@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'PROLABIOS Mitra Analitika')</title>
-  <meta name="description" content="@yield('meta_description', 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.')">
-  <meta name="keywords" content="@yield('meta_keywords', 'prolabios, laboratorium, alat laboratorium, instrumen, media kultur, mikrobiologi, analitika, distributor, indonesia')">
-  <link rel="canonical" href="@yield('canonical_url', url()->current())">
+  <meta name="description" content="PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.">
   
   <!-- Preconnect to CDN -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -19,7 +17,7 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   
   <!-- Bootstrap Icons (Non-blocking loading) -->
-  <link class="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"></noscript>
   
   <!-- Bootstrap 5 CSS -->
@@ -43,7 +41,6 @@
   <meta name="twitter:url" content="{{ request()->url() }}">
   <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
-  
   <!-- Fast Theme & Motion Check (Avoids Flash of Light Background/Animations) -->
   <script>
     if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -221,6 +218,7 @@
       const themeToggle = document.getElementById('theme-toggle');
       const themeToggleIcon = document.getElementById('theme-toggle-icon');
       
+      // Determine initial state and align icon class
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       if (isDark && themeToggleIcon) {
         themeToggleIcon.className = 'bi bi-sun-fill text-warning';
@@ -256,6 +254,7 @@
       const motionToggle = document.getElementById('motion-toggle');
       const motionToggleIcon = document.getElementById('motion-toggle-icon');
       
+      // Determine initial state and align icon class
       const isMotionDisabled = document.documentElement.classList.contains('no-motion');
       if (isMotionDisabled && motionToggleIcon) {
         motionToggleIcon.className = 'bi bi-pause-circle-fill';

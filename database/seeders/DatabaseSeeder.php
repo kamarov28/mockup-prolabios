@@ -21,10 +21,5 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-
-        // Call test data seeder for testing
-        if (app()->environment('testing')) {
-            $this->call(TestDataSeeder::class);
-        }
     }
 }
