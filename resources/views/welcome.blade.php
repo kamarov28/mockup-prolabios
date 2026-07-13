@@ -1,9 +1,6 @@
 @extends('layouts.app')
 
 @section('title', 'Home | PROLABIOS')
-@section('meta_description', 'PROLABIOS Mitra Analitika - Solusi analitika dan mikrobiologi terpercaya. Distributor media kultur, instrumen laboratorium, dan perlengkapan pengujian terbaik di Indonesia.')
-@section('meta_keywords', 'prolabios, mitra analitika, laboratorium, media kultur, instrumen, mikrobiologi, analitika, distributor alat lab, indonesia')
-@section('canonical_url', url('/'))
 
 @section('preload')
   @foreach($homeData['hero_images'] as $img)
@@ -135,37 +132,39 @@
       <div class="marquee-container">
         <!-- Group 1 -->
         <div class="marquee-content">
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
         </div>
         <!-- Group 2 (Duplicate for infinite seamless scrolling loop) -->
         <div class="marquee-content" aria-hidden="true">
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
         </div>
       </div>
+    </div>
+  </section>
     </div>
   </section>
 
@@ -182,6 +181,37 @@
         </div>
       </div>
 
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        @if(count($recentPosts) > 0)
+          @foreach($recentPosts as $post)
+            @php
+              $dateParts = explode(' ', $post['date']);
+              $day = isset($dateParts[0]) ? $dateParts[0] : '';
+              $month = isset($dateParts[1]) ? $dateParts[1] : '';
+            @endphp
+            <div class="col">
+              <div class="card h-100 blog-card position-relative animate-on-scroll animate-slide-up delay-{{ ($loop->index + 1) * 100 }}">
+                <div class="blog-card-img-wrap">
+                  <!-- Floating premium date badge -->
+                  <div class="blog-card-date">
+                    <span class="day">{{ $day }}</span>
+                    <span class="month">{{ $month }}</span>
+                  </div>
+                  <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
+                </div>
+                <div class="blog-card-body">
+                  <span class="blog-card-category">{{ $post['category'] }}</span>
+                  <h3 class="blog-card-title">
+                    <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}">{{ $post['title'] }}</a>
+                  </h3>
+                  <p class="blog-card-text">{{ Str::limit(strip_tags(html_entity_decode($post['content'])), 120) }}</p>
+                </div>
+              </div>
+            </div>
+          @endforeach
+        @else
+          <div class="col-12 text-center py-4">
+            <p class="text-muted">Belum ada artikel terbaru.</p>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         @if(count($recentPosts) > 0)
           @foreach($recentPosts as $post)

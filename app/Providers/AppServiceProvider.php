@@ -37,10 +37,5 @@ class AppServiceProvider extends ServiceProvider
         } catch (\Exception $e) {
             // Safe fallback during command execution
         }
-
-        // Cache busting helper for assets
-        \Illuminate\Support\Facades\Blade::directive('assetVersion', function ($expression) {
-            return "<?php echo asset($expression) . '?v=' . filemtime(public_path(substr($expression, 1, -1))); ?>";
-        });
     }
 }
