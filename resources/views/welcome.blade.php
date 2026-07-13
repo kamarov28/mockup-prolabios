@@ -17,7 +17,7 @@
     <!-- Decorative Glowing Blobs -->
     <div class="position-absolute top-0 start-0 w-100 h-100 hero-glow-1 pointer-events-none" style="z-index: 0;"></div>
     <div class="position-absolute top-0 start-0 w-100 h-100 hero-glow-2 pointer-events-none" style="z-index: 0;"></div>
-    
+
     <div class="container py-md-5 position-relative" style="z-index: 1;">
       <div class="row align-items-center g-5">
         <div class="col-lg-6 z-1">
@@ -39,7 +39,7 @@
         <div class="col-lg-6 position-relative z-1 animate-on-scroll animate-scale-in delay-300">
           <!-- Decorative dotted grid behind slider -->
           <div class="position-absolute translate-middle-y start-0 w-100 h-100 opacity-20 d-none d-md-block" style="background-image: radial-gradient(var(--color-primary, #D32F2F) 1.5px, transparent 1.5px); background-size: 20px 20px; z-index: -1; transform: translate(-25px, 25px); width: 120px; height: 160px;"></div>
-          
+
           <div class="rounded-4 overflow-hidden position-relative bg-dark hero-carousel-wrapper" style="aspect-ratio: 4/3;">
             <div id="heroSlideshow" class="carousel slide carousel-card-swap h-100" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false" data-bs-touch="true">
               <div class="carousel-indicators" style="z-index: 20;">
@@ -82,7 +82,7 @@
   <section class="py-5 bg-white">
     <div class="container py-4">
       <h2 class="text-center fw-bold mb-5 animate-on-scroll animate-slide-up" style="color: var(--color-secondary, #2b2d42);">{{ $homeData['focus_title'] }}</h2>
-      
+
       <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($homeData['focus_cards'] as $card)
           <div class="col">
@@ -128,7 +128,7 @@
         <h2 class="fw-bold" style="color: var(--color-secondary, #2b2d42);">Principal Kami</h2>
         <p class="text-muted">Kami bekerja sama dengan principal internasional terpercaya untuk menyediakan produk dan layanan berkualitas.</p>
       </div>
-      
+
       <div class="marquee-container">
         <!-- Group 1 -->
         <div class="marquee-content">
@@ -165,8 +165,6 @@
       </div>
     </div>
   </section>
-    </div>
-  </section>
 
   <!-- Berita & Kegiatan Section -->
   <section class="py-5 bg-light">
@@ -181,37 +179,6 @@
         </div>
       </div>
 
-      <div class="row row-cols-1 row-cols-md-3 g-4">
-        @if(count($recentPosts) > 0)
-          @foreach($recentPosts as $post)
-            @php
-              $dateParts = explode(' ', $post['date']);
-              $day = isset($dateParts[0]) ? $dateParts[0] : '';
-              $month = isset($dateParts[1]) ? $dateParts[1] : '';
-            @endphp
-            <div class="col">
-              <div class="card h-100 blog-card position-relative animate-on-scroll animate-slide-up delay-{{ ($loop->index + 1) * 100 }}">
-                <div class="blog-card-img-wrap">
-                  <!-- Floating premium date badge -->
-                  <div class="blog-card-date">
-                    <span class="day">{{ $day }}</span>
-                    <span class="month">{{ $month }}</span>
-                  </div>
-                  <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
-                </div>
-                <div class="blog-card-body">
-                  <span class="blog-card-category">{{ $post['category'] }}</span>
-                  <h3 class="blog-card-title">
-                    <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}">{{ $post['title'] }}</a>
-                  </h3>
-                  <p class="blog-card-text">{{ Str::limit(strip_tags(html_entity_decode($post['content'])), 120) }}</p>
-                </div>
-              </div>
-            </div>
-          @endforeach
-        @else
-          <div class="col-12 text-center py-4">
-            <p class="text-muted">Belum ada artikel terbaru.</p>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         @if(count($recentPosts) > 0)
           @foreach($recentPosts as $post)
