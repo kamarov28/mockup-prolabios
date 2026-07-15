@@ -628,21 +628,59 @@ function initGSAPAnimations() {
     });
   });
 
-  // Stagger reveal for index items or lists
-  gsap.utils.toArray('.typo-index-list').forEach(list => {
-    const items = list.querySelectorAll('.gsap-reveal-item');
-    gsap.from(items, {
-      scrollTrigger: {
-        trigger: list,
-        start: "top 95%"
-      },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out"
-    });
-  });
+  // Pinned Sequential reveal for Sektor Fokus (Scroll Pinning & Reveal)
+  const pinSection = document.querySelector('.focus-section-pin');
+  if (pinSection) {
+    const items = pinSection.querySelectorAll('.typo-index-item');
+    const isDesktop = window.matchMedia("(min-width: 992px)").matches;
+
+    if (isDesktop && items.length) {
+      // Set initial states
+      gsap.set(items, { opacity: 0.15, y: 40 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pinSection,
+          start: "top 12%", // Pin when the section top is 12% from viewport top
+          end: "+=1200",   // Pin duration of 1200px scroll
+          scrub: 1.2,      // Smooth interpolation
+          pin: true,       // Enable pinning
+          anticipatePin: 1
+        }
+      });
+
+      items.forEach((item, index) => {
+        tl.to(item, {
+          opacity: 1,
+          y: 0,
+          duration: 1
+        }, index * 1.2); // Sequential stagger inside the timeline
+      });
+    } else {
+      // Mobile / Fallback: Simple reveal on scroll
+      gsap.from(items, {
+        scrollTrigger: {
+          trigger: pinSection,
+          start: "top 95%"
+        },
+        y: 40,
+        opacity: 0.15,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out"
+      });
+      gsap.to(items, {
+        scrollTrigger: {
+          trigger: pinSection,
+          start: "top 80%"
+        },
+        opacity: 1,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out"
+      });
+    }
+  }
 
   // Stagger reveal for card/list grids
   const rowElements = document.querySelectorAll('.row:has(.gsap-reveal-item)');

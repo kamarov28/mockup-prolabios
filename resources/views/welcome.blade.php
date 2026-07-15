@@ -46,7 +46,7 @@
   </section>
 
   <!-- Sektor Fokus Section (Indeksal List) -->
-  <section class="section-spacious">
+  <section class="section-spacious focus-section-pin">
     <div class="container">
       <div class="row mb-5 gsap-reveal-fade">
         <div class="col-lg-8">
