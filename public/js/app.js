@@ -613,21 +613,6 @@ function initGSAPAnimations() {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Fade Up elements
-  gsap.utils.toArray('.gsap-reveal-fade').forEach(el => {
-    gsap.from(el, {
-      scrollTrigger: {
-        trigger: el,
-        start: "top 95%",
-        toggleActions: "play none none none"
-      },
-      y: 45,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out"
-    });
-  });
-
   // Pinned Sequential reveal for Sektor Fokus (Scroll Pinning & Reveal)
   const pinSection = document.querySelector('.focus-section-pin');
   if (pinSection) {
@@ -681,23 +666,6 @@ function initGSAPAnimations() {
       });
     }
   }
-
-  // Stagger reveal for card/list grids
-  const rowElements = document.querySelectorAll('.row:has(.gsap-reveal-item)');
-  rowElements.forEach(row => {
-    const items = row.querySelectorAll('.gsap-reveal-item');
-    gsap.from(items, {
-      scrollTrigger: {
-        trigger: row,
-        start: "top 95%"
-      },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out"
-    });
-  });
 }
 
 

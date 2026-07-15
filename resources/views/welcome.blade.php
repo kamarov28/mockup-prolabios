@@ -13,7 +13,7 @@
   <!-- Hero Section (Typography Only) -->
   <section class="section-spacious typo-hero">
     <div class="container">
-      <div class="gsap-reveal-fade">
+      <div class="animate-on-scroll">
         <div class="d-inline-block text-uppercase small fw-bold px-3 py-1 mb-4 text-white bg-primary rounded-1" style="width: fit-content; font-family: var(--font-headline); font-size: 0.75rem; letter-spacing: 2px;">
           {{ $siteSettings['company_name'] ?? 'Prolabios' }}
         </div>
@@ -48,7 +48,7 @@
   <!-- Sektor Fokus Section (Indeksal List) -->
   <section class="section-spacious focus-section-pin">
     <div class="container">
-      <div class="row mb-5 gsap-reveal-fade">
+      <div class="row mb-5 animate-on-scroll">
         <div class="col-lg-8">
           <h6 class="text-uppercase tracking-wider small mb-3 text-primary" style="font-family: var(--font-headline); font-size: 0.75rem; letter-spacing: 2px;">Value Chain</h6>
           <h2 class="display-5 fw-bold text-white mb-3" style="font-family: var(--font-headline); font-size: 2.2rem; letter-spacing: -1px;">{{ $homeData['focus_title'] }}</h2>
@@ -82,7 +82,7 @@
   <!-- Berita & Kegiatan Section (Clean Minimal List) -->
   <section class="section-spacious">
     <div class="container">
-      <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 gsap-reveal-fade">
+      <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 animate-on-scroll">
         <div>
           <h6 class="text-uppercase tracking-wider small mb-3 text-primary" style="font-family: var(--font-headline); font-size: 0.75rem; letter-spacing: 2px;">Artikel &amp; Media</h6>
           <h2 class="fw-bold text-white" style="font-family: var(--font-headline); font-size: 2.2rem; letter-spacing: -1px;">Berita &amp; Kegiatan</h2>
@@ -104,7 +104,7 @@
               $month = isset($dateParts[1]) ? $dateParts[1] : '';
             @endphp
             <div class="col-lg-4 col-md-12">
-              <div class="card typo-blog-card h-100 gsap-reveal-item" data-delay="{{ $loop->index * 0.15 }}">
+              <div class="card typo-blog-card h-100 animate-on-scroll" style="transition-delay: {{ $loop->index * 0.15 }}s;">
                 <div class="card-body p-0">
                   <span class="typo-blog-card-meta">
                     {{ $post['category'] }} &bull; {{ $day }} {{ $month }}

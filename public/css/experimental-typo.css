@@ -246,7 +246,9 @@ html, body {
 }
 
 /* Blog Cards Minimalist - Editorial Column Style */
-.typo-blog-card {
+[data-theme="dark"] .card.typo-blog-card,
+.card.typo-blog-card {
+  background-color: transparent !important;
   background: transparent !important;
   border: none !important;
   border-left: 1px solid var(--color-border) !important;
@@ -256,7 +258,7 @@ html, body {
   transition: all 0.3s ease;
 }
 /* Remove left border for the first column in the row */
-.row > div:first-child .typo-blog-card {
+.row > div:first-child .card.typo-blog-card {
   border-left: none !important;
   padding-left: 0 !important;
 }
