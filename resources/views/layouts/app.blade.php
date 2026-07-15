@@ -6,26 +6,26 @@
   <title>@yield('title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')</title>
   <meta name="description" content="PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.">
   
-  <!-- Preconnect to CDN -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <!-- Preconnect to CDN & fonts (critical for LCP) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-  
-  <!-- Font (Plus Jakarta Sans for Premium Aesthetic) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Bootstrap Icons (Non-blocking loading) -->
+
+  <!-- Single editorial face, essential weights only (was 3 families × many weights) -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons (non-blocking) -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"></noscript>
-  
+
   <!-- Bootstrap 5 CSS -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" as="style" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  
+
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  
+  <link rel="stylesheet" href="{{ asset('css/experimental-typo.css') }}">
+
   <!-- Page Preloads -->
   @yield('preload')
 
@@ -40,14 +40,18 @@
   <meta name="twitter:url" content="{{ request()->url() }}">
   <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
-  <!-- Fast Theme & Motion Check (Avoids Flash of Light Background/Animations) -->
+
+  <!-- Fast Theme & Motion Check (avoids flash of wrong theme / motion) -->
   <script>
-    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-    if (localStorage.getItem('motion') === 'disabled') {
-      document.documentElement.classList.add('no-motion');
-    }
+    (function () {
+      var theme = localStorage.getItem('theme');
+      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      if (localStorage.getItem('motion') === 'disabled' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('no-motion');
+      }
+    })();
   </script>
 </head>
 <body>
@@ -77,7 +81,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
-          <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="40">
+          <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="40" width="auto" decoding="async" fetchpriority="high">
         </a>
       
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,32 +91,39 @@
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('/') ? 'text-primary active' : '' }}" href="{{ url('/') }}">Home</a>
+            <a class="nav-link {{ request()->is('/') ? 'text-primary active' : '' }}" href="{{ url('/') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profil</a>
+            <a class="nav-link {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Produk</a>
+            <a class="nav-link {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Produk</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
+            <a class="nav-link {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
+            <a class="nav-link {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
+            <a class="nav-link {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link px-3 {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
+            <a class="nav-link {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
           </li>
           <li class="nav-item ms-lg-2">
             <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 rounded-pill d-inline-flex align-items-center gap-2" href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
               <i class="bi bi-download"></i> Unduh Katalog
             </a>
           </li>
-          <li class="nav-item d-flex align-items-center gap-3 ms-lg-3 mt-3 mt-lg-0">
+          <li class="nav-item d-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0 navbar-utilities">
+            <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
+              <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
+            </button>
+            
+            <!-- Minimal vertical divider -->
+            <span class="text-muted opacity-25 d-none d-lg-inline">|</span>
+            
             <button type="button" id="motion-toggle" class="btn btn-link nav-link p-0 border-0 bg-transparent" style="text-decoration: none;" aria-label="Toggle Animations" title="Aktif/Nonaktifkan Animasi">
               <i id="motion-toggle-icon" class="bi bi-play-circle-fill" style="font-size: 1.2rem;"></i>
             </button>
@@ -137,7 +148,7 @@
         <!-- Col 1: Kantor -->
         <div class="col-lg-3 col-md-6 col-12">
           <div class="mb-3">
-            <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="38" class="footer-logo">
+            <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="38" width="auto" class="footer-logo" loading="lazy" decoding="async">
           </div>
           <p class="mb-3 mt-3"><strong>{{ strtoupper($siteSettings['company_name'] ?? 'PT PROLABIOS MITRA ANALITIKA') }}</strong><br>
           Komplek Cibinong Griya Asri Blok: A9/10, RT 01 RW 08<br>
@@ -214,107 +225,83 @@
     </div>
   </footer>
 
-  <!-- Custom Scripts -->
-  <script src="{{ asset('js/app.js') }}"></script>
-  
-  <!-- Bootstrap 5 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap first (components), then app (site behavior). Defer keeps HTML parse unblocked. -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="{{ asset('js/app.js') }}" defer></script>
 
   @stack('scripts')
 
-  <!-- Theme Toggle Handler -->
+  <!-- Theme / Motion toggles (lightweight; scroll-to-top lives in app.js) -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const themeToggle = document.getElementById('theme-toggle');
-      const themeToggleIcon = document.getElementById('theme-toggle-icon');
-      
-      // Determine initial state and align icon class
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.addEventListener('DOMContentLoaded', function () {
+      var themeToggle = document.getElementById('theme-toggle');
+      var themeToggleIcon = document.getElementById('theme-toggle-icon');
+      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
       if (isDark && themeToggleIcon) {
         themeToggleIcon.className = 'bi bi-sun-fill text-warning';
       }
 
       if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
+        themeToggle.addEventListener('click', function () {
           if (themeToggleIcon) {
             themeToggleIcon.classList.add('rotated');
-            setTimeout(() => {
+            setTimeout(function () {
               themeToggleIcon.classList.remove('rotated');
             }, 600);
           }
 
-          const currentTheme = document.documentElement.getAttribute('data-theme');
-          if (currentTheme !== 'dark') {
+          if (document.documentElement.getAttribute('data-theme') !== 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem('theme', 'dark');
-            if (themeToggleIcon) {
-              themeToggleIcon.className = 'bi bi-sun-fill text-warning rotated';
-            }
+            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-sun-fill text-warning rotated';
           } else {
             document.documentElement.removeAttribute('data-theme');
             localStorage.setItem('theme', 'light');
-            if (themeToggleIcon) {
-              themeToggleIcon.className = 'bi bi-moon-fill text-dark rotated';
-            }
+            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-moon-fill text-dark rotated';
           }
         });
       }
 
-      // Motion Toggle logic
-      const motionToggle = document.getElementById('motion-toggle');
-      const motionToggleIcon = document.getElementById('motion-toggle-icon');
-      
-      // Determine initial state and align icon class
-      const isMotionDisabled = document.documentElement.classList.contains('no-motion');
+      var motionToggle = document.getElementById('motion-toggle');
+      var motionToggleIcon = document.getElementById('motion-toggle-icon');
+      var isMotionDisabled = document.documentElement.classList.contains('no-motion');
+
       if (isMotionDisabled && motionToggleIcon) {
         motionToggleIcon.className = 'bi bi-pause-circle-fill';
       }
 
       if (motionToggle) {
-        motionToggle.addEventListener('click', function() {
-          const isDisabled = document.documentElement.classList.contains('no-motion');
+        motionToggle.addEventListener('click', function () {
+          var isDisabled = document.documentElement.classList.contains('no-motion');
           if (!isDisabled) {
             document.documentElement.classList.add('no-motion');
             localStorage.setItem('motion', 'disabled');
-            if (motionToggleIcon) {
-              motionToggleIcon.className = 'bi bi-pause-circle-fill';
-            }
+            if (motionToggleIcon) motionToggleIcon.className = 'bi bi-pause-circle-fill';
           } else {
             document.documentElement.classList.remove('no-motion');
             localStorage.setItem('motion', 'enabled');
-            if (motionToggleIcon) {
-              motionToggleIcon.className = 'bi bi-play-circle-fill';
-            }
+            if (motionToggleIcon) motionToggleIcon.className = 'bi bi-play-circle-fill';
           }
-        });
-      }
-
-      // Scroll to Top logic
-      const scrollToTopBtn = document.getElementById('scroll-to-top');
-      if (scrollToTopBtn) {
-        window.addEventListener('scroll', function() {
-          if (window.scrollY > 300) {
-            scrollToTopBtn.style.opacity = '1';
-            scrollToTopBtn.style.visibility = 'visible';
-          } else {
-            scrollToTopBtn.style.opacity = '0';
-            scrollToTopBtn.style.visibility = 'hidden';
-          }
-        });
-
-        scrollToTopBtn.addEventListener('click', function() {
-          window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-          });
         });
       }
     });
   </script>
 
-  <!-- Scroll to Top Float Button -->
-  <button type="button" id="scroll-to-top" class="btn btn-primary btn-scroll-to-top shadow-lg rounded-circle" style="position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: all 0.3s ease; border: none; background-color: var(--color-primary, #D32F2F); color: #ffffff;">
+  <button type="button" id="scroll-to-top" class="btn btn-primary btn-scroll-to-top shadow-lg rounded-circle" style="position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; border: none; background-color: var(--color-primary, #D32F2F); color: #ffffff;" aria-label="Kembali ke atas">
     <i class="bi bi-arrow-up-short" style="font-size: 1.75rem; line-height: 1;"></i>
   </button>
+
+  <div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Pencarian produk" aria-hidden="true">
+    <button type="button" class="search-close-btn" id="search-close" aria-label="Tutup pencarian">
+      <i class="bi bi-x-lg"></i>
+    </button>
+    <div class="search-overlay-content">
+      <form action="{{ url('/produk') }}" method="GET" class="search-overlay-form" role="search">
+        <input type="search" name="q" id="search-overlay-input" placeholder="Ketik kata kunci produk..." autocomplete="off" enterkeyhint="search">
+        <div class="search-hint">Tekan enter untuk mencari atau ESC untuk membatalkan</div>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

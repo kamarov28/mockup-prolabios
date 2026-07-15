@@ -1151,23 +1151,42 @@ body {
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Reduce Motion / No Animation Override (Excluding infinite scrolling marquee) */
-.no-motion *:not(.marquee-content):not(.marquee-content *), 
-.no-motion *::before, 
+/* Reduce Motion / No Animation Override */
+.no-motion *:not(.marquee-content):not(.marquee-content *),
+.no-motion *::before,
 .no-motion *::after {
   animation-delay: 0s !important;
   animation-duration: 0s !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0s !important;
   scroll-behavior: auto !important;
+}
+
+/* Keep infinite marquees still when motion is off (was previously excluded) */
+.no-motion .marquee-content,
+.no-motion .typo-marquee-content,
+.no-motion .principal-track {
+  animation: none !important;
   transform: none !important;
 }
 
 /* Force all scroll reveal elements to be fully visible immediately when motion is disabled */
-.no-motion .animate-on-scroll {
+.no-motion .animate-on-scroll,
+.no-motion .typo-hero-entrance {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typo-marquee-content,
+  .marquee-content {
+    animation: none !important;
+  }
+  .animate-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* ==========================================================================

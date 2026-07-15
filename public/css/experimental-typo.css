@@ -1,12 +1,11 @@
 /* ==========================================================================
    Prolabios Ultra-Minimalist Typography Stylesheet (Experimental)
+   Fonts load once from layouts/app.blade.php (no @import — blocks render)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 :root {
-  --font-headline: 'Fira Code', monospace;
-  --font-body: 'Space Grotesk', sans-serif;
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
   --color-bg: #070708;
   --color-text-main: #FFFFFF;
   --color-text-muted: #8E8E93;
@@ -28,34 +27,47 @@ html, body {
   display: none !important;
 }
 
-/* Minimalist Navbar Override */
+/* Minimalist Navbar Override - Premium Editorial Style */
 .navbar {
   position: fixed !important;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000 !important;
-  background: rgba(7, 7, 8, 0.8) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--color-border) !important;
-  padding: 24px 0 !important;
-  transition: padding 0.3s ease;
+  /* Solid-ish base + lighter blur = cheaper paint than heavy backdrop-filter */
+  background: rgba(7, 7, 8, 0.88) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  padding: 16px 0 !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.navbar.header-scrolled {
+  background: rgba(7, 7, 8, 0.94) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.navbar-nav {
+  align-items: center !important;
 }
 .navbar-brand img {
   filter: brightness(0) invert(1);
 }
 .navbar-light .navbar-nav .nav-link {
-  font-family: var(--font-headline) !important;
-  font-size: 0.85rem !important;
-  color: var(--color-text-muted) !important;
-  letter-spacing: -0.5px;
-  padding: 6px 16px !important;
+  font-family: var(--font-headline) !important; /* Now Space Grotesk */
+  font-size: 0.72rem !important; /* Smaller, modern size */
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  padding: 8px 0 !important;
   transition: color 0.3s ease;
 }
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
   color: var(--color-accent) !important;
+}
+.navbar-nav .nav-item {
+  padding: 0 16px !important; /* Generous gap between links */
 }
 .navbar-light .navbar-toggler {
   border: none !important;
@@ -65,19 +77,24 @@ html, body {
   filter: invert(1);
 }
 
-/* Button override */
+/* Premium Download Button Override */
 .navbar .btn-outline-danger {
-  font-family: var(--font-headline);
-  border: 1px solid var(--color-border) !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
   background: transparent !important;
-  font-size: 0.8rem;
-  border-radius: 4px !important;
+  border-radius: 20px !important;
+  padding: 8px 18px !important;
   transition: all 0.3s ease !important;
 }
 .navbar .btn-outline-danger:hover {
   border-color: var(--color-accent) !important;
   color: var(--color-accent) !important;
+  background: transparent !important;
 }
 
 /* Theme / Motion toggles style */
@@ -90,9 +107,17 @@ html, body {
 
 /* Spacious Sections */
 .section-spacious {
-  padding: 160px 0 !important;
+  padding: 100px 0 !important;
   position: relative;
   border-bottom: 1px solid var(--color-border);
+  /* Skip layout/paint work for off-screen sections where supported */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+/* Hero must paint immediately for LCP — never defer */
+.section-spacious.typo-hero {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
 }
 .section-spacious:last-of-type {
   border-bottom: none;
@@ -107,27 +132,155 @@ html, body {
   align-items: flex-start;
   padding-top: 120px !important;
   border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
 }
+.typo-hero-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-bg-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  opacity: 0;
+  /* Prefer CSS filters only on active slide; keep inactive unfiltered for cheaper layers */
+  transition: opacity 1.6s ease-in-out;
+  z-index: 1;
+  will-change: opacity;
+  transform: translateZ(0);
+}
+.hero-bg-slide.active {
+  opacity: 0.20;
+  z-index: 2;
+  filter: grayscale(100%) contrast(115%);
+}
+.no-motion .hero-bg-slide,
+.no-motion .hero-bg-slide.active {
+  transition: none;
+  will-change: auto;
+}
+.typo-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Masking gradient: Gelap pekat di bagian kiri (teks) dan bawah (transisi seksi berikutnya) */
+  background: linear-gradient(
+    to right, 
+    var(--color-bg) 0%, 
+    rgba(7, 7, 8, 0.95) 40%, 
+    rgba(7, 7, 8, 0.7) 70%, 
+    rgba(7, 7, 8, 0.2) 100%
+  ), 
+  linear-gradient(
+    to top, 
+    var(--color-bg) 0%, 
+    rgba(7, 7, 8, 0) 30%
+  );
+}
+/* Eyebrow / brand label above hero title */
+.typo-eyebrow {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #fff;
+  background: var(--color-accent);
+  padding: 0.4rem 0.85rem;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+  line-height: 1.2;
+}
+
 .typo-hero-title {
   font-family: var(--font-headline);
-  font-size: 4.8rem;
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
   font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -2.5px;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   margin-bottom: 40px;
   color: #fff;
-  max-width: 900px;
+  max-width: 920px;
 }
 .typo-outline {
   color: transparent !important;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
 }
 .typo-lead {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   line-height: 1.7;
   max-width: 620px;
   color: var(--color-text-muted);
   margin-bottom: 50px;
+}
+
+/* ── GSAP typography split masks (clip-up / line reveal) ── */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.word-mask .word-inner {
+  display: inline-block;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.line-mask .line-inner {
+  display: block;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* Nested outline words keep stroke after split */
+.typo-outline,
+.typo-outline .word-inner {
+  color: transparent !important;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Section heads (shared homepage type system) */
+.typo-section-label {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-accent) !important;
+  margin-bottom: 0.85rem;
+  display: block;
+}
+.typo-section-title {
+  font-family: var(--font-headline);
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+.typo-section-sub {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 36rem;
 }
 
 /* Minimalist Button Link */
@@ -144,7 +297,10 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.typo-btn-link--ghost {
+  border-color: rgba(255, 255, 255, 0.3);
 }
 .typo-btn-link:hover {
   color: var(--color-accent);
@@ -223,7 +379,7 @@ html, body {
 /* Continuous Marquee Banner */
 .typo-marquee {
   overflow: hidden;
-  padding: 35px 0;
+  padding: 24px 0;
   background: #000;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -233,12 +389,28 @@ html, body {
 .typo-marquee-content {
   display: inline-block;
   font-family: var(--font-headline);
-  font-size: 1.3rem;
-  color: var(--color-text-muted);
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
   letter-spacing: 2px;
-  animation: typo-marquee-anim 25s linear infinite;
+  animation: typo-marquee-anim 40s linear infinite;
   padding-right: 40px;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* Pause marquee when tab is in background (class toggled optionally) or reduced motion */
+.no-motion .typo-marquee-content,
+.typo-marquee.is-paused .typo-marquee-content {
+  animation-play-state: paused;
+  will-change: auto;
+}
+.typo-marquee-outline {
+  color: transparent !important;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+}
+.typo-marquee-accent {
+  color: var(--color-accent) !important;
 }
 @keyframes typo-marquee-anim {
   0% { transform: translate3d(0, 0, 0); }
@@ -252,19 +424,25 @@ html, body {
   background: transparent !important;
   border: none !important;
   border-left: 1px solid var(--color-border) !important;
-  padding: 0 0 0 32px !important;
+  padding: 0 0 0 40px !important; /* Reset layout-level padding */
   border-radius: 0 !important;
   box-shadow: none !important;
   transition: all 0.3s ease;
+}
+.typo-blog-card .card-body {
+  padding: 0 32px 0 0 !important; /* Push inner content away from the right edge */
+  background: transparent !important;
+  border: none !important;
 }
 /* Remove left border for the first column in the row */
 .row > div:first-child .card.typo-blog-card {
   border-left: none !important;
   padding-left: 0 !important;
+  padding-right: 24px !important; /* Keep balance for first item */
 }
 .typo-blog-card:hover {
   border-left-color: var(--color-accent) !important;
-  padding-left: 36px !important;
+  padding-left: 44px !important; /* Minimal shift adjustment */
 }
 .typo-blog-card-meta {
   font-family: var(--font-headline);
@@ -370,3 +548,1128 @@ html, body {
     padding-left: 12px !important;
   }
 }
+
+/* ==========================================================================
+   Micro-interactions & QOL Animations
+   ========================================================================== */
+
+/* Navbar Brand Logo Pulse */
+.navbar-brand:hover img {
+  opacity: 0.85;
+}
+
+/* Navbar Download Button Icon Slide-Down */
+.navbar .btn-outline-danger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.navbar .btn-outline-danger i {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.navbar .btn-outline-danger:hover i {
+  transform: translateY(2px);
+}
+
+/* Hero CTA Button Micro-animations */
+.typo-btn-link i {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.typo-btn-link:hover i {
+  transform: translateX(5px);
+}
+
+/* Sektor Fokus Diagonal Arrow Translation */
+.typo-index-link i {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.typo-index-link:hover i {
+  transform: translate(3px, -3px);
+}
+
+/* Back to Top Hover Bounce */
+.btn-scroll-to-top {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.btn-scroll-to-top:hover {
+  transform: scale(1.1) translateY(-4px) !important;
+}
+
+/* Nav-link Hover Underline Effect */
+.navbar-nav .nav-link {
+  position: relative;
+}
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0 !important;
+  width: 0 !important;
+  height: 1px !important;
+  background-color: var(--color-accent) !important;
+  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), left 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+  width: 100% !important;
+  left: 0 !important;
+}
+
+/* Navbar Utilities Styling */
+.navbar-utilities a.nav-link,
+.navbar-utilities button.nav-link {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.navbar-utilities a.nav-link:hover,
+.navbar-utilities button.nav-link:hover {
+  color: var(--color-accent) !important;
+  transform: scale(1.1);
+}
+.navbar-utilities span {
+  font-family: var(--font-body);
+}
+
+/* Minimalist Search Overlay Styling */
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(7, 7, 8, 0.97);
+  /* Solid overlay is enough; skip heavy full-viewport blur until open if needed */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+}
+.search-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.search-close-btn {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.search-close-btn:hover {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+.search-overlay-content {
+  width: 100%;
+  max-width: 700px;
+  padding: 20px;
+  text-align: center;
+}
+.search-overlay-form input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 2.2rem;
+  font-weight: 500;
+  padding: 15px 0;
+  outline: none;
+  text-align: center;
+  transition: border-color 0.4s ease;
+}
+.search-overlay-form input:focus {
+  border-color: var(--color-accent);
+}
+.search-hint {
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 20px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Global Dark Editorial Theme Overrides (Unify all pages)
+   ========================================================================== */
+
+/* 1. Global Section Backgrounds */
+section, .bg-light, .bg-white {
+  background-color: var(--color-bg) !important;
+}
+
+/* 2. Text Colors Unification */
+.text-muted, .text-black-50, .text-secondary {
+  color: var(--color-text-muted) !important;
+}
+h1, h2, h3, h4, h5, h6, .fw-bold, .card-title, .modal-title {
+  color: var(--color-text-main) !important;
+}
+p, span, li, td, th, label {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+a {
+  color: var(--color-text-main);
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--color-accent);
+}
+
+/* 3. Global Cards & Box Containers */
+.card, .sidebar-cta-box, .bg-white.p-4.rounded.shadow-sm, .card-body {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+
+/* 4. List Groups (Sidebar filter) */
+.list-group-item {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: var(--color-accent) !important;
+  padding-left: 12px;
+}
+.list-group-item.active {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-accent) !important;
+  border-color: var(--color-border) !important;
+  font-weight: 600;
+}
+
+/* 5. Form Inputs (Contact form, Search fields) */
+.form-control, .form-select, .input-group-text {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+}
+.form-control:focus, .form-select:focus {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+.input-group-text {
+  border-right: none !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* 6. Buttons */
+.btn-danger, .btn-primary, .btn-submit {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+  font-family: var(--font-headline);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-radius: 4px !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.btn-danger:hover, .btn-primary:hover {
+  background-color: #ff333d !important;
+  border-color: #ff333d !important;
+  transform: translateY(-2px);
+}
+.btn-outline-danger {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+.btn-outline-danger:hover {
+  background: transparent !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+/* 7. Product Cards specific (inside /produk) */
+.product-card-premium {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 4px !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.product-card-premium:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-5px);
+}
+.product-card-premium .img-wrap {
+  border-bottom: 1px solid var(--color-border);
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+  overflow: hidden;
+}
+.product-card-premium:hover .img-wrap {
+  filter: grayscale(0%);
+}
+.product-card-premium .img-wrap img {
+  transition: transform 0.5s ease;
+}
+.product-card-premium:hover .img-wrap img {
+  transform: scale(1.05);
+}
+.product-card-premium .btn {
+  border-radius: 4px !important;
+  border: 1px solid var(--color-border) !important;
+  background: transparent !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+.product-card-premium:hover .btn {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+/* 8. Table overrides (Detail specifications) */
+.table {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background-color: transparent !important;
+  border-color: var(--color-border) !important;
+}
+.table th, .table td {
+  border-bottom-color: var(--color-border) !important;
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* 9. Pagination Styling */
+.pagination .page-link {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border-color: var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.pagination .page-item.active .page-link {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+.pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Editorial Page Headers (Replaces photo banner headers on all sub-pages)
+   ========================================================================== */
+.editorial-page-header {
+  padding: 140px 0 60px;
+  border-bottom: 1px solid var(--color-border);
+}
+.editorial-page-label {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+  padding: 6px 14px;
+  border: 1px solid var(--color-accent);
+}
+.editorial-page-title {
+  font-family: var(--font-headline) !important;
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.editorial-page-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.05rem !important;
+  color: var(--color-text-muted) !important;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Hide old-school photo banner headers */
+.page-header {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Profil Page — Editorial Components
+   ========================================================================== */
+
+.profil-sidebar-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4) !important;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.profil-social-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6) !important;
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.profil-social-link:hover {
+  color: var(--color-accent) !important;
+  padding-left: 6px;
+}
+.profil-cta-box {
+  border: 1px solid var(--color-border);
+  padding: 24px;
+}
+.profil-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-accent) !important;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 2px;
+  transition: all 0.3s ease;
+}
+.profil-cta-btn i {
+  transition: transform 0.3s ease;
+}
+.profil-cta-btn:hover i {
+  transform: translateX(4px);
+}
+.profil-hero-img {
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.profil-hero-img img {
+  filter: grayscale(30%);
+  transition: filter 0.5s ease;
+}
+.profil-hero-img:hover img {
+  filter: grayscale(0%);
+}
+.profil-section-label {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+.profil-section-title {
+  font-family: var(--font-headline) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  color: #fff !important;
+  margin-bottom: 16px !important;
+}
+.profil-body-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.6) !important;
+}
+.profil-vm-card {
+  border: 1px solid var(--color-border);
+  padding: 28px;
+  height: 100%;
+  transition: border-color 0.3s ease;
+}
+.profil-vm-card:hover {
+  border-color: rgba(255,255,255,0.15);
+}
+.profil-vm-icon {
+  font-size: 1.4rem;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+.profil-vm-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 12px;
+}
+.profil-mission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profil-mission-list li {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6) !important;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+  line-height: 1.5;
+}
+.profil-mission-list li:last-child {
+  border-bottom: none;
+}
+.profil-value-card {
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0;
+}
+.profil-value-letter {
+  font-family: var(--font-headline);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+.profil-value-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Layanan / Sektor Page — Sidebar Nav & Feature Cards
+   ========================================================================== */
+.layanan-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+.layanan-sidebar-link {
+  display: block;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55) !important;
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  letter-spacing: 0.2px;
+}
+.layanan-sidebar-link:hover {
+  color: rgba(255,255,255,0.9) !important;
+  padding-left: 6px;
+}
+.layanan-sidebar-link.is-active {
+  color: #fff !important;
+  font-weight: 600;
+  border-bottom-color: var(--color-accent);
+}
+
+/* Sub-categories styling */
+.sub-category-group {
+  display: flex;
+  flex-direction: column;
+}
+.sub-category-link {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45) !important;
+  text-decoration: none;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
+  line-height: 1.4;
+  display: block;
+}
+.sub-category-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  padding-left: 4px;
+}
+.sub-category-link.is-active {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+.layanan-feature-card {
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0;
+  height: 100%;
+}
+.layanan-feature-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.layanan-cta-strip {
+  border: 1px solid var(--color-border);
+  padding: 32px;
+}
+.layanan-cta-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.3rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+/* ==========================================================================
+   Kontak Page — Info Blocks & Form Inputs
+   ========================================================================== */
+.kontak-info-block {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.kontak-info-icon {
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+}
+.kontak-info-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4) !important;
+  margin-bottom: 10px;
+}
+.kontak-info-link {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  margin-bottom: 4px;
+}
+.kontak-info-link:hover {
+  color: var(--color-accent) !important;
+}
+.kontak-form-label {
+  display: block;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.5) !important;
+  margin-bottom: 8px;
+}
+.kontak-form-input {
+  background-color: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  color: rgba(255,255,255,0.85) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  padding: 12px 16px !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+}
+.kontak-form-input:focus {
+  border-color: rgba(255,255,255,0.3) !important;
+  background-color: rgba(255,255,255,0.04) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.kontak-form-input::placeholder {
+  color: rgba(255,255,255,0.25) !important;
+}
+.kontak-form-input option {
+  background-color: #111;
+  color: rgba(255,255,255,0.85);
+}
+.kontak-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #fff !important;
+  background-color: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  border-radius: 0 !important;
+  padding: 14px 32px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+.kontak-submit-btn:hover {
+  background-color: transparent !important;
+  color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Produk Page — Sidebar & Search Input
+   ========================================================================== */
+.produk-search-wrap {
+  position: relative;
+}
+.produk-search-wrap input {
+  background-color: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  color: rgba(255,255,255,0.85) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  padding: 10px 16px 10px 42px !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+.produk-search-wrap input:focus {
+  border-color: rgba(255,255,255,0.25) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.produk-search-wrap i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.3);
+  font-size: 0.9rem;
+}
+.produk-category-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  color: #fff !important;
+  margin-bottom: 4px;
+}
+.produk-category-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Editorial Blog Card Overrides (Informasi Page)
+   ========================================================================== */
+.blog-card {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+[data-theme="dark"] .blog-card,
+[data-theme="light"] .blog-card {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+.blog-card:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-4px) !important;
+}
+[data-theme="dark"] .blog-card:hover,
+[data-theme="light"] .blog-card:hover {
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+}
+.blog-card-body {
+  background-color: transparent !important;
+  padding: 24px !important;
+}
+[data-theme="dark"] .blog-card-body {
+  background-color: transparent !important;
+}
+.blog-card-title a {
+  font-family: var(--font-headline) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  transition: color 0.3s ease;
+}
+.blog-card:hover .blog-card-title a {
+  color: var(--color-accent) !important;
+}
+.blog-card-text {
+  font-family: var(--font-body) !important;
+  color: var(--color-text-muted) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+}
+.blog-card-category {
+  font-family: var(--font-headline) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  border-radius: 0px !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  padding: 4px 10px !important;
+}
+[data-theme="dark"] .blog-card-category {
+  background-color: transparent !important;
+  color: var(--color-accent) !important;
+}
+.blog-card-date {
+  border-radius: 0px !important;
+  background-color: var(--color-accent) !important;
+  box-shadow: none !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+[data-theme="dark"] .blog-card-date {
+  background-color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Editorial Product Card Overrides
+   ========================================================================== */
+.product-card-premium {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important; /* Sharp editorial corners */
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+[data-theme="dark"] .product-card-premium,
+[data-theme="light"] .product-card-premium {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.product-card-premium:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: none !important;
+}
+[data-theme="dark"] .product-card-premium:hover,
+[data-theme="light"] .product-card-premium:hover {
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+}
+.product-card-premium .img-wrap {
+  background-color: #070708 !important; /* Matches main bg */
+  border-bottom: 1px solid var(--color-border) !important;
+  padding: 20px !important;
+  height: 200px !important;
+}
+[data-theme="dark"] .product-card-premium .img-wrap,
+[data-theme="light"] .product-card-premium .img-wrap {
+  background-color: #070708 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+.product-card-premium .img-wrap img {
+  filter: grayscale(40%);
+  transition: all 0.4s ease !important;
+}
+.product-card-premium:hover .img-wrap img {
+  filter: grayscale(0%) scale(1.03) !important;
+}
+.product-card-premium .card-body {
+  background-color: transparent !important;
+  padding: 20px !important;
+}
+[data-theme="dark"] .product-card-premium .card-body,
+[data-theme="light"] .product-card-premium .card-body {
+  background-color: transparent !important;
+}
+.product-card-premium .card-title a {
+  font-family: var(--font-headline) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+.product-card-premium:hover .card-title a {
+  color: var(--color-accent) !important;
+}
+.product-card-premium .card-text {
+  font-family: var(--font-body) !important;
+  color: var(--color-text-muted) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.6 !important;
+}
+
+/* ==========================================================================
+   Editorial Table Overrides (Sektor Page)
+   ========================================================================== */
+.custom-table {
+  background-color: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important; /* Sharp corners */
+}
+.custom-table th {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.custom-table td {
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.custom-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: #fff !important;
+}
+[data-theme="dark"] .custom-table th,
+[data-theme="light"] .custom-table th {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .custom-table td,
+[data-theme="light"] .custom-table td {
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .custom-table tr:hover td,
+[data-theme="light"] .custom-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: #fff !important;
+}
+
+/* 9. Pagination Styling */
+.pagination {
+  border-radius: 0px !important;
+}
+.pagination .page-item {
+  margin: 0 2px;
+}
+.pagination .page-link,
+[data-theme="dark"] .pagination .page-link,
+[data-theme="light"] .pagination .page-link {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  padding: 10px 18px !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.82rem !important;
+  transition: all 0.3s ease !important;
+}
+.pagination .page-item.active .page-link,
+[data-theme="dark"] .pagination .page-item.active .page-link,
+[data-theme="light"] .pagination .page-item.active .page-link {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+.pagination .page-link:hover,
+[data-theme="dark"] .pagination .page-link:hover,
+[data-theme="light"] .pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--color-accent) !important;
+}
+.pagination .page-item.disabled .page-link,
+[data-theme="dark"] .pagination .page-item.disabled .page-link,
+[data-theme="light"] .pagination .page-item.disabled .page-link {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  border-color: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* ==========================================================================
+   Editorial Content Areas
+   ========================================================================== */
+
+/* Section Wrappers - remove Bootstrap cruft */
+.bg-white.p-4.rounded.shadow-sm,
+.bg-white.p-4.p-md-5.rounded.shadow-sm,
+.bg-white.p-4.p-md-5.rounded.shadow-sm.border-0,
+.bg-white.p-4.p-md-5.rounded.shadow-sm.border-0.h-100 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Sidebar boxes - strip Bootstrap styling */
+.bg-white.p-4.rounded.shadow-sm.border-0 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Sidebar titles */
+.bg-white.p-4.rounded.shadow-sm.border-0 h2,
+.bg-white.p-4.rounded.shadow-sm h2 {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  border-width: 1px !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Sidebar CTA boxes */
+.sidebar-cta-box {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+}
+
+/* Content images */
+.overflow-hidden.rounded.shadow-sm {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* Section headings inside content */
+section h2.fw-bold,
+section h3.fw-bold {
+  font-family: var(--font-headline) !important;
+  letter-spacing: -0.5px;
+}
+
+/* Section dividers */
+section hr {
+  border-color: var(--color-border) !important;
+  opacity: 1 !important;
+}
+
+/* Badges */
+.badge {
+  background-color: transparent !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  font-family: var(--font-headline);
+  font-size: 0.65rem !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-radius: 0 !important;
+  padding: 4px 10px !important;
+}
+
+/* Vision/Mission/Values cards on profile page */
+.card.border-0.shadow-sm.h-100.bg-light {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-left: none !important;
+  border-top: none !important;
+}
+
+/* Bootstrap alert overrides */
+.alert {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  border-radius: 2px !important;
+}
+
+/* Blog card overrides for Informasi page */
+.blog-card {
+  border: 1px solid var(--color-border) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-radius: 2px !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.blog-card:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-3px);
+}
+.blog-card-img-wrap img {
+  filter: grayscale(80%);
+  transition: filter 0.4s ease;
+}
+.blog-card:hover .blog-card-img-wrap img {
+  filter: grayscale(0%);
+}
+
+/* Custom table editorial styling */
+.custom-table, .table {
+  border-collapse: collapse !important;
+}
+.custom-table thead th, .table thead th {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--color-border) !important;
+  padding: 12px 16px !important;
+}
+.custom-table tbody td, .table tbody td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  font-size: 0.9rem !important;
+}
+
+/* Service/Sector feature cards */
+.card.h-100.border-0.shadow-sm.bg-light {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-top: none !important;
+}
+
+/* Contact info cards */
+.card.border-0.shadow-sm.mb-4 {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-left: none !important;
+}
+
+/* Social media buttons */
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-info,
+.btn-outline-success, .btn-outline-warning, .btn-outline-dark, .btn-outline-light {
+  background: transparent !important;
+  border-color: var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-radius: 2px !important;
+  font-family: var(--font-headline);
+  font-size: 0.78rem !important;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-info:hover,
+.btn-outline-success:hover, .btn-outline-warning:hover, .btn-outline-dark:hover, .btn-outline-light:hover {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  background: transparent !important;
+}
+
+
+

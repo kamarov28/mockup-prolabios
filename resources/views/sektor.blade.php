@@ -5,98 +5,101 @@
 @section('meta_keywords', 'sektor industri, farmasi, food beverage, mikrobiologi, industri, solusi laboratorium, prolabios')
 @section('canonical_url', url('/sektor'))
 
-@section('preload')
-  <link rel="preload" href="{{ $siteSettings['sectors_banner_image'] ?? 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1920&q=80' }}" as="image">
-@endsection
-
 @section('content')
-  <!-- Page Header -->
-  <div class="page-header position-relative py-5" style="background: url('{{ $siteSettings['sectors_banner_image'] ?? 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1920&q=80' }}') center/cover;">
-    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-    <div class="container position-relative text-white py-4 text-center">
-      <h1 class="display-5 fw-bold mb-3">{{ $siteSettings['sectors_title'] ?? 'Sektor Industri' }}</h1>
-      <p class="lead mb-0 text-light opacity-75">{{ $siteSettings['sectors_subtitle'] ?? 'Solusi spesifik untuk berbagai sektor industri dan laboratorium' }}</p>
+  <!-- Editorial Page Header -->
+  <div class="editorial-page-header">
+    <div class="container">
+      <span class="editorial-page-label">Sektor Industri</span>
+      <h1 class="editorial-page-title">Sektor Fokus</h1>
+      <p class="editorial-page-subtitle">Melayani berbagai sektor industri dengan solusi analitika terdepan</p>
     </div>
   </div>
 
   <!-- Sektor Content -->
-  <section class="py-5 bg-light" id="sektor-nav">
+  <section style="padding: 80px 0;" id="sektor-nav">
     <div class="container">
-      <div class="row">
-        <!-- Sidebar (Left) -->
-        <div class="col-lg-3 col-md-4 mb-4">
-          <div class="bg-white p-4 rounded shadow-sm border-0 mb-4 animate-on-scroll animate-slide-right">
-            <h2 class="h5 fw-bold mb-3 pb-2 border-bottom border-primary border-2" style="color: var(--color-secondary, #2b2d42);">Pilih Sektor</h2>
-            <div class="list-group list-group-flush">
-              @php $activeSector = request()->get('s') ?? request()->get('kategori') ?? 'brewing'; @endphp
+      <div class="row g-5">
+
+        <!-- Sidebar -->
+        <div class="col-lg-3 col-md-4">
+          @php $activeSector = request()->get('s') ?? request()->get('kategori') ?? 'brewing'; @endphp
+
+          <div class="mb-5">
+            <h3 class="profil-sidebar-title">Pilih Sektor</h3>
+            <nav class="layanan-sidebar-nav">
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
-                <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav" class="list-group-item list-group-item-action sector-sidebar-link {{ $activeSector == $sec['id'] ? 'active' : '' }}">
-                  {{ $sec['name'] }}
-                </a>
+                  <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav"
+                     class="layanan-sidebar-link {{ $activeSector == $sec['id'] ? 'is-active' : '' }}">
+                    {{ $sec['name'] }}
+                  </a>
                 @endforeach
               @else
-                <a href="#" class="list-group-item list-group-item-action sector-sidebar-link active">Brewing</a>
+                <a href="#" class="layanan-sidebar-link is-active">Brewing</a>
               @endif
-            </div>
+            </nav>
           </div>
-          
-          <div class="p-4 rounded shadow-sm text-center animate-on-scroll animate-slide-right delay-100 sidebar-cta-box">
-            <h2 class="h5 fw-bold mb-3">Butuh Solusi Khusus?</h2>
-            <p class="small mb-3">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="btn w-100 fw-bold shadow-sm">Konsultasi Gratis</a>
+
+          <div class="profil-cta-box">
+            <h3 class="profil-sidebar-title">Butuh Solusi Khusus?</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
+            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
 
         <!-- Main Content -->
         <div class="col-lg-9 col-md-8">
-          <div class="bg-white p-4 p-md-5 rounded shadow-sm animate-on-scroll animate-slide-up">
-            @php
-              $currentData = null;
-              if (isset($sectors)) {
-                  foreach ($sectors as $sec) {
-                      if ($sec['id'] == $activeSector) {
-                          $currentData = $sec;
-                          break;
-                      }
-                  }
-              }
+          @php
+            $currentData = null;
+            if (isset($sectors)) {
+                foreach ($sectors as $sec) {
+                    if ($sec['id'] == $activeSector) {
+                        $currentData = $sec;
+                        break;
+                    }
+                }
+            }
 
-              $descriptionParagraphs = $currentData['description'] ?? [];
-              if (empty($descriptionParagraphs)) {
-                  $descriptionParagraphs = [
-                      "Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>" . ($currentData['name'] ?? '') . "</strong>. Seluruh produk kami dikembangkan dengan standar kualitas tertinggi guna menjamin keandalan, akurasi, dan kepatuhan terhadap standar industri terkini.",
-                      "Jelajahi rangkaian produk spesifik yang kami tawarkan, mulai dari reagen, instrumen analitik, hingga media kultur yang dirancang khusus untuk memenuhi kebutuhan pengujian harian laboratorium maupun lini produksi Anda."
-                  ];
-              }
+            $descriptionParagraphs = $currentData['description'] ?? [];
+            if (empty($descriptionParagraphs)) {
+                $descriptionParagraphs = [
+                    "Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>" . ($currentData['name'] ?? '') . "</strong>. Seluruh produk kami dikembangkan dengan standar kualitas tertinggi guna menjamin keandalan, akurasi, dan kepatuhan terhadap standar industri terkini.",
+                    "Jelajahi rangkaian produk spesifik yang kami tawarkan, mulai dari reagen, instrumen analitik, hingga media kultur yang dirancang khusus untuk memenuhi kebutuhan pengujian harian laboratorium maupun lini produksi Anda."
+                ];
+            }
 
-              $defaultImage = 'https://images.unsplash.com/photo-1574585141047-92e105e4d9eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
-              $currentImage = $currentData['image'] ?? $defaultImage;
-              if ($currentImage && strpos($currentImage, '/') === 0) {
-                  $currentImage = asset($currentImage);
-              }
-            @endphp
+            $defaultImage = 'https://images.unsplash.com/photo-1574585141047-92e105e4d9eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+            $currentImage = $currentData['image'] ?? $defaultImage;
+            if ($currentImage && strpos($currentImage, '/') === 0) {
+                $currentImage = asset($currentImage);
+            }
+          @endphp
 
-            @if($currentData)
-            <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 400px; object-fit: cover;" loading="lazy" decoding="async">
-            
-            <h2 class="mb-3 fw-bold" style="color: var(--color-secondary, #2b2d42);">{{ $currentData['name'] }}</h2>
+          @if($currentData)
+            <!-- Sector Hero Image -->
+            <div class="profil-hero-img mb-5">
+              <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="object-fit: cover; height: 360px; display: block;" loading="lazy" decoding="async">
+            </div>
+
+            <!-- Sector Title & Description -->
+            <h2 class="profil-section-title">{{ $currentData['name'] }}</h2>
             @foreach($descriptionParagraphs as $desc)
-              <p class="text-justify text-muted mb-3" style="text-align: justify; line-height: 1.8;">{!! $desc !!}</p>
+              <p class="profil-body-text mb-4">{!! $desc !!}</p>
             @endforeach
 
-            <hr class="my-5">
+            <hr style="border-color: var(--color-border); margin: 48px 0;">
 
-            <h3 class="h4 mb-4 fw-bold">Temukan Produk Kami:</h3>
-            <p class="text-muted">Kami memiliki berbagai macam produk khusus yang dirancang untuk mendukung kegiatan operasional, riset, dan analisis di sektor <strong>{{ $currentData['name'] }}</strong>.</p>
-            
-            <div class="table-responsive mt-4">
-              <table class="table custom-table table-hover align-middle">
+            <!-- Product Table -->
+            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Temukan Produk Kami</h3>
+            <p class="profil-body-text mb-4">Kami memiliki berbagai macam produk khusus yang dirancang untuk mendukung kegiatan operasional, riset, dan analisis di sektor <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong>.</p>
+
+            <div class="table-responsive mt-2">
+              <table class="table custom-table align-middle">
                 <thead>
                   <tr>
-                    <th class="py-3 px-4">Catalogue</th>
-                    <th class="py-3 px-4">Product</th>
-                    <th class="py-3 px-4">Application</th>
+                    <th>Catalogue</th>
+                    <th>Product</th>
+                    <th>Application</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,13 +109,13 @@
                       @if(isset($prod['sector']) && in_array($currentData['id'], explode(',', $prod['sector'])))
                         @php $hasProducts = true; @endphp
                         <tr>
-                          <td class="py-3 px-4 text-secondary">{{ $prod['catalog'] ?? '-' }}</td>
-                          <td class="py-3 px-4">
-                            <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none fw-semibold" style="color: var(--color-primary, #e63946);">
+                          <td style="color: var(--color-text-muted); font-size: 0.82rem;">{{ $prod['catalog'] ?? '-' }}</td>
+                          <td>
+                            <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
                               {{ $prod['title'] }}
                             </a>
                           </td>
-                          <td class="py-3 px-4 text-secondary">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
+                          <td style="color: var(--color-text-muted); font-size: 0.88rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
                         </tr>
                       @endif
                     @endforeach
@@ -122,52 +125,49 @@
             </div>
 
             @if(!$hasProducts)
-              <div class="alert alert-light mt-3 border">
-                Belum ada produk spesifik yang ditambahkan untuk sektor ini. <a href="{{ url('/produk') }}" class="alert-link text-decoration-none">Lihat semua produk kami</a>.
-              </div>
+              <p style="color: var(--color-text-muted); font-size: 0.9rem; padding: 16px 0; border-top: 1px solid var(--color-border);">
+                Belum ada produk spesifik untuk sektor ini. <a href="{{ url('/produk') }}" style="color: var(--color-accent);">Lihat semua produk kami</a>.
+              </p>
             @endif
 
-            <!-- Related Product Section -->
-            <h3 class="h4 mt-5 mb-4 fw-bold border-bottom border-primary border-2 d-inline-block pb-2">Related Product</h3>
+            <hr style="border-color: var(--color-border); margin: 48px 0;">
+
+            <!-- Related Products -->
+            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Related Product</h3>
             <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
               @if(isset($products) && count($products) > 0)
-                @php 
+                @php
                   $related = collect($products)->filter(function($p) use ($currentData) {
                       return isset($p['sector']) && $p['sector'] != $currentData['id'];
-                  })->shuffle()->take(3); 
+                  })->shuffle()->take(3);
                 @endphp
                 @foreach($related as $prod)
-                  <div class="col animate-on-scroll animate-slide-up delay-{{ ($loop->index + 1) * 100 }}">
+                  <div class="col">
                     <div class="card h-100 product-card-premium border-0">
                       <div class="img-wrap">
                         <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
                       </div>
                       <div class="card-body p-3">
                         @if(!empty($prod['catalog']))
-                        <div class="text-muted small mb-2 fw-semibold" style="font-size: 0.75rem;">Cat. {{ $prod['catalog'] }}</div>
+                          <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
                         @endif
                         <h4 class="card-title fs-6 fw-bold">
-                          <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none text-dark hover-primary">{{ $prod['title'] }}</a>
+                          <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
                         </h4>
-                        <p class="card-text text-muted small mt-2 mb-3" style="font-size: 0.78rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
-                        <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="btn btn-sm btn-outline-primary w-100 fw-semibold">Lihat Detail</a>
+                        <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 16px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
+                        <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
                       </div>
                     </div>
                   </div>
                 @endforeach
               @endif
             </div>
-            <!-- End Related Product Section -->
-            
-            @else
-            <div class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <p class="text-muted mt-3">Sedang memuat data sektor...</p>
+
+          @else
+            <div style="text-align: center; padding: 80px 0;">
+              <p style="color: var(--color-text-muted);">Sedang memuat data sektor...</p>
             </div>
-            @endif
-          </div>
+          @endif
         </div>
       </div>
     </div>
@@ -188,119 +188,66 @@
       const detailProductUrl = "{{ url('/produk/detail') }}";
       const allProductsUrl = "{{ url('/produk') }}";
       
-      const sidebarLinks = document.querySelectorAll('#sektor-nav .list-group-item');
-      const contentCard = document.querySelector('#sektor-nav .col-lg-9 > div');
+      const sidebarLinks = document.querySelectorAll('#sektor-nav .layanan-sidebar-link');
+      const contentArea = document.querySelector('#sektor-nav .col-lg-9');
       
       sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
-          
           const urlObj = new URL(this.href);
           const sectorId = urlObj.searchParams.get('s');
-          
           if (!sectorId) return;
-          
           const sector = sectors.find(s => s.id === sectorId);
           if (!sector) return;
           
-          sidebarLinks.forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
+          sidebarLinks.forEach(l => l.classList.remove('is-active'));
+          this.classList.add('is-active');
           
-          const titleEl = contentCard.querySelector('h2');
-          if (titleEl) {
-            titleEl.textContent = sector.name;
-          }
+          const titleEl = contentArea.querySelector('.profil-section-title');
+          if (titleEl) titleEl.textContent = sector.name;
           
-          const imgEl = contentCard.querySelector('img');
+          const imgEl = contentArea.querySelector('.profil-hero-img img');
           if (imgEl) {
             let sectorImg = sector.image || "{{ $defaultImage }}";
-            if (sectorImg.startsWith('/')) {
-              sectorImg = "{{ url('/') }}" + sectorImg;
-            }
+            if (sectorImg.startsWith('/')) sectorImg = "{{ url('/') }}" + sectorImg;
             imgEl.src = sectorImg;
             imgEl.alt = sector.name + ' Sector';
           }
           
-          let currentEl = contentCard.querySelector('h2').nextElementSibling;
-          while (currentEl && currentEl.tagName !== 'HR') {
-            const nextEl = currentEl.nextElementSibling;
-            currentEl.remove();
-            currentEl = nextEl;
-          }
+          // Update description paragraphs
+          const bodyTexts = contentArea.querySelectorAll('p.profil-body-text');
+          const firstHr = contentArea.querySelector('hr');
+          bodyTexts.forEach(p => { if (firstHr && p.compareDocumentPosition(firstHr) & Node.DOCUMENT_POSITION_FOLLOWING) p.remove(); });
           
-          const hrEl = contentCard.querySelector('hr');
           const description = sector.description && sector.description.length > 0 ? sector.description : [
-              `Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>${sector.name}</strong>. Seluruh produk kami dikembangkan dengan standar kualitas tertinggi guna menjamin keandalan, akurasi, dan kepatuhan terhadap standar industri terkini.`,
-              `Jelajahi rangkaian produk spesifik yang kami tawarkan, mulai dari reagen, instrumen analitik, hingga media kultur yang dirancang khusus untuk memenuhi kebutuhan pengujian harian laboratorium maupun lini produksi Anda.`
+            `Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>${sector.name}</strong>.`,
+            `Jelajahi rangkaian produk spesifik yang kami tawarkan untuk memenuhi kebutuhan pengujian harian laboratorium Anda.`
           ];
           
-          description.forEach(descText => {
-            const p = document.createElement('p');
-            p.className = 'text-justify text-muted mb-3';
-            p.style.textAlign = 'justify';
-            p.style.lineHeight = '1.8';
-            p.innerHTML = descText;
-            hrEl.parentNode.insertBefore(p, hrEl);
-          });
-          
-          const productSecText = contentCard.querySelector('p.text-muted strong');
-          if (productSecText) {
-            productSecText.textContent = sector.name;
+          if (firstHr && titleEl) {
+            description.reverse().forEach(descText => {
+              const p = document.createElement('p');
+              p.className = 'profil-body-text mb-4';
+              p.innerHTML = descText;
+              titleEl.parentNode.insertBefore(p, firstHr);
+            });
           }
           
-          const tbody = contentCard.querySelector('table tbody');
+          // Update product table
+          const tbody = contentArea.querySelector('table tbody');
           if (tbody) {
             tbody.innerHTML = '';
-            
             const sectorProducts = products.filter(p => p.sector && p.sector.split(',').includes(sector.id));
-            
-            if (sectorProducts.length > 0) {
-              sectorProducts.forEach(prod => {
-                const tr = document.createElement('tr');
-                
-                const tdCatalog = document.createElement('td');
-                tdCatalog.className = 'py-3 px-4 text-secondary';
-                tdCatalog.textContent = prod.catalog || '-';
-                
-                const tdProduct = document.createElement('td');
-                tdProduct.className = 'py-3 px-4';
-                
-                const aLink = document.createElement('a');
-                aLink.href = detailProductUrl + '?id=' + encodeURIComponent(prod.title);
-                aLink.className = 'text-decoration-none fw-semibold';
-                aLink.style.color = 'var(--color-primary, #e63946)';
-                aLink.textContent = prod.title;
-                
-                tdProduct.appendChild(aLink);
-                
-                const tdApp = document.createElement('td');
-                tdApp.className = 'py-3 px-4 text-secondary';
-                const decodedDesc = decodeHtmlEntity(prod.description || '');
-                const cleanDesc = decodedDesc.replace(/<\/?[^>]+(>|$)/g, "").trim();
-                tdApp.textContent = cleanDesc.length > 150 ? cleanDesc.substring(0, 150) + '...' : (cleanDesc || '-');
-                
-                tr.appendChild(tdCatalog);
-                tr.appendChild(tdProduct);
-                tr.appendChild(tdApp);
-                tbody.appendChild(tr);
-              });
-              
-              const alertEl = contentCard.querySelector('.alert');
-              if (alertEl) alertEl.remove();
-            } else {
-              let alertEl = contentCard.querySelector('.alert');
-              if (!alertEl) {
-                alertEl = document.createElement('div');
-                alertEl.className = 'alert alert-light mt-3 border';
-                alertEl.innerHTML = `Belum ada produk spesifik yang ditambahkan untuk sektor ini. <a href="${allProductsUrl}" class="alert-link text-decoration-none">Lihat semua produk kami</a>.`;
-                tbody.parentNode.parentNode.appendChild(alertEl);
-              }
-            }
+            sectorProducts.forEach(prod => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td style="color: var(--color-text-muted); font-size: 0.82rem;">${prod.catalog || '-'}</td>
+                <td><a href="${detailProductUrl}?id=${encodeURIComponent(prod.title)}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">${prod.title}</a></td>
+                <td style="color: var(--color-text-muted); font-size: 0.88rem;">${(decodeHtmlEntity(prod.description || '').replace(/<\/?[^>]+(>|$)/g, '').trim()).substring(0, 150) || '-'}</td>
+              `;
+              tbody.appendChild(tr);
+            });
           }
-          
-          contentCard.querySelectorAll('.animate-on-scroll').forEach(el => {
-            el.classList.add('is-visible');
-          });
           
           history.pushState(null, '', window.location.pathname + '?s=' + sector.id);
         });
@@ -309,15 +256,11 @@
       window.addEventListener('popstate', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const sectorId = urlParams.get('s') || 'brewing';
-        
         const activeLink = Array.from(sidebarLinks).find(link => {
           const urlObj = new URL(link.href);
           return urlObj.searchParams.get('s') === sectorId;
         });
-        
-        if (activeLink) {
-          activeLink.dispatchEvent(new Event('click'));
-        }
+        if (activeLink) activeLink.dispatchEvent(new Event('click'));
       });
     });
   </script>

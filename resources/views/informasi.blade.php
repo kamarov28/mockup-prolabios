@@ -8,61 +8,50 @@
   @section('og_image', $currentBlog['image'])
 @endif
 
-@section('preload')
-  @if(isset($currentBlog) && $currentBlog)
-    <link rel="preload" href="{{ $currentBlog['image'] }}" as="image">
-  @else
-    <link rel="preload" href="{{ $siteSettings['info_banner_image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1920&q=80' }}" as="image">
-  @endif
-@endsection
-
 @section('content')
-  <!-- Page Header -->
-  <div class="page-header position-relative py-5" style="background: url('{{ $siteSettings['info_banner_image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1920&q=80' }}') center/cover;">
-    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-    <div class="container position-relative text-white py-4 text-center">
-      <h1 class="display-5 fw-bold mb-3">{{ $siteSettings['info_title'] ?? 'Berita & Kegiatan' }}</h1>
-      <p class="lead mb-0 text-light opacity-75">
-        @if($currentBlog)
-          Detail Artikel
-        @else
-          {{ $siteSettings['info_subtitle'] ?? 'Informasi terbaru, seminar, dan kegiatan teknis dari Prolabios' }}
-        @endif
-      </p>
+  <!-- Editorial Page Header -->
+  <div class="editorial-page-header">
+    <div class="container">
+      <span class="editorial-page-label">Berita &amp; Artikel</span>
+      <h1 class="editorial-page-title">Informasi</h1>
+      <p class="editorial-page-subtitle">Berita terkini dan artikel seputar dunia laboratorium dan industri</p>
     </div>
   </div>
 
   <!-- Informasi Content -->
-  <section class="py-5 bg-light">
+  <section style="padding: 80px 0;">
     <div class="container">
-      <div class="row">
-        
+      <div class="row g-5">
+
         <!-- Main Content (Left) -->
-        <div class="col-lg-8 col-md-7 mb-4">
+        <div class="col-lg-8 col-md-7">
           @if($currentBlog)
             <!-- Detail View -->
-            <div class="bg-white p-4 p-md-5 rounded shadow-sm border-0 animate-on-scroll animate-slide-up">
-              <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="btn btn-outline-secondary btn-sm mb-4">
-                <i class="bi bi-arrow-left me-2"></i>Kembali ke Berita
+            <div>
+              <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="profil-cta-btn mb-5 d-inline-flex" style="color: var(--color-text-muted) !important; border-color: var(--color-border);">
+                <i class="bi bi-arrow-left"></i> Kembali ke Berita
               </a>
-              
-              <div class="mb-3">
-                <span class="badge bg-primary px-3 py-2 text-uppercase mb-2">{{ $currentBlog['category'] }}</span>
-                <span class="text-muted ms-3 small"><i class="bi bi-calendar3 me-1"></i>{{ $currentBlog['date'] }}</span>
+
+              <div style="margin-bottom: 20px; margin-top: 20px;">
+                <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 4px 10px;">{{ $currentBlog['category'] }}</span>
+                <span style="font-size: 0.82rem; color: var(--color-text-muted); margin-left: 16px;"><i class="bi bi-calendar3 me-1"></i>{{ $currentBlog['date'] }}</span>
               </div>
-              
-              <h2 class="fw-bold mb-4" style="color: var(--color-secondary, #2b2d42);">{{ $currentBlog['title'] }}</h2>
-              
-              <img src="{{ $currentBlog['image'] }}" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 450px; object-fit: cover;" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
-              
-              <div class="lh-lg text-muted" style="text-align: justify;">
+
+              <h2 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 24px !important;">{{ $currentBlog['title'] }}</h2>
+
+              <div class="profil-hero-img mb-5">
+                <img src="{{ $currentBlog['image'] }}" class="w-100" style="max-height: 450px; object-fit: cover; display: block;" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
+              </div>
+
+              <div class="profil-body-text" style="line-height: 1.9;">
                 {!! $currentBlog['content'] !!}
               </div>
             </div>
+
           @else
             <!-- List View -->
             @if(count($posts) > 0)
-              <div class="row row-cols-1 row-cols-md-2 g-4 animate-on-scroll animate-slide-up">
+              <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach($posts as $post)
                   @php
                     $dateParts = explode(' ', $post['date']);
@@ -70,7 +59,7 @@
                     $month = isset($dateParts[1]) ? $dateParts[1] : '';
                   @endphp
                   <div class="col">
-                    <div class="card h-100 blog-card position-relative animate-on-scroll animate-slide-up delay-{{ ($loop->index % 2 + 1) * 100 }}">
+                    <div class="card h-100 blog-card position-relative">
                       <div class="blog-card-img-wrap">
                         <img src="{{ $post['image'] }}" class="card-img-top" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
                         <div class="blog-card-date">
@@ -92,7 +81,7 @@
 
               <!-- Pagination -->
               @if($totalPages > 1)
-                <nav aria-label="Page navigation" class="mt-5 animate-on-scroll animate-scale-in delay-200">
+                <nav aria-label="Page navigation" class="mt-5">
                   <ul class="pagination justify-content-center">
                     <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
                       <a class="page-link" href="{{ url('/informasi') }}?page={{ $currentPage - 1 }}{{ $selectedCategory ? '&kategori=' . $selectedCategory : '' }}">Sebelumnya</a>
@@ -108,30 +97,33 @@
                   </ul>
                 </nav>
               @endif
+
             @else
-              <div class="bg-white p-5 rounded text-center shadow-sm border-0 animate-on-scroll animate-scale-in">
-                <i class="bi bi-newspaper display-1 text-muted opacity-50 mb-3"></i>
-                <h2 class="h4 fw-bold">Belum Ada Artikel</h2>
-                <p class="text-muted mb-4">Tidak ada artikel yang ditemukan untuk kategori ini.</p>
-                <a href="{{ url('/informasi') }}" class="btn btn-primary px-4">Lihat Semua Artikel</a>
+              <div style="text-align: center; padding: 80px 0; border: 1px solid var(--color-border);">
+                <i class="bi bi-newspaper" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
+                <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Belum Ada Artikel</h2>
+                <p class="profil-body-text mb-4">Tidak ada artikel yang ditemukan untuk kategori ini.</p>
+                <a href="{{ url('/informasi') }}" class="profil-cta-btn">Lihat Semua Artikel <i class="bi bi-arrow-right"></i></a>
               </div>
             @endif
           @endif
         </div>
 
         <!-- Sidebar (Right) -->
-        <div class="col-lg-4 col-md-5 mb-4">
-          <div class="bg-white p-4 rounded shadow-sm border-0 mb-4 animate-on-scroll animate-slide-left">
-            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-primary border-2">
-              <h2 class="h5 fw-bold mb-0" style="color: var(--color-secondary, #2b2d42);">Kategori Artikel</h2>
+        <div class="col-lg-4 col-md-5">
+
+          <!-- Category Filter -->
+          <div class="mb-5">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+              <h3 class="profil-sidebar-title" style="margin-bottom: 0; flex: 1;">Kategori Artikel</h3>
               @if($selectedCategory)
-                <a href="{{ url('/informasi') }}" class="text-primary text-decoration-none small fw-semibold"><i class="bi bi-x-circle me-1"></i>Reset</a>
+                <a href="{{ url('/informasi') }}" style="font-family: var(--font-headline); font-size: 0.7rem; color: var(--color-accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;"><i class="bi bi-x-circle me-1"></i>Reset</a>
               @endif
             </div>
-            <div class="list-group list-group-flush">
+            <div style="border-bottom: 1px solid var(--color-border); margin-bottom: 16px; padding-bottom: 12px;"></div>
+            <nav class="layanan-sidebar-nav">
               @foreach($categoryCounts as $catName => $count)
                 @php
-                  // Build category slugs
                   $catSlug = '';
                   if ($catName === 'Berita') $catSlug = 'berita';
                   elseif ($catName === 'Event') $catSlug = 'event';
@@ -139,33 +131,36 @@
                   elseif ($catName === 'IPTEK') $catSlug = 'iptek';
                   elseif ($catName === 'Kegiatan') $catSlug = 'kegiatan';
                 @endphp
-                <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}" class="list-group-item list-group-item-action sector-sidebar-link d-flex justify-content-between align-items-center py-2 {{ $selectedCategory == $catSlug ? 'active' : '' }}">
+                <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
+                   class="layanan-sidebar-link {{ $selectedCategory == $catSlug ? 'is-active' : '' }}"
+                   style="display: flex; justify-content: space-between;">
                   {{ $catName }}
-                  <span class="badge {{ $selectedCategory == $catSlug ? 'bg-light text-primary' : 'bg-primary' }} rounded-pill">{{ $count }}</span>
+                  <span style="font-size: 0.72rem; color: var(--color-text-muted);">{{ $count }}</span>
                 </a>
               @endforeach
-            </div>
+            </nav>
           </div>
-          
-          <div class="bg-white p-4 rounded shadow-sm border-0 animate-on-scroll animate-slide-left delay-100">
-            <h2 class="h5 fw-bold mb-3 pb-2 border-bottom border-primary border-2" style="color: var(--color-secondary, #2b2d42);">Info Terkini</h2>
-            
+
+          <!-- Recent Posts -->
+          <div>
+            <h3 class="profil-sidebar-title">Info Terkini</h3>
             @if(count($recentPosts) > 0)
               @foreach($recentPosts as $index => $rPost)
-                <div class="mb-3 {{ $index === count($recentPosts) - 1 ? '' : 'pb-3 border-bottom' }}">
-                  <div class="text-muted small mb-1"><i class="bi bi-calendar3 me-1"></i> {{ $rPost['date'] }}</div>
-                  <h3 class="fs-6 fw-bold mb-0">
-                    <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" class="text-decoration-none text-dark hover-primary lh-base">{{ $rPost['title'] }}</a>
-                  </h3>
+                <div style="padding: 14px 0; {{ $index !== count($recentPosts) - 1 ? 'border-bottom: 1px solid var(--color-border);' : '' }}">
+                  <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">
+                    <i class="bi bi-calendar3 me-1"></i> {{ $rPost['date'] }}
+                  </div>
+                  <h4 style="font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                    <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" style="color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">{{ $rPost['title'] }}</a>
+                  </h4>
                 </div>
               @endforeach
             @else
-              <p class="text-muted small mb-0">Belum ada info terkini.</p>
+              <p class="profil-body-text">Belum ada info terkini.</p>
             @endif
-            
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   </section>
