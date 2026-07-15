@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
   initHeaderScrollEffect();
   initPrincipalSlider();
   initBlogCategoryFilter();
-  initHeroSlideshow();
   initScrollAnimations(); // Custom entrance scroll animations
+  initGSAPAnimations(); // Custom GSAP ScrollTrigger animations
   
   if (window.location.pathname === '/produk' || window.location.pathname.endsWith('/produk.php') || window.location.pathname.includes('/produk')) {
     applyPagination(1);
@@ -604,4 +604,62 @@ function initScrollAnimations() {
     }
   });
 }
+
+/**
+ * GSAP ScrollTrigger Fluid Animation Engine
+ */
+function initGSAPAnimations() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Fade Up elements
+  gsap.utils.toArray('.gsap-reveal-fade').forEach(el => {
+    gsap.from(el, {
+      scrollTrigger: {
+        trigger: el,
+        start: "top 95%",
+        toggleActions: "play none none none"
+      },
+      y: 45,
+      opacity: 0,
+      duration: 1,
+      ease: "power3.out"
+    });
+  });
+
+  // Stagger reveal for index items or lists
+  gsap.utils.toArray('.typo-index-list').forEach(list => {
+    const items = list.querySelectorAll('.gsap-reveal-item');
+    gsap.from(items, {
+      scrollTrigger: {
+        trigger: list,
+        start: "top 95%"
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: "power3.out"
+    });
+  });
+
+  // Stagger reveal for card/list grids
+  const rowElements = document.querySelectorAll('.row:has(.gsap-reveal-item)');
+  rowElements.forEach(row => {
+    const items = row.querySelectorAll('.gsap-reveal-item');
+    gsap.from(items, {
+      scrollTrigger: {
+        trigger: row,
+        start: "top 95%"
+      },
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.15,
+      ease: "power3.out"
+    });
+  });
+}
+
 
