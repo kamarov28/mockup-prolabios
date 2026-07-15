@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'PROLABIOS Mitra Analitika')</title>
+  <title>@yield('title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')</title>
   <meta name="description" content="PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.">
   
   <!-- Preconnect to CDN -->
@@ -59,12 +59,12 @@
       <div>
         <span><i class="bi bi-telephone-fill text-primary me-1"></i> Hubungi Kami: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
         <span class="mx-2 text-muted opacity-50">|</span>
-        <a href="mailto:{{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}" class="text-decoration-none fw-medium"><i class="bi bi-envelope-fill text-primary me-1"></i> {{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}</a>
+        <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="text-decoration-none fw-medium"><i class="bi bi-envelope-fill text-primary me-1"></i> {{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
       </div>
       <div class="mt-2 mt-md-0">
-        <form class="d-flex" action="{{ url('/produk') }}" method="GET">
+        <form class="d-flex search-form" action="{{ url('/produk') }}" method="GET">
           <div class="input-group input-group-sm">
-            <input type="text" name="s" class="form-control search-input-pill" placeholder="Cari produk..." aria-label="Search">
+            <input type="text" name="q" class="form-control search-input-pill" placeholder="Cari produk..." aria-label="Search" value="{{ request()->query('q') ?? request()->query('s') }}">
             <button class="btn search-btn-pill" type="submit" aria-label="Cari produk">
               <i class="bi bi-search"></i>
             </button>
@@ -77,9 +77,9 @@
   <!-- Header / Navigation -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
     <div class="container">
-      <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios" height="40">
-      </a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
+          <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="40">
+        </a>
       
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -108,6 +108,11 @@
           <li class="nav-item">
             <a class="nav-link px-3 {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
           </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 rounded-pill d-inline-flex align-items-center gap-2" href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
+              <i class="bi bi-download"></i> Unduh Katalog
+            </a>
+          </li>
           <li class="nav-item d-flex align-items-center gap-3 ms-lg-3 mt-3 mt-lg-0">
             <button type="button" id="motion-toggle" class="btn btn-link nav-link p-0 border-0 bg-transparent" style="text-decoration: none;" aria-label="Toggle Animations" title="Aktif/Nonaktifkan Animasi">
               <i id="motion-toggle-icon" class="bi bi-play-circle-fill" style="font-size: 1.2rem;"></i>
@@ -131,22 +136,31 @@
       <div class="row gy-4">
         
         <!-- Col 1: Kantor -->
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-3 col-md-6 col-12">
           <div class="mb-3">
-            <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios" height="38" class="footer-logo">
+            <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="38" class="footer-logo">
           </div>
-          <p class="mb-3 mt-3"><strong>PT PROLABIOS MITRA ANALITIKA</strong><br>
+          <p class="mb-3 mt-3"><strong>{{ strtoupper($siteSettings['company_name'] ?? 'PT PROLABIOS MITRA ANALITIKA') }}</strong><br>
           Komplek Cibinong Griya Asri Blok: A9/10, RT 01 RW 08<br>
           Cibinong – Bogor, West Java, Indonesia 16913</p>
           <div class="d-flex gap-2 mt-3">
-            <a href="https://web.facebook.com/PT-Prolabios-Mitra-Analitika-1787666991553394/" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://www.instagram.com/prolabios.id?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            @if(!empty($siteSettings['social_facebook']))
+              <a href="{{ $siteSettings['social_facebook'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            @endif
+            @if(!empty($siteSettings['social_instagram']))
+              <a href="{{ $siteSettings['social_instagram'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            @endif
+            @if(!empty($siteSettings['social_linkedin']))
+              <a href="{{ $siteSettings['social_linkedin'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            @endif
+            @if(!empty($siteSettings['social_twitter']))
+              <a href="{{ $siteSettings['social_twitter'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            @endif
           </div>
         </div>
 
         <!-- Col 2: Perusahaan -->
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-3 col-md-6 col-6">
           <h5>Perusahaan</h5>
           <ul class="list-unstyled footer-links lh-lg">
             <li><a href="{{ url('/profil') }}">Profil Perusahaan</a></li>
@@ -157,7 +171,7 @@
         </div>
 
         <!-- Col 3: Kontak -->
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-3 col-md-6 col-12">
           <h5>Hubungi Kami</h5>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-2">
@@ -168,24 +182,21 @@
               <i class="bi bi-telephone-fill me-2 mt-1" style="color: var(--color-primary);"></i>
               <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_finance'] ?? '021-8792-9433') }}">{{ $siteSettings['contact_phone_finance'] ?? '021-8792-9433' }} (Finance &amp; Wh)</a>
             </li>
-            <li class="d-flex align-items-start mb-2">
-              <i class="bi bi-whatsapp me-2 mt-1" style="color: var(--color-primary);"></i>
-              <a href="https://wa.me/{{ $waNumber }}" target="_blank" rel="noopener noreferrer">{{ $siteSettings['contact_phone'] ?? '0821-8792-9433' }} (WhatsApp CS)</a>
-            </li>
+
             <li class="d-flex align-items-start mb-2">
               <i class="bi bi-envelope-fill me-2 mt-1" style="color: var(--color-primary);"></i>
-              <a href="mailto:{{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}" style="word-break: break-all;">{{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}</a>
+              <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" style="word-break: break-all;">{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
             </li>
           </ul>
         </div>
 
         <!-- Col 4: Jam Operasional -->
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-3 col-md-6 col-6">
           <h5>Jam Operasional</h5>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-3 text-light">
               <i class="bi bi-clock-fill me-2 mt-1" style="color: var(--color-primary);"></i>
-              <span>Senin – Jumat<br>09.00 – 18.00 WIB</span>
+              <span>{{ $siteSettings['operational_hours'] ?? 'Senin – Jumat : 09.00 – 18.00 WIB' }}</span>
             </li>
             <li class="d-flex align-items-center">
               <i class="bi bi-geo-alt-fill me-2" style="color: var(--color-primary);"></i>

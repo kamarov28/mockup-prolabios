@@ -9,6 +9,8 @@
       $pageTitle = 'Editor Banner & Header Halaman';
   } elseif ($section === 'contacts') {
       $pageTitle = 'Pengaturan Kontak & Alamat';
+  } elseif ($section === 'general') {
+      $pageTitle = 'Pengaturan Umum, Logo & Media Sosial';
   } else {
       $pageTitle = 'Pengaturan & Editor Halaman Website';
   }
@@ -36,7 +38,7 @@
     <div class="row g-4 justify-content-center">
       
       <!-- Card 1: Homepage Editor -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card h-100 bg-white border-0 shadow-sm transition-all hover-translate-y">
           <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-between">
             <div class="rounded-circle bg-danger-subtle text-danger p-4 mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -54,7 +56,7 @@
       </div>
 
       <!-- Card 2: Page Banners Editor -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card h-100 bg-white border-0 shadow-sm transition-all hover-translate-y">
           <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-between">
             <div class="rounded-circle bg-info-subtle text-info p-4 mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -72,7 +74,7 @@
       </div>
 
       <!-- Card 3: Contact & Address Settings -->
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card h-100 bg-white border-0 shadow-sm transition-all hover-translate-y">
           <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-between">
             <div class="rounded-circle bg-success-subtle text-success p-4 mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
@@ -80,10 +82,28 @@
             </div>
             <div>
               <h3 class="h5 fw-bold text-dark mb-2">Kontak &amp; Alamat</h3>
-              <p class="text-muted small mb-4">Ubah nomor telepon utama, email perusahaan, dan alamat kantor lengkap yang akan tampil di header &amp; footer situs secara global.</p>
+              <p class="text-muted small mb-4">Ubah nomor telepon utama, email perusahaan, alamat kantor lengkap, dan link katalog PDF.</p>
             </div>
             <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="btn btn-success w-100 py-2 fw-semibold rounded-pill">
               Buka Pengaturan Kontak <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: General Settings & Logo -->
+      <div class="col-md-3">
+        <div class="card h-100 bg-white border-0 shadow-sm transition-all hover-translate-y">
+          <div class="card-body p-4 text-center d-flex flex-column align-items-center justify-content-between">
+            <div class="rounded-circle bg-warning-subtle text-warning p-4 mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+              <i class="bi bi-gear fs-1"></i>
+            </div>
+            <div>
+              <h3 class="h5 fw-bold text-dark mb-2">Umum &amp; Logo</h3>
+              <p class="text-muted small mb-4">Ubah nama perusahaan, upload file logo situs utama, edit jam operasional, dan link akun media sosial.</p>
+            </div>
+            <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="btn btn-warning text-white w-100 py-2 fw-semibold rounded-pill">
+              Buka Setelan Umum <i class="bi bi-chevron-right ms-1"></i>
             </a>
           </div>
         </div>
@@ -476,18 +496,106 @@
 
         <div class="mb-3">
           <label for="contact_email" class="form-label fw-bold">Alamat Email Utama</label>
-          <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ old('contact_email', $homeData['contact_email'] ?? 'lisa.aryadi@prolabios.com') }}" required>
+          <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ old('contact_email', $homeData['contact_email'] ?? 'marketing@prolabios.com') }}" required>
           <div class="form-text">Email resmi perusahaan yang tampil di header, footer, dan kontak.</div>
         </div>
 
         <div class="mb-3">
           <label for="contact_address" class="form-label fw-bold">Alamat Lengkap Kantor</label>
           <textarea class="form-control" id="contact_address" name="contact_address" rows="4" required>{{ old('contact_address', $homeData['contact_address'] ?? '') }}</textarea>
-          <div class="form-text">Alamat operasional kantor PMA (tampil di halaman Hubungi Kami).</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="catalog_pdf_url" class="form-label fw-bold">Link Google Drive Katalog PDF</label>
+          <input type="url" class="form-control" id="catalog_pdf_url" name="catalog_pdf_url" value="{{ old('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '') }}">
+          <div class="form-text">Tautan langsung Google Drive untuk dokumen katalog PDF ("Unduh Katalog").</div>
         </div>
 
         <div class="mt-4 border-top pt-3 text-end">
           <button type="submit" class="btn btn-success px-4 fw-bold rounded-pill"><i class="bi bi-save me-1"></i> SIMPAN PENGATURAN KONTAK</button>
+        </div>
+      </form>
+    </div>
+  @endif
+
+  @if($section === 'general')
+    <div class="card bg-white shadow-sm border-0">
+      <div class="card-header border-bottom py-3 bg-white">
+        <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-gear text-warning me-2"></i>Pengaturan Umum, Logo &amp; Media Sosial</h5>
+      </div>
+
+      <form action="{{ route('admin.home.update') }}" method="POST" enctype="multipart/form-data" class="card-body p-4">
+        @csrf
+        <input type="hidden" name="section" value="general">
+
+        <!-- Nama Perusahaan & Jam Operasional -->
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="company_name" class="form-label fw-bold">Nama Perusahaan</label>
+            <input type="text" class="form-control" id="company_name" name="company_name" value="{{ old('company_name', $homeData['company_name'] ?? 'PT. Prolabios Mitra Analitika') }}" required>
+            <div class="form-text">Nama utama PT / Perusahaan yang tampil di title bar dan logo website.</div>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="operational_hours" class="form-label fw-bold">Jam Operasional</label>
+            <input type="text" class="form-control" id="operational_hours" name="operational_hours" value="{{ old('operational_hours', $homeData['operational_hours'] ?? 'Senin - Jumat: 08.00 - 17.00') }}" required>
+            <div class="form-text">Jadwal buka-tutup kantor resmi (tampil di footer).</div>
+          </div>
+        </div>
+
+        <!-- Logo Website Upload -->
+        <div class="col-12 mt-4">
+          <label class="form-label fw-bold">Logo Utama Website</label>
+          <div class="row g-3 align-items-center">
+            <div class="col-sm-3 text-center">
+              <div class="border rounded bg-light p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 140px; height: 70px;">
+                <img id="site_logo_preview" src="{{ !empty($homeData['site_logo']) ? $homeData['site_logo'] : asset('images/logo-prolabios.png') }}" alt="Preview Logo" class="w-100 h-100" style="object-fit: contain;">
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="mb-2">
+                <label for="site_logo_file" class="form-label small fw-bold">Upload File Logo Baru (Saran: PNG transparan)</label>
+                <input class="form-control" type="file" id="site_logo_file" name="site_logo_file" accept="image/*">
+              </div>
+              <div>
+                <label for="site_logo_url" class="form-label small fw-bold">Atau Gunakan URL Gambar Logo Eksternal</label>
+                <input type="text" class="form-control" id="site_logo_url" name="site_logo_url" value="{{ old('site_logo_url', $homeData['site_logo'] ?? '') }}" placeholder="https://example.com/logo.png">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Media Sosial Links -->
+        <h6 class="mt-5 mb-3 fw-bold text-dark border-bottom pb-2"><i class="bi bi-share text-primary me-2"></i>Link Akun Media Sosial</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-light text-danger" style="width: 45px; justify-content: center;"><i class="bi bi-instagram"></i></span>
+              <input type="url" class="form-control" id="social_instagram" name="social_instagram" placeholder="https://instagram.com/akun" value="{{ old('social_instagram', $homeData['social_instagram'] ?? '') }}">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-light text-primary" style="width: 45px; justify-content: center;"><i class="bi bi-facebook"></i></span>
+              <input type="url" class="form-control" id="social_facebook" name="social_facebook" placeholder="https://facebook.com/akun" value="{{ old('social_facebook', $homeData['social_facebook'] ?? '') }}">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-light text-info" style="width: 45px; justify-content: center;"><i class="bi bi-linkedin"></i></span>
+              <input type="url" class="form-control" id="social_linkedin" name="social_linkedin" placeholder="https://linkedin.com/company/akun" value="{{ old('social_linkedin', $homeData['social_linkedin'] ?? '') }}">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-light text-dark" style="width: 45px; justify-content: center;"><i class="bi bi-twitter-x"></i></span>
+              <input type="url" class="form-control" id="social_twitter" name="social_twitter" placeholder="https://twitter.com/akun" value="{{ old('social_twitter', $homeData['social_twitter'] ?? '') }}">
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 border-top pt-3 text-end">
+          <button type="submit" class="btn btn-warning px-4 fw-bold text-white rounded-pill"><i class="bi bi-save me-1"></i> SIMPAN PENGATURAN UMUM</button>
         </div>
       </form>
     </div>
@@ -555,6 +663,11 @@
         
         bindPreviewListener('contact_banner_file', 'contact_banner_preview');
         bindUrlListener('contact_banner_url', 'contact_banner_preview');
+      @endif
+
+      @if($section === 'general')
+        bindPreviewListener('site_logo_file', 'site_logo_preview');
+        bindUrlListener('site_logo_url', 'site_logo_preview');
       @endif
     });
   </script>

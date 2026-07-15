@@ -33,10 +33,13 @@
           </div>
 
           <div class="bg-white p-4 rounded shadow-sm border-0 text-center animate-on-scroll animate-slide-right delay-100">
-            <h2 class="h5 fw-bold mb-3" style="color: var(--color-secondary, #2b2d42);">Hubungi Teknisi</h2>
-            <p class="small text-muted mb-3">Respon cepat via WhatsApp untuk pengajuan perbaikan alat.</p>
-            <a href="https://wa.me/{{ $waNumberTech }}?text=Halo%20Prolabios%2C%20saya%20ingin%20mengajukan%20service%20request%20untuk%20instrumen%20laboratorium%20kami." target="_blank" rel="noopener noreferrer" class="btn btn-success w-100 fw-bold d-flex align-items-center justify-content-center shadow-sm">
-              <i class="bi bi-whatsapp me-2 fs-5"></i> WhatsApp Teknisi
+            <h2 class="h5 fw-bold mb-3" style="color: var(--color-secondary, #2b2d42);">Hubungi Kami</h2>
+            <p class="small text-muted mb-3">Ajukan perbaikan atau konsultasi instrumen melalui kontak resmi perusahaan.</p>
+            <a href="{{ url('/kontak') }}" class="btn btn-primary w-100 fw-bold d-flex align-items-center justify-content-center shadow-sm mb-2">
+              <i class="bi bi-envelope-fill me-2"></i> Formulir Kontak
+            </a>
+            <a href="tel:02138741447" class="btn btn-outline-secondary w-100 fw-bold d-flex align-items-center justify-content-center btn-sm text-truncate">
+              <i class="bi bi-telephone-fill me-2"></i> Hubungi Telepon
             </a>
           </div>
         </div>

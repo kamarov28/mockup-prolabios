@@ -62,24 +62,31 @@ class AdminController extends Controller
         $recentProducts = array_slice($products, 0, 5);
         $recentPosts = array_slice($this->dataService->getPosts(), 0, 5);
 
-        // Count product categories distribution for the chart
-        $categoryDist = [
-            'Culture Media' => 0,
-            'Instruments' => 0,
-            'Chemicals & Reagents' => 0,
-            'Consumables' => 0
-        ];
-        foreach ($products as $p) {
-            $cat = $p['category'] ?? '';
-            if ($cat === 'culture-media') $categoryDist['Culture Media']++;
-            elseif ($cat === 'instruments') $categoryDist['Instruments']++;
-            elseif ($cat === 'chemicals') $categoryDist['Chemicals & Reagents']++;
-            elseif ($cat === 'consumables') $categoryDist['Consumables']++;
-        }
+        // Mengisi distribusi kategori secara dinamis berdasarkan data produk yang ada
+                $categoryDist = [];
+                foreach ($products as $p) {
+                    $catRaw = $p['category'] ?? '';
+                    if (!empty($catRaw)) {
+                        // Mengubah slug (misal: culture-media) menjadi nama berhuruf kapital (Culture Media)
+                        $catName = ucwords(str_replace('-', ' ', $catRaw));
+                        
+                        if (!isset($categoryDist[$catName])) {
+                            $categoryDist[$catName] = 0;
+                        }
+                        $categoryDist[$catName]++;
+                    }
+                }
+                
+                // Jaga-jaga jika database benar-benar kosong agar chart tidak error membaca array kosong
+                if (empty($categoryDist)) {
+                    $categoryDist = ['Belum Ada Produk' => 0];
+                }
+
+        $homeData = $this->dataService->getHomepageData();
 
         return view('admin.dashboard', compact(
             'productsCount', 'postsCount', 'sectorsCount',
-            'recentProducts', 'recentPosts', 'categoryDist'
+            'recentProducts', 'recentPosts', 'categoryDist', 'homeData'
         ));
     }
 
@@ -92,7 +99,6 @@ class AdminController extends Controller
             $file = $request->file($fileKey);
             $fileName = time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
             
-            // Ensure uploads directory exists in public folder
             $uploadPath = public_path('uploads');
             if (!File::exists($uploadPath)) {
                 File::makeDirectory($uploadPath, 0755, true);
@@ -118,7 +124,6 @@ class AdminController extends Controller
     {
         $homeData = $this->dataService->getHomepageData();
 
-        // 1. Text values
         $homeData['hero_title'] = $request->input('hero_title', $homeData['hero_title']);
         $homeData['hero_subtitle'] = $request->input('hero_subtitle', $homeData['hero_subtitle']);
         $homeData['focus_title'] = $request->input('focus_title', $homeData['focus_title']);
@@ -128,7 +133,6 @@ class AdminController extends Controller
         $homeData['hotline_number'] = $request->input('hotline_number', $homeData['hotline_number']);
         $homeData['hotline_description'] = $request->input('hotline_description', $homeData['hotline_description']);
 
-        // 2. Hero Slideshow Images
         for ($i = 0; $i < 4; $i++) {
             $existing = $homeData['hero_images'][$i] ?? '';
             $homeData['hero_images'][$i] = $this->handleImageUpload(
@@ -136,7 +140,6 @@ class AdminController extends Controller
             );
         }
 
-        // 3. Focus Cards
         for ($i = 0; $i < 3; $i++) {
             $existingCard = $homeData['focus_cards'][$i] ?? [];
             $existingImg = $existingCard['image'] ?? '';
@@ -150,13 +153,24 @@ class AdminController extends Controller
             ];
         }
 
-        // 4. Extended Page Configurations
         $homeData['contact_phone'] = $request->input('contact_phone', $homeData['contact_phone'] ?? '');
         $homeData['contact_phone_marketing'] = $request->input('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '');
         $homeData['contact_phone_finance'] = $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '');
         $homeData['contact_phone_technician'] = $request->input('contact_phone_technician', $homeData['contact_phone_technician'] ?? '');
         $homeData['contact_email'] = $request->input('contact_email', $homeData['contact_email'] ?? '');
         $homeData['contact_address'] = $request->input('contact_address', $homeData['contact_address'] ?? '');
+        $homeData['catalog_pdf_url'] = $request->input('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '');
+
+        $homeData['company_name'] = $request->input('company_name', $homeData['company_name'] ?? '');
+        $homeData['operational_hours'] = $request->input('operational_hours', $homeData['operational_hours'] ?? '');
+        $homeData['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
+        $homeData['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');
+        $homeData['social_linkedin'] = $request->input('social_linkedin', $homeData['social_linkedin'] ?? '');
+        $homeData['social_twitter'] = $request->input('social_twitter', $homeData['social_twitter'] ?? '');
+
+        $homeData['site_logo'] = $this->handleImageUpload(
+            $request, 'site_logo_file', 'site_logo_url', $homeData['site_logo'] ?? ''
+        );
         
         $homeData['products_title'] = $request->input('products_title', $homeData['products_title'] ?? '');
         $homeData['products_subtitle'] = $request->input('products_subtitle', $homeData['products_subtitle'] ?? '');
@@ -173,7 +187,6 @@ class AdminController extends Controller
         $homeData['contact_title'] = $request->input('contact_title', $homeData['contact_title'] ?? '');
         $homeData['contact_subtitle'] = $request->input('contact_subtitle', $homeData['contact_subtitle'] ?? '');
 
-        // 5. Extended Page Images/Banners
         $homeData['products_banner_image'] = $this->handleImageUpload(
             $request, "products_banner_file", "products_banner_url", $homeData['products_banner_image'] ?? ''
         );
@@ -203,37 +216,56 @@ class AdminController extends Controller
     // ----------------------------------------------------
     public function productsIndex(Request $request)
     {
-        $products = $this->dataService->getProducts();
+        $query = \Illuminate\Support\Facades\DB::table('products');
         
-        // Filter by search
         $search = $request->input('s');
         if ($search) {
-            $products = array_filter($products, function ($p) use ($search) {
-                return Str::contains(strtolower($p['title']), strtolower($search)) || 
-                       Str::contains(strtolower($p['catalog'] ?? ''), strtolower($search)) ||
-                       Str::contains(strtolower($p['description'] ?? ''), strtolower($search));
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('catalog', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
-        // Filter by category
         $category = $request->input('category');
         if ($category) {
-            $products = array_filter($products, function ($p) use ($category) {
-                return ($p['category'] ?? '') === $category;
-            });
+            $query->where('category', $category);
         }
 
-        // Filter by sector
         $sector = $request->input('sector');
         if ($sector) {
-            $products = array_filter($products, function ($p) use ($sector) {
-                $prodSectors = explode(',', $p['sector'] ?? '');
-                return in_array($sector, $prodSectors);
+            $query->where(function($q) use ($sector) {
+                $q->where('sector', $sector)
+                  ->orWhere('sector', 'like', "%{$sector}%")
+                  ->orWhere('sector', 'like', "%,{$sector},%")
+                  ->orWhere('sector', 'like', "%,{$sector}")
+                  ->orWhere('sector', 'like', "{$sector},%");
             });
         }
 
-        // Paginate products list (15 per page)
-        $totalProducts = count($products);
+        // Filter Rentang Tanggal (Advanced)
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        if ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        // Pengurutan Urutan (Advanced Sorting)
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
+        } elseif ($sort === 'name_asc') {
+            $query->orderBy('title', 'asc');
+        } elseif ($sort === 'name_desc') {
+            $query->orderBy('title', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
+        }
+
+        $totalProducts = $query->count();
         $perPage = 15;
         $totalPages = (int)ceil($totalProducts / $perPage);
         if ($totalPages < 1) $totalPages = 1;
@@ -243,7 +275,8 @@ class AdminController extends Controller
         if ($currentPage > $totalPages) $currentPage = $totalPages;
 
         $offset = ($currentPage - 1) * $perPage;
-        $paginatedProducts = array_slice($products, $offset, $perPage);
+        
+        $paginatedProducts = $query->skip($offset)->take($perPage)->get()->map(fn($r) => (array) $r)->toArray();
 
         $sectors = $this->dataService->getSectors();
 
@@ -253,6 +286,9 @@ class AdminController extends Controller
             'search' => $search,
             'category' => $category,
             'sector' => $sector,
+            'sort' => $sort,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
         ]);
@@ -261,7 +297,19 @@ class AdminController extends Controller
     public function productsCreate()
     {
         $sectors = $this->dataService->getSectors();
-        return view('admin.products.form', compact('sectors'));
+        
+        // Inisialisasi data array kosong agar view form.blade.php tidak crash membaca key object
+        $product = [
+            'title' => '',
+            'catalog' => '',
+            'category' => '',
+            'sub_category' => '',
+            'sector' => '',
+            'image' => '',
+            'description' => ''
+        ];
+        
+        return view('admin.products.form', compact('sectors', 'product'));
     }
 
     public function productsStore(Request $request)
@@ -269,13 +317,13 @@ class AdminController extends Controller
         $request->validate([
             'title' => 'required|string',
             'category' => 'required|string',
+            'sub_category' => 'nullable|string',
             'catalog' => 'nullable|string',
             'description' => 'nullable|string'
         ]);
 
         $title = $request->input('title');
         
-        // Validate uniqueness of title
         if ($this->dataService->getProductByTitle($title)) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
@@ -287,6 +335,7 @@ class AdminController extends Controller
             'title' => $title,
             'description' => $request->input('description') ?: '',
             'category' => $request->input('category'),
+            'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
             'image' => $image
         ];
@@ -316,13 +365,13 @@ class AdminController extends Controller
         $request->validate([
             'title' => 'required|string',
             'category' => 'required|string',
+            'sub_category' => 'nullable|string',
             'catalog' => 'nullable|string',
             'description' => 'nullable|string'
         ]);
 
         $newTitle = $request->input('title');
         
-        // Validate uniqueness if title changed
         if ($newTitle !== $title && $this->dataService->getProductByTitle($newTitle)) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
@@ -334,6 +383,7 @@ class AdminController extends Controller
             'title' => $newTitle,
             'description' => $request->input('description') ?: '',
             'category' => $request->input('category'),
+            'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
             'image' => $image
         ];
@@ -348,6 +398,7 @@ class AdminController extends Controller
         $this->dataService->deleteProduct($title);
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
     }
+
     public function productsCreateBulk()
     {
         $sectors = $this->dataService->getSectors();
@@ -368,18 +419,18 @@ class AdminController extends Controller
             }
 
             $catalog = trim($request->input("catalog.{$id}", ''));
+            $subCategory = trim($request->input("sub_category.{$id}", '')); 
             $sector = trim($request->input("sector.{$id}", ''));
             $description = trim($request->input("description.{$id}", ''));
             $imageUrl = trim($request->input("image_url.{$id}", ''));
 
-            // Handle file upload for this specific card
             $image = null;
             if ($request->hasFile("image_file.{$id}")) {
                 $file = $request->file("image_file.{$id}");
                 $fileName = time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
                 $uploadPath = public_path('uploads');
-                if (!\Illuminate\Support\Facades\File::exists($uploadPath)) {
-                    \Illuminate\Support\Facades\File::makeDirectory($uploadPath, 0755, true);
+                if (!File::exists($uploadPath)) {
+                    File::makeDirectory($uploadPath, 0755, true);
                 }
                 $file->move($uploadPath, $fileName);
                 $image = asset('uploads/' . $fileName);
@@ -395,6 +446,7 @@ class AdminController extends Controller
                 'catalog' => $catalog,
                 'title' => $title,
                 'category' => $category,
+                'sub_category' => $subCategory, 
                 'sector' => $sector ?: null,
                 'description' => $description,
                 'image' => $image
@@ -422,10 +474,42 @@ class AdminController extends Controller
     // ----------------------------------------------------
     public function postsIndex(Request $request)
     {
-        $posts = $this->dataService->getPosts();
+        $query = \Illuminate\Support\Facades\DB::table('posts');
 
-        // Paginate posts list (10 per page)
-        $totalPosts = count($posts);
+        $search = $request->input('s');
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('content', 'like', "%{$search}%");
+            });
+        }
+
+        $category = $request->input('category');
+        if ($category) {
+            $query->where('category', $category);
+        }
+
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        if ($startDate) {
+            $query->whereDate('created_at', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->whereDate('created_at', '<=', $endDate);
+        }
+
+        $sort = $request->input('sort', 'newest');
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
+        } elseif ($sort === 'title_asc') {
+            $query->orderBy('title', 'asc');
+        } elseif ($sort === 'title_desc') {
+            $query->orderBy('title', 'desc');
+        } else {
+            $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
+        }
+
+        $totalPosts = $query->count();
         $perPage = 10;
         $totalPages = (int)ceil($totalPosts / $perPage);
         if ($totalPages < 1) $totalPages = 1;
@@ -435,10 +519,15 @@ class AdminController extends Controller
         if ($currentPage > $totalPages) $currentPage = $totalPages;
 
         $offset = ($currentPage - 1) * $perPage;
-        $paginatedPosts = array_slice($posts, $offset, $perPage);
+        $paginatedPosts = $query->skip($offset)->take($perPage)->get()->map(fn($r) => (array) $r)->toArray();
 
         return view('admin.posts.index', [
             'posts' => $paginatedPosts,
+            'search' => $search,
+            'category' => $category,
+            'sort' => $sort,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages
         ]);
@@ -459,7 +548,6 @@ class AdminController extends Controller
 
         $slug = Str::slug($request->input('title'));
 
-        // Check unique slug
         if ($this->dataService->getPostBySlug($slug)) {
             $slug .= '-' . rand(10, 99);
         }
@@ -469,7 +557,7 @@ class AdminController extends Controller
         $post = [
             'slug' => $slug,
             'title' => $request->input('title'),
-            'date' => date('d M Y'), // Set automatically
+            'date' => date('d M Y'), 
             'category' => $request->input('category'),
             'image' => $image,
             'content' => $request->input('content')
@@ -507,7 +595,6 @@ class AdminController extends Controller
         if ($newTitle !== $post['title']) {
             $newSlug = Str::slug($newTitle);
             
-            // Check unique slug if changed
             if ($newSlug !== $slug && $this->dataService->getPostBySlug($newSlug)) {
                 $newSlug .= '-' . rand(10, 99);
             }
@@ -518,7 +605,7 @@ class AdminController extends Controller
         $updatedPost = [
             'slug' => $newSlug,
             'title' => $newTitle,
-            'date' => $post['date'], // Keep original date
+            'date' => $post['date'], 
             'category' => $request->input('category'),
             'image' => $image,
             'content' => $request->input('content')
@@ -563,7 +650,6 @@ class AdminController extends Controller
             return redirect()->back()->withInput()->with('error', 'Sektor dengan ID tersebut sudah ada.');
         }
 
-        // Split description by new lines into an array
         $descRaw = $request->input('description', '');
         $description = array_filter(array_map('trim', explode("\n", $descRaw)));
 
@@ -602,7 +688,6 @@ class AdminController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        // Split description by new lines into an array
         $descRaw = $request->input('description', '');
         $description = array_filter(array_map('trim', explode("\n", $descRaw)));
 
@@ -610,7 +695,7 @@ class AdminController extends Controller
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $existingImg);
 
         $updatedSector = [
-            'id' => $id, // Keep original ID as key
+            'id' => $id, 
             'name' => $request->input('name'),
             'description' => $description,
             'image' => $image
@@ -627,4 +712,50 @@ class AdminController extends Controller
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil dihapus!');
     }
 
+    public function syncSheets()
+    {
+        try {
+            // Jalankan command sync secara dinamis dan tangkap exit code-nya
+            $exitCode = \Illuminate\Support\Facades\Artisan::call('database:sync-sheets');
+            $output = \Illuminate\Support\Facades\Artisan::output();
+
+            $homeData = $this->dataService->getHomepageData();
+            
+            // Cek apakah command gagal (exit code bukan 0 atau output mengandung tulisan ERROR)
+            $isError = ($exitCode !== 0) || (stripos($output, 'ERROR') !== false);
+            
+            $homeData['last_sync_status'] = $isError ? 'failed' : 'success';
+            $homeData['last_sync_time'] = now()->format('Y-m-d H:i:s');
+            $homeData['last_sync_log'] = $output;
+            $this->dataService->saveHomepageData($homeData);
+
+            if ($isError) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sinkronisasi dijalankan, namun mengalami error.',
+                    'log' => $output
+                ], 500);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sinkronisasi katalog dari Google Sheets berhasil dijalankan!',
+                'log' => $output
+            ]);
+        } catch (\Exception $e) {
+            $output = $e->getMessage();
+            
+            $homeData = $this->dataService->getHomepageData();
+            $homeData['last_sync_status'] = 'failed';
+            $homeData['last_sync_time'] = now()->format('Y-m-d H:i:s');
+            $homeData['last_sync_log'] = $output;
+            $this->dataService->saveHomepageData($homeData);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sinkronisasi gagal: ' . $e->getMessage(),
+                'log' => $output
+            ], 500);
+        }
+    }
 }

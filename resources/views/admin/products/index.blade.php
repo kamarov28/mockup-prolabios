@@ -14,32 +14,69 @@
   </div>
   <div class="card-body">
     <!-- Filter Form -->
-    <form action="{{ route('admin.products') }}" method="GET" class="row g-3 mb-4">
-      <div class="col-md-4">
-        <div class="input-group">
-          <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
-          <input type="text" name="s" class="form-control bg-light border-start-0" placeholder="Cari catalog, judul, deskripsi..." value="{{ $search }}" aria-label="Kata kunci pencarian">
+    <form action="{{ route('admin.products') }}" method="GET" class="mb-4">
+      <div class="row g-3">
+        <!-- Pencarian & Utama -->
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
+            <input type="text" name="s" class="form-control bg-light border-start-0" placeholder="Cari catalog, judul, deskripsi..." value="{{ $search }}" aria-label="Kata kunci pencarian">
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select name="category" class="form-select bg-light" aria-label="Filter berdasarkan Kategori">
+            <option value="">-- Semua Kategori --</option>
+            <option value="microbiology" {{ $category === 'microbiology' ? 'selected' : '' }}>Microbiology</option>
+            <option value="reference-standards" {{ $category === 'reference-standards' ? 'selected' : '' }}>Reference Standards</option>
+            <option value="device" {{ $category === 'device' ? 'selected' : '' }}>Device</option>
+            <option value="instruments" {{ $category === 'instruments' ? 'selected' : '' }}>Instruments</option>
+            <option value="culture-media" {{ $category === 'culture-media' ? 'selected' : '' }}>Culture Media (Legacy)</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select name="sector" class="form-select bg-light" aria-label="Filter berdasarkan Sektor Industri">
+            <option value="">-- Semua Sektor --</option>
+            @foreach($sectors as $sec)
+              <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="collapse" data-bs-target="#advancedFilterBlock" aria-expanded="false" aria-controls="advancedFilterBlock">
+            <i class="bi bi-sliders me-1"></i> Advanced
+          </button>
         </div>
       </div>
-      <div class="col-md-3">
-        <select name="category" class="form-select bg-light" aria-label="Filter berdasarkan Kategori">
-          <option value="">-- Semua Kategori --</option>
-          <option value="culture-media" {{ $category === 'culture-media' ? 'selected' : '' }}>Culture Media</option>
-          <option value="instruments" {{ $category === 'instruments' ? 'selected' : '' }}>Instruments</option>
-          <option value="chemicals" {{ $category === 'chemicals' ? 'selected' : '' }}>Chemicals &amp; Reagents</option>
-          <option value="consumables" {{ $category === 'consumables' ? 'selected' : '' }}>Consumables</option>
-        </select>
-      </div>
-      <div class="col-md-3">
-        <select name="sector" class="form-select bg-light" aria-label="Filter berdasarkan Sektor Industri">
-          <option value="">-- Semua Sektor --</option>
-          @foreach($sectors as $sec)
-            <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
-          @endforeach
-        </select>
-      </div>
-      <div class="col-md-2">
-        <button type="submit" class="btn btn-outline-secondary w-100"><i class="bi bi-funnel me-1"></i>Filter</button>
+
+      <!-- Advanced Collapse Panel -->
+      <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedFilterBlock">
+        <div class="p-3 border rounded bg-light">
+          <div class="row g-3 align-items-end">
+            <!-- Urutkan -->
+            <div class="col-md-4">
+              <label for="sort" class="form-label small fw-bold text-muted">Urutkan Berdasarkan</label>
+              <select name="sort" id="sort" class="form-select bg-white">
+                <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Dibuat</option>
+                <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Dibuat</option>
+                <option value="name_asc" {{ $sort === 'name_asc' ? 'selected' : '' }}>Nama Produk (A - Z)</option>
+                <option value="name_desc" {{ $sort === 'name_desc' ? 'selected' : '' }}>Nama Produk (Z - A)</option>
+              </select>
+            </div>
+            <!-- Tanggal Mulai -->
+            <div class="col-md-3">
+              <label for="start_date" class="form-label small fw-bold text-muted">Dari Tanggal</label>
+              <input type="date" name="start_date" id="start_date" class="form-control bg-white" value="{{ $start_date }}">
+            </div>
+            <!-- Tanggal Selesai -->
+            <div class="col-md-3">
+              <label for="end_date" class="form-label small fw-bold text-muted">Sampai Tanggal</label>
+              <input type="date" name="end_date" id="end_date" class="form-control bg-white" value="{{ $end_date }}">
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-danger w-100 fw-bold"><i class="bi bi-funnel-fill me-1"></i> Terapkan</button>
+            </div>
+          </div>
+        </div>
       </div>
     </form>
 
@@ -68,7 +105,7 @@
                 <td class="text-muted small fw-semibold">{{ $p['catalog'] ?: '-' }}</td>
                 <td>
                   <div class="fw-bold text-dark">{{ $p['title'] }}</div>
-                  <div class="text-muted small text-truncate" style="max-width: 250px;">{{ $p['description'] ?: 'Tidak ada deskripsi' }}</div>
+                  <div class="text-muted small text-truncate" style="max-width: 250px;">{{ strip_tags(html_entity_decode($p['description'] ?? '')) ?: 'Tidak ada deskripsi' }}</div>
                 </td>
                 <td>
                   <span class="badge bg-light text-dark border text-capitalize">

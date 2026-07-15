@@ -53,7 +53,7 @@
               
               <h2 class="fw-bold mb-4" style="color: var(--color-secondary, #2b2d42);">{{ $currentBlog['title'] }}</h2>
               
-              <img src="{{ $currentBlog['image'] }}" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 450px; object-fit: cover;" alt="{{ $currentBlog['title'] }}">
+              <img src="{{ $currentBlog['image'] }}" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 450px; object-fit: cover;" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
               
               <div class="lh-lg text-muted" style="text-align: justify;">
                 {!! $currentBlog['content'] !!}
@@ -72,7 +72,7 @@
                   <div class="col">
                     <div class="card h-100 blog-card position-relative animate-on-scroll animate-slide-up delay-{{ ($loop->index % 2 + 1) * 100 }}">
                       <div class="blog-card-img-wrap">
-                        <img src="{{ $post['image'] }}" class="card-img-top" alt="{{ $post['title'] }}">
+                        <img src="{{ $post['image'] }}" class="card-img-top" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
                         <div class="blog-card-date">
                           <span class="day">{{ $day }}</span>
                           <span class="month">{{ $month }}</span>

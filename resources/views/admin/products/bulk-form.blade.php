@@ -15,7 +15,7 @@
       <i class="bi bi-info-circle-fill text-primary fs-5"></i>
       <div>
         <h6 class="fw-bold mb-1 text-dark">Petunjuk Pengisian Massal:</h6>
-        <p class="mb-0 text-secondary">Setiap kartu di bawah mewakili satu data produk. Anda bisa mengunggah file gambar lokal atau memasukkan URL gambar eksternal untuk tiap produk secara individu. Pastikan kolom bertanda <span class="text-danger">*</span> wajib diisi.</p>
+        <p class="mb-0 text-secondary">Setiap kartu di bawah mewakili satu data produk. Pilih kategori utama terlebih dahulu untuk memunculkan pilihan subkategori yang sesuai. Pastikan kolom bertanda <span class="text-danger">*</span> wajib diisi.</p>
       </div>
     </div>
   </div>
@@ -75,12 +75,20 @@
           <!-- Category -->
           <div class="col-md-6">
             <label class="form-label small fw-bold text-secondary">Kategori <span class="text-danger">*</span></label>
-            <select name="category[__INDEX__]" class="form-select text-capitalize" required>
+            <select name="category[__INDEX__]" class="form-select text-capitalize bulk-category-select" data-id="__INDEX__" required>
               <option value="">-- Pilih Kategori --</option>
-              <option value="culture-media">Culture Media</option>
+              <option value="microbiology">Microbiology</option>
+              <option value="reference-standards">Reference Standards</option>
+              <option value="device">Device</option>
               <option value="instruments">Instruments</option>
-              <option value="chemicals">Chemicals &amp; Reagents</option>
-              <option value="consumables">Consumables</option>
+            </select>
+          </div>
+
+          <!-- Sub-category (Dependent Dropdown Container) -->
+          <div class="col-md-6" id="sub-wrapper-__INDEX__" style="display: none;">
+            <label class="form-label small fw-bold text-secondary">Subkategori <span class="text-danger">*</span></label>
+            <select name="sub_category[__INDEX__]" id="bulk-subcategory-select-__INDEX__" class="form-select">
+              <option value="">-- Pilih Subkategori --</option>
             </select>
           </div>
 
@@ -127,27 +135,99 @@
 </div>
 
 <script>
-  // Initial cards count
-  document.addEventListener('DOMContentLoaded', function() {
+  // Peta data subkategori global
+  const subCategoriesMap = {
+    'microbiology': {
+      'food-safety': 'Food Safety',
+      'antimicrobial': 'Antimicrobial Susceptibility Testing',
+      'identification': 'Microbiological Identification',
+      'preservation': 'Microorganisms Preservation System (BactoBank)',
+      'staining': 'Microbial Staining & Fixatives',
+      'consumables': 'Consumables',
+      'mic-test': 'MIC Test Strip',
+      'qc-organisms': 'QC Organisms',
+      'dip-slide': 'Dip slide',
+      'chemical-indicator': 'Chemical Indicator',
+      'latex-agglutination': 'Latex Agglutination Kits',
+      'ready-culture': 'Ready To Use Culture Media',
+      'biological-indicators': 'Biological Indicators',
+      'dehydrated-culture': 'Dehydrated Culture Media',
+      'immunology': 'Immunology',
+      'endotoxin': 'Endotoxin'
+    },
+    'reference-standards': {
+      'pharmaceutical': 'Pharmaceutical Reference Standards',
+      'green-standards': 'Green Standards',
+      'environmental': 'Environmental Standards',
+      'food-beverages': 'Food and Beverages Standards',
+      'agro-chemical': 'Agro Chemical Standards'
+    },
+    'device': {
+      'bsc-lfc': 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+      'microbiological-instruments': 'Microbiological Instruments',
+      'liquid-handling': 'Liquid Handling',
+      'thermometer': 'Thermometer'
+    },
+    'instruments': {
+      'liofilchem-giotto-2': 'Liofilchem® Giotto 2',
+      'agar-filler': 'Agar Filler',
+      'agar-preparator': 'Agar Preparator',
+      'kinetic-incubating-reader': 'Kinetic Incubating Microplate Reader',
+      'mica-diamidex': 'MICA® Diamidex - Counting Microorganisms Faster'
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      for (let i = 0; i < 2; i++) {
+        addNewProductCard();
+      }
+    });
+  } else {
     for (let i = 0; i < 2; i++) {
       addNewProductCard();
     }
-  });
+  }
 
   function addNewProductCard() {
-    // Generate unique index key to avoid HTML form array alignment issues on files
     const uniqueId = 'prod_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
-    
     let template = document.getElementById('card-template').innerHTML;
-    
-    // Replace all placeholder tags '__INDEX__' with the uniqueId
     template = template.replaceAll('__INDEX__', uniqueId);
     
     const container = document.getElementById('bulk-cards-container');
     const div = document.createElement('div');
     div.innerHTML = template;
     
-    container.appendChild(div.firstElementChild);
+    const newCard = div.firstElementChild;
+    container.appendChild(newCard);
+
+    // Pasang event listener dependent dropdown khusus untuk select category di baris ini
+    const categorySelect = newCard.querySelector('.bulk-category-select');
+    categorySelect.addEventListener('change', function() {
+      const currentId = this.getAttribute('data-id');
+      const subSelect = document.getElementById(`bulk-subcategory-select-${currentId}`);
+      const wrapper = document.getElementById(`sub-wrapper-${currentId}`);
+      const val = this.value;
+
+      subSelect.innerHTML = '<option value="">-- Pilih Subkategori --</option>';
+
+      if (val && subCategoriesMap[val] && Object.keys(subCategoriesMap[val]).length > 0) {
+        const subs = subCategoriesMap[val];
+        for (const [k, name] of Object.entries(subs)) {
+          const opt = document.createElement('option');
+          opt.value = k;
+          opt.textContent = name;
+          subSelect.appendChild(opt);
+        }
+        wrapper.style.display = 'block';
+        subSelect.required = true;
+      } else {
+        wrapper.style.display = 'none';
+        subSelect.required = false;
+        subSelect.value = '';
+      }
+    });
+
     updateIndexes();
   }
 
@@ -163,19 +243,13 @@
     
     cards.forEach((card, index) => {
       card.querySelector('.index-num').innerText = index + 1;
-      
       const removeBtn = card.querySelector('.btn-remove-card');
-      if (cards.length <= 1) {
-        removeBtn.disabled = true;
-      } else {
-        removeBtn.disabled = false;
-      }
+      removeBtn.disabled = (cards.length <= 1);
     });
 
     totalBadge.innerText = `Jumlah: ${cards.length} formulir produk`;
   }
 
-  // Image preview functions
   function previewLocalImage(input, previewId) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();

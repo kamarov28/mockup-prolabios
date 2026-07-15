@@ -75,14 +75,15 @@ class MigrateJsonToDb extends Command
             }
             $seenTitles[] = $title;
             DB::table('products')->insertOrIgnore([
-                'catalog'     => $prod['catalog']     ?? null,
-                'title'       => $title,
-                'description' => $prod['description'] ?? null,
-                'category'    => $prod['category'],
-                'sector'      => $prod['sector']      ?? null,
-                'image'       => $prod['image']       ?? null,
-                'created_at'  => now(),
-                'updated_at'  => now(),
+                'catalog'      => $prod['catalog']      ?? null,
+                'title'        => $title,
+                'description'  => $prod['description']  ?? null,
+                'category'     => $prod['category'],
+                'sub_category' => $prod['sub_category'] ?? null,
+                'sector'       => $prod['sector']       ?? null,
+                'image'        => $prod['image']        ?? null,
+                'created_at'   => now(),
+                'updated_at'   => now(),
             ]);
         }
         $this->info('✓ Seeded products table.');

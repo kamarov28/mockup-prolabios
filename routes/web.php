@@ -21,9 +21,107 @@ Route::get('/profil', function () {
     return view('profil');
 });
 
-Route::get('/produk', function (DataService $dataService) {
-    $products = $dataService->getProducts();
-    return view('produk', compact('products'));
+Route::get('/produk', function (\Illuminate\Http\Request $request, DataService $dataService) {
+    // 1. Ambil semua data produk asli
+    $allProducts = $dataService->getProducts();
+
+    // 2. Tangkap parameter filter dari URL (?category=...&subcategory=...)
+    $activeCategory = $request->query('category', 'all'); 
+    $activeSubCategory = $request->query('subcategory');
+    $searchQuery = $request->query('q') ?? $request->query('s');
+
+    // 3. Struktur hierarki menu sidebar sesuai website lama
+    $categoriesStructure = [
+            'microbiology' => [
+                'name' => 'Microbiology',
+                'subs' => [
+                    'food-safety' => 'Food Safety',
+                    'antimicrobial' => 'Antimicrobial Susceptibility Testing',
+                    'identification' => 'Microbiological Identification',
+                    'preservation' => 'Microorganisms Preservation System (BactoBank)',
+                    'staining' => 'Microbial Staining & Fixatives',
+                    'consumables' => 'Consumables',
+                    'mic-test' => 'MIC Test Strip',
+                    'qc-organisms' => 'QC Organisms',
+                    'dip-slide' => 'Dip slide',
+                    'chemical-indicator' => 'Chemical Indicator',
+                    'latex-agglutination' => 'Latex Agglutination Kits',
+                    'ready-culture' => 'Ready To Use Culture Media',
+                    'biological-indicators' => 'Biological Indicators',
+                    'dehydrated-culture' => 'Dehydrated Culture Media',
+                    'immunology' => 'Immunology',
+                    'endotoxin' => 'Endotoxin'
+                ]
+            ],
+            'reference-standards' => [
+                'name' => 'Reference Standards',
+                'subs' => [
+                    'pharmaceutical' => 'Pharmaceutical Reference Standards',
+                    'green-standards' => 'Green Standards',
+                    'environmental' => 'Environmental Standards',
+                    'food-beverages' => 'Food and Beverages Standards',
+                    'agro-chemical' => 'Agro Chemical Standards'
+                ]
+            ],
+            'device' => [
+                'name' => 'Device',
+                'subs' => [
+                    'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+                    'microbiological-instruments' => 'Microbiological Instruments',
+                    'liquid-handling' => 'Liquid Handling',
+                    'thermometer' => 'Thermometer'
+                ]
+            ],
+            'instruments' => [
+                'name' => 'Instruments',
+                'subs' => [
+                    'liofilchem-giotto-2' => 'Liofilchem® Giotto 2',
+                    'agar-filler' => 'Agar Filler',
+                    'agar-preparator' => 'Agar Preparator',
+                    'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
+                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster'
+                ]
+            ]
+        ];
+
+    // 4. Filter produk berdasarkan Kategori, Sub-kategori, dan kata kunci pencarian (s)
+    $filteredProducts = array_filter($allProducts, function ($product) use ($activeCategory, $activeSubCategory, $searchQuery) {
+        // Jika ada parameter pencarian, cari kecocokan di title, description, atau catalog number
+        if ($searchQuery) {
+            $q = trim($searchQuery);
+            $titleMatch = stripos($product['title'] ?? '', $q) !== false;
+            $descMatch = stripos($product['description'] ?? '', $q) !== false;
+            $catalogMatch = stripos($product['catalog'] ?? '', $q) !== false;
+            
+            if (!$titleMatch && !$descMatch && !$catalogMatch) {
+                return false;
+            }
+        }
+
+        if ($activeCategory === 'all') {
+            return true;
+        }
+
+        // Normalisasi input string agar pencocokan presisi (slug-style)
+        $prodCat = \Illuminate\Support\Str::slug($product['category'] ?? '');
+        $prodSub = \Illuminate\Support\Str::slug($product['sub_category'] ?? '');
+
+        $matchCategory = ($prodCat === $activeCategory);
+        
+        if ($activeSubCategory && $activeSubCategory !== 'all') {
+            return $matchCategory && ($prodSub === $activeSubCategory);
+        }
+
+        return $matchCategory;
+    });
+
+    // 5. Kirim semua variabel kontrol ke halaman view produk
+    return view('produk', [
+        'products' => $filteredProducts,
+        'categoriesStructure' => $categoriesStructure,
+        'activeCategory' => $activeCategory,
+        'activeSubCategory' => $activeSubCategory
+    ]);
 });
 
 Route::get('/sektor', function (DataService $dataService) {
@@ -118,6 +216,7 @@ Route::get('/informasi', function (DataService $dataService) {
 Route::get('/kontak', function () {
     return view('kontak');
 });
+Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
 
 // ----------------------------------------------------
 // Admin Login Routes
@@ -161,4 +260,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/sectors/{id}/edit', [AdminController::class, 'sectorsEdit'])->name('admin.sectors.edit');
     Route::post('/sectors/{id}', [AdminController::class, 'sectorsUpdate'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
+
+    // Google Sheets Sync
+    Route::post('/sync-sheets', [AdminController::class, 'syncSheets'])->name('admin.sync-sheets');
 });

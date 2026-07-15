@@ -24,7 +24,7 @@
         <div class="col-lg-8 col-md-7 mb-4 order-md-2">
           <div class="bg-white p-4 p-md-5 rounded shadow-sm border-0 h-100 animate-on-scroll animate-slide-up">
             <div class="overflow-hidden rounded shadow-sm mb-4" style="height: 320px;">
-              <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Prolabios Building" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;">
+              <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Prolabios Building" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" loading="lazy" decoding="async">
             </div>
             
             <h2 class="fw-bold mb-3" style="color: var(--color-secondary, #2b2d42);">Our Story</h2>

@@ -53,7 +53,7 @@
               </div>
               <h2 class="h5 fw-bold" style="color: var(--color-secondary, #2b2d42);">Email</h2>
               <ul class="list-unstyled mb-0 small">
-                <li class="mb-2"><a href="mailto:{{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}" class="text-decoration-none text-muted">{{ $siteSettings['contact_email'] ?? 'lisa.aryadi@prolabios.com' }}</a></li>
+                <li class="mb-2"><a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="text-decoration-none text-muted">{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a></li>
                 <li><a href="mailto:sandi@prolabios.com" class="text-decoration-none text-muted">sandi@prolabios.com</a></li>
               </ul>
             </div>
@@ -128,22 +128,98 @@
 
       </div>
 
-      <!-- WhatsApp CTA -->
-      <div class="bg-success text-white p-4 p-md-5 rounded shadow-sm mt-5 animate-on-scroll animate-scale-in delay-100" style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;">
-        <div class="row align-items-center text-center text-md-start">
-          <div class="col-md-8 mb-4 mb-md-0">
-            <h3 class="fw-bold">Butuh Respon Cepat?</h3>
-            <p class="mb-0 text-white">Hubungi kami langsung via WhatsApp untuk konsultasi produk dan layanan.</p>
-          </div>
-          <div class="col-md-4 text-md-end">
-            <a href="https://wa.me/{{ $waNumber }}?text=Halo%20Prolabios%2C%20saya%20ingin%20bertanya%20mengenai%20produk%20dan%20layanan%20Anda." target="_blank" rel="noopener noreferrer" class="btn btn-light fw-bold px-4 py-3 rounded-pill shadow-sm d-inline-flex align-items-center" style="color: #146c43;">
-              <i class="bi bi-whatsapp fs-4 me-2"></i>
-              Chat via WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
+
 
     </div>
   </section>
+
+  @push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Override handleContactForm to send actual data via AJAX
+      window.handleContactForm = function(e) {
+        e.preventDefault();
+        
+        const form = document.getElementById('contactForm');
+        const success = document.getElementById('formSuccess');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!form || !success || !submitBtn) return false;
+
+        // Validasi input manual seperti di app.js
+        const requiredFields = form.querySelectorAll('[required]');
+        let valid = true;
+
+        requiredFields.forEach(function(field) {
+          if (!field.value.trim()) {
+            field.style.borderColor = 'var(--color-primary)';
+            valid = false;
+          } else {
+            field.style.borderColor = 'var(--color-border)';
+          }
+        });
+
+        if (!valid) return false;
+
+        // Ubah state button menjadi Loading
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Mengirim...';
+
+        // Ambil data form
+        const formData = new FormData(form);
+
+        // Kirim request via Fetch API
+        fetch('{{ route("contact.submit") }}', {
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+          },
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            form.style.display = 'none';
+            success.style.display = 'block';
+            success.querySelector('p').textContent = data.message;
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            // Tampilkan pesan error
+            alert(data.message || 'Gagal mengirim pesan.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          }
+        })
+        .catch(error => {
+          console.error('Error submitting form:', error);
+          alert('Terjadi kesalahan koneksi internet atau SMTP server. Silakan hubungi admin.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        });
+
+        return false;
+      };
+      
+      // Auto-select subject based on URL query (?subjek=inquiry&produk=...)
+      const urlParams = new URLSearchParams(window.location.search);
+      const subjekParam = urlParams.get('subjek');
+      const produkParam = urlParams.get('produk');
+      
+      if (subjekParam) {
+        const subjekSelect = document.getElementById('subjek');
+        if (subjekSelect) {
+          subjekSelect.value = subjekParam;
+        }
+      }
+      
+      if (produkParam) {
+        const pesanTextarea = document.getElementById('pesan');
+        if (pesanTextarea) {
+          pesanTextarea.value = `Halo Prolabios,\n\nSaya tertarik dan ingin meminta informasi lebih lanjut/penawaran harga mengenai produk: "${decodeURIComponent(produkParam)}".\n\nTerima kasih.`;
+        }
+      }
+    });
+  </script>
+  @endpush
 @endsection

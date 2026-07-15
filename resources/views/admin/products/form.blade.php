@@ -1,9 +1,11 @@
 @extends('admin.layout')
 
 @php 
-  $isEdit = isset($product);
+  $isEdit = isset($product) && !empty($product['title']);
   $titleText = $isEdit ? 'Edit Produk: ' . $product['title'] : 'Tambah Produk Baru';
-  $actionUrl = $isEdit ? route('admin.products.update', ['title' => $product['title']]) : route('admin.products.store');
+  $actionUrl = $isEdit 
+    ? route('admin.products.update', ['title' => $product['title']]) 
+    : route('admin.products.store');
 @endphp
 
 @section('title', $titleText)
@@ -14,36 +16,36 @@
   <div class="card-header">
     <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-box-seam text-danger me-2"></i>Formulir Data Produk</h5>
   </div>
-  
+
   <form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data" class="card-body p-4">
     @csrf
 
     <div class="row g-3">
-      <!-- Title -->
+      <!-- Nama Produk -->
       <div class="col-md-6">
         <label for="title" class="form-label fw-bold">Nama Produk <span class="text-danger">*</span></label>
         <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $product['title'] ?? '') }}" required placeholder="Contoh: Brewing Specific Media 1">
       </div>
 
-      <!-- Catalog Number -->
+      <!-- Nomor Katalog -->
       <div class="col-md-6">
         <label for="catalog" class="form-label fw-bold">Nomor Katalog (Catalogue No)</label>
         <input type="text" class="form-control" id="catalog" name="catalog" value="{{ old('catalog', $product['catalog'] ?? '') }}" placeholder="Contoh: 610152">
       </div>
 
-      <!-- Category -->
+      <!-- Kategori Utama -->
       <div class="col-md-6">
         <label for="category" class="form-label fw-bold">Kategori <span class="text-danger">*</span></label>
-        <select class="form-select" id="category" name="category" required>
+        <select class="form-select" id="admin-category-select" name="category" required>
           <option value="">-- Pilih Kategori --</option>
-          <option value="culture-media" {{ old('category', $product['category'] ?? '') === 'culture-media' ? 'selected' : '' }}>Culture Media</option>
+          <option value="microbiology" {{ old('category', $product['category'] ?? '') === 'microbiology' ? 'selected' : '' }}>Microbiology</option>
+          <option value="reference-standards" {{ old('category', $product['category'] ?? '') === 'reference-standards' ? 'selected' : '' }}>Reference Standards</option>
+          <option value="device" {{ old('category', $product['category'] ?? '') === 'device' ? 'selected' : '' }}>Device</option>
           <option value="instruments" {{ old('category', $product['category'] ?? '') === 'instruments' ? 'selected' : '' }}>Instruments</option>
-          <option value="chemicals" {{ old('category', $product['category'] ?? '') === 'chemicals' ? 'selected' : '' }}>Chemicals &amp; Reagents</option>
-          <option value="consumables" {{ old('category', $product['category'] ?? '') === 'consumables' ? 'selected' : '' }}>Consumables</option>
         </select>
       </div>
 
-      <!-- Sector -->
+      <!-- Sektor Industri -->
       <div class="col-md-6">
         <label for="sector" class="form-label fw-bold">Sektor Industri</label>
         <select class="form-select" id="sector" name="sector">
@@ -54,7 +56,20 @@
         </select>
       </div>
 
-      <!-- Image Area -->
+      <!-- Subkategori (Dependent Dropdown) -->
+      <div class="col-12 my-3" id="sub-category-block" style="display: none;">
+        <div class="p-3 rounded bg-light border">
+          <label for="sub_category" class="form-label fw-bold text-dark">
+            <i class="bi bi-diagram-3 text-primary me-2"></i>Subkategori Pilihan <span class="text-danger">*</span>
+          </label>
+          <select class="form-select bg-white" id="admin-subcategory-select" name="sub_category" data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
+            <option value="">-- Pilih Subkategori --</option>
+          </select>
+          <div class="form-text small text-muted mt-1">Sesuaikan subkategori berdasarkan rumpun produk yang Anda pilih di atas.</div>
+        </div>
+      </div>
+
+      <!-- Gambar Produk -->
       <div class="col-12 mt-4">
         <label class="form-label fw-bold">Gambar Produk</label>
         <div class="row g-3">
@@ -76,7 +91,7 @@
         </div>
       </div>
 
-      <!-- Description -->
+      <!-- Deskripsi -->
       <div class="col-12 mt-4">
         <label for="description" class="form-label fw-bold">Deskripsi Produk</label>
         <textarea class="form-control" id="description" name="description" rows="5" placeholder="Tulis rincian deskripsi produk, aplikasi, spesifikasi, dll.">{{ old('description', $product['description'] ?? '') }}</textarea>
@@ -96,7 +111,6 @@
   <!-- Summernote CSS -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
   <style>
-    /* Styling Summernote container alignment inside premium card */
     .note-editor.note-frame {
       border: 1px solid var(--admin-border) !important;
       border-radius: 0.5rem !important;
@@ -106,12 +120,12 @@
 @endsection
 
 @section('admin_scripts')
-  <!-- jQuery (Required by Summernote) -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <!-- Summernote JS -->
+  <!-- jQuery & Summernote JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
   <script>
+    // 1. Image Preview Helpers
     function previewLocalImage(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -121,14 +135,99 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
-    
+
     function previewUrlImage(url) {
       if (url.trim() !== '') {
         document.getElementById('image-preview').src = url;
       }
     }
 
-    // Initialize Summernote for product description
+    // 2. Dropdown dynamic mapping logic
+    var subCategoriesMap = {
+      'microbiology': {
+        'food-safety': 'Food Safety',
+        'antimicrobial': 'Antimicrobial Susceptibility Testing',
+        'identification': 'Microbiological Identification',
+        'preservation': 'Microorganisms Preservation System (BactoBank)',
+        'staining': 'Microbial Staining & Fixatives',
+        'consumables': 'Consumables',
+        'mic-test': 'MIC Test Strip',
+        'qc-organisms': 'QC Organisms',
+        'dip-slide': 'Dip slide',
+        'chemical-indicator': 'Chemical Indicator',
+        'latex-agglutination': 'Latex Agglutination Kits',
+        'ready-culture': 'Ready To Use Culture Media',
+        'biological-indicators': 'Biological Indicators',
+        'dehydrated-culture': 'Dehydrated Culture Media',
+        'immunology': 'Immunology',
+        'endotoxin': 'Endotoxin'
+      },
+      'reference-standards': {
+        'pharmaceutical': 'Pharmaceutical Reference Standards',
+        'green-standards': 'Green Standards',
+        'environmental': 'Environmental Standards',
+        'food-beverages': 'Food and Beverages Standards',
+        'agro-chemical': 'Agro Chemical Standards'
+      },
+      'device': {
+        'bsc-lfc': 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+        'microbiological-instruments': 'Microbiological Instruments',
+        'liquid-handling': 'Liquid Handling',
+        'thermometer': 'Thermometer'
+      },
+      'instruments': {
+        'liofilchem-giotto-2': 'Liofilchem Giotto 2',
+        'agar-filler': 'Agar Filler',
+        'agar-preparator': 'Agar Preparator',
+        'kinetic-incubating-reader': 'Kinetic Incubating Microplate Reader',
+        'mica-diamidex': 'MICA Diamidex - Counting Microorganisms Faster'
+      }
+    };
+
+    // Category and Subcategory selectors
+    var categorySelect = document.getElementById('admin-category-select');
+    var subcategorySelect = document.getElementById('admin-subcategory-select');
+    var block = document.getElementById('sub-category-block');
+
+    function updateSubCategories(categoryVal) {
+      if (!subcategorySelect || !block) return;
+
+      var savedSubCategory = subcategorySelect.getAttribute('data-saved') || '';
+      subcategorySelect.innerHTML = '<option value="">-- Pilih Subkategori --</option>';
+
+      if (categoryVal && subCategoriesMap[categoryVal]) {
+        var subs = subCategoriesMap[categoryVal];
+        
+        Object.keys(subs).forEach(function(key) {
+          var option = document.createElement('option');
+          option.value = key;
+          option.textContent = subs[key];
+          if (savedSubCategory === key) {
+            option.selected = true;
+          }
+          subcategorySelect.appendChild(option);
+        });
+
+        block.style.display = 'block';
+        subcategorySelect.required = true;
+      } else {
+        block.style.display = 'none';
+        subcategorySelect.required = false;
+        subcategorySelect.value = '';
+      }
+    }
+
+    if (categorySelect) {
+      categorySelect.addEventListener('change', function() {
+        updateSubCategories(this.value);
+      });
+      // Initial check if page loaded with a category selected
+      if (categorySelect.value) {
+        updateSubCategories(categorySelect.value);
+      }
+    }
+
+    // 3. Summernote Rich Editor Init
     $(document).ready(function() {
       $('#description').summernote({
         placeholder: 'Tulis rincian deskripsi produk, aplikasi, spesifikasi detail, tabel pendukung, dll...',

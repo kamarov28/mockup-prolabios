@@ -455,63 +455,7 @@
       }
     });
 
-    // Global Client-Side Table Filter (Instant Search)
-    document.addEventListener('input', function(e) {
-      if (e.target.matches('input[name="s"], #local-search-input')) {
-        const query = e.target.value.toLowerCase().trim();
-        const table = document.querySelector('table tbody');
-        if (table) {
-          const rows = table.querySelectorAll('tr');
-          let hasVisibleRow = false;
-          
-          rows.forEach(row => {
-            // Exclude headers or helper rows if any
-            if (row.classList.contains('no-filter')) return;
 
-            const cells = row.querySelectorAll('td');
-            let match = false;
-            cells.forEach(cell => {
-              // Search in text content of cells (ignoring links/buttons)
-              if (cell.textContent.toLowerCase().includes(query)) {
-                match = true;
-              }
-            });
-
-            if (match || query === '') {
-              row.style.setProperty('display', '', 'important');
-              hasVisibleRow = true;
-            } else {
-              row.style.setProperty('display', 'none', 'important');
-            }
-          });
-
-          // Show empty row message if no rows match the query
-          let emptyRow = table.querySelector('.empty-search-row');
-          if (!hasVisibleRow && query !== '') {
-            if (!emptyRow) {
-              const colCount = table.closest('table').querySelectorAll('thead th').length || 5;
-              emptyRow = document.createElement('tr');
-              emptyRow.className = 'empty-search-row no-filter';
-              emptyRow.innerHTML = `<td colspan="${colCount}" class="text-center text-muted py-4"><i class="bi bi-search me-2"></i>Tidak ada data yang cocok dengan "${e.target.value}"</td>`;
-              table.appendChild(emptyRow);
-            }
-          } else {
-            if (emptyRow) {
-              emptyRow.remove();
-            }
-          }
-        }
-      }
-    });
-
-    // Prevent search forms from reloading page on Enter
-    document.addEventListener('submit', function(e) {
-      const form = e.target;
-      const searchInput = form.querySelector('input[name="s"]');
-      if (searchInput) {
-        e.preventDefault();
-      }
-    });
 
     // Unsaved Changes Protection (Confirm Navigation)
     let isFormDirty = false;

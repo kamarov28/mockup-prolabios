@@ -38,7 +38,7 @@
         </div>
         <div class="col-lg-6 position-relative z-1 animate-on-scroll animate-scale-in delay-300">
           <!-- Decorative dotted grid behind slider -->
-          <div class="position-absolute translate-middle-y start-0 w-100 h-100 opacity-20 d-none d-md-block" style="background-image: radial-gradient(var(--color-primary, #D32F2F) 1.5px, transparent 1.5px); background-size: 20px 20px; z-index: -1; transform: translate(-25px, 25px); width: 120px; height: 160px;"></div>
+          <div class="position-absolute translate-middle-y start-0 opacity-20 d-none d-md-block" style="background-image: radial-gradient(var(--color-primary, #D32F2F) 1.5px, transparent 1.5px); background-size: 20px 20px; z-index: -1; transform: translate(-25px, 25px); width: 120px; height: 160px;"></div>
           
           <div class="rounded-4 overflow-hidden position-relative bg-dark hero-carousel-wrapper" style="aspect-ratio: 4/3;">
             <div id="heroSlideshow" class="carousel slide carousel-card-swap h-100" data-bs-ride="carousel" data-bs-interval="3000" data-bs-pause="false" data-bs-touch="true">
@@ -132,35 +132,39 @@
       <div class="marquee-container">
         <!-- Group 1 -->
         <div class="marquee-content">
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/liofilchem.png') }}" alt="Liofilchem" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bioendo.png') }}" alt="Bioendo" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/terragene.png') }}" alt="Terragene" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/biotool.png') }}" alt="Biotool" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ifm.png') }}" alt="IFM" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bnf_korea.png') }}" alt="BNF Korea" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/leadfluid.png') }}" alt="Leadfluid" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/meizheng.png') }}" alt="Meizheng" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ksl_pulse.png') }}" alt="KSL Pulse Scientific" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/solus_scientific.png') }}" alt="Solus Scientific" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/diamidex.png') }}" alt="Diamidex" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/lumeley.png') }}" alt="LuMeley" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/vecverse.png') }}" alt="Shuye Keji VECVERSE" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/vision_med.png') }}" alt="Vision Med" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ratel.png') }}" alt="Ratel" loading="lazy" decoding="async"></div>
         </div>
-        <!-- Group 2 (Duplicate for infinite seamless scrolling loop) -->
+        <!-- Group 2 (Duplikat otomatis di sisi client JS) -->
         <div class="marquee-content" aria-hidden="true">
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bc0ca791541599e58a4b7619ebfa72e4.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/72ca09c33675c45d2c94f351826e9425.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/8750771283bf378d2d4d34f33023f39e.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/4d8c80a7c6f31d10456d0838a4f76147.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/2584fc7d85c83d05914c130ab2da4180.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/9757f7f424d9fbbac1b3cfd10357ead4.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/631128ee29e2354e6685a44cad7560cf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/7296b8cb17186abb8eca80a5ff1ad710.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/19f38e3ab01d54b5475f78cf5f252c3b.jpeg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bf629c714fe27d7216ea8bb97b5e46ae.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/af5b6334db64050af4eaa8127c84e2bf.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/e3e89f927bf1432531884f64eb64d99d.png?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
-          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ab86de253e7289bc84fc8ba013292496.jpg?v=3') }}" alt="Principal" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/liofilchem.png') }}" alt="Liofilchem" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bioendo.png') }}" alt="Bioendo" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/terragene.png') }}" alt="Terragene" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/biotool.png') }}" alt="Biotool" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ifm.png') }}" alt="IFM" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/bnf_korea.png') }}" alt="BNF Korea" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/leadfluid.png') }}" alt="Leadfluid" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/meizheng.png') }}" alt="Meizheng" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ksl_pulse.png') }}" alt="KSL Pulse Scientific" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/solus_scientific.png') }}" alt="Solus Scientific" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/diamidex.png') }}" alt="Diamidex" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/lumeley.png') }}" alt="LuMeley" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/vecverse.png') }}" alt="Shuye Keji VECVERSE" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/vision_med.png') }}" alt="Vision Med" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset('images/vendor/ratel.png') }}" alt="Ratel" loading="lazy" decoding="async"></div>
         </div>
       </div>
     </div>

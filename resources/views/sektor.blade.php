@@ -78,7 +78,7 @@
             @endphp
 
             @if($currentData)
-            <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 400px; object-fit: cover;">
+            <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="img-fluid rounded shadow-sm mb-4 w-100" style="max-height: 400px; object-fit: cover;" loading="lazy" decoding="async">
             
             <h2 class="mb-3 fw-bold" style="color: var(--color-secondary, #2b2d42);">{{ $currentData['name'] }}</h2>
             @foreach($descriptionParagraphs as $desc)
@@ -112,7 +112,7 @@
                               {{ $prod['title'] }}
                             </a>
                           </td>
-                          <td class="py-3 px-4 text-secondary">{{ $prod['description'] ?? '-' }}</td>
+                          <td class="py-3 px-4 text-secondary">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
                         </tr>
                       @endif
                     @endforeach
@@ -149,7 +149,7 @@
                         <h4 class="card-title fs-6 fw-bold">
                           <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none text-dark hover-primary">{{ $prod['title'] }}</a>
                         </h4>
-                        <p class="card-text text-muted small mt-2 mb-3" style="font-size: 0.78rem;">{{ Str::limit($prod['description'] ?? '', 80) }}</p>
+                        <p class="card-text text-muted small mt-2 mb-3" style="font-size: 0.78rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
                         <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="btn btn-sm btn-outline-primary w-100 fw-semibold">Lihat Detail</a>
                       </div>
                     </div>
@@ -176,6 +176,13 @@
   @push('scripts')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      function decodeHtmlEntity(str) {
+        if (!str) return '';
+        const txt = document.createElement("textarea");
+        txt.innerHTML = str;
+        return txt.value;
+      }
+
       const sectors = @json($sectors);
       const products = @json($products);
       const detailProductUrl = "{{ url('/produk/detail') }}";
@@ -268,7 +275,9 @@
                 
                 const tdApp = document.createElement('td');
                 tdApp.className = 'py-3 px-4 text-secondary';
-                tdApp.textContent = prod.description || '-';
+                const decodedDesc = decodeHtmlEntity(prod.description || '');
+                const cleanDesc = decodedDesc.replace(/<\/?[^>]+(>|$)/g, "").trim();
+                tdApp.textContent = cleanDesc.length > 150 ? cleanDesc.substring(0, 150) + '...' : (cleanDesc || '-');
                 
                 tr.appendChild(tdCatalog);
                 tr.appendChild(tdProduct);

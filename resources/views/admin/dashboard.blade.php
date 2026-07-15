@@ -141,9 +141,51 @@
     </div>
   </div>
 
-  <!-- Right: Chart & Distribution -->
-  <div class="col-lg-4">
-    <div class="card bg-white shadow-sm h-100">
+  <!-- Right: Sync & Chart -->
+  <div class="col-lg-4 d-flex flex-column gap-4">
+    <!-- Card: Google Sheets Sync -->
+    <div class="card bg-white shadow-sm">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h2 class="h5 mb-0 fw-bold text-dark"><i class="bi bi-google text-primary me-2"></i>Sinkronisasi Katalog</h2>
+        <span class="badge bg-{{ ($homeData['last_sync_status'] ?? '') === 'success' ? 'success' : (($homeData['last_sync_status'] ?? '') === 'failed' ? 'danger' : 'secondary') }}">
+          {{ ($homeData['last_sync_status'] ?? '') === 'success' ? 'Aktif / Sukses' : (($homeData['last_sync_status'] ?? '') === 'failed' ? 'Gagal' : 'Belum Pernah') }}
+        </span>
+      </div>
+      <div class="card-body p-4">
+        <p class="text-muted small">Hubungkan dan sinkronisasikan katalog produk di website ini dengan lembar kerja Google Sheets Anda secara langsung.</p>
+        
+        <div class="mb-3 p-3 bg-light rounded border text-muted small">
+          <div class="d-flex justify-content-between mb-1">
+            <span>Waktu Terakhir:</span>
+            <span class="fw-bold text-dark" id="sync-time">{{ $homeData['last_sync_time'] ?? '-' }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Metode:</span>
+            <span class="fw-bold text-dark">Google Sheets API</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100 fw-bold py-2" id="btn-trigger-sync">
+          <span class="spinner-border spinner-border-sm d-none me-2" id="sync-spinner" role="status" aria-hidden="true"></span>
+          <i class="bi bi-arrow-repeat me-1" id="sync-icon"></i> <span id="sync-text">Sinkronkan Sekarang</span>
+        </button>
+
+        <div class="mt-3 d-none" id="sync-log-container">
+          <label class="form-label small fw-bold text-dark">Log Output Terakhir:</label>
+          <pre class="bg-dark text-light p-2 rounded small" id="sync-log-text" style="max-height: 120px; overflow-y: auto; font-size: 0.75rem; white-space: pre-wrap;"></pre>
+        </div>
+        
+        @if(!empty($homeData['last_sync_log']))
+        <div class="mt-3" id="sync-log-container-saved">
+          <label class="form-label small fw-bold text-dark">Log Output Terakhir:</label>
+          <pre class="bg-dark text-light p-2 rounded small" style="max-height: 120px; overflow-y: auto; font-size: 0.75rem; white-space: pre-wrap;">{{ $homeData['last_sync_log'] }}</pre>
+        </div>
+        @endif
+      </div>
+    </div>
+
+    <!-- Card: Product Distribution -->
+    <div class="card bg-white shadow-sm">
       <div class="card-header">
         <h2 class="h5 mb-0 fw-bold text-dark"><i class="bi bi-pie-chart text-warning me-2"></i>Penyebaran Produk</h2>
       </div>
@@ -153,16 +195,21 @@
         </div>
         <div class="mt-4 w-100">
           <ul class="list-group list-group-flush small">
-            @php 
-              $colors = ['#D32F2F', '#0DCAF0', '#198754', '#6C757D'];
-              $i = 0;
-            @endphp
-            @foreach($categoryDist as $catName => $count)
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-                <span><i class="bi bi-circle-fill me-2" style="color: {{ $colors[$i++] }};"></i>{{ $catName }}</span>
-                <span class="fw-bold">{{ $count }}</span>
-              </li>
-            @endforeach
+              @php 
+                $colors = ['#D32F2F', '#0DCAF0', '#198754', '#6C757D', '#F59E0B', '#8B5CF6', '#EC4899', '#10B981'];
+                $i = 0;
+                $colorCount = count($colors);
+              @endphp
+              @foreach($categoryDist as $catName => $count)
+                @php 
+                  $currentColor = $colors[$i % $colorCount];
+                  $i++;
+                @endphp
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                  <span><i class="bi bi-circle-fill me-2" style="color: {{ $currentColor }};"></i>{{ $catName }}</span>
+                  <span class="fw-bold">{{ $count }}</span>
+                </li>
+              @endforeach
           </ul>
         </div>
       </div>
@@ -175,6 +222,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // 1. Chart.js Doughnut Init
       const ctx = document.getElementById('categoryChart').getContext('2d');
       new Chart(ctx, {
         type: 'doughnut',
@@ -182,7 +230,7 @@
           labels: {!! json_encode(array_keys($categoryDist)) !!},
           datasets: [{
             data: {!! json_encode(array_values($categoryDist)) !!},
-            backgroundColor: ['#D32F2F', '#0DCAF0', '#198754', '#6C757D'],
+            backgroundColor: ['#D32F2F', '#0DCAF0', '#198754', '#6C757D', '#F59E0B', '#8B5CF6', '#EC4899'],
             hoverOffset: 4,
             borderWidth: 2,
             borderColor: '#ffffff'
@@ -199,6 +247,61 @@
           cutout: '70%'
         }
       });
+
+      // 2. AJAX Trigger for Google Sheets Sync
+      const btnSync = document.getElementById('btn-trigger-sync');
+      if (btnSync) {
+        btnSync.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const spinner = document.getElementById('sync-spinner');
+          const icon = document.getElementById('sync-icon');
+          const text = document.getElementById('sync-text');
+          const logContainer = document.getElementById('sync-log-container');
+          const logText = document.getElementById('sync-log-text');
+          const savedLog = document.getElementById('sync-log-container-saved');
+          
+          // Disable button, show loading
+          btnSync.disabled = true;
+          spinner.classList.remove('d-none');
+          icon.classList.add('d-none');
+          text.textContent = 'Menyinkronkan...';
+          
+          fetch('{{ route("admin.sync-sheets") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+          })
+          .then(response => {
+            if (!response.ok) {
+              return response.json().then(errData => { throw errData; });
+            }
+            return response.json();
+          })
+          .then(data => {
+            btnSync.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+            text.textContent = 'Sinkronkan Sekarang';
+            
+            alert(data.message);
+            location.reload();
+          })
+          .catch(err => {
+            btnSync.disabled = false;
+            spinner.classList.add('d-none');
+            icon.classList.remove('d-none');
+            text.textContent = 'Sinkronkan Sekarang';
+            
+            alert(err.message || 'Terjadi kesalahan teknis saat sinkronisasi.');
+            if (savedLog) savedLog.classList.add('d-none');
+            logContainer.classList.remove('d-none');
+            logText.textContent = err.log || err.message || JSON.stringify(err);
+          });
+        });
+      }
     });
   </script>
 @endsection

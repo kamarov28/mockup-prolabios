@@ -298,9 +298,16 @@ function initHeaderScrollEffect() {
   const header = document.querySelector('.header');
   if (!header) return;
 
+  let ticking = false;
   window.addEventListener('scroll', function () {
-    header.classList.toggle('header-scrolled', window.scrollY > 50);
-  });
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        header.classList.toggle('header-scrolled', window.scrollY > 50);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
 }
 
 // Client-side pagination logic
@@ -381,17 +388,25 @@ function initPrincipalSlider() {
     return principalTrack.scrollWidth / 2;
   }
 
+  let halfWidth = getHalfWidth();
+  window.addEventListener('resize', function () {
+    halfWidth = getHalfWidth();
+  });
+
   function normalizeScroll() {
-    const half = getHalfWidth();
-    if (half === 0) return;
-    if (principalSlider.scrollLeft >= half) {
-      principalSlider.scrollLeft -= half;
+    if (halfWidth === 0) return;
+    if (principalSlider.scrollLeft >= halfWidth) {
+      principalSlider.scrollLeft -= halfWidth;
     } else if (principalSlider.scrollLeft < 0) {
-      principalSlider.scrollLeft += half;
+      principalSlider.scrollLeft += halfWidth;
     }
   }
 
   function autoScrollFrame() {
+    if (document.documentElement.classList.contains('no-motion')) {
+      autoScrollId = requestAnimationFrame(autoScrollFrame);
+      return;
+    }
     if (!isDragging) {
       principalSlider.scrollLeft += scrollSpeed;
       normalizeScroll();

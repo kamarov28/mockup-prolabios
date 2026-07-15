@@ -49,14 +49,15 @@ class DataService
         DB::table('products')->truncate();
         foreach ($products as $p) {
             DB::table('products')->insert([
-                'catalog'     => $p['catalog']     ?? null,
-                'title'       => $p['title'],
-                'description' => $p['description'] ?? null,
-                'category'    => $p['category'],
-                'sector'      => $p['sector']      ?? null,
-                'image'       => $p['image']       ?? null,
-                'created_at'  => now(),
-                'updated_at'  => now(),
+                'catalog'      => $p['catalog']      ?? null,
+                'title'        => $p['title'],
+                'description'  => $p['description']  ?? null,
+                'category'     => $p['category'],
+                'sub_category' => $p['sub_category'] ?? null,
+                'sector'       => $p['sector']       ?? null,
+                'image'        => $p['image']        ?? null,
+                'created_at'   => now(),
+                'updated_at'   => now(),
             ]);
         }
         return true;
@@ -65,14 +66,15 @@ class DataService
     public function addProduct(array $product): bool
     {
         DB::table('products')->insert([
-            'catalog'     => $product['catalog']     ?? null,
-            'title'       => $product['title'],
-            'description' => $product['description'] ?? null,
-            'category'    => $product['category'],
-            'sector'      => $product['sector']      ?? null,
-            'image'       => $product['image']       ?? null,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'catalog'      => $product['catalog']      ?? null,
+            'title'        => $product['title'],
+            'description'  => $product['description']  ?? null,
+            'category'     => $product['category'],
+            'sub_category' => $product['sub_category'] ?? null,
+            'sector'       => $product['sector']       ?? null,
+            'image'        => $product['image']        ?? null,
+            'created_at'   => now(),
+            'updated_at'   => now(),
         ]);
         return true;
     }
@@ -80,13 +82,14 @@ class DataService
     public function updateProduct(string $oldTitle, array $updatedProduct): bool
     {
         DB::table('products')->where('title', $oldTitle)->update([
-            'catalog'     => $updatedProduct['catalog']     ?? null,
-            'title'       => $updatedProduct['title'],
-            'description' => $updatedProduct['description'] ?? null,
-            'category'    => $updatedProduct['category'],
-            'sector'      => $updatedProduct['sector']      ?? null,
-            'image'       => $updatedProduct['image']       ?? null,
-            'updated_at'  => now(),
+            'catalog'      => $updatedProduct['catalog']      ?? null,
+            'title'        => $updatedProduct['title'],
+            'description'  => $updatedProduct['description']  ?? null,
+            'category'     => $updatedProduct['category'],
+            'sub_category' => $updatedProduct['sub_category'] ?? null,
+            'sector'       => $updatedProduct['sector']       ?? null,
+            'image'        => $updatedProduct['image']        ?? null,
+            'updated_at'   => now(),
         ]);
         return true;
     }
@@ -340,8 +343,18 @@ class DataService
             'contact_phone_marketing'  => '021-3874-1447',
             'contact_phone_finance'    => '021-8792-9433',
             'contact_phone_technician' => '0812-837-4867',
-            'contact_email'            => 'lisa.aryadi@prolabios.com',
+            'contact_email'            => 'marketing@prolabios.com',
             'contact_address'          => 'Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres, Jakarta Barat, DKI Jakarta 11850',
+            'catalog_pdf_url'          => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
+
+            // General & Social Media settings
+            'company_name'             => 'PT. Prolabios Mitra Analitika',
+            'site_logo'                => '',
+            'operational_hours'        => 'Senin - Jumat: 08.00 - 17.00',
+            'social_instagram'         => 'https://instagram.com/prolabios',
+            'social_facebook'          => 'https://facebook.com/prolabios',
+            'social_linkedin'          => 'https://linkedin.com/company/prolabios',
+            'social_twitter'           => 'https://twitter.com/prolabios',
 
             // Page: Products
             'products_title'        => 'Semua Produk',

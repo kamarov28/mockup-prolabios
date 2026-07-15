@@ -171,6 +171,12 @@ body {
   background-color: var(--color-bg-white) !important;
   border-bottom: 1px solid var(--color-border) !important;
 }
+[data-theme="dark"] .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+[data-theme="dark"] .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
 
 [data-theme="dark"] .navbar-light .navbar-nav .nav-link {
   color: var(--color-text-muted) !important;
@@ -295,6 +301,15 @@ body {
   left: 10%;
 }
 
+/* Disable sliding underlines for theme and motion toggle buttons */
+#theme-toggle::after,
+#motion-toggle::after,
+.navbar-nav #theme-toggle::after,
+.navbar-nav #motion-toggle::after {
+  display: none !important;
+  content: none !important;
+}
+
 /* Theme Toggle Button Rotation */
 #theme-toggle {
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -361,6 +376,8 @@ body {
   gap: 3rem; /* Uniform gap */
   padding-right: 3rem; /* Mathematical alignment for seamless marquee loop */
   animation: scroll-marquee 35s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 /* Wrapper box for uniform size and background */
@@ -644,6 +661,7 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
   background-color: var(--color-bg-white) !important;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
   display: flex !important;
   flex-direction: column;
   height: 100%;
@@ -684,6 +702,7 @@ body {
   max-height: 90%;
   object-fit: contain;
   transition: transform 0.5s ease;
+  will-change: transform;
 }
 
 .product-card-premium:hover .img-wrap img {
@@ -1149,6 +1168,92 @@ body {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
+}
+
+/* ==========================================================================
+   Mobile Responsiveness & Performance Optimizations
+   ========================================================================== */
+
+/* Touch target optimizations for mobile links/buttons */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  [data-theme="dark"] .navbar-nav .nav-link {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+  }
+  .navbar-nav .nav-link::after {
+    left: 16px !important;
+  }
+  .navbar-nav .nav-link:hover::after,
+  .navbar-nav .nav-link.active::after {
+    width: 35px !important;
+    left: 16px !important;
+  }
+}
+
+/* Catalog Sidebar collapse indicator & mobile grids */
+@media (max-width: 767.98px) {
+  /* Reduce container padding on small viewports for maximum screen space */
+  .container, .container-fluid {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+  
+  /* Optimize product cards in grid */
+  .product-card {
+    margin-bottom: 15px;
+  }
+  .product-card .card-body {
+    padding: 1rem !important;
+  }
+  
+  /* Sidebar Accordion specific styling */
+  #sidebarCollapse {
+    background-color: var(--color-bg-white);
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 20px;
+  }
+  [data-theme="dark"] #sidebarCollapse {
+    background-color: #1e293b;
+  }
+  
+  /* Adjust hero typography size on mobile for CLS/readability */
+  .hero-headline {
+    font-size: 2.2rem !important;
+    line-height: 1.25 !important;
+  }
+  .lead {
+    font-size: 1.05rem !important;
+  }
+  
+  /* Reduce premium-footer spacing and sizes on mobile */
+  .premium-footer {
+    padding-top: 35px !important;
+    padding-bottom: 20px !important;
+  }
+  .premium-footer h5 {
+    font-size: 0.95rem !important;
+    margin-bottom: 15px !important;
+    margin-top: 15px !important;
+  }
+  .premium-footer p, 
+  .premium-footer ul,
+  .premium-footer li {
+    font-size: 0.85rem !important;
+    line-height: 1.6 !important;
+  }
+  .premium-footer .footer-logo {
+    height: 30px !important;
+  }
+  .premium-footer hr {
+    margin-top: 20px !important;
+    margin-bottom: 10px !important;
+  }
 }
 
 
