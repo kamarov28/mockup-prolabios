@@ -1017,43 +1017,6 @@ a:hover {
   color: var(--color-accent) !important;
 }
 
-/* 7. Product Cards specific (inside /produk) */
-.product-card-premium {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 4px !important;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.product-card-premium:hover {
-  border-color: var(--color-accent) !important;
-  transform: translateY(-5px);
-}
-.product-card-premium .img-wrap {
-  border-bottom: 1px solid var(--color-border);
-  filter: grayscale(100%);
-  transition: filter 0.3s ease;
-  overflow: hidden;
-}
-.product-card-premium:hover .img-wrap {
-  filter: grayscale(0%);
-}
-.product-card-premium .img-wrap img {
-  transition: transform 0.5s ease;
-}
-.product-card-premium:hover .img-wrap img {
-  transform: scale(1.05);
-}
-.product-card-premium .btn {
-  border-radius: 4px !important;
-  border: 1px solid var(--color-border) !important;
-  background: transparent !important;
-  color: #fff !important;
-  transition: all 0.3s ease;
-}
-.product-card-premium:hover .btn {
-  border-color: var(--color-accent) !important;
-  color: var(--color-accent) !important;
-}
 
 /* 8. Table overrides (Detail specifications) */
 .table {
@@ -1512,6 +1475,13 @@ a:hover {
   border-color: var(--color-accent) !important;
   box-shadow: none !important;
 }
+.blog-card-img-wrap img {
+  filter: grayscale(80%);
+  transition: filter 0.4s ease;
+}
+.blog-card:hover .blog-card-img-wrap img {
+  filter: grayscale(0%);
+}
 .blog-card-body {
   background-color: transparent !important;
   padding: 24px !important;
@@ -1627,6 +1597,17 @@ a:hover {
   color: var(--color-text-muted) !important;
   font-size: 0.82rem !important;
   line-height: 1.6 !important;
+}
+.product-card-premium .btn {
+  border-radius: 4px !important;
+  border: 1px solid var(--color-border) !important;
+  background: transparent !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+.product-card-premium:hover .btn {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
 }
 
 /* ==========================================================================
@@ -1810,24 +1791,6 @@ section hr {
   border-radius: 2px !important;
 }
 
-/* Blog card overrides for Informasi page */
-.blog-card {
-  border: 1px solid var(--color-border) !important;
-  background: rgba(255, 255, 255, 0.02) !important;
-  border-radius: 2px !important;
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.blog-card:hover {
-  border-color: var(--color-accent) !important;
-  transform: translateY(-3px);
-}
-.blog-card-img-wrap img {
-  filter: grayscale(80%);
-  transition: filter 0.4s ease;
-}
-.blog-card:hover .blog-card-img-wrap img {
-  filter: grayscale(0%);
-}
 
 /* Custom table editorial styling */
 .custom-table, .table {

@@ -9,6 +9,8 @@ function prefersReducedMotion() {
     || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+let gsapSafetyTimer = null;
+
 function isProductPath(pathname) {
   const path = pathname || window.location.pathname;
   return path === '/produk' || path.endsWith('/produk.php') || path.includes('/produk');
@@ -41,23 +43,23 @@ function onScrollThrottled(handler) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  initSearch();
-  initSidebarNavigation();
-  initContactForm();
-  initMobileMenu();
-  initAnchorSmoothScroll();
-  initHeaderScrollEffect();
-  initPrincipalSlider();
-  initBlogCategoryFilter();
-  initScrollAnimations();
-  initGSAPAnimations();
-  initHeroBgSlideshow();
-  initSearchOverlay();
-  initScrollToTop();
-  initMotionToggleSync();
-  initMarqueeVisibility();
-  initDraggableMarquee();
-  initDraggableLogoMarquee();
+  if (typeof initSearch === 'function') initSearch();
+  if (typeof initSidebarNavigation === 'function') initSidebarNavigation();
+  if (typeof initContactForm === 'function') initContactForm();
+  if (typeof initMobileMenu === 'function') initMobileMenu();
+  if (typeof initAnchorSmoothScroll === 'function') initAnchorSmoothScroll();
+  if (typeof initHeaderScrollEffect === 'function') initHeaderScrollEffect();
+  if (typeof initPrincipalSlider === 'function') initPrincipalSlider();
+  if (typeof initBlogCategoryFilter === 'function') initBlogCategoryFilter();
+  if (typeof initScrollAnimations === 'function') initScrollAnimations();
+  if (typeof initGSAPAnimations === 'function') initGSAPAnimations();
+  if (typeof initHeroBgSlideshow === 'function') initHeroBgSlideshow();
+  if (typeof initSearchOverlay === 'function') initSearchOverlay();
+  if (typeof initScrollToTop === 'function') initScrollToTop();
+  if (typeof initMotionToggleSync === 'function') initMotionToggleSync();
+  if (typeof initMarqueeVisibility === 'function') initMarqueeVisibility();
+  if (typeof initDraggableMarquee === 'function') initDraggableMarquee();
+  if (typeof initDraggableLogoMarquee === 'function') initDraggableLogoMarquee();
 
   if (isProductPath()) {
     applyPagination(1);
@@ -377,9 +379,10 @@ function renderPaginationControls(totalItems) {
   const container = document.getElementById('dynamic-pagination');
   if (!container) return;
   
-  const totalPages = Math.ceil(totalItems / productsPerPage);
+  // Clear the container first to prevent duplication on repeated renders
   container.innerHTML = '';
   
+  const totalPages = Math.ceil(totalItems / productsPerPage);
   if (totalPages <= 1) return;
 
   const nav = document.createElement('nav');
@@ -656,12 +659,70 @@ function revealHeroStatic() {
 }
 
 /**
+ * Safeguard: Ensure typography helpers are only run on trusted, static elements.
+ * MUST only be used on trusted, static content. Safe elements must either have the 
+ * data-allow-split="true" attribute, match a known-safe ID, or match one of the 
+ * whitelisted design-safe static classes.
+ *
+ * @param {HTMLElement} el The element to check
+ * @returns {boolean} True if the element is safe to split/wrap
+ */
+function isSafeTypographyElement(el) {
+  if (!el) return false;
+  if (el.dataset.allowSplit === 'true') return true;
+  
+  // Whitelist of known safe static classes
+  const safeClasses = [
+    'typo-hero-title',
+    'typo-lead',
+    'typo-eyebrow',
+    'typo-section-label',
+    'typo-section-title',
+    'typo-index-title',
+    'typo-blog-card-title',
+    'typo-blog-card-meta',
+    'editorial-page-label',
+    'editorial-page-title',
+    'profil-section-title',
+    'profil-section-label'
+  ];
+  
+  // Whitelist of known safe IDs
+  const safeIds = [
+    'category-title'
+  ];
+
+  if (safeIds.indexOf(el.id) !== -1) return true;
+
+  for (let i = 0; i < safeClasses.length; i++) {
+    if (el.classList.contains(safeClasses[i])) {
+      return true;
+    }
+  }
+
+  // Also check if any parent up to body has data-allow-split="true"
+  let parent = el.parentElement;
+  while (parent && parent !== document.body) {
+    if (parent.dataset.allowSplit === 'true') return true;
+    parent = parent.parentElement;
+  }
+
+  return false;
+}
+
+/**
  * Typography split helpers — word masks for editorial clip-up reveals.
  * Preserves nested markup (e.g. .typo-outline) while wrapping text nodes.
+ * Safeguarded: Only runs on whitelisted, trusted static content.
  */
 function typoSplitWords(el) {
-  if (!el || el.dataset.splitWords === '1') {
-    return el ? el.querySelectorAll('.word-inner') : [];
+  if (!el) return [];
+  if (!isSafeTypographyElement(el)) {
+    console.warn('typoSplitWords skipped: Element is not whitelisted for typography splitting to prevent potential DOM injection on dynamic/user-controlled content.', el);
+    return [];
+  }
+  if (el.dataset.splitWords === '1') {
+    return el.querySelectorAll('.word-inner');
   }
 
   // Get original text for screen readers
@@ -698,9 +759,9 @@ function typoSplitWords(el) {
     }
     if (node.nodeType !== Node.ELEMENT_NODE) return;
     
-    // Skip interactive/unsafe descendants
+    // Only traverse into known safe text formatting tags to prevent layout/behavior breakage
     const tagName = node.tagName.toUpperCase();
-    if (['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG'].indexOf(tagName) !== -1) {
+    if (['SPAN', 'STRONG', 'EM', 'B', 'I', 'U'].indexOf(tagName) === -1) {
       return;
     }
     
@@ -737,10 +798,16 @@ function typoSplitWords(el) {
 
 /**
  * Wrap block-level text content in a single line mask (good for labels / meta).
+ * Safeguarded: Only runs on whitelisted, trusted static content.
  */
 function typoWrapLine(el) {
-  if (!el || el.dataset.splitLine === '1') {
-    return el ? el.querySelector('.line-inner') : null;
+  if (!el) return null;
+  if (!isSafeTypographyElement(el)) {
+    console.warn('typoWrapLine skipped: Element is not whitelisted for typography wrapping to prevent potential DOM injection on dynamic/user-controlled content.', el);
+    return null;
+  }
+  if (el.dataset.splitLine === '1') {
+    return el.querySelector('.line-inner');
   }
   
   // Skip interactive/unsafe elements and elements containing them
@@ -813,8 +880,8 @@ function initGSAPAnimations() {
   }
 
   if (typeof gsap === 'undefined') {
-    if (!window.__prolabiosGsapSafety) {
-      window.__prolabiosGsapSafety = setTimeout(function () {
+    if (!gsapSafetyTimer) {
+      gsapSafetyTimer = setTimeout(function () {
         if (!document.querySelector('.typo-hero-entrance[data-gsap-done="1"]')) {
           revealHeroStatic();
         }
@@ -823,9 +890,9 @@ function initGSAPAnimations() {
     return;
   }
 
-  if (window.__prolabiosGsapSafety) {
-    clearTimeout(window.__prolabiosGsapSafety);
-    window.__prolabiosGsapSafety = null;
+  if (gsapSafetyTimer) {
+    clearTimeout(gsapSafetyTimer);
+    gsapSafetyTimer = null;
   }
 
   if (typeof ScrollTrigger !== 'undefined') {
