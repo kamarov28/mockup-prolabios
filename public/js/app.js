@@ -83,6 +83,7 @@ function initSearch() {
       const text = card.textContent.toLowerCase();
       if (!q || text.includes(q)) {
         card.classList.remove('hidden-by-filter');
+        card.style.display = '';
         hasResults = true;
       } else {
         card.classList.add('hidden-by-filter');
@@ -228,6 +229,7 @@ function filterProductsByCategory(category) {
   if (!category) {
     productCards.forEach(function (card) {
       card.classList.remove('hidden-by-filter');
+      card.style.display = '';
     });
     applyPagination(1);
     return;
@@ -237,6 +239,7 @@ function filterProductsByCategory(category) {
     const cat = card.getAttribute('data-category');
     if (!cat) {
       card.classList.remove('hidden-by-filter');
+      card.style.display = '';
       return;
     }
 
@@ -246,6 +249,7 @@ function filterProductsByCategory(category) {
     
     if (cats.includes(category.toLowerCase())) {
       card.classList.remove('hidden-by-filter');
+      card.style.display = '';
     } else {
       card.classList.add('hidden-by-filter');
       card.style.display = 'none';
@@ -336,11 +340,14 @@ function initAnchorSmoothScroll() {
 }
 
 function initHeaderScrollEffect() {
-  const header = document.querySelector('.header') || document.querySelector('.navbar.sticky-top, .navbar.fixed-top');
-  if (!header) return;
+  const elements = document.querySelectorAll('.header, .navbar');
+  if (!elements.length) return;
 
   onScrollThrottled(function () {
-    header.classList.toggle('header-scrolled', window.scrollY > 50);
+    const isScrolled = window.scrollY > 50;
+    elements.forEach(function (el) {
+      el.classList.toggle('header-scrolled', isScrolled);
+    });
   });
 }
 
@@ -375,27 +382,31 @@ function renderPaginationControls(totalItems) {
   
   if (totalPages <= 1) return;
 
-  container.style.display = 'flex';
-  container.style.flexWrap = 'wrap';
-  container.style.justifyContent = 'center';
-  container.style.gap = '5px';
+  const nav = document.createElement('nav');
+  const ul = document.createElement('ul');
+  ul.className = 'pagination';
 
   for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement('button');
-    btn.className = `page-link ${i === currentProductPage ? 'active' : ''}`;
-    btn.style.border = '1px solid var(--color-border)';
-    btn.style.background = i === currentProductPage ? 'var(--color-primary)' : 'var(--color-bg-white)';
-    btn.style.color = i === currentProductPage ? '#fff' : 'var(--color-text-main)';
-    btn.style.padding = '0.5rem 1rem';
-    btn.style.cursor = 'pointer';
-    btn.textContent = i;
-    btn.addEventListener('click', (e) => {
+    const li = document.createElement('li');
+    li.className = `page-item ${i === currentProductPage ? 'active' : ''}`;
+    
+    const link = document.createElement('a');
+    link.className = 'page-link';
+    link.href = '#';
+    link.textContent = i;
+    
+    link.addEventListener('click', (e) => {
       e.preventDefault();
       applyPagination(i);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    container.appendChild(btn);
+    
+    li.appendChild(link);
+    ul.appendChild(li);
   }
+  
+  nav.appendChild(ul);
+  container.appendChild(nav);
 }
 
 function initPrincipalSlider() {
@@ -582,57 +593,6 @@ function initBlogCategoryFilter() {
   });
 }
 
-function initHeroSlideshow() {
-  var slideshow = document.getElementById('heroSlideshow');
-  var dotsContainer = document.getElementById('heroSlideDots');
-  if (!slideshow || !dotsContainer) return;
-
-  var slides = slideshow.querySelectorAll('.hero-slide');
-  var dots = dotsContainer.querySelectorAll('.dot');
-  if (slides.length < 2) return;
-
-  var current = 0;
-  var interval = 4000;
-  var timer = null;
-
-  function goTo(index) {
-    slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (index + slides.length) % slides.length;
-    slides[current].classList.add('active');
-    dots[current].classList.add('active');
-  }
-
-  function next() {
-    goTo(current + 1);
-  }
-
-  function startTimer() {
-    if (timer) return;
-    timer = setInterval(next, interval);
-  }
-
-  function stopTimer() {
-    if (timer) {
-      clearInterval(timer);
-      timer = null;
-    }
-  }
-
-  dots.forEach(function (dot) {
-    dot.addEventListener('click', function () {
-      var index = parseInt(this.getAttribute('data-index'), 10);
-      goTo(index);
-      stopTimer();
-      startTimer();
-    });
-  });
-
-  slideshow.addEventListener('mouseenter', stopTimer);
-  slideshow.addEventListener('mouseleave', startTimer);
-
-  startTimer();
-}
 
 /**
  * Custom Scroll & Entrance Animation Engine
@@ -737,6 +697,13 @@ function typoSplitWords(el) {
       return;
     }
     if (node.nodeType !== Node.ELEMENT_NODE) return;
+    
+    // Skip interactive/unsafe descendants
+    const tagName = node.tagName.toUpperCase();
+    if (['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG'].indexOf(tagName) !== -1) {
+      return;
+    }
+    
     // Snapshot children — DOM mutates as we wrap
     Array.prototype.slice.call(node.childNodes).forEach(walk);
   }
@@ -775,6 +742,13 @@ function typoWrapLine(el) {
   if (!el || el.dataset.splitLine === '1') {
     return el ? el.querySelector('.line-inner') : null;
   }
+  
+  // Skip interactive/unsafe elements and elements containing them
+  const unsafeTags = ['A', 'BUTTON', 'INPUT', 'TEXTAREA', 'SELECT', 'SVG'];
+  if (unsafeTags.indexOf(el.tagName.toUpperCase()) !== -1 || el.querySelector('a, button, input, textarea, select, svg')) {
+    return null;
+  }
+
   const originalText = (el.textContent || '').replace(/\s+/g, ' ').trim();
   const inner = document.createElement('span');
   inner.className = 'line-inner';
@@ -1739,14 +1713,20 @@ function initMotionToggleSync() {
   const motionToggle = document.getElementById('motion-toggle');
   if (!motionToggle) return;
 
-  // Layout may also wire the click; we only dispatch after class changes
-  motionToggle.addEventListener('click', function () {
-    // Run after layout handler mutates the class (same tick is fine after microtask)
-    setTimeout(function () {
-      document.dispatchEvent(new CustomEvent('prolabios:motion-change', {
-        detail: { reduced: prefersReducedMotion() }
-      }));
-    }, 0);
+  // Observe class mutations on documentElement to ensure we dispatch on actual class change
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.attributeName === 'class') {
+        document.dispatchEvent(new CustomEvent('prolabios:motion-change', {
+          detail: { reduced: prefersReducedMotion() }
+        }));
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
   });
 }
 
@@ -1798,6 +1778,8 @@ function initDraggableMarquee() {
   let velocity = 0;
   let lastTime = Date.now();
   let lastX = 0;
+  let rAFId = null;
+  let isInView = true;
 
   let contentWidth = contents[0].offsetWidth;
   window.addEventListener('resize', function () {
@@ -1805,6 +1787,11 @@ function initDraggableMarquee() {
   });
 
   function update() {
+    if (!isDragging && (document.hidden || !isInView || prefersReducedMotion())) {
+      rAFId = null;
+      return;
+    }
+
     if (!isDragging) {
       x += speed + velocity;
       velocity *= 0.95; // Inertia friction decay
@@ -1832,7 +1819,20 @@ function initDraggableMarquee() {
       el.style.transform = `translate3d(${x}px, 0, 0)`;
     });
 
-    requestAnimationFrame(update);
+    rAFId = requestAnimationFrame(update);
+  }
+
+  function startLoop() {
+    if (!rAFId && (isDragging || (!document.hidden && isInView && !prefersReducedMotion()))) {
+      rAFId = requestAnimationFrame(update);
+    }
+  }
+
+  function stopLoop() {
+    if (rAFId) {
+      cancelAnimationFrame(rAFId);
+      rAFId = null;
+    }
   }
 
   function onStart(e) {
@@ -1846,6 +1846,7 @@ function initDraggableMarquee() {
     lastTime = Date.now();
     lastX = x;
     marquee.style.cursor = 'grabbing';
+    startLoop();
   }
 
   function onMove(e) {
@@ -1868,7 +1869,34 @@ function initDraggableMarquee() {
   // React to reduced motion setting dynamically
   document.addEventListener('prolabios:motion-change', function () {
     speed = prefersReducedMotion() ? 0 : baseSpeed;
+    if (prefersReducedMotion()) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
   });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        isInView = entry.isIntersecting;
+        if (isInView) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      });
+    }, { threshold: 0 });
+    observer.observe(marquee);
+  }
 
   marquee.style.cursor = 'grab';
   marquee.style.userSelect = 'none';
@@ -1881,7 +1909,7 @@ function initDraggableMarquee() {
   window.addEventListener('touchmove', onMove, { passive: true });
   window.addEventListener('touchend', onEnd);
 
-  requestAnimationFrame(update);
+  startLoop();
 }
 
 /**
@@ -1905,9 +1933,12 @@ function initDraggableLogoMarquee() {
   let isDragging = false;
   let startX = 0;
   let dragX = 0;
+  let Math_abs = Math.abs; // local cache
   let velocity = 0;
   let lastTime = Date.now();
   let lastX = 0;
+  let rAFId = null;
+  let isInView = true;
 
   // Pause on hover
   let isHovered = false;
@@ -1924,11 +1955,16 @@ function initDraggableLogoMarquee() {
   });
 
   function update() {
+    if (!isDragging && (document.hidden || !isInView || prefersReducedMotion())) {
+      rAFId = null;
+      return;
+    }
+
     if (!isDragging) {
       const currentSpeed = (isHovered && !prefersReducedMotion()) ? 0 : speed;
       x += currentSpeed + velocity;
       velocity *= 0.95; // Inertia friction decay
-      if (Math.abs(velocity) < 0.01) velocity = 0;
+      if (Math_abs(velocity) < 0.01) velocity = 0;
     } else {
       const now = Date.now();
       const dt = now - lastTime;
@@ -1951,7 +1987,21 @@ function initDraggableLogoMarquee() {
       el.style.transform = `translate3d(${x}px, 0, 0)`;
     });
 
-    requestAnimationFrame(update);
+    rAFId = requestAnimationFrame(update);
+  }
+
+  function startLoop() {
+    if (!rAFId && (isDragging || (!document.hidden && isInView && !prefersReducedMotion()))) {
+      rAFId = requestAnimationFrame(update);
+    }
+  }
+
+  // Cancel any active animation frame
+  function stopLoop() {
+    if (rAFId) {
+      cancelAnimationFrame(rAFId);
+      rAFId = null;
+    }
   }
 
   function onStart(e) {
@@ -1965,6 +2015,7 @@ function initDraggableLogoMarquee() {
     lastTime = Date.now();
     lastX = x;
     container.style.cursor = 'grabbing';
+    startLoop();
   }
 
   function onMove(e) {
@@ -1987,7 +2038,34 @@ function initDraggableLogoMarquee() {
   // React to reduced motion setting dynamically
   document.addEventListener('prolabios:motion-change', function () {
     speed = prefersReducedMotion() ? 0 : baseSpeed;
+    if (prefersReducedMotion()) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
   });
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
+  });
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        isInView = entry.isIntersecting;
+        if (isInView) {
+          startLoop();
+        } else {
+          stopLoop();
+        }
+      });
+    }, { threshold: 0 });
+    observer.observe(container);
+  }
 
   container.style.cursor = 'grab';
   container.style.userSelect = 'none';
@@ -2000,5 +2078,5 @@ function initDraggableLogoMarquee() {
   window.addEventListener('touchmove', onMove, { passive: true });
   window.addEventListener('touchend', onEnd);
 
-  requestAnimationFrame(update);
+  startLoop();
 }

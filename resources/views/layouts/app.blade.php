@@ -24,7 +24,9 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/experimental-typo.css') }}">
+  @if(Request::is('/') || Request::is('home'))
+    <link rel="stylesheet" href="{{ asset('css/experimental-typo.css') }}">
+  @endif
 
   <!-- Page Preloads -->
   @yield('preload')
