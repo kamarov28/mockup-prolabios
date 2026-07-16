@@ -198,6 +198,9 @@
         if (typeof initScrollAnimations === 'function') {
           initScrollAnimations();
         }
+        if (typeof initGSAPAnimations === 'function') {
+          initGSAPAnimations();
+        }
 
         // Close mobile filter/sidebar collapse after selection
         const sidebarCollapse = document.getElementById('sidebarCollapse');
@@ -229,6 +232,32 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+      // GSAP Script Bootloader
+      if (!document.documentElement.classList.contains('no-motion') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        function loadScript(src) {
+          return new Promise(function (resolve, reject) {
+            var s = document.createElement('script');
+            s.src = src;
+            s.async = true;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+          });
+        }
+        loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js')
+          .then(function () {
+            return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js');
+          })
+          .then(function () {
+            if (typeof initGSAPAnimations === 'function') {
+              initGSAPAnimations();
+            }
+          })
+          .catch(function () {
+            // GSAP failed load fallback is handled gracefully by styles
+          });
+      }
+
       // 1. Intercept sidebar catalog links clicks to load instantly via AJAX
       document.addEventListener('click', function(e) {
         const link = e.target.closest('#catalog-section .col-lg-3 a');

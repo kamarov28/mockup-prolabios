@@ -45,9 +45,6 @@
     </div>
     <div class="container" style="position: relative; z-index: 2;">
       <div class="typo-hero-entrance" style="opacity: 0;">
-        <div class="typo-eyebrow">
-          {{ $siteSettings['company_name'] ?? 'Prolabios' }}
-        </div>
         <h1 class="typo-hero-title">
           {!! str_replace('Terpercaya', '<span class="typo-outline">Terpercaya</span>', e($homeData['hero_title'] ?? '')) !!}
         </h1>
@@ -81,41 +78,7 @@
     <div class="container">
       <div class="row mb-5 typo-section-head">
         <div class="col-lg-8">
-          <h6 class="typo-section-label">Value Chain</h6>
-          <h2 class="typo-section-title">{{ $homeData['focus_title'] }}</h2>
-          <p class="typo-section-sub text-muted">Fokus industri dan rantai nilai pelayanan kami untuk menyediakan solusi laboratorium berkualitas tinggi.</p>
-        </div>
-      </div>
-
-      <div class="typo-index-list">
-        @foreach($homeData['focus_cards'] as $index => $card)
-          <div class="typo-index-item gsap-reveal-item">
-            <div class="typo-index-number">
-              {{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}.
-            </div>
-            <div class="typo-index-content">
-              <div class="typo-index-text">
-                <h3 class="typo-index-title">{{ $card['title'] }}</h3>
-                <p class="typo-index-desc">{{ $card['description'] }}</p>
-              </div>
-              <div>
-                <a href="{{ url('/sektor') }}" class="typo-index-link">
-                  Detail <i class="bi bi-arrow-up-right ms-1"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-    </div>
-  </section>
-
-  <!-- Sektor Fokus — index typography list -->
-  <section class="section-spacious focus-section-pin">
-    <div class="container">
-      <div class="row mb-5 typo-section-head">
-        <div class="col-lg-8">
-          <h6 class="typo-section-label">Value Chain</h6>
+          <span class="typo-section-label">Value Chain</span>
           <h2 class="typo-section-title">{{ $homeData['focus_title'] }}</h2>
           <p class="typo-section-sub text-muted">Fokus industri dan rantai nilai pelayanan kami untuk menyediakan solusi laboratorium berkualitas tinggi.</p>
         </div>
@@ -148,7 +111,7 @@
   <section style="padding: 60px 0; border-bottom: 1px solid var(--color-border); background-color: #070708; overflow: hidden;">
     <div class="container mb-4">
       <div class="text-center">
-        <h6 class="typo-section-label" style="margin-bottom: 0;">Authorized Principals &amp; Partners</h6>
+        <span class="typo-section-label" style="margin-bottom: 0;">Authorized Principals &amp; Partners</span>
       </div>
     </div>
     <div class="marquee-container" style="position: relative; display: flex; overflow: hidden; user-select: none; gap: 40px; padding: 20px 0;">
@@ -182,7 +145,7 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <h6 class="typo-section-label">Artikel &amp; Media</h6>
+          <span class="typo-section-label">Artikel &amp; Media</span>
           <h2 class="typo-section-title">Berita &amp; Kegiatan</h2>
           <p class="typo-section-sub text-muted mb-0">Update terbaru tentang event, training, dan aktivitas Prolabios.</p>
         </div>

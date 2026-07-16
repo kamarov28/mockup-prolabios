@@ -171,7 +171,7 @@
 
         <!-- Col 2: Perusahaan -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h5>Perusahaan</h5>
+          <h2>Perusahaan</h2>
           <ul class="list-unstyled footer-links lh-lg">
             <li><a href="{{ url('/profil') }}">Profil Perusahaan</a></li>
             <li><a href="{{ url('/profil') }}#visi-misi">Visi & Misi</a></li>
@@ -182,7 +182,7 @@
 
         <!-- Col 3: Kontak -->
         <div class="col-lg-3 col-md-6 col-12">
-          <h5>Hubungi Kami</h5>
+          <h2>Hubungi Kami</h2>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-2">
               <i class="bi bi-telephone-fill me-2 mt-1" style="color: var(--color-primary);"></i>
@@ -202,7 +202,7 @@
 
         <!-- Col 4: Jam Operasional -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h5>Jam Operasional</h5>
+          <h2>Jam Operasional</h2>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-3 text-light">
               <i class="bi bi-clock-fill me-2 mt-1" style="color: var(--color-primary);"></i>
@@ -288,8 +288,8 @@
     });
   </script>
 
-  <button type="button" id="scroll-to-top" class="btn btn-primary btn-scroll-to-top shadow-lg rounded-circle" style="position: fixed; bottom: 30px; right: 30px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; z-index: 1050; opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease; border: none; background-color: var(--color-primary, #D32F2F); color: #ffffff;" aria-label="Kembali ke atas">
-    <i class="bi bi-arrow-up-short" style="font-size: 1.75rem; line-height: 1;"></i>
+  <button type="button" id="scroll-to-top" class="btn-scroll-to-top" style="opacity: 0; visibility: hidden;" aria-label="Kembali ke atas">
+    <i class="bi bi-arrow-up-short"></i>
   </button>
 
   <div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Pencarian produk" aria-hidden="true">

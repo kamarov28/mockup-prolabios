@@ -56,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
   initScrollToTop();
   initMotionToggleSync();
   initMarqueeVisibility();
+  initDraggableMarquee();
+  initDraggableLogoMarquee();
 
   if (isProductPath()) {
     applyPagination(1);
@@ -702,9 +704,8 @@ function typoSplitWords(el) {
     return el ? el.querySelectorAll('.word-inner') : [];
   }
 
-  if (!el.getAttribute('aria-label')) {
-    el.setAttribute('aria-label', (el.textContent || '').replace(/\s+/g, ' ').trim());
-  }
+  // Get original text for screen readers
+  const originalText = (el.textContent || '').replace(/\s+/g, ' ').trim();
 
   function wrapTextNode(textNode) {
     const text = textNode.textContent;
@@ -741,6 +742,27 @@ function typoSplitWords(el) {
   }
 
   Array.prototype.slice.call(el.childNodes).forEach(walk);
+
+  // Find target element to prepend visually hidden span.
+  // If container is or contains an anchor/button, prepend inside it so the link has a discernible name.
+  let targetEl = el;
+  if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+    targetEl = el;
+  } else {
+    const link = el.querySelector('a, button');
+    if (link) {
+      targetEl = link;
+    }
+  }
+
+  const srSpan = document.createElement('span');
+  srSpan.className = 'visually-hidden';
+  srSpan.textContent = originalText;
+  targetEl.insertBefore(srSpan, targetEl.firstChild);
+
+  // Remove aria-label if present to avoid accessibility warnings on generic elements
+  el.removeAttribute('aria-label');
+
   el.dataset.splitWords = '1';
   el.classList.add('is-split');
   return el.querySelectorAll('.word-inner');
@@ -753,6 +775,7 @@ function typoWrapLine(el) {
   if (!el || el.dataset.splitLine === '1') {
     return el ? el.querySelector('.line-inner') : null;
   }
+  const originalText = (el.textContent || '').replace(/\s+/g, ' ').trim();
   const inner = document.createElement('span');
   inner.className = 'line-inner';
   while (el.firstChild) {
@@ -762,10 +785,28 @@ function typoWrapLine(el) {
   mask.className = 'line-mask';
   mask.setAttribute('aria-hidden', 'true');
   mask.appendChild(inner);
-  el.appendChild(mask);
-  if (!el.getAttribute('aria-label')) {
-    el.setAttribute('aria-label', (inner.textContent || '').replace(/\s+/g, ' ').trim());
+
+  // Find target element to prepend visually hidden span
+  let targetEl = el;
+  if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+    targetEl = el;
+  } else {
+    const link = el.querySelector('a, button');
+    if (link) {
+      targetEl = link;
+    }
   }
+
+  const srSpan = document.createElement('span');
+  srSpan.className = 'visually-hidden';
+  srSpan.textContent = originalText;
+
+  targetEl.appendChild(srSpan);
+  el.appendChild(mask);
+
+  // Remove aria-label if present to avoid accessibility warnings on generic elements
+  el.removeAttribute('aria-label');
+
   el.dataset.splitLine = '1';
   el.classList.add('is-split');
   return inner;
@@ -780,7 +821,14 @@ function initGSAPAnimations() {
   const pinSection = document.querySelector('.focus-section-pin');
   const newsSection = document.querySelector('.typo-news-section');
   const activeHeroImg = document.querySelector('.hero-bg-slide.active');
-  const hasTargets = heroTextContainer || pinSection || newsSection || activeHeroImg;
+  const pageHeader = document.querySelector('.editorial-page-header');
+  const profilHeroImg = document.querySelector('.profil-hero-img img');
+  const catalogSection = document.getElementById('catalog-section');
+  const sektorSection = document.getElementById('sektor-nav');
+  const layananSection = document.getElementById('service-nav');
+  const infoContainer = document.querySelector('.blog-card, .profil-body-text');
+  const kontakContainer = document.getElementById('contactForm');
+  const hasTargets = heroTextContainer || pinSection || newsSection || activeHeroImg || pageHeader || profilHeroImg || catalogSection || sektorSection || layananSection || infoContainer || kontakContainer;
 
   if (!hasTargets) return;
   if (heroTextContainer && heroTextContainer.dataset.gsapDone === '1') return;
@@ -1081,6 +1129,495 @@ function initGSAPAnimations() {
     });
   }
 
+  // ── Common Page Header Animations ──────────────────────────────────────────
+  if (pageHeader) {
+    const label = pageHeader.querySelector('.editorial-page-label');
+    const title = pageHeader.querySelector('.editorial-page-title');
+    const subtitle = pageHeader.querySelector('.editorial-page-subtitle');
+    const labelInner = label ? typoWrapLine(label) : null;
+    const titleWords = title ? typoSplitWords(title) : [];
+
+    gsap.set(pageHeader, { opacity: 1 });
+    if (labelInner) gsap.set(labelInner, { yPercent: 110 });
+    if (titleWords.length) gsap.set(titleWords, { yPercent: 110 });
+    if (subtitle) gsap.set(subtitle, { y: 15, opacity: 0 });
+
+    const headerTl = gsap.timeline({
+      defaults: { ease: EASE_EXPO }
+    });
+    if (labelInner) headerTl.to(labelInner, { yPercent: 0, duration: 0.8 }, 0.05);
+    if (titleWords.length) {
+      headerTl.to(titleWords, {
+        yPercent: 0,
+        duration: 1,
+        stagger: 0.04,
+        ease: EASE_EXPO
+      }, 0.1);
+    }
+    if (subtitle) headerTl.to(subtitle, { y: 0, opacity: 1, duration: 0.7, ease: EASE_POWER }, 0.35);
+  }
+
+  // ── Profil Page Animations ──────────────────────────────────────────────────
+  if (profilHeroImg && typeof ScrollTrigger !== 'undefined') {
+    gsap.fromTo(profilHeroImg, 
+      { scale: 1.15, transformOrigin: 'center center' },
+      { 
+        scale: 1, 
+        duration: 1.6, 
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.profil-hero-img',
+          start: 'top 85%',
+          once: true
+        }
+      }
+    );
+  }
+
+  document.querySelectorAll('.profil-section-title').forEach(function (title) {
+    const parent = title.parentNode;
+    const label = parent.querySelector('.profil-section-label');
+    const labelInner = label ? typoWrapLine(label) : null;
+    const titleWords = typoSplitWords(title);
+    const bodyText = parent.querySelectorAll('.profil-body-text');
+
+    if (labelInner) gsap.set(labelInner, { yPercent: 110 });
+    if (titleWords.length) gsap.set(titleWords, { yPercent: 110 });
+    if (bodyText.length) gsap.set(bodyText, { y: 15, opacity: 0 });
+
+    const sectionTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: title,
+        start: 'top 85%',
+        once: true
+      }
+    });
+
+    if (labelInner) sectionTl.to(labelInner, { yPercent: 0, duration: 0.8, ease: EASE_EXPO }, 0);
+    if (titleWords.length) {
+      sectionTl.to(titleWords, {
+        yPercent: 0,
+        duration: 1,
+        stagger: 0.04,
+        ease: EASE_EXPO
+      }, 0.06);
+    }
+    if (bodyText.length) {
+      sectionTl.to(bodyText, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: EASE_POWER }, 0.28);
+    }
+  });
+
+  const vmCards = document.querySelectorAll('.profil-vm-card');
+  if (vmCards.length && typeof ScrollTrigger !== 'undefined') {
+    gsap.fromTo(vmCards, 
+      { y: 30, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.85,
+        stagger: 0.15,
+        ease: EASE_POWER,
+        scrollTrigger: {
+          trigger: '#visi-misi',
+          start: 'top 80%',
+          once: true
+        }
+      }
+    );
+  }
+
+  const valCards = document.querySelectorAll('.profil-value-card');
+  if (valCards.length && typeof ScrollTrigger !== 'undefined') {
+    valCards.forEach(function (card, idx) {
+      const letter = card.querySelector('.profil-value-letter');
+      const valTitle = card.querySelector('.profil-value-title');
+      const valDesc = card.querySelector('.profil-body-text');
+
+      if (letter) gsap.set(letter, { scale: 0.4, opacity: 0 });
+      if (valTitle) gsap.set(valTitle, { y: 12, opacity: 0 });
+      if (valDesc) gsap.set(valDesc, { y: 12, opacity: 0 });
+
+      const cardTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 85%',
+          once: true
+        },
+        delay: idx * 0.1
+      });
+
+      if (letter) cardTl.to(letter, { scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.7)' }, 0);
+      if (valTitle) cardTl.to(valTitle, { y: 0, opacity: 1, duration: 0.6, ease: EASE_POWER }, 0.15);
+      if (valDesc) cardTl.to(valDesc, { y: 0, opacity: 1, duration: 0.6, ease: EASE_POWER }, 0.25);
+    });
+  }
+
+  const profilSidebar = document.querySelector('.col-lg-3.col-md-4.order-md-1');
+  if (profilSidebar && document.querySelector('.profil-sidebar-title') && typeof ScrollTrigger !== 'undefined') {
+    const sidebarElements = profilSidebar.querySelectorAll('.profil-sidebar-title, p, .profil-social-link, .profil-cta-box');
+    gsap.fromTo(sidebarElements,
+      { y: 15, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.08,
+        ease: EASE_POWER,
+        scrollTrigger: {
+          trigger: profilSidebar,
+          start: 'top 85%',
+          once: true
+        }
+      }
+    );
+  }
+
+  // ── Produk Page Animations ──────────────────────────────────────────────────
+  if (catalogSection && typeof ScrollTrigger !== 'undefined') {
+    const categoryLinks = catalogSection.querySelectorAll('.layanan-sidebar-nav a, .profil-cta-box');
+    if (categoryLinks.length) {
+      gsap.fromTo(categoryLinks,
+        { x: -15, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.04,
+          ease: EASE_POWER,
+          scrollTrigger: {
+            trigger: '#produk-sidebar',
+            start: 'top 85%',
+            once: true
+          }
+        }
+      );
+    }
+
+    const catTitle = document.getElementById('category-title');
+    const catSubtitle = document.getElementById('category-subtitle');
+    const searchWrap = document.querySelector('.produk-search-wrap');
+    
+    if (catTitle) {
+      const titleWords = typoSplitWords(catTitle);
+      gsap.set(titleWords, { yPercent: 110 });
+      gsap.to(titleWords, {
+        yPercent: 0,
+        duration: 0.95,
+        stagger: 0.04,
+        ease: EASE_EXPO
+      });
+    }
+    if (catSubtitle) {
+      gsap.fromTo(catSubtitle, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: EASE_POWER, delay: 0.15 });
+    }
+    if (searchWrap) {
+      gsap.fromTo(searchWrap, { x: 20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, ease: EASE_POWER });
+    }
+
+    const productCards = document.querySelectorAll('#product-container .product-card');
+    if (productCards.length) {
+      productCards.forEach(function (card) {
+        const inner = card.querySelector('.product-card-premium');
+        const img = card.querySelector('.img-wrap img');
+        
+        gsap.set(inner, { y: 30, opacity: 0 });
+        if (img) gsap.set(img, { scale: 1.15 });
+
+        const cardTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 88%',
+            once: true
+          }
+        });
+
+        cardTl.to(inner, { y: 0, opacity: 1, duration: 0.8, ease: EASE_POWER }, 0);
+        if (img) cardTl.to(img, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0);
+      });
+    }
+  }
+
+  // ── Sektor Page Animations ──────────────────────────────────────────────────
+  if (sektorSection && typeof ScrollTrigger !== 'undefined') {
+    if (sektorSection.dataset.gsapSidebarDone !== '1') {
+      const categoryLinks = sektorSection.querySelectorAll('.layanan-sidebar-nav a, .profil-cta-box');
+      if (categoryLinks.length) {
+        gsap.fromTo(categoryLinks,
+          { x: -15, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.04,
+            ease: EASE_POWER
+          }
+        );
+        sektorSection.dataset.gsapSidebarDone = '1';
+      }
+    }
+
+    const mainCol = sektorSection.querySelector('.col-lg-9');
+    if (mainCol) {
+      const img = mainCol.querySelector('.profil-hero-img img');
+      const title = mainCol.querySelector('.profil-section-title');
+      const bodyTexts = mainCol.querySelectorAll('.profil-body-text');
+      const table = mainCol.querySelector('.table-responsive');
+
+      if (img) gsap.set(img, { scale: 1.15 });
+      const titleWords = title ? typoSplitWords(title) : [];
+      if (titleWords.length) gsap.set(titleWords, { yPercent: 110 });
+      if (bodyTexts.length) gsap.set(bodyTexts, { y: 15, opacity: 0 });
+      if (table) gsap.set(table, { y: 20, opacity: 0 });
+
+      const contentTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: mainCol,
+          start: 'top 85%',
+          once: true
+        }
+      });
+
+      if (img) contentTl.to(img, { scale: 1, duration: 1.4, ease: 'power2.out' }, 0);
+      if (titleWords.length) {
+        contentTl.to(titleWords, {
+          yPercent: 0,
+          duration: 0.95,
+          stagger: 0.04,
+          ease: EASE_EXPO
+        }, 0.05);
+      }
+      if (bodyTexts.length) {
+        contentTl.to(bodyTexts, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: EASE_POWER }, 0.25);
+      }
+      if (table) {
+        contentTl.to(table, { y: 0, opacity: 1, duration: 0.8, ease: EASE_POWER }, 0.4);
+      }
+    }
+  }
+
+  // ── Layanan Page Animations ─────────────────────────────────────────────────
+  if (layananSection && typeof ScrollTrigger !== 'undefined') {
+    if (layananSection.dataset.gsapSidebarDone !== '1') {
+      const categoryLinks = layananSection.querySelectorAll('.layanan-sidebar-nav a, .profil-cta-box');
+      if (categoryLinks.length) {
+        gsap.fromTo(categoryLinks,
+          { x: -15, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.04,
+            ease: EASE_POWER
+          }
+        );
+        layananSection.dataset.gsapSidebarDone = '1';
+      }
+    }
+
+    const activeBlock = layananSection.querySelector('.service-content-block:not(.d-none)');
+    if (activeBlock) {
+      const img = activeBlock.querySelector('.profil-hero-img img');
+      const title = activeBlock.querySelector('.profil-section-title');
+      const label = activeBlock.querySelector('.profil-section-label');
+      const labelInner = label ? typoWrapLine(label) : null;
+      const bodyTexts = activeBlock.querySelectorAll('.profil-body-text');
+      const featureCards = activeBlock.querySelectorAll('.layanan-feature-card');
+      const ctaStrip = activeBlock.querySelector('.layanan-cta-strip');
+
+      if (img) gsap.set(img, { scale: 1.15 });
+      if (labelInner) gsap.set(labelInner, { yPercent: 110 });
+      const titleWords = title ? typoSplitWords(title) : [];
+      if (titleWords.length) gsap.set(titleWords, { yPercent: 110 });
+      if (bodyTexts.length) gsap.set(bodyTexts, { y: 15, opacity: 0 });
+      if (featureCards.length) gsap.set(featureCards, { y: 25, opacity: 0 });
+      if (ctaStrip) gsap.set(ctaStrip, { y: 25, opacity: 0 });
+
+      const blockTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: activeBlock,
+          start: 'top 85%',
+          once: true
+        }
+      });
+
+      if (img) blockTl.to(img, { scale: 1, duration: 1.4, ease: 'power2.out' }, 0);
+      if (labelInner) blockTl.to(labelInner, { yPercent: 0, duration: 0.8, ease: EASE_EXPO }, 0);
+      if (titleWords.length) {
+        blockTl.to(titleWords, {
+          yPercent: 0,
+          duration: 0.95,
+          stagger: 0.04,
+          ease: EASE_EXPO
+        }, 0.05);
+      }
+      if (bodyTexts.length) {
+        blockTl.to(bodyTexts, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: EASE_POWER }, 0.25);
+      }
+      if (featureCards.length) {
+        blockTl.to(featureCards, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: EASE_POWER }, 0.35);
+      }
+      if (ctaStrip) {
+        blockTl.to(ctaStrip, { y: 0, opacity: 1, duration: 0.8, ease: EASE_POWER }, 0.45);
+      }
+    }
+  }
+
+  // ── Informasi Page Animations ───────────────────────────────────────────────
+  if (infoContainer && typeof ScrollTrigger !== 'undefined') {
+    const blogCards = document.querySelectorAll('.col-lg-8 .blog-card');
+    if (blogCards.length) {
+      blogCards.forEach(function (card, idx) {
+        const inner = card;
+        const img = card.querySelector('.blog-card-img-wrap img');
+        
+        gsap.set(inner, { y: 30, opacity: 0 });
+        if (img) gsap.set(img, { scale: 1.15 });
+
+        const cardTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 90%',
+            once: true
+          },
+          delay: idx * 0.05
+        });
+
+        cardTl.to(inner, { y: 0, opacity: 1, duration: 0.8, ease: EASE_POWER }, 0);
+        if (img) cardTl.to(img, { scale: 1, duration: 1.2, ease: 'power2.out' }, 0);
+      });
+    }
+
+    const detailHeroImg = document.querySelector('.col-lg-8 .profil-hero-img img');
+    if (detailHeroImg) {
+      gsap.fromTo(detailHeroImg, 
+        { scale: 1.15, transformOrigin: 'center center' },
+        { 
+          scale: 1, 
+          duration: 1.4, 
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.profil-hero-img',
+            start: 'top 85%',
+            once: true
+          }
+        }
+      );
+    }
+
+    const detailTitle = document.querySelector('.col-lg-8 .profil-section-title');
+    if (detailTitle) {
+      const titleWords = typoSplitWords(detailTitle);
+      gsap.set(titleWords, { yPercent: 110 });
+      gsap.to(titleWords, {
+        yPercent: 0,
+        duration: 0.95,
+        stagger: 0.04,
+        ease: EASE_EXPO,
+        scrollTrigger: {
+          trigger: detailTitle,
+          start: 'top 85%',
+          once: true
+        }
+      });
+    }
+
+    const detailBody = document.querySelector('.col-lg-8 .profil-body-text');
+    if (detailBody) {
+      gsap.fromTo(detailBody,
+        { y: 15, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: EASE_POWER,
+          scrollTrigger: {
+            trigger: detailBody,
+            start: 'top 85%',
+            once: true
+          }
+        }
+      );
+    }
+
+    const sidebarWidget = document.querySelector('.col-lg-4.col-md-5');
+    if (sidebarWidget) {
+      const sidebarLinks = sidebarWidget.querySelectorAll('.layanan-sidebar-nav a, h3, div');
+      gsap.fromTo(sidebarLinks,
+        { y: 15, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          stagger: 0.03,
+          ease: EASE_POWER,
+          scrollTrigger: {
+            trigger: sidebarWidget,
+            start: 'top 85%',
+            once: true
+          }
+        }
+      );
+    }
+  }
+
+  // ── Kontak Page Animations ──────────────────────────────────────────────────
+  if (kontakContainer && typeof ScrollTrigger !== 'undefined') {
+    const infoBlocks = document.querySelectorAll('.kontak-info-block');
+    if (infoBlocks.length) {
+      gsap.fromTo(infoBlocks,
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: EASE_POWER,
+          scrollTrigger: {
+            trigger: '.col-lg-4.col-md-5',
+            start: 'top 85%',
+            once: true
+          }
+        }
+      );
+    }
+
+    const formTitle = document.querySelector('.col-lg-8.col-md-7 .profil-section-title');
+    if (formTitle) {
+      const titleWords = typoSplitWords(formTitle);
+      gsap.set(titleWords, { yPercent: 110 });
+      gsap.to(titleWords, {
+        yPercent: 0,
+        duration: 0.95,
+        stagger: 0.04,
+        ease: EASE_EXPO,
+        scrollTrigger: {
+          trigger: formTitle,
+          start: 'top 85%',
+          once: true
+        }
+      });
+    }
+
+    const formElements = kontakContainer.querySelectorAll('.row > div');
+    if (formElements.length) {
+      gsap.fromTo(formElements,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.05,
+          ease: EASE_POWER,
+          scrollTrigger: {
+            trigger: kontakContainer,
+            start: 'top 80%',
+            once: true
+          }
+        }
+      );
+    }
+  }
+
   // Refresh ScrollTrigger after splits change layout
   if (typeof ScrollTrigger !== 'undefined') {
     requestAnimationFrame(function () {
@@ -1235,4 +1772,233 @@ function initMarqueeVisibility() {
   });
 
   setPaused(document.hidden || prefersReducedMotion());
+}
+
+/**
+ * Interactive Draggable Marquee with Momentum / Inertia
+ */
+function initDraggableMarquee() {
+  const marquee = document.querySelector('.typo-marquee');
+  if (!marquee) return;
+
+  const contents = marquee.querySelectorAll('.typo-marquee-content');
+  if (contents.length < 2) return;
+
+  // Disable CSS keyframe animations to allow JS to drive translation
+  contents.forEach(el => {
+    el.style.animation = 'none';
+  });
+
+  let x = 0;
+  let baseSpeed = -0.75; // px per frame
+  let speed = prefersReducedMotion() ? 0 : baseSpeed;
+  let isDragging = false;
+  let startX = 0;
+  let dragX = 0;
+  let velocity = 0;
+  let lastTime = Date.now();
+  let lastX = 0;
+
+  let contentWidth = contents[0].offsetWidth;
+  window.addEventListener('resize', function () {
+    contentWidth = contents[0].offsetWidth;
+  });
+
+  function update() {
+    if (!isDragging) {
+      x += speed + velocity;
+      velocity *= 0.95; // Inertia friction decay
+      if (Math.abs(velocity) < 0.01) velocity = 0;
+    } else {
+      const now = Date.now();
+      const dt = now - lastTime;
+      if (dt > 0) {
+        // Calculate velocity (pixels moved per normalized 60fps frame)
+        velocity = (x - lastX) / (dt / 16.666);
+        lastTime = now;
+        lastX = x;
+      }
+    }
+
+    if (x <= -contentWidth) {
+      x += contentWidth;
+      lastX += contentWidth;
+    } else if (x > 0) {
+      x -= contentWidth;
+      lastX -= contentWidth;
+    }
+
+    contents.forEach(el => {
+      el.style.transform = `translate3d(${x}px, 0, 0)`;
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  function onStart(e) {
+    if (e.type === 'mousedown') {
+      e.preventDefault();
+    }
+    isDragging = true;
+    velocity = 0;
+    startX = e.pageX || (e.touches && e.touches[0].pageX);
+    dragX = x;
+    lastTime = Date.now();
+    lastX = x;
+    marquee.style.cursor = 'grabbing';
+  }
+
+  function onMove(e) {
+    if (!isDragging) return;
+    const currentX = e.pageX || (e.touches && e.touches[0].pageX);
+    const dx = currentX - startX;
+    x = dragX + dx;
+  }
+
+  function onEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    marquee.style.cursor = 'grab';
+
+    const maxVelocity = 40;
+    if (velocity > maxVelocity) velocity = maxVelocity;
+    if (velocity < -maxVelocity) velocity = -maxVelocity;
+  }
+
+  // React to reduced motion setting dynamically
+  document.addEventListener('prolabios:motion-change', function () {
+    speed = prefersReducedMotion() ? 0 : baseSpeed;
+  });
+
+  marquee.style.cursor = 'grab';
+  marquee.style.userSelect = 'none';
+
+  marquee.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+
+  marquee.addEventListener('touchstart', onStart, { passive: true });
+  window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('touchend', onEnd);
+
+  requestAnimationFrame(update);
+}
+
+/**
+ * Interactive Draggable Logo Marquee with Momentum / Inertia (Buttery smooth 60fps+)
+ */
+function initDraggableLogoMarquee() {
+  const container = document.querySelector('.marquee-container');
+  if (!container) return;
+
+  const contents = container.querySelectorAll('.marquee-content');
+  if (contents.length < 2) return;
+
+  // Disable CSS keyframe animations to allow JS to drive translation
+  contents.forEach(el => {
+    el.style.animation = 'none';
+  });
+
+  let x = 0;
+  let baseSpeed = -0.55; // px per frame
+  let speed = prefersReducedMotion() ? 0 : baseSpeed;
+  let isDragging = false;
+  let startX = 0;
+  let dragX = 0;
+  let velocity = 0;
+  let lastTime = Date.now();
+  let lastX = 0;
+
+  // Pause on hover
+  let isHovered = false;
+  container.addEventListener('mouseenter', function () {
+    isHovered = true;
+  });
+  container.addEventListener('mouseleave', function () {
+    isHovered = false;
+  });
+
+  let contentWidth = contents[0].getBoundingClientRect().width;
+  window.addEventListener('resize', function () {
+    contentWidth = contents[0].getBoundingClientRect().width;
+  });
+
+  function update() {
+    if (!isDragging) {
+      const currentSpeed = (isHovered && !prefersReducedMotion()) ? 0 : speed;
+      x += currentSpeed + velocity;
+      velocity *= 0.95; // Inertia friction decay
+      if (Math.abs(velocity) < 0.01) velocity = 0;
+    } else {
+      const now = Date.now();
+      const dt = now - lastTime;
+      if (dt > 0) {
+        velocity = (x - lastX) / (dt / 16.666);
+        lastTime = now;
+        lastX = x;
+      }
+    }
+
+    if (x <= -contentWidth) {
+      x += contentWidth;
+      lastX += contentWidth;
+    } else if (x > 0) {
+      x -= contentWidth;
+      lastX -= contentWidth;
+    }
+
+    contents.forEach(el => {
+      el.style.transform = `translate3d(${x}px, 0, 0)`;
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  function onStart(e) {
+    if (e.type === 'mousedown') {
+      e.preventDefault();
+    }
+    isDragging = true;
+    velocity = 0;
+    startX = e.pageX || (e.touches && e.touches[0].pageX);
+    dragX = x;
+    lastTime = Date.now();
+    lastX = x;
+    container.style.cursor = 'grabbing';
+  }
+
+  function onMove(e) {
+    if (!isDragging) return;
+    const currentX = e.pageX || (e.touches && e.touches[0].pageX);
+    const dx = currentX - startX;
+    x = dragX + dx;
+  }
+
+  function onEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    container.style.cursor = 'grab';
+
+    const maxVelocity = 40;
+    if (velocity > maxVelocity) velocity = maxVelocity;
+    if (velocity < -maxVelocity) velocity = -maxVelocity;
+  }
+
+  // React to reduced motion setting dynamically
+  document.addEventListener('prolabios:motion-change', function () {
+    speed = prefersReducedMotion() ? 0 : baseSpeed;
+  });
+
+  container.style.cursor = 'grab';
+  container.style.userSelect = 'none';
+
+  container.addEventListener('mousedown', onStart);
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onEnd);
+
+  container.addEventListener('touchstart', onStart, { passive: true });
+  window.addEventListener('touchmove', onMove, { passive: true });
+  window.addEventListener('touchend', onEnd);
+
+  requestAnimationFrame(update);
 }

@@ -115,6 +115,32 @@
   @push('scripts')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // GSAP Script Bootloader
+      if (!document.documentElement.classList.contains('no-motion') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        function loadScript(src) {
+          return new Promise(function (resolve, reject) {
+            var s = document.createElement('script');
+            s.src = src;
+            s.async = true;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+          });
+        }
+        loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js')
+          .then(function () {
+            return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js');
+          })
+          .then(function () {
+            if (typeof initGSAPAnimations === 'function') {
+              initGSAPAnimations();
+            }
+          })
+          .catch(function () {
+            // GSAP failed load fallback is handled gracefully by styles
+          });
+      }
+
       const sidebarLinks = document.querySelectorAll('#service-nav .layanan-sidebar-link');
       
       sidebarLinks.forEach(link => {
@@ -132,6 +158,10 @@
             targetBlock.querySelectorAll('.animate-on-scroll').forEach(el => el.classList.add('is-visible'));
           }
           history.pushState(null, '', window.location.pathname + '?s=' + serviceKey);
+          
+          if (typeof initGSAPAnimations === 'function') {
+            initGSAPAnimations();
+          }
         });
       });
       

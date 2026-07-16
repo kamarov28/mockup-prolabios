@@ -358,13 +358,13 @@ body {
 .marquee-container::before {
   left: 0;
   top: 0;
-  background: linear-gradient(to right, var(--color-secondary, #8B1A1A) 0%, transparent 100%);
+  background: linear-gradient(to right, #070708 0%, transparent 100%) !important;
 }
 
 .marquee-container::after {
   right: 0;
   top: 0;
-  background: linear-gradient(to left, var(--color-secondary, #8B1A1A) 0%, transparent 100%);
+  background: linear-gradient(to left, #070708 0%, transparent 100%) !important;
 }
 
 .marquee-content {
@@ -428,25 +428,36 @@ body {
 
 /* Dark Mode Marquee Gradient Fade Overrides to match Slate background */
 [data-theme="dark"] .marquee-container::before {
-  background: linear-gradient(to right, var(--color-bg-white) 0%, transparent 100%) !important;
+  background: linear-gradient(to right, #070708 0%, transparent 100%) !important;
 }
 [data-theme="dark"] .marquee-container::after {
-  background: linear-gradient(to left, var(--color-bg-white) 0%, transparent 100%) !important;
+  background: linear-gradient(to left, #070708 0%, transparent 100%) !important;
 }
 
-
-/* Scroll to Top Button Styling */
-.btn-scroll-to-top {
+/* Dark Mode overrides for marquee logo boxes */
+[data-theme="dark"] .marquee-logo-box {
+  background-color: rgba(255, 255, 255, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: none !important;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-.btn-scroll-to-top:hover {
-  background-color: var(--color-secondary, #8B1A1A) !important;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23) !important;
+[data-theme="dark"] .marquee-logo-box:hover {
+  background-color: rgba(255, 255, 255, 1) !important;
+  transform: scale(1.05) translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
 }
-.btn-scroll-to-top:active {
-  transform: translateY(-1px) scale(1);
+[data-theme="dark"] .marquee-logo-box img {
+  filter: grayscale(100%) !important;
+  opacity: 0.75 !important;
+  transition: all 0.3s ease !important;
 }
+[data-theme="dark"] .marquee-logo-box:hover img {
+  filter: grayscale(0%) !important;
+  opacity: 1 !important;
+}
+
+
+/* Scroll to Top Button styling moved to experimental-typo.css */
 
 /* Subtle Motion-based Animations for Premium Cards & Layouts */
 .blog-card, 
@@ -898,6 +909,7 @@ body {
   background-color: #0b0f19 !important;
 }
 
+.premium-footer h2,
 .premium-footer h5 {
   color: #ffffff !important;
   font-size: 1rem;
@@ -907,6 +919,7 @@ body {
   margin-bottom: 25px;
 }
 
+.premium-footer h2::after,
 .premium-footer h5::after {
   content: '';
   position: absolute;
@@ -1255,6 +1268,7 @@ body {
     padding-top: 35px !important;
     padding-bottom: 20px !important;
   }
+  .premium-footer h2,
   .premium-footer h5 {
     font-size: 0.95rem !important;
     margin-bottom: 15px !important;
