@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')</title>
-  <meta name="description" content="PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.">
+  <meta name="description" content="@yield('meta_description', 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.')">
+  <meta name="keywords" content="@yield('meta_keywords', 'prolabios, alat laboratorium, mikrobiologi, instrumen lab')">
+  <link rel="canonical" href="@yield('canonical_url', request()->url())">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   
   <!-- Preconnect to CDN & fonts (critical for LCP) -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -22,9 +25,8 @@
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/experimental-typo.css') }}">
+  <!-- Custom CSS via Vite -->
+  @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
 
   <!-- Page Preloads -->
   @yield('preload')
@@ -40,19 +42,6 @@
   <meta name="twitter:url" content="{{ request()->url() }}">
   <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
-
-  <!-- Fast Theme & Motion Check (avoids flash of wrong theme / motion) -->
-  <script>
-    (function () {
-      var theme = localStorage.getItem('theme');
-      if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
-      if (localStorage.getItem('motion') === 'disabled' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        document.documentElement.classList.add('no-motion');
-      }
-    })();
-  </script>
 </head>
 <body>
 
@@ -120,16 +109,6 @@
             <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
               <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
             </button>
-            
-            <!-- Minimal vertical divider -->
-            <span class="text-muted opacity-25 d-none d-lg-inline">|</span>
-            
-            <button type="button" id="motion-toggle" class="btn btn-link nav-link p-0 border-0 bg-transparent" style="text-decoration: none;" aria-label="Toggle Animations" title="Aktif/Nonaktifkan Animasi">
-              <i id="motion-toggle-icon" class="bi bi-play-circle-fill" style="font-size: 1.2rem;"></i>
-            </button>
-            <button type="button" id="theme-toggle" class="btn btn-link nav-link p-0 text-dark border-0 bg-transparent" style="text-decoration: none;" aria-label="Toggle Theme">
-              <i id="theme-toggle-icon" class="bi bi-moon-fill" style="font-size: 1.2rem;"></i>
-            </button>
           </li>
         </ul>
       </div>
@@ -171,7 +150,7 @@
 
         <!-- Col 2: Perusahaan -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h2>Perusahaan</h2>
+          <h3>Perusahaan</h3>
           <ul class="list-unstyled footer-links lh-lg">
             <li><a href="{{ url('/profil') }}">Profil Perusahaan</a></li>
             <li><a href="{{ url('/profil') }}#visi-misi">Visi & Misi</a></li>
@@ -182,7 +161,7 @@
 
         <!-- Col 3: Kontak -->
         <div class="col-lg-3 col-md-6 col-12">
-          <h2>Hubungi Kami</h2>
+          <h3>Hubungi Kami</h3>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-2">
               <i class="bi bi-telephone-fill me-2 mt-1" style="color: var(--color-primary);"></i>
@@ -202,7 +181,7 @@
 
         <!-- Col 4: Jam Operasional -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h2>Jam Operasional</h2>
+          <h3>Jam Operasional</h3>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-3 text-light">
               <i class="bi bi-clock-fill me-2 mt-1" style="color: var(--color-primary);"></i>
@@ -227,66 +206,11 @@
 
   <!-- Bootstrap first (components), then app (site behavior). Defer keeps HTML parse unblocked. -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="{{ asset('js/app.js') }}" defer></script>
+  @vite(['resources/js/app.js'])
 
   @stack('scripts')
 
-  <!-- Theme / Motion toggles (lightweight; scroll-to-top lives in app.js) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var themeToggle = document.getElementById('theme-toggle');
-      var themeToggleIcon = document.getElementById('theme-toggle-icon');
-      var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
-      if (isDark && themeToggleIcon) {
-        themeToggleIcon.className = 'bi bi-sun-fill text-warning';
-      }
-
-      if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-          if (themeToggleIcon) {
-            themeToggleIcon.classList.add('rotated');
-            setTimeout(function () {
-              themeToggleIcon.classList.remove('rotated');
-            }, 600);
-          }
-
-          if (document.documentElement.getAttribute('data-theme') !== 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-sun-fill text-warning rotated';
-          } else {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            if (themeToggleIcon) themeToggleIcon.className = 'bi bi-moon-fill text-dark rotated';
-          }
-        });
-      }
-
-      var motionToggle = document.getElementById('motion-toggle');
-      var motionToggleIcon = document.getElementById('motion-toggle-icon');
-      var isMotionDisabled = document.documentElement.classList.contains('no-motion');
-
-      if (isMotionDisabled && motionToggleIcon) {
-        motionToggleIcon.className = 'bi bi-pause-circle-fill';
-      }
-
-      if (motionToggle) {
-        motionToggle.addEventListener('click', function () {
-          var isDisabled = document.documentElement.classList.contains('no-motion');
-          if (!isDisabled) {
-            document.documentElement.classList.add('no-motion');
-            localStorage.setItem('motion', 'disabled');
-            if (motionToggleIcon) motionToggleIcon.className = 'bi bi-pause-circle-fill';
-          } else {
-            document.documentElement.classList.remove('no-motion');
-            localStorage.setItem('motion', 'enabled');
-            if (motionToggleIcon) motionToggleIcon.className = 'bi bi-play-circle-fill';
-          }
-        });
-      }
-    });
-  </script>
 
   <button type="button" id="scroll-to-top" class="btn-scroll-to-top" style="opacity: 0; visibility: hidden;" aria-label="Kembali ke atas">
     <i class="bi bi-arrow-up-short"></i>

@@ -60,16 +60,35 @@
           </a>
         </div>
       </div>
+      <!-- Manual Slider Controls -->
+      @if(isset($homeData['hero_images']) && count($homeData['hero_images']) > 1)
+        <div class="typo-hero-controls">
+          <button id="hero-prev" class="typo-hero-ctrl-btn" aria-label="Previous Slide">
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <button id="hero-next" class="typo-hero-ctrl-btn" aria-label="Next Slide">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      @endif
     </div>
   </section>
 
-  <!-- Continuous Running Text Marquee -->
-  <section class="typo-marquee" aria-hidden="true">
-    <div class="typo-marquee-content">
-      PT PROLABIOS MITRA ANALITIKA &bull; <span class="typo-marquee-accent">PROFESSIONAL</span> &bull; <span class="typo-marquee-outline">ROBUST</span> &bull; <span class="typo-marquee-accent">OFFERING THE BEST</span> &bull; PT PROLABIOS MITRA ANALITIKA &bull; <span class="typo-marquee-outline">PROFESSIONAL</span> &bull; <span class="typo-marquee-accent">ROBUST</span> &bull; <span class="typo-marquee-outline">OFFERING THE BEST</span> &bull;
-    </div>
-    <div class="typo-marquee-content">
-      PT PROLABIOS MITRA ANALITIKA &bull; <span class="typo-marquee-outline">PROFESSIONAL</span> &bull; <span class="typo-marquee-accent">ROBUST</span> &bull; <span class="typo-marquee-outline">OFFERING THE BEST</span> &bull; PT PROLABIOS MITRA ANALITIKA &bull; <span class="typo-marquee-accent">PROFESSIONAL</span> &bull; <span class="typo-marquee-outline">ROBUST</span> &bull; <span class="typo-marquee-accent">OFFERING THE BEST</span> &bull;
+  <!-- Brand Statement Banner -->
+  <section class="typo-brand-statement">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-5 col-md-6 mb-3 mb-md-0">
+          <span class="typo-statement-lead">PT PROLABIOS MITRA ANALITIKA</span>
+        </div>
+        <div class="col-lg-7 col-md-6 d-flex justify-content-md-end justify-content-start">
+          <div class="typo-statement-pills">
+            <span class="typo-pill-accent">PROFESSIONAL</span>
+            <span class="typo-pill-outline">ROBUST</span>
+            <span class="typo-pill-accent">OFFERING THE BEST</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -188,49 +207,6 @@
   </section>
 @endsection
 
-{{-- GSAP: load ASAP on homepage (not idle) so typography timeline owns first impression --}}
 @push('scripts')
-  <script>
-    (function () {
-      if (document.documentElement.classList.contains('no-motion')) return;
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      function loadScript(src) {
-        return new Promise(function (resolve, reject) {
-          var s = document.createElement('script');
-          s.src = src;
-          s.async = true;
-          s.onload = resolve;
-          s.onerror = reject;
-          document.head.appendChild(s);
-        });
-      }
-
-      var boot = function () {
-        loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js')
-          .then(function () {
-            return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js');
-          })
-          .then(function () {
-            if (typeof initGSAPAnimations === 'function') {
-              initGSAPAnimations();
-            }
-          })
-          .catch(function () {
-            if (typeof revealHeroStatic === 'function') revealHeroStatic();
-            else {
-              var hero = document.querySelector('.typo-hero-entrance');
-              if (hero) hero.style.opacity = '1';
-            }
-          });
-      };
-
-      // Start load immediately — hero type should not wait for idle
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', boot);
-      } else {
-        boot();
-      }
-    })();
-  </script>
+  @include('partials.gsap-loader')
 @endpush

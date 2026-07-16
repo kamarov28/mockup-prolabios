@@ -7,20 +7,20 @@
   --color-secondary: #8B1A1A; /* Prolabios Dark Red */
   --color-accent: #25D366; /* WhatsApp Green */
   
-  --color-text-main: #333333;
-  --color-text-muted: #666666;
-  --color-bg-body: #F8FAFC; /* Slate 50 - cleaner look */
-  --color-bg-white: #FFFFFF;
-  --color-bg-gray: #F1F5F9; /* Slate 100 */
-  --color-border: #E2E8F0; /* Slate 200 */
+  --color-text-main: #F8FAFC; /* Slate 50 */
+  --color-text-muted: #94A3B8; /* Slate 400 */
+  --color-bg-body: #0B0F19; /* Premium Dark Navy */
+  --color-bg-white: #111827; /* Dark Slate card background */
+  --color-bg-gray: #1F2937; /* Dark Slate background */
+  --color-border: #374151; /* Dark Slate border */
 
   /* Typography */
   --font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   
   /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-hover: 0 12px 24px rgba(0,0,0,0.12);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-hover: 0 12px 24px rgba(0,0,0,0.6);
   
   /* Transitions */
   --transition-fast: 0.2s ease-in-out;
@@ -510,7 +510,6 @@ body {
 .animate-on-scroll {
   opacity: 0;
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
 }
 
 /* Transition Directions */
@@ -672,7 +671,6 @@ body {
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
   background-color: var(--color-bg-white) !important;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
   display: flex !important;
   flex-direction: column;
   height: 100%;
@@ -713,7 +711,6 @@ body {
   max-height: 90%;
   object-fit: contain;
   transition: transform 0.5s ease;
-  will-change: transform;
 }
 
 .product-card-premium:hover .img-wrap img {
@@ -909,7 +906,7 @@ body {
   background-color: #0b0f19 !important;
 }
 
-.premium-footer h2,
+.premium-footer h3,
 .premium-footer h5 {
   color: #ffffff !important;
   font-size: 1rem;
@@ -919,7 +916,7 @@ body {
   margin-bottom: 25px;
 }
 
-.premium-footer h2::after,
+.premium-footer h3::after,
 .premium-footer h5::after {
   content: '';
   position: absolute;
@@ -1268,7 +1265,7 @@ body {
     padding-top: 35px !important;
     padding-bottom: 20px !important;
   }
-  .premium-footer h2,
+  .premium-footer h3,
   .premium-footer h5 {
     font-size: 0.95rem !important;
     margin-bottom: 15px !important;

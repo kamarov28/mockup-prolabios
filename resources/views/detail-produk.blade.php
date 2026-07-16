@@ -13,7 +13,7 @@
   <div class="editorial-page-header">
     <div class="container">
       <span class="editorial-page-label">Detail Produk</span>
-      <h1 class="editorial-page-title">Produk &amp; Instrumen</h1>
+      <p class="editorial-page-title">Produk &amp; Instrumen</p>
       <p class="editorial-page-subtitle">Informasi lengkap mengenai spesifikasi produk kami</p>
     </div>
   </div>
@@ -27,7 +27,7 @@
           @if($product)
             <!-- Title Area -->
             <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 24px; margin-bottom: 40px;">
-              <h2 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h2>
+              <h1 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
               @if(!empty($product['category']))
                 <p class="profil-body-text mb-0 text-capitalize">
                   <span style="color: var(--color-accent); font-family: var(--font-headline); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-right: 8px;">Kategori:</span> {{ str_replace('-', ' ', $product['category']) }}

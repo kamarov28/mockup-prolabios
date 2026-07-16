@@ -56,6 +56,7 @@
           <h3 class="profil-section-title mb-5">Kirim Pesan</h3>
 
           <form id="contactForm" class="contact-form" onsubmit="return handleContactForm(event)">
+            @csrf
             <div class="row g-4">
               <div class="col-md-6">
                 <label for="nama" class="kontak-form-label">Nama Lengkap <span style="color: var(--color-accent);">*</span></label>
@@ -108,33 +109,10 @@
   </section>
 
   @push('scripts')
+  @include('partials.gsap-loader')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // GSAP Script Bootloader
-      if (!document.documentElement.classList.contains('no-motion') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        function loadScript(src) {
-          return new Promise(function (resolve, reject) {
-            var s = document.createElement('script');
-            s.src = src;
-            s.async = true;
-            s.onload = resolve;
-            s.onerror = reject;
-            document.head.appendChild(s);
-          });
-        }
-        loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js')
-          .then(function () {
-            return loadScript('https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js');
-          })
-          .then(function () {
-            if (typeof initGSAPAnimations === 'function') {
-              initGSAPAnimations();
-            }
-          })
-          .catch(function () {
-            // GSAP failed load fallback is handled gracefully by styles
-          });
-      }
+
 
       window.handleContactForm = function(e) {
         e.preventDefault();
@@ -159,10 +137,13 @@
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Mengirim...';
 
+        const csrfMeta = document.querySelector('meta[name="csrf-token"]');
+        const csrfToken = csrfMeta ? csrfMeta.getAttribute('content') : '';
+
         const formData = new FormData(form);
         fetch('{{ route("contact.submit") }}', {
           method: 'POST',
-          headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
+          headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
           body: formData
         })
         .then(response => response.json())
