@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/css/style.css',
                 'resources/css/experimental-typo.css',
                 'resources/js/app.js',
-                'resources/css/app.css'
+                'resources/css/app.css',
+                'resources/css/admin.css'
             ],
             refresh: true,
             fonts: [

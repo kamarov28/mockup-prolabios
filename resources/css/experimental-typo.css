@@ -156,19 +156,20 @@ html, body {
   object-fit: cover;
   object-position: right center;
   opacity: 0;
-  transition: opacity 1.6s ease-in-out;
   z-index: 1;
-  transform: translateZ(0);
-  will-change: opacity;
+  transform: translateZ(0) scale(1);
+  will-change: opacity, transform;
   filter: grayscale(100%) contrast(115%);
 }
 .hero-bg-slide.active {
   opacity: 0.20;
   z-index: 2;
 }
-.no-motion .hero-bg-slide,
+.no-motion .hero-bg-slide {
+  will-change: auto;
+}
 .no-motion .hero-bg-slide.active {
-  transition: none;
+  opacity: 0.20;
   will-change: auto;
 }
 .typo-hero-overlay {
@@ -218,8 +219,8 @@ html, body {
   max-width: 920px;
 }
 .typo-outline {
-  color: transparent !important;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+  color: var(--color-accent) !important;
+  -webkit-text-stroke: none !important;
 }
 .typo-lead {
   font-size: 1.25rem;
@@ -255,8 +256,8 @@ html, body {
 /* Nested outline words keep stroke after split */
 .typo-outline,
 .typo-outline .word-inner {
-  color: transparent !important;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+  color: var(--color-accent) !important;
+  -webkit-text-stroke: none !important;
 }
 .typo-outline .word-mask {
   padding-right: 0.15em;
@@ -382,8 +383,11 @@ html, body {
   border-color: var(--color-accent);
 }
 .typo-index-item:hover {
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(255, 255, 255, 0.05);
   padding-left: 24px;
+}
+.typo-index-item:hover .typo-index-desc {
+  color: #ffffff;
 }
 
 /* Brand Statement Banner */
@@ -520,19 +524,33 @@ html, body {
   margin: 40px 0 24px !important;
 }
 
+@media (min-width: 992px) {
+  .navbar-collapse-inner {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 991px) {
   .navbar-brand img {
     max-width: 180px !important;
   }
-  /* Navbar Collapse Panel - Glassmorphic overlay */
-  .navbar-collapse {
-    background: rgba(7, 7, 8, 0.98) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    margin-top: 15px;
-    padding: 20px !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  /* Navbar Collapse Panel - Glassmorphic overlay di dalam inner container */
+  .navbar-collapse-inner {
+    width: 100%;
+  }
+  @media (max-width: 991px) {
+    .navbar-collapse-inner {
+      background: rgba(7, 7, 8, 0.98) !important;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      margin-top: 15px;
+      padding: 20px !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    }
   }
   .navbar-nav {
     align-items: flex-start !important;
@@ -922,6 +940,30 @@ html, body {
   letter-spacing: 1px;
   text-transform: uppercase;
 }
+@media (max-width: 768px) {
+  .search-hint {
+    display: none !important;
+  }
+}
+
+.suggestion-tag {
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 16px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.suggestion-tag:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.08);
+  transform: translateY(-1px);
+}
 
 /* ==========================================================================
    Global Dark Editorial Theme Overrides (Unify all pages)
@@ -1067,8 +1109,11 @@ a:hover {
    Editorial Page Headers (Replaces photo banner headers on all sub-pages)
    ========================================================================== */
 .editorial-page-header {
-  padding: 140px 0 60px;
+  padding: 140px 0 40px;
   border-bottom: 1px solid var(--color-border);
+}
+.editorial-page-header + section {
+  padding-top: 48px !important;
 }
 .editorial-page-label {
   display: inline-block;
@@ -1165,7 +1210,13 @@ a:hover {
 }
 .profil-hero-img img {
   filter: grayscale(30%);
-  transition: filter 0.5s ease;
+  transition: filter 0.5s ease, height 0.3s ease;
+}
+@media (max-width: 768px) {
+  .profil-hero-img img {
+    height: 200px !important;
+    object-fit: cover !important;
+  }
 }
 .profil-hero-img:hover img {
   filter: grayscale(0%);
@@ -1717,6 +1768,15 @@ a:hover {
   color: rgba(255, 255, 255, 0.2) !important;
 }
 
+@media (max-width: 576px) {
+  .pagination .page-link,
+  [data-theme="dark"] .pagination .page-link,
+  [data-theme="light"] .pagination .page-link {
+    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+  }
+}
+
 /* ==========================================================================
    Editorial Content Areas
    ========================================================================== */
@@ -1910,13 +1970,282 @@ section hr {
   transform: translateY(0);
 }
 @media (max-width: 768px) {
+  .typo-hero {
+    padding-bottom: 120px !important;
+  }
   .typo-hero-controls {
-    bottom: 20px;
-    right: 50%;
-    transform: translateX(50%);
+    position: relative;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 12px;
+    width: 100%;
+  }
+  .typo-hero-ctrl-btn {
+    width: 44px;
+    height: 44px;
   }
 }
 
+/* Animated Hamburger Menu (from Uiverse.io by JulanDeAlb) */
+.hamburger {
+  cursor: pointer;
+  display: none;
+}
+@media (max-width: 991.98px) {
+  .hamburger {
+    display: inline-block;
+  }
+}
+.hamburger input {
+  display: none;
+}
+.hamburger svg {
+  height: 2.2rem;
+  width: 2.2rem;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+.hamburger .line {
+  fill: none;
+  stroke: #ffffff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hamburger .line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+.hamburger input:checked + svg {
+  transform: rotate(-45deg);
+}
+.hamburger input:checked + svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}
 
+/* Single-track Infinite Marquee Rework */
+.marquee-content-single {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100%;
+  gap: 3rem;
+  padding-right: 3rem;
+  animation: scroll-marquee-single 30s linear infinite;
+  will-change: transform;
+}
 
+@keyframes scroll-marquee-single {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
 
+.marquee-container:hover .marquee-content-single {
+  animation-play-state: paused;
+}
+
+/* Custom Catalog Filter Button on Mobile */
+.catalog-filter-toggle-btn {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.catalog-filter-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Custom Scrollbar for Responsive Tables (Mobile Indicator) */
+.table-responsive {
+  scrollbar-color: var(--color-accent) rgba(255, 255, 255, 0.03); /* Firefox */
+  scrollbar-width: thin;
+}
+.table-responsive::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 6px; /* Ketebalan scrollbar horizontal */
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 100px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--color-accent); /* Aksen Merah Prolabios */
+  border-radius: 100px;
+  transition: background 0.3s ease;
+}
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #ff4d5a;
+}
+
+/* ==========================================================================
+   Admin Login Page Styling (Vite Integrated)
+   ========================================================================== */
+.login-body-wrapper {
+  font-family: 'Instrument Sans', 'Inter', sans-serif;
+  background-color: #070708;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+/* Ambient Glow Backgrounds */
+.login-body-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 73, 80, 0.05) 0%, rgba(255, 73, 80, 0) 70%);
+  top: -100px;
+  left: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+.login-body-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 73, 80, 0.03) 0%, rgba(255, 73, 80, 0) 70%);
+  bottom: -150px;
+  right: -150px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-card {
+  background-color: #0e0e10;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  z-index: 10;
+  position: relative;
+}
+.login-header {
+  background-color: #070708;
+  padding: 3rem 2rem 2.2rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.login-header img {
+  height: 42px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+.login-body {
+  padding: 2.5rem 2.2rem;
+}
+.login-body .form-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 8px;
+}
+.login-body .input-group {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.015);
+}
+.login-body .input-group:focus-within {
+  border-color: #ff4950;
+  box-shadow: 0 0 0 4px rgba(255, 73, 80, 0.12);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+.login-body .input-group-text {
+  background-color: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 0.95rem;
+  padding-left: 14px;
+  padding-right: 12px;
+}
+.login-body .form-control {
+  background-color: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.9rem;
+  padding: 12px 14px 12px 0;
+}
+.login-body .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+.login-body .form-control:focus {
+  box-shadow: none !important;
+  color: #ffffff;
+}
+.login-body .btn-primary {
+  background-color: #ff4950 !important;
+  border-color: #ff4950 !important;
+  padding: 12px !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+.login-body .btn-primary:hover, .login-body .btn-primary:focus {
+  background-color: #e03e45 !important;
+  border-color: #e03e45 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 73, 80, 0.25) !important;
+}
+.login-body .btn-primary:active {
+  transform: translateY(0);
+}
+.btn-back-home {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.btn-back-home:hover {
+  color: #ffffff !important;
+}
+.login-body .alert-danger {
+  background-color: rgba(255, 73, 80, 0.06) !important;
+  border: 1px solid rgba(255, 73, 80, 0.15) !important;
+  color: #ff6b72 !important;
+  border-radius: 8px;
+}
+.login-body .alert-success {
+  background-color: rgba(46, 204, 113, 0.06) !important;
+  border: 1px solid rgba(46, 204, 113, 0.15) !important;
+  color: #2ecc71 !important;
+  border-radius: 8px;
+}

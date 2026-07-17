@@ -1,66 +1,80 @@
 @extends('admin.layout')
 
 @section('title', 'Kelola Artikel')
-@section('page_title', 'Manajemen Berita & Artikel')
+@section('page_title', 'Artikel')
 
 @section('admin_content')
-<div class="card bg-white shadow-sm mb-4">
-  <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-3">
-    <h2 class="h5 mb-0 fw-bold text-dark"><i class="bi bi-newspaper text-success me-2"></i>Daftar Artikel Diterbitkan</h2>
-    <a href="{{ route('admin.posts.create') }}" class="btn btn-sm btn-success"><i class="bi bi-plus-lg me-1"></i>Tulis Artikel Baru</a>
+
+<div class="admin-card">
+
+  {{-- Header --}}
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Konten</span>
+      <h2 class="admin-card-header-title">Daftar Artikel</h2>
+    </div>
+    <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
+      <i class="bi bi-plus-lg"></i> Tulis Artikel
+    </a>
   </div>
-  <div class="card-body p-3">
-    <!-- Filter Form -->
-    <form action="{{ route('admin.posts') }}" method="GET" class="mb-0">
+
+  {{-- Filter Form --}}
+  <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
+    <form action="{{ route('admin.posts') }}" method="GET">
       <div class="row g-3">
-        <!-- Pencarian & Utama -->
         <div class="col-md-5">
-          <div class="input-group">
-            <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-search"></i></span>
-            <input type="text" name="s" class="form-control bg-light border-start-0" placeholder="Cari judul atau isi artikel..." value="{{ $search }}" aria-label="Kata kunci pencarian">
+          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; transition: border-color 0.25s ease;" id="search-group">
+            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: transparent; border-right: 1px solid var(--color-border);">
+              <i class="bi bi-search" style="font-size: 0.8rem;"></i>
+            </span>
+            <input type="text" name="s" id="local-search-input"
+                   style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem;"
+                   placeholder="Cari judul atau isi artikel..." value="{{ $search }}" aria-label="Kata kunci pencarian">
           </div>
         </div>
         <div class="col-md-4">
-          <select name="category" class="form-select bg-light" aria-label="Filter berdasarkan Kategori">
-            <option value="">-- Semua Kategori --</option>
-            <option value="Berita" {{ $category === 'Berita' ? 'selected' : '' }}>Berita</option>
+          <select name="category" class="form-select" aria-label="Filter Kategori">
+            <option value="">Semua Kategori</option>
+            <option value="Berita"   {{ $category === 'Berita' ? 'selected' : '' }}>Berita</option>
             <option value="Kegiatan" {{ $category === 'Kegiatan' ? 'selected' : '' }}>Kegiatan</option>
-            <option value="Event" {{ $category === 'Event' ? 'selected' : '' }}>Event</option>
+            <option value="Event"    {{ $category === 'Event' ? 'selected' : '' }}>Event</option>
           </select>
         </div>
         <div class="col-md-3">
-          <button type="button" class="btn btn-outline-secondary w-100" data-bs-toggle="collapse" data-bs-target="#advancedPostFilterBlock" aria-expanded="false" aria-controls="advancedPostFilterBlock">
-            <i class="bi bi-sliders me-1"></i> Advanced
+          <button type="button" class="admin-btn admin-btn-ghost w-100 justify-content-center"
+                  data-bs-toggle="collapse" data-bs-target="#advancedPostFilterBlock"
+                  aria-expanded="{{ ($sort !== 'newest' || $start_date || $end_date) ? 'true' : 'false' }}"
+                  aria-controls="advancedPostFilterBlock">
+            <i class="bi bi-sliders"></i> Filter Lanjutan
           </button>
         </div>
       </div>
 
-      <!-- Advanced Collapse Panel -->
+      {{-- Advanced Collapse --}}
       <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedPostFilterBlock">
-        <div class="p-3 border rounded bg-light">
+        <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 16px;">
           <div class="row g-3 align-items-end">
-            <!-- Urutkan -->
             <div class="col-md-4">
-              <label for="sort" class="form-label small fw-bold text-muted">Urutkan Berdasarkan</label>
-              <select name="sort" id="sort" class="form-select bg-white">
-                <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Diterbitkan</option>
-                <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Diterbitkan</option>
-                <option value="title_asc" {{ $sort === 'title_asc' ? 'selected' : '' }}>Judul (A - Z)</option>
-                <option value="title_desc" {{ $sort === 'title_desc' ? 'selected' : '' }}>Judul (Z - A)</option>
+              <label class="admin-form-label" for="sort">Urutkan</label>
+              <select name="sort" id="sort" class="form-select">
+                <option value="newest"     {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Diterbitkan</option>
+                <option value="oldest"     {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Diterbitkan</option>
+                <option value="title_asc"  {{ $sort === 'title_asc' ? 'selected' : '' }}>Judul (A–Z)</option>
+                <option value="title_desc" {{ $sort === 'title_desc' ? 'selected' : '' }}>Judul (Z–A)</option>
               </select>
             </div>
-            <!-- Tanggal Mulai -->
             <div class="col-md-3">
-              <label for="start_date" class="form-label small fw-bold text-muted">Dari Tanggal</label>
-              <input type="date" name="start_date" id="start_date" class="form-control bg-white" value="{{ $start_date }}">
+              <label class="admin-form-label" for="start_date">Dari Tanggal</label>
+              <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $start_date }}">
             </div>
-            <!-- Tanggal Selesai -->
             <div class="col-md-3">
-              <label for="end_date" class="form-label small fw-bold text-muted">Sampai Tanggal</label>
-              <input type="date" name="end_date" id="end_date" class="form-control bg-white" value="{{ $end_date }}">
+              <label class="admin-form-label" for="end_date">Sampai Tanggal</label>
+              <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $end_date }}">
             </div>
             <div class="col-md-2">
-              <button type="submit" class="btn btn-success w-100 fw-bold"><i class="bi bi-funnel-fill me-1"></i> Terapkan</button>
+              <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
+                <i class="bi bi-funnel-fill"></i> Terapkan
+              </button>
             </div>
           </div>
         </div>
@@ -68,50 +82,53 @@
     </form>
   </div>
 
-  <div class="card-body p-0 border-top">
+  {{-- Table --}}
+  <div class="admin-card-body-flush">
     @if(count($posts) > 0)
       <div class="table-responsive">
-        <table class="table align-middle mb-0">
+        <table class="admin-table">
           <thead>
             <tr>
               <th>Gambar</th>
               <th>Judul Artikel</th>
               <th>Kategori</th>
-              <th>Tanggal Rilis</th>
-              <th class="text-end">Aksi</th>
+              <th>Tanggal</th>
+              <th style="text-align: right; padding-right: 24px;">Aksi</th>
             </tr>
           </thead>
           <tbody>
             @foreach($posts as $post)
               <tr>
                 <td>
-                  <div class="rounded border overflow-hidden bg-light" style="width: 70px; height: 50px;">
-                    <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" class="w-100 h-100" style="object-fit: cover;">
+                  <div style="width: 60px; height: 42px; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; background: rgba(255,255,255,0.02);">
+                    <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
                   </div>
                 </td>
                 <td>
-                  <div class="fw-bold text-dark">{{ $post['title'] }}</div>
-                  <div class="text-muted small">Slug: <code class="text-danger">{{ $post['slug'] }}</code></div>
+                  <div class="cell-title">{{ $post['title'] }}</div>
+                  <div class="cell-muted">slug: <code>{{ $post['slug'] }}</code></div>
                 </td>
-                <td>
-                  <span class="badge bg-light text-success border text-capitalize">
-                    {{ $post['category'] }}
-                  </span>
+                <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] }}</span></td>
+                <td class="cell-muted" style="white-space: nowrap;">
+                  <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
                 </td>
-                <td class="text-muted small fw-semibold">
-                  <i class="bi bi-calendar3 me-1"></i> {{ $post['date'] }}
-                </td>
-                <td class="text-end">
-                  <div class="d-inline-flex gap-2 pe-3">
-                    <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Lihat di Web"><i class="bi bi-eye"></i></a>
-                    <button type="button" class="btn btn-sm btn-outline-info btn-copy-link" data-url="{{ url('/informasi') }}?detail={{ $post['slug'] }}" title="Salin Tautan"><i class="bi bi-clipboard"></i></button>
-                    <a href="{{ route('admin.posts.edit', ['slug' => $post['slug']]) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i> Edit</a>
-                    <form action="{{ route('admin.posts.destroy', ['slug' => $post['slug']]) }}" method="POST" class="form-delete" data-name="{{ $post['title'] }}">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
-                    </form>
-                  </div>
+                <td style="text-align: right; white-space: nowrap;">
+                  <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}" target="_blank" class="admin-action-link view" title="Lihat">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/informasi') }}?detail={{ $post['slug'] }}" title="Salin link">
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                  <a href="{{ route('admin.posts.edit', ['slug' => $post['slug']]) }}" class="admin-action-link edit" title="Edit">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </a>
+                  <form action="{{ route('admin.posts.destroy', ['slug' => $post['slug']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $post['title'] }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="admin-action-link delete" title="Hapus">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
                 </td>
               </tr>
             @endforeach
@@ -119,29 +136,24 @@
         </table>
       </div>
 
-      <!-- Pagination Controls -->
+      {{-- Pagination --}}
       @if($totalPages > 1)
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 p-3 border-top">
-          <div class="text-muted small">
-            Menampilkan Halaman <strong>{{ $currentPage }}</strong> dari <strong>{{ $totalPages }}</strong>
-          </div>
-          <nav aria-label="Navigasi Halaman Artikel">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--color-border);">
+          <span style="font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.5px;">
+            Halaman <strong style="color: var(--color-text-main);">{{ $currentPage }}</strong> dari <strong style="color: var(--color-text-main);">{{ $totalPages }}</strong>
+          </span>
+          <nav aria-label="Navigasi halaman artikel">
             <ul class="pagination pagination-sm mb-0">
-              <!-- Prev Button -->
               <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $currentPage - 1])) }}" aria-label="Sebelumnya">
                   <i class="bi bi-chevron-left"></i>
                 </a>
               </li>
-              
-              <!-- Page List -->
               @for($i = 1; $i <= $totalPages; $i++)
                 <li class="page-item {{ $currentPage == $i ? 'active' : '' }}">
                   <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $i])) }}">{{ $i }}</a>
                 </li>
               @endfor
-              
-              <!-- Next Button -->
               <li class="page-item {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $currentPage + 1])) }}" aria-label="Berikutnya">
                   <i class="bi bi-chevron-right"></i>
@@ -151,39 +163,47 @@
           </nav>
         </div>
       @endif
+
     @else
-      <div class="text-center py-5">
-        <i class="bi bi-newspaper display-3 text-muted opacity-50 mb-3"></i>
-        <h5 class="fw-bold">Belum Ada Artikel</h5>
-        <p class="text-muted">Klik tombol di atas untuk menerbitkan artikel/berita pertama Anda.</p>
+      <div class="text-center py-5" style="color: var(--color-text-muted);">
+        <i class="bi bi-file-text" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <p style="font-size: 0.88rem;">Belum ada artikel diterbitkan.</p>
+        <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">Tulis Sekarang</a>
       </div>
     @endif
   </div>
+
 </div>
+@endsection
 
 @section('admin_scripts')
 <script>
+  const sg = document.getElementById('search-group');
+  const si = document.getElementById('local-search-input');
+  if (sg && si) {
+    si.addEventListener('focus', () => sg.style.borderColor = 'var(--color-accent)');
+    si.addEventListener('blur',  () => sg.style.borderColor = 'var(--color-border)');
+  }
+
   document.querySelectorAll('.form-delete').forEach(form => {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       const name = this.getAttribute('data-name');
       Swal.fire({
         title: 'Hapus Artikel?',
-        text: `Apakah Anda yakin ingin menghapus artikel "${name}"? Tindakan ini tidak dapat dibatalkan!`,
+        html: `Hapus "<strong>${name}</strong>"? Tidak bisa dibatalkan.`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#D32F2F',
-        cancelButtonColor: '#6C757D',
-        confirmButtonText: 'Ya, Hapus!',
+        confirmButtonText: 'Ya, Hapus',
         cancelButtonText: 'Batal',
-        focusCancel: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.submit();
-        }
-      });
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'admin-btn admin-btn-danger mx-2',
+          cancelButton: 'admin-btn admin-btn-ghost mx-2'
+        },
+        buttonsStyling: false
+      }).then(r => { if (r.isConfirmed) this.submit(); });
     });
   });
 </script>
-@endsection
 @endsection

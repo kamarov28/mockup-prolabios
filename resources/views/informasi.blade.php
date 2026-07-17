@@ -24,7 +24,7 @@
       <div class="row g-5">
 
         <!-- Main Content (Left) -->
-        <div class="col-lg-8 col-md-7">
+        <div class="col-lg-8 col-md-7 {{ $currentBlog ? 'order-first' : 'order-last order-md-1' }}">
           @if($currentBlog)
             <!-- Detail View -->
             <div>
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Sidebar (Right) -->
-        <div class="col-lg-4 col-md-5">
+        <div class="col-lg-4 col-md-5 {{ $currentBlog ? 'order-last' : 'order-first order-md-2' }}">
 
           <!-- Category Filter -->
           <div class="mb-5">

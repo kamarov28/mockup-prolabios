@@ -1248,7 +1248,8 @@ body {
     margin-bottom: 20px;
   }
   [data-theme="dark"] #sidebarCollapse {
-    background-color: #1e293b;
+    background-color: #0e0e10;
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
   
   /* Adjust hero typography size on mobile for CLS/readability */

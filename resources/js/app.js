@@ -890,9 +890,13 @@ function typoWrapLine(el) {
  * Word clip-ups, letter-spacing settles, scroll-linked reveals — not plain fade/slide.
  */
 function initGSAPAnimations() {
+  if (typeof window !== 'undefined' && 'history' in window && 'scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+  }
   const heroTextContainer = document.querySelector('.typo-hero-entrance');
   const pinSection = document.querySelector('.focus-section-pin');
   const newsSection = document.querySelector('.typo-news-section');
+  const productsSection = document.querySelector('.typo-products-section');
   const activeHeroImg = document.querySelector('.hero-bg-slide.active');
   const pageHeader = document.querySelector('.editorial-page-header');
   const profilHeroImg = document.querySelector('.profil-hero-img img');
@@ -901,7 +905,7 @@ function initGSAPAnimations() {
   const layananSection = document.getElementById('service-nav');
   const infoContainer = document.querySelector('.blog-card, .profil-body-text');
   const kontakContainer = document.getElementById('contactForm');
-  const hasTargets = heroTextContainer || pinSection || newsSection || activeHeroImg || pageHeader || profilHeroImg || catalogSection || sektorSection || layananSection || infoContainer || kontakContainer;
+  const hasTargets = heroTextContainer || pinSection || newsSection || productsSection || activeHeroImg || pageHeader || profilHeroImg || catalogSection || sektorSection || layananSection || infoContainer || kontakContainer;
 
   if (!hasTargets) return;
   if (heroTextContainer && heroTextContainer.dataset.gsapDone === '1') return;
@@ -929,6 +933,7 @@ function initGSAPAnimations() {
 
   if (typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.clearScrollMemory();
   }
 
   // Shared editorial easing — snappier than power2, reads as "designed" motion
@@ -1135,6 +1140,71 @@ function initGSAPAnimations() {
       }
       if (link) {
         rowTl.to(link, { y: 0, opacity: 1, duration: 0.55, ease: EASE_EXPO }, 0.38);
+      }
+    });
+  }
+
+  // ── Products: premium grid reveals ──────────────────────────────────────
+  if (productsSection && typeof ScrollTrigger !== 'undefined') {
+    const head = productsSection.querySelector('.typo-section-head');
+    if (head) {
+      const label = head.querySelector('.typo-section-label');
+      const heading = head.querySelector('.typo-section-title');
+      const sub = head.querySelector('.typo-section-sub');
+      const viewAll = head.querySelector('.typo-btn-link');
+      const labelInner = label ? typoWrapLine(label) : null;
+      const headingWords = heading ? typoSplitWords(heading) : [];
+
+      if (labelInner) gsap.set(labelInner, { yPercent: 110 });
+      if (headingWords.length) gsap.set(headingWords, { yPercent: 110 });
+      if (sub) gsap.set(sub, { y: 16, opacity: 0 });
+      if (viewAll) gsap.set(viewAll, { y: 16, opacity: 0 });
+      gsap.set(head, { opacity: 1 });
+
+      const pTl = gsap.timeline({
+        scrollTrigger: { trigger: head, start: 'top 85%', once: true }
+      });
+      if (labelInner) pTl.to(labelInner, { yPercent: 0, duration: 0.8, ease: EASE_EXPO }, 0);
+      if (headingWords.length) {
+        pTl.to(headingWords, {
+          yPercent: 0,
+          duration: 1,
+          stagger: 0.05,
+          ease: EASE_EXPO
+        }, 0.05);
+      }
+      if (sub) pTl.to(sub, { y: 0, opacity: 1, duration: 0.65, ease: EASE_POWER }, 0.25);
+      if (viewAll) pTl.to(viewAll, { y: 0, opacity: 1, duration: 0.65, ease: EASE_POWER }, 0.25);
+    }
+
+    productsSection.querySelectorAll('.product-card-premium').forEach(function (card, i) {
+      const img = card.querySelector('.img-wrap img');
+      
+      gsap.set(card, { y: 35, opacity: 0 });
+      if (img) gsap.set(img, { scale: 1.08 });
+      
+      const cTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 92%',
+          once: true
+        },
+        delay: (i % 4) * 0.08
+      });
+      
+      cTl.to(card, {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: EASE_EXPO
+      }, 0);
+      
+      if (img) {
+        cTl.to(img, {
+          scale: 1,
+          duration: 1.2,
+          ease: EASE_POWER
+        }, 0);
       }
     });
   }
@@ -1349,21 +1419,26 @@ function initGSAPAnimations() {
   if (catalogSection && typeof ScrollTrigger !== 'undefined') {
     const categoryLinks = catalogSection.querySelectorAll('.layanan-sidebar-nav a, .profil-cta-box');
     if (categoryLinks.length) {
-      gsap.fromTo(categoryLinks,
-        { x: -15, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 0.7,
-          stagger: 0.04,
-          ease: EASE_POWER,
-          scrollTrigger: {
-            trigger: '#produk-sidebar',
-            start: 'top 85%',
-            once: true
+      const isFiltering = window.location.search && (window.location.search.includes('category') || window.location.search.includes('q=') || window.location.search.includes('s=') || window.location.search.includes('page='));
+      if (isFiltering) {
+        gsap.set(categoryLinks, { x: 0, opacity: 1 });
+      } else {
+        gsap.fromTo(categoryLinks,
+          { x: -15, opacity: 0 },
+          {
+            x: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.03,
+            ease: EASE_POWER,
+            scrollTrigger: {
+              trigger: '#produk-sidebar',
+              start: 'top 85%',
+              once: true
+            }
           }
-        }
-      );
+        );
+      }
     }
 
     const catTitle = document.getElementById('category-title');
@@ -1706,40 +1781,158 @@ function initHeroBgSlideshow() {
   const slides = document.querySelectorAll('.hero-bg-slide');
   if (slides.length <= 1) return;
 
-  let currentSlide = 0;
-  const prevBtn = document.getElementById('hero-prev');
-  const nextBtn = document.getElementById('hero-next');
+  const prevBtn     = document.getElementById('hero-prev');
+  const nextBtn     = document.getElementById('hero-next');
+  const heroSection = document.querySelector('.typo-hero');
 
-  function showSlide(index) {
-    slides[currentSlide].classList.remove('active');
-    currentSlide = (index + slides.length) % slides.length;
-    slides[currentSlide].classList.add('active');
+  const SLIDE_DURATION = 5;    // seconds each slide stays
+  const FADE_DURATION  = 1.2;  // crossfade length in seconds
+  const SCALE_FROM     = 1.0;
+  const SCALE_TO       = 1.06;
+
+  // ── Reduced-motion fallback: instant CSS class swap ───────────────────────
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionOff = document.documentElement.classList.contains('no-motion');
+  if (prefersReduced || motionOff || typeof gsap === 'undefined') {
+    var cur = 0;
+    function swap(i) {
+      slides[cur].classList.remove('active');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('active');
+    }
+    if (prevBtn) prevBtn.addEventListener('click', function () { swap(cur - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { swap(cur + 1); });
+    setInterval(function () { swap(cur + 1); }, SLIDE_DURATION * 1000);
+    return;
   }
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', function () {
-      showSlide(currentSlide - 1);
+  // ── GSAP mode ─────────────────────────────────────────────────────────────
+  var current  = 0;
+  var autoTimer = null;
+  var isPaused  = false;
+  var kbTween   = null;
+
+  // Initial state: all invisible, first slide at 0.20 opacity
+  gsap.set(slides, { opacity: 0, scale: SCALE_FROM });
+  gsap.set(slides[0], { opacity: 0.20 });
+
+  // Ken Burns — slow zoom on the active slide
+  function startKenBurns(slide) {
+    if (kbTween) kbTween.kill();
+    gsap.set(slide, { scale: SCALE_FROM, transformOrigin: '60% 50%' });
+    kbTween = gsap.to(slide, {
+      scale: SCALE_TO,
+      duration: SLIDE_DURATION + FADE_DURATION,
+      ease: 'none',
+    });
+  }
+  startKenBurns(slides[0]);
+
+  // ── Dot indicators ────────────────────────────────────────────────────────
+  var dots = [];
+  var controlsEl = document.querySelector('.typo-hero-controls');
+  if (controlsEl) {
+    var dotsWrap = document.createElement('div');
+    dotsWrap.setAttribute('aria-hidden', 'true');
+    dotsWrap.style.cssText = 'display:flex;gap:8px;align-items:center;';
+    slides.forEach(function (_, i) {
+      var d = document.createElement('button');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.style.cssText = [
+        'width:' + (i === 0 ? '20px' : '8px'),
+        'height:8px',
+        'border-radius:100px',
+        'background:' + (i === 0 ? '#ffffff' : 'rgba(255,255,255,0.3)'),
+        'border:none',
+        'cursor:pointer',
+        'padding:0',
+        'transition:width 0.35s ease,background 0.35s ease',
+        'flex-shrink:0',
+      ].join(';');
+      d.addEventListener('click', function () { goTo(i); });
+      dotsWrap.appendChild(d);
+      dots.push(d);
+    });
+    // Insert between prev and next buttons
+    controlsEl.insertBefore(dotsWrap, nextBtn || null);
+  }
+
+  function updateDots(idx) {
+    dots.forEach(function (d, i) {
+      d.style.width      = i === idx ? '20px' : '8px';
+      d.style.background = i === idx ? '#ffffff' : 'rgba(255,255,255,0.3)';
     });
   }
 
-  if (nextBtn) {
-    nextBtn.addEventListener('click', function () {
-      showSlide(currentSlide + 1);
-    });
+  // ── Core crossfade ────────────────────────────────────────────────────────
+  function goTo(next) {
+    if (next === current) return;
+    var outSlide = slides[current];
+    var inSlide  = slides[next];
+
+    // Reset incoming slide scale before fade-in
+    gsap.set(inSlide, { scale: SCALE_FROM, transformOrigin: '60% 50%' });
+
+    gsap.to(outSlide, { opacity: 0,    duration: FADE_DURATION, ease: 'power2.inOut' });
+    gsap.to(inSlide,  { opacity: 0.20, duration: FADE_DURATION, ease: 'power2.inOut' });
+
+    slides[current].classList.remove('active');
+    slides[next].classList.add('active');
+
+    current = next;
+    updateDots(current);
+    startKenBurns(inSlide);
+    resetAutoTimer();
   }
+
+  function advance() {
+    if (!isPaused) goTo((current + 1) % slides.length);
+  }
+
+  function resetAutoTimer() {
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = setInterval(advance, SLIDE_DURATION * 1000);
+  }
+
+  // ── Manual controls ───────────────────────────────────────────────────────
+  if (prevBtn) prevBtn.addEventListener('click', function () {
+    goTo((current - 1 + slides.length) % slides.length);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function () {
+    goTo((current + 1) % slides.length);
+  });
+
+  // ── Pause on hover / focus ────────────────────────────────────────────────
+  if (heroSection) {
+    heroSection.addEventListener('mouseenter', function () { isPaused = true; });
+    heroSection.addEventListener('mouseleave', function () { isPaused = false; });
+    heroSection.addEventListener('focusin',    function () { isPaused = true; });
+    heroSection.addEventListener('focusout',   function () { isPaused = false; });
+  }
+
+  // ── Pause when browser tab hidden (saves GPU cycles) ─────────────────────
+  document.addEventListener('visibilitychange', function () {
+    isPaused = document.hidden;
+    if (kbTween) {
+      if (isPaused) kbTween.pause();
+      else kbTween.resume();
+    }
+  });
+
+  // ── Start ─────────────────────────────────────────────────────────────────
+  resetAutoTimer();
 }
 
 /**
  * Premium Search Overlay Popup Controller
  */
 function initSearchOverlay() {
-  const searchBtn = document.getElementById('nav-search-open')
-    || document.querySelector('.navbar-utilities a[href*="produk"]');
+  const searchButtons = document.querySelectorAll('#nav-search-open, #mobile-search-open');
   const overlay = document.getElementById('search-overlay');
   const closeBtn = document.getElementById('search-close');
   const input = document.getElementById('search-overlay-input');
 
-  if (!searchBtn || !overlay || !closeBtn || !input) return;
+  if (!searchButtons.length || !overlay || !closeBtn || !input) return;
 
   function openOverlay(e) {
     if (e) e.preventDefault();
@@ -1758,7 +1951,9 @@ function initSearchOverlay() {
     input.value = '';
   }
 
-  searchBtn.addEventListener('click', openOverlay);
+  searchButtons.forEach(function (btn) {
+    btn.addEventListener('click', openOverlay);
+  });
   closeBtn.addEventListener('click', closeOverlay);
 
   document.addEventListener('keydown', function (e) {

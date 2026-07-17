@@ -1,0 +1,872 @@
+/* ==========================================================================
+   PT Prolabios Mitra Analitika — Admin Panel
+   Aesthetic: Authentic editorial-dark, same DNA as main website.
+   Font: Space Grotesk (same as main site, not Instrument Sans)
+   Language: No Bootstrap overrides, pure editorial from scratch.
+   ========================================================================== */
+
+/* ── 1. Design Tokens ─────────────────────────────────────────────────────── */
+:root {
+  --font-headline: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --color-bg: #070708;
+  --color-surface: #0e0e10;
+  --color-surface-2: #141416;
+  --color-text-main: #ffffff;
+  --color-text-muted: rgba(255, 255, 255, 0.45);
+  --color-accent: #FF4950;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --sidebar-width: 200px;
+  --header-height: 60px;
+}
+
+/* ── 2. Base Reset ────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg) !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline) !important;
+  color: var(--color-text-main) !important;
+}
+
+a { color: var(--color-text-muted); text-decoration: none; transition: color 0.2s ease; }
+a:hover { color: var(--color-text-main); }
+
+/* ── 3. Layout Shell ──────────────────────────────────────────────────────── */
+#admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── 4. Sidebar — Editorial Left Rail ────────────────────────────────────── */
+#admin-sidebar {
+  width: var(--sidebar-width);
+  background-color: var(--color-bg);
+  border-right: 1px solid var(--color-border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar for sidebar */
+#admin-sidebar::-webkit-scrollbar { width: 3px; }
+#admin-sidebar::-webkit-scrollbar-track { background: transparent; }
+#admin-sidebar::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 100px; }
+
+/* Brand lockup */
+.sidebar-brand {
+  padding: 28px 24px 24px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.sidebar-brand img {
+  height: 30px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+.sidebar-brand .admin-badge {
+  font-family: var(--font-headline);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid rgba(255, 73, 80, 0.25);
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+
+/* Nav section label */
+.sidebar-nav-label {
+  font-family: var(--font-headline);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 24px 24px 8px;
+  display: block;
+}
+
+/* Menu container */
+.sidebar-menu {
+  padding: 8px 0;
+  flex-grow: 1;
+}
+.sidebar-item { padding: 2px 16px; }
+
+/* Nav links — editorial style (like navbar on main site) */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 12px;
+  color: var(--color-text-muted) !important;
+  text-decoration: none;
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  background: transparent;
+  width: 100%;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+.sidebar-link i {
+  font-size: 1rem;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+.sidebar-link:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.03);
+}
+.sidebar-link:hover i { opacity: 1; }
+
+.sidebar-item.active .sidebar-link {
+  color: #ffffff !important;
+  border-left-color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.04);
+}
+.sidebar-item.active .sidebar-link i { opacity: 1; color: var(--color-accent); }
+
+/* Sidebar separator */
+.sidebar-sep {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 12px 16px;
+}
+
+/* ── 5. Main Content Area ─────────────────────────────────────────────────── */
+#admin-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: var(--color-bg);
+}
+
+/* ── 6. Admin Header ─────────────────────────────────────────────────────── */
+.admin-header {
+  height: var(--header-height);
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.admin-header-title {
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.admin-header-user {
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.admin-header-user i { color: var(--color-accent); }
+
+/* Lihat Web link */
+.admin-header-web-link {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 100px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.admin-header-web-link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── 7. Page Body ─────────────────────────────────────────────────────────── */
+.admin-body {
+  padding: 36px 48px;
+  flex-grow: 1;
+}
+
+/* Page section heading (editorial style from main site) */
+.admin-page-label {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 6px;
+}
+.admin-page-title {
+  font-family: var(--font-headline);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  letter-spacing: -0.5px;
+  margin: 0 0 32px;
+  line-height: 1.2;
+}
+
+/* ── 8. Cards — Editorial Surface ────────────────────────────────────────── */
+.admin-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.admin-card-header {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.admin-card-header-label {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+.admin-card-header-title {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+.admin-card-body { padding: 28px; }
+.admin-card-body-flush { padding: 0; }
+
+/* Stat cards on dashboard */
+.admin-stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 32px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.3s ease;
+}
+.admin-stat-card:hover { border-color: rgba(255, 255, 255, 0.15); }
+.admin-stat-label {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.admin-stat-value {
+  font-family: var(--font-headline);
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  line-height: 1;
+  letter-spacing: -3px;
+}
+.admin-stat-link {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.3s ease;
+}
+.admin-stat-link:hover { gap: 10px; color: var(--color-accent); }
+
+/* ── 9. Tables — Editorial Data Rows ─────────────────────────────────────── */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.admin-table thead tr {
+  border-bottom: 1px solid var(--color-border);
+}
+.admin-table thead th {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 14px 24px;
+  background: transparent;
+  white-space: nowrap;
+}
+.admin-table tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.2s ease;
+}
+.admin-table tbody tr:last-child { border-bottom: none; }
+.admin-table tbody tr:hover { background: rgba(255, 255, 255, 0.025); }
+.admin-table tbody td {
+  padding: 18px 24px;
+  vertical-align: middle;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+}
+
+/* Cell typography helpers */
+.admin-table .cell-title {
+  font-family: var(--font-headline);
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 0.98rem;
+}
+.admin-table .cell-muted {
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+}
+.admin-table .cell-code {
+  font-family: 'SFMono-Regular', 'Courier New', monospace;
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.05);
+  border: 1px solid rgba(255, 73, 80, 0.12);
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Inline code in general (for slug, id, etc.) */
+code {
+  font-family: 'SFMono-Regular', 'Courier New', monospace;
+  font-size: 0.78em;
+  color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.05);
+  border: 1px solid rgba(255, 73, 80, 0.1);
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Terminal / log pre blocks */
+pre {
+  background: #000000 !important;
+  border: 1px solid var(--color-border) !important;
+  color: rgba(168, 255, 178, 0.9) !important;
+  border-radius: 6px;
+  padding: 16px 20px;
+  font-family: 'SFMono-Regular', 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+pre code {
+  all: unset;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+}
+
+/* ── 10. Badges / Pills ───────────────────────────────────────────────────── */
+.admin-badge {
+  font-family: var(--font-headline);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 100px;
+  border: 1px solid;
+  display: inline-block;
+}
+.admin-badge-accent {
+  color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.06);
+  border-color: rgba(255, 73, 80, 0.2);
+}
+.admin-badge-success {
+  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.06);
+  border-color: rgba(46, 204, 113, 0.2);
+}
+.admin-badge-warning {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.admin-badge-muted {
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--color-border);
+}
+
+/* ── 11. Buttons ──────────────────────────────────────────────────────────── */
+
+/* Primary — filled red */
+.admin-btn {
+  font-family: var(--font-headline);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.admin-btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+.admin-btn-primary:hover {
+  background: #e03e45;
+  border-color: #e03e45;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2);
+}
+
+/* Ghost — outline style (like main site's ghost button) */
+.admin-btn-ghost {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+.admin-btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Danger — ghost red */
+.admin-btn-danger {
+  background: transparent;
+  border-color: rgba(255, 73, 80, 0.25);
+  color: var(--color-accent);
+}
+.admin-btn-danger:hover {
+  background: rgba(255, 73, 80, 0.08);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+/* Text-only action links in tables */
+.admin-action-link {
+  font-family: var(--font-headline);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  transition: color 0.2s ease, background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.admin-action-link:hover { color: #ffffff; background: rgba(255, 255, 255, 0.05); }
+.admin-action-link.edit:hover { color: #60a5fa; }
+.admin-action-link.delete:hover { color: var(--color-accent); }
+.admin-action-link.view:hover { color: #34d399; }
+
+/* ── 12. Forms ────────────────────────────────────────────────────────────── */
+.admin-form-group { margin-bottom: 24px; }
+.admin-form-label {
+  font-family: var(--font-headline);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+.admin-form-control {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 11px 14px;
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+  -webkit-appearance: none;
+}
+.admin-form-control::placeholder { color: rgba(255, 255, 255, 0.2); }
+.admin-form-control:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+.admin-form-control select, select.admin-form-control { cursor: pointer; }
+
+/* Bootstrap form compatibility overrides */
+.form-control, .form-select {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 6px !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  transition: border-color 0.25s ease !important;
+}
+.form-control::placeholder, .form-select option { color: rgba(255, 255, 255, 0.2); }
+.form-control:focus, .form-select:focus {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.1) !important;
+  color: var(--color-text-main) !important;
+}
+.input-group-text {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+}
+select.form-select option { background: var(--color-surface); color: var(--color-text-main); }
+
+/* Bootstrap button compatibility */
+.btn-primary {
+  font-family: var(--font-headline) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  border-radius: 6px !important;
+  padding: 9px 18px !important;
+  transition: all 0.25s ease !important;
+}
+.btn-primary:hover {
+  background: #e03e45 !important;
+  border-color: #e03e45 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2) !important;
+}
+.btn-success {
+  font-family: var(--font-headline) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  border-radius: 6px !important;
+  padding: 9px 18px !important;
+}
+.btn-outline-secondary {
+  font-family: var(--font-headline) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  border-radius: 6px !important;
+  transition: all 0.25s ease !important;
+}
+.btn-outline-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  background: transparent !important;
+}
+/* Override any remaining Bootstrap bg-white remnants */
+.bg-white { background-color: var(--color-surface) !important; }
+.text-dark { color: var(--color-text-main) !important; }
+.text-muted { color: var(--color-text-muted) !important; }
+.bg-light { background-color: rgba(255, 255, 255, 0.02) !important; }
+.border { border-color: var(--color-border) !important; }
+.border-top { border-top-color: var(--color-border) !important; }
+.border-bottom { border-bottom-color: var(--color-border) !important; }
+.border-secondary { border-color: var(--color-border) !important; }
+
+/* ── 13. SweetAlert2 — Editorial Dark Theme ───────────────────────────────── */
+.swal2-popup {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8) !important;
+  font-family: var(--font-body) !important;
+  color: var(--color-text-main) !important;
+}
+.swal2-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: var(--color-text-main) !important;
+  letter-spacing: -0.3px;
+}
+.swal2-html-container {
+  font-size: 0.88rem !important;
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-body) !important;
+}
+.swal2-confirm {
+  font-family: var(--font-headline) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  border-radius: 6px !important;
+  padding: 10px 24px !important;
+}
+.swal2-cancel {
+  font-family: var(--font-headline) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  border-radius: 6px !important;
+  padding: 10px 24px !important;
+}
+.swal2-cancel:hover {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--color-text-main) !important;
+}
+.swal2-icon { border-color: var(--color-border) !important; }
+.swal2-icon.swal2-warning { border-color: rgba(245, 158, 11, 0.4) !important; color: #f59e0b !important; }
+.swal2-toast {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  font-family: var(--font-body) !important;
+  color: var(--color-text-main) !important;
+}
+
+/* ── 14. Pagination ───────────────────────────────────────────────────────── */
+.pagination { gap: 4px; }
+.page-link {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  border-radius: 5px !important;
+  padding: 7px 12px;
+  transition: all 0.2s ease;
+}
+.page-link:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-text-main) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.page-item.active .page-link {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #ffffff !important;
+}
+.page-item.disabled .page-link { opacity: 0.3; cursor: not-allowed; }
+
+/* ── 15. Alerts / Flash Messages ─────────────────────────────────────────── */
+.alert-success {
+  background: rgba(46, 204, 113, 0.06) !important;
+  border: 1px solid rgba(46, 204, 113, 0.2) !important;
+  color: #2ecc71 !important;
+  border-radius: 6px !important;
+  font-family: var(--font-body) !important;
+}
+.alert-danger {
+  background: rgba(255, 73, 80, 0.06) !important;
+  border: 1px solid rgba(255, 73, 80, 0.2) !important;
+  color: #ff6b72 !important;
+  border-radius: 6px !important;
+  font-family: var(--font-body) !important;
+}
+.alert-warning {
+  background: rgba(245, 158, 11, 0.06) !important;
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+  color: #f59e0b !important;
+  border-radius: 6px !important;
+  font-family: var(--font-body) !important;
+}
+
+/* ── 16. Mobile responsive ────────────────────────────────────────────────── */
+@media (max-width: 991px) {
+  #admin-wrapper { flex-direction: column; }
+  #admin-sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .sidebar-menu {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8px 12px;
+    gap: 4px;
+  }
+  .sidebar-item { padding: 0; }
+  .sidebar-link {
+    padding: 7px 10px;
+    font-size: 0.68rem;
+  }
+  .sidebar-brand { padding: 16px 20px; }
+  .admin-body { padding: 24px 20px; }
+  .admin-header { padding: 0 20px; }
+}
+
+/* ── 17. Login page (Vite-integrated) ────────────────────────────────────── */
+.login-body-wrapper {
+  font-family: var(--font-body) !important;
+  background: var(--color-bg) !important;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.login-body-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 73, 80, 0.05) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  pointer-events: none;
+}
+.login-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8);
+  width: 100%;
+  max-width: 400px;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+.login-header {
+  background: var(--color-bg);
+  padding: 36px 28px 28px;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+.login-header img {
+  height: 36px;
+  filter: brightness(0) invert(1);
+  margin-bottom: 12px;
+}
+.login-body { padding: 28px; }
+.login-body .form-label {
+  font-size: 0.6rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  color: var(--color-text-muted) !important;
+  margin-bottom: 8px;
+}
+.login-body .input-group {
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+.login-body .input-group:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.1);
+}
+.login-body .input-group-text {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-muted) !important;
+}
+.login-body .form-control {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-main) !important;
+  padding: 11px 14px 11px 0 !important;
+}
+.login-body .form-control:focus { box-shadow: none !important; }
+.login-body .btn-primary { letter-spacing: 1.5px !important; }
+.btn-back-home {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-text-muted) !important;
+  transition: color 0.2s ease;
+}
+.btn-back-home:hover { color: #ffffff !important; }

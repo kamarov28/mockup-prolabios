@@ -18,7 +18,7 @@
       <div class="row g-5">
 
         <!-- Sidebar -->
-        <div class="col-lg-3 col-md-4 order-md-1">
+        <div class="col-lg-3 col-md-4 order-last order-md-1">
 
           <!-- Social Links -->
           <div class="mb-5">
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-9 col-md-8 order-md-2">
+        <div class="col-lg-9 col-md-8 order-first order-md-2">
 
           <!-- Story Image -->
           <div class="profil-hero-img mb-5">

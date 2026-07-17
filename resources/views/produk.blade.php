@@ -23,7 +23,7 @@
         <!-- Sidebar -->
         <div class="col-lg-3 col-md-4">
           <!-- Mobile Filter Toggle Button -->
-          <button class="btn w-100 d-md-none mb-4 d-flex align-items-center justify-content-between py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse" style="background: rgba(255,255,255,0.04); border: 1px solid var(--color-border); border-radius: 0; font-family: var(--font-headline); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7);">
+          <button class="catalog-filter-toggle-btn w-100 d-md-none mb-4 d-flex align-items-center justify-content-between py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
             <span><i class="bi bi-funnel me-2"></i>Filter &amp; Kategori</span>
             <i class="bi bi-chevron-down"></i>
           </button>
@@ -39,28 +39,34 @@
                   Semua Kategori
                 </a>
                 @foreach($categoriesStructure as $catKey => $catData)
-                  <a href="{{ $activeCategory === $catKey ? url('/produk') . '?category=all#catalog-section' : url('/produk') . '?category=' . $catKey . '#catalog-section' }}"
-                     class="layanan-sidebar-link d-flex justify-content-between align-items-center {{ $activeCategory === $catKey ? 'is-active' : '' }}">
-                    <span>{{ $catData['name'] }}</span>
-                    @if(!empty($catData['subs']))
-                      <i class="bi bi-chevron-{{ $activeCategory === $catKey ? 'down' : 'right' }}" style="font-size: 0.7rem; opacity: 0.4;"></i>
-                    @endif
-                  </a>
+                  @if(!empty($catData['subs']))
+                    <!-- Category with subcategories: acts as accordion toggle -->
+                    <a href="#"
+                       class="layanan-sidebar-link d-flex justify-content-between align-items-center category-accordion-btn {{ $activeCategory === $catKey ? 'is-active' : '' }}"
+                       data-target="sub-group-{{ $catKey }}">
+                      <span>{{ $catData['name'] }}</span>
+                      <i class="bi bi-chevron-{{ $activeCategory === $catKey ? 'down' : 'right' }} chevron-icon" style="font-size: 0.7rem; opacity: 0.4;"></i>
+                    </a>
 
-                  <!-- Nested Sub-Categories -->
-                  @if(!empty($catData['subs']) && $activeCategory === $catKey)
-                    <div class="sub-category-group ps-3 mb-3" style="max-height: 350px; overflow-y: auto; border-left: 1px solid var(--color-border); margin-left: 8px;">
+                    <!-- Subcategories container -->
+                    <div id="sub-group-{{ $catKey }}" class="sub-category-group ps-3 mb-3 {{ $activeCategory === $catKey ? '' : 'd-none' }}" style="max-height: 350px; overflow-y: auto; border-left: 1px solid var(--color-border); margin-left: 8px;">
                       <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory=all#catalog-section"
-                         class="sub-category-link {{ !$activeSubCategory || $activeSubCategory === 'all' ? 'is-active' : '' }}">
+                         class="sub-category-link {{ $activeCategory === $catKey && (!$activeSubCategory || $activeSubCategory === 'all') ? 'is-active' : '' }}">
                         Semua {{ $catData['name'] }}
                       </a>
                       @foreach($catData['subs'] as $subKey => $subName)
                         <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory={{ $subKey }}#catalog-section"
-                           class="sub-category-link {{ $activeSubCategory === $subKey ? 'is-active' : '' }}">
+                           class="sub-category-link {{ $activeCategory === $catKey && $activeSubCategory === $subKey ? 'is-active' : '' }}">
                           {{ $subName }}
                         </a>
                       @endforeach
                     </div>
+                  @else
+                    <!-- Category without subcategories: direct filter link -->
+                    <a href="{{ url('/produk') }}?category={{ $catKey }}#catalog-section"
+                       class="layanan-sidebar-link {{ $activeCategory === $catKey ? 'is-active' : '' }}">
+                      {{ $catData['name'] }}
+                    </a>
                   @endif
                 @endforeach
               </nav>
@@ -169,7 +175,17 @@
         const currentSidebar = document.querySelector('#catalog-section .col-lg-3');
         const newSidebar = doc.querySelector('#catalog-section .col-lg-3');
         if (currentSidebar && newSidebar) {
+          const collapseEl = document.getElementById('sidebarCollapse');
+          const isCollapseOpen = collapseEl ? collapseEl.classList.contains('show') : false;
+
           currentSidebar.innerHTML = newSidebar.innerHTML;
+
+          if (isCollapseOpen) {
+            const newCollapseEl = document.getElementById('sidebarCollapse');
+            if (newCollapseEl) {
+              newCollapseEl.classList.add('show');
+            }
+          }
         }
 
         // 2. Update Category Header Title and Subtitle
@@ -241,6 +257,48 @@
         if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
           e.preventDefault();
           loadProductsAjax(link.href);
+        }
+      });
+
+      // Accordion Toggle for Categories
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.category-accordion-btn');
+        if (btn) {
+          e.preventDefault();
+          const targetId = btn.getAttribute('data-target');
+          const targetGroup = document.getElementById(targetId);
+          if (targetGroup) {
+            const isHidden = targetGroup.classList.contains('d-none');
+            
+            // Tutup semua sub-kategori lain yang sedang terbuka
+            document.querySelectorAll('.sub-category-group').forEach(group => {
+              if (group.id !== targetId) {
+                group.classList.add('d-none');
+              }
+            });
+            document.querySelectorAll('.category-accordion-btn').forEach(otherBtn => {
+              if (otherBtn !== btn) {
+                otherBtn.classList.remove('is-active');
+                const otherChevron = otherBtn.querySelector('.chevron-icon');
+                if (otherChevron) {
+                  otherChevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
+                }
+              }
+            });
+
+            // Toggle status active pada kategori yang diklik
+            if (isHidden) {
+              targetGroup.classList.remove('d-none');
+              btn.classList.add('is-active');
+              const chevron = btn.querySelector('.chevron-icon');
+              if (chevron) chevron.classList.replace('bi-chevron-right', 'bi-chevron-down');
+            } else {
+              targetGroup.classList.add('d-none');
+              btn.classList.remove('is-active');
+              const chevron = btn.querySelector('.chevron-icon');
+              if (chevron) chevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
+            }
+          }
         }
       });
 

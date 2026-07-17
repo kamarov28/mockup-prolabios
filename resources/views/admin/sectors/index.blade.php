@@ -1,49 +1,56 @@
 @extends('admin.layout')
 
 @section('title', 'Kelola Sektor')
-@section('page_title', 'Manajemen Sektor Industri')
+@section('page_title', 'Sektor')
 
 @section('admin_content')
-<div class="card bg-white shadow-sm mb-4">
-  <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-3">
-    <h2 class="h5 mb-0 fw-bold text-dark"><i class="bi bi-collection text-info me-2"></i>Daftar Sektor Industri</h2>
-    <a href="{{ route('admin.sectors.create') }}" class="btn btn-sm text-white" style="background-color: #005a70;"><i class="bi bi-plus-lg me-1"></i>Tambah Sektor Baru</a>
+
+<div class="admin-card">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Konten</span>
+      <h2 class="admin-card-header-title">Sektor Industri</h2>
+    </div>
+    <a href="{{ route('admin.sectors.create') }}" class="admin-btn admin-btn-primary">
+      <i class="bi bi-plus-lg"></i> Tambah Sektor
+    </a>
   </div>
-  <div class="card-body p-0">
+
+  <div class="admin-card-body-flush">
     @if(count($sectors) > 0)
       <div class="table-responsive">
-        <table class="table align-middle mb-0">
+        <table class="admin-table">
           <thead>
             <tr>
-              <th style="width: 150px;">ID Sektor</th>
-              <th>Nama Sektor</th>
-              <th>Deskripsi Sektor</th>
-              <th class="text-end" style="width: 200px;">Aksi</th>
+              <th style="width: 160px;">ID Sektor</th>
+              <th>Nama</th>
+              <th>Deskripsi</th>
+              <th style="text-align: right; padding-right: 24px;">Aksi</th>
             </tr>
           </thead>
           <tbody>
             @foreach($sectors as $sec)
               <tr>
-                <td class="text-muted small fw-semibold"><code class="text-danger">{{ $sec['id'] }}</code></td>
-                <td><span class="fw-bold text-dark">{{ $sec['name'] }}</span></td>
-                <td>
+                <td><code>{{ $sec['id'] }}</code></td>
+                <td class="cell-title">{{ $sec['name'] }}</td>
+                <td class="cell-muted" style="max-width: 460px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                   @if(count($sec['description'] ?? []) > 0)
-                    <div class="text-muted small text-truncate" style="max-width: 450px;">
-                      {{ implode(' ', $sec['description']) }}
-                    </div>
+                    {{ implode(' ', $sec['description']) }}
                   @else
-                    <span class="text-muted small italic">Tidak ada deskripsi</span>
+                    <em>Tidak ada deskripsi</em>
                   @endif
                 </td>
-                <td class="text-end">
-                  <div class="d-inline-flex gap-2 pe-3">
-                    <a href="{{ route('admin.sectors.edit', ['id' => $sec['id']]) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i> Edit</a>
-                    <form action="{{ route('admin.sectors.destroy', ['id' => $sec['id']]) }}" method="POST" class="form-delete" data-name="{{ $sec['name'] }}">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
-                    </form>
-                  </div>
+                <td style="text-align: right; white-space: nowrap;">
+                  <a href="{{ route('admin.sectors.edit', ['id' => $sec['id']]) }}" class="admin-action-link edit" title="Edit">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </a>
+                  <form action="{{ route('admin.sectors.destroy', ['id' => $sec['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $sec['name'] }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="admin-action-link delete" title="Hapus">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
                 </td>
               </tr>
             @endforeach
@@ -51,14 +58,16 @@
         </table>
       </div>
     @else
-      <div class="text-center py-5">
-        <i class="bi bi-collection display-3 text-muted opacity-50 mb-3"></i>
-        <h5 class="fw-bold">Belum Ada Sektor</h5>
-        <p class="text-muted">Klik tombol di atas untuk menambahkan sektor industri pertama Anda.</p>
+      <div class="text-center py-5" style="color: var(--color-text-muted);">
+        <i class="bi bi-layers" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <p style="font-size: 0.88rem;">Belum ada sektor industri.</p>
+        <a href="{{ route('admin.sectors.create') }}" class="admin-btn admin-btn-primary">Tambah Sekarang</a>
       </div>
     @endif
   </div>
 </div>
+
+@endsection
 
 @section('admin_scripts')
 <script>
@@ -68,21 +77,19 @@
       const name = this.getAttribute('data-name');
       Swal.fire({
         title: 'Hapus Sektor?',
-        text: `Apakah Anda yakin ingin menghapus sektor industri "${name}"? Tindakan ini tidak dapat dibatalkan!`,
+        html: `Hapus "<strong>${name}</strong>"? Tidak bisa dibatalkan.`,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#D32F2F',
-        cancelButtonColor: '#6C757D',
-        confirmButtonText: 'Ya, Hapus!',
+        confirmButtonText: 'Ya, Hapus',
         cancelButtonText: 'Batal',
-        focusCancel: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.submit();
-        }
-      });
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'admin-btn admin-btn-danger mx-2',
+          cancelButton: 'admin-btn admin-btn-ghost mx-2'
+        },
+        buttonsStyling: false
+      }).then(r => { if (r.isConfirmed) this.submit(); });
     });
   });
 </script>
-@endsection
 @endsection

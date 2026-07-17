@@ -17,7 +17,10 @@ class PageController extends Controller
         $posts = $dataService->getPosts();
         $recentPosts = array_slice($posts, 0, 3);
         
-        return view('welcome', compact('homeData', 'recentPosts'));
+        $allProducts = $dataService->getProducts();
+        $featuredProducts = array_slice($allProducts, 0, 4);
+        
+        return view('welcome', compact('homeData', 'recentPosts', 'featuredProducts'));
     }
 
     /**

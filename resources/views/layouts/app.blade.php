@@ -73,44 +73,55 @@
           <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="40" width="auto" decoding="async" fetchpriority="high">
         </a>
       
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+      <!-- Mobile Search Trigger -->
+      <button type="button" id="mobile-search-open" class="btn p-0 border-0 bg-transparent text-white ms-auto me-3 d-lg-none" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
+        <i class="bi bi-search" style="font-size: 1.25rem;"></i>
       </button>
+
+      <label class="hamburger">
+        <input type="checkbox" id="hamburger-checkbox" autocomplete="off">
+        <svg viewBox="0 0 32 32">
+          <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+          <path class="line" d="M7 16 27 16"></path>
+        </svg>
+      </label>
       
       <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('/') ? 'text-primary active' : '' }}" href="{{ url('/') }}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Produk</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
-          </li>
-          <li class="nav-item ms-lg-2">
-            <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 rounded-pill d-inline-flex align-items-center gap-2" href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
-              <i class="bi bi-download"></i> Unduh Katalog
-            </a>
-          </li>
-          <li class="nav-item d-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0 navbar-utilities">
-            <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
-              <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
-            </button>
-          </li>
-        </ul>
+        <div class="navbar-collapse-inner">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('/') ? 'text-primary active' : '' }}" href="{{ url('/') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Produk</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
+            </li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 rounded-pill d-inline-flex align-items-center gap-2" href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
+                <i class="bi bi-download"></i> Unduh Katalog
+              </a>
+            </li>
+            <li class="nav-item d-none d-lg-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0 navbar-utilities">
+              <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
+                <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -208,6 +219,38 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
   @vite(['resources/js/app.js'])
 
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var mainNavbar = document.getElementById('mainNavbar');
+      var hamburgerInput = document.getElementById('hamburger-checkbox');
+      
+      if (mainNavbar && hamburgerInput) {
+        // Initialize bootstrap collapse instance programmatically
+        var bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
+        
+        // Reset checkbox to unchecked initially (since collapse is closed by default)
+        hamburgerInput.checked = false;
+
+        // Toggle collapse programmatically when checkbox changes
+        hamburgerInput.addEventListener('change', function () {
+          if (hamburgerInput.checked) {
+            bsCollapse.show();
+          } else {
+            bsCollapse.hide();
+          }
+        });
+
+        // Also sync state if Bootstrap collapse events are triggered by other triggers
+        mainNavbar.addEventListener('show.bs.collapse', function () {
+          hamburgerInput.checked = true;
+        });
+        mainNavbar.addEventListener('hide.bs.collapse', function () {
+          hamburgerInput.checked = false;
+        });
+      }
+    });
+  </script>
+
   @stack('scripts')
 
 
@@ -224,6 +267,42 @@
       <form action="{{ url('/produk') }}" method="GET" class="search-overlay-form" role="search">
         <input type="search" name="q" id="search-overlay-input" placeholder="Ketik kata kunci produk..." autocomplete="off" enterkeyhint="search">
         <div class="search-hint">Tekan enter untuk mencari atau ESC untuk membatalkan</div>
+        
+        <div class="search-suggestions mt-4">
+          <span class="d-block mb-3 text-muted" style="font-size: 0.72rem; font-family: var(--font-headline); letter-spacing: 1.5px; text-transform: uppercase;">Saran Pencarian</span>
+          <div class="d-flex flex-wrap justify-content-center gap-2">
+            @php
+              $suggestions = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
+              try {
+                  $productTitles = \Illuminate\Support\Facades\DB::table('products')->pluck('title')->toArray();
+                  if (!empty($productTitles)) {
+                      $wordsList = [];
+                      foreach ($productTitles as $title) {
+                          // Bersihkan karakter spesial
+                          $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
+                          $words = explode(' ', $clean);
+                          foreach ($words as $word) {
+                              $word = trim($word);
+                              // Filter kata-kata umum yang kurang bernilai pencarian
+                              if (strlen($word) > 3 && !in_array(strtolower($word), ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'])) {
+                                  $wordsList[] = $word;
+                              }
+                          }
+                      }
+                      if (!empty($wordsList)) {
+                          $suggestions = array_slice(array_unique($wordsList), 0, 7);
+                      }
+                  }
+              } catch (\Exception $e) {
+                  // Fallback ke default jika DB bermasalah
+              }
+            @endphp
+            
+            @foreach($suggestions as $tag)
+              <a href="{{ url('/produk?q=' . urlencode($tag)) }}" class="suggestion-tag">{{ $tag }}</a>
+            @endforeach
+          </div>
+        </div>
       </form>
     </div>
   </div>

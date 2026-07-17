@@ -22,7 +22,10 @@
 
         <!-- Sidebar -->
         <div class="col-lg-3 col-md-4">
-          @php $activeSector = request()->get('s') ?? request()->get('kategori') ?? 'brewing'; @endphp
+          @php 
+            $firstSectorId = (isset($sectors) && count($sectors) > 0) ? $sectors[0]['id'] : 'biomolecular';
+            $activeSector = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId; 
+          @endphp
 
           <div class="mb-5">
             <h3 class="profil-sidebar-title">Pilih Sektor</h3>
@@ -40,7 +43,7 @@
             </nav>
           </div>
 
-          <div class="profil-cta-box">
+          <div class="profil-cta-box d-none d-md-block">
             <h3 class="profil-sidebar-title">Butuh Solusi Khusus?</h3>
             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
             <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
@@ -93,8 +96,15 @@
             <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Temukan Produk Kami</h3>
             <p class="profil-body-text mb-4">Kami memiliki berbagai macam produk khusus yang dirancang untuk mendukung kegiatan operasional, riset, dan analisis di sektor <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong>.</p>
 
+            <!-- Mobile Swipe Indicator -->
+            <div class="d-md-none text-end mb-2">
+              <span class="badge" style="background: rgba(255, 73, 80, 0.08); color: var(--color-accent); border: 1px solid rgba(255, 73, 80, 0.2); font-size: 0.68rem; font-family: var(--font-headline); letter-spacing: 0.5px; padding: 6px 12px; border-radius: 100px;">
+                <i class="bi bi-arrow-left-right me-1"></i> Geser Tabel
+              </span>
+            </div>
+
             <div class="table-responsive mt-2">
-              <table class="table custom-table align-middle">
+              <table class="table custom-table align-middle" style="min-width: 650px;">
                 <thead>
                   <tr>
                     <th>Catalogue</th>
@@ -163,9 +173,11 @@
               @endif
             </div>
 
-          @else
-            <div style="text-align: center; padding: 80px 0;">
-              <p style="color: var(--color-text-muted);">Sedang memuat data sektor...</p>
+            <!-- Mobile-only CTA Box -->
+            <div class="profil-cta-box d-md-none mt-5">
+              <h3 class="profil-sidebar-title">Butuh Solusi Khusus?</h3>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
+              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
             </div>
           @endif
         </div>

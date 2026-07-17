@@ -30,7 +30,7 @@
             </nav>
           </div>
 
-          <div class="profil-cta-box">
+          <div class="profil-cta-box d-none d-md-block">
             <h3 class="profil-sidebar-title">Hubungi Kami</h3>
             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Ajukan perbaikan atau konsultasi instrumen melalui kontak resmi perusahaan.</p>
             <a href="{{ url('/kontak') }}" class="profil-cta-btn d-block mb-3">Formulir Kontak <i class="bi bi-arrow-right"></i></a>
@@ -105,8 +105,14 @@
               <p class="profil-body-text mb-4">Ajukan kebutuhan workshop atau training instrumen lab sesuai kebutuhan spesifik tim Anda.</p>
               <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Hubungi Tim Pelatih Kami <i class="bi bi-arrow-right"></i></a>
             </div>
+            </div>
+          <!-- Mobile-only CTA Box -->
+          <div class="profil-cta-box d-md-none mt-5">
+            <h3 class="profil-sidebar-title">Hubungi Kami</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Ajukan perbaikan atau konsultasi instrumen melalui kontak resmi perusahaan.</p>
+            <a href="{{ url('/kontak') }}" class="profil-cta-btn d-block mb-3">Formulir Kontak <i class="bi bi-arrow-right"></i></a>
+            <a href="tel:02138741447" class="profil-social-link"><i class="bi bi-telephone"></i> 021-3874-1447</a>
           </div>
-
         </div>
       </div>
     </div>
