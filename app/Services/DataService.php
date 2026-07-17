@@ -25,6 +25,65 @@ class DataService
         return $default;
     }
 
+    /**
+     * Get the category and subcategory hierarchy structure.
+     */
+    public function getCategoriesStructure(): array
+    {
+        return [
+            'microbiology' => [
+                'name' => 'Microbiology',
+                'subs' => [
+                    'food-safety' => 'Food Safety',
+                    'antimicrobial' => 'Antimicrobial Susceptibility Testing',
+                    'identification' => 'Microbiological Identification',
+                    'preservation' => 'Microorganisms Preservation System (BactoBank)',
+                    'staining' => 'Microbial Staining & Fixatives',
+                    'consumables' => 'Consumables',
+                    'mic-test' => 'MIC Test Strip',
+                    'qc-organisms' => 'QC Organisms',
+                    'dip-slide' => 'Dip slide',
+                    'chemical-indicator' => 'Chemical Indicator',
+                    'latex-agglutination' => 'Latex Agglutination Kits',
+                    'ready-culture' => 'Ready To Use Culture Media',
+                    'biological-indicators' => 'Biological Indicators',
+                    'dehydrated-culture' => 'Dehydrated Culture Media',
+                    'immunology' => 'Immunology',
+                    'endotoxin' => 'Endotoxin'
+                ]
+            ],
+            'reference-standards' => [
+                'name' => 'Reference Standards',
+                'subs' => [
+                    'pharmaceutical' => 'Pharmaceutical Reference Standards',
+                    'green-standards' => 'Green Standards',
+                    'environmental' => 'Environmental Standards',
+                    'food-beverages' => 'Food and Beverages Standards',
+                    'agro-chemical' => 'Agro Chemical Standards'
+                ]
+            ],
+            'device' => [
+                'name' => 'Device',
+                'subs' => [
+                    'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+                    'microbiological-instruments' => 'Microbiological Instruments',
+                    'liquid-handling' => 'Liquid Handling',
+                    'thermometer' => 'Thermometer'
+                ]
+            ],
+            'instruments' => [
+                'name' => 'Instruments',
+                'subs' => [
+                    'liofilchem-giotto-2' => 'Liofilchem® Giotto 2',
+                    'agar-filler' => 'Agar Filler',
+                    'agar-preparator' => 'Agar Preparator',
+                    'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
+                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster'
+                ]
+            ]
+        ];
+    }
+
     // ----------------------------------------------------
     // Products Service  (MySQL)
     // ----------------------------------------------------

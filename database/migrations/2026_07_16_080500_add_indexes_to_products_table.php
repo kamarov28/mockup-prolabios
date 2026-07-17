@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->index('category');
-            $table->index('sub_category');
+            $table->index('category', 'products_category_index');
+            $table->index('sub_category', 'products_sub_category_index');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropIndex(['category']);
-            $table->dropIndex(['sub_category']);
+            $table->dropIndex('products_category_index');
+            $table->dropIndex('products_sub_category_index');
         });
     }
 };

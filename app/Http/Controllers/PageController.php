@@ -34,66 +34,34 @@ class PageController extends Controller
     /**
      * Display the catalog products page.
      */
+    /**
+     * Display the catalog products page.
+     */
     public function produk(Request $request, DataService $dataService)
     {
         $allProducts = $dataService->getProducts();
-        $activeCategory = $request->query('category', 'all'); 
-        $activeSubCategory = $request->query('subcategory');
-        $searchQuery = $request->query('q') ?? $request->query('s');
+        $categoriesStructure = $dataService->getCategoriesStructure();
 
-        // Sidebar category hierarchy
-        $categoriesStructure = [
-            'microbiology' => [
-                'name' => 'Microbiology',
-                'subs' => [
-                    'food-safety' => 'Food Safety',
-                    'antimicrobial' => 'Antimicrobial Susceptibility Testing',
-                    'identification' => 'Microbiological Identification',
-                    'preservation' => 'Microorganisms Preservation System (BactoBank)',
-                    'staining' => 'Microbial Staining & Fixatives',
-                    'consumables' => 'Consumables',
-                    'mic-test' => 'MIC Test Strip',
-                    'qc-organisms' => 'QC Organisms',
-                    'dip-slide' => 'Dip slide',
-                    'chemical-indicator' => 'Chemical Indicator',
-                    'latex-agglutination' => 'Latex Agglutination Kits',
-                    'ready-culture' => 'Ready To Use Culture Media',
-                    'biological-indicators' => 'Biological Indicators',
-                    'dehydrated-culture' => 'Dehydrated Culture Media',
-                    'immunology' => 'Immunology',
-                    'endotoxin' => 'Endotoxin'
-                ]
-            ],
-            'reference-standards' => [
-                'name' => 'Reference Standards',
-                'subs' => [
-                    'pharmaceutical' => 'Pharmaceutical Reference Standards',
-                    'green-standards' => 'Green Standards',
-                    'environmental' => 'Environmental Standards',
-                    'food-beverages' => 'Food and Beverages Standards',
-                    'agro-chemical' => 'Agro Chemical Standards'
-                ]
-            ],
-            'device' => [
-                'name' => 'Device',
-                'subs' => [
-                    'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
-                    'microbiological-instruments' => 'Microbiological Instruments',
-                    'liquid-handling' => 'Liquid Handling',
-                    'thermometer' => 'Thermometer'
-                ]
-            ],
-            'instruments' => [
-                'name' => 'Instruments',
-                'subs' => [
-                    'liofilchem-giotto-2' => 'Liofilchem® Giotto 2',
-                    'agar-filler' => 'Agar Filler',
-                    'agar-preparator' => 'Agar Preparator',
-                    'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
-                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster'
-                ]
-            ]
-        ];
+        // Sanitize and normalize activeCategory
+        $rawCategory = $request->query('category', 'all');
+        $activeCategory = isset($categoriesStructure[$rawCategory]) ? $rawCategory : 'all';
+
+        // Sanitize and normalize activeSubCategory
+        $activeSubCategory = null;
+        $rawSubCategory = $request->query('subcategory');
+        if ($rawSubCategory) {
+            $allowedSubs = $activeCategory !== 'all' ? array_keys($categoriesStructure[$activeCategory]['subs']) : [];
+            if ($rawSubCategory === 'all' || in_array($rawSubCategory, $allowedSubs)) {
+                $activeSubCategory = $rawSubCategory;
+            }
+        }
+
+        // Sanitize search query to prevent script injections in views
+        $rawSearch = $request->query('q') ?? $request->query('s');
+        $searchQuery = null;
+        if ($rawSearch) {
+            $searchQuery = strip_tags((string)$rawSearch);
+        }
 
         // Filter products
         $filteredProducts = array_filter($allProducts, function ($product) use ($activeCategory, $activeSubCategory, $searchQuery) {
@@ -138,9 +106,11 @@ class PageController extends Controller
     public function detailProduk(Request $request, DataService $dataService)
     {
         $product = null;
-        $id = $request->query('id');
-        if ($id) {
-            $product = $dataService->getProductByTitle($id);
+        $title = $request->query('id');
+        if ($title) {
+            // Strip tags to prevent XSS reflection / parameter pollution
+            $cleanTitle = strip_tags((string)$title);
+            $product = $dataService->getProductByTitle($cleanTitle);
         }
         return view('detail-produk', compact('product'));
     }
@@ -180,7 +150,7 @@ class PageController extends Controller
         ];
         
         foreach ($posts as $post) {
-            $cat = $post['category'];
+            $cat = $post['category'] ?? null;
             if ($cat === 'Berita') $categoryCounts['Berita']++;
             elseif ($cat === 'Event') $categoryCounts['Event']++;
             elseif ($cat === 'Info Terkait' || $cat === 'Info') $categoryCounts['Info Terkait']++;
@@ -188,38 +158,49 @@ class PageController extends Controller
             elseif ($cat === 'Kegiatan') $categoryCounts['Kegiatan']++;
         }
 
-        // Filter by Category
-        $selectedCategory = $request->query('kategori');
-        if ($selectedCategory) {
-            $posts = array_filter($posts, function($post) use ($selectedCategory) {
-                $cat = strtolower($post['category']);
-                if ($selectedCategory === 'info') {
-                    return $cat === 'info terkait' || $cat === 'info';
-                }
-                return $cat === strtolower($selectedCategory);
-            });
-        }
-
-        // Get detail if requested
+        // Get and sanitize detail slug (regex validation for safety)
+        // Resolved against the full raw posts list before filtering
         $detail = $request->query('detail');
         $currentBlog = null;
-        if ($detail) {
+        if ($detail && preg_match('/^[a-zA-Z0-9\-_]+$/', (string)$detail)) {
             foreach ($posts as $post) {
-                if ($post['slug'] === $detail) {
+                if (($post['slug'] ?? null) === $detail) {
                     $currentBlog = $post;
                     break;
                 }
             }
         }
 
+        // Filter and sanitize by Category (allowlist validation)
+        $rawKategori = $request->query('kategori');
+        $allowedKategori = ['berita', 'event', 'info', 'iptek', 'kegiatan'];
+        $selectedCategory = null;
+        if ($rawKategori && in_array(strtolower($rawKategori), $allowedKategori)) {
+            $selectedCategory = strtolower($rawKategori);
+            $posts = array_filter($posts, function($post) use ($selectedCategory) {
+                $cat = strtolower($post['category'] ?? '');
+                if ($selectedCategory === 'info') {
+                    return $cat === 'info terkait' || $cat === 'info';
+                }
+                return $cat === $selectedCategory;
+            });
+        }
+
         // Paginate
         $perPage = 4;
         $currentPage = (int)$request->query('page', 1);
-        if ($currentPage < 1) $currentPage = 1;
+        if ($currentPage < 1) {
+            $currentPage = 1;
+        }
         
         $totalPosts = count($posts);
         $totalPages = (int)ceil($totalPosts / $perPage);
-        if ($totalPages < 1) $totalPages = 1;
+        if ($totalPages < 1) {
+            $totalPages = 1;
+        }
+        if ($currentPage > $totalPages) {
+            $currentPage = $totalPages;
+        }
         
         $offset = ($currentPage - 1) * $perPage;
         $paginatedPosts = array_slice($posts, $offset, $perPage);
