@@ -34,7 +34,7 @@
   <!-- Open Graph / Facebook / Twitter Metadata -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ request()->url() }}">
-  <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
+  <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika ahay & Mikrobiologi')">
   <meta property="og:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
   <meta property="og:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
 
@@ -49,15 +49,15 @@
   <div class="premium-top-bar py-2">
     <div class="container d-flex flex-wrap justify-content-between align-items-center small">
       <div>
-        <span><i class="bi bi-telephone-fill text-primary me-1"></i> Hubungi Kami: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
+        <span><i class="bi bi-telephone-fill text-primary me-1"></i> Contact Us: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
         <span class="mx-2 text-muted opacity-50">|</span>
         <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="text-decoration-none fw-medium"><i class="bi bi-envelope-fill text-primary me-1"></i> {{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
       </div>
       <div class="mt-2 mt-md-0">
         <form class="d-flex search-form" action="{{ url('/produk') }}" method="GET">
           <div class="input-group input-group-sm">
-            <input type="text" name="q" class="form-control search-input-pill" placeholder="Cari produk..." aria-label="Search" value="{{ request()->query('q') ?? request()->query('s') }}">
-            <button class="btn search-btn-pill" type="submit" aria-label="Cari produk">
+            <input type="text" name="q" class="form-control search-input-pill" placeholder="Search products..." aria-label="Search" value="{{ request()->query('q') ?? request()->query('s') }}">
+            <button class="btn search-btn-pill" type="submit" aria-label="Search products">
               <i class="bi bi-search"></i>
             </button>
           </div>
@@ -74,7 +74,7 @@
         </a>
       
       <!-- Mobile Search Trigger -->
-      <button type="button" id="mobile-search-open" class="btn p-0 border-0 bg-transparent text-white ms-auto me-3 d-lg-none" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
+      <button type="button" id="mobile-search-open" class="btn p-0 border-0 bg-transparent text-white ms-auto me-3 d-lg-none" title="Search Products" aria-label="Search Products" aria-haspopup="dialog" aria-controls="search-overlay">
         <i class="bi bi-search" style="font-size: 1.25rem;"></i>
       </button>
 
@@ -93,30 +93,30 @@
               <a class="nav-link {{ request()->is('/') ? 'text-primary active' : '' }}" href="{{ url('/') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profil</a>
+              <a class="nav-link {{ request()->is('profil') ? 'text-primary active' : '' }}" href="{{ url('/profil') }}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Produk</a>
+              <a class="nav-link {{ request()->is('produk') ? 'text-primary active' : '' }}" href="{{ url('/produk') }}">Products</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
+              <a class="nav-link {{ request()->is('sektor') ? 'text-primary active' : '' }}" href="{{ url('/sektor') }}">Sectors</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
+              <a class="nav-link {{ request()->is('layanan') ? 'text-primary active' : '' }}" href="{{ url('/layanan') }}">Services</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
+              <a class="nav-link {{ request()->is('informasi') ? 'text-primary active' : '' }}" href="{{ url('/informasi') }}">Information</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
+              <a class="nav-link {{ request()->is('kontak') ? 'text-primary active' : '' }}" href="{{ url('/kontak') }}">Contacts</a>
             </li>
             <li class="nav-item ms-lg-2">
               <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 rounded-pill d-inline-flex align-items-center gap-2" href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
-                <i class="bi bi-download"></i> Unduh Katalog
+                <i class="bi bi-download"></i> Download the Catalog
               </a>
             </li>
             <li class="nav-item d-none d-lg-flex align-items-center gap-3 ms-lg-4 mt-3 mt-lg-0 navbar-utilities">
-              <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Cari Produk" aria-label="Cari Produk" aria-haspopup="dialog" aria-controls="search-overlay">
+              <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent" title="Search Products" aria-label="Search Products" aria-haspopup="dialog" aria-controls="search-overlay">
                 <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
               </button>
             </li>
@@ -135,7 +135,7 @@
     <div class="container">
       <div class="row gy-4">
         
-        <!-- Col 1: Kantor -->
+        <!-- Col 1: Office -->
         <div class="col-lg-3 col-md-6 col-12">
           <div class="mb-3">
             <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="38" width="auto" class="footer-logo" loading="lazy" decoding="async">
@@ -159,20 +159,20 @@
           </div>
         </div>
 
-        <!-- Col 2: Perusahaan -->
+        <!-- Col 2: Company -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h3>Perusahaan</h3>
+          <h3>Company</h3>
           <ul class="list-unstyled footer-links lh-lg">
-            <li><a href="{{ url('/profil') }}">Profil Perusahaan</a></li>
-            <li><a href="{{ url('/profil') }}#visi-misi">Visi & Misi</a></li>
-            <li><a href="{{ url('/informasi') }}">Berita & Kegiatan</a></li>
-            <li><a href="{{ url('/layanan') }}">Layanan Kami</a></li>
+            <li><a href="{{ url('/profil') }}">Company Profile</a></li>
+            <li><a href="{{ url('/profil') }}#visi-misi">Vision & Mission</a></li>
+            <li><a href="{{ url('/informasi') }}">News & Events</a></li>
+            <li><a href="{{ url('/layanan') }}">Our Services</a></li>
           </ul>
         </div>
 
-        <!-- Col 3: Kontak -->
+        <!-- Col 3: Contact -->
         <div class="col-lg-3 col-md-6 col-12">
-          <h3>Hubungi Kami</h3>
+          <h3>Contact Us</h3>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-2">
               <i class="bi bi-telephone-fill me-2 mt-1" style="color: var(--color-primary);"></i>
@@ -190,17 +190,17 @@
           </ul>
         </div>
 
-        <!-- Col 4: Jam Operasional -->
+        <!-- Col 4: Operating Hours -->
         <div class="col-lg-3 col-md-6 col-6">
-          <h3>Jam Operasional</h3>
+          <h3>Operating Hours</h3>
           <ul class="list-unstyled footer-links lh-lg">
             <li class="d-flex align-items-start mb-3 text-light">
               <i class="bi bi-clock-fill me-2 mt-1" style="color: var(--color-primary);"></i>
-              <span>{{ $siteSettings['operational_hours'] ?? 'Senin – Jumat : 09.00 – 18.00 WIB' }}</span>
+              <span>{{ $siteSettings['operational_hours'] ?? 'Monday – Friday : 09.00 – 18.00 WIB' }}</span>
             </li>
             <li class="d-flex align-items-center">
               <i class="bi bi-geo-alt-fill me-2" style="color: var(--color-primary);"></i>
-              <a href="{{ url('/kontak') }}">Formulir Kontak</a>
+              <a href="{{ url('/kontak') }}">Contact Form</a>
             </li>
           </ul>
         </div>
@@ -255,21 +255,21 @@
 
 
 
-  <button type="button" id="scroll-to-top" class="btn-scroll-to-top" style="opacity: 0; visibility: hidden;" aria-label="Kembali ke atas">
+  <button type="button" id="scroll-to-top" class="btn-scroll-to-top" style="opacity: 0; visibility: hidden;" aria-label="Back to top">
     <i class="bi bi-arrow-up-short"></i>
   </button>
 
-  <div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Pencarian produk" aria-hidden="true">
-    <button type="button" class="search-close-btn" id="search-close" aria-label="Tutup pencarian">
+  <div id="search-overlay" class="search-overlay" role="dialog" aria-modal="true" aria-label="Product search" aria-hidden="true">
+    <button type="button" class="search-close-btn" id="search-close" aria-label="Close search">
       <i class="bi bi-x-lg"></i>
     </button>
     <div class="search-overlay-content">
       <form action="{{ url('/produk') }}" method="GET" class="search-overlay-form" role="search">
-        <input type="search" name="q" id="search-overlay-input" placeholder="Ketik kata kunci produk..." autocomplete="off" enterkeyhint="search">
-        <div class="search-hint">Tekan enter untuk mencari atau ESC untuk membatalkan</div>
+        <input type="search" name="q" id="search-overlay-input" placeholder="Type product keywords..." autocomplete="off" enterkeyhint="search">
+        <div class="search-hint">Press enter to search or ESC to cancel</div>
         
         <div class="search-suggestions mt-4">
-          <span class="d-block mb-3 text-muted" style="font-size: 0.72rem; font-family: var(--font-headline); letter-spacing: 1.5px; text-transform: uppercase;">Saran Pencarian</span>
+          <span class="d-block mb-3 text-muted" style="font-size: 0.72rem; font-family: var(--font-headline); letter-spacing: 1.5px; text-transform: uppercase;">Search Suggestions</span>
           <div class="d-flex flex-wrap justify-content-center gap-2">
             @php
               $suggestions = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];

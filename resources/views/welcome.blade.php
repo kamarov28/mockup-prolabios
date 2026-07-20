@@ -51,17 +51,17 @@
           <span class="typo-pill-accent">OFFERING THE BEST</span>
         </div>
         <h1 class="typo-hero-title">
-          {!! str_replace('Terpercaya', '<span class="typo-outline">Terpercaya</span>', e($homeData['hero_title'] ?? '')) !!}
+            {!! $homeData['hero_title'] ?? '' !!}
         </h1>
         <p class="typo-lead">
           {{ $homeData['hero_subtitle'] }}
         </p>
         <div class="d-flex flex-wrap gap-4 typo-hero-ctas">
           <a href="{{ url('/profil') }}" class="typo-btn-link">
-            Tentang Kami <i class="bi bi-arrow-right"></i>
+            About Us <i class="bi bi-arrow-right"></i>
           </a>
           <a href="{{ url('/produk') }}" class="typo-btn-link typo-btn-link--ghost">
-            Katalog Produk <i class="bi bi-box-seam"></i>
+            product catalog <i class="bi bi-box-seam"></i>
           </a>
         </div>
       </div>
@@ -86,7 +86,7 @@
         <div class="col-lg-8">
           <span class="typo-section-label">Value Chain</span>
           <h2 class="typo-section-title">{{ $homeData['focus_title'] }}</h2>
-          <p class="typo-section-sub text-muted">Fokus industri dan rantai nilai pelayanan kami untuk menyediakan solusi laboratorium berkualitas tinggi.</p>
+          <p class="typo-section-sub text-muted">Our focus on the industry and the service value chain enables us to provide high-quality laboratory solutions.</p>
         </div>
       </div>
 
@@ -154,9 +154,9 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <span class="typo-section-label">Rekomendasi</span>
-          <h2 class="typo-section-title">Produk Unggulan</h2>
-          <p class="typo-section-sub text-muted mb-0">Temukan instrumen dan reagen terbaik pilihan kami untuk menunjang aktivitas laboratorium Anda.</p>
+          <span class="typo-section-label">Recommendation</span>
+          <h2 class="typo-section-title">Featured Products</h2>
+          <p class="typo-section-sub text-muted mb-0">Discover our selection of the best instruments and reagents to support your laboratory activities.</p>
         </div>
         <div class="mt-3 mt-md-0">
           <a href="{{ url('/produk') }}" class="typo-btn-link" style="font-size: 0.85rem;">
@@ -188,7 +188,7 @@
           @endforeach
         @else
           <div class="col-12 text-center py-4">
-            <p class="text-muted">Belum ada produk unggulan yang ditampilkan.</p>
+            <p class="text-muted">No featured products have been displayed yet.</p>
           </div>
         @endif
       </div>
@@ -200,9 +200,9 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <span class="typo-section-label">Artikel &amp; Media</span>
-          <h2 class="typo-section-title">Berita &amp; Kegiatan</h2>
-          <p class="typo-section-sub text-muted mb-0">Update terbaru tentang event, training, dan aktivitas Prolabios.</p>
+          <span class="typo-section-label">Articles &amp; Medias</span>
+          <h2 class="typo-section-title">News &amp; activities</h2>
+          <p class="typo-section-sub text-muted mb-0">The latest updates on Prolabios events, training sessions, and activities.</p>
         </div>
         <div class="mt-3 mt-md-0">
           <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;">

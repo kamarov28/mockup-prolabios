@@ -645,11 +645,47 @@ select.form-select option { background: var(--color-surface); color: var(--color
 .bg-white { background-color: var(--color-surface) !important; }
 .text-dark { color: var(--color-text-main) !important; }
 .text-muted { color: var(--color-text-muted) !important; }
-.bg-light { background-color: rgba(255, 255, 255, 0.02) !important; }
+.bg-light { background-color: rgba(255, 255, 255, 0.03) !important; }
 .border { border-color: var(--color-border) !important; }
 .border-top { border-top-color: var(--color-border) !important; }
 .border-bottom { border-bottom-color: var(--color-border) !important; }
 .border-secondary { border-color: var(--color-border) !important; }
+
+/* ── Bootstrap Card Dark Mode ─────────────────────────────────────────────── */
+.card {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-main) !important;
+}
+.card-header {
+  background-color: var(--color-surface-2) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  color: var(--color-text-main) !important;
+}
+.card-body {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-main) !important;
+}
+.card-footer {
+  background-color: var(--color-surface-2) !important;
+  border-top: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* ── Bootstrap Form Labels & Helpers ─────────────────────────────────────── */
+.form-label {
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+}
+label {
+  color: var(--color-text-main) !important;
+}
+.form-text {
+  color: var(--color-text-muted) !important;
+}
+.form-check-label {
+  color: var(--color-text-main) !important;
+}
 
 /* ── 13. SweetAlert2 — Editorial Dark Theme ───────────────────────────────── */
 .swal2-popup {
@@ -870,3 +906,103 @@ select.form-select option { background: var(--color-surface); color: var(--color
   transition: color 0.2s ease;
 }
 .btn-back-home:hover { color: #ffffff !important; }
+
+/* ── 18. Dashboard Menu Dark Mode Overrides ───────────────────────────────── */
+/* Kartu 1: Halaman Beranda (Nuansa Merah) */
+.card:nth-of-type(1) [class*="icon"],
+.card:nth-of-type(1) [class*="avatar"],
+.card:nth-of-type(1) .rounded-circle {
+    background-color: rgba(255, 73, 80, 0.08) !important;
+    border: 1px solid rgba(255, 73, 80, 0.25) !important;
+}
+.card:nth-of-type(1) [class*="icon"] i,
+.card:nth-of-type(1) .rounded-circle i {
+    color: #FF4950 !important;
+}
+
+/* Kartu 2: Banner & Header Halaman (Nuansa Biru) */
+.card:nth-of-type(2) [class*="icon"],
+.card:nth-of-type(2) [class*="avatar"],
+.card:nth-of-type(2) .rounded-circle {
+    background-color: rgba(13, 202, 240, 0.08) !important;
+    border: 1px solid rgba(13, 202, 240, 0.25) !important;
+}
+.card:nth-of-type(2) [class*="icon"] i,
+.card:nth-of-type(2) .rounded-circle i {
+    color: #0dcaf0 !important;
+}
+
+/* Kartu 3: Kontak & Alamat (Nuansa Hijau) */
+.card:nth-of-type(3) [class*="icon"],
+.card:nth-of-type(3) [class*="avatar"],
+.card:nth-of-type(3) .rounded-circle {
+    background-color: rgba(25, 135, 84, 0.08) !important;
+    border: 1px solid rgba(25, 135, 84, 0.25) !important;
+}
+.card:nth-of-type(3) [class*="icon"] i,
+.card:nth-of-type(3) .rounded-circle i {
+    color: #198754 !important;
+}
+
+/* Kartu 4: Umum & Logo (Nuansa Kuning) */
+.card:nth-of-type(4) [class*="icon"],
+.card:nth-of-type(4) [class*="avatar"],
+.card:nth-of-type(4) .rounded-circle {
+    background-color: rgba(255, 193, 7, 0.08) !important;
+    border: 1px solid rgba(255, 193, 7, 0.25) !important;
+}
+.card:nth-of-type(4) [class*="icon"] i,
+.card:nth-of-type(4) .rounded-circle i {
+    color: #ffc107 !important;
+}
+
+/* ── 19. Dashboard Buttons Dark Mode Overrides ────────────────────────────── */
+.card .btn,
+.card a[class*="btn"] {
+    background: transparent !important;
+    transition: all 0.25s ease !important;
+}
+
+/* Tombol 1: Beranda (Merah) */
+.card:nth-of-type(1) .btn, .card:nth-of-type(1) a[class*="btn"] {
+    border: 1px solid rgba(255, 73, 80, 0.3) !important;
+    color: #FF4950 !important;
+}
+.card:nth-of-type(1) .btn:hover, .card:nth-of-type(1) a[class*="btn"]:hover {
+    background: #FF4950 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2) !important;
+}
+
+/* Tombol 2: Banner (Biru) */
+.card:nth-of-type(2) .btn, .card:nth-of-type(2) a[class*="btn"] {
+    border: 1px solid rgba(13, 202, 240, 0.3) !important;
+    color: #0dcaf0 !important;
+}
+.card:nth-of-type(2) .btn:hover, .card:nth-of-type(2) a[class*="btn"]:hover {
+    background: #0dcaf0 !important;
+    color: #070708 !important; /* Menggunakan warna dasar gelap Anda untuk kontras teks */
+    box-shadow: 0 4px 16px rgba(13, 202, 240, 0.2) !important;
+}
+
+/* Tombol 3: Kontak (Hijau) */
+.card:nth-of-type(3) .btn, .card:nth-of-type(3) a[class*="btn"] {
+    border: 1px solid rgba(25, 135, 84, 0.4) !important;
+    color: #2ecc71 !important; /* Diganti ke hijau terang token Anda agar menyala */
+}
+.card:nth-of-type(3) .btn:hover, .card:nth-of-type(3) a[class*="btn"]:hover {
+    background: #2ecc71 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(46, 204, 113, 0.2) !important;
+}
+
+/* Tombol 4: Umum (Kuning) */
+.card:nth-of-type(4) .btn, .card:nth-of-type(4) a[class*="btn"] {
+    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+    color: #ffc107 !important;
+}
+.card:nth-of-type(4) .btn:hover, .card:nth-of-type(4) a[class*="btn"]:hover {
+    background: #ffc107 !important;
+    color: #070708 !important; /* Menggunakan warna dasar gelap Anda untuk kontras teks */
+    box-shadow: 0 4px 16px rgba(255, 193, 7, 0.2) !important;
+}

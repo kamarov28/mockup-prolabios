@@ -111,10 +111,101 @@
   <!-- Summernote CSS -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
   <style>
+    /* ── Summernote Dark Mode ────────────────────────────────────────────────── */
     .note-editor.note-frame {
-      border: 1px solid var(--admin-border) !important;
+      border: 1px solid var(--color-border) !important;
       border-radius: 0.5rem !important;
       overflow: hidden;
+      background-color: var(--color-surface) !important;
+    }
+
+    /* Toolbar */
+    .note-editor .note-toolbar {
+      background-color: var(--color-surface-2) !important;
+      border-bottom: 1px solid var(--color-border) !important;
+      padding: 6px 8px !important;
+    }
+
+    /* Toolbar buttons */
+    .note-editor .note-toolbar .note-btn {
+      background-color: transparent !important;
+      border: 1px solid transparent !important;
+      color: rgba(255,255,255,0.75) !important;
+      transition: background 0.15s, color 0.15s;
+    }
+    .note-editor .note-toolbar .note-btn:hover,
+    .note-editor .note-toolbar .note-btn:focus {
+      background-color: rgba(255,255,255,0.08) !important;
+      border-color: var(--color-border) !important;
+      color: #fff !important;
+    }
+    .note-editor .note-toolbar .note-btn.active {
+      background-color: rgba(255,73,80,0.2) !important;
+      border-color: var(--color-accent) !important;
+      color: var(--color-accent) !important;
+    }
+
+    /* Dropdown menus */
+    .note-editor .dropdown-menu,
+    .note-editor .note-dropdown-menu {
+      background-color: var(--color-surface-2) !important;
+      border: 1px solid var(--color-border) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+    }
+    .note-editor .dropdown-item,
+    .note-editor .note-dropdown-item {
+      color: rgba(255,255,255,0.8) !important;
+    }
+    .note-editor .dropdown-item:hover,
+    .note-editor .note-dropdown-item:hover {
+      background-color: rgba(255,255,255,0.07) !important;
+      color: #fff !important;
+    }
+
+    /* Editing area */
+    .note-editor .note-editable {
+      background-color: var(--color-surface) !important;
+      color: rgba(255,255,255,0.9) !important;
+      caret-color: #fff;
+    }
+    .note-editor .note-editable[data-placeholder]:empty:before {
+      color: rgba(255,255,255,0.3) !important;
+    }
+
+    /* Status bar */
+    .note-editor .note-statusbar {
+      background-color: var(--color-surface-2) !important;
+      border-top: 1px solid var(--color-border) !important;
+    }
+    .note-editor .note-statusbar .note-resizebar .note-icon-bar {
+      border-top-color: rgba(255,255,255,0.2) !important;
+    }
+
+    /* ── File Input (Browse button) Dark Mode ───────────────────────────────── */
+    /* Hide the native file input and replace with custom styled button */
+    input[type="file"].form-control {
+      color: rgba(255,255,255,0.75) !important;
+      background-color: var(--color-surface) !important;
+      border: 1px solid var(--color-border) !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+
+    input[type="file"].form-control::file-selector-button {
+      background-color: #2a2a2e !important;
+      color: rgba(255,255,255,0.85) !important;
+      border: none !important;
+      border-right: 1px solid var(--color-border) !important;
+      padding: 0.375rem 0.85rem !important;
+      margin-right: 0.75rem !important;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+    }
+    input[type="file"].form-control::file-selector-button:hover {
+      background-color: rgba(255,73,80,0.15) !important;
+      color: var(--color-accent) !important;
     }
   </style>
 @endsection

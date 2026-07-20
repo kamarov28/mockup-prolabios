@@ -9,9 +9,9 @@
   <!-- Editorial Page Header -->
   <div class="editorial-page-header">
     <div class="container">
-      <span class="editorial-page-label">Sektor Industri</span>
-      <h1 class="editorial-page-title">Sektor Fokus</h1>
-      <p class="editorial-page-subtitle">Melayani berbagai sektor industri dengan solusi analitika terdepan</p>
+      <span class="editorial-page-label">Industrial Sector</span>
+      <h1 class="editorial-page-title">Focus Sectors</h1>
+      <p class="editorial-page-subtitle">Serving various industrial sectors with cutting-edge analytics solutions</p>
     </div>
   </div>
 
@@ -22,13 +22,13 @@
 
         <!-- Sidebar -->
         <div class="col-lg-3 col-md-4">
-          @php 
+          @php
             $firstSectorId = (isset($sectors) && count($sectors) > 0) ? $sectors[0]['id'] : 'biomolecular';
-            $activeSector = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId; 
+            $activeSector = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId;
           @endphp
 
           <div class="mb-5">
-            <h3 class="profil-sidebar-title">Pilih Sektor</h3>
+            <h3 class="profil-sidebar-title">Select a Sector</h3>
             <nav class="layanan-sidebar-nav">
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
@@ -44,9 +44,9 @@
           </div>
 
           <div class="profil-cta-box d-none d-md-block">
-            <h3 class="profil-sidebar-title">Butuh Solusi Khusus?</h3>
-            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
+            <h3 class="profil-sidebar-title">Looking for tailored solutions?</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your industry-specific needs with our technical team.</p>
+            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Free Consultation <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
 
@@ -93,8 +93,8 @@
             <hr style="border-color: var(--color-border); margin: 48px 0;">
 
             <!-- Product Table -->
-            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Temukan Produk Kami</h3>
-            <p class="profil-body-text mb-4">Kami memiliki berbagai macam produk khusus yang dirancang untuk mendukung kegiatan operasional, riset, dan analisis di sektor <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong>.</p>
+            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Discover Our Products</h3>
+            <p class="profil-body-text mb-4">We offer a wide variety of specialized products designed to support operational activities, research, and analysis in the <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong> sector.</p>
 
             <!-- Mobile Swipe Indicator -->
             <div class="d-md-none text-end mb-2">
@@ -175,9 +175,9 @@
 
             <!-- Mobile-only CTA Box -->
             <div class="profil-cta-box d-md-none mt-5">
-              <h3 class="profil-sidebar-title">Butuh Solusi Khusus?</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan sektor industri Anda dengan tim teknis kami.</p>
-              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
+              <h3 class="profil-sidebar-title">Looking for tailored solutions?</h3>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your industry-specific needs with our technical team.</p>
+              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Free Consultation <i class="bi bi-arrow-right"></i></a>
             </div>
           @endif
         </div>
@@ -202,10 +202,10 @@
       const products = @json($products);
       const detailProductUrl = "{{ url('/produk/detail') }}";
       const allProductsUrl = "{{ url('/produk') }}";
-      
+
       const sidebarLinks = document.querySelectorAll('#sektor-nav .layanan-sidebar-link');
       const contentArea = document.querySelector('#sektor-nav .col-lg-9');
-      
+
       sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
           e.preventDefault();
@@ -214,13 +214,13 @@
           if (!sectorId) return;
           const sector = sectors.find(s => s.id === sectorId);
           if (!sector) return;
-          
+
           sidebarLinks.forEach(l => l.classList.remove('is-active'));
           this.classList.add('is-active');
-          
+
           const titleEl = contentArea.querySelector('.profil-section-title');
           if (titleEl) titleEl.textContent = sector.name;
-          
+
           const imgEl = contentArea.querySelector('.profil-hero-img img');
           if (imgEl) {
             let sectorImg = sector.image || "{{ $defaultImage }}";
@@ -228,17 +228,17 @@
             imgEl.src = sectorImg;
             imgEl.alt = sector.name + ' Sector';
           }
-          
+
           // Update description paragraphs
           const bodyTexts = contentArea.querySelectorAll('p.profil-body-text');
           const firstHr = contentArea.querySelector('hr');
           bodyTexts.forEach(p => { if (firstHr && p.compareDocumentPosition(firstHr) & Node.DOCUMENT_POSITION_FOLLOWING) p.remove(); });
-          
+
           const description = sector.description && sector.description.length > 0 ? sector.description : [
             `Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>${sector.name}</strong>.`,
             `Jelajahi rangkaian produk spesifik yang kami tawarkan untuk memenuhi kebutuhan pengujian harian laboratorium Anda.`
           ];
-          
+
           if (firstHr && titleEl) {
             description.reverse().forEach(descText => {
               const p = document.createElement('p');
@@ -247,7 +247,7 @@
               titleEl.parentNode.insertBefore(p, firstHr);
             });
           }
-          
+
           // Update product table
           const tbody = contentArea.querySelector('table tbody');
           if (tbody) {
@@ -263,15 +263,15 @@
               tbody.appendChild(tr);
             });
           }
-          
+
           history.pushState(null, '', window.location.pathname + '?s=' + sector.id);
-          
+
           if (typeof initGSAPAnimations === 'function') {
             initGSAPAnimations();
           }
         });
       });
-      
+
       window.addEventListener('popstate', function() {
         const urlParams = new URLSearchParams(window.location.search);
         const sectorId = urlParams.get('s') || 'brewing';

@@ -76,7 +76,7 @@
             
             <div class="field-group">
                 <div class="field-label">Email Pengirim</div>
-                <div class="field-value"><a href="mailto:{{ $data['email'] }}">{{ $data['email'] }}</a></div>
+                <div class="field-value">{{ $data['email'] }}</div>
             </div>
             
             <div class="field-group">

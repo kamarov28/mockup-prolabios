@@ -1010,7 +1010,7 @@ function initGSAPAnimations() {
       // outline already moves with title; add stroke contrast settle
       heroTl.fromTo(
         title.querySelectorAll('.typo-outline'),
-        { opacity: 0.35 },
+        { opacity: 0.85 },
         { opacity: 1, duration: 0.8, ease: EASE_POWER },
         0.55
       );

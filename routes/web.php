@@ -66,3 +66,17 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     // Google Sheets Sync
     Route::post('/sync-sheets', [AdminController::class, 'syncSheets'])->name('admin.sync-sheets');
 });
+
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/test-email-prolabios', function () {
+    try {
+        Mail::raw('Halo, ini adalah pesan tes langsung tanpa queue dari Laravel Prolabios.', function ($message) {
+            $message->to('marketing@prolabios.com')
+                    ->subject('TES SMTP LANGSUNG');
+        });
+        return 'SKSES! Email berhasil dikirim ke Google SMTP.';
+    } catch (\Exception $e) {
+        return 'ERROR KETEMU: <br>' . $e->getMessage();
+    }
+});

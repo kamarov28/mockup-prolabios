@@ -10,9 +10,9 @@
   <!-- Page Header -->
   <div class="editorial-page-header">
     <div class="container">
-      <span class="editorial-page-label">Katalog</span>
-      <h1 class="editorial-page-title">Produk & Instrumen</h1>
-      <p class="editorial-page-subtitle">{{ $siteSettings['products_subtitle'] ?? 'Katalog lengkap produk laboratorium dari Prolabios' }}</p>
+      <span class="editorial-page-label">catalog</span>
+      <h1 class="editorial-page-title">Products & Instruments</h1>
+      <p class="editorial-page-subtitle">{{ $siteSettings['products_subtitle'] ?? 'Prolabios Complete Catalog of Laboratory Products' }}</p>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
               <nav class="layanan-sidebar-nav" id="produk-sidebar">
                 <a href="{{ url('/produk') }}?category=all#catalog-section"
                    class="layanan-sidebar-link {{ $activeCategory === 'all' ? 'is-active' : '' }}">
-                  Semua Kategori
+                  All Categories
                 </a>
                 @foreach($categoriesStructure as $catKey => $catData)
                   @if(!empty($catData['subs']))
@@ -73,10 +73,10 @@
             </div>
 
             <div class="profil-cta-box">
-              <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Konsultasikan kebutuhan produk Anda dengan tim teknis kami.</p>
-              <a href="{{ url('/kontak') }}?subjek=inquiry" class="profil-cta-btn d-block mb-3">Tanya Produk <i class="bi bi-arrow-right"></i></a>
-              <a href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Unduh Katalog PDF</a>
+              <h3 class="profil-sidebar-title">Need Help?</h3>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your product needs with our technical team.</p>
+              <a href="{{ url('/kontak') }}?subjek=inquiry" class="profil-cta-btn d-block mb-3">Ask About a Product <i class="bi bi-arrow-right"></i></a>
+              <a href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Download the PDF Catalog</a>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@
             <div>
               <h2 class="produk-category-title" id="category-title">
                 @if($activeCategory === 'all')
-                  Semua Produk
+                  All Products
                 @else
                   {{ $categoriesStructure[$activeCategory]['name'] }}
                   @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
@@ -97,9 +97,9 @@
               </h2>
               <span class="produk-category-subtitle" id="category-subtitle">
                 @if($activeCategory === 'all')
-                  Menampilkan seluruh katalog produk
+                    Displaying the entire product catalog
                 @else
-                  Menampilkan hasil untuk {{ $categoriesStructure[$activeCategory]['name'] }}
+                  Showing results for {{ $categoriesStructure[$activeCategory]['name'] }}
                   @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
                     ({{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }})
                   @endif
@@ -108,7 +108,7 @@
             </div>
             <div class="produk-search-wrap" style="width: 100%; max-width: 280px;">
               <i class="bi bi-search"></i>
-              <input type="text" id="local-search-input" placeholder="Cari produk..." aria-label="Cari produk" value="{{ request()->query('q') ?? request()->query('s') }}">
+              <input type="text" id="local-search-input" placeholder="Search for products..." aria-label="Cari produk" value="{{ request()->query('q') ?? request()->query('s') }}">
             </div>
           </div>
 
@@ -136,7 +136,7 @@
             @else
               <div class="col-12" style="padding: 60px 0; border: 1px solid var(--color-border); text-align: center;">
                 <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--color-text-muted); display: block; margin-bottom: 16px;"></i>
-                <p style="color: var(--color-text-muted);">Belum ada produk spesifik di kategori ini.</p>
+                <p style="color: var(--color-text-muted);">There are no specific products in this category yet.</p>
               </div>
             @endif
           </div>
