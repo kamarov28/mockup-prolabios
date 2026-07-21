@@ -422,7 +422,7 @@ class DataService
         $default = $this->getDefaultHomepageData();
 
         try {
-            $rows = DB::table('homepage_settings')->get()->pluck('value', 'key')->toArray();
+            $rows = DB::table('homepage_settings')->pluck('value', 'key')->toArray();
         } catch (\Exception $e) {
             // Table not yet created (first boot before migrate) – fall back to defaults
             return $default;
@@ -575,7 +575,7 @@ class DataService
         ];
 
         $sanitizeNode = function (\DOMNode $node) use (&$sanitizeNode, $allowedTags, $allowedAttributes) {
-            if ($node->nodeType === XML_ELEMENT_NODE) {
+            if ($node instanceof \DOMElement) {
                 $tagName = strtolower($node->nodeName);
                 if (!in_array($tagName, $allowedTags, true)) {
                     while ($node->hasChildNodes()) {

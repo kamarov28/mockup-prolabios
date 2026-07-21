@@ -15,8 +15,8 @@ class GoogleSheetsService
 
     public function __construct()
     {
-        $this->spreadsheetId = env('GOOGLE_SPREADSHEET_ID');
-        $jsonPath = env('GOOGLE_SERVICE_ACCOUNT_JSON');
+        $this->spreadsheetId = config('contact.google_spreadsheet_id');
+        $jsonPath = config('contact.google_service_account_json');
 
         // Jika kredensial belum dikonfigurasi, skip inisialisasi
         if (!$this->spreadsheetId || !$jsonPath) {

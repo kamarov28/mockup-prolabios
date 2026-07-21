@@ -32,8 +32,8 @@ class AdminController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
 
-        $expectedUser = env('ADMIN_USERNAME', 'admin');
-        $expectedPass = env('ADMIN_PASSWORD', 'prolabios2026');
+        $expectedUser = config('contact.admin_username');
+        $expectedPass = config('contact.admin_password');
 
         if (hash_equals((string)$expectedUser, (string)$username) && hash_equals((string)$expectedPass, (string)$password)) {
             session(['admin_logged_in' => true]);

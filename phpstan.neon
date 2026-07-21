@@ -1,0 +1,13 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app/
+        - routes/
+        - database/
+
+    # Level 0 (paling santai) sampai Level 9 (sangat ketat)
+    # Untuk pertama kali coba level 4 atau 5 dulu
+    level: 5

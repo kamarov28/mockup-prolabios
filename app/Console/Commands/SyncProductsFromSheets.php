@@ -27,8 +27,8 @@ class SyncProductsFromSheets extends Command
     {
         $this->info('Starting Google Sheets → Local DB product synchronization...');
 
-        $spreadsheetId = env('GOOGLE_SPREADSHEET_ID');
-        $jsonPath = env('GOOGLE_SERVICE_ACCOUNT_JSON');
+        $spreadsheetId = config('contact.google_spreadsheet_id');
+        $jsonPath = config('contact.google_service_account_json');
 
         if (!$spreadsheetId || !$jsonPath) {
             $this->error('ERROR: Google Sheets config is missing in .env! Please set GOOGLE_SPREADSHEET_ID and GOOGLE_SERVICE_ACCOUNT_JSON.');

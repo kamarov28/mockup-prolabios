@@ -41,9 +41,9 @@ class SyncGoogleSheetsJob implements ShouldQueue
             }
 
             $data = $inquiry->payload;
-            if (!is_array($data)) {
-                Log::channel('contact')->error("Data payload kontak terkorup atau bukan array untuk ID: " . $this->inquiryId);
-                throw new \Exception("Payload terkorup atau bukan array.");
+            if (empty($data)) {
+                Log::channel('contact')->error("Data payload kontak terkorup atau kosong untuk ID: " . $this->inquiryId);
+                throw new \Exception("Payload terkorup atau kosong.");
             }
 
             $correlationId = $data['correlation_id'] ?? 'unknown';
