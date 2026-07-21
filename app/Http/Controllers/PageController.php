@@ -34,9 +34,6 @@ class PageController extends Controller
     /**
      * Display the catalog products page.
      */
-    /**
-     * Display the catalog products page.
-     */
     public function produk(Request $request, DataService $dataService)
     {
         $allProducts = $dataService->getProducts();
@@ -50,7 +47,7 @@ class PageController extends Controller
         $activeSubCategory = null;
         $rawSubCategory = $request->query('subcategory');
         if ($rawSubCategory) {
-            $allowedSubs = $activeCategory !== 'all' ? array_keys($categoriesStructure[$activeCategory]['subs']) : [];
+            $allowedSubs = $activeCategory !== 'all' ? array_keys($categoriesStructure[$activeCategory]['subs'] ?? []) : [];
             if ($rawSubCategory === 'all' || in_array($rawSubCategory, $allowedSubs)) {
                 $activeSubCategory = $rawSubCategory;
             }

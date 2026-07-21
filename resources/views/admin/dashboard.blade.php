@@ -264,7 +264,7 @@
         icon.classList.add('d-none');
         text.textContent = 'Menyinkronkan...';
 
-        fetch('{{ route("admin.sync-sheets") }}', {
+        fetch('{{ route("admin.sync-sheets", [], false) }}', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
         })

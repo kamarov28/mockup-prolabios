@@ -140,7 +140,7 @@
         const csrfToken = '{{ csrf_token() }}';
 
         const formData = new FormData(form);
-        fetch('{{ route("contact.submit") }}', {
+        fetch('{{ route("contact.submit", [], false) }}', {
           method: 'POST',
           headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
           body: formData

@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ContactMail;
+use App\Jobs\SyncGoogleSheetsJob;
 
 class ContactController extends Controller
 {
-    public function submit(
-        Request $request,
-        \App\Services\GoogleSheetsService $sheetsService,
-    ) {
+    public function submit(Request $request) {
         // 1. Validasi Input Formulir
         $validated = $request->validate([
             "nama" => "required|string|max:255",
@@ -38,37 +37,11 @@ class ContactController extends Controller
             // 2. Tentukan Alamat Email Penerima dari .env
             $recipient = env("MAIL_TO_ADDRESS", "marketing@prolabios.com");
 
-            // 3. Ubah bodi menjadi teks mengalir biasa, samarkan format label kaku agar lolos filter spam Google
-            $body =
-                "Halo, ada pesan masuk dari " .
-                $validated["nama"] .
-                " (" .
-                $validated["email"] .
-                ").\n\n" .
-                "Nomor kontak yang bisa dihubungi adalah " .
-                ($validated["telepon"] ?: "-") .
-                " dari instansi " .
-                ($validated["perusahaan"] ?: "-") .
-                ".\n\n" .
-                "Mengenai perihal " .
-                $validated["subjek_label"] .
-                ", berikut adalah pesannya:\n" .
-                $validated["pesan"];
+            // 3. Eksekusi pengiriman email asli menggunakan Mailable (dilengkapi reply-to dan template HTML)
+            Mail::to($recipient)->send(new ContactMail($validated));
 
-            // Eksekusi pengiriman email asli
-            Mail::raw($body, function ($message) use ($recipient) {
-                $message
-                    ->to($recipient)
-                    // Ubah subjek menjadi kalimat biasa, hindari kata "New Inquiry" atau format bot sistem
-                    ->subject("Pesan baru dari pengunjung website");
-            });
-
-            // 4. Catat data ke Google Sheets (Komentari dulu agar tidak mengganggu durasi)
-            // try {
-            //     $sheetsService->appendInquiry($validated);
-            // } catch (\Exception $sheetException) {
-            //     Log::warning('Google Sheets bermasalah atau belum dikonfigurasi: ' . $sheetException->getMessage());
-            // }
+            // 4. Catat data ke Google Sheets secara asinkron (lewat queue)
+            SyncGoogleSheetsJob::dispatch($validated);
 
             // 5. Kembalikan Response Sukses
             return response()->json([
@@ -77,16 +50,23 @@ class ContactController extends Controller
                     "Pesan Anda berhasil terkirim! Tim kami akan menghubungi Anda sesegera mungkin.",
             ]);
         } catch (\Exception $e) {
-            // Mencatat detail error lengkap ke file storage/logs/laravel.log
-            Log::error("Gagal mengirim email lewat form: " . $e->getMessage(), [
-                "exception" => $e,
-                "trace" => $e->getTraceAsString(),
-            ]);
+            // Mencatat detail error secara aman (hanya menyertakan trace lengkap jika debug aktif)
+            $logContext = [
+                'exception_class' => get_class($e),
+                'exception_code' => $e->getCode(),
+            ];
+
+            if (config('app.debug')) {
+                $logContext['exception'] = $e;
+                $logContext['trace'] = $e->getTraceAsString();
+            }
+
+            Log::error("Gagal mengirim email lewat form: " . $e->getMessage(), $logContext);
 
             return response()->json(
                 [
                     "success" => false,
-                    "message" => "Gagal mengirim pesan: " . $e->getMessage(),
+                    "message" => "Maaf, terjadi kesalahan teknis saat mengirim pesan. Silakan coba beberapa saat lagi.",
                 ],
                 500,
             );

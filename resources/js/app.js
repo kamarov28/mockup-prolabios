@@ -314,6 +314,7 @@ function setTextContent(selector, text) {
 }
 
 function initContactForm() {
+  if (window.handleContactForm) return;
   window.handleContactForm = function (e) {
     e.preventDefault();
 
