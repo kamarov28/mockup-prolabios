@@ -50,8 +50,10 @@ class ContactController extends Controller
             // 3. Kirim email secara asinkron lewat queue (hanya mengirimkan ID referensi)
             SendContactEmailJob::dispatch($inquiry->id);
 
-            // 4. Catat data ke Google Sheets secara asinkron (lewat queue)
-            SyncGoogleSheetsJob::dispatch($inquiry->id);
+            // 4. Catat data ke Google Sheets secara asinkron (lewat queue - jika dikonfigurasi)
+            if (config('contact.google_spreadsheet_id') && config('contact.google_service_account_json')) {
+                SyncGoogleSheetsJob::dispatch($inquiry->id);
+            }
 
             // 5. Kembalikan Response Sukses
             return response()->json([
