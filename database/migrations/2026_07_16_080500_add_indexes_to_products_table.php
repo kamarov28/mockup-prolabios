@@ -11,16 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        $existingIndexes = collect(Schema::getIndexes('products'))->pluck('name')->toArray();
-
-        Schema::table('products', function (Blueprint $table) use ($existingIndexes) {
-            if (!in_array('products_category_index', $existingIndexes)) {
+        try {
+            Schema::table('products', function (Blueprint $table) {
                 $table->index('category', 'products_category_index');
-            }
-            if (!in_array('products_sub_category_index', $existingIndexes)) {
+            });
+        } catch (\Exception $e) {
+            // Index might already exist, skip gracefully
+        }
+
+        try {
+            Schema::table('products', function (Blueprint $table) {
                 $table->index('sub_category', 'products_sub_category_index');
-            }
-        });
+            });
+        } catch (\Exception $e) {
+            // Index might already exist, skip gracefully
+        }
     }
 
     /**
@@ -28,15 +33,20 @@ return new class extends Migration
      */
     public function down(): void
     {
-        $existingIndexes = collect(Schema::getIndexes('products'))->pluck('name')->toArray();
-
-        Schema::table('products', function (Blueprint $table) use ($existingIndexes) {
-            if (in_array('products_category_index', $existingIndexes)) {
+        try {
+            Schema::table('products', function (Blueprint $table) {
                 $table->dropIndex('products_category_index');
-            }
-            if (in_array('products_sub_category_index', $existingIndexes)) {
+            });
+        } catch (\Exception $e) {
+            // Index might not exist, skip gracefully
+        }
+
+        try {
+            Schema::table('products', function (Blueprint $table) {
                 $table->dropIndex('products_sub_category_index');
-            }
-        });
+            });
+        } catch (\Exception $e) {
+            // Index might not exist, skip gracefully
+        }
     }
 };

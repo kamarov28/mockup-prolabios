@@ -40,9 +40,8 @@ class ContactController extends Controller
 
         try {
             // Log dispatch event
-            Log::info("Memulai proses kirim pesan kontak secara asinkron (dispatching jobs).", [
+            Log::channel('contact')->info("Memulai proses kirim pesan kontak secara asinkron (dispatching jobs).", [
                 'correlation_id' => $correlationId,
-                'subjek' => $validated['subjek_label'],
             ]);
 
             // 2. Simpan payload terenkripsi ke database
@@ -73,7 +72,7 @@ class ContactController extends Controller
                 $logContext['trace'] = $e->getTraceAsString();
             }
 
-            Log::error("Gagal mengirim email lewat form: " . $e->getMessage(), $logContext);
+            Log::channel('contact')->error("Gagal mengirim email lewat form.", $logContext);
 
             return response()->json(
                 [

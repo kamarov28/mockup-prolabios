@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Services\GoogleSheetsService;
+use App\Models\ContactInquiry;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 class SyncGoogleSheetsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $tries = 3;
 
     protected int $inquiryId;
 
@@ -31,34 +34,46 @@ class SyncGoogleSheetsJob implements ShouldQueue
     {
         $correlationId = 'unknown';
         try {
-            $inquiry = \App\Models\ContactInquiry::find($this->inquiryId);
+            $inquiry = ContactInquiry::find($this->inquiryId);
             if (!$inquiry) {
-                Log::warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
+                Log::channel('contact')->warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
                 return;
             }
 
             $data = $inquiry->payload;
+            if (!is_array($data)) {
+                Log::channel('contact')->error("Data payload kontak terkorup atau bukan array untuk ID: " . $this->inquiryId);
+                throw new \Exception("Payload terkorup atau bukan array.");
+            }
+
             $correlationId = $data['correlation_id'] ?? 'unknown';
 
-            Log::info("Memulai perekaman data kontak ke Google Sheets (SyncGoogleSheetsJob).", [
+            Log::channel('contact')->info("Memulai perekaman data kontak ke Google Sheets (SyncGoogleSheetsJob).", [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
             ]);
 
             $sheetsService->appendInquiry($data);
 
-            Log::info("Data kontak berhasil direkam ke Google Sheets secara asinkron.", [
+            Log::channel('contact')->info("Data kontak berhasil direkam ke Google Sheets secara asinkron.", [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
             ]);
         } catch (\Exception $e) {
-            Log::warning('Google Sheets bermasalah atau belum dikonfigurasi.', [
+            Log::channel('contact')->warning('Gagal merekam data kontak ke Google Sheets lewat queue.', [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
                 'exception_class' => get_class($e),
                 'exception_code'  => $e->getCode(),
+                'error_message' => $e->getMessage(),
             ]);
-            $this->fail(new \Exception("Google Sheets bermasalah atau belum dikonfigurasi."));
+
+            // Differentiate configuration errors vs transient failures
+            if (str_contains($e->getMessage(), 'belum dikonfigurasi') || str_contains($e->getMessage(), 'Payload terkorup')) {
+                $this->fail(new \Exception($e->getMessage(), $e->getCode()));
+            } else {
+                throw new \Exception($e->getMessage(), $e->getCode());
+            }
         }
     }
 }

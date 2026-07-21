@@ -48,18 +48,16 @@ class PageController extends Controller
         $rawSubCategory = $request->query('subcategory');
         if ($rawSubCategory) {
             $normalizedSub = Str::slug((string) $rawSubCategory);
-            $allowedSubs = $activeCategory !== 'all' ? array_keys($categoriesStructure[$activeCategory]['subs'] ?? []) : [];
+            $allowedSubs = [];
+            if ($activeCategory !== 'all' && isset($categoriesStructure[$activeCategory]) && is_array($categoriesStructure[$activeCategory]['subs'] ?? null)) {
+                $allowedSubs = array_keys($categoriesStructure[$activeCategory]['subs']);
+            }
             if ($normalizedSub === 'all' || in_array($normalizedSub, $allowedSubs)) {
                 $activeSubCategory = $normalizedSub;
             }
         }
 
-        // Sanitize search query to prevent script injections in views
-        $rawSearch = $request->query('q') ?? $request->query('s');
-        $searchQuery = null;
-        if ($rawSearch) {
-            $searchQuery = strip_tags((string)$rawSearch);
-        }
+        $searchQuery = $request->query('q') ?? $request->query('s');
 
         // Filter products
         $filteredProducts = array_filter($allProducts, function ($product) use ($activeCategory, $activeSubCategory, $searchQuery) {
@@ -106,9 +104,7 @@ class PageController extends Controller
         $product = null;
         $title = $request->query('id');
         if ($title) {
-            // Strip tags to prevent XSS reflection / parameter pollution
-            $cleanTitle = strip_tags((string)$title);
-            $product = $dataService->getProductByTitle($cleanTitle);
+            $product = $dataService->getProductByTitle((string)$title);
         }
         return view('detail-produk', compact('product'));
     }

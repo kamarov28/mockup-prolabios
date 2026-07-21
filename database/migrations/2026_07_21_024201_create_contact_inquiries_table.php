@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('contact_inquiries', function (Blueprint $table) {
             $table->id();
-            $table->text('payload');
+            $table->longText('payload');
             $table->timestamps();
         });
     }
