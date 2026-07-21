@@ -8,6 +8,7 @@ parameters:
         - routes/
         - database/
 
-    # Level 0 (paling santai) sampai Level 9 (sangat ketat)
-    # Untuk pertama kali coba level 4 atau 5 dulu
+    # Level 5 is the standard for stable Laravel/Larastan setups,
+    # as level 9 requires strict static types (e.g. array<string, mixed>)
+    # and explicit DTOs for every request input.
     level: 5
