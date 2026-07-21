@@ -51,7 +51,7 @@
           <span class="typo-pill-accent">OFFERING THE BEST</span>
         </div>
         <h1 class="typo-hero-title">
-            {!! strip_tags($homeData['hero_title'] ?? '', ['strong', 'b', 'i', 'em', 'span', 'br', 'div']) !!}
+            {!! \App\Services\DataService::sanitizeHtml($homeData['hero_title'] ?? '') !!}
         </h1>
         <p class="typo-lead">
           {{ $homeData['hero_subtitle'] }}

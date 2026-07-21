@@ -36,7 +36,6 @@ class PageController extends Controller
      */
     public function produk(Request $request, DataService $dataService)
     {
-        $allProducts = $dataService->getProducts();
         $categoriesStructure = $dataService->getCategoriesStructure();
 
         // Sanitize and normalize activeCategory
@@ -59,34 +58,19 @@ class PageController extends Controller
 
         $searchQuery = $request->query('q') ?? $request->query('s');
 
-        // Filter products
-        $filteredProducts = array_filter($allProducts, function ($product) use ($activeCategory, $activeSubCategory, $searchQuery) {
-            if ($searchQuery) {
-                $q = trim($searchQuery);
-                $titleMatch = stripos($product['title'] ?? '', $q) !== false;
-                $descMatch = stripos($product['description'] ?? '', $q) !== false;
-                $catalogMatch = stripos($product['catalog'] ?? '', $q) !== false;
-                
-                if (!$titleMatch && !$descMatch && !$catalogMatch) {
-                    return false;
-                }
-            }
-
-            if ($activeCategory === 'all') {
-                return true;
-            }
-
-            $prodCat = Str::slug($product['category'] ?? '');
-            $prodSub = Str::slug($product['sub_category'] ?? '');
-
-            $matchCategory = ($prodCat === $activeCategory);
-            
+        // Build database query filters instead of in-memory array filtering
+        $filters = [];
+        if ($activeCategory !== 'all') {
+            $filters['category'] = $categoriesStructure[$activeCategory]['name'] ?? $activeCategory;
             if ($activeSubCategory && $activeSubCategory !== 'all') {
-                return $matchCategory && ($prodSub === $activeSubCategory);
+                $filters['sub_category'] = $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] ?? $activeSubCategory;
             }
+        }
+        if ($searchQuery) {
+            $filters['search'] = $searchQuery;
+        }
 
-            return $matchCategory;
-        });
+        $filteredProducts = $dataService->getProducts($filters);
 
         return view('produk', [
             'products' => $filteredProducts,

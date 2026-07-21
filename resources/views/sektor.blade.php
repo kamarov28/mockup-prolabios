@@ -87,7 +87,7 @@
             <!-- Sector Title & Description -->
             <h2 class="profil-section-title">{{ $currentData['name'] }}</h2>
             @foreach($descriptionParagraphs as $desc)
-              <p class="profil-body-text mb-4">{!! strip_tags($desc, ['strong', 'b', 'i', 'em', 'span', 'br']) !!}</p>
+              <p class="profil-body-text mb-4">{!! \App\Services\DataService::sanitizeHtml($desc) !!}</p>
             @endforeach
 
             <hr style="border-color: var(--color-border); margin: 48px 0;">

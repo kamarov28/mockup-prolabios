@@ -26,7 +26,7 @@ Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'submit'
 // Admin Login Routes
 // ----------------------------------------------------
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'login']);
+Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:5,1');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // ----------------------------------------------------
@@ -67,18 +67,4 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
 
     // Google Sheets Sync
     Route::post('/sync-sheets', [AdminController::class, 'syncSheets'])->name('admin.sync-sheets');
-});
-
-use Illuminate\Support\Facades\Mail;
-
-Route::get('/test-email-prolabios', function () {
-    try {
-        Mail::raw('Halo, ini adalah pesan tes langsung tanpa queue dari Laravel Prolabios.', function ($message) {
-            $message->to('marketing@prolabios.com')
-                    ->subject('TES SMTP LANGSUNG');
-        });
-        return 'SKSES! Email berhasil dikirim ke Google SMTP.';
-    } catch (\Exception $e) {
-        return 'ERROR KETEMU: <br>' . $e->getMessage();
-    }
 });

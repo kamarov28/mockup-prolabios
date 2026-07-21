@@ -35,7 +35,7 @@ class AdminController extends Controller
         $expectedUser = env('ADMIN_USERNAME', 'admin');
         $expectedPass = env('ADMIN_PASSWORD', 'prolabios2026');
 
-        if ($username === $expectedUser && $password === $expectedPass) {
+        if (hash_equals((string)$expectedUser, (string)$username) && hash_equals((string)$expectedPass, (string)$password)) {
             session(['admin_logged_in' => true]);
             return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
         }
@@ -95,9 +95,27 @@ class AdminController extends Controller
     // ----------------------------------------------------
     protected function handleImageUpload(Request $request, string $fileKey, string $urlKey, ?string $fallback = null): ?string
     {
-        if ($request->hasFile($fileKey)) {
+        if ($request->hasFile($fileKey) && $request->file($fileKey)->isValid()) {
             $file = $request->file($fileKey);
-            $fileName = time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            
+            $ext = strtolower($file->getClientOriginalExtension());
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+            
+            if (!in_array($ext, $allowedExtensions, true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    $fileKey => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp, svg.']
+                ]);
+            }
+
+            $mime = $file->getMimeType();
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+            if (!in_array($mime, $allowedMimes, true)) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    $fileKey => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
+                ]);
+            }
+
+            $fileName = time() . '_' . Str::random(8) . '.' . $ext;
             
             $uploadPath = public_path('uploads');
             if (!File::exists($uploadPath)) {
@@ -408,7 +426,7 @@ class AdminController extends Controller
     public function productsStoreBulk(Request $request)
     {
         $titles = $request->input('title', []);
-        $savedCount = 0;
+        $productsToStore = [];
 
         foreach ($titles as $id => $title) {
             $title = trim($title);
@@ -425,9 +443,26 @@ class AdminController extends Controller
             $imageUrl = trim($request->input("image_url.{$id}", ''));
 
             $image = null;
-            if ($request->hasFile("image_file.{$id}")) {
+            if ($request->hasFile("image_file.{$id}") && $request->file("image_file.{$id}")->isValid()) {
                 $file = $request->file("image_file.{$id}");
-                $fileName = time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+                
+                $ext = strtolower($file->getClientOriginalExtension());
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                if (!in_array($ext, $allowedExtensions, true)) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        "image_file.{$id}" => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp, svg.']
+                    ]);
+                }
+
+                $mime = $file->getMimeType();
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+                if (!in_array($mime, $allowedMimes, true)) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        "image_file.{$id}" => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
+                    ]);
+                }
+
+                $fileName = time() . '_' . Str::random(8) . '.' . $ext;
                 $uploadPath = public_path('uploads');
                 if (!File::exists($uploadPath)) {
                     File::makeDirectory($uploadPath, 0755, true);
@@ -442,7 +477,7 @@ class AdminController extends Controller
                 $image = 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
             }
 
-            $productData = [
+            $productsToStore[] = [
                 'catalog' => $catalog,
                 'title' => $title,
                 'category' => $category,
@@ -451,18 +486,11 @@ class AdminController extends Controller
                 'description' => $description,
                 'image' => $image
             ];
-
-            $existing = $this->dataService->getProductByTitle($title);
-            if ($existing) {
-                $this->dataService->updateProduct($title, $productData);
-            } else {
-                $this->dataService->addProduct($productData);
-            }
-
-            $savedCount++;
         }
 
+        $savedCount = count($productsToStore);
         if ($savedCount > 0) {
+            $this->dataService->upsertProducts($productsToStore);
             return redirect()->route('admin.products')->with('success', "Berhasil menyimpan $savedCount produk secara massal!");
         }
 

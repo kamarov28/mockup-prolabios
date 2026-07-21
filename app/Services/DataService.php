@@ -132,11 +132,28 @@ class DataService
     // ----------------------------------------------------
     // Products Service  (MySQL)
     // ----------------------------------------------------
-    public function getProducts(): array
+    public function getProducts(?array $filters = []): array
     {
-        return DB::table('products')
-            ->orderBy('id')
-            ->get()
+        $query = DB::table('products')->orderBy('id');
+
+        if (!empty($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
+        if (!empty($filters['sub_category'])) {
+            $query->where('sub_category', $filters['sub_category']);
+        }
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('catalog', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->get()
             ->map(fn($r) => (array) $r)
             ->toArray();
     }
@@ -204,6 +221,48 @@ class DataService
     public function deleteProduct(string $title): bool
     {
         DB::table('products')->where('title', $title)->delete();
+        \App\Models\Product::clearCategoriesCache();
+        return true;
+    }
+
+    /**
+     * Bulk upsert products in a single database transaction and clear cache once.
+     */
+    public function upsertProducts(array $products): bool
+    {
+        if (empty($products)) {
+            return false;
+        }
+
+        DB::transaction(function () use ($products) {
+            foreach ($products as $p) {
+                $existing = DB::table('products')->where('title', $p['title'])->first();
+                if ($existing) {
+                    DB::table('products')->where('title', $p['title'])->update([
+                        'catalog'      => $p['catalog']      ?? null,
+                        'description'  => $p['description']  ?? null,
+                        'category'     => $p['category'],
+                        'sub_category' => $p['sub_category'] ?? null,
+                        'sector'       => $p['sector']       ?? null,
+                        'image'        => $p['image']        ?? null,
+                        'updated_at'   => now(),
+                    ]);
+                } else {
+                    DB::table('products')->insert([
+                        'catalog'      => $p['catalog']      ?? null,
+                        'title'        => $p['title'],
+                        'description'  => $p['description']  ?? null,
+                        'category'     => $p['category'],
+                        'sub_category' => $p['sub_category'] ?? null,
+                        'sector'       => $p['sector']       ?? null,
+                        'image'        => $p['image']        ?? null,
+                        'created_at'   => now(),
+                        'updated_at'   => now(),
+                    ]);
+                }
+            }
+        });
+
         \App\Models\Product::clearCategoriesCache();
         return true;
     }
@@ -489,5 +548,95 @@ class DataService
             'contact_subtitle'     => 'Ada pertanyaan atau butuh konsultasi? Tim kami siap melayani Anda.',
             'contact_banner_image' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
         ];
+    }
+
+    /**
+     * Safely sanitize HTML to allow specific layout tags and strip unsafe attributes/scripts.
+     */
+    public static function sanitizeHtml(?string $html): string
+    {
+        if (empty($html)) {
+            return '';
+        }
+        
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        // Wrap the snippet inside <div> to prevent DOMDocument from adding automatic wrapper tags
+        $dom->loadHTML('<?xml encoding="utf-8" ?><div>' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+        
+        $allowedTags = ['p', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'span', 'div'];
+        $allowedAttributes = [
+            'a' => ['href', 'title', 'class', 'target'],
+            'img' => ['src', 'alt', 'class', 'style', 'width', 'height'],
+            'span' => ['class', 'style'],
+            'div' => ['class', 'style'],
+            'p' => ['class', 'style'],
+        ];
+
+        $sanitizeNode = function (\DOMNode $node) use (&$sanitizeNode, $allowedTags, $allowedAttributes) {
+            if ($node->nodeType === XML_ELEMENT_NODE) {
+                $tagName = strtolower($node->nodeName);
+                if (!in_array($tagName, $allowedTags, true)) {
+                    while ($node->hasChildNodes()) {
+                        $node->parentNode->insertBefore($node->firstChild, $node);
+                    }
+                    $node->parentNode->removeChild($node);
+                    return;
+                }
+                
+                if ($node->hasAttributes()) {
+                    $attrsToRemove = [];
+                    foreach ($node->attributes as $attr) {
+                        $attrName = strtolower($attr->name);
+                        $allowedAttrsForTag = $allowedAttributes[$tagName] ?? [];
+                        if (!in_array($attrName, $allowedAttrsForTag, true)) {
+                            $attrsToRemove[] = $attr->name;
+                            continue;
+                        }
+                        
+                        if ($attrName === 'href' || $attrName === 'src') {
+                            $val = trim($attr->value);
+                            if (preg_match('/^(javascript|data|vbscript):/i', $val)) {
+                                $attrsToRemove[] = $attr->name;
+                            }
+                        }
+                    }
+                    foreach ($attrsToRemove as $attrName) {
+                        $node->removeAttribute($attrName);
+                    }
+                }
+            }
+            
+            if ($node->hasChildNodes()) {
+                for ($i = $node->childNodes->length - 1; $i >= 0; $i--) {
+                    $child = $node->childNodes->item($i);
+                    if ($child) {
+                        $sanitizeNode($child);
+                    }
+                }
+            }
+        };
+        
+        $wrapper = $dom->getElementsByTagName('div')->item(0);
+        if ($wrapper) {
+            for ($i = $wrapper->childNodes->length - 1; $i >= 0; $i--) {
+                $node = $wrapper->childNodes->item($i);
+                if ($node) {
+                    $sanitizeNode($node);
+                }
+            }
+        }
+        
+        $outputHtml = '';
+        if ($wrapper) {
+            foreach ($wrapper->childNodes as $child) {
+                $outputHtml .= $dom->saveHTML($child);
+            }
+        } else {
+            $outputHtml = $dom->saveHTML();
+        }
+        
+        return trim($outputHtml);
     }
 }
