@@ -44,7 +44,7 @@
               </div>
 
               <div class="profil-body-text" style="line-height: 1.9;">
-                {!! $currentBlog['content'] !!}
+                {!! strip_tags($currentBlog['content'] ?? '', ['p', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'span', 'div']) !!}
               </div>
             </div>
 

@@ -14,15 +14,14 @@ class SyncGoogleSheetsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // Store encrypted string payload to prevent PII exposure in the queue database table
-    protected string $encryptedData;
+    protected int $inquiryId;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(array $data)
+    public function __construct(int $inquiryId)
     {
-        $this->encryptedData = \Illuminate\Support\Facades\Crypt::encrypt($data);
+        $this->inquiryId = $inquiryId;
     }
 
     /**
@@ -30,14 +29,36 @@ class SyncGoogleSheetsJob implements ShouldQueue
      */
     public function handle(GoogleSheetsService $sheetsService): void
     {
+        $correlationId = 'unknown';
         try {
-            $data = \Illuminate\Support\Facades\Crypt::decrypt($this->encryptedData);
+            $inquiry = \App\Models\ContactInquiry::find($this->inquiryId);
+            if (!$inquiry) {
+                Log::warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
+                return;
+            }
+
+            $data = $inquiry->payload;
+            $correlationId = $data['correlation_id'] ?? 'unknown';
+
+            Log::info("Memulai perekaman data kontak ke Google Sheets (SyncGoogleSheetsJob).", [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
+            ]);
+
             $sheetsService->appendInquiry($data);
+
+            Log::info("Data kontak berhasil direkam ke Google Sheets secara asinkron.", [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
+            ]);
         } catch (\Exception $e) {
-            Log::warning('Google Sheets bermasalah atau belum dikonfigurasi: ' . $e->getMessage(), [
+            Log::warning('Google Sheets bermasalah atau belum dikonfigurasi.', [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
                 'exception_class' => get_class($e),
                 'exception_code'  => $e->getCode(),
             ]);
+            $this->fail(new \Exception("Google Sheets bermasalah atau belum dikonfigurasi."));
         }
     }
 }

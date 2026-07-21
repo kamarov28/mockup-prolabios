@@ -57,7 +57,7 @@
                 <div class="mt-4">
                   <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>
                   <div class="profil-body-text" style="line-height: 1.9;">
-                    {!! $product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.' !!}
+                    {!! nl2br(e($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.')) !!}
                   </div>
                 </div>
                 

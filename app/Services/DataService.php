@@ -86,7 +86,7 @@ class DataService
             ]
         ];
 
-        return Cache::remember('categories_structure', 3600, function () use ($fallback) {
+        return Cache::remember(config('app.name') . ':categories_structure', 600, function () use ($fallback) {
             try {
                 $dbItems = DB::table('products')
                     ->select('category', 'sub_category')
@@ -164,7 +164,7 @@ class DataService
                 'updated_at'   => now(),
             ]);
         }
-        Cache::forget('categories_structure');
+        Cache::forget(config('app.name') . ':categories_structure');
         return true;
     }
 
@@ -181,7 +181,7 @@ class DataService
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
-        Cache::forget('categories_structure');
+        Cache::forget(config('app.name') . ':categories_structure');
         return true;
     }
 
@@ -197,14 +197,14 @@ class DataService
             'image'        => $updatedProduct['image']        ?? null,
             'updated_at'   => now(),
         ]);
-        Cache::forget('categories_structure');
+        Cache::forget(config('app.name') . ':categories_structure');
         return true;
     }
 
     public function deleteProduct(string $title): bool
     {
         DB::table('products')->where('title', $title)->delete();
-        Cache::forget('categories_structure');
+        Cache::forget(config('app.name') . ':categories_structure');
         return true;
     }
 

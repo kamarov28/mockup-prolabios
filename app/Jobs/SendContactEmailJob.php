@@ -15,15 +15,14 @@ class SendContactEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // Store encrypted string payload to prevent PII exposure in the queue database table
-    protected string $encryptedData;
+    protected int $inquiryId;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(array $data)
+    public function __construct(int $inquiryId)
     {
-        $this->encryptedData = \Illuminate\Support\Facades\Crypt::encrypt($data);
+        $this->inquiryId = $inquiryId;
     }
 
     /**
@@ -31,16 +30,37 @@ class SendContactEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $correlationId = 'unknown';
         try {
-            $data = \Illuminate\Support\Facades\Crypt::decrypt($this->encryptedData);
-            $recipient = config('contact.to_address', 'marketing@prolabios.com');
+            $inquiry = \App\Models\ContactInquiry::find($this->inquiryId);
+            if (!$inquiry) {
+                Log::warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
+                return;
+            }
 
-            Mail::to($recipient)->send(new ContactMail($data));
-        } catch (\Exception $e) {
-            Log::error('Gagal mengirim email kontak lewat queue: ' . $e->getMessage(), [
-                'exception' => $e
+            $data = $inquiry->payload;
+            $correlationId = $data['correlation_id'] ?? 'unknown';
+
+            Log::info("Memulai pengiriman email kontak (SendContactEmailJob).", [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
             ]);
-            throw $e; // Rethrow to let the queue manager handle retries/failures
+
+            $recipient = config('contact.to_address', 'marketing@prolabios.com');
+            Mail::to($recipient)->send(new ContactMail($data));
+
+            Log::info("Email kontak berhasil dikirim secara asinkron.", [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Gagal mengirim email kontak lewat queue.', [
+                'correlation_id' => $correlationId,
+                'inquiry_id' => $this->inquiryId,
+                'exception_class' => get_class($e),
+                'exception_code' => $e->getCode(),
+            ]);
+            $this->fail(new \Exception("Gagal mengirim email kontak lewat queue."));
         }
     }
 }

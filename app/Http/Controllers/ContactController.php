@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Jobs\SendContactEmailJob;
 use App\Jobs\SyncGoogleSheetsJob;
+use App\Models\ContactInquiry;
+use Illuminate\Support\Str;
 
 class ContactController extends Controller
 {
-    public function submit(
-        Request $request,
-        ?\App\Services\GoogleSheetsService $sheetsService = null
-    ) {
+    public function submit(Request $request)
+    {
         // 1. Validasi Input Formulir
         $validated = $request->validate([
             "nama" => "required|string|max:255",
@@ -35,12 +35,24 @@ class ContactController extends Controller
         $validated["subjek_label"] =
             $subjekLabels[$validated["subjek"]] ?? $validated["subjek"];
 
-        try {
-            // 2. Kirim email secara asinkron lewat queue
-            SendContactEmailJob::dispatch($validated);
+        $correlationId = (string) Str::uuid();
+        $validated["correlation_id"] = $correlationId;
 
-            // 3. Catat data ke Google Sheets secara asinkron (lewat queue)
-            SyncGoogleSheetsJob::dispatch($validated);
+        try {
+            // Log dispatch event
+            Log::info("Memulai proses kirim pesan kontak secara asinkron (dispatching jobs).", [
+                'correlation_id' => $correlationId,
+                'subjek' => $validated['subjek_label'],
+            ]);
+
+            // 2. Simpan payload terenkripsi ke database
+            $inquiry = ContactInquiry::create(['payload' => $validated]);
+
+            // 3. Kirim email secara asinkron lewat queue (hanya mengirimkan ID referensi)
+            SendContactEmailJob::dispatch($inquiry->id);
+
+            // 4. Catat data ke Google Sheets secara asinkron (lewat queue)
+            SyncGoogleSheetsJob::dispatch($inquiry->id);
 
             // 5. Kembalikan Response Sukses
             return response()->json([
@@ -51,6 +63,7 @@ class ContactController extends Controller
         } catch (\Exception $e) {
             // Mencatat detail error secara aman (hanya menyertakan trace lengkap jika debug aktif)
             $logContext = [
+                'correlation_id' => $correlationId,
                 'exception_class' => get_class($e),
                 'exception_code' => $e->getCode(),
             ];
