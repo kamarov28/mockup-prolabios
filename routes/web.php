@@ -64,7 +64,4 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/sectors/{id}/edit', [AdminController::class, 'sectorsEdit'])->name('admin.sectors.edit');
     Route::post('/sectors/{id}', [AdminController::class, 'sectorsUpdate'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
-
-    // Google Sheets Sync
-    Route::post('/sync-sheets', [AdminController::class, 'syncSheets'])->name('admin.sync-sheets');
 });

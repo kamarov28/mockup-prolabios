@@ -135,54 +135,7 @@
   {{-- Right: Sync & Chart --}}
   <div class="col-lg-4 d-flex flex-column gap-4">
 
-    {{-- Google Sheets Sync --}}
-    <div class="admin-card">
-      <div class="admin-card-header">
-        <div>
-          <span class="admin-card-header-label">Integrasi</span>
-          <h2 class="admin-card-header-title">Sinkronisasi</h2>
-        </div>
-        @php $syncStatus = $homeData['last_sync_status'] ?? '' @endphp
-        <span class="admin-badge {{ $syncStatus === 'success' ? 'admin-badge-success' : ($syncStatus === 'failed' ? 'admin-badge-accent' : 'admin-badge-muted') }}">
-          {{ $syncStatus === 'success' ? 'Sukses' : ($syncStatus === 'failed' ? 'Gagal' : 'Belum') }}
-        </span>
-      </div>
-      <div class="admin-card-body">
-        <p style="color: var(--color-text-muted); font-size: 0.82rem; line-height: 1.6; margin-bottom: 16px;">
-          Hubungkan dan sinkronisasikan katalog produk dengan Google Sheets Anda.
-        </p>
 
-        {{-- Meta block --}}
-        <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-muted);">Terakhir</span>
-            <span id="sync-time" style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-main);">{{ $homeData['last_sync_time'] ?? '—' }}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--color-text-muted);">Metode</span>
-            <span style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-main);">Google Sheets API</span>
-          </div>
-        </div>
-
-        <button class="admin-btn admin-btn-primary w-100 justify-content-center" id="btn-trigger-sync">
-          <span class="spinner-border spinner-border-sm d-none me-1" id="sync-spinner" role="status" aria-hidden="true"></span>
-          <i class="bi bi-arrow-repeat" id="sync-icon"></i>
-          <span id="sync-text">Sinkronkan Sekarang</span>
-        </button>
-
-        <div class="mt-3 d-none" id="sync-log-container">
-          <label style="font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-muted); display: block; margin-bottom: 6px;">Log Output</label>
-          <pre id="sync-log-text" style="max-height: 120px; overflow-y: auto; font-size: 0.73rem;"></pre>
-        </div>
-
-        @if(!empty($homeData['last_sync_log']))
-        <div class="mt-3" id="sync-log-container-saved">
-          <label style="font-size: 0.6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--color-text-muted); display: block; margin-bottom: 6px;">Log Terakhir</label>
-          <pre style="max-height: 120px; overflow-y: auto; font-size: 0.73rem;">{{ $homeData['last_sync_log'] }}</pre>
-        </div>
-        @endif
-      </div>
-    </div>
 
     {{-- Product Distribution Chart --}}
     <div class="admin-card">
@@ -247,49 +200,7 @@
       }
     });
 
-    // ── Google Sheets Sync ────────────────────────────────────────────────
-    const btnSync = document.getElementById('btn-trigger-sync');
-    if (btnSync) {
-      btnSync.addEventListener('click', function(e) {
-        e.preventDefault();
-        const spinner   = document.getElementById('sync-spinner');
-        const icon      = document.getElementById('sync-icon');
-        const text      = document.getElementById('sync-text');
-        const logCont   = document.getElementById('sync-log-container');
-        const logText   = document.getElementById('sync-log-text');
-        const savedLog  = document.getElementById('sync-log-container-saved');
 
-        btnSync.disabled = true;
-        spinner.classList.remove('d-none');
-        icon.classList.add('d-none');
-        text.textContent = 'Menyinkronkan...';
-
-        fetch('{{ route("admin.sync-sheets", [], false) }}', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-        })
-        .then(r => r.ok ? r.json() : r.json().then(e => { throw e; }))
-        .then(data => {
-          btnSync.disabled = false;
-          spinner.classList.add('d-none');
-          icon.classList.remove('d-none');
-          text.textContent = 'Sinkronkan Sekarang';
-          // Use global Toast from layout
-          Toast.fire({ icon: 'success', title: data.message });
-          setTimeout(() => location.reload(), 1500);
-        })
-        .catch(err => {
-          btnSync.disabled = false;
-          spinner.classList.add('d-none');
-          icon.classList.remove('d-none');
-          text.textContent = 'Sinkronkan Sekarang';
-          Toast.fire({ icon: 'error', title: err.message || 'Terjadi kesalahan sinkronisasi.' });
-          if (savedLog) savedLog.classList.add('d-none');
-          logCont.classList.remove('d-none');
-          logText.textContent = err.log || err.message || JSON.stringify(err);
-        });
-      });
-    }
 
   });
 </script>
