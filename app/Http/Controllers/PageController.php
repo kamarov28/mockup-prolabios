@@ -40,16 +40,17 @@ class PageController extends Controller
         $categoriesStructure = $dataService->getCategoriesStructure();
 
         // Sanitize and normalize activeCategory
-        $rawCategory = $request->query('category', 'all');
+        $rawCategory = Str::slug((string) $request->query('category', 'all'));
         $activeCategory = isset($categoriesStructure[$rawCategory]) ? $rawCategory : 'all';
 
         // Sanitize and normalize activeSubCategory
         $activeSubCategory = null;
         $rawSubCategory = $request->query('subcategory');
         if ($rawSubCategory) {
+            $rawSubSlug = Str::slug((string) $rawSubCategory);
             $allowedSubs = $activeCategory !== 'all' ? array_keys($categoriesStructure[$activeCategory]['subs'] ?? []) : [];
-            if ($rawSubCategory === 'all' || in_array($rawSubCategory, $allowedSubs)) {
-                $activeSubCategory = $rawSubCategory;
+            if ($rawSubCategory === 'all' || in_array($rawSubSlug, $allowedSubs)) {
+                $activeSubCategory = $rawSubCategory === 'all' ? 'all' : $rawSubSlug;
             }
         }
 
@@ -181,6 +182,7 @@ class PageController extends Controller
                 }
                 return $cat === $selectedCategory;
             });
+            $posts = array_values($posts);
         }
 
         // Paginate

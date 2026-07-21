@@ -2,15 +2,16 @@
 
 namespace App\Jobs;
 
-use App\Services\GoogleSheetsService;
+use App\Mail\ContactMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
-class SyncGoogleSheetsJob implements ShouldQueue
+class SendContactEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,16 +29,18 @@ class SyncGoogleSheetsJob implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(GoogleSheetsService $sheetsService): void
+    public function handle(): void
     {
         try {
             $data = \Illuminate\Support\Facades\Crypt::decrypt($this->encryptedData);
-            $sheetsService->appendInquiry($data);
+            $recipient = config('contact.to_address', 'marketing@prolabios.com');
+
+            Mail::to($recipient)->send(new ContactMail($data));
         } catch (\Exception $e) {
-            Log::warning('Google Sheets bermasalah atau belum dikonfigurasi: ' . $e->getMessage(), [
-                'exception_class' => get_class($e),
-                'exception_code'  => $e->getCode(),
+            Log::error('Gagal mengirim email kontak lewat queue: ' . $e->getMessage(), [
+                'exception' => $e
             ]);
+            throw $e; // Rethrow to let the queue manager handle retries/failures
         }
     }
 }

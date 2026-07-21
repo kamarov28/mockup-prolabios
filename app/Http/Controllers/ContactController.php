@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use App\Mail\ContactMail;
+use App\Jobs\SendContactEmailJob;
 use App\Jobs\SyncGoogleSheetsJob;
 
 class ContactController extends Controller
 {
-    public function submit(Request $request) {
+    public function submit(
+        Request $request,
+        ?\App\Services\GoogleSheetsService $sheetsService = null
+    ) {
         // 1. Validasi Input Formulir
         $validated = $request->validate([
             "nama" => "required|string|max:255",
@@ -34,13 +36,10 @@ class ContactController extends Controller
             $subjekLabels[$validated["subjek"]] ?? $validated["subjek"];
 
         try {
-            // 2. Tentukan Alamat Email Penerima dari .env
-            $recipient = env("MAIL_TO_ADDRESS", "marketing@prolabios.com");
+            // 2. Kirim email secara asinkron lewat queue
+            SendContactEmailJob::dispatch($validated);
 
-            // 3. Eksekusi pengiriman email asli menggunakan Mailable (dilengkapi reply-to dan template HTML)
-            Mail::to($recipient)->send(new ContactMail($validated));
-
-            // 4. Catat data ke Google Sheets secara asinkron (lewat queue)
+            // 3. Catat data ke Google Sheets secara asinkron (lewat queue)
             SyncGoogleSheetsJob::dispatch($validated);
 
             // 5. Kembalikan Response Sukses

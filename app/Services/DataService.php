@@ -4,6 +4,9 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class DataService
 {
@@ -83,7 +86,7 @@ class DataService
             ]
         ];
 
-        return \Illuminate\Support\Facades\Cache::remember('categories_structure', 3600, function () use ($fallback) {
+        return Cache::remember('categories_structure', 3600, function () use ($fallback) {
             try {
                 $dbItems = DB::table('products')
                     ->select('category', 'sub_category')
@@ -97,8 +100,8 @@ class DataService
 
                 $structure = [];
                 foreach ($dbItems as $item) {
-                    $catSlug = $item->category;
-                    $subSlug = $item->sub_category;
+                    $catSlug = Str::slug((string) $item->category);
+                    $subSlug = !empty($item->sub_category) ? Str::slug((string) $item->sub_category) : null;
 
                     if (empty($catSlug)) {
                         continue;
@@ -113,15 +116,14 @@ class DataService
                     }
 
                     if (!empty($subSlug)) {
-                        $subName = $fallback[$catSlug]['subs'][$subSlug]
-                            ?? ($fallback[$subSlug] ?? ucwords(str_replace('-', ' ', $subSlug)));
+                        $subName = $fallback[$catSlug]['subs'][$subSlug] ?? ucwords(str_replace('-', ' ', $subSlug));
                         $structure[$catSlug]['subs'][$subSlug] = $subName;
                     }
                 }
 
                 return empty($structure) ? $fallback : $structure;
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::warning('Gagal memuat kategori dinamis, menggunakan fallback: ' . $e->getMessage());
+                Log::warning('Gagal memuat kategori dinamis, menggunakan fallback: ' . $e->getMessage());
                 return $fallback;
             }
         });
@@ -162,7 +164,7 @@ class DataService
                 'updated_at'   => now(),
             ]);
         }
-        \Illuminate\Support\Facades\Cache::forget('categories_structure');
+        Cache::forget('categories_structure');
         return true;
     }
 
@@ -179,7 +181,7 @@ class DataService
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
-        \Illuminate\Support\Facades\Cache::forget('categories_structure');
+        Cache::forget('categories_structure');
         return true;
     }
 
@@ -195,14 +197,14 @@ class DataService
             'image'        => $updatedProduct['image']        ?? null,
             'updated_at'   => now(),
         ]);
-        \Illuminate\Support\Facades\Cache::forget('categories_structure');
+        Cache::forget('categories_structure');
         return true;
     }
 
     public function deleteProduct(string $title): bool
     {
         DB::table('products')->where('title', $title)->delete();
-        \Illuminate\Support\Facades\Cache::forget('categories_structure');
+        Cache::forget('categories_structure');
         return true;
     }
 

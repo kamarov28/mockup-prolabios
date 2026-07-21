@@ -18,7 +18,9 @@ Route::get('/produk/detail', [PageController::class, 'detailProduk']);
 Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi', [PageController::class, 'informasi']);
 Route::get('/kontak', [PageController::class, 'kontak']);
-Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'submit'])->name('contact.submit');
+Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'submit'])
+    ->middleware('throttle:5,1')
+    ->name('contact.submit');
 
 // ----------------------------------------------------
 // Admin Login Routes
