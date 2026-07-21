@@ -81,7 +81,7 @@
           @if($currentData)
             <!-- Sector Hero Image -->
             <div class="profil-hero-img mb-5">
-              <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="object-fit: cover; height: 360px; display: block;" loading="lazy" decoding="async">
+              <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 480px;" loading="lazy" decoding="async">
             </div>
 
             <!-- Sector Title & Description -->
