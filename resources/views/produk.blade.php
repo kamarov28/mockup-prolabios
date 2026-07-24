@@ -120,15 +120,27 @@
                   <div class="img-wrap">
                     <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
                   </div>
-                  <div class="card-body p-3">
+                  <div class="card-body p-3 d-flex flex-column">
                     @if(!empty($prod['catalog']))
-                      <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
+                      <div style="font-size: 0.72rem; color: var(--color-accent); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+                        <i class="bi bi-upc-scan me-1"></i> Cat. {{ $prod['catalog'] }}
+                      </div>
                     @endif
                     <h3 class="card-title fs-6 fw-bold">
                       <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
                     </h3>
-                    <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 6px; margin-bottom: 14px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
-                    <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                    <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 6px; margin-bottom: 14px; flex-grow: 1;">
+                      {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 85) }}
+                    </p>
+
+                    <!-- B2B Value Add Badge -->
+                    <div class="b2b-product-roi-badge mb-3">
+                      <i class="bi bi-check-circle-fill text-accent me-1"></i> CoA Included &bull; High Reliability
+                    </div>
+
+                    <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="profil-cta-btn w-100 text-center" style="font-size: 0.75rem;">
+                      Spesifikasi &amp; Detail <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
                   </div>
                 </div>
               </div>

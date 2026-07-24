@@ -765,6 +765,9 @@ function typoSplitWords(el) {
     const text = textNode.textContent;
     if (!text || !text.trim()) return;
 
+    const parentEl = textNode.parentElement;
+    const extraClasses = (parentEl && parentEl !== el && parentEl.className) ? ' ' + parentEl.className : '';
+
     const frag = document.createDocumentFragment();
     // Keep whitespace as real text so wrapping still works
     text.split(/(\s+)/).forEach(function (part) {
@@ -774,10 +777,10 @@ function typoSplitWords(el) {
         return;
       }
       const mask = document.createElement('span');
-      mask.className = 'word-mask';
+      mask.className = 'word-mask' + extraClasses;
       mask.setAttribute('aria-hidden', 'true');
       const inner = document.createElement('span');
-      inner.className = 'word-inner';
+      inner.className = 'word-inner' + extraClasses;
       inner.textContent = part;
       mask.appendChild(inner);
       frag.appendChild(mask);
@@ -906,7 +909,10 @@ function initGSAPAnimations() {
   const layananSection = document.getElementById('service-nav');
   const infoContainer = document.querySelector('.blog-card, .profil-body-text');
   const kontakContainer = document.getElementById('contactForm');
-  const hasTargets = heroTextContainer || pinSection || newsSection || productsSection || activeHeroImg || pageHeader || profilHeroImg || catalogSection || sektorSection || layananSection || infoContainer || kontakContainer;
+  const bentoSection = document.querySelector('.hitech-bento-card');
+  const finalBanner = document.querySelector('.hitech-final-banner');
+
+  const hasTargets = heroTextContainer || pinSection || newsSection || productsSection || activeHeroImg || pageHeader || profilHeroImg || catalogSection || sektorSection || layananSection || infoContainer || kontakContainer || bentoSection || finalBanner;
 
   if (!hasTargets) return;
   if (heroTextContainer && heroTextContainer.dataset.gsapDone === '1') return;
@@ -1143,6 +1149,97 @@ function initGSAPAnimations() {
         rowTl.to(link, { y: 0, opacity: 1, duration: 0.55, ease: EASE_EXPO }, 0.38);
       }
     });
+  }
+
+  // ── Bento Grid Cards & Final Banner GSAP Animations ──────────────────────
+  if (typeof ScrollTrigger !== 'undefined') {
+    const bentoCards = document.querySelectorAll('.hitech-bento-card');
+    if (bentoCards.length) {
+      bentoCards.forEach(function (card, i) {
+        gsap.fromTo(card,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.95,
+            ease: EASE_EXPO,
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 88%',
+              once: true
+            },
+            delay: (i % 2) * 0.12
+          }
+        );
+      });
+    }
+
+    const finalBanner = document.querySelector('.hitech-final-banner');
+    if (finalBanner) {
+      const bannerTitle = finalBanner.querySelector('.hitech-final-title');
+      const bannerSub = finalBanner.querySelector('.hitech-final-sub');
+      const bannerCtas = finalBanner.querySelectorAll('.typo-btn-link');
+
+      if (bannerTitle) gsap.set(bannerTitle, { y: 24, opacity: 0 });
+      if (bannerSub) gsap.set(bannerSub, { y: 20, opacity: 0 });
+      if (bannerCtas.length) gsap.set(bannerCtas, { y: 16, opacity: 0 });
+
+      const bannerTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: finalBanner,
+          start: 'top 82%',
+          once: true
+        }
+      });
+      if (bannerTitle) bannerTl.to(bannerTitle, { y: 0, opacity: 1, duration: 0.9, ease: EASE_EXPO }, 0);
+      if (bannerSub) bannerTl.to(bannerSub, { y: 0, opacity: 1, duration: 0.8, ease: EASE_POWER }, 0.15);
+      if (bannerCtas.length) bannerTl.to(bannerCtas, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: EASE_EXPO }, 0.3);
+    }
+
+    // Interactive Sector Finder GSAP Scroll Reveal
+    const sectorTabBar = document.querySelector('.hitech-tab-bar');
+    const sectorPanels = document.querySelectorAll('.hitech-tab-panel');
+    if (sectorTabBar) {
+      gsap.fromTo(sectorTabBar, 
+        { y: 25, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.85,
+          ease: EASE_EXPO,
+          scrollTrigger: {
+            trigger: sectorTabBar,
+            start: 'top 86%',
+            once: true
+          }
+        }
+      );
+    }
+    if (sectorPanels.length) {
+      sectorPanels.forEach(function(panel) {
+        const title = panel.querySelector('.hitech-panel-title');
+        const desc = panel.querySelector('.hitech-panel-desc');
+        const box = panel.querySelector('.hitech-panel-box');
+        const link = panel.querySelector('.typo-btn-link');
+
+        if (title) gsap.set(title, { y: 20, opacity: 0 });
+        if (desc) gsap.set(desc, { y: 16, opacity: 0 });
+        if (box) gsap.set(box, { y: 25, opacity: 0 });
+        if (link) gsap.set(link, { y: 12, opacity: 0 });
+
+        const pTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: panel,
+            start: 'top 84%',
+            once: true
+          }
+        });
+        if (title) pTl.to(title, { y: 0, opacity: 1, duration: 0.85, ease: EASE_EXPO }, 0);
+        if (desc) pTl.to(desc, { y: 0, opacity: 1, duration: 0.75, ease: EASE_POWER }, 0.15);
+        if (box) pTl.to(box, { y: 0, opacity: 1, duration: 0.85, ease: EASE_EXPO }, 0.2);
+        if (link) pTl.to(link, { y: 0, opacity: 1, duration: 0.65, ease: EASE_EXPO }, 0.3);
+      });
+    }
   }
 
   // ── Products: premium grid reveals ──────────────────────────────────────
@@ -1813,21 +1910,9 @@ function initHeroBgSlideshow() {
   var isPaused  = false;
   var kbTween   = null;
 
-  // Initial state: all invisible, first slide at 0.20 opacity
-  gsap.set(slides, { opacity: 0, scale: SCALE_FROM });
-  gsap.set(slides[0], { opacity: 0.20 });
-
-  // Ken Burns — slow zoom on the active slide
-  function startKenBurns(slide) {
-    if (kbTween) kbTween.kill();
-    gsap.set(slide, { scale: SCALE_FROM, transformOrigin: '60% 50%' });
-    kbTween = gsap.to(slide, {
-      scale: SCALE_TO,
-      duration: SLIDE_DURATION + FADE_DURATION,
-      ease: 'none',
-    });
-  }
-  startKenBurns(slides[0]);
+  // Initial state: all invisible, first slide at 0.7 opacity
+  gsap.set(slides, { opacity: 0, scale: 1.0, xPercent: 0, zIndex: 1 });
+  gsap.set(slides[0], { opacity: 0.7, scale: 1.0, zIndex: 2 });
 
   // ── Dot indicators ────────────────────────────────────────────────────────
   var dots = [];
@@ -1840,10 +1925,11 @@ function initHeroBgSlideshow() {
       var d = document.createElement('button');
       d.setAttribute('aria-label', 'Slide ' + (i + 1));
       d.style.cssText = [
-        'width:' + (i === 0 ? '20px' : '8px'),
+        'width:' + (i === 0 ? '24px' : '8px'),
         'height:8px',
         'border-radius:100px',
-        'background:' + (i === 0 ? '#ffffff' : 'rgba(255,255,255,0.3)'),
+        'background:' + (i === 0 ? '#FF3B42' : 'rgba(255,255,255,0.25)'),
+        'box-shadow:' + (i === 0 ? '0 0 8px rgba(255,59,66,0.6)' : 'none'),
         'border:none',
         'cursor:pointer',
         'padding:0',
@@ -1860,29 +1946,51 @@ function initHeroBgSlideshow() {
 
   function updateDots(idx) {
     dots.forEach(function (d, i) {
-      d.style.width      = i === idx ? '20px' : '8px';
-      d.style.background = i === idx ? '#ffffff' : 'rgba(255,255,255,0.3)';
+      d.style.width      = i === idx ? '24px' : '8px';
+      d.style.background = i === idx ? '#FF3B42' : 'rgba(255,255,255,0.25)';
+      d.style.boxShadow  = i === idx ? '0 0 8px rgba(255,59,66,0.6)' : 'none';
     });
   }
 
-  // ── Core crossfade ────────────────────────────────────────────────────────
+  // ── Core smooth slide crossfade ───────────────────────────────────────────
   function goTo(next) {
     if (next === current) return;
     var outSlide = slides[current];
     var inSlide  = slides[next];
 
-    // Reset incoming slide scale before fade-in
-    gsap.set(inSlide, { scale: SCALE_FROM, transformOrigin: '60% 50%' });
+    gsap.killTweensOf([outSlide, inSlide]);
 
-    gsap.to(outSlide, { opacity: 0,    duration: FADE_DURATION, ease: 'power2.inOut' });
-    gsap.to(inSlide,  { opacity: 0.20, duration: FADE_DURATION, ease: 'power2.inOut' });
+    var dir = next > current ? 1 : -1;
+    if (current === slides.length - 1 && next === 0) dir = 1;
+    if (current === 0 && next === slides.length - 1) dir = -1;
+
+    gsap.set(inSlide, { opacity: 0, scale: 1.04, xPercent: dir * 5, zIndex: 3 });
+    gsap.set(outSlide, { zIndex: 2 });
+
+    gsap.to(outSlide, { 
+      opacity: 0, 
+      xPercent: -dir * 5,
+      scale: 1.0,
+      duration: 0.9, 
+      ease: 'power2.inOut',
+      onComplete: function() {
+        gsap.set(outSlide, { zIndex: 1, xPercent: 0 });
+      }
+    });
+
+    gsap.to(inSlide, { 
+      opacity: 0.7, 
+      xPercent: 0,
+      scale: 1.0,
+      duration: 0.9, 
+      ease: 'power2.inOut' 
+    });
 
     slides[current].classList.remove('active');
     slides[next].classList.add('active');
 
     current = next;
     updateDots(current);
-    startKenBurns(inSlide);
     resetAutoTimer();
   }
 
