@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Services\DataService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -21,7 +23,7 @@ class AdminController extends Controller
     // ----------------------------------------------------
     public function showLogin()
     {
-        if (session('admin_logged_in')) {
+        if (Auth::check() || session('admin_logged_in')) {
             return redirect()->route('admin.dashboard');
         }
         return view('admin.login');
@@ -29,13 +31,23 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $username = $request->input('username');
-        $password = $request->input('password');
+        $loginInput = trim($request->input('username', ''));
+        $password = $request->input('password', '');
 
+        // 1. Attempt Native Laravel Auth via User model (email or name)
+        $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+        if (Auth::attempt([$field => $loginInput, 'password' => $password])) {
+            $request->session()->regenerate();
+            session(['admin_logged_in' => true]);
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
+        }
+
+        // 2. Fallback to ENV admin credentials (with timing-safe hash_equals)
         $expectedUser = config('contact.admin_username');
         $expectedPass = config('contact.admin_password');
 
-        if (hash_equals((string)$expectedUser, (string)$username) && hash_equals((string)$expectedPass, (string)$password)) {
+        if (!empty($expectedUser) && !empty($expectedPass) && hash_equals((string)$expectedUser, (string)$loginInput) && hash_equals((string)$expectedPass, (string)$password)) {
+            $request->session()->regenerate();
             session(['admin_logged_in' => true]);
             return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
         }
@@ -43,8 +55,11 @@ class AdminController extends Controller
         return redirect()->back()->withInput()->with('error', 'Username atau password yang Anda masukkan salah.');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         session()->forget('admin_logged_in');
         return redirect()->route('admin.login')->with('success', 'Anda telah berhasil logout.');
     }
@@ -447,15 +462,15 @@ class AdminController extends Controller
                 $file = $request->file("image_file.{$id}");
                 
                 $ext = strtolower($file->getClientOriginalExtension());
-                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
                 if (!in_array($ext, $allowedExtensions, true)) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        "image_file.{$id}" => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp, svg.']
+                        "image_file.{$id}" => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp.']
                     ]);
                 }
 
                 $mime = $file->getMimeType();
-                $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'];
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
                 if (!in_array($mime, $allowedMimes, true)) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
                         "image_file.{$id}" => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']

@@ -234,18 +234,30 @@
           const firstHr = contentArea.querySelector('hr');
           bodyTexts.forEach(p => { if (firstHr && p.compareDocumentPosition(firstHr) & Node.DOCUMENT_POSITION_FOLLOWING) p.remove(); });
 
-          const description = sector.description && sector.description.length > 0 ? sector.description : [
-            `Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor <strong>${sector.name}</strong>.`,
-            `Jelajahi rangkaian produk spesifik yang kami tawarkan untuk memenuhi kebutuhan pengujian harian laboratorium Anda.`
-          ];
-
           if (firstHr && titleEl) {
-            description.reverse().forEach(descText => {
-              const p = document.createElement('p');
-              p.className = 'profil-body-text mb-4';
-              p.innerHTML = descText;
-              titleEl.parentNode.insertBefore(p, firstHr);
-            });
+            if (sector.description && sector.description.length > 0) {
+              [...sector.description].reverse().forEach(descText => {
+                const p = document.createElement('p');
+                p.className = 'profil-body-text mb-4';
+                p.textContent = descText;
+                titleEl.parentNode.insertBefore(p, firstHr);
+              });
+            } else {
+              const p2 = document.createElement('p');
+              p2.className = 'profil-body-text mb-4';
+              p2.textContent = 'Jelajahi rangkaian produk spesifik yang kami tawarkan untuk memenuhi kebutuhan pengujian harian laboratorium Anda.';
+
+              const p1 = document.createElement('p');
+              p1.className = 'profil-body-text mb-4';
+              p1.appendChild(document.createTextNode('Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor '));
+              const strong = document.createElement('strong');
+              strong.textContent = sector.name;
+              p1.appendChild(strong);
+              p1.appendChild(document.createTextNode('.'));
+
+              titleEl.parentNode.insertBefore(p2, firstHr);
+              titleEl.parentNode.insertBefore(p1, firstHr);
+            }
           }
 
           // Update product table
@@ -255,11 +267,27 @@
             const sectorProducts = products.filter(p => p.sector && p.sector.split(',').includes(sector.id));
             sectorProducts.forEach(prod => {
               const tr = document.createElement('tr');
-              tr.innerHTML = `
-                <td style="color: var(--color-text-muted); font-size: 0.82rem;">${prod.catalog || '-'}</td>
-                <td><a href="${detailProductUrl}?id=${encodeURIComponent(prod.title)}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">${prod.title}</a></td>
-                <td style="color: var(--color-text-muted); font-size: 0.88rem;">${(decodeHtmlEntity(prod.description || '').replace(/<\/?[^>]+(>|$)/g, '').trim()).substring(0, 150) || '-'}</td>
-              `;
+
+              const tdCatalog = document.createElement('td');
+              tdCatalog.style.cssText = 'color: var(--color-text-muted); font-size: 0.82rem;';
+              tdCatalog.textContent = prod.catalog || '-';
+
+              const tdTitle = document.createElement('td');
+              const aTitle = document.createElement('a');
+              aTitle.href = detailProductUrl + '?id=' + encodeURIComponent(prod.title || '');
+              aTitle.className = 'text-decoration-none fw-semibold';
+              aTitle.style.color = 'var(--color-accent)';
+              aTitle.textContent = prod.title || '';
+              tdTitle.appendChild(aTitle);
+
+              const tdDesc = document.createElement('td');
+              tdDesc.style.cssText = 'color: var(--color-text-muted); font-size: 0.88rem;';
+              const cleanDesc = (decodeHtmlEntity(prod.description || '').replace(/<\/?[^>]+(>|$)/g, '').trim()).substring(0, 150) || '-';
+              tdDesc.textContent = cleanDesc;
+
+              tr.appendChild(tdCatalog);
+              tr.appendChild(tdTitle);
+              tr.appendChild(tdDesc);
               tbody.appendChild(tr);
             });
           }

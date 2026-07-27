@@ -11,7 +11,7 @@ class MigrateJsonToDb extends Command
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'database:migrate-json';
+    protected $signature = 'database:migrate-json {--force : Force the operation to run when in production}';
 
     /**
      * The console command description.
@@ -31,6 +31,17 @@ class MigrateJsonToDb extends Command
      */
     public function handle()
     {
+        if (app()->environment('production') && !$this->option('force')) {
+            $this->warn('************************************************');
+            $this->warn('*     Application In Production Environment!   *');
+            $this->warn('************************************************');
+
+            if (!$this->confirm('Running this command will TRUNCATE existing tables! Do you really wish to run this command?')) {
+                $this->info('Command cancelled.');
+                return 1;
+            }
+        }
+
         $this->info('Starting JSON → MySQL migration...');
 
         // Test connection

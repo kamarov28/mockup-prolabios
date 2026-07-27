@@ -166,21 +166,23 @@ class DataService
 
     public function saveProducts(array $products): bool
     {
-        // Full replace – used for bulk overwrites only
-        DB::table('products')->truncate();
-        foreach ($products as $p) {
-            DB::table('products')->insert([
-                'catalog'      => $p['catalog']      ?? null,
-                'title'        => $p['title'],
-                'description'  => $p['description']  ?? null,
-                'category'     => $p['category'],
-                'sub_category' => $p['sub_category'] ?? null,
-                'sector'       => $p['sector']       ?? null,
-                'image'        => $p['image']        ?? null,
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ]);
-        }
+        // Full replace – wrapped in transaction to prevent partial data loss
+        DB::transaction(function () use ($products) {
+            DB::table('products')->delete();
+            foreach ($products as $p) {
+                DB::table('products')->insert([
+                    'catalog'      => $p['catalog']      ?? null,
+                    'title'        => $p['title'],
+                    'description'  => $p['description']  ?? null,
+                    'category'     => $p['category'],
+                    'sub_category' => $p['sub_category'] ?? null,
+                    'sector'       => $p['sector']       ?? null,
+                    'image'        => $p['image']        ?? null,
+                    'created_at'   => now(),
+                    'updated_at'   => now(),
+                ]);
+            }
+        });
         \App\Models\Product::clearCategoriesCache();
         return true;
     }
@@ -190,7 +192,7 @@ class DataService
         DB::table('products')->insert([
             'catalog'      => $product['catalog']      ?? null,
             'title'        => $product['title'],
-            'description'  => $product['description']  ?? null,
+            'description'  => self::sanitizeHtml($product['description'] ?? null),
             'category'     => $product['category'],
             'sub_category' => $product['sub_category'] ?? null,
             'sector'       => $product['sector']       ?? null,
@@ -207,7 +209,7 @@ class DataService
         DB::table('products')->where('title', $oldTitle)->update([
             'catalog'      => $updatedProduct['catalog']      ?? null,
             'title'        => $updatedProduct['title'],
-            'description'  => $updatedProduct['description']  ?? null,
+            'description'  => self::sanitizeHtml($updatedProduct['description'] ?? null),
             'category'     => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
             'sector'       => $updatedProduct['sector']       ?? null,
@@ -287,19 +289,21 @@ class DataService
 
     public function savePosts(array $posts): bool
     {
-        DB::table('posts')->truncate();
-        foreach ($posts as $post) {
-            DB::table('posts')->insert([
-                'slug'       => $post['slug'],
-                'title'      => $post['title'],
-                'date'       => $post['date'],
-                'category'   => $post['category'],
-                'image'      => $post['image']   ?? null,
-                'content'    => $post['content'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        DB::transaction(function () use ($posts) {
+            DB::table('posts')->delete();
+            foreach ($posts as $post) {
+                DB::table('posts')->insert([
+                    'slug'       => $post['slug'],
+                    'title'      => $post['title'],
+                    'date'       => $post['date'],
+                    'category'   => $post['category'],
+                    'image'      => $post['image']   ?? null,
+                    'content'    => $post['content'] ?? null,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        });
         return true;
     }
 
@@ -311,7 +315,7 @@ class DataService
             'date'       => $post['date'],
             'category'   => $post['category'],
             'image'      => $post['image']   ?? null,
-            'content'    => $post['content'] ?? null,
+            'content'    => self::sanitizeHtml($post['content'] ?? null),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -326,7 +330,7 @@ class DataService
             'date'       => $updatedPost['date'],
             'category'   => $updatedPost['category'],
             'image'      => $updatedPost['image']   ?? null,
-            'content'    => $updatedPost['content'] ?? null,
+            'content'    => self::sanitizeHtml($updatedPost['content'] ?? null),
             'updated_at' => now(),
         ]);
         return true;
@@ -370,17 +374,19 @@ class DataService
 
     public function saveSectors(array $sectors): bool
     {
-        DB::table('sectors')->truncate();
-        foreach ($sectors as $sec) {
-            DB::table('sectors')->insert([
-                'id'          => $sec['id'],
-                'name'        => $sec['name'],
-                'description' => json_encode($sec['description'] ?? []),
-                'image'       => $sec['image'] ?? null,
-                'created_at'  => now(),
-                'updated_at'  => now(),
-            ]);
-        }
+        DB::transaction(function () use ($sectors) {
+            DB::table('sectors')->delete();
+            foreach ($sectors as $sec) {
+                DB::table('sectors')->insert([
+                    'id'          => $sec['id'],
+                    'name'        => $sec['name'],
+                    'description' => json_encode($sec['description'] ?? []),
+                    'image'       => $sec['image'] ?? null,
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
+                ]);
+            }
+        });
         return true;
     }
 

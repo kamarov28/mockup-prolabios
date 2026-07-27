@@ -43,8 +43,11 @@
       @endif
       <div class="typo-hero-overlay"></div>
     </div>
+    <noscript>
+      <style>.typo-hero-entrance { opacity: 1 !important; }</style>
+    </noscript>
     <div class="container" style="position: relative; z-index: 2;">
-      <div class="typo-hero-entrance" style="opacity: 0;">
+      <div class="typo-hero-entrance">
         <div class="d-flex flex-wrap gap-2 mb-4">
           <span class="typo-pill-accent">PROFESSIONAL</span>
           <span class="typo-pill-outline">ROBUST</span>

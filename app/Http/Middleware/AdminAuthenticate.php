@@ -15,7 +15,7 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->session()->get('admin_logged_in')) {
+        if (!\Illuminate\Support\Facades\Auth::check() && !$request->session()->get('admin_logged_in')) {
             return redirect()->route('admin.login')->with('error', 'Silakan login terlebih dahulu untuk mengakses panel admin.');
         }
 
