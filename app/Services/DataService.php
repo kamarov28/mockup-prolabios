@@ -16,6 +16,25 @@ class DataService
     protected string $sectorsFile  = 'data/sectors.json';
     protected string $homepageFile = 'data/homepage.json';
 
+    /**
+     * Clear all product-related cache entries.
+     * Call this after any product create/update/delete operation.
+     */
+    protected function clearProductsCache(): void
+    {
+        Cache::forget('categories_structure');
+        Cache::tags(['products'])->flush();
+        
+        // Pattern-based cache clearing for product queries
+        // In production with Redis, you can use tags or prefix-based invalidation
+        $pattern = 'products_*';
+        foreach (Cache::getMultiple([]) as $key => $value) {
+            if (strpos($key, 'products_') === 0 || strpos($key, 'product_') === 0) {
+                Cache::forget($key);
+            }
+        }
+    }
+
     // ----------------------------------------------------
     // JSON Helper (seed / backup only)
     // ----------------------------------------------------
@@ -141,92 +160,102 @@ class DataService
     // ----------------------------------------------------
     public function getProducts(?array $filters = [], int $limit = 0): array
     {
-        $query = DB::table('products')->orderBy('id');
+        $cacheKey = 'products_list_' . md5(json_encode($filters) . '_' . $limit);
+        
+        return Cache::remember($cacheKey, 300, function () use ($filters, $limit) {
+            $query = DB::table('products')->orderBy('id');
 
-        if (!empty($filters['category'])) {
-            $cat = $filters['category'];
-            $catSlug = Str::slug($cat);
-            if ($catSlug === 'culture-media') {
-                $query->where(function($q) use ($cat) {
-                    $q->where('category', $cat)
-                      ->orWhere('category', 'LIKE', '%Culture Media%')
-                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
-                });
-            } else {
-                $query->where('category', $cat);
+            if (!empty($filters['category'])) {
+                $cat = $filters['category'];
+                $catSlug = Str::slug($cat);
+                if ($catSlug === 'culture-media') {
+                    $query->where(function($q) use ($cat) {
+                        $q->where('category', $cat)
+                          ->orWhere('category', 'LIKE', '%Culture Media%')
+                          ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                    });
+                } else {
+                    $query->where('category', $cat);
+                }
             }
-        }
 
-        if (!empty($filters['sub_category'])) {
-            $subCat = $filters['sub_category'];
-            $query->where(function($q) use ($subCat) {
-                $q->where('sub_category', $subCat)
-                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
-            });
-        }
+            if (!empty($filters['sub_category'])) {
+                $subCat = $filters['sub_category'];
+                $query->where(function($q) use ($subCat) {
+                    $q->where('sub_category', $subCat)
+                      ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+                });
+            }
 
-        if (!empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('catalog', 'like', "%{$search}%");
-            });
-        }
+            if (!empty($filters['search'])) {
+                $search = $filters['search'];
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%")
+                      ->orWhere('catalog', 'like', "%{$search}%");
+                });
+            }
 
-        if ($limit > 0) {
-            $query->limit($limit);
-        }
+            if ($limit > 0) {
+                $query->limit($limit);
+            }
 
-        return $query->get()
-            ->map(fn($r) => (array) $r)
-            ->toArray();
+            return $query->get()
+                ->map(fn($r) => (array) $r)
+                ->toArray();
+        });
     }
 
     public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
     {
-        $query = DB::table('products')->orderBy('id');
+        $cacheKey = 'products_paginated_' . md5(json_encode($filters) . '_' . $perPage);
+        
+        return Cache::remember($cacheKey, 300, function () use ($filters, $perPage) {
+            $query = DB::table('products')->orderBy('id');
 
-        if (!empty($filters['category'])) {
-            $cat = $filters['category'];
-            $catSlug = Str::slug($cat);
-            if ($catSlug === 'culture-media') {
-                $query->where(function($q) use ($cat) {
-                    $q->where('category', $cat)
-                      ->orWhere('category', 'LIKE', '%Culture Media%')
-                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
-                });
-            } else {
-                $query->where('category', $cat);
+            if (!empty($filters['category'])) {
+                $cat = $filters['category'];
+                $catSlug = Str::slug($cat);
+                if ($catSlug === 'culture-media') {
+                    $query->where(function($q) use ($cat) {
+                        $q->where('category', $cat)
+                          ->orWhere('category', 'LIKE', '%Culture Media%')
+                          ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                    });
+                } else {
+                    $query->where('category', $cat);
+                }
             }
-        }
 
-        if (!empty($filters['sub_category'])) {
-            $subCat = $filters['sub_category'];
-            $query->where(function($q) use ($subCat) {
-                $q->where('sub_category', $subCat)
-                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
-            });
-        }
+            if (!empty($filters['sub_category'])) {
+                $subCat = $filters['sub_category'];
+                $query->where(function($q) use ($subCat) {
+                    $q->where('sub_category', $subCat)
+                      ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+                });
+            }
 
-        if (!empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('catalog', 'like', "%{$search}%");
-            });
-        }
+            if (!empty($filters['search'])) {
+                $search = $filters['search'];
+                $query->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhere('description', 'like', "%{$search}%")
+                      ->orWhere('catalog', 'like', "%{$search}%");
+                });
+            }
 
-        return $query->paginate($perPage)
-            ->through(fn($r) => (array) $r)
-            ->withQueryString();
+            return $query->paginate($perPage)
+                ->through(fn($r) => (array) $r)
+                ->withQueryString();
+        });
     }
 
     public function getProductByTitle(string $title): ?array
     {
-        $row = DB::table('products')->where('title', $title)->first();
-        return $row ? (array) $row : null;
+        return Cache::remember('product_by_title_' . md5($title), 600, function () use ($title) {
+            $row = DB::table('products')->where('title', $title)->first();
+            return $row ? (array) $row : null;
+        });
     }
 
     public function saveProducts(array $products): bool
@@ -296,12 +325,18 @@ class DataService
             : DB::table('products')->where('title', $productIdOrTitle);
 
         $affected = (clone $query)->where('stock', '>=', $quantity)->decrement('stock', $quantity);
+        
+        if ($affected > 0) {
+            $this->clearProductsCache();
+        }
+        
         return $affected > 0;
     }
 
     public function deleteProduct(string $title): bool
     {
         DB::table('products')->where('title', $title)->delete();
+        $this->clearProductsCache();
         \App\Models\Product::clearCategoriesCache();
         return true;
     }
