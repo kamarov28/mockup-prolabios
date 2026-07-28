@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendQuotationResponseEmailJob;
 use App\Mail\QuotationResponseMail;
 use App\Models\Rfq;
 use App\Models\RfqItem;
@@ -72,12 +73,12 @@ class AdminRfqController extends Controller
             'valid_until'          => $validated['valid_until'],
         ]);
 
-        // Send Feedback Email to Corporate Buyer
+        // Send Feedback Email to Corporate Buyer (queued for performance)
         try {
-            Mail::to($rfq->email)->send(new QuotationResponseMail($rfq));
+            SendQuotationResponseEmailJob::dispatch($rfq->id, $rfq->email);
             $msg = 'Penawaran resmi berhasil disimpan & email feedback telah dikirimkan ke korporasi (' . $rfq->email . ')!';
         } catch (\Exception $e) {
-            \Log::error('Gagal mengirim email penawaran ke pembeli: ' . $e->getMessage());
+            \Log::error('Failed to queue quotation email: ' . $e->getMessage());
             $msg = 'Penawaran resmi berhasil disimpan! (Catatan: Gagal mengirim email otomatis, periksa konfigurasi SMTP).';
         }
 

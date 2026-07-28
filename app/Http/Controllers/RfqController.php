@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Mail\RfqSubmittedMail;
 use App\Models\Rfq;
 use App\Models\RfqItem;
@@ -88,12 +89,12 @@ class RfqController extends Controller
 
         $rfq->update(['total_offered_amount' => $totalEstimated]);
 
-        // Send Notification Email to Sales Admin
+        // Send Notification Email to Sales Admin (queued for performance)
         try {
             $adminEmail = config('mail.from.address', 'sales@prolabios.com');
-            Mail::to($adminEmail)->send(new RfqSubmittedMail($rfq));
+            SendRfqSubmittedEmailJob::dispatch($rfq->id, $adminEmail);
         } catch (\Exception $e) {
-            \Log::error('Gagal mengirim email RFQ ke admin: ' . $e->getMessage());
+            \Log::error('Failed to queue RFQ email notification: ' . $e->getMessage());
         }
 
         // Clear Cart
