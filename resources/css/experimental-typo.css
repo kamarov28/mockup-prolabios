@@ -48,7 +48,9 @@ html, body {
 }
 
 @media (max-width: 991.98px) {
-  .navbar {
+  .navbar,
+  [data-theme="dark"] .navbar,
+  .navbar.header-scrolled {
     position: fixed !important;
     top: 16px !important;
     left: 12px !important;
@@ -56,8 +58,8 @@ html, body {
     width: auto !important;
     max-width: none !important;
     transform: none !important;
-    border-radius: 16px !important;
-    padding: 8px 14px !important;
+    border-radius: 18px !important;
+    padding: 10px 16px !important;
     margin: 0 !important;
     z-index: 99999 !important;
   }
@@ -72,6 +74,11 @@ html, body {
     max-width: 140px !important;
     max-height: 24px !important;
     object-fit: contain !important;
+  }
+  .navbar-collapse {
+    border-radius: 12px !important;
+    margin-top: 8px !important;
+    padding: 10px 0 !important;
   }
 }
 
