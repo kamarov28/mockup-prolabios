@@ -97,18 +97,30 @@ class AdminPostController extends Controller
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80');
 
+        $statusOption = $request->input('status_option', 'online_now');
+        $status = ($statusOption === 'draft') ? 'draft' : 'online';
+
+        $publishDate = date('d/m/Y');
+        if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
+            $publishDate = date('d/m/Y', strtotime($request->input('publish_date')));
+        }
+
+        $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
+
         $post = [
-            'slug' => $slug,
-            'title' => $request->input('title'),
-            'date' => date('Y-m-d'),
-            'category' => $request->input('category'),
-            'image' => $image,
-            'content' => $request->input('content')
+            'slug'        => $slug,
+            'title'       => $request->input('title'),
+            'date'        => $publishDate,
+            'category'    => $request->input('category'),
+            'status'      => $status,
+            'is_featured' => $isFeatured,
+            'image'       => $image,
+            'content'     => $request->input('content')
         ];
 
         $this->dataService->addPost($post);
 
-        return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil diterbitkan!');
+        return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil disimpan!');
     }
 
     public function postsEdit(string $slug)
@@ -139,13 +151,25 @@ class AdminPostController extends Controller
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $post['image']);
 
+        $statusOption = $request->input('status_option', 'online_now');
+        $status = ($statusOption === 'draft') ? 'draft' : 'online';
+
+        $publishDate = $post['date'] ?? date('d/m/Y');
+        if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
+            $publishDate = date('d/m/Y', strtotime($request->input('publish_date')));
+        }
+
+        $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
+
         $updatedPost = [
-            'slug' => $newSlug,
-            'title' => $newTitle,
-            'date' => $post['date'],
-            'category' => $request->input('category'),
-            'image' => $image,
-            'content' => $request->input('content')
+            'slug'        => $newSlug,
+            'title'       => $newTitle,
+            'date'        => $publishDate,
+            'category'    => $request->input('category'),
+            'status'      => $status,
+            'is_featured' => $isFeatured,
+            'image'       => $image,
+            'content'     => $request->input('content')
         ];
 
         $this->dataService->updatePost($slug, $updatedPost);

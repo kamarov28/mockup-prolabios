@@ -40,7 +40,7 @@
               <!-- Product Image -->
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100" style="object-fit: contain; max-height: 350px; display: block;">
+                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
                 </div>
               </div>
               
@@ -54,22 +54,52 @@
                   </div>
                 @endif
                 
+                <!-- Price & Stock Info Box -->
+                <div class="p-3 my-4 rounded border border-secondary border-opacity-20 d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: rgba(255,255,255,0.02);">
+                  <div>
+                    <span class="text-muted small d-block">Harga Estimasi / Penawaran:</span>
+                    <strong class="fs-4" style="color: var(--color-accent);">
+                      {{ ($product['price'] ?? 0) > 0 ? 'Rp ' . number_format($product['price'], 0, ',', '.') : 'Hubungi Tim Penawaran' }}
+                    </strong>
+                  </div>
+                  <div>
+                    <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
+                      <i class="bi bi-box-seam me-1"></i> Ready Stock
+                    </span>
+                  </div>
+                </div>
+
                 <div class="mt-4">
                   <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>
                   <div class="profil-body-text" style="line-height: 1.9;">
-                    {!! nl2br(e($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.')) !!}
+                    {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                   </div>
                 </div>
                 
-                <div class="d-flex flex-wrap gap-3 mt-5 pt-3" style="border-top: 1px solid var(--color-border);">
-                  <a href="{{ url('/kontak') }}?subjek=inquiry&produk={{ urlencode($product['title']) }}" class="kontak-submit-btn" style="text-decoration: none;">
-                    Minta Penawaran <i class="bi bi-envelope"></i>
-                  </a>
+                <form action="{{ route('cart.add') }}" method="POST" class="d-flex flex-wrap align-items-center gap-3 mt-5 pt-3" style="border-top: 1px solid var(--color-border);">
+                  @csrf
+                  <input type="hidden" name="title" value="{{ $product['title'] }}">
+                  <div class="d-flex align-items-center gap-3">
+                    <span class="text-white small fw-semibold">Jumlah Unit:</span>
+                    <div class="custom-qty-stepper d-flex align-items-center rounded border border-secondary border-opacity-30 overflow-hidden" style="background: rgba(255,255,255,0.03);">
+                      <button type="button" class="btn btn-dark text-white border-0 px-3 py-2 btn-qty-minus" onclick="stepQty(-1)">
+                        <i class="bi bi-dash-lg"></i>
+                      </button>
+                      <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold px-0 hide-spinner" style="width: 50px;">
+                      <button type="button" class="btn btn-dark text-white border-0 px-3 py-2 btn-qty-plus" onclick="stepQty(1)">
+                        <i class="bi bi-plus-lg"></i>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <button type="submit" class="kontak-submit-btn border-0 cursor-pointer">
+                    <i class="bi bi-cart-plus me-1"></i> Tambah ke Keranjang RFQ
+                  </button>
 
-                  <a href="{{ url('/produk') }}" class="profil-cta-btn" style="padding-top: 14px;">
+                  <a href="{{ url('/produk') }}" class="profil-cta-btn">
                     Kembali ke Katalog <i class="bi bi-arrow-right"></i>
                   </a>
-                </div>
+                </form>
               </div>
             </div>
           @else
@@ -110,7 +140,7 @@
         </button>
         <div class="modal-body text-center p-0">
           <div class="lightbox-image-wrapper">
-            <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="lightbox-img">
+            <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -200,4 +230,14 @@
       transform: scale(1);
     }
   </style>
+  <script>
+    function stepQty(amount) {
+      const input = document.getElementById('qty-input');
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        val = Math.max(1, val + amount);
+        input.value = val;
+      }
+    }
+  </script>
 @endsection

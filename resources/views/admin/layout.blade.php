@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Admin Panel') | PROLABIOS</title>
-  <meta name="description" content="Dashboard portal admin untuk mengelola katalog produk, artikel, dan sektor industri PT Prolabios Mitra Analitika.">
+  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+  <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
   <!-- Font: Space Grotesk — same as main website -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,11 +57,25 @@
           </a>
         </div>
 
+        <span class="sidebar-nav-label" style="margin-top: 8px;">Procurement B2B</span>
+
+        <div class="sidebar-item {{ request()->is('admin/rfq*') ? 'active' : '' }}">
+          <a href="{{ route('admin.rfq') }}" class="sidebar-link">
+            <i class="bi bi-file-earmark-text"></i> Penawaran (RFQ)
+          </a>
+        </div>
+
         <span class="sidebar-nav-label" style="margin-top: 8px;">Konten</span>
 
         <div class="sidebar-item {{ request()->is('admin/products*') ? 'active' : '' }}">
           <a href="{{ route('admin.products') }}" class="sidebar-link">
             <i class="bi bi-box-seam"></i> Produk
+          </a>
+        </div>
+
+        <div class="sidebar-item {{ request()->is('admin/principals*') ? 'active' : '' }}">
+          <a href="{{ route('admin.principals') }}" class="sidebar-link">
+            <i class="bi bi-award"></i> Prinsipal / Mitra
           </a>
         </div>
 

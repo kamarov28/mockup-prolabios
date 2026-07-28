@@ -80,23 +80,9 @@
               </div>
 
               <!-- Pagination -->
-              @if($totalPages > 1)
-                <nav aria-label="Page navigation" class="mt-5">
-                  <ul class="pagination justify-content-center">
-                    <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
-                      <a class="page-link" href="{{ url('/informasi') }}?page={{ $currentPage - 1 }}{{ $selectedCategory ? '&kategori=' . $selectedCategory : '' }}">Previous</a>
-                    </li>
-                    @for($i = 1; $i <= $totalPages; $i++)
-                      <li class="page-item {{ $currentPage == $i ? 'active' : '' }}">
-                        <a class="page-link" href="{{ url('/informasi') }}?page={{ $i }}{{ $selectedCategory ? '&kategori=' . $selectedCategory : '' }}">{{ $i }}</a>
-                      </li>
-                    @endfor
-                    <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
-                      <a class="page-link" href="{{ url('/informasi') }}?page={{ $currentPage + 1 }}{{ $selectedCategory ? '&kategori=' . $selectedCategory : '' }}">Next</a>
-                    </li>
-                  </ul>
-                </nav>
-              @endif
+              <div class="d-flex justify-content-center mt-5">
+                {{ $posts->links('pagination::bootstrap-5') }}
+              </div>
 
             @else
               <div style="text-align: center; padding: 80px 0; border: 1px solid var(--color-border);">

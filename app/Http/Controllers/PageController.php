@@ -14,11 +14,8 @@ class PageController extends Controller
     public function home(DataService $dataService)
     {
         $homeData = $dataService->getHomepageData();
-        $posts = $dataService->getPosts();
-        $recentPosts = array_slice($posts, 0, 3);
-        
-        $allProducts = $dataService->getProducts();
-        $featuredProducts = array_slice($allProducts, 0, 4);
+        $recentPosts = $dataService->getPosts([], 3);
+        $featuredProducts = $dataService->getProducts([], 4);
         
         return view('welcome', compact('homeData', 'recentPosts', 'featuredProducts'));
     }
@@ -70,7 +67,7 @@ class PageController extends Controller
             $filters['search'] = $searchQuery;
         }
 
-        $filteredProducts = $dataService->getProducts($filters);
+        $filteredProducts = $dataService->getPaginatedProducts($filters, 12);
 
         return view('produk', [
             'products' => $filteredProducts,
@@ -99,7 +96,7 @@ class PageController extends Controller
     public function sektor(DataService $dataService)
     {
         $sectors = $dataService->getSectors();
-        $products = $dataService->getProducts();
+        $products = $dataService->getProducts([], 16);
         return view('sektor', compact('sectors', 'products'));
     }
 
@@ -116,80 +113,49 @@ class PageController extends Controller
      */
     public function informasi(Request $request, DataService $dataService)
     {
-        $posts = $dataService->getPosts();
-        $recentPosts = array_slice($posts, 0, 3);
+        $recentPosts = $dataService->getPosts([], 3);
         
-        $categoryCounts = [
-            'Berita' => 0,
-            'Event' => 0,
-            'Info Terkait' => 0,
-            'IPTEK' => 0,
-            'Kegiatan' => 0
-        ];
-        
-        foreach ($posts as $post) {
-            $cat = $post['category'] ?? null;
-            if ($cat === 'Berita') $categoryCounts['Berita']++;
-            elseif ($cat === 'Event') $categoryCounts['Event']++;
-            elseif ($cat === 'Info Terkait' || $cat === 'Info') $categoryCounts['Info Terkait']++;
-            elseif ($cat === 'IPTEK') $categoryCounts['IPTEK']++;
-            elseif ($cat === 'Kegiatan') $categoryCounts['Kegiatan']++;
-        }
+        $categoryCounts = \Illuminate\Support\Facades\Cache::remember('blog_category_counts', 3600, function () use ($dataService) {
+            $allPosts = $dataService->getPosts();
+            $counts = [
+                'Berita' => 0,
+                'Event' => 0,
+                'Info Terkait' => 0,
+                'IPTEK' => 0,
+                'Kegiatan' => 0
+            ];
+            foreach ($allPosts as $post) {
+                $cat = $post['category'] ?? null;
+                if ($cat === 'Berita') $counts['Berita']++;
+                elseif ($cat === 'Event') $counts['Event']++;
+                elseif ($cat === 'Info Terkait' || $cat === 'Info') $counts['Info Terkait']++;
+                elseif ($cat === 'IPTEK') $counts['IPTEK']++;
+                elseif ($cat === 'Kegiatan') $counts['Kegiatan']++;
+            }
+            return $counts;
+        });
 
-        // Get and sanitize detail slug (regex validation for safety)
-        // Resolved against the full raw posts list before filtering
         $detail = $request->query('detail');
         $currentBlog = null;
         if ($detail && preg_match('/^[a-zA-Z0-9\-_]+$/', (string)$detail)) {
-            foreach ($posts as $post) {
-                if (($post['slug'] ?? null) === $detail) {
-                    $currentBlog = $post;
-                    break;
-                }
-            }
+            $currentBlog = $dataService->getPostBySlug((string)$detail);
         }
 
-        // Filter and sanitize by Category (allowlist validation)
         $rawKategori = $request->query('kategori');
         $allowedKategori = ['berita', 'event', 'info', 'iptek', 'kegiatan'];
         $selectedCategory = null;
+        $filters = [];
         if ($rawKategori && in_array(strtolower($rawKategori), $allowedKategori)) {
             $selectedCategory = strtolower($rawKategori);
-            $posts = array_filter($posts, function($post) use ($selectedCategory) {
-                $cat = strtolower($post['category'] ?? '');
-                if ($selectedCategory === 'info') {
-                    return $cat === 'info terkait' || $cat === 'info';
-                }
-                return $cat === $selectedCategory;
-            });
-            $posts = array_values($posts);
+            $filters['category'] = $selectedCategory;
         }
 
-        // Paginate
-        $perPage = 4;
-        $currentPage = (int)$request->query('page', 1);
-        if ($currentPage < 1) {
-            $currentPage = 1;
-        }
-        
-        $totalPosts = count($posts);
-        $totalPages = (int)ceil($totalPosts / $perPage);
-        if ($totalPages < 1) {
-            $totalPages = 1;
-        }
-        if ($currentPage > $totalPages) {
-            $currentPage = $totalPages;
-        }
-        
-        $offset = ($currentPage - 1) * $perPage;
-        $paginatedPosts = array_slice($posts, $offset, $perPage);
+        $paginatedPosts = $dataService->getPaginatedPosts($filters, 4);
 
         return view('informasi', [
             'posts' => $paginatedPosts,
             'categoryCounts' => $categoryCounts,
             'currentBlog' => $currentBlog,
-            'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
             'selectedCategory' => $selectedCategory,
             'recentPosts' => $recentPosts
         ]);

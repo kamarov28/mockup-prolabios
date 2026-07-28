@@ -1,0 +1,236 @@
+/**
+ * Hero Background Slideshow, Kinetic Particle Canvas, and Marquee Controllers
+ */
+import { prefersReducedMotion } from './utils.js';
+
+export function initHeroSlideshow() {
+  initHeroBgSlideshow();
+  initHeroKineticGrid();
+  initPrincipalSlider();
+  initMarqueeVisibility();
+}
+
+export function initHeroBgSlideshow() {
+  const slides = document.querySelectorAll('.hero-bg-slide');
+  if (slides.length <= 1) return;
+
+  const prevBtn      = document.getElementById('hero-prev');
+  const nextBtn      = document.getElementById('hero-next');
+  const heroSection  = document.querySelector('.typo-hero');
+  const slideNumEl   = document.getElementById('hero-slide-current');
+  const slideTotalEl = document.getElementById('hero-slide-total');
+  const progressFill = document.getElementById('hero-progress-fill');
+
+  const SLIDE_DURATION = 5;
+
+  if (slideTotalEl) {
+    slideTotalEl.textContent = slides.length < 10 ? '0' + slides.length : slides.length;
+  }
+
+  function updateCounter(idx) {
+    if (slideNumEl) {
+      slideNumEl.textContent = (idx + 1) < 10 ? '0' + (idx + 1) : (idx + 1);
+    }
+  }
+
+  function startProgressAnim() {
+    if (!progressFill) return;
+    progressFill.classList.remove('running');
+    void progressFill.offsetWidth; // force reflow
+    progressFill.classList.add('running');
+  }
+
+  const prefersReduced = prefersReducedMotion();
+  const motionOff = document.documentElement.classList.contains('no-motion');
+
+  if (prefersReduced || motionOff || typeof gsap === 'undefined') {
+    let cur = 0;
+    function swap(i) {
+      slides[cur].classList.remove('active');
+      cur = (i + slides.length) % slides.length;
+      slides[cur].classList.add('active');
+      updateCounter(cur);
+      startProgressAnim();
+    }
+    if (prevBtn) prevBtn.addEventListener('click', function () { swap(cur - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { swap(cur + 1); });
+    updateCounter(0);
+    startProgressAnim();
+    setInterval(function () { swap(cur + 1); }, SLIDE_DURATION * 1000);
+    return;
+  }
+
+  let current   = 0;
+  let autoTimer = null;
+  let isPaused  = false;
+
+  gsap.set(slides, { opacity: 0, scale: 1.0, xPercent: 0, zIndex: 1 });
+  gsap.set(slides[0], { opacity: 0.7, scale: 1.0, zIndex: 2 });
+
+  function goTo(next) {
+    if (next === current) return;
+    const outSlide = slides[current];
+    const inSlide  = slides[next];
+
+    gsap.killTweensOf([outSlide, inSlide]);
+
+    let dir = next > current ? 1 : -1;
+    if (current === slides.length - 1 && next === 0) dir = 1;
+    if (current === 0 && next === slides.length - 1) dir = -1;
+
+    gsap.set(inSlide, { opacity: 0, scale: 1.04, xPercent: dir * 5, zIndex: 3 });
+    gsap.set(outSlide, { zIndex: 2 });
+
+    gsap.to(outSlide, { 
+      opacity: 0, 
+      xPercent: -dir * 5,
+      scale: 1.0,
+      duration: 0.9, 
+      ease: 'power2.inOut',
+      onComplete: function() {
+        gsap.set(outSlide, { zIndex: 1, xPercent: 0 });
+      }
+    });
+
+    gsap.to(inSlide, { 
+      opacity: 0.7, 
+      xPercent: 0,
+      scale: 1.0,
+      duration: 0.9, 
+      ease: 'power2.inOut' 
+    });
+
+    slides[current].classList.remove('active');
+    slides[next].classList.add('active');
+
+    current = next;
+    updateCounter(current);
+    startProgressAnim();
+    resetAutoTimer();
+  }
+
+  function advance() {
+    if (!isPaused) goTo((current + 1) % slides.length);
+  }
+
+  function resetAutoTimer() {
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = setInterval(advance, SLIDE_DURATION * 1000);
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', function () {
+    goTo((current - 1 + slides.length) % slides.length);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function () {
+    goTo((current + 1) % slides.length);
+  });
+
+  if (heroSection) {
+    heroSection.addEventListener('mouseenter', function () { isPaused = true; });
+    heroSection.addEventListener('mouseleave', function () { isPaused = false; });
+  }
+
+  updateCounter(0);
+  startProgressAnim();
+  resetAutoTimer();
+}
+
+export function initHeroKineticGrid() {
+  const canvas = document.getElementById('hero-kinetic-canvas');
+  if (!canvas || prefersReducedMotion()) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  const mouse = { x: -1000, y: -1000, active: false };
+  const particles = [];
+  const spacing = 45;
+  let cols = 0;
+  let rows = 0;
+
+  function resize() {
+    const parent = canvas.parentElement;
+    width = canvas.width = parent ? parent.offsetWidth : window.innerWidth;
+    height = canvas.height = parent ? parent.offsetHeight : window.innerHeight;
+    cols = Math.ceil(width / spacing) + 1;
+    rows = Math.ceil(height / spacing) + 1;
+
+    particles.length = 0;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        particles.push({
+          baseX: c * spacing,
+          baseY: r * spacing,
+          x: c * spacing,
+          y: r * spacing,
+          vx: 0,
+          vy: 0
+        });
+      }
+    }
+  }
+
+  function onMouseMove(e) {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+  }
+
+  function onMouseLeave() {
+    mouse.active = false;
+    mouse.x = -1000;
+    mouse.y = -1000;
+  }
+
+  const heroContainer = document.querySelector('.typo-hero') || window;
+  window.addEventListener('resize', resize);
+  heroContainer.addEventListener('mousemove', onMouseMove);
+  heroContainer.addEventListener('mouseleave', onMouseLeave);
+  resize();
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      const dx = mouse.x - p.x;
+      const dy = mouse.y - p.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 120 && mouse.active) {
+        const angle = Math.atan2(dy, dx);
+        const force = (120 - dist) / 120;
+        p.vx -= Math.cos(angle) * force * 1.5;
+        p.vy -= Math.sin(angle) * force * 1.5;
+      }
+
+      p.vx += (p.baseX - p.x) * 0.05;
+      p.vy += (p.baseY - p.y) * 0.05;
+      p.vx *= 0.85;
+      p.vy *= 0.85;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      ctx.fillStyle = 'rgba(255, 73, 80, 0.4)';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(render);
+  }
+
+  render();
+}
+
+export function initPrincipalSlider() {
+  // Principal slider handling if needed
+}
+
+export function initMarqueeVisibility() {
+  // Marquee animation visibility handler
+}

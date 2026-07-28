@@ -34,6 +34,13 @@ class DataService
     public function getCategoriesStructure(): array
     {
         $fallback = [
+            'culture-media' => [
+                'name' => 'Culture Media',
+                'subs' => [
+                    'dehydrated-culture-media' => 'Dehydrated Culture Media',
+                    'ready-to-use-culture-media' => 'Ready To Use Culture Media',
+                ]
+            ],
             'microbiology' => [
                 'name' => 'Microbiology',
                 'subs' => [
@@ -48,9 +55,9 @@ class DataService
                     'dip-slide' => 'Dip slide',
                     'chemical-indicator' => 'Chemical Indicator',
                     'latex-agglutination' => 'Latex Agglutination Kits',
-                    'ready-culture' => 'Ready To Use Culture Media',
+                    'ready-to-use-culture-media' => 'Ready To Use Culture Media',
                     'biological-indicators' => 'Biological Indicators',
-                    'dehydrated-culture' => 'Dehydrated Culture Media',
+                    'dehydrated-culture-media' => 'Dehydrated Culture Media',
                     'immunology' => 'Immunology',
                     'endotoxin' => 'Endotoxin'
                 ]
@@ -132,16 +139,30 @@ class DataService
     // ----------------------------------------------------
     // Products Service  (MySQL)
     // ----------------------------------------------------
-    public function getProducts(?array $filters = []): array
+    public function getProducts(?array $filters = [], int $limit = 0): array
     {
         $query = DB::table('products')->orderBy('id');
 
         if (!empty($filters['category'])) {
-            $query->where('category', $filters['category']);
+            $cat = $filters['category'];
+            $catSlug = Str::slug($cat);
+            if ($catSlug === 'culture-media') {
+                $query->where(function($q) use ($cat) {
+                    $q->where('category', $cat)
+                      ->orWhere('category', 'LIKE', '%Culture Media%')
+                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                });
+            } else {
+                $query->where('category', $cat);
+            }
         }
 
         if (!empty($filters['sub_category'])) {
-            $query->where('sub_category', $filters['sub_category']);
+            $subCat = $filters['sub_category'];
+            $query->where(function($q) use ($subCat) {
+                $q->where('sub_category', $subCat)
+                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+            });
         }
 
         if (!empty($filters['search'])) {
@@ -153,9 +174,53 @@ class DataService
             });
         }
 
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+
         return $query->get()
             ->map(fn($r) => (array) $r)
             ->toArray();
+    }
+
+    public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
+    {
+        $query = DB::table('products')->orderBy('id');
+
+        if (!empty($filters['category'])) {
+            $cat = $filters['category'];
+            $catSlug = Str::slug($cat);
+            if ($catSlug === 'culture-media') {
+                $query->where(function($q) use ($cat) {
+                    $q->where('category', $cat)
+                      ->orWhere('category', 'LIKE', '%Culture Media%')
+                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                });
+            } else {
+                $query->where('category', $cat);
+            }
+        }
+
+        if (!empty($filters['sub_category'])) {
+            $subCat = $filters['sub_category'];
+            $query->where(function($q) use ($subCat) {
+                $q->where('sub_category', $subCat)
+                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+            });
+        }
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('catalog', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->paginate($perPage)
+            ->through(fn($r) => (array) $r)
+            ->withQueryString();
     }
 
     public function getProductByTitle(string $title): ?array
@@ -173,7 +238,7 @@ class DataService
                 DB::table('products')->insert([
                     'catalog'      => $p['catalog']      ?? null,
                     'title'        => $p['title'],
-                    'description'  => $p['description']  ?? null,
+                    'description'  => self::sanitizeHtml($p['description']  ?? null),
                     'category'     => $p['category'],
                     'sub_category' => $p['sub_category'] ?? null,
                     'sector'       => $p['sector']       ?? null,
@@ -197,6 +262,8 @@ class DataService
             'sub_category' => $product['sub_category'] ?? null,
             'sector'       => $product['sector']       ?? null,
             'image'        => $product['image']        ?? null,
+            'price'        => $product['price']        ?? 0,
+            'stock'        => $product['stock']        ?? 0,
             'created_at'   => now(),
             'updated_at'   => now(),
         ]);
@@ -214,10 +281,22 @@ class DataService
             'sub_category' => $updatedProduct['sub_category'] ?? null,
             'sector'       => $updatedProduct['sector']       ?? null,
             'image'        => $updatedProduct['image']        ?? null,
+            'price'        => $updatedProduct['price']        ?? 0,
+            'stock'        => $updatedProduct['stock']        ?? 0,
             'updated_at'   => now(),
         ]);
         \App\Models\Product::clearCategoriesCache();
         return true;
+    }
+
+    public function decrementStock(int|string $productIdOrTitle, int $quantity = 1): bool
+    {
+        $query = is_numeric($productIdOrTitle)
+            ? DB::table('products')->where('id', $productIdOrTitle)
+            : DB::table('products')->where('title', $productIdOrTitle);
+
+        $affected = (clone $query)->where('stock', '>=', $quantity)->decrement('stock', $quantity);
+        return $affected > 0;
     }
 
     public function deleteProduct(string $title): bool
@@ -239,25 +318,30 @@ class DataService
         DB::transaction(function () use ($products) {
             foreach ($products as $p) {
                 $existing = DB::table('products')->where('title', $p['title'])->first();
+                $cleanDesc = self::sanitizeHtml($p['description'] ?? null);
                 if ($existing) {
                     DB::table('products')->where('title', $p['title'])->update([
                         'catalog'      => $p['catalog']      ?? null,
-                        'description'  => $p['description']  ?? null,
+                        'description'  => $cleanDesc,
                         'category'     => $p['category'],
                         'sub_category' => $p['sub_category'] ?? null,
                         'sector'       => $p['sector']       ?? null,
                         'image'        => $p['image']        ?? null,
+                        'price'        => $p['price']        ?? 0,
+                        'stock'        => $p['stock']        ?? 0,
                         'updated_at'   => now(),
                     ]);
                 } else {
                     DB::table('products')->insert([
                         'catalog'      => $p['catalog']      ?? null,
                         'title'        => $p['title'],
-                        'description'  => $p['description']  ?? null,
+                        'description'  => $cleanDesc,
                         'category'     => $p['category'],
                         'sub_category' => $p['sub_category'] ?? null,
                         'sector'       => $p['sector']       ?? null,
                         'image'        => $p['image']        ?? null,
+                        'price'        => $p['price']        ?? 0,
+                        'stock'        => $p['stock']        ?? 0,
                         'created_at'   => now(),
                         'updated_at'   => now(),
                     ]);
@@ -272,13 +356,48 @@ class DataService
     // ----------------------------------------------------
     // Posts / Articles Service  (MySQL)
     // ----------------------------------------------------
-    public function getPosts(): array
+    public function getPosts(?array $filters = [], int $limit = 0): array
     {
-        return DB::table('posts')
-            ->orderByDesc('id')
-            ->get()
+        $query = DB::table('posts')->orderByDesc('id');
+
+        if (!empty($filters['category'])) {
+            $cat = strtolower($filters['category']);
+            if ($cat === 'info') {
+                $query->where(function($q) {
+                    $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
+                });
+            } else {
+                $query->whereRaw('LOWER(category) = ?', [$cat]);
+            }
+        }
+
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+
+        return $query->get()
             ->map(fn($r) => (array) $r)
             ->toArray();
+    }
+
+    public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
+    {
+        $query = DB::table('posts')->orderByDesc('id');
+
+        if (!empty($filters['category'])) {
+            $cat = strtolower($filters['category']);
+            if ($cat === 'info') {
+                $query->where(function($q) {
+                    $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
+                });
+            } else {
+                $query->whereRaw('LOWER(category) = ?', [$cat]);
+            }
+        }
+
+        return $query->paginate($perPage)
+            ->through(fn($r) => (array) $r)
+            ->withQueryString();
     }
 
     public function getPostBySlug(string $slug): ?array
@@ -298,7 +417,7 @@ class DataService
                     'date'       => $post['date'],
                     'category'   => $post['category'],
                     'image'      => $post['image']   ?? null,
-                    'content'    => $post['content'] ?? null,
+                    'content'    => self::sanitizeHtml($post['content'] ?? null),
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
@@ -310,14 +429,16 @@ class DataService
     public function addPost(array $post): bool
     {
         DB::table('posts')->insert([
-            'slug'       => $post['slug'],
-            'title'      => $post['title'],
-            'date'       => $post['date'],
-            'category'   => $post['category'],
-            'image'      => $post['image']   ?? null,
-            'content'    => self::sanitizeHtml($post['content'] ?? null),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'slug'        => $post['slug'],
+            'title'       => $post['title'],
+            'date'        => $post['date'],
+            'category'    => $post['category'],
+            'status'      => $post['status']      ?? 'online',
+            'is_featured' => $post['is_featured'] ?? false,
+            'image'       => $post['image']       ?? null,
+            'content'     => self::sanitizeHtml($post['content'] ?? null),
+            'created_at'  => now(),
+            'updated_at'  => now(),
         ]);
         return true;
     }
@@ -325,13 +446,15 @@ class DataService
     public function updatePost(string $slug, array $updatedPost): bool
     {
         DB::table('posts')->where('slug', $slug)->update([
-            'slug'       => $updatedPost['slug'],
-            'title'      => $updatedPost['title'],
-            'date'       => $updatedPost['date'],
-            'category'   => $updatedPost['category'],
-            'image'      => $updatedPost['image']   ?? null,
-            'content'    => self::sanitizeHtml($updatedPost['content'] ?? null),
-            'updated_at' => now(),
+            'slug'        => $updatedPost['slug'],
+            'title'       => $updatedPost['title'],
+            'date'        => $updatedPost['date'],
+            'category'    => $updatedPost['category'],
+            'status'      => $updatedPost['status']      ?? 'online',
+            'is_featured' => $updatedPost['is_featured'] ?? false,
+            'image'       => $updatedPost['image']       ?? null,
+            'content'     => self::sanitizeHtml($updatedPost['content'] ?? null),
+            'updated_at'  => now(),
         ]);
         return true;
     }
@@ -347,18 +470,19 @@ class DataService
     // ----------------------------------------------------
     public function getSectors(): array
     {
-        return DB::table('sectors')
-            ->orderBy('name')
-            ->get()
-            ->map(function ($r) {
-                $row = (array) $r;
-                // description stored as JSON string in DB, decode back to array
-                $row['description'] = is_string($row['description'])
-                    ? (json_decode($row['description'], true) ?? [])
-                    : ($row['description'] ?? []);
-                return $row;
-            })
-            ->toArray();
+        return Cache::remember('sectors_list_v2', 3600, function () {
+            return DB::table('sectors')
+                ->orderBy('name')
+                ->get()
+                ->map(function ($r) {
+                    $row = (array) $r;
+                    $row['description'] = is_string($row['description'])
+                        ? (json_decode($row['description'], true) ?? [])
+                        : ($row['description'] ?? []);
+                    return $row;
+                })
+                ->toArray();
+        });
     }
 
     public function getSectorById(string $id): ?array
@@ -479,37 +603,89 @@ class DataService
     public function getDefaultHomepageData(): array
     {
         return [
-            'hero_title'       => 'Solusi Analitika & Mikrobiologi Terpercaya',
-            'hero_subtitle'    => 'Kami menyediakan media kultur, instrumen lab, dan perlengkapan pengujian dengan kualitas terbaik untuk mendukung berbagai kebutuhan industri di Indonesia.',
-            'hero_images'      => [
-                'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-                'https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+            // 1. Hero Section
+            'hero_badge'        => 'PRECISION LABORATORY SOLUTIONS',
+            'hero_title'        => 'Uncompromised <span class="text-accent">Testing Accuracy</span> for Research & Industry.',
+            'hero_subtitle'     => 'Official provider of analytical instruments, culture media, and laboratory reagents meeting strict international quality standards.',
+            'hero_cta_text'     => 'Explore Product Catalog',
+            'hero_cta_link'     => '/produk',
+            'hero_images'       => [
+                'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
             ],
-            'focus_title'      => 'Fokus Industri Kami',
-            'focus_cards'      => [
+
+            // 2. Bento Infrastructure Grid
+            'bento_title'       => 'Infrastructure & Reliability Standards',
+            'bento_subtitle'    => 'Engineered to fulfill strict regulatory compliance and ensure seamless laboratory testing continuity.',
+            'bento_cards'       => [
                 [
-                    'title'       => 'Farmasi & Klinis',
-                    'description' => 'Menyediakan perangkat uji endotoksin dan instrumen kinetik untuk kebutuhan sterilisasi dan pengecekan klinis.',
-                    'image'       => 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                    'icon'  => 'bi-patch-check',
+                    'title' => 'ISO & AKL Certified Products',
+                    'desc'  => 'Over 1,000+ officially accredited reagents and instruments, guaranteeing distribution legality for BPOM and ISO 17025 audit compliance.'
                 ],
                 [
-                    'title'       => 'Food & Beverage',
-                    'description' => 'HACCP System Plus untuk total bacterial count dan identifikasi kuman patogen langsung dari permukaan kerja.',
-                    'image'       => 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                    'icon'  => 'bi-file-earmark-code',
+                    'title' => 'Instant COA & MSDS Access',
+                    'desc'  => 'Every batch of reagents and culture media comes with official Certificate of Analysis (COA) and MSDS ready for lab validation download.'
                 ],
                 [
-                    'title'       => 'Mikrobiologi Umum',
-                    'description' => 'Menyediakan MICA® Diamidex dan media kultur selektif untuk isolasi mikroorganisme yang presisi.',
-                    'image'       => 'https://images.unsplash.com/photo-1576086213369-97a306d36557?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                    'icon'  => 'bi-snow',
+                    'title' => 'Safe Cold-Chain Logistics',
+                    'desc'  => 'Tested cold-chain infrastructure ensuring temperature-sensitive reagents remain stable and active upon arrival at your laboratory.'
                 ],
+                [
+                    'icon'  => 'bi-tools',
+                    'title' => 'Integrated After-Sales & Calibration',
+                    'desc'  => 'Comprehensive equipment qualification (IQ/OQ/PQ), routine calibration services, and technical training by application specialists.'
+                ]
             ],
+
+            // 3. Interactive Sector Finder
+            'sector_title'      => 'Interactive Sector Finder',
+            'sector_subtitle'   => 'Select your industry sector to explore tailored testing workflows and relevant products.',
+            'sector_panels'     => [
+                'pharma' => [
+                    'tag'   => 'PHARMACEUTICAL & COSMETICS',
+                    'title' => 'Endotoxin Testing & Sterilization Validation',
+                    'desc'  => 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.',
+                    'link'  => '/sektor?s=pharmaceutical#sektor-nav'
+                ],
+                'fnb' => [
+                    'tag'   => 'FOOD & BEVERAGE INDUSTRY',
+                    'title' => 'Rapid Pathogen Detection & Hygiene Monitoring',
+                    'desc'  => 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.',
+                    'link'  => '/sektor?s=food#sektor-nav'
+                ],
+                'healthcare' => [
+                    'tag'   => 'HEALTHCARE & HOSPITAL CSSD',
+                    'title' => 'Diagnostics & Sterilization Indicators',
+                    'desc'  => 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.',
+                    'link'  => '/sektor?s=hospital-clinic#sektor-nav'
+                ],
+                'brewing' => [
+                    'tag'   => 'BREWING & RESEARCH LABS',
+                    'title' => 'Spoilage Control & Fermentation Quality',
+                    'desc'  => 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.',
+                    'link'  => '/sektor?s=brewing#sektor-nav'
+                ]
+            ],
+
+            // 4. Bottom Conversion CTA Banner
+            'cta_banner_badge'     => 'TECHNICAL PROCUREMENT SUPPORT',
+            'cta_banner_title'     => 'Require Custom Procurement or Project Quote?',
+            'cta_banner_sub'       => 'Our application specialists and technical sales team assist with instrument specifications, bulk availability, and compliance documentation.',
+            'cta_banner_btn_text'  => 'Contact Sales / Request Quote',
+            'cta_banner_btn_url'   => '/kontak',
+
+            // Legacy fallbacks kept for compatibility
+            'focus_title'       => 'Interactive Sector Finder',
+            'focus_cards'       => [],
             'about_title'       => 'Tentang Prolabios',
-            'about_description' => 'Prolabios Mitra Analitika (PMA) dibangun untuk menjadi salah satu distributor terkemuka di Indonesia dengan semangat memenuhi kebutuhan produk atau layanan serta peningkatan keterampilan bagi pengguna laboratorium.',
+            'about_description' => 'Prolabios Mitra Analitika (PMA) dibangun untuk menjadi distributor terkemuka produk mikrobiologi di Indonesia.',
             'hotline_label'     => 'Layanan Pelanggan 24/7',
             'hotline_number'    => '0821-8792-9433',
-            'hotline_description' => 'Hubungi kami via telepon atau WhatsApp untuk konsultasi produk dan layanan perbaikan alat laboratorium Anda.',
+            'hotline_description' => 'Hubungi kami via telepon atau WhatsApp untuk konsultasi produk.',
 
             // Site-wide contact info
             'contact_phone'            => '0821-8792-9433',

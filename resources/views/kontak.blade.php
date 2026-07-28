@@ -18,7 +18,7 @@
       <div class="row g-5">
 
         <!-- Contact Info -->
-        <div class="col-lg-4 col-md-5 d-none d-md-block">
+        <div class="col-lg-4 col-md-5 order-last order-md-first">
 
           <div class="kontak-info-block">
             <div class="kontak-info-icon"><i class="bi bi-geo-alt"></i></div>

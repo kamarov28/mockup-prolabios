@@ -8,14 +8,16 @@
   --color-accent: #25D366; /* WhatsApp Green */
   
   --color-text-main: #F8FAFC; /* Slate 50 */
-  --color-text-muted: #94A3B8; /* Slate 400 */
+  --color-text-muted: #CBD5E1; /* Slate 300 - WCAG AA compliant on dark backgrounds */
   --color-bg-body: #0B0F19; /* Premium Dark Navy */
+  --color-bg-dark: #0B0F19; /* Premium Dark Navy Alias */
   --color-bg-white: #111827; /* Dark Slate card background */
   --color-bg-gray: #1F2937; /* Dark Slate background */
   --color-border: #374151; /* Dark Slate border */
 
   /* Typography */
-  --font-family-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-family-headline: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
   /* Shadows */
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
@@ -168,8 +170,9 @@ body {
 }
 
 [data-theme="dark"] .navbar {
-  background-color: var(--color-bg-white) !important;
-  border-bottom: 1px solid var(--color-border) !important;
+  background: rgba(5, 7, 9, 0.95) !important;
+  border: 1px solid rgba(255, 73, 80, 0.35) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
 }
 [data-theme="dark"] .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.25) !important;
@@ -254,10 +257,11 @@ body {
 }
 
 [data-theme="dark"] .navbar.sticky-top {
-  background-color: rgba(11, 15, 25, 0.85) !important;
+  background: rgba(5, 7, 9, 0.95) !important;
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 73, 80, 0.35) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
 }
 
 [data-theme="dark"] .navbar-brand img {
@@ -278,27 +282,10 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Sliding Indicator on Navbar links */
+/* Navbar links disable old sliding underlines */
 .navbar-nav .nav-link {
   position: relative;
   transition: color 0.3s ease;
-}
-
-.navbar-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-primary);
-  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
-.navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-link.active::after {
-  width: 80%;
-  left: 10%;
 }
 
 /* Disable sliding underlines for theme and motion toggle buttons */
@@ -312,7 +299,7 @@ body {
 
 /* Theme Toggle Button Rotation */
 #theme-toggle {
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 #theme-toggle:hover {
   transform: rotate(20deg) scale(1.15);
@@ -434,25 +421,33 @@ body {
   background: linear-gradient(to left, #070708 0%, transparent 100%) !important;
 }
 
-/* Dark Mode overrides for marquee logo boxes */
+/* Dark Mode overrides for marquee logo boxes - Option 1: Frosted Substrate Cards */
 [data-theme="dark"] .marquee-logo-box {
-  background-color: rgba(255, 255, 255, 0.82) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: none !important;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px 20px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-[data-theme="dark"] .marquee-logo-box:hover {
-  background-color: rgba(255, 255, 255, 1) !important;
-  transform: scale(1.05) translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
-}
+
 [data-theme="dark"] .marquee-logo-box img {
-  filter: grayscale(100%) !important;
-  opacity: 0.75 !important;
-  transition: all 0.3s ease !important;
+  filter: brightness(0.9) contrast(110%);
+  opacity: 0.85;
+  transition: all 0.35s ease;
 }
+
+[data-theme="dark"] .marquee-logo-box:hover {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(255, 255, 255, 1) !important;
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.15) !important;
+}
+
 [data-theme="dark"] .marquee-logo-box:hover img {
-  filter: grayscale(0%) !important;
+  filter: none !important;
   opacity: 1 !important;
 }
 
@@ -476,11 +471,11 @@ body {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Visi Misi Card Motion: Subtle border widening + translation */
+/* Visi Misi Card Motion: Subtle border glow + translation */
 #visi-misi .card:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06) !important;
-  border-left-width: 8px !important;
+  border-color: rgba(255, 73, 80, 0.3) !important;
 }
 
 [data-theme="dark"] .blog-card:hover, 
@@ -961,19 +956,19 @@ body {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.05);
-  color: #cbd5e1 !important;
+  background-color: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.6) !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
 }
 
 .footer-social-icon:hover {
-  background-color: var(--color-primary);
-  color: #ffffff !important;
-  border-color: var(--color-primary);
-  transform: translateY(-3px);
-  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3);
+  background-color: rgba(255, 73, 80, 0.1) !important;
+  color: var(--color-accent) !important;
+  border-color: rgba(255, 73, 80, 0.4) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
 .premium-footer .footer-logo {
@@ -1105,14 +1100,14 @@ body {
   width: 100%;
   height: 100%;
   opacity: 0;
-  transform: scale(0.9) rotate(-3deg);
-  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease;
+  transform: scale(0.95);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
   z-index: 1;
 }
 
 .carousel-card-swap .carousel-item.active {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: scale(1);
   position: relative;
   z-index: 2;
 }
@@ -1121,26 +1116,26 @@ body {
 .carousel-card-swap .carousel-item-next.carousel-item-start,
 .carousel-card-swap .carousel-item-prev.carousel-item-end {
   opacity: 1;
-  transform: scale(1) rotate(0deg);
+  transform: scale(1);
   z-index: 2;
 }
 
 /* Outgoing slide action (slides out to left/right with rotation and tilt) */
 .carousel-card-swap .active.carousel-item-start {
   opacity: 0;
-  transform: scale(0.9) translateX(-100%) rotate(-8deg);
+  transform: scale(0.95) translateX(-60%);
   z-index: 1;
 }
 
 .carousel-card-swap .active.carousel-item-end {
   opacity: 0;
-  transform: scale(0.9) translateX(100%) rotate(8deg);
+  transform: scale(0.95) translateX(60%);
   z-index: 1;
 }
 
 /* Theme Toggle Icon Micro-interaction */
 #theme-toggle-icon {
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   display: inline-block;
 }
 #theme-toggle-icon.rotated {
@@ -1213,14 +1208,6 @@ body {
   [data-theme="dark"] .navbar-nav .nav-link {
     border-bottom-color: rgba(255, 255, 255, 0.05);
   }
-  .navbar-nav .nav-link::after {
-    left: 16px !important;
-  }
-  .navbar-nav .nav-link:hover::after,
-  .navbar-nav .nav-link.active::after {
-    width: 35px !important;
-    left: 16px !important;
-  }
 }
 
 /* Catalog Sidebar collapse indicator & mobile grids */
@@ -1287,7 +1274,7 @@ body {
   }
 }
 
-/* Accessibility Utility */
+/* Accessibility Utilities & Touch Target Fixes */
 .visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -1298,6 +1285,43 @@ body {
   clip: rect(0, 0, 0, 0) !important;
   white-space: nowrap !important;
   border: 0 !important;
+}
+
+/* Ensure minimum touch targets on mobile triggers */
+#mobile-search-open,
+#nav-search-open,
+.search-close-btn,
+.suggestion-tag {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Focus visible styles for keyboard navigation */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+.suggestion-tag:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 3px !important;
+}
+
+/* Reduced motion preference safeguards */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .marquee-content-single {
+    animation: none !important;
+  }
 }
 
 

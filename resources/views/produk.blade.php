@@ -43,9 +43,12 @@
                     <!-- Category with subcategories: acts as accordion toggle -->
                     <a href="#"
                        class="layanan-sidebar-link d-flex justify-content-between align-items-center category-accordion-btn {{ $activeCategory === $catKey ? 'is-active' : '' }}"
+                       role="button"
+                       aria-expanded="{{ $activeCategory === $catKey ? 'true' : 'false' }}"
+                       aria-controls="sub-group-{{ $catKey }}"
                        data-target="sub-group-{{ $catKey }}">
                       <span>{{ $catData['name'] }}</span>
-                      <i class="bi bi-chevron-{{ $activeCategory === $catKey ? 'down' : 'right' }} chevron-icon" style="font-size: 0.7rem; opacity: 0.4;"></i>
+                      <i class="bi bi-chevron-{{ $activeCategory === $catKey ? 'down' : 'right' }} chevron-icon" style="font-size: 0.7rem; opacity: 0.6;"></i>
                     </a>
 
                     <!-- Subcategories container -->
@@ -83,33 +86,34 @@
 
         <!-- Main Content -->
         <div class="col-lg-9 col-md-8">
-          <div class="d-flex flex-wrap justify-content-between align-items-start mb-5 gap-3">
-            <div>
-              <h2 class="produk-category-title" id="category-title">
-                @if($activeCategory === 'all')
-                  All Products
-                @else
-                  {{ $categoriesStructure[$activeCategory]['name'] }}
-                  @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
-                    — {{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }}
-                  @endif
+          <!-- Category Title Header -->
+          <div class="mb-4">
+            <h2 class="produk-category-title mb-1" id="category-title">
+              @if($activeCategory === 'all')
+                All Products
+              @else
+                {{ $categoriesStructure[$activeCategory]['name'] }}
+                @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
+                  — {{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }}
                 @endif
-              </h2>
-              <span class="produk-category-subtitle" id="category-subtitle">
-                @if($activeCategory === 'all')
-                    Displaying the entire product catalog
-                @else
-                  Showing results for {{ $categoriesStructure[$activeCategory]['name'] }}
-                  @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
-                    ({{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }})
-                  @endif
+              @endif
+            </h2>
+            <span class="produk-category-subtitle d-block" id="category-subtitle">
+              @if($activeCategory === 'all')
+                  Displaying the entire product catalog
+              @else
+                Showing results for {{ $categoriesStructure[$activeCategory]['name'] }}
+                @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
+                  ({{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }})
                 @endif
-              </span>
-            </div>
-            <div class="produk-search-wrap" style="width: 100%; max-width: 280px;">
-              <i class="bi bi-search"></i>
-              <input type="text" id="local-search-input" placeholder="Search for products..." aria-label="Cari produk" value="{{ request()->query('q') ?? request()->query('s') }}">
-            </div>
+              @endif
+            </span>
+          </div>
+
+          <!-- Search Input Box Below Title -->
+          <div class="produk-search-wrap w-100 mb-5" style="max-width: 480px;">
+            <i class="bi bi-search"></i>
+            <input type="text" id="local-search-input" placeholder="Search reagents or CAT. code..." aria-label="Cari produk" value="{{ request()->query('q') ?? request()->query('s') }}">
           </div>
 
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
@@ -120,27 +124,34 @@
                   <div class="img-wrap">
                     <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
                   </div>
-                  <div class="card-body p-3 d-flex flex-column">
+                  <div class="card-body p-4 d-flex flex-column">
                     @if(!empty($prod['catalog']))
-                      <div style="font-size: 0.72rem; color: var(--color-accent); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
-                        <i class="bi bi-upc-scan me-1"></i> Cat. {{ $prod['catalog'] }}
+                      <div class="product-cat-code mb-2">
+                        CAT. {{ $prod['catalog'] }}
                       </div>
                     @endif
-                    <h3 class="card-title fs-6 fw-bold">
-                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
+                    <h3 class="card-title fs-6 fw-semibold mb-2">
+                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="product-card-link">{{ $prod['title'] }}</a>
                     </h3>
-                    <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 6px; margin-bottom: 14px; flex-grow: 1;">
-                      {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 85) }}
+                    <p class="product-card-desc mb-3 flex-grow-1">
+                      {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) }}
                     </p>
 
-                    <!-- B2B Value Add Badge -->
-                    <div class="b2b-product-roi-badge mb-3">
-                      <i class="bi bi-check-circle-fill text-accent me-1"></i> CoA Included &bull; High Reliability
+                    <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="fw-bold" style="color: var(--color-accent); font-size: 0.88rem; font-family: var(--font-headline); letter-spacing: 0.5px;">
+                          {{ ($prod['price'] ?? 0) > 0 ? 'Rp ' . number_format($prod['price'], 0, ',', '.') : 'Est. Penawaran' }}
+                        </span>
+                      </div>
+                      <form action="{{ route('cart.add') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="title" value="{{ $prod['title'] }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100 fw-semibold">
+                          <i class="bi bi-cart-plus me-1"></i> + Keranjang RFQ
+                        </button>
+                      </form>
                     </div>
-
-                    <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="profil-cta-btn w-100 text-center" style="font-size: 0.75rem;">
-                      Spesifikasi &amp; Detail <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
                   </div>
                 </div>
               </div>
@@ -154,6 +165,7 @@
           </div>
 
           <div class="d-flex justify-content-center mt-5" id="dynamic-pagination">
+            {{ $products->links('pagination::bootstrap-5') }}
           </div>
         </div>
       </div>
@@ -335,10 +347,10 @@
             const q = query.toLowerCase();
             cards.forEach(card => {
               if (card.textContent.toLowerCase().includes(q)) {
-                card.classList.remove('hidden-by-filter');
-                card.style.display = 'block';
+                card.classList.remove('hidden-by-filter', 'd-none');
+                card.style.display = '';
               } else {
-                card.classList.add('hidden-by-filter');
+                card.classList.add('hidden-by-filter', 'd-none');
                 card.style.display = 'none';
               }
             });

@@ -107,6 +107,8 @@
               <th>Gambar</th>
               <th>Katalog</th>
               <th>Nama Produk</th>
+              <th>Harga</th>
+              <th>Stok</th>
               <th>Kategori</th>
               <th>Sektor</th>
               <th style="text-align: right; padding-right: 24px;">Aksi</th>
@@ -126,6 +128,14 @@
                   <div class="cell-muted" style="max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     {{ strip_tags(html_entity_decode($p['description'] ?? '')) ?: 'Tidak ada deskripsi' }}
                   </div>
+                </td>
+                <td style="white-space: nowrap; font-weight: 600; color: var(--color-accent);">
+                  {{ ($p['price'] ?? 0) > 0 ? 'Rp ' . number_format($p['price'], 0, ',', '.') : 'Hubungi Kami' }}
+                </td>
+                <td>
+                  <span class="admin-badge {{ ($p['stock'] ?? 0) > 0 ? 'admin-badge-success' : 'admin-badge-danger' }}">
+                    {{ $p['stock'] ?? 0 }} Unit
+                  </span>
                 </td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category']) }}</span></td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>

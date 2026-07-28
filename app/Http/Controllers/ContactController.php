@@ -19,7 +19,7 @@ class ContactController extends Controller
             "telepon" => "nullable|string|max:50",
             "perusahaan" => "nullable|string|max:255",
             "subjek" => "required|string|max:50",
-            "pesan" => "required|string",
+            "pesan" => "required|string|max:5000",
         ]);
 
         // Mapping Label Subjek agar terlihat rapi di email

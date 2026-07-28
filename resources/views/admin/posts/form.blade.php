@@ -29,7 +29,7 @@
       </div>
 
       <!-- Category -->
-      <div class="col-md-4">
+      <div class="col-md-6">
         <label for="category" class="form-label fw-bold">Kategori Artikel <span class="text-danger">*</span></label>
         <select class="form-select" id="category" name="category" required>
           <option value="">-- Pilih Kategori --</option>
@@ -38,7 +38,50 @@
           <option value="Info Terkait" {{ old('category', $post['category'] ?? '') === 'Info Terkait' || old('category', $post['category'] ?? '') === 'Info' ? 'selected' : '' }}>Info Terkait</option>
           <option value="IPTEK" {{ old('category', $post['category'] ?? '') === 'IPTEK' ? 'selected' : '' }}>IPTEK</option>
           <option value="Kegiatan" {{ old('category', $post['category'] ?? '') === 'Kegiatan' ? 'selected' : '' }}>Kegiatan</option>
+          <option value="Berita & Kegiatan" {{ old('category', $post['category'] ?? '') === 'Berita & Kegiatan' ? 'selected' : '' }}>Berita &amp; Kegiatan</option>
         </select>
+      </div>
+
+      <!-- Status & Highlight Radio Group -->
+      <div class="col-12 mt-4 pt-3 border-top border-secondary border-opacity-10">
+        <div class="row g-4">
+          <!-- Status -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold d-block">Status Artikel</label>
+            <div class="d-flex flex-column gap-2">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="status_option" id="statusDraft" value="draft" {{ old('status_option', ($post['status'] ?? 'online') === 'draft' ? 'draft' : 'online_now') === 'draft' ? 'checked' : '' }}>
+                <label class="form-check-label" for="statusDraft">Draft (Simpan sebagai draf)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="status_option" id="statusOnlineNow" value="online_now" {{ old('status_option', ($post['status'] ?? 'online') === 'online' ? 'online_now' : 'draft') === 'online_now' ? 'checked' : '' }}>
+                <label class="form-check-label" for="statusOnlineNow">Online Now (Terbitkan Sekarang)</label>
+              </div>
+              <div class="form-check d-flex align-items-center gap-2">
+                <input class="form-check-input" type="radio" name="status_option" id="statusScheduled" value="scheduled" {{ old('status_option') === 'scheduled' ? 'checked' : '' }}>
+                <label class="form-check-label me-1" for="statusScheduled">Online pada tanggal:</label>
+                <input type="date" name="publish_date" class="form-control form-control-sm" style="width: 160px;" value="{{ old('publish_date') }}">
+              </div>
+            </div>
+          </div>
+
+          <!-- Highlight / Show on Frontpage -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold d-block">Highlight (Beranda)</label>
+            <div class="d-flex align-items-center gap-4 mt-2">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="highlight" id="highlightNo" value="0" {{ old('highlight', ($post['is_featured'] ?? false) ? '1' : '0') === '0' ? 'checked' : '' }}>
+                <label class="form-check-label" for="highlightNo">No (Biasa)</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="highlight" id="highlightYes" value="1" {{ old('highlight', ($post['is_featured'] ?? false) ? '1' : '0') === '1' ? 'checked' : '' }}>
+                <label class="form-check-label text-warning fw-semibold" for="highlightYes">
+                  <i class="bi bi-star-fill me-1"></i> Show on Frontpage
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Image Area -->

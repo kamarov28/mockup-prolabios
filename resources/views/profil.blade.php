@@ -41,7 +41,7 @@
           <div class="profil-cta-box">
             <h3 class="profil-sidebar-title">Need a Consultation?</h3>
             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Our team of experts is ready to help you choose the right instruments and reagents.</p>
-            <a href="{{ url('/kontak') }}" class="profil-cta-btn">Hubungi Kami <i class="bi bi-arrow-right"></i></a>
+            <a href="{{ url('/kontak') }}" class="profil-cta-btn">Contact Us <i class="bi bi-arrow-right"></i></a>
           </div>
 
         </div>
@@ -56,7 +56,7 @@
 
           <!-- Our Story -->
           <div class="mb-5">
-            <span class="profil-section-label">01 — Cerita Kami</span>
+            <span class="profil-section-label">Our Story</span>
             <h2 class="profil-section-title">Our Story</h2>
             <p class="profil-body-text">
                 <strong>Prolabios Mitra Analitika (PMA)</strong> was established to become one of Indonesia’s leading distributors, driven by a commitment to meeting the product and service needs of laboratory users and enhancing their skills. Our success is measured by the company’s growth, employee well-being, and customer satisfaction.
@@ -67,7 +67,7 @@
 
           <!-- Vision & Mission -->
           <div id="visi-misi" class="mb-5">
-            <span class="profil-section-label">02 — Our Principles</span>
+            <span class="profil-section-label">Our Principles</span>
             <h2 class="profil-section-title">Vision & Mission</h2>
             <div class="row g-4 mt-2">
               <div class="col-md-6">
@@ -96,7 +96,7 @@
 
           <!-- Core Values -->
           <div>
-            <span class="profil-section-label">03 — Our Core Values</span>
+            <span class="profil-section-label">Our Core Values</span>
             <h2 class="profil-section-title">The P-R-O Way</h2>
             <div class="row g-4 mt-2">
               <div class="col-md-4">

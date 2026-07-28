@@ -44,7 +44,7 @@
           <!-- Service Block: Maintenance & Repair -->
           <div id="service-content-maintenance" class="service-content-block {{ $activeService == 'maintenance' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-5">
-              <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Maintenance Service" class="w-100" style="object-fit: cover; height: 320px; display: block;">
+              <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Maintenance Service" class="w-100" style="object-fit: cover; height: 320px; display: block;" loading="lazy" decoding="async">
             </div>
             <span class="profil-section-label">Service 01</span>
             <h2 class="profil-section-title">Maintenance &amp; Repair</h2>
@@ -53,7 +53,7 @@
             <div class="row g-4 mt-3">
               <div class="col-md-4"><div class="layanan-feature-card"><h3 class="layanan-feature-title">Preventive Maintenance</h3><p class="profil-body-text">A schedule of routine maintenance to prevent equipment failure that could halt your lab’s operations.</p></div></div>
               <div class="col-md-4"><div class="layanan-feature-card"><h3 class="layanan-feature-title">Troubleshooting &amp; Repair</h3><p class="profil-body-text">Quick repairs utilizing guaranteed genuine <em>spare parts</em>.</p></div></div>
-              <div class="col-md-4"><div class="layanan-feature-card"><h3 class="layanan-feature-title">Kalibrasi Internal</h3><p class="profil-body-text">A service to verify the accuracy of instrument readings to ensure the reliability of test analysis results.</p></div></div>
+              <div class="col-md-4"><div class="layanan-feature-card"><h3 class="layanan-feature-title">Internal Calibration</h3><p class="profil-body-text">A service to verify the accuracy of instrument readings to ensure the reliability of test analysis results.</p></div></div>
             </div>
 
             <div class="layanan-cta-strip mt-5">
@@ -66,7 +66,7 @@
           <!-- Service Block: Lab Design & Build -->
           <div id="service-content-labdesign" class="service-content-block {{ $activeService == 'labdesign' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-5">
-              <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Lab Design & Build" class="w-100" style="object-fit: cover; height: 320px; display: block;">
+              <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Lab Design & Build" class="w-100" style="object-fit: cover; height: 320px; display: block;" loading="lazy" decoding="async">
             </div>
             <span class="profil-section-label">Service 02</span>
             <h2 class="profil-section-title">Lab Design &amp; Build</h2>
@@ -88,7 +88,7 @@
           <!-- Service Block: Consultation & Training -->
           <div id="service-content-consultation" class="service-content-block {{ $activeService == 'consultation' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-5">
-              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Consultation & Training" class="w-100" style="object-fit: cover; height: 320px; display: block;">
+              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Consultation & Training" class="w-100" style="object-fit: cover; height: 320px; display: block;" loading="lazy" decoding="async">
             </div>
             <span class="profil-section-label">Service 03</span>
             <h2 class="profil-section-title">Consultation &amp; Training</h2>

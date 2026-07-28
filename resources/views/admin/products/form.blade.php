@@ -33,6 +33,18 @@
         <input type="text" class="form-control" id="catalog" name="catalog" value="{{ old('catalog', $product['catalog'] ?? '') }}" placeholder="Contoh: 610152">
       </div>
 
+      <!-- Harga Produk (Rp) -->
+      <div class="col-md-6">
+        <label for="price" class="form-label fw-bold">Harga Produk (Rp)</label>
+        <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" value="{{ old('price', $product['price'] ?? 0) }}" placeholder="Contoh: 1500000">
+      </div>
+
+      <!-- Stok Produk -->
+      <div class="col-md-6">
+        <label for="stock" class="form-label fw-bold">Stok Produk (Unit)</label>
+        <input type="number" min="0" class="form-control" id="stock" name="stock" value="{{ old('stock', $product['stock'] ?? 0) }}" placeholder="Contoh: 50">
+      </div>
+
       <!-- Kategori Utama -->
       <div class="col-md-6">
         <label for="category" class="form-label fw-bold">Kategori <span class="text-danger">*</span></label>

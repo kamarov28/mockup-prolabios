@@ -42,16 +42,6 @@ class AdminController extends Controller
             return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
         }
 
-        // 2. Fallback to ENV admin credentials (with timing-safe hash_equals)
-        $expectedUser = config('contact.admin_username');
-        $expectedPass = config('contact.admin_password');
-
-        if (!empty($expectedUser) && !empty($expectedPass) && hash_equals((string)$expectedUser, (string)$loginInput) && hash_equals((string)$expectedPass, (string)$password)) {
-            $request->session()->regenerate();
-            session(['admin_logged_in' => true]);
-            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
-        }
-
         return redirect()->back()->withInput()->with('error', 'Username atau password yang Anda masukkan salah.');
     }
 

@@ -21,11 +21,12 @@ class AdminDashboardController extends Controller
     {
         $products = $this->dataService->getProducts();
         $productsCount = count($products);
-        $postsCount = count($this->dataService->getPosts());
+        $allPosts = $this->dataService->getPosts();
+        $postsCount = count($allPosts);
         $sectorsCount = count($this->dataService->getSectors());
 
         $recentProducts = array_slice($products, 0, 5);
-        $recentPosts = array_slice($this->dataService->getPosts(), 0, 5);
+        $recentPosts = array_slice($allPosts, 0, 5);
 
         $categoryDist = [];
         foreach ($products as $p) {
@@ -60,53 +61,96 @@ class AdminDashboardController extends Controller
     public function homeUpdate(Request $request)
     {
         $homeData = $this->dataService->getHomepageData();
+        $section = $request->input('section', 'homepage');
 
-        $homeData['hero_title'] = $request->input('hero_title', $homeData['hero_title']);
-        $homeData['hero_subtitle'] = $request->input('hero_subtitle', $homeData['hero_subtitle']);
-        $homeData['focus_title'] = $request->input('focus_title', $homeData['focus_title']);
-        $homeData['about_title'] = $request->input('about_title', $homeData['about_title']);
-        $homeData['about_description'] = $request->input('about_description', $homeData['about_description']);
-        $homeData['hotline_label'] = $request->input('hotline_label', $homeData['hotline_label']);
-        $homeData['hotline_number'] = $request->input('hotline_number', $homeData['hotline_number']);
-        $homeData['hotline_description'] = $request->input('hotline_description', $homeData['hotline_description']);
+        if ($section === 'homepage') {
+            // Hero
+            $homeData['hero_badge'] = $request->input('hero_badge', $homeData['hero_badge'] ?? '');
+            $homeData['hero_title'] = $request->input('hero_title', $homeData['hero_title'] ?? '');
+            $homeData['hero_subtitle'] = $request->input('hero_subtitle', $homeData['hero_subtitle'] ?? '');
+            $homeData['hero_cta_text'] = $request->input('hero_cta_text', $homeData['hero_cta_text'] ?? '');
+            $homeData['hero_cta_link'] = $request->input('hero_cta_link', $homeData['hero_cta_link'] ?? '');
 
-        for ($i = 0; $i < 4; $i++) {
-            $existing = $homeData['hero_images'][$i] ?? '';
-            $homeData['hero_images'][$i] = $this->handleImageUpload(
-                $request, "hero_image_file_$i", "hero_image_url_$i", $existing
+            for ($i = 0; $i < 4; $i++) {
+                $existing = $homeData['hero_images'][$i] ?? '';
+                $homeData['hero_images'][$i] = $this->handleImageUpload(
+                    $request, "hero_image_file_$i", "hero_image_url_$i", $existing
+                );
+            }
+
+            // Bento Grid
+            $homeData['bento_title'] = $request->input('bento_title', $homeData['bento_title'] ?? '');
+            $homeData['bento_subtitle'] = $request->input('bento_subtitle', $homeData['bento_subtitle'] ?? '');
+            for ($i = 0; $i < 4; $i++) {
+                $existingBento = $homeData['bento_cards'][$i] ?? [];
+                $homeData['bento_cards'][$i] = [
+                    'icon'  => $request->input("bento_card_icon_$i", $existingBento['icon'] ?? 'bi-patch-check'),
+                    'title' => $request->input("bento_card_title_$i", $existingBento['title'] ?? ''),
+                    'desc'  => $request->input("bento_card_desc_$i", $existingBento['desc'] ?? ''),
+                ];
+            }
+
+            // Interactive Sector Finder
+            $homeData['sector_title'] = $request->input('sector_title', $homeData['sector_title'] ?? '');
+            $homeData['sector_subtitle'] = $request->input('sector_subtitle', $homeData['sector_subtitle'] ?? '');
+            $sectorKeys = ['pharma', 'fnb', 'healthcare', 'brewing'];
+            foreach ($sectorKeys as $sKey) {
+                $existingSector = $homeData['sector_panels'][$sKey] ?? [];
+                $homeData['sector_panels'][$sKey] = [
+                    'tag'   => $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''),
+                    'title' => $request->input("sector_title_$sKey", $existingSector['title'] ?? ''),
+                    'desc'  => $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''),
+                    'link'  => $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
+                ];
+            }
+
+            // Bottom CTA Banner
+            $homeData['cta_banner_badge']    = $request->input('cta_banner_badge', $homeData['cta_banner_badge'] ?? '');
+            $homeData['cta_banner_title']    = $request->input('cta_banner_title', $homeData['cta_banner_title'] ?? '');
+            $homeData['cta_banner_sub']      = $request->input('cta_banner_sub', $homeData['cta_banner_sub'] ?? '');
+            $homeData['cta_banner_btn_text'] = $request->input('cta_banner_btn_text', $homeData['cta_banner_btn_text'] ?? '');
+            $homeData['cta_banner_btn_url']  = $request->input('cta_banner_btn_url', $homeData['cta_banner_btn_url'] ?? '');
+        }
+
+        if ($section === 'banners') {
+            $pages = ['products', 'sectors', 'services', 'info', 'contact'];
+            foreach ($pages as $p) {
+                $homeData["{$p}_title"] = $request->input("{$p}_title", $homeData["{$p}_title"] ?? '');
+                $homeData["{$p}_subtitle"] = $request->input("{$p}_subtitle", $homeData["{$p}_subtitle"] ?? '');
+                $existingImg = $homeData["{$p}_banner_image"] ?? '';
+                $homeData["{$p}_banner_image"] = $this->handleImageUpload(
+                    $request, "{$p}_banner_file", "{$p}_banner_url", $existingImg
+                );
+            }
+        }
+
+        if ($section === 'contacts') {
+            $homeData['contact_phone'] = $request->input('contact_phone', $homeData['contact_phone'] ?? '');
+            $homeData['contact_phone_marketing'] = $request->input('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '');
+            $homeData['contact_phone_finance'] = $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '');
+            $homeData['contact_phone_technician'] = $request->input('contact_phone_technician', $homeData['contact_phone_technician'] ?? '');
+            $homeData['contact_email'] = $request->input('contact_email', $homeData['contact_email'] ?? '');
+            $homeData['contact_address'] = $request->input('contact_address', $homeData['contact_address'] ?? '');
+            $homeData['catalog_pdf_url'] = $request->input('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '');
+        }
+
+        if ($section === 'general') {
+            $homeData['company_name'] = $request->input('company_name', $homeData['company_name'] ?? '');
+            $homeData['operational_hours'] = $request->input('operational_hours', $homeData['operational_hours'] ?? '');
+            $homeData['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
+            $homeData['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');
+            $homeData['social_linkedin'] = $request->input('social_linkedin', $homeData['social_linkedin'] ?? '');
+            $homeData['social_twitter'] = $request->input('social_twitter', $homeData['social_twitter'] ?? '');
+
+            $existingLogo = $homeData['site_logo'] ?? '';
+            $homeData['site_logo'] = $this->handleImageUpload(
+                $request, 'site_logo_file', 'site_logo_url', $existingLogo
             );
         }
 
-        for ($i = 0; $i < 3; $i++) {
-            $existingCard = $homeData['focus_cards'][$i] ?? [];
-            $existingImg = $existingCard['image'] ?? '';
-
-            $homeData['focus_cards'][$i] = [
-                'title' => $request->input("focus_card_title_$i", $existingCard['title'] ?? ''),
-                'description' => $request->input("focus_card_desc_$i", $existingCard['description'] ?? ''),
-                'image' => $this->handleImageUpload(
-                    $request, "focus_card_file_$i", "focus_card_url_$i", $existingImg
-                )
-            ];
-        }
-
-        $homeData['contact_phone'] = $request->input('contact_phone', $homeData['contact_phone'] ?? '');
-        $homeData['contact_phone_marketing'] = $request->input('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '');
-        $homeData['contact_phone_finance'] = $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '');
-        $homeData['contact_phone_technician'] = $request->input('contact_phone_technician', $homeData['contact_phone_technician'] ?? '');
-        $homeData['contact_email'] = $request->input('contact_email', $homeData['contact_email'] ?? '');
-        $homeData['contact_address'] = $request->input('contact_address', $homeData['contact_address'] ?? '');
-        $homeData['catalog_pdf_url'] = $request->input('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '');
-
-        $homeData['company_name'] = $request->input('company_name', $homeData['company_name'] ?? '');
-        $homeData['operational_hours'] = $request->input('operational_hours', $homeData['operational_hours'] ?? '');
-        $homeData['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
-        $homeData['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');
-        $homeData['social_linkedin'] = $request->input('social_linkedin', $homeData['social_linkedin'] ?? '');
-
         $this->dataService->saveHomepageData($homeData);
 
-        return redirect()->route('admin.home.edit')->with('success', 'Homepage content updated successfully!');
+        return redirect()->route('admin.home.edit', ['section' => $section])->with('success', 'Pengaturan berhasil disimpan!');
     }
 
     protected function handleImageUpload(Request $request, string $fileKey, string $urlKey, ?string $fallback = null): ?string

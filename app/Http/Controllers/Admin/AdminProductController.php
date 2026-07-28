@@ -133,7 +133,9 @@ class AdminProductController extends Controller
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
-            'image' => $image
+            'image' => $image,
+            'price' => (float)$request->input('price', 0),
+            'stock' => (int)$request->input('stock', 0),
         ];
 
         $this->dataService->addProduct($product);
@@ -173,7 +175,9 @@ class AdminProductController extends Controller
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
-            'image' => $image
+            'image' => $image,
+            'price' => (float)$request->input('price', 0),
+            'stock' => (int)$request->input('stock', 0),
         ];
 
         $this->dataService->updateProduct($title, $updatedProduct);

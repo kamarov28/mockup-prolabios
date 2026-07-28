@@ -92,6 +92,7 @@
               <th>Gambar</th>
               <th>Judul Artikel</th>
               <th>Kategori</th>
+              <th>Status Publish</th>
               <th>Tanggal</th>
               <th style="text-align: right; padding-right: 24px;">Aksi</th>
             </tr>
@@ -108,7 +109,25 @@
                   <div class="cell-title">{{ $post['title'] }}</div>
                   <div class="cell-muted">slug: <code>{{ $post['slug'] }}</code></div>
                 </td>
-                <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] }}</span></td>
+                <td><span class="admin-badge admin-badge-muted text-capitalize">{{ $post['category'] }}</span></td>
+                <td>
+                  <div class="d-flex flex-column gap-1 align-items-start">
+                    @if(($post['status'] ?? 'online') === 'online')
+                      <span class="admin-badge admin-badge-success">
+                        Published
+                      </span>
+                    @else
+                      <span class="admin-badge admin-badge-warning">
+                        Draft / Offline
+                      </span>
+                    @endif
+                    @if(!empty($post['is_featured']))
+                      <span class="admin-badge admin-badge-warning">
+                        <i class="bi bi-star-fill me-1"></i> Highlight
+                      </span>
+                    @endif
+                  </div>
+                </td>
                 <td class="cell-muted" style="white-space: nowrap;">
                   <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
                 </td>
