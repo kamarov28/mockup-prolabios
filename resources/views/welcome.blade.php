@@ -48,7 +48,7 @@
             <div class="col">
               <div class="card h-100 product-card-premium border-0" style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }};">
                 <div class="img-wrap">
-                  <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
+                  <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product &amp; Analytical Instrument" loading="lazy" decoding="async">
                 </div>
                 <div class="card-body p-4 d-flex flex-column">
                   @if(!empty($prod['catalog']))

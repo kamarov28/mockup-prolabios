@@ -13,7 +13,7 @@
   </div>
 
   <!-- Layanan Content -->
-  <section style="padding: 80px 0;" id="service-nav">
+  <section class="section-main" id="service-nav">
     <div class="container">
       <div class="row g-5">
 

@@ -17,7 +17,7 @@
   </div>
 
   <!-- Product Content -->
-  <section style="padding: 80px 0;" id="catalog-section">
+  <section class="section-main" id="catalog-section">
     <div class="container">
       <div class="row g-5">
         <!-- Sidebar -->
@@ -79,7 +79,7 @@
               <h3 class="profil-sidebar-title">Need Help?</h3>
               <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your product needs with our technical team.</p>
               <a href="{{ url('/kontak') }}?subjek=inquiry" class="profil-cta-btn d-block mb-3">Ask About a Product <i class="bi bi-arrow-right"></i></a>
-              <a href="{{ $siteSettings['catalog_pdf_url'] ?? 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs' }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Download the PDF Catalog</a>
+              <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Download the PDF Catalog</a>
             </div>
           </div>
         </div>
@@ -122,7 +122,7 @@
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
                 <div class="card h-100 product-card-premium border-0">
                   <div class="img-wrap">
-                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
+                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product &amp; Analytical Instrument" loading="lazy" decoding="async">
                   </div>
                   <div class="card-body p-4 d-flex flex-column">
                     @if(!empty($prod['catalog']))

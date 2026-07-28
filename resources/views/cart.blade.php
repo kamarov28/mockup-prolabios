@@ -262,7 +262,7 @@
                 <!-- 1. Thumbnail Image -->
                 <div class="col-auto">
                   <div class="cart-img-box">
-                    <img src="{{ $item['image'] ?: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $item['title'] }}" loading="lazy" decoding="async">
+                    <img src="{{ $item['image'] ?: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $item['title'] }} — RFQ Basket Item" loading="lazy" decoding="async">
                   </div>
                 </div>
 

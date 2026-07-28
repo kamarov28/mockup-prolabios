@@ -26,12 +26,12 @@
       <div class="marquee-content-single">
         <!-- Loop 1 -->
         @foreach($activePrincipals as $pr)
-          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }}" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
         @endforeach
         
         <!-- Loop 2 (seamless infinite marquee) -->
         @foreach($activePrincipals as $pr)
-          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }}" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
         @endforeach
       </div>
     </div>

@@ -16,7 +16,7 @@
   </div>
 
   <!-- Sektor Content -->
-  <section style="padding: 80px 0;" id="sektor-nav">
+  <section class="section-main" id="sektor-nav">
     <div class="container">
       <div class="row g-5">
 
@@ -155,7 +155,7 @@
                   <div class="col">
                     <div class="card h-100 product-card-premium border-0">
                       <div class="img-wrap">
-                        <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }}" loading="lazy" decoding="async">
+                        <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Sector Product &amp; Analytical Instrument" loading="lazy" decoding="async">
                       </div>
                       <div class="card-body p-3">
                         @if(!empty($prod['catalog']))

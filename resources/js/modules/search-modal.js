@@ -132,4 +132,19 @@ export function initSearchOverlay() {
   overlay.addEventListener('click', function (e) {
     if (e.target === overlay || e.target === backdrop) closeOverlay();
   });
+
+  input.addEventListener('input', debounce(function () {
+    const q = this.value.trim().toLowerCase();
+    if (isProductPath()) {
+      const cards = getProductCards();
+      cards.forEach(function (card) {
+        const text = card.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  }, 200));
 }

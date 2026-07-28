@@ -13,7 +13,7 @@
   </div>
 
   <!-- Contact Content -->
-  <section style="padding: 80px 0;">
+  <section class="section-main">
     <div class="container">
       <div class="row g-5">
 

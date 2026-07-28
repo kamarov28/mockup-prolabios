@@ -19,7 +19,7 @@
   </div>
 
   <!-- Informasi Content -->
-  <section style="padding: 80px 0;">
+  <section class="section-main">
     <div class="container">
       <div class="row g-5">
 
@@ -85,7 +85,7 @@
               </div>
 
             @else
-              <div style="text-align: center; padding: 80px 0; border: 1px solid var(--color-border);">
+              <div class="empty-state-card">
                 <i class="bi bi-newspaper" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
                 <h2 class="profil-section-title" style="font-size: 1.4rem !important;">No Articles Yet</h2>
                 <p class="profil-body-text mb-4">No articles found for this category.</p>

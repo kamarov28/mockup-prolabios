@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <section style="padding: 80px 0;">
+  <section class="section-main">
     <div class="container">
       <div class="row g-5">
         
@@ -40,7 +40,7 @@
               <!-- Product Image -->
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
+                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
                 </div>
               </div>
               
@@ -103,7 +103,7 @@
               </div>
             </div>
           @else
-            <div style="text-align: center; padding: 80px 0; border: 1px solid var(--color-border);">
+            <div class="empty-state-card">
               <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
               <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Produk Tidak Ditemukan</h2>
               <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
