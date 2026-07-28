@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>OFFICIAL QUOTATION {{ $rfq->rfq_number }} - PT. PROLABIOS MITRA ANALITIKA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; color: #111; margin: 0; padding: 20px; font-size: 13px; background: #fff; }
         .invoice-box { max-width: 800px; margin: auto; padding: 30px; border: 1px solid #eee; box-shadow: 0 0 10px rgba(0, 0, 0, .05); }
@@ -32,8 +33,9 @@
 <body>
 
     <div class="no-print" style="max-width: 800px; margin: 0 auto 15px; text-align: right;">
-        <button onclick="window.print()" style="padding: 10px 20px; background: #ff4950; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">
-            🖨️ Cetak / Simpan PDF Dokumen Ini
+        <button onclick="window.print()" style="padding: 10px 22px; background: #ff4950; color: #fff; border: none; border-radius: 6px; font-weight: 600; font-family: 'Space Grotesk', system-ui, sans-serif; font-size: 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(255, 73, 80, 0.3);">
+            <i class="bi bi-printer-fill" style="font-size: 1.1rem;"></i>
+            <span>Cetak / Simpan PDF Dokumen Ini</span>
         </button>
     </div>
 

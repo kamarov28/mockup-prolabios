@@ -90,4 +90,9 @@ class AdminRfqController extends Controller
         $rfq->delete();
         return redirect()->route('admin.rfq')->with('success', 'Pengajuan penawaran berhasil dihapus.');
     }
+
+    public function guide()
+    {
+        return view('admin.guide');
+    }
 }

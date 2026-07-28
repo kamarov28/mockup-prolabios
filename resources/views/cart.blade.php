@@ -98,53 +98,63 @@
   /* Qty Pill Horizontal Layout */
   .b2b-qty-pill {
     display: inline-flex !important;
-    flex-direction: row !important;
     align-items: center !important;
-    background: rgba(0, 0, 0, 0.45) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 99px !important;
-    padding: 3px 6px !important;
+    justify-content: center !important;
+    background: #0f1015 !important;
+    border: 1px solid rgba(255, 73, 80, 0.35) !important;
+    border-radius: 100px !important;
+    padding: 4px 8px !important;
     gap: 4px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
   }
+  button.b2b-qty-btn,
   .b2b-qty-btn {
-    width: 30px !important;
-    height: 30px !important;
+    width: 32px !important;
+    height: 32px !important;
     border-radius: 50% !important;
-    border: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
     background: rgba(255, 255, 255, 0.08) !important;
     color: #ffffff !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
-    font-size: 0.85rem !important;
-    transition: all 0.2s ease !important;
+    font-size: 0.9rem !important;
+    transition: all 0.25s ease !important;
     padding: 0 !important;
     line-height: 1 !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
+  button.b2b-qty-btn:hover,
   .b2b-qty-btn:hover {
-    background: rgba(255, 73, 80, 0.3) !important;
-    color: #ff4950 !important;
+    background: rgba(255, 73, 80, 0.25) !important;
+    border-color: #ff4950 !important;
+    color: #ffffff !important;
+    transform: scale(1.1) !important;
   }
+  input.b2b-qty-input,
   .b2b-qty-input {
-    width: 40px !important;
+    width: 44px !important;
+    height: 32px !important;
     background: transparent !important;
     border: none !important;
     color: #ffffff !important;
     font-weight: 700 !important;
-    font-size: 0.92rem !important;
+    font-size: 0.95rem !important;
     text-align: center !important;
     outline: none !important;
+    box-shadow: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: none !important;
   }
-  .b2b-qty-input::-webkit-inner-spin-button,
-  .b2b-qty-input::-webkit-outer-spin-button {
+  input.b2b-qty-input::-webkit-inner-spin-button,
+  input.b2b-qty-input::-webkit-outer-spin-button {
     -webkit-appearance: none !important;
     margin: 0 !important;
-  }
-  .b2b-qty-input[type=number] {
-    -moz-appearance: textfield !important;
   }
 
   /* Catalog Code Badge */
@@ -182,7 +192,7 @@
 @endpush
 
 @section('content')
-<section class="cart-page-bg" style="padding-top: 140px !important; padding-bottom: 80px !important;">
+<section class="cart-page-bg" style="padding-top: 155px !important; padding-bottom: 80px !important;">
   <div class="container py-2">
 
     <!-- Stepper Navigation -->
@@ -277,7 +287,7 @@
                       <button type="button" class="b2b-qty-btn" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
                         <i class="bi bi-dash-lg"></i>
                       </button>
-                      <input type="number" name="quantity" min="1" max="9999" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="b2b-qty-input cart-qty-input" onchange="updateCartItemAjax(this.form)">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="b2b-qty-input cart-qty-input" onchange="updateCartItemAjax(this.form)">
                       <button type="button" class="b2b-qty-btn" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
                         <i class="bi bi-plus-lg"></i>
                       </button>
@@ -312,7 +322,7 @@
 
         <!-- Right Column: Summary & Checkout CTA -->
         <div class="col-lg-4">
-          <div class="cart-sidebar-panel sticky-top" style="top: 100px;">
+          <div class="cart-sidebar-panel sticky-top" style="top: 130px; z-index: 100;">
             <h3 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2">
               <i class="bi bi-receipt text-danger"></i> Ringkasan RFQ
             </h3>

@@ -91,6 +91,14 @@
           </a>
         </div>
 
+        <span class="sidebar-nav-label" style="margin-top: 8px;">Bantuan</span>
+
+        <div class="sidebar-item {{ request()->routeIs('admin.guide') ? 'active' : '' }}">
+          <a href="{{ route('admin.guide') }}" class="sidebar-link">
+            <i class="bi bi-book"></i> Panduan Admin
+          </a>
+        </div>
+
         <!-- Logout -->
         <hr class="sidebar-sep" style="margin-top: auto;">
         <div class="sidebar-item">

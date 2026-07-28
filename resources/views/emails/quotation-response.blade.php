@@ -71,8 +71,8 @@
             </p>
 
             <div style="text-align: center; margin-top: 24px;">
-                <a href="{{ route('rfq.track', ['number' => $rfq->rfq_number]) }}" class="btn">Setujui Penawaran &amp; Proses PO</a>
-                <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn-pdf">Cetak / Download Quotation PDF</a>
+                <a href="{{ route('rfq.track', ['number' => $rfq->rfq_number]) }}" class="btn" style="background-color: #28a745 !important; background: #28a745 !important; color: #ffffff !important; text-decoration: none !important; display: inline-block; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 16px;"><span style="color: #ffffff !important; text-decoration: none !important;">Setujui Penawaran &amp; Proses PO</span></a>
+                <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn-pdf" style="background-color: #ff4950 !important; background: #ff4950 !important; color: #ffffff !important; text-decoration: none !important; display: inline-block; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 16px; margin-left: 10px;"><span style="color: #ffffff !important; text-decoration: none !important;">Cetak / Download Quotation PDF</span></a>
             </div>
         </div>
         <div class="footer">

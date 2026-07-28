@@ -59,11 +59,12 @@ class CartController extends Controller
         session()->put('cart', $cart);
         $totalCount = array_sum(array_column($cart, 'quantity'));
 
-        if ($request->wantsJson()) {
+        if ($request->wantsJson() || $request->ajax() || $request->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Produk berhasil ditambahkan ke keranjang!',
+                'message' => '"' . $product['title'] . '" berhasil ditambahkan ke keranjang RFQ!',
                 'cartCount' => $totalCount,
+                'title' => $product['title'],
             ]);
         }
 

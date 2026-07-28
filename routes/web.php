@@ -65,6 +65,9 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::post('/rfq/{id}/update', [\App\Http\Controllers\Admin\AdminRfqController::class, 'updateQuotation'])->name('admin.rfq.update');
     Route::delete('/rfq/{id}', [\App\Http\Controllers\Admin\AdminRfqController::class, 'destroy'])->name('admin.rfq.destroy');
 
+    // Admin Documentation & Operational Guide
+    Route::get('/guide', [\App\Http\Controllers\Admin\AdminRfqController::class, 'guide'])->name('admin.guide');
+
     // Products CRUD
     Route::get('/products', [AdminProductController::class, 'productsIndex'])->name('admin.products');
     Route::get('/products/create', [AdminProductController::class, 'productsCreate'])->name('admin.products.create');

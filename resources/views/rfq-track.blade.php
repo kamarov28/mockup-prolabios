@@ -109,21 +109,33 @@
 
         <!-- Action Buttons -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top border-secondary border-opacity-20">
-          <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn btn-outline-light">
-            <i class="bi bi-printer me-2"></i> Cetak / Download Official Quotation PDF
-          </a>
+          @if(in_array($rfq->status, ['quotation_sent', 'approved']))
+            <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
+              <i class="bi bi-printer me-2"></i> Cetak / Download Official Quotation PDF
+            </a>
+          @else
+            <div class="text-secondary small d-flex align-items-center gap-2">
+              <i class="bi bi-hourglass-split text-warning fs-5"></i>
+              <span>Dokumen Surat Penawaran Resmi (PDF) akan dapat diunduh setelah disetujui &amp; diterbitkan oleh Tim Sales.</span>
+            </div>
+          @endif
 
           @if($rfq->status === 'quotation_sent')
-            <form action="{{ \Illuminate\Support\Facades\URL::signedRoute('rfq.approve', ['number' => $rfq->rfq_number]) }}" method="POST" onsubmit="return confirm('Apakah Anda menyetujui penawaran harga resmi ini? Stok akan otomatis berkurang untuk memproses pesanan Anda.');">
+            <form action="{{ \Illuminate\Support\Facades\URL::signedRoute('rfq.approve', ['number' => $rfq->rfq_number]) }}" method="POST" onsubmit="confirmApproveRFQ(event, this);">
               @csrf
-              <button type="submit" class="btn btn-success px-4 py-2 fw-bold">
+              <button type="submit" class="btn btn-success px-4 py-2 fw-bold rounded-pill" style="background: #2e7d32; border-color: #2e7d32; box-shadow: 0 4px 14px rgba(46, 125, 50, 0.4);">
                 <i class="bi bi-check-circle-fill me-2"></i> Setujui Penawaran &amp; Proses PO
               </button>
             </form>
           @elseif($rfq->status === 'approved')
-            <span class="text-success small fw-semibold">
-              <i class="bi bi-check-all fs-5 me-1"></i> Penawaran telah disetujui &amp; stok telah teralokasi.
-            </span>
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <span class="badge px-3 py-2 text-success bg-success bg-opacity-15 border border-success border-opacity-30 rounded-pill small fw-semibold">
+                <i class="bi bi-check-circle-fill me-1"></i> Penawaran Disetujui &amp; Stok Teralokasi
+              </span>
+              <a href="https://wa.me/6281234567890?text={{ urlencode('Halo Tim Sales Prolabios, kami telah menyetujui Penawaran RFQ: ' . $rfq->rfq_number . '. Mohon informasi alur pengiriman dan penerbitan Invoice.') }}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold">
+                <i class="bi bi-whatsapp me-1"></i> Konfirmasi Pengiriman &amp; Invoice via WA
+              </a>
+            </div>
           @endif
         </div>
 
@@ -132,4 +144,35 @@
     </div>
   </div>
 </section>
+
+@push('scripts')
+<script>
+  function confirmApproveRFQ(e, form) {
+    e.preventDefault();
+    if (typeof Swal === 'undefined') {
+      if (confirm('Apakah Anda menyetujui penawaran harga resmi ini? Stok akan otomatis berkurang untuk memproses pesanan Anda.')) {
+        form.submit();
+      }
+      return;
+    }
+
+    Swal.fire({
+      title: 'Setujui Penawaran & Proses PO?',
+      text: 'Stok produk akan otomatis teralokasi dan tim sales kami akan menerbitkan invoice & jadwal pengiriman.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#2e7d32',
+      cancelButtonColor: 'rgba(255, 255, 255, 0.15)',
+      confirmButtonText: 'Ya, Setujui Penawaran!',
+      cancelButtonText: 'Batal',
+      background: '#0f172a',
+      color: '#ffffff'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();
+      }
+    });
+  }
+</script>
+@endpush
 @endsection

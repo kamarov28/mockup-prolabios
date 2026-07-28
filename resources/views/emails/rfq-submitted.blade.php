@@ -65,7 +65,7 @@
             </table>
 
             <div style="text-align: center; margin-top: 24px;">
-                <a href="{{ route('admin.rfq.respond', ['id' => $rfq->id]) }}" class="btn">Buka di Admin Dashboard &amp; Beri Feedback</a>
+                <a href="{{ route('admin.rfq.respond', ['id' => $rfq->id]) }}" class="btn" style="background-color: #ff4950 !important; background: #ff4950 !important; color: #ffffff !important; text-decoration: none !important; display: inline-block; padding: 12px 24px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-top: 16px;"><span style="color: #ffffff !important; text-decoration: none !important;">Buka di Admin Dashboard &amp; Beri Feedback</span></a>
             </div>
         </div>
         <div class="footer">

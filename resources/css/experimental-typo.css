@@ -36,13 +36,13 @@ html, body {
   transform: translateX(-50%) !important;
   width: calc(100% - 40px) !important;
   max-width: 1280px !important;
-  z-index: 1000 !important;
+  z-index: 99999 !important;
   background: rgba(5, 7, 9, 0.95) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 73, 80, 0.35) !important;
   border-radius: 100px !important;
-  padding: 10px 24px !important;
+  padding: 8px 20px !important;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
 }
@@ -78,24 +78,26 @@ html, body {
 .navbar.header-scrolled {
   background: rgba(5, 7, 9, 0.95) !important;
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;
-  border-color: rgba(255, 73, 80, 0.3) !important;
+  border-color: rgba(255, 73, 80, 0.35) !important;
 }
 .navbar-nav {
   align-items: center !important;
+  flex-wrap: nowrap !important;
 }
 .navbar-brand img {
   filter: brightness(0) invert(1);
-  max-width: 240px;
+  max-width: 175px !important;
   height: auto !important;
 }
 .navbar-light .navbar-nav .nav-link {
-  font-family: var(--font-headline) !important; /* Now Space Grotesk */
-  font-size: 0.72rem !important; /* Smaller, modern size */
+  font-family: var(--font-headline) !important;
+  font-size: 0.7rem !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
-  letter-spacing: 1.5px !important;
-  color: rgba(255, 255, 255, 0.5) !important;
-  padding: 8px 0 !important;
+  letter-spacing: 0.8px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding: 6px 0 !important;
+  white-space: nowrap !important;
   transition: color 0.3s ease;
 }
 .navbar-light .navbar-nav .nav-link:hover,
@@ -103,11 +105,11 @@ html, body {
   color: var(--color-accent) !important;
 }
 .navbar-nav .nav-item {
-  padding: 0 6px !important;
+  padding: 0 5px !important;
 }
 @media (min-width: 1200px) {
   .navbar-nav .nav-item {
-    padding: 0 10px !important;
+    padding: 0 7px !important;
   }
 }
 .navbar-light .navbar-toggler {
@@ -2797,6 +2799,75 @@ section hr {
   max-width: 650px;
   margin: 0 auto 30px auto;
   line-height: 1.6;
+}
+
+/* Custom Stepper Qty Pill in Dark Theme */
+.b2b-qty-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #0f1015 !important;
+  border: 1px solid rgba(255, 73, 80, 0.35) !important;
+  border-radius: 100px !important;
+  padding: 4px 8px !important;
+  gap: 4px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+}
+
+button.b2b-qty-btn,
+.b2b-qty-btn {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  font-size: 0.9rem !important;
+  transition: all 0.25s ease !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button.b2b-qty-btn:hover,
+.b2b-qty-btn:hover {
+  background: rgba(255, 73, 80, 0.25) !important;
+  border-color: #ff4950 !important;
+  color: #ffffff !important;
+  transform: scale(1.1) !important;
+}
+
+input.b2b-qty-input,
+.b2b-qty-input {
+  width: 44px !important;
+  height: 32px !important;
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  appearance: textfield !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: none !important;
+}
+
+input.b2b-qty-input::-webkit-inner-spin-button,
+input.b2b-qty-input::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  display: none !important;
+  margin: 0 !important;
 }
 
 
