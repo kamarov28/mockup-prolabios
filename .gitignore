@@ -77,4 +77,8 @@ public/storage
 bootstrap/cache/
 .npm
 .yarn
+.codex/
+.cursor/
+.phpactor.json
+.phpunit.result.cache
 ```

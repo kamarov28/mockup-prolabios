@@ -1,0 +1,52 @@
+name: mockup-prolabios
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prolabios_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    container_name: prolabios_db
+    restart: unless-stopped
+    ports:
+      - "33061:3306"
+    environment:
+      MYSQL_DATABASE: prolabios_db
+      MYSQL_USER: prolabios_user
+      MYSQL_PASSWORD: prolabios_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  redis:
+    image: redis:alpine
+    container_name: prolabios_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: prolabios_pma
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root_password
+    depends_on:
+      - db
+
+volumes:
+  dbdata:

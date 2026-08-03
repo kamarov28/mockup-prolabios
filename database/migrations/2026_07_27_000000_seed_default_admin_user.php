@@ -15,7 +15,14 @@ return new class extends Migration
         if (Schema::hasTable('users')) {
             $adminEmail = env('ADMIN_EMAIL', 'admin@prolabios.com');
             $adminUsername = env('ADMIN_USERNAME', 'admin');
-            $adminPassword = env('ADMIN_PASSWORD', 'prolabios2026');
+            $adminPassword = env('ADMIN_PASSWORD');
+
+            if (empty($adminPassword)) {
+                $adminPassword = \Illuminate\Support\Str::random(16);
+                if (app()->runningInConsole()) {
+                    echo "\n[SECURITY WARNING] ADMIN_PASSWORD environment variable not set. Generated initial admin password: {$adminPassword}\n";
+                }
+            }
 
             if (!User::where('email', $adminEmail)->orWhere('name', $adminUsername)->exists()) {
                 User::create([

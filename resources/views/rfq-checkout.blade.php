@@ -27,7 +27,7 @@
       <div class="row g-4">
         <!-- Form Kredensial Perusahaan -->
         <div class="col-lg-7">
-          <div class="card border-0 p-4 rounded-3 shadow-sm" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--color-border) !important;">
+          <div class="card border-0 p-4 rounded-3 shadow-sm" style="background: var(--color-surface, #0e0e10); border: 1px solid var(--color-border) !important;">
             <h3 class="h6 fw-bold text-white mb-3 pb-2 border-bottom border-secondary border-opacity-20">
               <i class="bi bi-building text-danger me-2"></i> 1. Profil Perusahaan &amp; PIC
             </h3>
@@ -38,26 +38,26 @@
               <!-- Nama Perusahaan / Instansi -->
               <div class="mb-3">
                 <label for="company_name" class="form-label text-white small fw-semibold">Nama Perusahaan / Instansi / RS / Pabrik <span class="text-danger">*</span></label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="company_name" name="company_name" value="{{ old('company_name') }}" required placeholder="Contoh: PT. Indofood Sukses Makmur Tbk">
+                <input type="text" class="form-control rfq-input" id="company_name" name="company_name" value="{{ old('company_name') }}" required placeholder="Contoh: PT. Indofood Sukses Makmur Tbk">
               </div>
 
               <!-- NPWP / NIB Perusahaan -->
               <div class="mb-3">
                 <label for="company_tax_id" class="form-label text-white small fw-semibold">NPWP / NIB Perusahaan (Opsional)</label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="company_tax_id" name="company_tax_id" value="{{ old('company_tax_id') }}" placeholder="Contoh: 01.234.567.8-901.000">
+                <input type="text" class="form-control rfq-input" id="company_tax_id" name="company_tax_id" value="{{ old('company_tax_id') }}" placeholder="Contoh: 01.234.567.8-901.000">
               </div>
 
               <div class="row g-3 mb-3">
                 <!-- Nama PIC -->
                 <div class="col-md-6">
                   <label for="pic_name" class="form-label text-white small fw-semibold">Nama Penanggung Jawab (PIC) <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="pic_name" name="pic_name" value="{{ old('pic_name') }}" required placeholder="Nama Anda">
+                  <input type="text" class="form-control rfq-input" id="pic_name" name="pic_name" value="{{ old('pic_name') }}" required placeholder="Nama Anda">
                 </div>
 
                 <!-- Jabatan PIC -->
                 <div class="col-md-6">
                   <label for="pic_position" class="form-label text-white small fw-semibold">Jabatan PIC</label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="pic_position" name="pic_position" value="{{ old('pic_position') }}" placeholder="Contoh: Procurement Manager / QC Lead">
+                  <input type="text" class="form-control rfq-input" id="pic_position" name="pic_position" value="{{ old('pic_position') }}" placeholder="Contoh: Procurement Manager / QC Lead">
                 </div>
               </div>
 
@@ -65,27 +65,27 @@
                 <!-- Email Korporasi -->
                 <div class="col-md-6">
                   <label for="email" class="form-label text-white small fw-semibold">Email Korporasi <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control bg-dark text-white border-secondary" id="email" name="email" value="{{ old('email') }}" required placeholder="procurement@company.com">
+                  <input type="email" class="form-control rfq-input" id="email" name="email" value="{{ old('email') }}" required placeholder="procurement@company.com">
                   <div class="form-text text-muted small">Feedback &amp; dokumen PDF penawaran akan dikirimkan ke email ini.</div>
                 </div>
 
                 <!-- No. WhatsApp PIC -->
                 <div class="col-md-6">
                   <label for="phone_wa" class="form-label text-white small fw-semibold">Nomor WhatsApp PIC <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control bg-dark text-white border-secondary" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="081234567890">
+                  <input type="text" class="form-control rfq-input" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="081234567890">
                 </div>
               </div>
 
               <!-- Alamat Pengiriman -->
               <div class="mb-3">
                 <label for="address" class="form-label text-white small fw-semibold">Alamat Lengkap Pengiriman / Lokasi Pabrik <span class="text-danger">*</span></label>
-                <textarea class="form-control bg-dark text-white border-secondary" id="address" name="address" rows="3" required placeholder="Jl. Raya Industri No. 12, Kawasan Industri, Bekasi, Jawa Barat">{{ old('address') }}</textarea>
+                <textarea class="form-control rfq-input" id="address" name="address" rows="3" required placeholder="Jl. Raya Industri No. 12, Kawasan Industri, Bekasi, Jawa Barat">{{ old('address') }}</textarea>
               </div>
 
               <!-- Catatan Spesifik -->
               <div class="mb-4">
                 <label for="notes" class="form-label text-white small fw-semibold">Catatan Pengadaan Spesifik (Opsional)</label>
-                <textarea class="form-control bg-dark text-white border-secondary" id="notes" name="notes" rows="2" placeholder="Contoh: Butuh sertifikat COA / MSDS, atau opsi pengiriman bertahap">{{ old('notes') }}</textarea>
+                <textarea class="form-control rfq-input" id="notes" name="notes" rows="2" placeholder="Contoh: Butuh sertifikat COA / MSDS, atau opsi pengiriman bertahap">{{ old('notes') }}</textarea>
               </div>
 
               <button type="submit" class="btn btn-danger w-100 py-3 fw-bold text-uppercase tracking-wider">
@@ -97,7 +97,7 @@
 
         <!-- Ringkasan Item Pesanan -->
         <div class="col-lg-5">
-          <div class="card border-0 p-4 rounded-3 shadow-sm" style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--color-border) !important;">
+          <div class="card border-0 p-4 rounded-3 shadow-sm" style="background: var(--color-surface, #0e0e10); border: 1px solid var(--color-border) !important;">
             <h3 class="h6 fw-bold text-white mb-3 pb-2 border-bottom border-secondary border-opacity-20">
               <i class="bi bi-cart-check text-danger me-2"></i> 2. Ringkasan Item RFQ
             </h3>
@@ -125,7 +125,7 @@
               <span style="color: var(--color-accent);">Rp {{ number_format($total, 0, ',', '.') }}</span>
             </div>
 
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-20 text-secondary" style="font-size: 0.8rem; line-height: 1.5;">
+            <div class="p-3 rounded border border-secondary border-opacity-20 text-secondary" style="background: rgba(0, 0, 0, 0.4); font-size: 0.8rem; line-height: 1.5;">
               <i class="bi bi-shield-check text-success me-1"></i>
               Data kredensial korporasi Anda dilindungi secara ketat. Tim Sales &amp; Procurement Prolabios akan memproses dokumen Surat Penawaran Resmi dan mengirimi Anda balasan.
             </div>
@@ -140,4 +140,25 @@
     </div>
   </div>
 </section>
+
+<style>
+  .rfq-input {
+    background-color: #070708 !important;
+    border: 1px solid var(--color-border) !important;
+    color: #ffffff !important;
+    font-size: 0.9rem !important;
+    padding: 10px 14px !important;
+    border-radius: 6px !important;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+  }
+  .rfq-input::placeholder {
+    color: rgba(255, 255, 255, 0.25) !important;
+  }
+  .rfq-input:focus {
+    background-color: #0e0e10 !important;
+    border-color: var(--color-accent) !important;
+    box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.12) !important;
+    color: #ffffff !important;
+  }
+</style>
 @endsection

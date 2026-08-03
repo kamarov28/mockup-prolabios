@@ -67,7 +67,7 @@
           <div id="hero-progress-fill" class="hero-progress-fill"></div>
         </div>
 
-        <div class="hero-arrow-btns d-flex align-items-center">
+        <div class="hero-arrow-btns d-flex align-items-center gap-2">
           <button id="hero-prev" class="typo-hero-ctrl-btn" aria-label="Previous Slide">
             <i class="bi bi-arrow-left"></i>
           </button>

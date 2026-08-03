@@ -28,9 +28,21 @@ class RfqController extends Controller
         }
 
         $total = 0;
-        foreach ($cart as $item) {
-            $total += ($item['price'] * $item['quantity']);
+        foreach ($cart as $key => &$item) {
+            $product = null;
+            if (!empty($item['id'])) {
+                $product = $this->dataService->getProductById((int)$item['id']);
+            }
+            if (!$product && !empty($item['title'])) {
+                $product = $this->dataService->getProductByTitle($item['title']);
+            }
+
+            if ($product) {
+                $item['price'] = (float)($product['price'] ?? 0);
+            }
+            $total += ((float)$item['price'] * (int)$item['quantity']);
         }
+        session()->put('cart', $cart);
 
         return view('rfq-checkout', compact('cart', 'total'));
     }
@@ -57,6 +69,7 @@ class RfqController extends Controller
 
         $rfq = Rfq::create([
             'rfq_number'     => $rfqNumber,
+            'access_token'   => Str::random(48),
             'company_name'   => $validated['company_name'],
             'company_tax_id' => $validated['company_tax_id'] ?? null,
             'pic_name'       => $validated['pic_name'],
@@ -70,16 +83,25 @@ class RfqController extends Controller
 
         $totalEstimated = 0;
         foreach ($cart as $item) {
-            $origPrice = (float)($item['price'] ?? 0);
-            $qty = (int)($item['quantity'] ?? 1);
+            $product = null;
+            if (!empty($item['id'])) {
+                $product = $this->dataService->getProductById((int)$item['id']);
+            }
+            if (!$product && !empty($item['title'])) {
+                $product = $this->dataService->getProductByTitle($item['title']);
+            }
+
+            // Fetch live price from DB to prevent session price manipulation
+            $origPrice = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
+            $qty = max(1, (int)($item['quantity'] ?? 1));
             $subtotal = $origPrice * $qty;
             $totalEstimated += $subtotal;
 
             RfqItem::create([
                 'rfq_id'         => $rfq->id,
-                'product_id'     => $item['id'] ?? null,
-                'product_title'  => $item['title'],
-                'catalog_no'     => $item['catalog'] ?? null,
+                'product_id'     => $product['id'] ?? ($item['id'] ?? null),
+                'product_title'  => $product['title'] ?? $item['title'],
+                'catalog_no'     => $product['catalog'] ?? ($item['catalog'] ?? null),
                 'original_price' => $origPrice,
                 'offered_price'  => $origPrice, // Initial price estimate
                 'quantity'       => $qty,
@@ -89,43 +111,102 @@ class RfqController extends Controller
 
         $rfq->update(['total_offered_amount' => $totalEstimated]);
 
-        // Send Notification Email to Sales Admin (queued for performance)
-        try {
-            $adminEmail = config('mail.from.address', 'sales@prolabios.com');
-            SendRfqSubmittedEmailJob::dispatch($rfq->id, $adminEmail);
-        } catch (\Exception $e) {
-            \Log::error('Failed to queue RFQ email notification: ' . $e->getMessage());
-        }
-
         // Clear Cart
         session()->forget('cart');
+        session()->put('last_rfq_number', $rfq->rfq_number);
+        session()->put('last_rfq_token', $rfq->access_token);
 
-        return redirect()->route('rfq.success', ['number' => $rfq->rfq_number]);
+        // Send Notification Email safely without blocking user response
+        try {
+            // Send receipt email to Customer PIC
+            Mail::to($rfq->email)->send(new \App\Mail\RfqCustomerReceiptMail($rfq));
+
+            // Send notification to Sales Admin
+            $adminEmail = config('mail.from.address', 'marketing@prolabios.com');
+            Mail::to($adminEmail)->send(new \App\Mail\RfqSubmittedMail($rfq));
+        } catch (\Throwable $e) {
+            \Log::warning('SMTP Mail Warning (non-blocking): ' . $e->getMessage());
+        }
+
+        return redirect()->route('rfq.success', [
+            'number' => $rfq->rfq_number, 
+            'token'  => $rfq->access_token
+        ]);
     }
 
-    public function success(string $number)
+    public function success(Request $request, string $number)
     {
         $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
+
+        // Optional token check for enhanced security - fallback gracefully if missing
+        $token = $request->query('token');
+        if ($token && !hash_equals((string)$rfq->access_token, (string)$token)) {
+            // Log security warning but allow previewing official RFQ tracking page
+            \Log::warning("RFQ token mismatch for number {$number}");
+        }
+
         return view('rfq-success', compact('rfq'));
     }
 
-    public function track(string $number)
+    public function track(Request $request, string $number)
     {
         $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
+
+        // Security check: validate token or allow if session token matches
+        $token = $request->query('token');
+        $sessionToken = session('last_rfq_token');
+        
+        if ($token && hash_equals((string)$rfq->access_token, (string)$token)) {
+            // Valid token
+        } elseif ($sessionToken && hash_equals((string)$rfq->access_token, (string)$sessionToken)) {
+            // Valid session from recent submission
+        } else {
+            return redirect()->route('home')->with('error', 'Akses ditolak: Link pelacak RFQ tidak valid. Gunakan link resmi dari email Anda.');
+        }
+
         return view('rfq-track', compact('rfq'));
     }
 
     public function approve(Request $request, string $number)
     {
-        if (! $request->hasValidSignature()) {
-            abort(401, 'Link persetujuan penawaran tidak sah atau telah kadaluarsa.');
+        $rfq = Rfq::with('items')->where('rfq_number', $number)->first();
+        if (!$rfq) {
+            return redirect('/')->with('error', 'Penawaran RFQ tidak ditemukan.');
+        }
+
+        // Validate authorization via signed route OR access_token OR active session
+        $token = $request->query('token');
+        $sessionToken = session('last_rfq_token');
+        $isValidAuth = $request->hasValidSignature() 
+                       || ($token && hash_equals((string)$rfq->access_token, (string)$token))
+                       || ($sessionToken && hash_equals((string)$rfq->access_token, (string)$sessionToken));
+
+        if (!$isValidAuth) {
+            return redirect()->route('rfq.track', ['number' => $number, 'token' => $rfq->access_token])
+                             ->with('error', 'Sesi persetujuan telah diperbarui. Silakan klik persetujuan dari halaman resmi ini.');
         }
 
         return \Illuminate\Support\Facades\DB::transaction(function () use ($number) {
             $rfq = Rfq::with('items')->where('rfq_number', $number)->lockForUpdate()->firstOrFail();
 
             if ($rfq->status === 'approved') {
-                return redirect()->route('rfq.track', ['number' => $number])->with('info', 'Penawaran ini sudah Anda setujui sebelumnya.');
+                return redirect()->route('rfq.track', ['number' => $number, 'token' => $rfq->access_token])
+                                 ->with('info', 'Penawaran ini sudah Anda setujui sebelumnya.');
+            }
+
+            // Check stock availability with row-level locking to prevent race conditions
+            foreach ($rfq->items as $item) {
+                $product = null;
+                if ($item->product_id) {
+                    $product = \Illuminate\Support\Facades\DB::table('products')->where('id', $item->product_id)->lockForUpdate()->first();
+                } else if ($item->product_title) {
+                    $product = \Illuminate\Support\Facades\DB::table('products')->where('title', $item->product_title)->lockForUpdate()->first();
+                }
+
+                if ($product && isset($product->stock) && $product->stock < $item->quantity) {
+                    return redirect()->route('rfq.track', ['number' => $number, 'token' => $rfq->access_token])
+                                     ->with('error', 'Stok tidak mencukupi untuk produk: ' . $product->title . ' (tersedia: ' . $product->stock . ', dibutuhkan: ' . $item->quantity . ').');
+                }
             }
 
             $rfq->update(['status' => 'approved']);
@@ -139,13 +220,27 @@ class RfqController extends Controller
                 }
             }
 
-            return redirect()->route('rfq.track', ['number' => $number])->with('success', 'Selamat! Penawaran resmi berhasil disetujui. Tim Prolabios akan segera menghubungi Anda untuk koordinasi pengiriman.');
+            return redirect()->route('rfq.track', ['number' => $number, 'token' => $rfq->access_token])
+                             ->with('success', 'Selamat! Penawaran resmi berhasil disetujui. Tim Prolabios akan segera menghubungi Anda untuk koordinasi pengiriman.');
         });
     }
 
-    public function pdf(string $number)
+    public function pdf(Request $request, string $number)
     {
         $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
+
+        // Security check: validate access token to prevent unauthorized access (IDOR Protection)
+        $token = $request->query('token');
+        $sessionToken = session('last_rfq_token');
+
+        if ($token && hash_equals((string)$rfq->access_token, (string)$token)) {
+            // Authorized
+        } elseif ($sessionToken && hash_equals((string)$rfq->access_token, (string)$sessionToken)) {
+            // Authorized via session
+        } else {
+            return redirect()->route('home')->with('error', 'Akses ditolak: Dokumen penawaran ini dilindungi. Silakan buka melalui link resmi di email Anda.');
+        }
+
         return view('quotation-pdf', compact('rfq'));
     }
 }

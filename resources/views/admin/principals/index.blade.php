@@ -74,7 +74,7 @@
                 <td class="cell-muted">{{ $p->address ?: '—' }}</td>
                 <td>
                   <div style="width: 110px; height: 44px; padding: 6px; background: #ffffff; border: 1px solid var(--color-border); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                    <img src="{{ $logoPath ?: 'https://via.placeholder.com/120x40?text=No+Logo' }}" alt="{{ $p->name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <img src="{{ $logoPath ?: asset('images/placeholder.svg') }}" alt="{{ $p->name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                   </div>
                 </td>
                 <td>

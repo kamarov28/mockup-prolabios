@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\DataService;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -114,30 +115,31 @@ class PageController extends Controller
     public function informasi(Request $request, DataService $dataService)
     {
         $recentPosts = $dataService->getPosts([], 3);
-        
-        $categoryCounts = \Illuminate\Support\Facades\Cache::remember('blog_category_counts', 3600, function () use ($dataService) {
-            $allPosts = $dataService->getPosts();
-            $counts = [
-                'Berita' => 0,
-                'Event' => 0,
-                'Info Terkait' => 0,
-                'IPTEK' => 0,
-                'Kegiatan' => 0
+
+        // Use GROUP BY query instead of loading all posts to memory
+        $categoryCounts = \Illuminate\Support\Facades\Cache::remember('blog_category_counts', 3600, function () {
+            $rows = DB::table('posts')
+                ->select('category', DB::raw('COUNT(*) as total'))
+                ->whereNotNull('category')
+                ->groupBy('category')
+                ->get()
+                ->keyBy('category');
+
+            $getCt = fn(string $key) => (int) ($rows->get($key)->total ?? 0);
+
+            return [
+                'Berita'      => $getCt('Berita'),
+                'Event'       => $getCt('Event'),
+                'Info Terkait' => $getCt('Info Terkait') + $getCt('Info'),
+                'IPTEK'       => $getCt('IPTEK'),
+                'Kegiatan'    => $getCt('Kegiatan'),
             ];
-            foreach ($allPosts as $post) {
-                $cat = $post['category'] ?? null;
-                if ($cat === 'Berita') $counts['Berita']++;
-                elseif ($cat === 'Event') $counts['Event']++;
-                elseif ($cat === 'Info Terkait' || $cat === 'Info') $counts['Info Terkait']++;
-                elseif ($cat === 'IPTEK') $counts['IPTEK']++;
-                elseif ($cat === 'Kegiatan') $counts['Kegiatan']++;
-            }
-            return $counts;
         });
 
         $detail = $request->query('detail');
         $currentBlog = null;
-        if ($detail && preg_match('/^[a-zA-Z0-9\-_]+$/', (string)$detail)) {
+        // Allow alphanumerics, hyphens, underscores, and dots in slugs
+        if ($detail && preg_match('/^[a-zA-Z0-9\-_.]+$/', (string)$detail)) {
             $currentBlog = $dataService->getPostBySlug((string)$detail);
         }
 
@@ -153,11 +155,11 @@ class PageController extends Controller
         $paginatedPosts = $dataService->getPaginatedPosts($filters, 4);
 
         return view('informasi', [
-            'posts' => $paginatedPosts,
-            'categoryCounts' => $categoryCounts,
-            'currentBlog' => $currentBlog,
+            'posts'            => $paginatedPosts,
+            'categoryCounts'   => $categoryCounts,
+            'currentBlog'      => $currentBlog,
             'selectedCategory' => $selectedCategory,
-            'recentPosts' => $recentPosts
+            'recentPosts'      => $recentPosts
         ]);
     }
 

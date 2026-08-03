@@ -43,12 +43,12 @@
           <div class="row g-3">
             <div class="col-sm-3 text-center">
               <div class="border rounded bg-white p-2 d-flex align-items-center justify-content-center" style="width: 100%; height: 90px;">
-                <img id="logo-preview" src="{{ $principal->logo ?? 'https://via.placeholder.com/160x60?text=Logo' }}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                <img id="logo-preview" src="{{ $principal->logo ?? asset('images/placeholder.svg') }}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
               </div>
             </div>
             <div class="col-sm-9">
               <div class="mb-3">
-                <label for="logo_file" class="form-label small fw-bold">Upload File Logo (PNG/JPG/SVG)</label>
+                <label for="logo_file" class="form-label small fw-bold">Upload File Logo (PNG/JPG/WEBP)</label>
                 <input type="file" class="form-control" id="logo_file" name="logo_file" accept="image/*" onchange="previewImage(this)">
               </div>
               <div>

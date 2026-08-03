@@ -1,0 +1,574 @@
+/* ==========================================================================
+   Summernote Dark Editorial Theme
+   Clean, readable dark mode that matches the admin panel aesthetic.
+   Uses the same design tokens as admin.css for visual consistency.
+   ========================================================================== */
+
+/* ── 1. Editor Shell ────────────────────────────────────────────────────── */
+.note-editor.note-frame {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px !important;
+  background-color: #0e0e10 !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.note-editor.note-frame:focus-within {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* ── 2. Toolbar ─────────────────────────────────────────────────────────── */
+.note-editor.note-frame .note-toolbar {
+  background-color: #141416 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0 !important;
+}
+
+/* Button group separators */
+.note-editor .note-toolbar .note-btn-group {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  margin: 0 2px !important;
+  padding: 0 !important;
+  position: relative;
+}
+
+.note-editor .note-toolbar .note-btn-group::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.note-editor .note-toolbar .note-btn-group:last-child::after {
+  display: none;
+}
+
+/* ── 3. Toolbar Buttons ─────────────────────────────────────────────────── */
+.note-editor .note-toolbar .note-btn:not(.note-color-btn),
+.note-editor .note-btn:not(.note-color-btn),
+.note-popover .note-btn:not(.note-color-btn) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding: 6px 8px !important;
+  font-size: 14px !important;
+  border-radius: 4px !important;
+  margin: 1px !important;
+  text-shadow: none !important;
+  transition: color 0.15s ease, background-color 0.15s ease !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+}
+
+/* Icon & text colors inside buttons */
+.note-editor .note-toolbar .note-btn:not(.note-color-btn) i,
+.note-editor .note-toolbar .note-btn:not(.note-color-btn) span,
+.note-popover .note-btn:not(.note-color-btn) i,
+.note-popover .note-btn:not(.note-color-btn) span,
+.note-editor [class^="note-icon-"],
+.note-editor [class*=" note-icon-"] {
+  color: inherit !important;
+  text-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Dropdown caret */
+.note-editor .note-toolbar .note-btn .note-icon-caret,
+.note-popover .note-btn .note-icon-caret {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 10px !important;
+  margin-left: 2px !important;
+}
+
+/* Hover state */
+.note-editor .note-toolbar .note-btn:not(.note-color-btn):hover,
+.note-editor .note-btn:not(.note-color-btn):hover,
+.note-popover .note-btn:not(.note-color-btn):hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.note-editor .note-toolbar .note-btn:not(.note-color-btn):hover i,
+.note-editor .note-toolbar .note-btn:not(.note-color-btn):hover span {
+  color: #ffffff !important;
+}
+
+/* Active / Pressed state */
+.note-editor .note-toolbar .note-btn:not(.note-color-btn).active,
+.note-editor .note-btn:not(.note-color-btn).active,
+.note-popover .note-btn:not(.note-color-btn).active {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.note-editor .note-toolbar .note-btn:not(.note-color-btn).active i,
+.note-editor .note-toolbar .note-btn:not(.note-color-btn).active span {
+  color: #ffffff !important;
+}
+
+/* ── 4. Dropdowns ───────────────────────────────────────────────────────── */
+.note-editor .dropdown-menu,
+.note-editor .note-dropdown-menu,
+.note-popover .dropdown-menu,
+.note-popover .note-dropdown-menu {
+  background-color: #1a1a1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255,255,255,0.05) !important;
+  padding: 8px !important;
+  z-index: 1050 !important;
+}
+
+/* Dropdown items */
+.note-editor .dropdown-menu .dropdown-item,
+.note-editor .note-dropdown-menu .note-dropdown-item,
+.note-popover .dropdown-menu .dropdown-item {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+  padding: 7px 12px !important;
+  font-size: 0.85rem !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  transition: background 0.15s ease, color 0.15s ease !important;
+}
+
+.note-editor .dropdown-menu .dropdown-item:hover,
+.note-editor .note-dropdown-menu .note-dropdown-item:hover,
+.note-popover .dropdown-menu .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+/* Heading / Paragraph preview reset inside dropdown */
+.note-editor .note-dropdown-menu h1,
+.note-editor .note-dropdown-menu h2,
+.note-editor .note-dropdown-menu h3,
+.note-editor .note-dropdown-menu h4,
+.note-editor .note-dropdown-menu h5,
+.note-editor .note-dropdown-menu h6,
+.note-editor .note-dropdown-menu p,
+.note-editor .note-dropdown-menu blockquote,
+.note-editor .note-dropdown-menu pre,
+.note-editor .note-dropdown-menu code {
+  color: rgba(255, 255, 255, 0.85) !important;
+  background: transparent !important;
+  border: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── 5. Color Palette ───────────────────────────────────────────────────── */
+.note-editor .note-color .dropdown-menu,
+.note-popover .note-color .dropdown-menu,
+.note-editor .note-color .note-dropdown-menu,
+.note-popover .note-color .note-dropdown-menu {
+  min-width: 340px !important;
+  padding: 14px !important;
+  background-color: #1a1a1e !important;
+}
+
+.note-editor .note-color-palette,
+.note-popover .note-color-palette {
+  margin-bottom: 10px !important;
+}
+
+.note-editor .note-color-palette .note-color-row,
+.note-popover .note-color-palette .note-color-row {
+  height: 22px !important;
+  display: flex !important;
+  gap: 2px !important;
+  margin-bottom: 2px !important;
+}
+
+/* Preserving inline background-color for color buttons */
+.note-editor .note-color-palette .note-color-btn,
+.note-popover .note-color-palette .note-color-btn,
+.note-color-btn {
+  width: 20px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 3px !important;
+  transition: transform 0.12s ease, border-color 0.12s ease !important;
+  cursor: pointer !important;
+}
+
+.note-editor .note-color-palette .note-color-btn:hover,
+.note-popover .note-color-palette .note-color-btn:hover,
+.note-color-btn:hover {
+  transform: scale(1.25) !important;
+  border-color: #ffffff !important;
+  z-index: 5 !important;
+  position: relative !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+.note-editor .note-color .note-color-title,
+.note-popover .note-color .note-color-title,
+.note-color .note-color-title {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 8px !important;
+  text-align: center !important;
+}
+
+.note-editor .note-color .note-color-reset,
+.note-popover .note-color .note-color-reset,
+.note-color .note-btn-reset {
+  font-size: 0.78rem !important;
+  padding: 6px 10px !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  margin-top: 8px !important;
+  width: 100% !important;
+  transition: all 0.15s ease !important;
+}
+
+.note-editor .note-color .note-color-reset:hover,
+.note-popover .note-color .note-color-reset:hover,
+.note-color .note-btn-reset:hover {
+  background: var(--color-accent, #FF4950) !important;
+  color: #ffffff !important;
+  border-color: var(--color-accent, #FF4950) !important;
+}
+
+/* ── 6. Editable Area — Where content is written ────────────────────────── */
+.note-editor.note-frame .note-editing-area,
+.note-editor.note-frame .note-editing-area .note-editable,
+.note-editor .note-editing-area .note-editable[contenteditable="true"] {
+  background-color: #0e0e10 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+  line-height: 1.75 !important;
+  padding: 20px 24px !important;
+  min-height: 250px;
+  caret-color: #FF4950;
+}
+
+/* Placeholder text */
+.note-editor.note-frame .note-placeholder {
+  color: rgba(255, 255, 255, 0.35) !important;
+  padding: 20px 24px !important;
+  font-style: italic;
+}
+
+/* Content styling inside editor */
+.note-editor .note-editable h1,
+.note-editor .note-editable h2,
+.note-editor .note-editable h3,
+.note-editor .note-editable h4,
+.note-editor .note-editable h5,
+.note-editor .note-editable h6 {
+  color: #ffffff !important;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+.note-editor .note-editable a {
+  color: #60a5fa !important;
+}
+
+.note-editor .note-editable blockquote {
+  border-left: 3px solid rgba(255, 73, 80, 0.5) !important;
+  padding-left: 16px !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  margin: 12px 0 !important;
+}
+
+/* Table Dark Styling & Visible Borders */
+.note-editor .note-editable table,
+.note-editor.note-frame .note-editing-area .note-editable table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+  margin-bottom: 1rem !important;
+  background-color: #141416 !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.note-editor .note-editable table td,
+.note-editor .note-editable table th,
+.note-editor.note-frame .note-editing-area .note-editable table td,
+.note-editor.note-frame .note-editing-area .note-editable table th {
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  padding: 10px 14px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  background-color: #141416 !important;
+}
+
+.note-editor .note-editable table th,
+.note-editor.note-frame .note-editing-area .note-editable table th {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+.note-editor .note-editable code {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f472b6 !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  font-size: 0.88em !important;
+}
+
+.note-editor .note-editable pre {
+  background: #000000 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 6px !important;
+  padding: 14px 18px !important;
+  color: rgba(168, 255, 178, 0.9) !important;
+}
+
+.note-editor .note-editable hr {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ── 7. Status Bar ──────────────────────────────────────────────────────── */
+.note-editor.note-frame .note-statusbar {
+  background-color: #141416 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.note-editor.note-frame .note-statusbar .note-resizebar .note-icon-bar {
+  border-top-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* ── 8. Modal Dialogs (Link, Image, Video insert) ───────────────────────── */
+.note-editor .note-modal .note-modal-content,
+.note-modal .note-modal-content {
+  background-color: #1a1a1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.note-modal .note-modal-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 18px 20px !important;
+}
+
+.note-modal .note-modal-header .note-modal-title {
+  color: #ffffff !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.note-modal .note-modal-header .close {
+  color: rgba(255, 255, 255, 0.4) !important;
+  text-shadow: none !important;
+  opacity: 1 !important;
+}
+
+.note-modal .note-modal-header .close:hover {
+  color: #ffffff !important;
+}
+
+.note-modal .note-modal-body {
+  padding: 20px !important;
+}
+
+.note-modal .note-modal-body label {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.82rem !important;
+}
+
+.note-modal .note-modal-body .note-form-group .note-input,
+.note-modal .note-modal-body input[type="text"],
+.note-modal .note-modal-body input[type="url"],
+.note-modal .note-modal-body textarea {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  padding: 8px 12px !important;
+  font-size: 0.88rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.note-modal .note-modal-body .note-form-group .note-input:focus,
+.note-modal .note-modal-body input:focus,
+.note-modal .note-modal-body textarea:focus {
+  border-color: rgba(255, 73, 80, 0.4) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.08) !important;
+}
+
+.note-modal .note-modal-footer {
+  background: transparent !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 14px 20px !important;
+}
+
+.note-modal .note-modal-footer .note-btn {
+  border-radius: 6px !important;
+  padding: 8px 16px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+}
+
+/* ── 9. Popover (Image/Link/Table editing tooltip) ──────────────────────── */
+.note-popover,
+.note-popover.popover,
+.note-popover .popover-body,
+.note-popover .popover-content,
+.note-air-popover {
+  background-color: #1c1c20 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+  padding: 4px 6px !important;
+}
+
+.note-popover .popover-content,
+.note-popover .note-popover-content,
+.note-popover .popover-body {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+  background-color: transparent !important;
+}
+
+/* Arrow indicator styling */
+.note-popover .arrow::before,
+.note-popover .arrow::after,
+.note-popover .popover-arrow::before,
+.note-popover .popover-arrow::after {
+  border-bottom-color: #1c1c20 !important;
+  border-top-color: #1c1c20 !important;
+}
+
+/* Popover Buttons & Icons Visibility Fix */
+.note-popover .note-btn,
+.note-popover.popover .note-btn,
+.note-air-popover .note-btn {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
+  padding: 6px 10px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  margin: 1px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.note-popover .note-btn i,
+.note-popover .note-btn span,
+.note-popover .note-btn [class^="note-icon-"],
+.note-popover .note-btn [class*=" note-icon-"] {
+  color: #ffffff !important;
+}
+
+.note-popover .note-btn:hover,
+.note-popover.popover .note-btn:hover {
+  background-color: var(--color-accent, #FF4950) !important;
+  color: #ffffff !important;
+  border-color: var(--color-accent, #FF4950) !important;
+}
+
+.note-popover .note-btn:hover i,
+.note-popover .note-btn:hover span {
+  color: #ffffff !important;
+}
+
+/* ── 10. Table sizing popover ───────────────────────────────────────────── */
+.note-editor .note-dimension-picker-mousecatcher {
+  background: transparent !important;
+}
+
+.note-editor .note-dimension-picker-unhighlighted {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.note-editor .note-dimension-picker-highlighted {
+  background: rgba(255, 73, 80, 0.2) !important;
+  border: 1px solid rgba(255, 73, 80, 0.3) !important;
+}
+
+.note-editor .note-dimension-display {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.78rem !important;
+  text-align: center !important;
+  margin-top: 6px !important;
+}
+
+/* ── 11. Codeview Mode ──────────────────────────────────────────────────── */
+.note-editor .note-codable {
+  background-color: #000000 !important;
+  color: rgba(168, 255, 178, 0.9) !important;
+  font-family: 'SFMono-Regular', 'Fira Code', 'Cascadia Code', 'Courier New', monospace !important;
+  font-size: 0.82rem !important;
+  line-height: 1.7 !important;
+  padding: 16px 20px !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* ── 12. Fullscreen Mode ────────────────────────────────────────────────── */
+.note-editor.note-frame.fullscreen {
+  z-index: 9999 !important;
+  background-color: #0e0e10 !important;
+}
+
+.note-editor.note-frame.fullscreen .note-toolbar {
+  background-color: #111113 !important;
+}
+
+/* ── 13. Help Dialog ────────────────────────────────────────────────────── */
+.note-editor .note-help-dialog {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.note-editor .note-help-dialog .modal-content {
+  background-color: #1a1a1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ── 14. Scrollbar Styling ──────────────────────────────────────────────── */
+.note-editor .note-editable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-editor .note-editable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.note-editor .note-editable::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+}
+
+.note-editor .note-editable::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

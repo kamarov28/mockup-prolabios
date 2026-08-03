@@ -266,16 +266,33 @@
                   </div>
                 </div>
 
-                <!-- 2. Product Name & Catalog -->
+                <!-- 2. Product Name & Catalog & Stock Status -->
                 <div class="col">
                   <a href="{{ url('/produk/detail') }}?id={{ urlencode($item['title']) }}" class="text-white text-decoration-none fw-semibold d-block mb-1 text-hover-danger" style="font-size: 0.98rem; line-height: 1.35;">
                     {{ $item['title'] }}
                   </a>
-                  @if(!empty($item['catalog']))
-                    <span class="cart-cat-badge">
-                      <i class="bi bi-hash"></i>Cat: {{ $item['catalog'] }}
-                    </span>
-                  @endif
+                  <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                    @if(!empty($item['catalog']))
+                      <span class="cart-cat-badge">
+                        <i class="bi bi-hash"></i>Cat: {{ $item['catalog'] }}
+                      </span>
+                    @endif
+
+                    @php
+                      $stockVal = (int)($item['stock'] ?? 0);
+                      $isIndent = $item['quantity'] > $stockVal;
+                    @endphp
+
+                    @if(!$isIndent)
+                      <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-2 py-1" style="font-size: 0.72rem;">
+                        <i class="bi bi-box-seam me-1"></i> Ready Stock
+                      </span>
+                    @else
+                      <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 px-2 py-1" style="font-size: 0.72rem;" title="Stok ready {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses secara Indent / Pre-Order.">
+                        <i class="bi bi-clock-history me-1"></i> Status: Indent / Pre-Order (Ready: {{ $stockVal }}, Indent: {{ $item['quantity'] - $stockVal }})
+                      </span>
+                    @endif
+                  </div>
                 </div>
 
                 <!-- 3. Quantity Stepper -->

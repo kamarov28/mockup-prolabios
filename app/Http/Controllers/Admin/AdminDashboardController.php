@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DataService;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
+    use HandlesImageUploads;
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -19,25 +22,28 @@ class AdminDashboardController extends Controller
 
     public function dashboard()
     {
-        $products = $this->dataService->getProducts();
-        $productsCount = count($products);
-        $allPosts = $this->dataService->getPosts();
-        $postsCount = count($allPosts);
-        $sectorsCount = count($this->dataService->getSectors());
+        // Use COUNT/LIMIT queries instead of loading entire tables to memory
+        $productsCount  = DB::table('products')->count();
+        $postsCount     = DB::table('posts')->count();
+        $sectorsCount   = DB::table('sectors')->count();
 
-        $recentProducts = array_slice($products, 0, 5);
-        $recentPosts = array_slice($allPosts, 0, 5);
+        $recentProducts = DB::table('products')->latest()->limit(5)->get()->map(fn($r) => (array) $r)->toArray();
+        $recentPosts    = DB::table('posts')->latest()->limit(5)->get()->map(fn($r) => (array) $r)->toArray();
+
+        // Category distribution via GROUP BY (single query, no PHP counting)
+        $categoryRows = DB::table('products')
+            ->select('category', DB::raw('COUNT(*) as total'))
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->groupBy('category')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get();
 
         $categoryDist = [];
-        foreach ($products as $p) {
-            $catRaw = $p['category'] ?? '';
-            if (!empty($catRaw)) {
-                $catName = ucwords(str_replace('-', ' ', $catRaw));
-                if (!isset($categoryDist[$catName])) {
-                    $categoryDist[$catName] = 0;
-                }
-                $categoryDist[$catName]++;
-            }
+        foreach ($categoryRows as $row) {
+            $catName = ucwords(str_replace('-', ' ', $row->category));
+            $categoryDist[$catName] = $row->total;
         }
 
         if (empty($categoryDist)) {
@@ -60,8 +66,62 @@ class AdminDashboardController extends Controller
 
     public function homeUpdate(Request $request)
     {
-        $homeData = $this->dataService->getHomepageData();
+        // Validate section input to prevent unexpected processing
         $section = $request->input('section', 'homepage');
+        $allowedSections = ['homepage', 'banners', 'contacts', 'general'];
+        if (!in_array($section, $allowedSections, true)) {
+            return redirect()->back()->with('error', 'Section tidak valid.');
+        }
+
+        // Common validation rules shared across sections
+        $urlRule = 'nullable|string|max:2000';
+        $textRule = 'nullable|string|max:5000';
+        $shortTextRule = 'nullable|string|max:500';
+
+        if ($section === 'homepage') {
+            $request->validate([
+                'hero_badge'        => $shortTextRule,
+                'hero_title'        => $shortTextRule,
+                'hero_subtitle'     => $textRule,
+                'hero_cta_text'     => $shortTextRule,
+                'hero_cta_link'     => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'bento_title'       => $shortTextRule,
+                'bento_subtitle'    => $shortTextRule,
+                'sector_title'      => $shortTextRule,
+                'sector_subtitle'   => $shortTextRule,
+                'cta_banner_badge'  => $shortTextRule,
+                'cta_banner_title'  => $shortTextRule,
+                'cta_banner_sub'    => $textRule,
+                'cta_banner_btn_text' => $shortTextRule,
+                'cta_banner_btn_url'  => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'sector_link_*'     => 'nullable|string|max:500',
+            ]);
+        }
+
+        if ($section === 'contacts') {
+            $request->validate([
+                'contact_phone'            => 'nullable|string|max:50',
+                'contact_phone_marketing'  => 'nullable|string|max:50',
+                'contact_phone_finance'    => 'nullable|string|max:50',
+                'contact_phone_technician' => 'nullable|string|max:50',
+                'contact_email'            => 'nullable|email|max:255',
+                'contact_address'          => 'nullable|string|max:1000',
+                'catalog_pdf_url'          => 'nullable|url|max:2000',
+            ]);
+        }
+
+        if ($section === 'general') {
+            $request->validate([
+                'company_name'       => 'nullable|string|max:255',
+                'operational_hours'  => 'nullable|string|max:255',
+                'social_instagram'   => 'nullable|url|max:500',
+                'social_facebook'    => 'nullable|url|max:500',
+                'social_linkedin'    => 'nullable|url|max:500',
+                'social_twitter'     => 'nullable|url|max:500',
+            ]);
+        }
+
+        $homeData = $this->dataService->getHomepageData();
 
         if ($section === 'homepage') {
             // Hero
@@ -151,41 +211,5 @@ class AdminDashboardController extends Controller
         $this->dataService->saveHomepageData($homeData);
 
         return redirect()->route('admin.home.edit', ['section' => $section])->with('success', 'Pengaturan berhasil disimpan!');
-    }
-
-    protected function handleImageUpload(Request $request, string $fileKey, string $urlKey, ?string $fallback = null): ?string
-    {
-        if ($request->hasFile($fileKey) && $request->file($fileKey)->isValid()) {
-            $file = $request->file($fileKey);
-
-            $ext = strtolower($file->getClientOriginalExtension());
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-            if (!in_array($ext, $allowedExtensions, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp.']
-                ]);
-            }
-
-            $mime = $file->getMimeType();
-            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!in_array($mime, $allowedMimes, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
-                ]);
-            }
-
-            $fileName = time() . '_' . Str::random(8) . '.' . $ext;
-
-            $uploadPath = public_path('uploads');
-            if (!File::exists($uploadPath)) {
-                File::makeDirectory($uploadPath, 0755, true);
-            }
-
-            $file->move($uploadPath, $fileName);
-            return asset('uploads/' . $fileName);
-        }
-
-        return $request->input($urlKey, $fallback);
     }
 }

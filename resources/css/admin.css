@@ -71,16 +71,24 @@ a:hover { color: var(--color-text-main); }
 
 /* Brand lockup */
 .sidebar-brand {
-  padding: 28px 24px 24px;
+  padding: 24px 20px;
   border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
-  gap: 12px;
   flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-brand a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
 }
 .sidebar-brand img {
-  height: 30px;
+  max-height: 32px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
   filter: brightness(0) invert(1);
 }
 .sidebar-brand .admin-badge {
@@ -93,6 +101,7 @@ a:hover { color: var(--color-text-main); }
   border: 1px solid rgba(255, 73, 80, 0.25);
   padding: 2px 7px;
   border-radius: 100px;
+  flex-shrink: 0;
 }
 
 /* Nav section label */
@@ -396,7 +405,7 @@ a:hover { color: var(--color-text-main); }
 }
 
 /* Inline code in general (for slug, id, etc.) */
-code {
+.admin-table code {
   font-family: 'SFMono-Regular', 'Courier New', monospace;
   font-size: 0.78em;
   color: var(--color-accent);
@@ -405,6 +414,32 @@ code {
   padding: 2px 7px;
   border-radius: 4px;
   white-space: nowrap;
+}
+
+/* Table Responsive Drag-to-Scroll & Custom Scrollbar */
+.table-responsive {
+  position: relative;
+  overflow-x: auto;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) rgba(255, 255, 255, 0.05);
+}
+.table-responsive:active {
+  cursor: grabbing;
+}
+.table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+  border: 2px solid var(--color-surface);
 }
 
 /* Terminal / log pre blocks */
@@ -456,6 +491,11 @@ pre code {
   background: rgba(245, 158, 11, 0.06);
   border-color: rgba(245, 158, 11, 0.2);
 }
+.admin-badge-info {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.2);
+}
 .admin-badge-muted {
   color: var(--color-text-muted);
   background: rgba(255, 255, 255, 0.03);
@@ -495,27 +535,38 @@ pre code {
   box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2);
 }
 
-/* Ghost — outline style (like main site's ghost button) */
-.admin-btn-ghost {
+/* Ghost / Outline style */
+.admin-btn-outline {
   background: transparent;
   border-color: var(--color-border);
   color: var(--color-text-muted);
 }
-.admin-btn-ghost:hover {
-  border-color: rgba(255, 255, 255, 0.2);
+.admin-btn-outline:hover {
+  border-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
+  background: rgba(255, 255, 255, 0.04);
+}
+.admin-btn-outline.active,
+.nav-pills .admin-btn-outline.active,
+.nav-pills .show > .admin-btn-outline {
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(255, 73, 80, 0.35);
 }
 
-/* Danger — ghost red */
-.admin-btn-danger {
-  background: transparent;
-  border-color: rgba(255, 73, 80, 0.25);
-  color: var(--color-accent);
-}
-.admin-btn-danger:hover {
-  background: rgba(255, 73, 80, 0.08);
+/* Accent style */
+.admin-btn-accent {
+  background: var(--color-accent);
   border-color: var(--color-accent);
   color: #ffffff;
+}
+.admin-btn-accent:hover {
+  background: #e03e45;
+  border-color: #e03e45;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2);
 }
 
 /* Text-only action links in tables */
@@ -576,7 +627,8 @@ pre code {
 .admin-form-control select, select.admin-form-control { cursor: pointer; }
 
 /* Bootstrap form compatibility overrides */
-.form-control, .form-select {
+.form-control:not(.note-editor *):not(.note-popover *), 
+.form-select:not(.note-editor *):not(.note-popover *) {
   background-color: rgba(255, 255, 255, 0.02) !important;
   border: 1px solid var(--color-border) !important;
   border-radius: 6px !important;
@@ -585,7 +637,8 @@ pre code {
   transition: border-color 0.25s ease !important;
 }
 .form-control::placeholder, .form-select option { color: rgba(255, 255, 255, 0.2); }
-.form-control:focus, .form-select:focus {
+.form-control:focus:not(.note-editor *):not(.note-popover *), 
+.form-select:focus:not(.note-editor *):not(.note-popover *) {
   background-color: rgba(255, 255, 255, 0.03) !important;
   border-color: var(--color-accent) !important;
   box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.1) !important;
@@ -599,7 +652,10 @@ pre code {
 select.form-select option { background: var(--color-surface); color: var(--color-text-main); }
 
 /* Bootstrap button compatibility */
-.btn-primary {
+.btn:not(.note-btn):not(.note-editor *):not(.note-popover *) {
+  border-color: var(--color-border);
+}
+.btn-primary:not(.note-editor *):not(.note-popover *) {
   font-family: var(--font-headline) !important;
   font-size: 0.75rem;
   font-weight: 700;
@@ -610,13 +666,13 @@ select.form-select option { background: var(--color-surface); color: var(--color
   padding: 9px 18px;
   transition: all 0.25s ease !important;
 }
-.btn-primary:hover {
+.btn-primary:not(.note-editor *):not(.note-popover *):hover {
   background: #e03e45 !important;
   border-color: #e03e45 !important;
   transform: translateY(-1px);
   box-shadow: 0 4px 16px rgba(255, 73, 80, 0.2) !important;
 }
-.btn-success {
+.btn-success:not(.note-editor *):not(.note-popover *) {
   font-family: var(--font-headline);
   font-size: 0.75rem;
   font-weight: 700;
@@ -624,7 +680,7 @@ select.form-select option { background: var(--color-surface); color: var(--color
   border-radius: 6px;
   padding: 9px 18px;
 }
-.btn-outline-secondary {
+.btn-outline-secondary:not(.note-editor *):not(.note-popover *) {
   font-family: var(--font-headline);
   font-size: 0.75rem;
   font-weight: 700;
@@ -638,20 +694,20 @@ select.form-select option { background: var(--color-surface); color: var(--color
 .rounded-pill {
   border-radius: 50rem !important;
 }
-.btn-outline-secondary:hover {
+.btn-outline-secondary:not(.note-editor *):not(.note-popover *):hover {
   border-color: rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
   background: transparent !important;
 }
 /* Override any remaining Bootstrap bg-white remnants */
-.bg-white { background-color: var(--color-surface) !important; }
-.text-dark { color: var(--color-text-main) !important; }
-.text-muted { color: var(--color-text-muted) !important; }
-.bg-light { background-color: rgba(255, 255, 255, 0.03) !important; }
-.border { border-color: var(--color-border) !important; }
-.border-top { border-top-color: var(--color-border) !important; }
-.border-bottom { border-bottom-color: var(--color-border) !important; }
-.border-secondary { border-color: var(--color-border) !important; }
+.bg-white:not(.note-editor *):not(.note-popover *) { background-color: var(--color-surface) !important; }
+.text-dark:not(.note-editor *):not(.note-popover *) { color: var(--color-text-main) !important; }
+.text-muted:not(.note-editor *):not(.note-popover *) { color: var(--color-text-muted) !important; }
+.bg-light:not(.note-editor *):not(.note-popover *) { background-color: rgba(255, 255, 255, 0.03) !important; }
+.border:not(.note-editor *):not(.note-popover *) { border-color: var(--color-border) !important; }
+.border-top:not(.note-editor *):not(.note-popover *) { border-top-color: var(--color-border) !important; }
+.border-bottom:not(.note-editor *):not(.note-popover *) { border-bottom-color: var(--color-border) !important; }
+.border-secondary:not(.note-editor *):not(.note-popover *) { border-color: var(--color-border) !important; }
 
 /* ── Bootstrap Card Dark Mode ─────────────────────────────────────────────── */
 .card {
@@ -889,12 +945,13 @@ label {
   background: transparent !important;
   border: none !important;
   color: var(--color-text-muted) !important;
+  padding: 11px 12px 11px 16px !important;
 }
 .login-body .form-control {
   background: transparent !important;
   border: none !important;
   color: var(--color-text-main) !important;
-  padding: 11px 14px 11px 0 !important;
+  padding: 11px 16px 11px 10px !important;
 }
 .login-body .form-control:focus { box-shadow: none !important; }
 .login-body .btn-primary { letter-spacing: 1.5px !important; }
@@ -911,56 +968,56 @@ label {
 
 /* ── 18. Dashboard Menu Dark Mode Overrides ───────────────────────────────── */
 /* Kartu 1: Halaman Beranda (Nuansa Merah) */
-.card:nth-of-type(1) [class*="icon"],
-.card:nth-of-type(1) [class*="avatar"],
-.card:nth-of-type(1) .rounded-circle {
+.card:nth-of-type(1) [class*="icon"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(1) [class*="avatar"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(1) .rounded-circle:not(.note-editor *):not(.note-popover *) {
     background-color: rgba(255, 73, 80, 0.08) !important;
     border: 1px solid rgba(255, 73, 80, 0.25) !important;
 }
-.card:nth-of-type(1) [class*="icon"] i,
-.card:nth-of-type(1) .rounded-circle i {
+.card:nth-of-type(1) [class*="icon"]:not(.note-editor *):not(.note-popover *) i,
+.card:nth-of-type(1) .rounded-circle:not(.note-editor *):not(.note-popover *) i {
     color: #FF4950 !important;
 }
 
 /* Kartu 2: Banner & Header Halaman (Nuansa Biru) */
-.card:nth-of-type(2) [class*="icon"],
-.card:nth-of-type(2) [class*="avatar"],
-.card:nth-of-type(2) .rounded-circle {
+.card:nth-of-type(2) [class*="icon"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(2) [class*="avatar"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(2) .rounded-circle:not(.note-editor *):not(.note-popover *) {
     background-color: rgba(13, 202, 240, 0.08) !important;
     border: 1px solid rgba(13, 202, 240, 0.25) !important;
 }
-.card:nth-of-type(2) [class*="icon"] i,
-.card:nth-of-type(2) .rounded-circle i {
+.card:nth-of-type(2) [class*="icon"]:not(.note-editor *):not(.note-popover *) i,
+.card:nth-of-type(2) .rounded-circle:not(.note-editor *):not(.note-popover *) i {
     color: #0dcaf0 !important;
 }
 
 /* Kartu 3: Kontak & Alamat (Nuansa Hijau) */
-.card:nth-of-type(3) [class*="icon"],
-.card:nth-of-type(3) [class*="avatar"],
-.card:nth-of-type(3) .rounded-circle {
+.card:nth-of-type(3) [class*="icon"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(3) [class*="avatar"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(3) .rounded-circle:not(.note-editor *):not(.note-popover *) {
     background-color: rgba(25, 135, 84, 0.08) !important;
     border: 1px solid rgba(25, 135, 84, 0.25) !important;
 }
-.card:nth-of-type(3) [class*="icon"] i,
-.card:nth-of-type(3) .rounded-circle i {
+.card:nth-of-type(3) [class*="icon"]:not(.note-editor *):not(.note-popover *) i,
+.card:nth-of-type(3) .rounded-circle:not(.note-editor *):not(.note-popover *) i {
     color: #198754 !important;
 }
 
 /* Kartu 4: Umum & Logo (Nuansa Kuning) */
-.card:nth-of-type(4) [class*="icon"],
-.card:nth-of-type(4) [class*="avatar"],
-.card:nth-of-type(4) .rounded-circle {
+.card:nth-of-type(4) [class*="icon"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(4) [class*="avatar"]:not(.note-editor *):not(.note-popover *),
+.card:nth-of-type(4) .rounded-circle:not(.note-editor *):not(.note-popover *) {
     background-color: rgba(255, 193, 7, 0.08) !important;
     border: 1px solid rgba(255, 193, 7, 0.25) !important;
 }
-.card:nth-of-type(4) [class*="icon"] i,
-.card:nth-of-type(4) .rounded-circle i {
+.card:nth-of-type(4) [class*="icon"]:not(.note-editor *):not(.note-popover *) i,
+.card:nth-of-type(4) .rounded-circle:not(.note-editor *):not(.note-popover *) i {
     color: #ffc107 !important;
 }
 
 /* ── 19. Dashboard Buttons Dark Mode Overrides ────────────────────────────── */
-.card .btn,
-.card a[class*="btn"] {
+.card .btn:not(.note-btn),
+.card a[class*="btn"]:not(.note-btn) {
     background: transparent !important;
     transition: all 0.25s ease !important;
 }
@@ -1007,4 +1064,26 @@ label {
     background: #ffc107 !important;
     color: #070708 !important; /* Menggunakan warna dasar gelap Anda untuk kontras teks */
     box-shadow: 0 4px 16px rgba(255, 193, 7, 0.2) !important;
+}
+
+/* ── 20. Summernote Isolation — prevent admin styles from leaking ─────── */
+/* Reset any stray borders/backgrounds that card or dashboard rules may inject */
+.note-editor .note-toolbar .note-btn,
+.note-editor .note-toolbar .note-btn-group,
+.note-popover .note-btn,
+.note-popover .note-btn-group {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background-image: none !important;
+}
+
+/* Ensure icon elements inside Summernote are never touched by [class*="icon"] rules */
+.note-editor [class*="note-icon"],
+.note-popover [class*="note-icon"] {
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }

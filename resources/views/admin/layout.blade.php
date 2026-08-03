@@ -37,7 +37,6 @@
         <a href="{{ url('/') }}">
           <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios Logo">
         </a>
-        <span class="admin-badge">Admin</span>
       </div>
 
       <!-- Navigation -->
@@ -325,6 +324,39 @@
         const input = document.querySelector('input[name="s"], #local-search-input');
         if (input) { e.preventDefault(); input.focus(); input.select(); }
       }
+    });
+    // ── Drag-to-Scroll for Responsive Tables ─────────────────────────────
+    document.querySelectorAll('.table-responsive').forEach(function(slider) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      slider.addEventListener('mousedown', (e) => {
+        // Prevent drag trigger if clicking on interactive elements like links or buttons
+        if (e.target.closest('a, button, input, select')) return;
+        isDown = true;
+        slider.style.cursor = 'grabbing';
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+
+      slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.8; // scroll-speed multiplier
+        slider.scrollLeft = scrollLeft - walk;
+      });
     });
   </script>
 

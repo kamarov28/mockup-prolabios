@@ -1,10 +1,10 @@
 @extends('admin.layout')
 
 @php 
-  $isEdit = isset($product) && !empty($product['title']);
-  $titleText = $isEdit ? 'Edit Produk: ' . $product['title'] : 'Tambah Produk Baru';
+  $isEdit = isset($product) && !empty($product['id']);
+  $titleText = $isEdit ? 'Edit Produk: ' . ($product['title'] ?? '') : 'Tambah Produk Baru';
   $actionUrl = $isEdit 
-    ? route('admin.products.update', ['title' => $product['title']]) 
+    ? route('admin.products.update', ['id' => $product['id']]) 
     : route('admin.products.store');
 @endphp
 
@@ -19,6 +19,16 @@
 
   <form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data" class="card-body p-4">
     @csrf
+
+    @if ($errors->any())
+      <div class="alert alert-danger mb-4">
+        <ul class="mb-0 ps-3">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
 
     <div class="row g-3">
       <!-- Nama Produk -->
@@ -106,7 +116,7 @@
       <!-- Deskripsi -->
       <div class="col-12 mt-4">
         <label for="description" class="form-label fw-bold">Deskripsi Produk</label>
-        <textarea class="form-control" id="description" name="description" rows="5" placeholder="Tulis rincian deskripsi produk, aplikasi, spesifikasi, dll.">{{ old('description', $product['description'] ?? '') }}</textarea>
+        <textarea class="form-control" id="description" name="description" rows="6" placeholder="Tulis rincian deskripsi produk, aplikasi, spesifikasi detail, tabel pendukung, dll...">{{ old('description', $product['description'] ?? '') }}</textarea>
       </div>
     </div>
 
@@ -120,81 +130,11 @@
 @endsection
 
 @section('admin_styles')
-  <!-- Summernote CSS -->
+  <!-- Summernote Lite Original CDN CSS -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+  @vite(['resources/css/summernote-dark.css'])
   <style>
-    /* ── Summernote Dark Mode ────────────────────────────────────────────────── */
-    .note-editor.note-frame {
-      border: 1px solid var(--color-border) !important;
-      border-radius: 0.5rem !important;
-      overflow: hidden;
-      background-color: var(--color-surface) !important;
-    }
-
-    /* Toolbar */
-    .note-editor .note-toolbar {
-      background-color: var(--color-surface-2) !important;
-      border-bottom: 1px solid var(--color-border) !important;
-      padding: 6px 8px !important;
-    }
-
-    /* Toolbar buttons */
-    .note-editor .note-toolbar .note-btn {
-      background-color: transparent !important;
-      border: 1px solid transparent !important;
-      color: rgba(255,255,255,0.75) !important;
-      transition: background 0.15s, color 0.15s;
-    }
-    .note-editor .note-toolbar .note-btn:hover,
-    .note-editor .note-toolbar .note-btn:focus {
-      background-color: rgba(255,255,255,0.08) !important;
-      border-color: var(--color-border) !important;
-      color: #fff !important;
-    }
-    .note-editor .note-toolbar .note-btn.active {
-      background-color: rgba(255,73,80,0.2) !important;
-      border-color: var(--color-accent) !important;
-      color: var(--color-accent) !important;
-    }
-
-    /* Dropdown menus */
-    .note-editor .dropdown-menu,
-    .note-editor .note-dropdown-menu {
-      background-color: var(--color-surface-2) !important;
-      border: 1px solid var(--color-border) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
-    }
-    .note-editor .dropdown-item,
-    .note-editor .note-dropdown-item {
-      color: rgba(255,255,255,0.8) !important;
-    }
-    .note-editor .dropdown-item:hover,
-    .note-editor .note-dropdown-item:hover {
-      background-color: rgba(255,255,255,0.07) !important;
-      color: #fff !important;
-    }
-
-    /* Editing area */
-    .note-editor .note-editable {
-      background-color: var(--color-surface) !important;
-      color: rgba(255,255,255,0.9) !important;
-      caret-color: #fff;
-    }
-    .note-editor .note-editable[data-placeholder]:empty:before {
-      color: rgba(255,255,255,0.3) !important;
-    }
-
-    /* Status bar */
-    .note-editor .note-statusbar {
-      background-color: var(--color-surface-2) !important;
-      border-top: 1px solid var(--color-border) !important;
-    }
-    .note-editor .note-statusbar .note-resizebar .note-icon-bar {
-      border-top-color: rgba(255,255,255,0.2) !important;
-    }
-
     /* ── File Input (Browse button) Dark Mode ───────────────────────────────── */
-    /* Hide the native file input and replace with custom styled button */
     input[type="file"].form-control {
       color: rgba(255,255,255,0.75) !important;
       background-color: var(--color-surface) !important;
@@ -202,7 +142,6 @@
       padding: 0 !important;
       overflow: hidden;
     }
-
     input[type="file"].form-control::file-selector-button {
       background-color: #2a2a2e !important;
       color: rgba(255,255,255,0.85) !important;
@@ -223,7 +162,7 @@
 @endsection
 
 @section('admin_scripts')
-  <!-- jQuery & Summernote JS -->
+  <!-- jQuery & Summernote Lite JS -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
@@ -287,7 +226,6 @@
       }
     };
 
-    // Category and Subcategory selectors
     var categorySelect = document.getElementById('admin-category-select');
     var subcategorySelect = document.getElementById('admin-subcategory-select');
     var block = document.getElementById('sub-category-block');
@@ -324,18 +262,17 @@
       categorySelect.addEventListener('change', function() {
         updateSubCategories(this.value);
       });
-      // Initial check if page loaded with a category selected
       if (categorySelect.value) {
         updateSubCategories(categorySelect.value);
       }
     }
 
-    // 3. Summernote Rich Editor Init
+    // 3. Initialize Summernote
     $(document).ready(function() {
       $('#description').summernote({
         placeholder: 'Tulis rincian deskripsi produk, aplikasi, spesifikasi detail, tabel pendukung, dll...',
         tabsize: 2,
-        height: 250,
+        height: 280,
         toolbar: [
           ['style', ['style']],
           ['font', ['bold', 'underline', 'clear']],

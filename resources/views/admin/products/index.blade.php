@@ -146,10 +146,10 @@
                   <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ urlencode($p['title']) }}" title="Salin link">
                     <i class="bi bi-clipboard"></i>
                   </button>
-                  <a href="{{ route('admin.products.edit', ['title' => $p['title']]) }}" class="admin-action-link edit" title="Edit">
+                  <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit">
                     <i class="bi bi-pencil-square"></i> Edit
                   </a>
-                  <form action="{{ route('admin.products.destroy', ['title' => $p['title']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $p['title'] }}">
+                  <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $p['title'] }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="admin-action-link delete" title="Hapus">

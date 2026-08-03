@@ -10,41 +10,15 @@ use Illuminate\Support\Str;
 
 class DataService
 {
-    // JSON files kept as fallback seed sources only (no longer primary storage)
-    protected string $productsFile = 'data/products.json';
-    protected string $postsFile    = 'data/posts.json';
-    protected string $sectorsFile  = 'data/sectors.json';
-    protected string $homepageFile = 'data/homepage.json';
-
     /**
      * Clear all product-related cache entries.
+     * Compatible with database, file, array, redis, and memcached cache drivers.
      * Call this after any product create/update/delete operation.
      */
     protected function clearProductsCache(): void
     {
         Cache::forget('categories_structure');
-        Cache::tags(['products'])->flush();
-        
-        // Pattern-based cache clearing for product queries
-        // In production with Redis, you can use tags or prefix-based invalidation
-        $pattern = 'products_*';
-        foreach (Cache::getMultiple([]) as $key => $value) {
-            if (strpos($key, 'products_') === 0 || strpos($key, 'product_') === 0) {
-                Cache::forget($key);
-            }
-        }
-    }
-
-    // ----------------------------------------------------
-    // JSON Helper (seed / backup only)
-    // ----------------------------------------------------
-    protected function getJsonData(string $file, array $default = []): array
-    {
-        if (Storage::disk('local')->exists($file)) {
-            $content = Storage::disk('local')->get($file);
-            return json_decode($content, true) ?: $default;
-        }
-        return $default;
+        Cache::flush();
     }
 
     /**
@@ -208,46 +182,59 @@ class DataService
 
     public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
     {
-        $cacheKey = 'products_paginated_' . md5(json_encode($filters) . '_' . $perPage);
+        $page = (int) request()->input('page', 1);
+        $cacheKey = 'products_paginated_' . md5(json_encode($filters) . '_' . $perPage . '_p' . $page);
         
-        return Cache::remember($cacheKey, 300, function () use ($filters, $perPage) {
-            $query = DB::table('products')->orderBy('id');
+        $cached = Cache::get($cacheKey);
+        if ($cached instanceof \__PHP_Incomplete_Class) {
+            Cache::forget($cacheKey);
+            $cached = null;
+        }
 
-            if (!empty($filters['category'])) {
-                $cat = $filters['category'];
-                $catSlug = Str::slug($cat);
-                if ($catSlug === 'culture-media') {
-                    $query->where(function($q) use ($cat) {
-                        $q->where('category', $cat)
-                          ->orWhere('category', 'LIKE', '%Culture Media%')
-                          ->orWhere('sub_category', 'LIKE', '%Culture Media%');
-                    });
-                } else {
-                    $query->where('category', $cat);
-                }
-            }
+        if ($cached) {
+            return $cached;
+        }
 
-            if (!empty($filters['sub_category'])) {
-                $subCat = $filters['sub_category'];
-                $query->where(function($q) use ($subCat) {
-                    $q->where('sub_category', $subCat)
-                      ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+        $query = DB::table('products')->orderBy('id');
+
+        if (!empty($filters['category'])) {
+            $cat = $filters['category'];
+            $catSlug = Str::slug($cat);
+            if ($catSlug === 'culture-media') {
+                $query->where(function($q) use ($cat) {
+                    $q->where('category', $cat)
+                      ->orWhere('category', 'LIKE', '%Culture Media%')
+                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
                 });
+            } else {
+                $query->where('category', $cat);
             }
+        }
 
-            if (!empty($filters['search'])) {
-                $search = $filters['search'];
-                $query->where(function($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhere('catalog', 'like', "%{$search}%");
-                });
-            }
+        if (!empty($filters['sub_category'])) {
+            $subCat = $filters['sub_category'];
+            $query->where(function($q) use ($subCat) {
+                $q->where('sub_category', $subCat)
+                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+            });
+        }
 
-            return $query->paginate($perPage)
-                ->through(fn($r) => (array) $r)
-                ->withQueryString();
-        });
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhere('catalog', 'like', "%{$search}%");
+            });
+        }
+
+        $result = $query->paginate($perPage)
+            ->through(fn($r) => (array) $r)
+            ->withQueryString();
+
+        Cache::put($cacheKey, $result, 300);
+
+        return $result;
     }
 
     public function getProductByTitle(string $title): ?array
@@ -258,28 +245,15 @@ class DataService
         });
     }
 
-    public function saveProducts(array $products): bool
+    public function getProductById(int $id): ?array
     {
-        // Full replace – wrapped in transaction to prevent partial data loss
-        DB::transaction(function () use ($products) {
-            DB::table('products')->delete();
-            foreach ($products as $p) {
-                DB::table('products')->insert([
-                    'catalog'      => $p['catalog']      ?? null,
-                    'title'        => $p['title'],
-                    'description'  => self::sanitizeHtml($p['description']  ?? null),
-                    'category'     => $p['category'],
-                    'sub_category' => $p['sub_category'] ?? null,
-                    'sector'       => $p['sector']       ?? null,
-                    'image'        => $p['image']        ?? null,
-                    'created_at'   => now(),
-                    'updated_at'   => now(),
-                ]);
-            }
+        return Cache::remember('product_by_id_' . $id, 600, function () use ($id) {
+            $row = DB::table('products')->where('id', $id)->first();
+            return $row ? (array) $row : null;
         });
-        \App\Models\Product::clearCategoriesCache();
-        return true;
     }
+
+
 
     public function addProduct(array $product): bool
     {
@@ -297,6 +271,26 @@ class DataService
             'updated_at'   => now(),
         ]);
         \App\Models\Product::clearCategoriesCache();
+        $this->clearProductsCache();
+        return true;
+    }
+
+    public function updateProductById(int $id, array $updatedProduct): bool
+    {
+        DB::table('products')->where('id', $id)->update([
+            'catalog'      => $updatedProduct['catalog']      ?? null,
+            'title'        => $updatedProduct['title'],
+            'description'  => self::sanitizeHtml($updatedProduct['description'] ?? null),
+            'category'     => $updatedProduct['category'],
+            'sub_category' => $updatedProduct['sub_category'] ?? null,
+            'sector'       => $updatedProduct['sector']       ?? null,
+            'image'        => $updatedProduct['image']        ?? null,
+            'price'        => $updatedProduct['price']        ?? 0,
+            'stock'        => $updatedProduct['stock']        ?? 0,
+            'updated_at'   => now(),
+        ]);
+        \App\Models\Product::clearCategoriesCache();
+        $this->clearProductsCache();
         return true;
     }
 
@@ -315,6 +309,7 @@ class DataService
             'updated_at'   => now(),
         ]);
         \App\Models\Product::clearCategoriesCache();
+        $this->clearProductsCache();
         return true;
     }
 
@@ -331,6 +326,14 @@ class DataService
         }
         
         return $affected > 0;
+    }
+
+    public function deleteProductById(int $id): bool
+    {
+        DB::table('products')->where('id', $id)->delete();
+        $this->clearProductsCache();
+        \App\Models\Product::clearCategoriesCache();
+        return true;
     }
 
     public function deleteProduct(string $title): bool
@@ -350,41 +353,44 @@ class DataService
             return false;
         }
 
-        DB::transaction(function () use ($products) {
-            foreach ($products as $p) {
-                $existing = DB::table('products')->where('title', $p['title'])->first();
-                $cleanDesc = self::sanitizeHtml($p['description'] ?? null);
-                if ($existing) {
-                    DB::table('products')->where('title', $p['title'])->update([
-                        'catalog'      => $p['catalog']      ?? null,
-                        'description'  => $cleanDesc,
-                        'category'     => $p['category'],
-                        'sub_category' => $p['sub_category'] ?? null,
-                        'sector'       => $p['sector']       ?? null,
-                        'image'        => $p['image']        ?? null,
-                        'price'        => $p['price']        ?? 0,
-                        'stock'        => $p['stock']        ?? 0,
-                        'updated_at'   => now(),
-                    ]);
-                } else {
-                    DB::table('products')->insert([
-                        'catalog'      => $p['catalog']      ?? null,
-                        'title'        => $p['title'],
-                        'description'  => $cleanDesc,
-                        'category'     => $p['category'],
-                        'sub_category' => $p['sub_category'] ?? null,
-                        'sector'       => $p['sector']       ?? null,
-                        'image'        => $p['image']        ?? null,
-                        'price'        => $p['price']        ?? 0,
-                        'stock'        => $p['stock']        ?? 0,
-                        'created_at'   => now(),
-                        'updated_at'   => now(),
-                    ]);
-                }
+        // Sanitize descriptions first (outside transaction for performance)
+        $now = now();
+        $rows = [];
+        foreach ($products as $p) {
+            if (empty(trim($p['title'] ?? ''))) {
+                continue;
             }
-        });
+            $rows[] = [
+                'catalog'      => $p['catalog']      ?? null,
+                'title'        => $p['title'],
+                'description'  => self::sanitizeHtml($p['description'] ?? null),
+                'category'     => $p['category'],
+                'sub_category' => $p['sub_category'] ?? null,
+                'sector'       => $p['sector']       ?? null,
+                'image'        => $p['image']        ?? null,
+                'price'        => $p['price']        ?? 0,
+                'stock'        => $p['stock']        ?? 0,
+                'created_at'   => $now,
+                'updated_at'   => $now,
+            ];
+        }
+
+        if (empty($rows)) {
+            return false;
+        }
+
+        // Single upsert call — vastly more efficient than N+1 select+insert/update pattern
+        // MySQL: INSERT ... ON DUPLICATE KEY UPDATE (requires unique key on 'title')
+        foreach (array_chunk($rows, 200) as $chunk) {
+            DB::table('products')->upsert(
+                $chunk,
+                ['title'],                  // unique key to match on
+                ['catalog', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock', 'updated_at']
+            );
+        }
 
         \App\Models\Product::clearCategoriesCache();
+        $this->clearProductsCache();
         return true;
     }
 
@@ -441,25 +447,7 @@ class DataService
         return $row ? (array) $row : null;
     }
 
-    public function savePosts(array $posts): bool
-    {
-        DB::transaction(function () use ($posts) {
-            DB::table('posts')->delete();
-            foreach ($posts as $post) {
-                DB::table('posts')->insert([
-                    'slug'       => $post['slug'],
-                    'title'      => $post['title'],
-                    'date'       => $post['date'],
-                    'category'   => $post['category'],
-                    'image'      => $post['image']   ?? null,
-                    'content'    => self::sanitizeHtml($post['content'] ?? null),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-        });
-        return true;
-    }
+
 
     public function addPost(array $post): bool
     {
@@ -475,6 +463,7 @@ class DataService
             'created_at'  => now(),
             'updated_at'  => now(),
         ]);
+        Cache::forget('blog_category_counts');
         return true;
     }
 
@@ -491,12 +480,14 @@ class DataService
             'content'     => self::sanitizeHtml($updatedPost['content'] ?? null),
             'updated_at'  => now(),
         ]);
+        Cache::forget('blog_category_counts');
         return true;
     }
 
     public function deletePost(string $slug): bool
     {
         DB::table('posts')->where('slug', $slug)->delete();
+        Cache::forget('blog_category_counts');
         return true;
     }
 
@@ -531,23 +522,7 @@ class DataService
         return $row;
     }
 
-    public function saveSectors(array $sectors): bool
-    {
-        DB::transaction(function () use ($sectors) {
-            DB::table('sectors')->delete();
-            foreach ($sectors as $sec) {
-                DB::table('sectors')->insert([
-                    'id'          => $sec['id'],
-                    'name'        => $sec['name'],
-                    'description' => json_encode($sec['description'] ?? []),
-                    'image'       => $sec['image'] ?? null,
-                    'created_at'  => now(),
-                    'updated_at'  => now(),
-                ]);
-            }
-        });
-        return true;
-    }
+
 
     public function addSector(array $sector): bool
     {
@@ -559,6 +534,7 @@ class DataService
             'created_at'  => now(),
             'updated_at'  => now(),
         ]);
+        Cache::forget('sectors_list_v2');
         return true;
     }
 
@@ -570,12 +546,14 @@ class DataService
             'image'       => $updatedSector['image'] ?? null,
             'updated_at'  => now(),
         ]);
+        Cache::forget('sectors_list_v2');
         return true;
     }
 
     public function deleteSector(string $id): bool
     {
         DB::table('sectors')->where('id', $id)->delete();
+        Cache::forget('sectors_list_v2');
         return true;
     }
 
@@ -586,24 +564,26 @@ class DataService
     {
         $default = $this->getDefaultHomepageData();
 
-        try {
-            $rows = DB::table('homepage_settings')->pluck('value', 'key')->toArray();
-        } catch (\Exception $e) {
-            // Table not yet created (first boot before migrate) – fall back to defaults
-            return $default;
-        }
+        return Cache::remember('homepage_data_v1', 300, function () use ($default) {
+            try {
+                $rows = DB::table('homepage_settings')->pluck('value', 'key')->toArray();
+            } catch (\Exception $e) {
+                // Table not yet created (first boot before migrate) – fall back to defaults
+                return $default;
+            }
 
-        if (empty($rows)) {
-            return $default;
-        }
+            if (empty($rows)) {
+                return $default;
+            }
 
-        // Decode JSON values back to arrays where needed
-        $decoded = [];
-        foreach ($rows as $key => $val) {
-            $decoded[$key] = $this->decodeSettingValue($val);
-        }
+            // Decode JSON values back to arrays where needed
+            $decoded = [];
+            foreach ($rows as $key => $val) {
+                $decoded[$key] = $this->decodeSettingValue($val);
+            }
 
-        return array_merge($default, $decoded);
+            return array_merge($default, $decoded);
+        });
     }
 
     public function saveHomepageData(array $data): bool
@@ -621,6 +601,8 @@ class DataService
                 ['value', 'updated_at']
             );
         }
+        // Invalidate cached homepage data
+        Cache::forget('homepage_data_v1');
         return true;
     }
 
@@ -782,13 +764,26 @@ class DataService
         $dom->loadHTML('<?xml encoding="utf-8" ?><div>' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
         
-        $allowedTags = ['p', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'span', 'div'];
+        $allowedTags = ['p', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'span', 'div', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'blockquote', 'code', 'pre', 'hr', 'sub', 'sup', 'u', 's', 'strike', 'del'];
         $allowedAttributes = [
-            'a' => ['href', 'title', 'class', 'target'],
+            'a' => ['href', 'title', 'class', 'target', 'style'],
             'img' => ['src', 'alt', 'class', 'style', 'width', 'height'],
             'span' => ['class', 'style'],
-            'div' => ['class', 'style'],
-            'p' => ['class', 'style'],
+            'div' => ['class', 'style', 'align'],
+            'p' => ['class', 'style', 'align'],
+            'table' => ['class', 'style', 'border', 'cellpadding', 'cellspacing', 'width', 'align'],
+            'tr' => ['class', 'style', 'align', 'valign'],
+            'td' => ['class', 'style', 'colspan', 'rowspan', 'align', 'valign', 'width', 'height'],
+            'th' => ['class', 'style', 'colspan', 'rowspan', 'align', 'valign', 'width', 'height'],
+            'blockquote' => ['class', 'style'],
+            'code' => ['class', 'style'],
+            'pre' => ['class', 'style'],
+            'h1' => ['class', 'style', 'align'],
+            'h2' => ['class', 'style', 'align'],
+            'h3' => ['class', 'style', 'align'],
+            'h4' => ['class', 'style', 'align'],
+            'h5' => ['class', 'style', 'align'],
+            'h6' => ['class', 'style', 'align'],
         ];
 
         $sanitizeNode = function (\DOMNode $node) use (&$sanitizeNode, $allowedTags, $allowedAttributes) {
@@ -814,7 +809,7 @@ class DataService
                         
                         if ($attrName === 'href' || $attrName === 'src') {
                             $val = trim($attr->value);
-                            if (preg_match('/^(javascript|data|vbscript):/i', $val)) {
+                            if (preg_match('/^(javascript|vbscript):/i', $val)) {
                                 $attrsToRemove[] = $attr->name;
                             }
                         }

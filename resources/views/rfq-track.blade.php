@@ -52,20 +52,20 @@
             </div>
           </div>
           <div class="col-md-6">
-            <div class="p-3 rounded bg-dark border border-secondary border-opacity-20">
-              <strong class="text-muted d-block mb-1">Lokasi Pengiriman:</strong>
-              <div class="text-secondary mb-2">{{ $rfq->address }}</div>
+            <div class="p-3 rounded style-neutral-card" style="background: #141416; border: 1px solid var(--color-border) !important;">
+              <strong class="text-secondary d-block mb-1">Lokasi Pengiriman:</strong>
+              <div class="text-light mb-2">{{ $rfq->address }}</div>
               @if($rfq->valid_until)
-                <div class="text-info"><i class="bi bi-clock me-1"></i> Penawaran berlaku s/d: <strong>{{ $rfq->valid_until->format('d F Y') }}</strong></div>
+                <div style="color: #ff4950; font-size: 0.85rem;"><i class="bi bi-clock me-1"></i> Penawaran berlaku s/d: <strong>{{ $rfq->valid_until->format('d F Y') }}</strong></div>
               @endif
             </div>
           </div>
         </div>
 
         @if($rfq->admin_response_notes)
-          <div class="p-3 mb-4 rounded bg-info bg-opacity-10 text-info border border-info border-opacity-20 small">
-            <strong><i class="bi bi-chat-left-text me-1"></i> Catatan Penawaran dari Tim Sales Prolabios:</strong><br>
-            {{ $rfq->admin_response_notes }}
+          <div class="p-3 mb-4 rounded small" style="background: #141416; border: 1px solid rgba(255, 73, 80, 0.3); color: #ffffff;">
+            <strong style="color: #ff4950;"><i class="bi bi-chat-left-text me-1"></i> Catatan Penawaran dari Tim Sales Prolabios:</strong><br>
+            <span class="text-light mt-1 d-block">{{ $rfq->admin_response_notes }}</span>
           </div>
         @endif
 
@@ -110,7 +110,7 @@
         <!-- Action Buttons -->
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-3 border-top border-secondary border-opacity-20">
           @if(in_array($rfq->status, ['quotation_sent', 'approved']))
-            <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
+            <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number, 'token' => $rfq->access_token]) }}" target="_blank" class="btn btn-outline-light rounded-pill px-4">
               <i class="bi bi-printer me-2"></i> Cetak / Download Official Quotation PDF
             </a>
           @else
@@ -121,7 +121,7 @@
           @endif
 
           @if($rfq->status === 'quotation_sent')
-            <form action="{{ \Illuminate\Support\Facades\URL::signedRoute('rfq.approve', ['number' => $rfq->rfq_number]) }}" method="POST" onsubmit="confirmApproveRFQ(event, this);">
+            <form action="{{ route('rfq.approve', ['number' => $rfq->rfq_number, 'token' => $rfq->access_token]) }}" method="POST" onsubmit="confirmApproveRFQ(event, this);">
               @csrf
               <button type="submit" class="btn btn-success px-4 py-2 fw-bold rounded-pill" style="background: #2e7d32; border-color: #2e7d32; box-shadow: 0 4px 14px rgba(46, 125, 50, 0.4);">
                 <i class="bi bi-check-circle-fill me-2"></i> Setujui Penawaran &amp; Proses PO
@@ -132,7 +132,7 @@
               <span class="badge px-3 py-2 text-success bg-success bg-opacity-15 border border-success border-opacity-30 rounded-pill small fw-semibold">
                 <i class="bi bi-check-circle-fill me-1"></i> Penawaran Disetujui &amp; Stok Teralokasi
               </span>
-              <a href="https://wa.me/6281234567890?text={{ urlencode('Halo Tim Sales Prolabios, kami telah menyetujui Penawaran RFQ: ' . $rfq->rfq_number . '. Mohon informasi alur pengiriman dan penerbitan Invoice.') }}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold">
+              <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $siteSettings['contact_phone'] ?? '082187929433') }}?text={{ urlencode('Halo Tim Sales Prolabios, kami telah menyetujui Penawaran RFQ: ' . $rfq->rfq_number . '. Mohon informasi alur pengiriman dan penerbitan Invoice.') }}" target="_blank" class="btn btn-outline-success btn-sm rounded-pill px-3 py-2 fw-semibold">
                 <i class="bi bi-whatsapp me-1"></i> Konfirmasi Pengiriman &amp; Invoice via WA
               </a>
             </div>
@@ -162,11 +162,14 @@
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#2e7d32',
-      cancelButtonColor: 'rgba(255, 255, 255, 0.15)',
+      cancelButtonColor: 'rgba(255, 255, 255, 0.12)',
       confirmButtonText: 'Ya, Setujui Penawaran!',
       cancelButtonText: 'Batal',
-      background: '#0f172a',
-      color: '#ffffff'
+      background: '#0e0e10',
+      color: '#ffffff',
+      customClass: {
+        popup: 'border border-secondary border-opacity-25 rounded-4 shadow-lg'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         form.submit();

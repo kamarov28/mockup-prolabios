@@ -18,6 +18,8 @@ class SendContactEmailJob implements ShouldQueue
 
     public int $tries = 3;
 
+    public array $backoff = [10, 30, 60];
+
     protected int $inquiryId;
 
     /**

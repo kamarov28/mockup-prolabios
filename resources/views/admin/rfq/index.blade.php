@@ -90,9 +90,15 @@
                   {{ $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : '—' }}
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ route('admin.rfq.respond', ['id' => $rfq->id]) }}" class="admin-btn admin-btn-primary py-1 px-3" title="Beri Feedback Penawaran">
-                    <i class="bi bi-pencil-square me-1"></i> Feedback &amp; Respon
-                  </a>
+                  @if($rfq->status === 'pending_review')
+                    <a href="{{ route('admin.rfq.respond', ['id' => $rfq->id]) }}" class="admin-btn admin-btn-primary py-1 px-3" title="Beri Feedback Penawaran">
+                      <i class="bi bi-pencil-square me-1"></i> Feedback &amp; Respon
+                    </a>
+                  @else
+                    <a href="{{ route('admin.rfq.respond', ['id' => $rfq->id]) }}" class="admin-btn admin-btn-ghost py-1 px-3 text-info border-info border-opacity-25" title="Lihat atau Kirim Revisi Penawaran">
+                      <i class="bi bi-eye me-1"></i> Lihat / Edit Revisi
+                    </a>
+                  @endif
                   <form action="{{ route('admin.rfq.destroy', ['id' => $rfq->id]) }}" method="POST" class="d-inline form-delete" data-name="{{ $rfq->rfq_number }}">
                     @csrf
                     @method('DELETE')

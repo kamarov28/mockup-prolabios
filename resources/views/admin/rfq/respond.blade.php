@@ -74,7 +74,7 @@
     <h5 class="mb-0 fw-bold text-white fs-5">
       <i class="bi bi-file-earmark-text text-danger me-2"></i> Feedback Penawaran RFQ: <span class="text-danger">{{ $rfq->rfq_number }}</span>
     </h5>
-    <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number]) }}" target="_blank" class="btn btn-outline-light btn-sm px-3 rounded-pill">
+    <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number, 'token' => $rfq->access_token]) }}" target="_blank" class="btn btn-outline-light btn-sm px-3 rounded-pill">
       <i class="bi bi-printer me-1"></i> Preview PDF Quotation
     </a>
   </div>
@@ -96,6 +96,19 @@
       </div>
     </div>
   </div>
+
+  @if($rfq->status === 'quotation_sent' || $rfq->status === 'approved')
+    <div class="p-3 mb-4 rounded-3 d-flex align-items-center justify-content-between" style="background: rgba(33, 150, 243, 0.12); border: 1px solid rgba(33, 150, 243, 0.3); color: #64b5f6;">
+      <div>
+        <i class="bi bi-check-circle-fill me-2 fs-5 text-info"></i>
+        <strong>Status: Surat Penawaran Resmi Telah Terbit &amp; Terkirim!</strong>
+        <div class="small text-white-50 mt-1">Dokumen penawaran harga sudah dikirimkan ke email {{ $rfq->email }}. Anda dapat memperbarui item/harga untuk mengirimkan <strong>Surat Penawaran Revisi</strong>.</div>
+      </div>
+      <a href="{{ route('rfq.pdf', ['number' => $rfq->rfq_number, 'token' => $rfq->access_token]) }}" target="_blank" class="btn btn-info btn-sm px-3 rounded-pill text-white fw-bold">
+        <i class="bi bi-file-earmark-pdf me-1"></i> Unduh PDF
+      </a>
+    </div>
+  @endif
 
   @if($rfq->notes)
     <div class="p-3 mb-4 rounded" style="background: rgba(255, 193, 7, 0.08); border: 1px solid rgba(255, 193, 7, 0.25); color: #ffc107;">
@@ -177,7 +190,11 @@
         <i class="bi bi-arrow-left me-1"></i> Batal
       </a>
       <button type="submit" class="btn btn-danger px-4 py-2 fw-bold rounded-pill">
-        <i class="bi bi-send-fill me-1"></i> Simpan &amp; Kirim Feedback Email ke Korporasi
+        @if($rfq->status === 'quotation_sent' || $rfq->status === 'approved')
+          <i class="bi bi-arrow-repeat me-1"></i> Update &amp; Kirim Email Revisi Penawaran
+        @else
+          <i class="bi bi-send-fill me-1"></i> Terbitkan &amp; Kirim Feedback Email ke Korporasi
+        @endif
       </button>
     </div>
 

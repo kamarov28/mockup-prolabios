@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 // ----------------------------------------------------
 // Public Frontend Routes
 // ----------------------------------------------------
-Route::get('/', [PageController::class, 'home']);
+Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/profil', [PageController::class, 'profil']);
 Route::get('/produk', [PageController::class, 'produk']);
 Route::get('/sektor', [PageController::class, 'sektor']);
@@ -74,9 +74,9 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/products/create-bulk', [AdminProductController::class, 'productsCreateBulk'])->name('admin.products.create.bulk');
     Route::post('/products/store-bulk', [AdminProductController::class, 'productsStoreBulk'])->name('admin.products.store-bulk');
     Route::post('/products', [AdminProductController::class, 'productsStore'])->name('admin.products.store');
-    Route::get('/products/{title}/edit', [AdminProductController::class, 'productsEdit'])->name('admin.products.edit');
-    Route::post('/products/{title}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
-    Route::delete('/products/{title}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
+    Route::get('/products/{id}/edit', [AdminProductController::class, 'productsEdit'])->name('admin.products.edit');
+    Route::post('/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
+    Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
     
     // Posts CRUD
     Route::get('/posts', [AdminPostController::class, 'postsIndex'])->name('admin.posts');

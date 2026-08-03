@@ -7,13 +7,13 @@
   --color-secondary: #8B1A1A; /* Prolabios Dark Red */
   --color-accent: #25D366; /* WhatsApp Green */
   
-  --color-text-main: #F8FAFC; /* Slate 50 */
-  --color-text-muted: #CBD5E1; /* Slate 300 - WCAG AA compliant on dark backgrounds */
-  --color-bg-body: #0B0F19; /* Premium Dark Navy */
-  --color-bg-dark: #0B0F19; /* Premium Dark Navy Alias */
-  --color-bg-white: #111827; /* Dark Slate card background */
-  --color-bg-gray: #1F2937; /* Dark Slate background */
-  --color-border: #374151; /* Dark Slate border */
+  --color-text-main: #F8FAFC;
+  --color-text-muted: rgba(255, 255, 255, 0.55);
+  --color-bg-body: #070708; /* Pure Authentic Dark */
+  --color-bg-dark: #070708; /* Pure Authentic Dark */
+  --color-bg-white: #0e0e10; /* Pure Neutral Surface */
+  --color-bg-gray: #141416; /* Pure Neutral Surface 2 */
+  --color-border: rgba(255, 255, 255, 0.08); /* Subtle border */
 
   /* Typography Tokens */
   --font-family-headline: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -157,12 +157,12 @@ h1, h2, h3, h4, h5, h6,
    Dark Theme (Maintainability & Design Aesthetics)
    ========================================================================== */
 [data-theme="dark"] {
-  --color-text-main: #F8FAFC; /* Slate 50 */
-  --color-text-muted: #94A3B8; /* Slate 400 */
-  --color-bg-body: #0B0F19; /* Premium Dark Navy */
-  --color-bg-white: #111827; /* Dark Slate card background */
-  --color-bg-gray: #1F2937; /* Dark Slate background */
-  --color-border: #374151; /* Dark Slate border */
+  --color-text-main: #F8FAFC;
+  --color-text-muted: rgba(255, 255, 255, 0.55);
+  --color-bg-body: #070708;
+  --color-bg-white: #0e0e10;
+  --color-bg-gray: #141416;
+  --color-border: rgba(255, 255, 255, 0.08);
   
   --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.5);

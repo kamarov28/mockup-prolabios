@@ -20,8 +20,13 @@ class CartController extends Controller
         $total = 0;
         foreach ($cart as $title => &$item) {
             $product = $this->dataService->getProductByTitle($title);
-            if ($product && (float)($product['price'] ?? 0) > 0) {
-                $item['price'] = (float)$product['price'];
+            if ($product) {
+                if ((float)($product['price'] ?? 0) > 0) {
+                    $item['price'] = (float)$product['price'];
+                }
+                $item['stock'] = (int)($product['stock'] ?? 0);
+            } else {
+                $item['stock'] = (int)($item['stock'] ?? 0);
             }
             $total += ($item['price'] * $item['quantity']);
         }
@@ -37,38 +42,45 @@ class CartController extends Controller
 
         $product = $this->dataService->getProductByTitle($title);
         if (!$product) {
-            return response()->json(['success' => false, 'message' => 'Produk tidak ditemukan.'], 440);
+            return response()->json(['success' => false, 'message' => 'Produk tidak ditemukan.'], 404);
         }
 
+        $stock = (int)($product['stock'] ?? 0);
         $cart = session()->get('cart', []);
 
+        $currentQty = $cart[$title]['quantity'] ?? 0;
+        $newQty = $currentQty + $qty;
+
         if (isset($cart[$title])) {
-            $cart[$title]['quantity'] += $qty;
+            $cart[$title]['quantity'] = $newQty;
+            $cart[$title]['stock'] = $stock;
         } else {
             $cart[$title] = [
-                'id' => $product['id'] ?? null,
-                'title' => $product['title'],
-                'catalog' => $product['catalog'] ?? '',
-                'price' => (float)($product['price'] ?? 0),
-                'stock' => (int)($product['stock'] ?? 999), // Unlimited for testing
-                'image' => $product['image'] ?? '',
-                'quantity' => $qty,
+                'id'       => $product['id'] ?? null,
+                'title'    => $product['title'],
+                'catalog'  => $product['catalog'] ?? '',
+                'image'    => $product['image'] ?? '',
+                'price'    => (float)($product['price'] ?? 0),
+                'stock'    => $stock,
+                'quantity' => $newQty
             ];
         }
 
         session()->put('cart', $cart);
-        $totalCount = array_sum(array_column($cart, 'quantity'));
 
-        if ($request->wantsJson() || $request->ajax() || $request->expectsJson()) {
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+
+        if ($request->wantsJson()) {
             return response()->json([
-                'success' => true,
-                'message' => '"' . $product['title'] . '" berhasil ditambahkan ke keranjang RFQ!',
-                'cartCount' => $totalCount,
-                'title' => $product['title'],
+                'success'   => true,
+                'message'   => 'Produk berhasil ditambahkan ke keranjang RFQ!',
+                'cartCount' => $cartCount,
+                'isIndent'  => $newQty > $stock,
+                'stock'     => $stock
             ]);
         }
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang RFQ!');
     }
 
     public function update(Request $request)
@@ -78,6 +90,11 @@ class CartController extends Controller
 
         $cart = session()->get('cart', []);
         if (isset($cart[$title])) {
+            // Enforce max quantity based on cached stock in cart
+            $stock = (int)($cart[$title]['stock'] ?? 999);
+            if ($stock > 0 && $qty > $stock) {
+                $qty = $stock;
+            }
             $cart[$title]['quantity'] = $qty;
             session()->put('cart', $cart);
         }

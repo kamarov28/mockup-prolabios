@@ -1443,7 +1443,48 @@ a:hover {
   font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.8;
-  color: rgba(255,255,255,0.6) !important;
+  color: rgba(255,255,255,0.8) !important;
+}
+.profil-body-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+.profil-body-text table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.02);
+}
+.profil-body-text table th,
+.profil-body-text table td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.profil-body-text table th {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-weight: 600;
+}
+.profil-body-text h1, .profil-body-text h2, .profil-body-text h3, 
+.profil-body-text h4, .profil-body-text h5, .profil-body-text h6 {
+  color: #ffffff !important;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  font-family: var(--font-headline);
+}
+.profil-body-text ul, .profil-body-text ol {
+  padding-left: 24px;
+  margin: 12px 0;
+}
+.profil-body-text blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: rgba(255, 255, 255, 0.65);
 }
 .profil-vm-card {
   border: 1px solid var(--color-border);

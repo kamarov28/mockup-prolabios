@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use App\Traits\HandlesImageUploads;
 
 class AdminPrincipalController extends Controller
 {
+    use HandlesImageUploads;
+
     public function index(Request $request)
     {
         $search = $request->input('s');
@@ -37,7 +40,7 @@ class AdminPrincipalController extends Controller
             'status' => 'required|in:online,draft',
         ]);
 
-        $logo = $this->handleLogoUpload($request);
+        $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', null);
 
         DB::table('principals')->insert([
             'name'       => $request->input('name'),
@@ -73,7 +76,7 @@ class AdminPrincipalController extends Controller
             'status' => 'required|in:online,draft',
         ]);
 
-        $logo = $this->handleLogoUpload($request, $principal->logo);
+        $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', $principal->logo ?? null);
 
         DB::table('principals')->where('id', $id)->update([
             'name'       => $request->input('name'),
@@ -93,24 +96,5 @@ class AdminPrincipalController extends Controller
         DB::table('principals')->where('id', $id)->delete();
         \Illuminate\Support\Facades\Cache::forget('active_principals_v4');
         return redirect()->route('admin.principals')->with('success', 'Prinsipal berhasil dihapus!');
-    }
-
-    protected function handleLogoUpload(Request $request, ?string $fallback = null): ?string
-    {
-        if ($request->hasFile('logo_file') && $request->file('logo_file')->isValid()) {
-            $file = $request->file('logo_file');
-            $ext = strtolower($file->getClientOriginalExtension());
-            $fileName = 'principal_' . time() . '_' . Str::random(6) . '.' . $ext;
-
-            $uploadPath = public_path('uploads');
-            if (!File::exists($uploadPath)) {
-                File::makeDirectory($uploadPath, 0755, true);
-            }
-
-            $file->move($uploadPath, $fileName);
-            return asset('uploads/' . $fileName);
-        }
-
-        return $request->input('logo_url', $fallback);
     }
 }

@@ -49,9 +49,7 @@ class ContactController extends Controller
             // 3. Kirim email secara asinkron lewat queue (hanya mengirimkan ID referensi)
             SendContactEmailJob::dispatch($inquiry->id);
 
-
-
-            // 5. Kembalikan Response Sukses
+            // 4. Kembalikan Response Sukses
             return response()->json([
                 "success" => true,
                 "message" =>

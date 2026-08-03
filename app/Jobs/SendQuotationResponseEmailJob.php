@@ -24,7 +24,7 @@ class SendQuotationResponseEmailJob implements ShouldQueue
     /**
      * The number of seconds to wait before retrying the job.
      */
-    public int $backoff = [10, 30, 60];
+    public array $backoff = [10, 30, 60];
 
     protected int $rfqId;
     protected string $customerEmail;

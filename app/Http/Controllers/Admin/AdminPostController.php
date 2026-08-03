@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DataService;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use App\Http\Requests\UpdatePostRequest;
 
 class AdminPostController extends Controller
 {
+    use HandlesImageUploads;
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -181,41 +183,5 @@ class AdminPostController extends Controller
     {
         $this->dataService->deletePost($slug);
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil dihapus!');
-    }
-
-    protected function handleImageUpload(Request $request, string $fileKey, string $urlKey, ?string $fallback = null): ?string
-    {
-        if ($request->hasFile($fileKey) && $request->file($fileKey)->isValid()) {
-            $file = $request->file($fileKey);
-
-            $ext = strtolower($file->getClientOriginalExtension());
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-            if (!in_array($ext, $allowedExtensions, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp.']
-                ]);
-            }
-
-            $mime = $file->getMimeType();
-            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!in_array($mime, $allowedMimes, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
-                ]);
-            }
-
-            $fileName = time() . '_' . Str::random(8) . '.' . $ext;
-
-            $uploadPath = public_path('uploads');
-            if (!File::exists($uploadPath)) {
-                File::makeDirectory($uploadPath, 0755, true);
-            }
-
-            $file->move($uploadPath, $fileName);
-            return asset('uploads/' . $fileName);
-        }
-
-        return $request->input($urlKey, $fallback);
     }
 }

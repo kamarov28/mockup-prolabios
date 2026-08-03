@@ -111,13 +111,19 @@
           </div>
 
           <!-- Search Input Box Below Title -->
-          <div class="produk-search-wrap w-100 mb-5" style="max-width: 480px;">
-            <i class="bi bi-search"></i>
-            <input type="text" id="local-search-input" placeholder="Search reagents or CAT. code..." aria-label="Cari produk" value="{{ request()->query('q') ?? request()->query('s') }}">
-          </div>
+          <form action="{{ url('/produk') }}" method="GET" id="catalog-search-form" class="produk-search-wrap w-100 mb-5" style="max-width: 480px;">
+            @if(request()->query('category'))
+              <input type="hidden" name="category" value="{{ request()->query('category') }}">
+            @endif
+            @if(request()->query('subcategory'))
+              <input type="hidden" name="subcategory" value="{{ request()->query('subcategory') }}">
+            @endif
+            <i class="bi bi-search" style="cursor: pointer;" onclick="document.getElementById('catalog-search-form').submit();"></i>
+            <input type="text" id="local-search-input" name="s" placeholder="Search reagents or CAT. code..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
+          </form>
 
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
-            @if(isset($products) && count($products) > 0)
+            @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
                 <div class="card h-100 product-card-premium border-0">
@@ -254,10 +260,16 @@
           }
         }
 
-        // 6. Reset search input
+        // 6. Preserve active search query in search input
         const localSearch = document.getElementById('local-search-input');
         if (localSearch) {
-          localSearch.value = '';
+          const currentUrlObj = new URL(url, window.location.origin);
+          const activeSearchQuery = currentUrlObj.searchParams.get('s') || currentUrlObj.searchParams.get('q') || '';
+          localSearch.value = activeSearchQuery;
+          if (activeSearchQuery && document.activeElement === localSearch) {
+            const len = activeSearchQuery.length;
+            localSearch.setSelectionRange(len, len);
+          }
         }
 
         // Smooth scroll to catalog section top
@@ -331,37 +343,48 @@
         loadProductsAjax(window.location.href, false);
       });
 
-      // 3. Keep local instant search filter logic working
+      // 3. Dynamic Server-Side Search (AJAX Debounced Search across full Database)
       const localSearch = document.getElementById('local-search-input');
+      const searchForm = document.getElementById('catalog-search-form');
+      let searchDebounceTimer = null;
+
+      if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const query = localSearch ? localSearch.value.trim() : '';
+          const currentUrl = new URL(window.location.href);
+          if (query) {
+            currentUrl.searchParams.set('s', query);
+          } else {
+            currentUrl.searchParams.delete('s');
+          }
+          currentUrl.searchParams.delete('page');
+          loadProductsAjax(currentUrl.toString());
+        });
+      }
+
       if (localSearch) {
         localSearch.addEventListener('input', function() {
+          clearTimeout(searchDebounceTimer);
           const query = this.value.trim();
-          const navSearchInput = document.querySelector('.search-form input');
-          if (navSearchInput) {
-            navSearchInput.value = query;
-          }
-          if (typeof filterProducts === 'function') {
-            filterProducts(query);
-          } else {
-            const cards = document.querySelectorAll('.product-card');
-            const q = query.toLowerCase();
-            cards.forEach(card => {
-              if (card.textContent.toLowerCase().includes(q)) {
-                card.classList.remove('hidden-by-filter', 'd-none');
-                card.style.display = '';
-              } else {
-                card.classList.add('hidden-by-filter', 'd-none');
-                card.style.display = 'none';
-              }
-            });
-            if (typeof applyPagination === 'function') applyPagination(1);
-          }
+
+          searchDebounceTimer = setTimeout(() => {
+            const currentUrl = new URL(window.location.href);
+            if (query) {
+              currentUrl.searchParams.set('s', query);
+            } else {
+              currentUrl.searchParams.delete('s');
+            }
+            currentUrl.searchParams.delete('page');
+            loadProductsAjax(currentUrl.toString());
+          }, 350);
         });
-        
-        const urlParams = new URLSearchParams(window.location.search);
-        const q = urlParams.get('q');
-        if (q) {
-          localSearch.value = q;
+
+        // Set cursor to end of input if search parameter active
+        if (localSearch.value) {
+          localSearch.focus();
+          const len = localSearch.value.length;
+          localSearch.setSelectionRange(len, len);
         }
       }
     });

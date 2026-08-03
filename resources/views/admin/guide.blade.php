@@ -201,17 +201,17 @@
       </thead>
       <tbody>
         <tr>
-          <td><span class="badge bg-warning text-dark">Pending Review</span></td>
+          <td><span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 600; padding: 5px 10px;">Pending Review</span></td>
           <td>Pembeli korporasi baru saja selesai mengajukan formulir RFQ dari website. Penawaran belum di-review oleh sales.</td>
           <td>Admin Sales membuka detail &amp; menetapkan harga satuan resmi.</td>
         </tr>
         <tr>
-          <td><span class="badge bg-info text-dark">Quotation Sent</span></td>
+          <td><span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-weight: 600; padding: 5px 10px;">Quotation Sent</span></td>
           <td>Tim Sales telah memasukkan harga satuan, diskon, &amp; menerbitkan PDF Surat Penawaran Resmi ke pembeli.</td>
           <td>Menunggu pembeli melakukan konfirmasi / menyetujui penawaran.</td>
         </tr>
         <tr>
-          <td><span class="badge bg-success">Approved</span></td>
+          <td><span class="badge" style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); font-weight: 600; padding: 5px 10px;">Approved</span></td>
           <td>Pembeli telah menyetujui penawaran harga. <strong>Stok produk di basis data otomatis terpotong</strong>.</td>
           <td>Tim Finance &amp; Logistik menerbitkan Invoice &amp; mengirimkan barang.</td>
         </tr>
@@ -267,8 +267,17 @@
       </div>
     </div>
 
+    <div class="manual-subchapter-title">
+      <i class="bi bi-shield-check"></i> 1.3 Keamanan Akses RFQ &amp; Signed Link Tracking
+    </div>
+    <div class="manual-callout-info my-2">
+      <strong><i class="bi bi-lock-fill me-1"></i> Proteksi Token Akses (Anti-IDOR) &amp; Signed URL:</strong><br>
+      • Setiap pengajuan RFQ kini dilengkapi dengan <code>access_token</code> unik (48-karakter acak). Dokumen RFQ hanya dapat dibuka melalui link resmi bernavigasi token.<br>
+      • Tombol <strong>"Setujui Penawaran &amp; Proses PO"</strong> pada halaman pembeli dilindungi oleh <em>Cryptographic Signed URL</em> dari Laravel. Hal ini menjamin bahwa persetujuan transaksi sah dan tidak dapat dimanipulasi dari luar.
+    </div>
+
     <div class="manual-callout-success">
-      <i class="bi bi-check-circle-fill me-1"></i> <strong>Otomasi Stok Setelah Approval:</strong> Begitu pembeli menyetujui penawaran di portal pemantauan status, sistem secara otomatis mengalokasikan stok di database sehingga jumlah stok produk di gudang terpotong secara real-time.
+      <i class="bi bi-check-circle-fill me-1"></i> <strong>Otomasi Stok Setelah Approval:</strong> Begitu pembeli menyetujui penawaran melalui link resmi, sistem secara otomatis mengalokasikan stok di database dengan transaksi aman (row-locking) sehingga jumlah stok produk di gudang terpotong secara real-time dan akurat.
     </div>
   </div>
 
@@ -290,7 +299,7 @@
       <li><strong>Nomor Katalog (CAT Code):</strong> Kode unik pabrikan (misal: <code>CAT. 610025</code>).</li>
       <li><strong>Kategori:</strong> Pilih kategori utama (misal: <em>Culture Media / Microbiology</em>).</li>
       <li><strong>Harga Est. Penawaran:</strong> Price list standar acuan (dapat di-override saat RFQ).</li>
-      <li><strong>Gambar Produk:</strong> Upload foto produk format PNG/JPG/WebP resmi pabrikan.</li>
+      <li><strong>Gambar Produk:</strong> Upload foto produk format PNG/JPG/WebP resmi pabrikan. <em>(Sistem secara otomatis mengompresi dan mengonversi gambar ke format modern WebP dengan efisiensi memori hingga 80% tanpa mengurangi kualitas visual)</em>.</li>
     </ul>
 
     <div class="manual-subchapter-title">

@@ -73,13 +73,13 @@ class AdminRfqController extends Controller
             'valid_until'          => $validated['valid_until'],
         ]);
 
-        // Send Feedback Email to Corporate Buyer (queued for performance)
+        // Send Feedback Email directly to Corporate Buyer (real-time delivery)
         try {
-            SendQuotationResponseEmailJob::dispatch($rfq->id, $rfq->email);
+            \Illuminate\Support\Facades\Mail::to($rfq->email)->send(new \App\Mail\QuotationResponseMail($rfq));
             $msg = 'Penawaran resmi berhasil disimpan & email feedback telah dikirimkan ke korporasi (' . $rfq->email . ')!';
-        } catch (\Exception $e) {
-            \Log::error('Failed to queue quotation email: ' . $e->getMessage());
-            $msg = 'Penawaran resmi berhasil disimpan! (Catatan: Gagal mengirim email otomatis, periksa konfigurasi SMTP).';
+        } catch (\Throwable $e) {
+            \Log::error('Failed to send quotation email: ' . $e->getMessage());
+            $msg = 'Penawaran resmi berhasil disimpan! (Catatan: Email notifikasi gagal dikirim, periksa log/koneksi SMTP).';
         }
 
         return redirect()->route('admin.rfq')->with('success', $msg);

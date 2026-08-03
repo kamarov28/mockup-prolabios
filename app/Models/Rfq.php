@@ -13,6 +13,7 @@ class Rfq extends Model
 
     protected $fillable = [
         'rfq_number',
+        'access_token',
         'company_name',
         'company_tax_id',
         'pic_name',

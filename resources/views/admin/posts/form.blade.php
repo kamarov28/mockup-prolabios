@@ -18,6 +18,16 @@
   <form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data" class="card-body p-4">
     @csrf
 
+    @if ($errors->any())
+      <div class="alert alert-danger mb-4">
+        <ul class="mb-0 ps-3">
+          @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+    @endif
+
     <div class="row g-3">
       <!-- Title -->
       <div class="col-md-8">
@@ -106,86 +116,27 @@
         </div>
       </div>
 
-      <!-- Content -->
+      <!-- Konten Artikel -->
       <div class="col-12 mt-4">
-        <label for="content" class="form-label fw-bold">Konten Artikel <span class="text-danger">*</span></label>
-        <textarea class="form-control" id="content" name="content" rows="10" required placeholder="Tulis artikel lengkap di sini. Gunakan tag HTML seperti <br> atau <p> untuk format paragraf.">{{ old('content', $post['content'] ?? '') }}</textarea>
+        <label for="content" class="form-label fw-bold">Isi Artikel / Berita</label>
+        <textarea class="form-control" id="content" name="content" rows="10" placeholder="Tulis isi artikel lengkap...">{{ old('content', $post['content'] ?? '') }}</textarea>
       </div>
     </div>
 
     <!-- Buttons -->
     <div class="mt-4 border-top pt-3 d-flex justify-content-between">
       <a href="{{ route('admin.posts') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i> Batal</a>
-      <button type="submit" class="btn btn-success px-4"><i class="bi bi-send me-1"></i> Terbitkan Artikel</button>
+      <button type="submit" class="btn btn-success px-4"><i class="bi bi-check-lg me-1"></i> Simpan Artikel</button>
     </div>
   </form>
 </div>
 @endsection
 
 @section('admin_styles')
-  <!-- Summernote CSS -->
+  <!-- Summernote Lite Original CDN CSS -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
+  @vite(['resources/css/summernote-dark.css'])
   <style>
-    /* ── Summernote Dark Mode ────────────────────────────────────────────────── */
-    .note-editor.note-frame {
-      border: 1px solid var(--color-border) !important;
-      border-radius: 0.5rem !important;
-      overflow: hidden;
-      background-color: var(--color-surface) !important;
-    }
-    .note-editor .note-toolbar {
-      background-color: var(--color-surface-2) !important;
-      border-bottom: 1px solid var(--color-border) !important;
-      padding: 6px 8px !important;
-    }
-    .note-editor .note-toolbar .note-btn {
-      background-color: transparent !important;
-      border: 1px solid transparent !important;
-      color: rgba(255,255,255,0.75) !important;
-      transition: background 0.15s, color 0.15s;
-    }
-    .note-editor .note-toolbar .note-btn:hover,
-    .note-editor .note-toolbar .note-btn:focus {
-      background-color: rgba(255,255,255,0.08) !important;
-      border-color: var(--color-border) !important;
-      color: #fff !important;
-    }
-    .note-editor .note-toolbar .note-btn.active {
-      background-color: rgba(255,73,80,0.2) !important;
-      border-color: var(--color-accent) !important;
-      color: var(--color-accent) !important;
-    }
-    .note-editor .dropdown-menu,
-    .note-editor .note-dropdown-menu {
-      background-color: var(--color-surface-2) !important;
-      border: 1px solid var(--color-border) !important;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
-    }
-    .note-editor .dropdown-item,
-    .note-editor .note-dropdown-item {
-      color: rgba(255,255,255,0.8) !important;
-    }
-    .note-editor .dropdown-item:hover,
-    .note-editor .note-dropdown-item:hover {
-      background-color: rgba(255,255,255,0.07) !important;
-      color: #fff !important;
-    }
-    .note-editor .note-editable {
-      background-color: var(--color-surface) !important;
-      color: rgba(255,255,255,0.9) !important;
-      caret-color: #fff;
-    }
-    .note-editor .note-editable[data-placeholder]:empty:before {
-      color: rgba(255,255,255,0.3) !important;
-    }
-    .note-editor .note-statusbar {
-      background-color: var(--color-surface-2) !important;
-      border-top: 1px solid var(--color-border) !important;
-    }
-    .note-editor .note-statusbar .note-resizebar .note-icon-bar {
-      border-top-color: rgba(255,255,255,0.2) !important;
-    }
-
     /* ── File Input (Browse button) Dark Mode ───────────────────────────────── */
     input[type="file"].form-control {
       color: rgba(255,255,255,0.75) !important;
@@ -214,27 +165,11 @@
 @endsection
 
 @section('admin_scripts')
-  <!-- jQuery (Required by Summernote) -->
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-  <!-- Summernote JS -->
+  <!-- jQuery & Summernote Lite JS -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
-  
-  <script>
-    function previewLocalImage(input) {
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('image-preview').src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-    function previewUrlImage(url) {
-      if (url.trim() !== '') {
-        document.getElementById('image-preview').src = url;
-      }
-    }
 
+  <script>
     // Initialize Summernote
     $(document).ready(function() {
       $('#content').summernote({

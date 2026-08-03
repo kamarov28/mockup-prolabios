@@ -21,7 +21,7 @@ class UpdateProductRequest extends FormRequest
             'sector' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:5120',
-            'image_url' => 'nullable|url',
+            'image_url' => 'nullable|string|max:2048',
         ];
     }
 }

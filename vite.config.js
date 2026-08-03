@@ -11,7 +11,8 @@ export default defineConfig({
                 'resources/css/experimental-typo.css',
                 'resources/js/app.js',
                 'resources/css/app.css',
-                'resources/css/admin.css'
+                'resources/css/admin.css',
+                'resources/css/summernote-dark.css'
             ],
             refresh: true,
             fonts: [

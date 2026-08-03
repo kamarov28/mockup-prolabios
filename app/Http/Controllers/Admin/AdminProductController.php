@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DataService;
+use App\Traits\HandlesImageUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,8 @@ use App\Http\Requests\UpdateProductRequest;
 
 class AdminProductController extends Controller
 {
+    use HandlesImageUploads;
+
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -43,10 +46,7 @@ class AdminProductController extends Controller
         if ($sector) {
             $query->where(function ($q) use ($sector) {
                 $q->where('sector', $sector)
-                  ->orWhere('sector', 'like', "%{$sector}%")
-                  ->orWhere('sector', 'like', "%,{$sector},%")
-                  ->orWhere('sector', 'like', "%,{$sector}")
-                  ->orWhere('sector', 'like', "{$sector},%");
+                  ->orWhereRaw("FIND_IN_SET(?, sector)", [$sector]);
             });
         }
 
@@ -124,7 +124,7 @@ class AdminProductController extends Controller
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80');
+        $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
 
         $product = [
             'catalog' => $request->input('catalog') ?: '',
@@ -143,9 +143,9 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
     }
 
-    public function productsEdit(string $title)
+    public function productsEdit(int $id)
     {
-        $product = $this->dataService->getProductByTitle($title);
+        $product = $this->dataService->getProductById($id);
         if (!$product) {
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
@@ -153,16 +153,17 @@ class AdminProductController extends Controller
         return view('admin.products.form', compact('product', 'sectors'));
     }
 
-    public function productsUpdate(UpdateProductRequest $request, string $title)
+    public function productsUpdate(UpdateProductRequest $request, int $id)
     {
-        $product = $this->dataService->getProductByTitle($title);
+        $product = $this->dataService->getProductById($id);
         if (!$product) {
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
 
         $newTitle = $request->input('title');
+        $existing = $this->dataService->getProductByTitle($newTitle);
 
-        if ($newTitle !== $title && $this->dataService->getProductByTitle($newTitle)) {
+        if ($existing && (int)($existing['id'] ?? 0) !== $id) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
 
@@ -180,14 +181,14 @@ class AdminProductController extends Controller
             'stock' => (int)$request->input('stock', 0),
         ];
 
-        $this->dataService->updateProduct($title, $updatedProduct);
+        $this->dataService->updateProductById($id, $updatedProduct);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui!');
     }
 
-    public function productsDestroy(string $title)
+    public function productsDestroy(int $id)
     {
-        $this->dataService->deleteProduct($title);
+        $this->dataService->deleteProductById($id);
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
     }
 
@@ -210,55 +211,29 @@ class AdminProductController extends Controller
                 continue;
             }
 
-            $catalog = trim($request->input("catalog.{$id}", ''));
+            $catalog     = trim($request->input("catalog.{$id}", ''));
             $subCategory = trim($request->input("sub_category.{$id}", ''));
-            $sector = trim($request->input("sector.{$id}", ''));
+            $sector      = trim($request->input("sector.{$id}", ''));
             $description = trim($request->input("description.{$id}", ''));
-            $imageUrl = trim($request->input("image_url.{$id}", ''));
 
-            $image = null;
-            if ($request->hasFile("image_file.{$id}") && $request->file("image_file.{$id}")->isValid()) {
-                $file = $request->file("image_file.{$id}");
-
-                $ext = strtolower($file->getClientOriginalExtension());
-                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                if (!in_array($ext, $allowedExtensions, true)) {
-                    throw \Illuminate\Validation\ValidationException::withMessages([
-                        "image_file.{$id}" => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp.']
-                    ]);
-                }
-
-                $mime = $file->getMimeType();
-                $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-                if (!in_array($mime, $allowedMimes, true)) {
-                    throw \Illuminate\Validation\ValidationException::withMessages([
-                        "image_file.{$id}" => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
-                    ]);
-                }
-
-                $fileName = time() . '_' . Str::random(8) . '.' . $ext;
-                $uploadPath = public_path('uploads');
-                if (!File::exists($uploadPath)) {
-                    File::makeDirectory($uploadPath, 0755, true);
-                }
-                $file->move($uploadPath, $fileName);
-                $image = asset('uploads/' . $fileName);
-            } else {
-                $image = $imageUrl;
-            }
-
-            if (empty($image)) {
-                $image = 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
-            }
+            // Use HandlesImageUploads trait — same security, WebP conversion, size limits as single upload
+            $image = $this->handleImageUpload(
+                $request,
+                "image_file.{$id}",
+                "image_url.{$id}",
+                '/images/placeholder.svg'
+            );
 
             $productsToStore[] = [
-                'catalog' => $catalog,
-                'title' => $title,
-                'category' => $category,
+                'catalog'      => $catalog,
+                'title'        => $title,
+                'category'     => $category,
                 'sub_category' => $subCategory,
-                'sector' => $sector ?: null,
-                'description' => $description,
-                'image' => $image
+                'sector'       => $sector ?: null,
+                'description'  => $description,
+                'image'        => $image,
+                'price'        => 0,
+                'stock'        => 0,
             ];
         }
 
@@ -269,41 +244,5 @@ class AdminProductController extends Controller
         }
 
         return redirect()->back()->with('error', 'Tidak ada data produk valid yang disimpan. Harap isi minimal judul dan kategori produk.');
-    }
-
-    protected function handleImageUpload(Request $request, string $fileKey, string $urlKey, ?string $fallback = null): ?string
-    {
-        if ($request->hasFile($fileKey) && $request->file($fileKey)->isValid()) {
-            $file = $request->file($fileKey);
-
-            $ext = strtolower($file->getClientOriginalExtension());
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-            if (!in_array($ext, $allowedExtensions, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Format file tidak didukung. Harap unggah gambar dengan format: jpg, jpeg, png, gif, webp.']
-                ]);
-            }
-
-            $mime = $file->getMimeType();
-            $allowedMimes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-            if (!in_array($mime, $allowedMimes, true)) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    $fileKey => ['Tipe file tidak valid. Harap unggah file gambar yang valid.']
-                ]);
-            }
-
-            $fileName = time() . '_' . Str::random(8) . '.' . $ext;
-
-            $uploadPath = public_path('uploads');
-            if (!File::exists($uploadPath)) {
-                File::makeDirectory($uploadPath, 0755, true);
-            }
-
-            $file->move($uploadPath, $fileName);
-            return asset('uploads/' . $fileName);
-        }
-
-        return $request->input($urlKey, $fallback);
     }
 }

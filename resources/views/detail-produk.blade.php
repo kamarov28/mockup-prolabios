@@ -22,8 +22,8 @@
     <div class="container">
       <div class="row g-5">
         
-        <!-- Main Content (Left) -->
-        <div class="col-lg-9 col-md-8">
+        <!-- Main Content (Full Width) -->
+        <div class="col-12">
           @if($product)
             <!-- Title Area -->
             <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 24px; margin-bottom: 40px;">
@@ -44,7 +44,7 @@
                 </div>
               </div>
               
-              <!-- Product Info -->
+              <!-- Product Specs & Form -->
               <div class="col-md-7">
                 @if(!empty($product['catalog']))
                   <div class="mb-4">
@@ -76,29 +76,35 @@
                   </div>
                 </div>
                 
-                <form action="{{ route('cart.add') }}" method="POST" class="d-flex flex-wrap align-items-center gap-3 mt-5 pt-3" style="border-top: 1px solid var(--color-border);">
+                <form action="{{ route('cart.add') }}" method="POST" class="mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
                   @csrf
                   <input type="hidden" name="title" value="{{ $product['title'] }}">
-                  <div class="d-flex align-items-center gap-3">
-                    <span class="text-white small fw-semibold">Jumlah Unit:</span>
-                    <div class="custom-qty-stepper d-flex align-items-center rounded border border-secondary border-opacity-30 overflow-hidden" style="background: rgba(255,255,255,0.03);">
-                      <button type="button" class="btn btn-dark text-white border-0 px-3 py-2 btn-qty-minus" onclick="stepQty(-1)">
-                        <i class="bi bi-dash-lg"></i>
+                  
+                  <div class="d-flex flex-wrap align-items-center gap-4">
+                    {{-- Quantity Selector --}}
+                    <div>
+                      <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
+                      <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
+                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
+                          <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
+                        </button>
+                        <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 52px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;">
+                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
+                          <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    {{-- Action Buttons --}}
+                    <div class="d-flex align-items-end gap-3 flex-grow-1" style="margin-top: 18px;">
+                      <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
+                        <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang RFQ
                       </button>
-                      <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold px-0 hide-spinner" style="width: 50px;">
-                      <button type="button" class="btn btn-dark text-white border-0 px-3 py-2 btn-qty-plus" onclick="stepQty(1)">
-                        <i class="bi bi-plus-lg"></i>
-                      </button>
+                      <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
+                        Kembali <i class="bi bi-arrow-right ms-2"></i>
+                      </a>
                     </div>
                   </div>
-                  
-                  <button type="submit" class="kontak-submit-btn border-0 cursor-pointer">
-                    <i class="bi bi-cart-plus me-1"></i> Tambah ke Keranjang RFQ
-                  </button>
-
-                  <a href="{{ url('/produk') }}" class="profil-cta-btn">
-                    Kembali ke Katalog <i class="bi bi-arrow-right"></i>
-                  </a>
                 </form>
               </div>
             </div>
@@ -110,20 +116,6 @@
               <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i class="bi bi-arrow-right"></i></a>
             </div>
           @endif
-        </div>
-
-        <!-- Sidebar (Right) -->
-        <div class="col-lg-3 col-md-4">
-          <div class="mb-5">
-            <h3 class="profil-sidebar-title">Kategori Produk</h3>
-            <nav class="layanan-sidebar-nav">
-              <a href="{{ url('/produk') }}" class="layanan-sidebar-link">Semua Produk</a>
-              <a href="{{ url('/produk') }}?kategori=culture-media" class="layanan-sidebar-link">Culture Media</a>
-              <a href="{{ url('/produk') }}?kategori=instruments" class="layanan-sidebar-link">Instruments</a>
-              <a href="{{ url('/produk') }}?kategori=chemicals" class="layanan-sidebar-link">Chemicals &amp; Reagents</a>
-              <a href="{{ url('/produk') }}?kategori=consumables" class="layanan-sidebar-link">Consumables</a>
-            </nav>
-          </div>
         </div>
         
       </div>
