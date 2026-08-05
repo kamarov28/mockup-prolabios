@@ -7,7 +7,7 @@
         <p class="typo-section-sub">Testing application guides, ISO/BPOM regulatory updates, and Prolabios activity news.</p>
       </div>
       <div class="mt-3 mt-md-0">
-        <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;">
+        <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;" aria-label="View All Articles and Information">
           View All Articles <i class="bi bi-arrow-right"></i>
         </a>
       </div>

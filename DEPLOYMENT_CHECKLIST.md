@@ -17,12 +17,15 @@ Added strategic indexes for:
 
 ### 2. **Email Queue System Implemented**
 **New Jobs Created**:
-- `app/Jobs/SendRfqSubmittedEmailJob.php` - Queues RFQ submission notifications
-- `app/Jobs/SendQuotationResponseEmailJob.php` - Queues quotation responses
+- `app/Jobs/SendContactEmailJob.php` - Queues website contact inquiry emails
+- `app/Jobs/SendRfqSubmittedEmailJob.php` - Queues RFQ submission admin notifications
+- `app/Jobs/SendRfqCustomerReceiptEmailJob.php` - Queues RFQ customer receipt confirmation emails
+- `app/Jobs/SendQuotationResponseEmailJob.php` - Queues quotation responses to corporate buyers
 
 **Updated Controllers**:
-- `app/Http/Controllers/RfqController.php` - Now dispatches jobs instead of synchronous sending
-- `app/Http/Controllers/Admin/AdminRfqController.php` - Queued quotation emails
+- `app/Http/Controllers/ContactController.php` - Dispatches Contact inquiry email job
+- `app/Http/Controllers/RfqController.php` - Dispatches RFQ receipt and admin notification jobs
+- `app/Http/Controllers/Admin/AdminRfqController.php` - Dispatches quotation response email job
 
 **Benefits**:
 - Request response time reduced from 2-5s to <200ms

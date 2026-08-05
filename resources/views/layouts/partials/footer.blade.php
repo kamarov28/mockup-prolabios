@@ -33,7 +33,7 @@
         <ul class="list-unstyled footer-links lh-lg">
           <li><a href="{{ url('/profil') }}">Company Profile</a></li>
           <li><a href="{{ url('/profil') }}#visi-misi">Vision & Mission</a></li>
-          <li><a href="{{ url('/informasi') }}">News & Events</a></li>
+          <li><a href="{{ url('/informasi') }}" aria-label="News and Events Information">News & Events</a></li>
           <li><a href="{{ url('/layanan') }}">Our Services</a></li>
         </ul>
       </div>
@@ -77,7 +77,7 @@
     
     <hr class="border-secondary mt-4 mb-3" style="opacity: 0.25;">
     
-    <div class="text-center text-light opacity-75 small">
+    <div class="text-center text-light small fw-medium" style="color: #cbd5e1 !important; opacity: 1 !important;">
       <p class="mb-0">&copy; 2026 PT Prolabios Mitra Analitika. All Rights Reserved.</p>
     </div>
   </div>

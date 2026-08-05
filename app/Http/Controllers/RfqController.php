@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendRfqCustomerReceiptEmailJob;
 use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Mail\RfqSubmittedMail;
 use App\Models\Rfq;
@@ -116,16 +117,15 @@ class RfqController extends Controller
         session()->put('last_rfq_number', $rfq->rfq_number);
         session()->put('last_rfq_token', $rfq->access_token);
 
-        // Send Notification Email safely without blocking user response
+        // Dispatch Notification Email Jobs asynchronously without blocking user response
         try {
-            // Send receipt email to Customer PIC
-            Mail::to($rfq->email)->send(new \App\Mail\RfqCustomerReceiptMail($rfq));
+            // Dispatch receipt email job to Customer PIC
+            SendRfqCustomerReceiptEmailJob::dispatch($rfq->id);
 
-            // Send notification to Sales Admin
-            $adminEmail = config('mail.from.address', 'marketing@prolabios.com');
-            Mail::to($adminEmail)->send(new \App\Mail\RfqSubmittedMail($rfq));
+            // Dispatch notification email job to Sales Admin
+            SendRfqSubmittedEmailJob::dispatch($rfq->id);
         } catch (\Throwable $e) {
-            \Log::warning('SMTP Mail Warning (non-blocking): ' . $e->getMessage());
+            \Log::warning('Failed to dispatch RFQ queue jobs: ' . $e->getMessage());
         }
 
         return redirect()->route('rfq.success', [

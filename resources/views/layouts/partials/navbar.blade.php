@@ -58,7 +58,7 @@
             <a class="nav-link {{ request()->is('layanan*') ? 'active' : '' }}" href="{{ url('/layanan') }}">Services</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('informasi*') ? 'active' : '' }}" href="{{ url('/informasi') }}">Information</a>
+            <a class="nav-link {{ request()->is('informasi*') ? 'active' : '' }}" href="{{ url('/informasi') }}">News &amp; Articles</a>
           </li>
           <li class="nav-item">
             <a class="nav-link {{ request()->is('kontak*') ? 'active' : '' }}" href="{{ url('/kontak') }}">Contacts</a>
