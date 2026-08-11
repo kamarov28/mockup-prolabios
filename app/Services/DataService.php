@@ -18,7 +18,7 @@ class DataService
     protected function clearProductsCache(): void
     {
         Cache::forget('categories_structure');
-        Cache::flush();
+    Cache::forget('products_list_global');
     }
 
     /**

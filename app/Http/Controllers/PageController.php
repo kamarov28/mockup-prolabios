@@ -54,7 +54,7 @@ class PageController extends Controller
             }
         }
 
-        $searchQuery = $request->query('q') ?? $request->query('s');
+        $searchQuery = $request->query('search') ?? $request->query('s') ?? $request->query('q');
 
         // Build database query filters instead of in-memory array filtering
         $filters = [];
@@ -84,9 +84,13 @@ class PageController extends Controller
     public function detailProduk(Request $request, DataService $dataService)
     {
         $product = null;
-        $title = $request->query('id');
-        if ($title) {
-            $product = $dataService->getProductByTitle((string)$title);
+        $identifier = $request->query('id');
+        if ($identifier !== null && $identifier !== '') {
+            if (is_numeric($identifier)) {
+                $product = $dataService->getProductById((int) $identifier);
+            } else {
+                $product = $dataService->getProductByTitle((string) $identifier);
+            }
         }
         return view('detail-produk', compact('product'));
     }

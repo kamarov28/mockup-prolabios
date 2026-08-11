@@ -107,7 +107,11 @@ trait HandlesImageUploads
         $url = trim($request->input($urlKey, ''));
         if (!empty($url)) {
             $sanitized = filter_var($url, FILTER_SANITIZE_URL);
-            return filter_var($sanitized, FILTER_VALIDATE_URL) ? $sanitized : $fallback;
+            $valid = filter_var($sanitized, FILTER_VALIDATE_URL);
+            if ($valid && in_array(strtolower(parse_url($valid, PHP_URL_SCHEME)), ['http', 'https'])) {
+                return $valid;
+            }
+            return $fallback;
         }
 
         return $fallback;
