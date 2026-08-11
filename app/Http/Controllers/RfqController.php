@@ -139,11 +139,18 @@ class RfqController extends Controller
     {
         $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
 
-        // Optional token check for enhanced security - fallback gracefully if missing
+        // Security check: validate token or allow if session token matches recent submission.
+        // Mirrors the enforcement used in track()/pdf()/approve() to prevent IDOR access to
+        // another buyer's RFQ (company data, PIC contact, and the access_token itself).
         $token = $request->query('token');
-        if ($token && !hash_equals((string)$rfq->access_token, (string)$token)) {
-            // Log security warning but allow previewing official RFQ tracking page
-            \Log::warning("RFQ token mismatch for number {$number}");
+        $sessionToken = session('last_rfq_token');
+
+        if ($token && hash_equals((string)$rfq->access_token, (string)$token)) {
+            // Valid token
+        } elseif ($sessionToken && hash_equals((string)$rfq->access_token, (string)$sessionToken)) {
+            // Valid session from recent submission
+        } else {
+            return redirect()->route('home')->with('error', 'Akses ditolak: Halaman ini hanya dapat diakses melalui link resmi setelah pengajuan RFQ.');
         }
 
         return view('rfq-success', compact('rfq'));

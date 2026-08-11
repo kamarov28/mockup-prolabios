@@ -44,10 +44,10 @@ Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clear'
 
 Route::get('/rfq/checkout', [\App\Http\Controllers\RfqController::class, 'checkout'])->name('rfq.checkout');
 Route::post('/rfq/submit', [\App\Http\Controllers\RfqController::class, 'store'])->middleware('throttle:10,1')->name('rfq.store');
-Route::get('/rfq/success/{number}', [\App\Http\Controllers\RfqController::class, 'success'])->name('rfq.success');
-Route::get('/rfq/track/{number}', [\App\Http\Controllers\RfqController::class, 'track'])->name('rfq.track');
+Route::get('/rfq/success/{number}', [\App\Http\Controllers\RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
+Route::get('/rfq/track/{number}', [\App\Http\Controllers\RfqController::class, 'track'])->middleware('throttle:20,1')->name('rfq.track');
 Route::post('/rfq/approve/{number}', [\App\Http\Controllers\RfqController::class, 'approve'])->middleware('throttle:5,1')->name('rfq.approve');
-Route::get('/rfq/pdf/{number}', [\App\Http\Controllers\RfqController::class, 'pdf'])->name('rfq.pdf');
+Route::get('/rfq/pdf/{number}', [\App\Http\Controllers\RfqController::class, 'pdf'])->middleware('throttle:20,1')->name('rfq.pdf');
 
 // ----------------------------------------------------
 // Protected Admin Panel Routes
