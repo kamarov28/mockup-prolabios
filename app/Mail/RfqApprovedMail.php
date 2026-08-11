@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class RfqSubmittedMail extends Mailable
+class RfqApprovedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,14 +23,14 @@ class RfqSubmittedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: sprintf('PROLABIOS - Pengajuan Penawaran Baru [%s] dari %s', $this->rfq->rfq_number, $this->rfq->company_name),
+            subject: sprintf('PROLABIOS - Penawaran Disetujui [%s] oleh %s', $this->rfq->rfq_number, $this->rfq->company_name),
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.rfq-submitted',
+            view: 'emails.rfq-approved',
         );
     }
 }

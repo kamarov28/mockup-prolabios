@@ -20,6 +20,8 @@ class SendContactEmailJob implements ShouldQueue
 
     public array $backoff = [10, 30, 60];
 
+    public int $timeout = 120;
+
     protected int $inquiryId;
 
     /**
@@ -37,7 +39,7 @@ class SendContactEmailJob implements ShouldQueue
     {
         $correlationId = 'unknown';
         try {
-            $inquiry = ContactInquiry::find($this->inquiryId);
+            $inquiry = ContactInquiry::query()->find($this->inquiryId);
             if (!$inquiry) {
                 Log::channel('contact')->warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
                 return;
@@ -67,7 +69,7 @@ class SendContactEmailJob implements ShouldQueue
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::channel('contact')->error('Gagal mengirim email kontak lewat queue.', [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
@@ -78,10 +80,21 @@ class SendContactEmailJob implements ShouldQueue
 
             // Differentiate configuration errors vs transient failures
             if (str_contains($e->getMessage(), 'belum dikonfigurasi') || str_contains($e->getMessage(), 'Payload terkorup')) {
-                $this->fail(new \Exception($e->getMessage(), $e->getCode()));
+                $this->fail($e);
             } else {
-                throw new \Exception($e->getMessage(), $e->getCode());
+                throw $e;
             }
         }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::channel('contact')->critical('Contact email job failed after all retries', [
+            'inquiry_id' => $this->inquiryId,
+            'error' => $exception->getMessage(),
+        ]);
     }
 }

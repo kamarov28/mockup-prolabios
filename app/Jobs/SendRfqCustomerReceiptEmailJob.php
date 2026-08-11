@@ -26,6 +26,11 @@ class SendRfqCustomerReceiptEmailJob implements ShouldQueue
      */
     public array $backoff = [10, 30, 60];
 
+    /**
+     * The number of seconds the job can run before timing out.
+     */
+    public int $timeout = 120;
+
     protected int $rfqId;
 
     /**
@@ -42,7 +47,7 @@ class SendRfqCustomerReceiptEmailJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            $rfq = Rfq::find($this->rfqId);
+            $rfq = Rfq::query()->with('items')->find($this->rfqId);
 
             if (!$rfq) {
                 Log::warning("RFQ not found for customer receipt email. ID: {$this->rfqId}");
@@ -67,7 +72,7 @@ class SendRfqCustomerReceiptEmailJob implements ShouldQueue
             Log::info("RFQ customer receipt email sent successfully", [
                 'rfq_number' => $rfq->rfq_number,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Failed to send RFQ customer receipt email', [
                 'rfq_id' => $this->rfqId,
                 'error' => $e->getMessage(),

@@ -26,8 +26,13 @@ class SendQuotationResponseEmailJob implements ShouldQueue
      */
     public array $backoff = [10, 30, 60];
 
+    /**
+     * The number of seconds the job can run before timing out.
+     */
+    public int $timeout = 120;
+
     protected int $rfqId;
-    protected string $customerEmail;
+    protected ?string $customerEmail;
 
     /**
      * Create a new job instance.
@@ -44,8 +49,8 @@ class SendQuotationResponseEmailJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            $rfq = Rfq::find($this->rfqId);
-            
+            $rfq = Rfq::query()->with('items')->find($this->rfqId);
+
             if (!$rfq) {
                 Log::warning("RFQ not found for quotation email. ID: {$this->rfqId}");
                 return;
@@ -71,7 +76,7 @@ class SendQuotationResponseEmailJob implements ShouldQueue
             Log::info("Quotation response email sent successfully", [
                 'rfq_number' => $rfq->rfq_number,
             ]);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Failed to send quotation response email', [
                 'rfq_id' => $this->rfqId,
                 'error' => $e->getMessage(),

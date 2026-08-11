@@ -3,13 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Mailable implements ShouldQueue
+class ContactMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,18 +28,20 @@ class ContactMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $subject = sprintf('New Inquiry from Website: %s', $this->data['subjek_label'] ?? 'General Inquiry');
+
         // Validate email before using it as reply-to to avoid header injection
         $replyTo = $this->data['email'] ?? null;
         if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
             return new Envelope(
-                subject: 'New Inquiry from Website: ' . ($this->data['subjek_label'] ?? 'General Inquiry'),
-                replyTo: [$replyTo]
+                subject: $subject,
+                replyTo: [new Address($replyTo, $this->data['nama'] ?? null)]
             );
         }
         // Fallback to a generic no-reply address
         return new Envelope(
-            subject: 'New Inquiry from Website: ' . ($this->data['subjek_label'] ?? 'General Inquiry'),
-            replyTo: ['no-reply@' . request()->getHost()]
+            subject: $subject,
+            replyTo: [new Address('no-reply@' . request()->getHost())]
         );
     }
 

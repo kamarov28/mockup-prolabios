@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendRfqApprovedEmailJob;
 use App\Jobs\SendRfqCustomerReceiptEmailJob;
 use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Mail\RfqSubmittedMail;
@@ -218,6 +219,13 @@ class RfqController extends Controller
                 } else {
                     $this->dataService->decrementStock($item->product_title, $item->quantity);
                 }
+            }
+
+            // Notify Sales Admin that the buyer has approved the quotation
+            try {
+                SendRfqApprovedEmailJob::dispatch($rfq->id);
+            } catch (\Throwable $e) {
+                \Log::warning('Failed to dispatch RFQ approved email job: ' . $e->getMessage());
             }
 
             return redirect()->route('rfq.track', ['number' => $number, 'token' => $rfq->access_token])
