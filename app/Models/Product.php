@@ -11,7 +11,7 @@ class Product extends Model
     /**
      * Clear the categories structure cache.
      */
-    public static function clearCategoriesCache(): void
+    protected static function clearCategoriesCache(): void
     {
         \Illuminate\Support\Facades\Cache::forget('categories_structure');
     }

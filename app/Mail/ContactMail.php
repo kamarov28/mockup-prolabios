@@ -28,9 +28,18 @@ class ContactMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        // Validate email before using it as reply-to to avoid header injection
+        $replyTo = $this->data['email'] ?? null;
+        if ($replyTo && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
+            return new Envelope(
+                subject: 'New Inquiry from Website: ' . ($this->data['subjek_label'] ?? 'General Inquiry'),
+                replyTo: [$replyTo]
+            );
+        }
+        // Fallback to a generic no-reply address
         return new Envelope(
             subject: 'New Inquiry from Website: ' . ($this->data['subjek_label'] ?? 'General Inquiry'),
-            replyTo: [$this->data['email']]
+            replyTo: ['no-reply@' . request()->getHost()]
         );
     }
 

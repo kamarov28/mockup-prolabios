@@ -44,6 +44,8 @@ class ContactController extends Controller
             ]);
 
             // 2. Simpan payload terenkripsi ke database
+            // Strip any HTML tags from the message to avoid XSS when rendered in emails
+            $validated['pesan'] = strip_tags($validated['pesan'] ?? '');
             $inquiry = ContactInquiry::create(['payload' => $validated]);
 
             // 3. Kirim email secara asinkron lewat queue (hanya mengirimkan ID referensi)

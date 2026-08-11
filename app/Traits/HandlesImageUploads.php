@@ -109,7 +109,12 @@ trait HandlesImageUploads
             $sanitized = filter_var($url, FILTER_SANITIZE_URL);
             $valid = filter_var($sanitized, FILTER_VALIDATE_URL);
             if ($valid && in_array(strtolower(parse_url($valid, PHP_URL_SCHEME)), ['http', 'https'])) {
-                return $valid;
+                // Optional domain whitelist: only allow same host as the application
+                $allowedHost = request()->getHost();
+                $urlHost = strtolower(parse_url($valid, PHP_URL_HOST) ?? '');
+                if ($urlHost === $allowedHost) {
+                    return $valid;
+                }
             }
             return $fallback;
         }
