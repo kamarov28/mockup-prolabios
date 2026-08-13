@@ -1,0 +1,791 @@
+From ccac10461add5abdee731d568437c33062e91cc1 Mon Sep 17 00:00:00 2001
+From: Dev <dev@prolabios.local>
+Date: Thu, 13 Aug 2026 01:58:03 +0000
+Subject: [PATCH 1/2] Revisi E-commerce: pisah page deskripsi & belanja, hapus
+ harga di card, galeri foto produk
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Sesuai revisi konsep E-commerce (terinspirasi Biotool, tapi disederhanakan
+jadi satu domain beda page):
+
+1. Card produk di /produk tidak lagi menampilkan harga (mencegah user
+   overwhelmed di tahap browsing). Tombol quick-add-to-cart diganti
+   "Lihat Detail Produk" mengarah ke halaman deskripsi.
+
+2. Halaman produk dipecah jadi dua:
+   - /produk/detail: fokus ke deskripsi & spesifikasi produk saja (harga,
+     stok, dan form cart dihapus dari sini), dengan CTA besar "Lihat Harga
+     & Beli Produk Ini" di bagian bawah.
+   - /produk/beli (baru, PageController::beliProduk): halaman shopping
+     terpisah — harga, status stok real-time, sistem indent/pre-order
+     (badge + notice dinamis kalau qty > stok), quantity selector, dan
+     form tambah ke keranjang RFQ (dipindah dari halaman deskripsi).
+
+3. Kapabilitas galeri foto produk (bukan gambar inline di deskripsi):
+   - Migration baru: kolom `gallery_images` (JSON) di tabel products,
+     terpisah dari kolom `image` (cover/thumbnail utama yang dipakai di
+     card katalog, cart, PDF penawaran, OG meta — tidak diubah).
+   - Trait HandlesImageUploads: tambah handleMultipleImageUploads() —
+     validasi & hardening identik dengan upload gambar tunggal (ekstensi
+     allowlist, MIME check, blokir SVG, auto WebP + resize, random
+     filename), berlaku untuk tiap file di batch upload.
+   - DataService: addProduct/updateProductById encode gallery_images ke
+     JSON; getProductById/getProductByTitle decode balik ke array.
+   - Admin form produk: section "Galeri Foto Tambahan" — upload banyak
+     file sekaligus (max 10), plus checkbox hapus per foto saat edit.
+   - Halaman deskripsi & belanja produk menampilkan galeri sebagai
+     thumbnail strip yang bisa diklik untuk ganti gambar utama & lightbox.
+---
+ .../Admin/AdminProductController.php          |  13 ++
+ app/Http/Controllers/PageController.php       |  20 +++
+ app/Models/Product.php                        |   2 +-
+ app/Services/DataService.php                  |  32 +++-
+ app/Traits/HandlesImageUploads.php            | 110 ++++++++++++
+ ...0_add_gallery_images_to_products_table.php |  34 ++++
+ resources/views/admin/products/form.blade.php |  28 +++-
+ resources/views/beli-produk.blade.php         | 156 ++++++++++++++++++
+ resources/views/detail-produk.blade.php       | 117 ++++++-------
+ resources/views/produk.blade.php              |  16 +-
+ routes/web.php                                |   1 +
+ 11 files changed, 456 insertions(+), 73 deletions(-)
+ create mode 100644 database/migrations/2026_08_13_000000_add_gallery_images_to_products_table.php
+ create mode 100644 resources/views/beli-produk.blade.php
+
+diff --git a/app/Http/Controllers/Admin/AdminProductController.php b/app/Http/Controllers/Admin/AdminProductController.php
+index 8a6ff61..f2f422c 100644
+--- a/app/Http/Controllers/Admin/AdminProductController.php
++++ b/app/Http/Controllers/Admin/AdminProductController.php
+@@ -110,6 +110,7 @@ public function productsCreate()
+             'sub_category' => '',
+             'sector' => '',
+             'image' => '',
++            'gallery_images' => [],
+             'description' => ''
+         ];
+ 
+@@ -125,6 +126,7 @@ public function productsStore(StoreProductRequest $request)
+         }
+ 
+         $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
++        $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+ 
+         $product = [
+             'catalog' => $request->input('catalog') ?: '',
+@@ -134,6 +136,7 @@ public function productsStore(StoreProductRequest $request)
+             'sub_category' => $request->input('sub_category') ?: '',
+             'sector' => $request->input('sector') ?: '',
+             'image' => $image,
++            'gallery_images' => $galleryImages,
+             'price' => (float)$request->input('price', 0),
+             'stock' => (int)$request->input('stock', 0),
+         ];
+@@ -169,6 +172,15 @@ public function productsUpdate(UpdateProductRequest $request, int $id)
+ 
+         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image']);
+ 
++        // Keep existing gallery images except those the admin explicitly marked for removal
++        $existingGallery = $product['gallery_images'] ?? [];
++        $toRemove = (array) $request->input('remove_gallery', []);
++        if (!empty($toRemove)) {
++            $existingGallery = array_values(array_diff($existingGallery, $toRemove));
++        }
++        $newGalleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
++        $galleryImages = array_values(array_slice(array_merge($existingGallery, $newGalleryImages), 0, 10));
++
+         $updatedProduct = [
+             'catalog' => $request->input('catalog') ?: '',
+             'title' => $newTitle,
+@@ -177,6 +189,7 @@ public function productsUpdate(UpdateProductRequest $request, int $id)
+             'sub_category' => $request->input('sub_category') ?: '',
+             'sector' => $request->input('sector') ?: '',
+             'image' => $image,
++            'gallery_images' => $galleryImages,
+             'price' => (float)$request->input('price', 0),
+             'stock' => (int)$request->input('stock', 0),
+         ];
+diff --git a/app/Http/Controllers/PageController.php b/app/Http/Controllers/PageController.php
+index 652bc90..3e99cbd 100644
+--- a/app/Http/Controllers/PageController.php
++++ b/app/Http/Controllers/PageController.php
+@@ -95,6 +95,26 @@ public function detailProduk(Request $request, DataService $dataService)
+         return view('detail-produk', compact('product'));
+     }
+ 
++    /**
++     * Display the dedicated shopping/checkout page for a single product
++     * (price, live stock, indent/pre-order status, and add-to-cart form).
++     * Kept separate from detailProduk() so the description page can focus
++     * purely on specs/application info without overwhelming the visitor.
++     */
++    public function beliProduk(Request $request, DataService $dataService)
++    {
++        $product = null;
++        $identifier = $request->query('id');
++        if ($identifier !== null && $identifier !== '') {
++            if (is_numeric($identifier)) {
++                $product = $dataService->getProductById((int) $identifier);
++            } else {
++                $product = $dataService->getProductByTitle((string) $identifier);
++            }
++        }
++        return view('beli-produk', compact('product'));
++    }
++
+     /**
+      * Display the Sektor Fokus page.
+      */
+diff --git a/app/Models/Product.php b/app/Models/Product.php
+index 378fd7d..7190a4d 100644
+--- a/app/Models/Product.php
++++ b/app/Models/Product.php
+@@ -6,7 +6,7 @@
+ 
+ class Product extends Model
+ {
+-    protected $fillable = ['catalog', 'title', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock'];
++    protected $fillable = ['catalog', 'title', 'description', 'category', 'sub_category', 'sector', 'image', 'gallery_images', 'price', 'stock'];
+ 
+     /**
+      * Clear the categories structure cache.
+diff --git a/app/Services/DataService.php b/app/Services/DataService.php
+index f04fa98..882e8d1 100644
+--- a/app/Services/DataService.php
++++ b/app/Services/DataService.php
+@@ -241,7 +241,12 @@ public function getProductByTitle(string $title): ?array
+     {
+         return Cache::remember('product_by_title_' . md5($title), 600, function () use ($title) {
+             $row = DB::table('products')->where('title', $title)->first();
+-            return $row ? (array) $row : null;
++            if (!$row) {
++                return null;
++            }
++            $product = (array) $row;
++            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
++            return $product;
+         });
+     }
+ 
+@@ -249,10 +254,31 @@ public function getProductById(int $id): ?array
+     {
+         return Cache::remember('product_by_id_' . $id, 600, function () use ($id) {
+             $row = DB::table('products')->where('id', $id)->first();
+-            return $row ? (array) $row : null;
++            if (!$row) {
++                return null;
++            }
++            $product = (array) $row;
++            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
++            return $product;
+         });
+     }
+ 
++    /**
++     * Safely decode the `gallery_images` JSON column into a plain array of
++     * relative image paths, tolerating null/empty/malformed stored values.
++     */
++    protected static function decodeGalleryImages($raw): array
++    {
++        if (empty($raw)) {
++            return [];
++        }
++        if (is_array($raw)) {
++            return array_values(array_filter($raw));
++        }
++        $decoded = json_decode((string) $raw, true);
++        return is_array($decoded) ? array_values(array_filter($decoded)) : [];
++    }
++
+ 
+ 
+     public function addProduct(array $product): bool
+@@ -265,6 +291,7 @@ public function addProduct(array $product): bool
+             'sub_category' => $product['sub_category'] ?? null,
+             'sector'       => $product['sector']       ?? null,
+             'image'        => $product['image']        ?? null,
++            'gallery_images' => !empty($product['gallery_images']) ? json_encode(array_values($product['gallery_images'])) : null,
+             'price'        => $product['price']        ?? 0,
+             'stock'        => $product['stock']        ?? 0,
+             'created_at'   => now(),
+@@ -285,6 +312,7 @@ public function updateProductById(int $id, array $updatedProduct): bool
+             'sub_category' => $updatedProduct['sub_category'] ?? null,
+             'sector'       => $updatedProduct['sector']       ?? null,
+             'image'        => $updatedProduct['image']        ?? null,
++            'gallery_images' => !empty($updatedProduct['gallery_images']) ? json_encode(array_values($updatedProduct['gallery_images'])) : null,
+             'price'        => $updatedProduct['price']        ?? 0,
+             'stock'        => $updatedProduct['stock']        ?? 0,
+             'updated_at'   => now(),
+diff --git a/app/Traits/HandlesImageUploads.php b/app/Traits/HandlesImageUploads.php
+index 0ce646e..94dac9e 100644
+--- a/app/Traits/HandlesImageUploads.php
++++ b/app/Traits/HandlesImageUploads.php
+@@ -121,4 +121,114 @@ protected function handleImageUpload(
+ 
+         return $fallback;
+     }
++
++    /**
++     * Securely handle multiple image uploads (e.g. a product photo gallery).
++     * Reuses the exact same validation/hardening rules as handleImageUpload()
++     * (extension allowlist, MIME check, SVG block, WebP re-encode + resize,
++     * random filename) for every file in the batch.
++     *
++     * @param Request $request
++     * @param string $fileKey Input key for the file[] array (e.g. 'gallery_files')
++     * @param string $folder Target upload folder inside public/
++     * @param int $maxSizeBytes Max size per file (5MB default)
++     * @param int $maxFiles Max number of files accepted per request (10 default)
++     * @return array<int, string> List of stored relative image paths
++     */
++    protected function handleMultipleImageUploads(
++        Request $request,
++        string $fileKey = 'gallery_files',
++        string $folder = 'uploads',
++        int $maxSizeBytes = 5242880,
++        int $maxFiles = 10
++    ): array {
++        if (!$request->hasFile($fileKey)) {
++            return [];
++        }
++
++        $files = $request->file($fileKey);
++        if (!is_array($files)) {
++            $files = [$files];
++        }
++
++        $files = array_slice($files, 0, $maxFiles);
++        $stored = [];
++
++        foreach ($files as $file) {
++            if (!$file || !$file->isValid()) {
++                continue;
++            }
++
++            if ($file->getSize() > $maxSizeBytes) {
++                throw \Illuminate\Validation\ValidationException::withMessages([
++                    $fileKey => ['Salah satu file gambar galeri berukuran terlalu besar (maksimal ' . round($maxSizeBytes / 1024 / 1024) . 'MB).'],
++                ]);
++            }
++
++            $extension = strtolower($file->getClientOriginalExtension());
++            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
++
++            if ($extension === 'svg' || !in_array($extension, $allowedExtensions)) {
++                throw \Illuminate\Validation\ValidationException::withMessages([
++                    $fileKey => ['Format gambar galeri tidak valid. Gunakan JPG, JPEG, PNG, WEBP, atau GIF.'],
++                ]);
++            }
++
++            $mimeType = $file->getMimeType();
++            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
++            if (!in_array($mimeType, $allowedMimes)) {
++                throw \Illuminate\Validation\ValidationException::withMessages([
++                    $fileKey => ['Salah satu file yang diunggah bukan file gambar yang sah.'],
++                ]);
++            }
++
++            $targetDir = public_path($folder);
++            if (!file_exists($targetDir)) {
++                mkdir($targetDir, 0755, true);
++            }
++
++            $storedPath = null;
++
++            if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
++                $rawContent = file_get_contents($file->getRealPath());
++                $img = @imagecreatefromstring($rawContent);
++
++                if ($img !== false) {
++                    $width = imagesx($img);
++                    $height = imagesy($img);
++
++                    if ($width > 1920) {
++                        $newWidth = 1920;
++                        $newHeight = (int) round(($height / $width) * 1920);
++                        $resized = imagecreatetruecolor($newWidth, $newHeight);
++
++                        imagealphablending($resized, false);
++                        imagesavealpha($resized, true);
++
++                        imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
++                        imagedestroy($img);
++                        $img = $resized;
++                    }
++
++                    $webpFilename = time() . '_' . Str::random(16) . '.webp';
++                    $fullPath = $targetDir . '/' . $webpFilename;
++
++                    imagewebp($img, $fullPath, 82);
++                    imagedestroy($img);
++
++                    $storedPath = '/' . trim($folder, '/') . '/' . $webpFilename;
++                }
++            }
++
++            if ($storedPath === null) {
++                $filename = time() . '_' . Str::random(16) . '.' . $extension;
++                $file->move($targetDir, $filename);
++                $storedPath = '/' . trim($folder, '/') . '/' . $filename;
++            }
++
++            $stored[] = $storedPath;
++        }
++
++        return $stored;
++    }
+ }
+diff --git a/database/migrations/2026_08_13_000000_add_gallery_images_to_products_table.php b/database/migrations/2026_08_13_000000_add_gallery_images_to_products_table.php
+new file mode 100644
+index 0000000..abc87d3
+--- /dev/null
++++ b/database/migrations/2026_08_13_000000_add_gallery_images_to_products_table.php
+@@ -0,0 +1,34 @@
++<?php
++
++use Illuminate\Database\Migrations\Migration;
++use Illuminate\Database\Schema\Blueprint;
++use Illuminate\Support\Facades\Schema;
++
++return new class extends Migration
++{
++    /**
++     * Adds a `gallery_images` JSON column to store multiple additional product
++     * photos (beyond the single primary/cover `image` column used for the
++     * catalog card thumbnail, OG meta tags, cart, and quotation PDF).
++     */
++    public function up(): void
++    {
++        Schema::table('products', function (Blueprint $table) {
++            if (!Schema::hasColumn('products', 'gallery_images')) {
++                $table->json('gallery_images')->nullable()->after('image');
++            }
++        });
++    }
++
++    /**
++     * Reverse the migrations.
++     */
++    public function down(): void
++    {
++        Schema::table('products', function (Blueprint $table) {
++            if (Schema::hasColumn('products', 'gallery_images')) {
++                $table->dropColumn('gallery_images');
++            }
++        });
++    }
++};
+diff --git a/resources/views/admin/products/form.blade.php b/resources/views/admin/products/form.blade.php
+index 692c29d..59ef2a8 100644
+--- a/resources/views/admin/products/form.blade.php
++++ b/resources/views/admin/products/form.blade.php
+@@ -93,7 +93,8 @@
+ 
+       <!-- Gambar Produk -->
+       <div class="col-12 mt-4">
+-        <label class="form-label fw-bold">Gambar Produk</label>
++        <label class="form-label fw-bold">Gambar Utama / Cover Produk</label>
++        <div class="form-text small text-muted mb-2">Gambar ini dipakai untuk thumbnail di katalog, kartu keranjang, dan PDF penawaran.</div>
+         <div class="row g-3">
+           <div class="col-sm-3 text-center">
+             <div class="border rounded bg-light p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+@@ -113,6 +114,31 @@
+         </div>
+       </div>
+ 
++      <!-- Galeri Foto Tambahan -->
++      <div class="col-12 mt-4">
++        <label class="form-label fw-bold">Galeri Foto Tambahan</label>
++        <div class="form-text small text-muted mb-2">Foto tambahan untuk ditampilkan sebagai galeri di halaman detail &amp; belanja produk (maks. 10 foto, di luar gambar cover di atas).</div>
++
++        @if(!empty($product['gallery_images']))
++          <div class="row g-2 mb-3">
++            @foreach($product['gallery_images'] as $galleryPath)
++              <div class="col-4 col-sm-2">
++                <div class="border rounded bg-light p-1 position-relative" style="aspect-ratio: 1/1; overflow: hidden;">
++                  <img src="{{ $galleryPath }}" alt="Galeri produk" class="w-100 h-100" style="object-fit: cover;">
++                  <label class="position-absolute top-0 end-0 m-1 bg-white rounded px-1 py-0 small d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem;" title="Hapus foto ini">
++                    <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
++                    <i class="bi bi-trash text-danger"></i>
++                  </label>
++                </div>
++              </div>
++            @endforeach
++          </div>
++          <div class="form-text small text-danger mb-2">Centang foto yang ingin dihapus, lalu klik simpan.</div>
++        @endif
++
++        <input class="form-control" type="file" id="gallery_files" name="gallery_files[]" accept="image/*" multiple>
++      </div>
++
+       <!-- Deskripsi -->
+       <div class="col-12 mt-4">
+         <label for="description" class="form-label fw-bold">Deskripsi Produk</label>
+diff --git a/resources/views/beli-produk.blade.php b/resources/views/beli-produk.blade.php
+new file mode 100644
+index 0000000..3c6d245
+--- /dev/null
++++ b/resources/views/beli-produk.blade.php
+@@ -0,0 +1,156 @@
++@extends('layouts.app')
++
++@section('title', $product ? 'Beli ' . $product['title'] . ' - Prolabios' : 'Produk Tidak Ditemukan - Prolabios')
++
++@if(isset($product) && $product)
++  @section('og_title', $product['title'] . ' | PROLABIOS')
++  @section('og_description', 'Harga, stok, dan pemesanan ' . $product['title'] . ' di PT. Prolabios Mitra Analitika.')
++  @section('og_image', $product['image'])
++@endif
++
++@section('content')
++  <!-- Editorial Page Header -->
++  <div class="editorial-page-header">
++    <div class="container">
++      <span class="editorial-page-label">Belanja Produk</span>
++      <p class="editorial-page-title">Harga &amp; Ketersediaan Stok</p>
++      <p class="editorial-page-subtitle">Ajukan penawaran resmi (RFQ) untuk produk ini</p>
++    </div>
++  </div>
++
++  <section class="section-main">
++    <div class="container">
++      <div class="row g-5">
++        <div class="col-12" style="max-width: 760px; margin: 0 auto;">
++          @if($product)
++            @php
++              $stock = (int) ($product['stock'] ?? 0);
++              $price = (float) ($product['price'] ?? 0);
++            @endphp
++
++            <!-- Back to description link -->
++            <div class="mb-4">
++              <a href="{{ url('/produk/detail') }}?id={{ urlencode($product['title']) }}" class="text-decoration-none" style="color: var(--color-text-muted); font-size: 0.82rem;">
++                <i class="bi bi-arrow-left me-1"></i> Kembali ke Deskripsi &amp; Spesifikasi Produk
++              </a>
++            </div>
++
++            <!-- Compact Product Header -->
++            <div class="d-flex align-items-center gap-4 mb-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
++              <div style="width: 90px; height: 90px; flex-shrink: 0; border: 1px solid var(--color-border); background-color: #070708; padding: 8px;">
++                <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100 h-100" style="object-fit: contain;" loading="lazy" decoding="async">
++              </div>
++              <div>
++                @if(!empty($product['catalog']))
++                  <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-accent);">Cat. No: {{ $product['catalog'] }}</span>
++                @endif
++                <h1 class="profil-section-title" style="font-size: 1.4rem !important; margin: 4px 0 0 !important;">{{ $product['title'] }}</h1>
++              </div>
++            </div>
++
++            <!-- Price Box -->
++            <div class="p-4 mb-4 rounded border border-secondary border-opacity-20" style="background: rgba(255,255,255,0.02);">
++              <span class="text-muted small d-block mb-1">Harga Estimasi / Penawaran per Unit:</span>
++              <strong class="fs-2 d-block mb-3" style="color: var(--color-accent);">
++                {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
++              </strong>
++
++              @if($stock > 0)
++                <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
++                  <i class="bi bi-box-seam me-1"></i> Ready Stock: {{ $stock }} unit
++                </span>
++              @else
++                <span class="badge bg-warning bg-opacity-20 text-warning px-3 py-2">
++                  <i class="bi bi-clock-history me-1"></i> Stok Kosong — Tersedia Sistem Indent
++                </span>
++              @endif
++
++              <p class="profil-body-text small mt-3 mb-0" style="opacity: 0.75;">
++                Harga di atas bersifat estimasi awal. Harga &amp; diskon final akan dikonfirmasi oleh Tim Sales kami melalui Surat Penawaran Resmi (PDF) setelah RFQ Anda ditinjau.
++              </p>
++            </div>
++
++            <!-- Add to Cart Form -->
++            <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form">
++              @csrf
++              <input type="hidden" name="title" value="{{ $product['title'] }}">
++
++              <div class="d-flex flex-wrap align-items-end gap-4 mb-4">
++                <div>
++                  <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
++                  <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
++                    <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
++                      <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
++                    </button>
++                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;" data-stock="{{ $stock }}">
++                    <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
++                      <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
++                    </button>
++                  </div>
++                </div>
++
++                <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
++                  <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang RFQ
++                </button>
++              </div>
++
++              <!-- Live Indent Notice -->
++              <div id="indent-notice" class="p-3 rounded border border-warning border-opacity-30 bg-warning bg-opacity-10 text-warning small" style="display: none;">
++                <i class="bi bi-info-circle me-1"></i>
++                Jumlah yang Anda pesan melebihi stok ready ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>Indent / Pre-Order</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
++              </div>
++            </form>
++
++            <div class="mt-4">
++              <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
++                Kembali ke Katalog <i class="bi bi-arrow-right ms-2"></i>
++              </a>
++              <a href="{{ route('cart.index') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none ms-2" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
++                <i class="bi bi-cart me-2"></i> Lihat Keranjang RFQ
++              </a>
++            </div>
++
++          @else
++            <div class="empty-state-card">
++              <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
++              <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Produk Tidak Ditemukan</h2>
++              <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
++              <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i class="bi bi-arrow-right"></i></a>
++            </div>
++          @endif
++        </div>
++      </div>
++    </div>
++  </section>
++
++  <script>
++    function stepQty(amount) {
++      const input = document.getElementById('qty-input');
++      if (input) {
++        let val = parseInt(input.value) || 1;
++        val = Math.max(1, val + amount);
++        input.value = val;
++        toggleIndentNotice();
++      }
++    }
++
++    function toggleIndentNotice() {
++      const input = document.getElementById('qty-input');
++      const notice = document.getElementById('indent-notice');
++      if (!input || !notice) return;
++
++      const stock = parseInt(input.dataset.stock || '0', 10);
++      const qty = parseInt(input.value || '1', 10);
++
++      notice.style.display = (qty > stock) ? 'block' : 'none';
++    }
++
++    document.addEventListener('DOMContentLoaded', function () {
++      const input = document.getElementById('qty-input');
++      if (input) {
++        input.addEventListener('input', toggleIndentNotice);
++        toggleIndentNotice();
++      }
++    });
++  </script>
++@endsection
+diff --git a/resources/views/detail-produk.blade.php b/resources/views/detail-produk.blade.php
+index 7a3e9eb..5e25699 100644
+--- a/resources/views/detail-produk.blade.php
++++ b/resources/views/detail-produk.blade.php
+@@ -37,14 +37,28 @@
+ 
+             <!-- Product Details Area -->
+             <div class="row g-5">
+-              <!-- Product Image -->
++              <!-- Product Image Gallery -->
+               <div class="col-md-5">
++                @php
++                  $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
++                  $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
++                  $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
++                @endphp
+                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
+-                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
++                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
+                 </div>
++                @if(count($allImages) > 1)
++                  <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
++                    @foreach($allImages as $imgPath)
++                      <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" onclick="switchProductImage('{{ $imgPath }}', this)">
++                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async">
++                      </div>
++                    @endforeach
++                  </div>
++                @endif
+               </div>
+               
+-              <!-- Product Specs & Form -->
++              <!-- Product Specs -->
+               <div class="col-md-7">
+                 @if(!empty($product['catalog']))
+                   <div class="mb-4">
+@@ -53,21 +67,6 @@
+                     </span>
+                   </div>
+                 @endif
+-                
+-                <!-- Price & Stock Info Box -->
+-                <div class="p-3 my-4 rounded border border-secondary border-opacity-20 d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: rgba(255,255,255,0.02);">
+-                  <div>
+-                    <span class="text-muted small d-block">Harga Estimasi / Penawaran:</span>
+-                    <strong class="fs-4" style="color: var(--color-accent);">
+-                      {{ ($product['price'] ?? 0) > 0 ? 'Rp ' . number_format($product['price'], 0, ',', '.') : 'Hubungi Tim Penawaran' }}
+-                    </strong>
+-                  </div>
+-                  <div>
+-                    <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
+-                      <i class="bi bi-box-seam me-1"></i> Ready Stock
+-                    </span>
+-                  </div>
+-                </div>
+ 
+                 <div class="mt-4">
+                   <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>
+@@ -75,37 +74,15 @@
+                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
+                   </div>
+                 </div>
+-                
+-                <form action="{{ route('cart.add') }}" method="POST" class="mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
+-                  @csrf
+-                  <input type="hidden" name="title" value="{{ $product['title'] }}">
+-                  
+-                  <div class="d-flex flex-wrap align-items-center gap-4">
+-                    {{-- Quantity Selector --}}
+-                    <div>
+-                      <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
+-                      <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
+-                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
+-                          <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
+-                        </button>
+-                        <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 52px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;">
+-                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
+-                          <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
+-                        </button>
+-                      </div>
+-                    </div>
+ 
+-                    {{-- Action Buttons --}}
+-                    <div class="d-flex align-items-end gap-3 flex-grow-1" style="margin-top: 18px;">
+-                      <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
+-                        <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang RFQ
+-                      </button>
+-                      <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
+-                        Kembali <i class="bi bi-arrow-right ms-2"></i>
+-                      </a>
+-                    </div>
+-                  </div>
+-                </form>
++                <div class="mt-5 pt-4 d-flex flex-wrap gap-3" style="border-top: 1px solid var(--color-border);">
++                  <a href="{{ url('/produk/beli') }}?id={{ urlencode($product['title']) }}" class="kontak-submit-btn border-0 cursor-pointer text-decoration-none d-inline-flex align-items-center justify-content-center" style="height: 46px; margin: 0; padding: 0 28px; font-size: 0.85rem; letter-spacing: 1px;">
++                    <i class="bi bi-cart-check me-2" style="font-size: 1.1rem;"></i> Lihat Harga &amp; Beli Produk Ini
++                  </a>
++                  <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
++                    Kembali <i class="bi bi-arrow-right ms-2"></i>
++                  </a>
++                </div>
+               </div>
+             </div>
+           @else
+@@ -132,7 +109,7 @@
+         </button>
+         <div class="modal-body text-center p-0">
+           <div class="lightbox-image-wrapper">
+-            <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
++            <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
+           </div>
+         </div>
+       </div>
+@@ -221,15 +198,43 @@
+     .modal.show .modal-dialog {
+       transform: scale(1);
+     }
++    .product-gallery-thumbs {
++      justify-content: center;
++    }
++    .gallery-thumb {
++      width: 64px;
++      height: 64px;
++      border: 1px solid var(--color-border);
++      background-color: #070708;
++      padding: 4px;
++      cursor: pointer;
++      opacity: 0.55;
++      transition: all 0.2s ease;
++    }
++    .gallery-thumb img {
++      width: 100%;
++      height: 100%;
++      object-fit: contain;
++    }
++    .gallery-thumb:hover {
++      opacity: 0.85;
++    }
++    .gallery-thumb.active {
++      opacity: 1;
++      border-color: var(--color-accent);
++    }
+   </style>
+   <script>
+-    function stepQty(amount) {
+-      const input = document.getElementById('qty-input');
+-      if (input) {
+-        let val = parseInt(input.value) || 1;
+-        val = Math.max(1, val + amount);
+-        input.value = val;
+-      }
++    function switchProductImage(src, thumbEl) {
++      const mainImg = document.getElementById('main-product-image');
++      const lightboxImg = document.getElementById('lightbox-product-image');
++      if (mainImg) mainImg.src = src;
++      if (lightboxImg) lightboxImg.src = src;
++
++      document.querySelectorAll('.gallery-thumb').forEach(function (el) {
++        el.classList.remove('active');
++      });
++      if (thumbEl) thumbEl.classList.add('active');
+     }
+   </script>
+ @endsection
+diff --git a/resources/views/produk.blade.php b/resources/views/produk.blade.php
+index 716b321..3200ec0 100644
+--- a/resources/views/produk.blade.php
++++ b/resources/views/produk.blade.php
+@@ -144,19 +144,9 @@ class="layanan-sidebar-link {{ $activeCategory === $catKey ? 'is-active' : '' }}
+                     </p>
+ 
+                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
+-                      <div class="d-flex align-items-center justify-content-between mb-2">
+-                        <span class="fw-bold" style="color: var(--color-accent); font-size: 0.88rem; font-family: var(--font-headline); letter-spacing: 0.5px;">
+-                          {{ ($prod['price'] ?? 0) > 0 ? 'Rp ' . number_format($prod['price'], 0, ',', '.') : 'Est. Penawaran' }}
+-                        </span>
+-                      </div>
+-                      <form action="{{ route('cart.add') }}" method="POST">
+-                        @csrf
+-                        <input type="hidden" name="title" value="{{ $prod['title'] }}">
+-                        <input type="hidden" name="quantity" value="1">
+-                        <button type="submit" class="btn btn-outline-danger btn-sm w-100 fw-semibold">
+-                          <i class="bi bi-cart-plus me-1"></i> + Keranjang RFQ
+-                        </button>
+-                      </form>
++                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
++                        <i class="bi bi-eye me-1"></i> Lihat Detail Produk
++                      </a>
+                     </div>
+                   </div>
+                 </div>
+diff --git a/routes/web.php b/routes/web.php
+index 4739908..505d94b 100644
+--- a/routes/web.php
++++ b/routes/web.php
+@@ -19,6 +19,7 @@
+ Route::get('/produk', [PageController::class, 'produk']);
+ Route::get('/sektor', [PageController::class, 'sektor']);
+ Route::get('/produk/detail', [PageController::class, 'detailProduk']);
++Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
+ Route::get('/layanan', [PageController::class, 'layanan']);
+ Route::get('/informasi', [PageController::class, 'informasi']);
+ Route::get('/kontak', [PageController::class, 'kontak']);
+-- 
+2.43.0
+

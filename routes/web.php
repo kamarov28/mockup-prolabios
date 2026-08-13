@@ -46,9 +46,6 @@ Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clear'
 Route::get('/rfq/checkout', [\App\Http\Controllers\RfqController::class, 'checkout'])->name('rfq.checkout');
 Route::post('/rfq/submit', [\App\Http\Controllers\RfqController::class, 'store'])->middleware('throttle:10,1')->name('rfq.store');
 Route::get('/rfq/success/{number}', [\App\Http\Controllers\RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
-Route::get('/rfq/track/{number}', [\App\Http\Controllers\RfqController::class, 'track'])->middleware('throttle:20,1')->name('rfq.track');
-Route::post('/rfq/approve/{number}', [\App\Http\Controllers\RfqController::class, 'approve'])->middleware('throttle:5,1')->name('rfq.approve');
-Route::get('/rfq/pdf/{number}', [\App\Http\Controllers\RfqController::class, 'pdf'])->middleware('throttle:20,1')->name('rfq.pdf');
 
 // ----------------------------------------------------
 // Protected Admin Panel Routes
@@ -59,15 +56,9 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     // Home Editor
     Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
     Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
-    
-    // Admin RFQ Management
-    Route::get('/rfq', [\App\Http\Controllers\Admin\AdminRfqController::class, 'index'])->name('admin.rfq');
-    Route::get('/rfq/{id}/respond', [\App\Http\Controllers\Admin\AdminRfqController::class, 'respond'])->name('admin.rfq.respond');
-    Route::post('/rfq/{id}/update', [\App\Http\Controllers\Admin\AdminRfqController::class, 'updateQuotation'])->name('admin.rfq.update');
-    Route::delete('/rfq/{id}', [\App\Http\Controllers\Admin\AdminRfqController::class, 'destroy'])->name('admin.rfq.destroy');
 
     // Admin Documentation & Operational Guide
-    Route::get('/guide', [\App\Http\Controllers\Admin\AdminRfqController::class, 'guide'])->name('admin.guide');
+    Route::get('/guide', [AdminDashboardController::class, 'guide'])->name('admin.guide');
 
     // Products CRUD
     Route::get('/products', [AdminProductController::class, 'productsIndex'])->name('admin.products');

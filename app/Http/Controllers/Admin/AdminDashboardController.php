@@ -212,4 +212,10 @@ class AdminDashboardController extends Controller
 
         return redirect()->route('admin.home.edit', ['section' => $section])->with('success', 'Pengaturan berhasil disimpan!');
     }
+
+    public function guide()
+    {
+        return view('admin.guide');
+    }
 }
+

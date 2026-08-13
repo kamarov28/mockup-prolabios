@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Rfq extends Model
 {
@@ -13,28 +14,16 @@ class Rfq extends Model
 
     protected $fillable = [
         'rfq_number',
-        'access_token',
-        'company_name',
-        'company_tax_id',
-        'pic_name',
-        'pic_position',
+        'name',
         'email',
+        'company_name',
         'phone_wa',
-        'address',
         'notes',
-        'status',
-        'total_offered_amount',
-        'admin_response_notes',
-        'valid_until',
     ];
 
-    protected $casts = [
-        'valid_until' => 'date',
-        'total_offered_amount' => 'decimal:2',
-    ];
-
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(RfqItem::class, 'rfq_id');
     }
 }
+

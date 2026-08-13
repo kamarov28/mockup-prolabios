@@ -56,14 +56,6 @@
           </a>
         </div>
 
-        <span class="sidebar-nav-label" style="margin-top: 8px;">Procurement B2B</span>
-
-        <div class="sidebar-item {{ request()->is('admin/rfq*') ? 'active' : '' }}">
-          <a href="{{ route('admin.rfq') }}" class="sidebar-link">
-            <i class="bi bi-file-earmark-text"></i> Penawaran (RFQ)
-          </a>
-        </div>
-
         <span class="sidebar-nav-label" style="margin-top: 8px;">Konten</span>
 
         <div class="sidebar-item {{ request()->is('admin/products*') ? 'active' : '' }}">
