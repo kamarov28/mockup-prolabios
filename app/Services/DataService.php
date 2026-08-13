@@ -132,13 +132,13 @@ class DataService
     // ----------------------------------------------------
     // Products Service  (MySQL)
     // ----------------------------------------------------
-    public function getProducts(?array $filters = [], int $limit = 0): array
+    public function getProducts(?array $filters = [], int $limit = 0): \Illuminate\Support\Collection
     {
         $cacheKey = 'products_list_' . md5(json_encode($filters) . '_' . $limit);
         
         return Cache::remember($cacheKey, 300, function () use ($filters, $limit) {
-            $query = DB::table('products')->orderBy('id');
-
+            $query = Product::query()->orderBy('id');
+            
             if (!empty($filters['category'])) {
                 $cat = $filters['category'];
                 $catSlug = Str::slug($cat);
@@ -152,7 +152,7 @@ class DataService
                     $query->where('category', $cat);
                 }
             }
-
+            
             if (!empty($filters['sub_category'])) {
                 $subCat = $filters['sub_category'];
                 $query->where(function($q) use ($subCat) {
@@ -160,7 +160,7 @@ class DataService
                       ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
                 });
             }
-
+            
             if (!empty($filters['search'])) {
                 $search = $filters['search'];
                 $query->where(function($q) use ($search) {
@@ -169,14 +169,12 @@ class DataService
                       ->orWhere('catalog', 'like', "%{$search}%");
                 });
             }
-
+            
             if ($limit > 0) {
                 $query->limit($limit);
             }
-
-            return $query->get()
-                ->map(fn($r) => (array) $r)
-                ->toArray();
+            
+            return $query->get();
         });
     }
 
@@ -195,7 +193,7 @@ class DataService
             return $cached;
         }
 
-        $query = DB::table('products')->orderBy('id');
+        $query = Product::query()->orderBy('id');
 
         if (!empty($filters['category'])) {
             $cat = $filters['category'];
@@ -228,39 +226,24 @@ class DataService
             });
         }
 
-        $result = $query->paginate($perPage)
-            ->through(fn($r) => (array) $r)
-            ->withQueryString();
+        $result = $query->paginate($perPage)->withQueryString();
 
         Cache::put($cacheKey, $result, 300);
 
         return $result;
     }
 
-    public function getProductByTitle(string $title): ?array
+    public function getProductByTitle(string $title): ?\App\Models\Product
     {
         return Cache::remember('product_by_title_' . md5($title), 600, function () use ($title) {
-            $row = DB::table('products')->where('title', $title)->first();
-            if (!$row) {
-                return null;
-            }
-            $product = (array) $row;
-            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
-            return $product;
+            return Product::where('title', $title)->first();
         });
     }
 
-    public function getProductById(int $id): ?array
+    <?php
+    public function getProductById(int $id): ?\App\Models\Product
     {
-        return Cache::remember('product_by_id_' . $id, 600, function () use ($id) {
-            $row = DB::table('products')->where('id', $id)->first();
-            if (!$row) {
-                return null;
-            }
-            $product = (array) $row;
-            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
-            return $product;
-        });
+        return \App\Models\Product::find($id);
     }
 
     /**

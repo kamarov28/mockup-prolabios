@@ -18,17 +18,14 @@ class CartController extends Controller
     {
         $cart = session()->get('cart', []);
         $total = 0;
-        foreach ($cart as $title => &$item) {
+        foreach ($cart as $title => $item) {
             $product = $this->dataService->getProductByTitle($title);
-            if ($product) {
-                if ((float)($product['price'] ?? 0) > 0) {
-                    $item['price'] = (float)$product['price'];
-                }
-                $item['stock'] = (int)($product['stock'] ?? 0);
-            } else {
-                $item['stock'] = (int)($item['stock'] ?? 0);
-            }
-            $total += ($item['price'] * $item['quantity']);
+            $stock = $product ? (int)($product['stock'] ?? 0) : (int)($item['stock'] ?? 0);
+            $price = $product && (float)($product['price'] ?? 0) > 0 ? (float)$product['price'] : (float)($item['price'] ?? 0);
+            
+            $cart[$title]['stock'] = $stock;
+            $cart[$title]['price'] = $price;
+            $total += ($price * $item['quantity']);
         }
         session()->put('cart', $cart);
 
@@ -73,14 +70,14 @@ class CartController extends Controller
         if ($request->wantsJson()) {
             return response()->json([
                 'success'   => true,
-                'message'   => 'Produk berhasil ditambahkan ke keranjang RFQ!',
+                'message'   => 'Produk berhasil ditambahkan ke keranjang!',
                 'cartCount' => $cartCount,
                 'isIndent'  => $newQty > $stock,
                 'stock'     => $stock
             ]);
         }
 
-        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang RFQ!');
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
     public function update(Request $request)
@@ -90,16 +87,16 @@ class CartController extends Controller
 
         $cart = session()->get('cart', []);
         if (isset($cart[$title])) {
-            // Enforce max quantity based on cached stock in cart
-            $stock = (int)($cart[$title]['stock'] ?? 999);
-            if ($stock > 0 && $qty > $stock) {
-                $qty = $stock;
-            }
+            // Fetch fresh stock from DB to ensure accurate limit
+            $product = $this->dataService->getProductByTitle($title);
+            $stock = $product ? (int)($product['stock'] ?? 0) : (int)($cart[$title]['stock'] ?? 0);
+            
+            $cart[$title]['stock'] = $stock;
             $cart[$title]['quantity'] = $qty;
             session()->put('cart', $cart);
         }
 
-        if ($request->ajax() || $request->wantsJson() || $request->expectsJson()) {
+        if ($request->ajax() || $request->wantsJson()) {
             $total = 0;
             foreach ($cart as $item) {
                 $total += ($item['price'] * $item['quantity']);
@@ -111,7 +108,7 @@ class CartController extends Controller
                 'cart' => $cart,
                 'total' => $total,
                 'totalFormatted' => $total > 0 ? 'Rp ' . number_format($total, 0, ',', '.') : 'Rp 0',
-                'itemSubtotal' => $itemSubtotal > 0 ? 'Rp ' . number_format($itemSubtotal, 0, ',', '.') : 'Est. Penawaran',
+                'itemSubtotal' => $itemSubtotal > 0 ? 'Rp ' . number_format($itemSubtotal, 0, ',', '.') : 'Harga Katalog',
                 'cartCount' => array_sum(array_column($cart, 'quantity')),
             ]);
         }

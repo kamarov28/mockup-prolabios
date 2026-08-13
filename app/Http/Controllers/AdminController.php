@@ -26,6 +26,10 @@ class AdminController extends Controller
         // Attempt Native Laravel Auth via User model (email or name)
         $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
         if (Auth::attempt([$field => $loginInput, 'password' => $password])) {
+            if (!Auth::user()->isAdmin()) {
+                Auth::logout();
+                return redirect()->back()->withInput()->with('error', 'Akses ditolak: Akun Anda tidak memiliki hak akses administrator.');
+            }
             $request->session()->regenerate();
             return redirect()->route('admin.dashboard')->with('success', 'Selamat datang kembali, Administrator!');
         }

@@ -28,7 +28,7 @@ class RfqController extends Controller
         }
 
         $total = 0;
-        foreach ($cart as $key => &$item) {
+        foreach ($cart as $key => $item) {
             $product = null;
             if (!empty($item['id'])) {
                 $product = $this->dataService->getProductById((int)$item['id']);
@@ -37,10 +37,9 @@ class RfqController extends Controller
                 $product = $this->dataService->getProductByTitle($item['title']);
             }
 
-            if ($product) {
-                $item['price'] = (float)($product['price'] ?? 0);
-            }
-            $total += ((float)$item['price'] * (int)$item['quantity']);
+            $price = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
+            $cart[$key]['price'] = $price;
+            $total += ($price * (int)$item['quantity']);
         }
         session()->put('cart', $cart);
 
@@ -59,8 +58,10 @@ class RfqController extends Controller
             'name'         => 'required|string|max:255',
             'email'        => 'required|email|max:255',
             'company_name' => 'required|string|max:255',
-            'phone_wa'     => 'required|string|max:50',
+            'phone_wa'     => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
             'notes'        => 'nullable|string',
+        ], [
+            'phone_wa.regex' => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
         ]);
 
         $rfqNumber = 'RFQ-' . date('Ym') . '-' . strtoupper(Str::random(6));
@@ -100,8 +101,9 @@ class RfqController extends Controller
             return $rfq;
         });
 
-        // Clear Cart
+        // Clear Cart & Store Session Token for Success Page Protection
         session()->forget('cart');
+        session()->put('submitted_rfq_number', $rfq->rfq_number);
 
         // Dispatch notification emails asynchronously
         try {
@@ -114,9 +116,15 @@ class RfqController extends Controller
         return redirect()->route('rfq.success', ['number' => $rfq->rfq_number]);
     }
 
-    public function success(string $number)
+    public function success(Request $request, string $number)
     {
         $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
+
+        // Protection: Ensure only recent session submitter can view the success summary
+        if (session('submitted_rfq_number') !== $number) {
+            return redirect()->route('home')->with('info', 'Halaman konfirmasi pengajuan telah kedaluwarsa.');
+        }
+
         return view('rfq-success', compact('rfq'));
     }
 }

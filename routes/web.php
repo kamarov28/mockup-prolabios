@@ -67,7 +67,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::post('/products/store-bulk', [AdminProductController::class, 'productsStoreBulk'])->name('admin.products.store-bulk');
     Route::post('/products', [AdminProductController::class, 'productsStore'])->name('admin.products.store');
     Route::get('/products/{id}/edit', [AdminProductController::class, 'productsEdit'])->name('admin.products.edit');
-    Route::post('/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
+    Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
     Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
     
     // Posts CRUD
@@ -75,7 +75,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/posts/create', [AdminPostController::class, 'postsCreate'])->name('admin.posts.create');
     Route::post('/posts', [AdminPostController::class, 'postsStore'])->name('admin.posts.store');
     Route::get('/posts/{slug}/edit', [AdminPostController::class, 'postsEdit'])->name('admin.posts.edit');
-    Route::post('/posts/{slug}', [AdminPostController::class, 'postsUpdate'])->name('admin.posts.update');
+    Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'postsUpdate'])->name('admin.posts.update');
     Route::delete('/posts/{slug}', [AdminPostController::class, 'postsDestroy'])->name('admin.posts.destroy');
     
     // Sectors CRUD
@@ -83,7 +83,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/sectors/create', [AdminSectorController::class, 'sectorsCreate'])->name('admin.sectors.create');
     Route::post('/sectors', [AdminSectorController::class, 'sectorsStore'])->name('admin.sectors.store');
     Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'sectorsEdit'])->name('admin.sectors.edit');
-    Route::post('/sectors/{id}', [AdminSectorController::class, 'sectorsUpdate'])->name('admin.sectors.update');
+    Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'sectorsUpdate'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
 
     // Principals CRUD
@@ -91,6 +91,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/principals/create', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'create'])->name('admin.principals.create');
     Route::post('/principals', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'store'])->name('admin.principals.store');
     Route::get('/principals/{id}/edit', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
-    Route::post('/principals/{id}', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'update'])->name('admin.principals.update');
+    Route::match(['post', 'put'], '/principals/{id}', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'update'])->name('admin.principals.update');
     Route::delete('/principals/{id}', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
 });
