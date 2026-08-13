@@ -126,6 +126,36 @@
     });
   </script>
 
+  @if(session('success') || session('error') || session('info'))
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Swal === 'undefined') return;
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          }
+        });
+
+        @if(session('success'))
+          Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
+        @endif
+        @if(session('error'))
+          Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
+        @endif
+        @if(session('info'))
+          Toast.fire({ icon: 'info', title: {!! json_encode(session('info')) !!} });
+        @endif
+      });
+    </script>
+  @endif
+
   @stack('scripts')
 
   <!-- Global Search Overlay & Scroll-to-top Button -->
