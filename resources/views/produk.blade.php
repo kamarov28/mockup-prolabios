@@ -144,19 +144,9 @@
                     </p>
 
                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                      <div class="d-flex align-items-center justify-content-between mb-2">
-                        <span class="fw-bold" style="color: var(--color-accent); font-size: 0.88rem; font-family: var(--font-headline); letter-spacing: 0.5px;">
-                          {{ ($prod['price'] ?? 0) > 0 ? 'Rp ' . number_format($prod['price'], 0, ',', '.') : 'Est. Penawaran' }}
-                        </span>
-                      </div>
-                      <form action="{{ route('cart.add') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="title" value="{{ $prod['title'] }}">
-                        <input type="hidden" name="quantity" value="1">
-                        <button type="submit" class="btn btn-outline-danger btn-sm w-100 fw-semibold">
-                          <i class="bi bi-cart-plus me-1"></i> + Keranjang RFQ
-                        </button>
-                      </form>
+                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
+                        <i class="bi bi-eye me-1"></i> Lihat Detail Produk
+                      </a>
                     </div>
                   </div>
                 </div>

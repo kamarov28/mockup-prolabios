@@ -110,6 +110,7 @@ class AdminProductController extends Controller
             'sub_category' => '',
             'sector' => '',
             'image' => '',
+            'gallery_images' => [],
             'description' => ''
         ];
 
@@ -125,6 +126,7 @@ class AdminProductController extends Controller
         }
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
+        $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
 
         $product = [
             'catalog' => $request->input('catalog') ?: '',
@@ -134,6 +136,7 @@ class AdminProductController extends Controller
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
             'image' => $image,
+            'gallery_images' => $galleryImages,
             'price' => (float)$request->input('price', 0),
             'stock' => (int)$request->input('stock', 0),
         ];
@@ -169,6 +172,15 @@ class AdminProductController extends Controller
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image']);
 
+        // Keep existing gallery images except those the admin explicitly marked for removal
+        $existingGallery = $product['gallery_images'] ?? [];
+        $toRemove = (array) $request->input('remove_gallery', []);
+        if (!empty($toRemove)) {
+            $existingGallery = array_values(array_diff($existingGallery, $toRemove));
+        }
+        $newGalleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+        $galleryImages = array_values(array_slice(array_merge($existingGallery, $newGalleryImages), 0, 10));
+
         $updatedProduct = [
             'catalog' => $request->input('catalog') ?: '',
             'title' => $newTitle,
@@ -177,6 +189,7 @@ class AdminProductController extends Controller
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
             'image' => $image,
+            'gallery_images' => $galleryImages,
             'price' => (float)$request->input('price', 0),
             'stock' => (int)$request->input('stock', 0),
         ];

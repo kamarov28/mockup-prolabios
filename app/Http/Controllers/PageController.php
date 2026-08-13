@@ -96,6 +96,26 @@ class PageController extends Controller
     }
 
     /**
+     * Display the dedicated shopping/checkout page for a single product
+     * (price, live stock, indent/pre-order status, and add-to-cart form).
+     * Kept separate from detailProduk() so the description page can focus
+     * purely on specs/application info without overwhelming the visitor.
+     */
+    public function beliProduk(Request $request, DataService $dataService)
+    {
+        $product = null;
+        $identifier = $request->query('id');
+        if ($identifier !== null && $identifier !== '') {
+            if (is_numeric($identifier)) {
+                $product = $dataService->getProductById((int) $identifier);
+            } else {
+                $product = $dataService->getProductByTitle((string) $identifier);
+            }
+        }
+        return view('beli-produk', compact('product'));
+    }
+
+    /**
      * Display the Sektor Fokus page.
      */
     public function sektor(DataService $dataService)

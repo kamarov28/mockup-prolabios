@@ -241,7 +241,12 @@ class DataService
     {
         return Cache::remember('product_by_title_' . md5($title), 600, function () use ($title) {
             $row = DB::table('products')->where('title', $title)->first();
-            return $row ? (array) $row : null;
+            if (!$row) {
+                return null;
+            }
+            $product = (array) $row;
+            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
+            return $product;
         });
     }
 
@@ -249,8 +254,29 @@ class DataService
     {
         return Cache::remember('product_by_id_' . $id, 600, function () use ($id) {
             $row = DB::table('products')->where('id', $id)->first();
-            return $row ? (array) $row : null;
+            if (!$row) {
+                return null;
+            }
+            $product = (array) $row;
+            $product['gallery_images'] = self::decodeGalleryImages($product['gallery_images'] ?? null);
+            return $product;
         });
+    }
+
+    /**
+     * Safely decode the `gallery_images` JSON column into a plain array of
+     * relative image paths, tolerating null/empty/malformed stored values.
+     */
+    protected static function decodeGalleryImages($raw): array
+    {
+        if (empty($raw)) {
+            return [];
+        }
+        if (is_array($raw)) {
+            return array_values(array_filter($raw));
+        }
+        $decoded = json_decode((string) $raw, true);
+        return is_array($decoded) ? array_values(array_filter($decoded)) : [];
     }
 
 
@@ -265,6 +291,7 @@ class DataService
             'sub_category' => $product['sub_category'] ?? null,
             'sector'       => $product['sector']       ?? null,
             'image'        => $product['image']        ?? null,
+            'gallery_images' => !empty($product['gallery_images']) ? json_encode(array_values($product['gallery_images'])) : null,
             'price'        => $product['price']        ?? 0,
             'stock'        => $product['stock']        ?? 0,
             'created_at'   => now(),
@@ -285,6 +312,7 @@ class DataService
             'sub_category' => $updatedProduct['sub_category'] ?? null,
             'sector'       => $updatedProduct['sector']       ?? null,
             'image'        => $updatedProduct['image']        ?? null,
+            'gallery_images' => !empty($updatedProduct['gallery_images']) ? json_encode(array_values($updatedProduct['gallery_images'])) : null,
             'price'        => $updatedProduct['price']        ?? 0,
             'stock'        => $updatedProduct['stock']        ?? 0,
             'updated_at'   => now(),

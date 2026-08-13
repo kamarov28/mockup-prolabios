@@ -37,14 +37,28 @@
 
             <!-- Product Details Area -->
             <div class="row g-5">
-              <!-- Product Image -->
+              <!-- Product Image Gallery -->
               <div class="col-md-5">
+                @php
+                  $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
+                  $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
+                  $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
+                @endphp
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
                 </div>
+                @if(count($allImages) > 1)
+                  <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
+                    @foreach($allImages as $imgPath)
+                      <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" onclick="switchProductImage('{{ $imgPath }}', this)">
+                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async">
+                      </div>
+                    @endforeach
+                  </div>
+                @endif
               </div>
               
-              <!-- Product Specs & Form -->
+              <!-- Product Specs -->
               <div class="col-md-7">
                 @if(!empty($product['catalog']))
                   <div class="mb-4">
@@ -53,21 +67,6 @@
                     </span>
                   </div>
                 @endif
-                
-                <!-- Price & Stock Info Box -->
-                <div class="p-3 my-4 rounded border border-secondary border-opacity-20 d-flex flex-wrap align-items-center justify-content-between gap-3" style="background: rgba(255,255,255,0.02);">
-                  <div>
-                    <span class="text-muted small d-block">Harga Estimasi / Penawaran:</span>
-                    <strong class="fs-4" style="color: var(--color-accent);">
-                      {{ ($product['price'] ?? 0) > 0 ? 'Rp ' . number_format($product['price'], 0, ',', '.') : 'Hubungi Tim Penawaran' }}
-                    </strong>
-                  </div>
-                  <div>
-                    <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
-                      <i class="bi bi-box-seam me-1"></i> Ready Stock
-                    </span>
-                  </div>
-                </div>
 
                 <div class="mt-4">
                   <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>
@@ -75,37 +74,15 @@
                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                   </div>
                 </div>
-                
-                <form action="{{ route('cart.add') }}" method="POST" class="mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
-                  @csrf
-                  <input type="hidden" name="title" value="{{ $product['title'] }}">
-                  
-                  <div class="d-flex flex-wrap align-items-center gap-4">
-                    {{-- Quantity Selector --}}
-                    <div>
-                      <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
-                      <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
-                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
-                          <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
-                        </button>
-                        <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 52px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;">
-                        <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
-                          <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
-                        </button>
-                      </div>
-                    </div>
 
-                    {{-- Action Buttons --}}
-                    <div class="d-flex align-items-end gap-3 flex-grow-1" style="margin-top: 18px;">
-                      <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
-                        <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang RFQ
-                      </button>
-                      <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
-                        Kembali <i class="bi bi-arrow-right ms-2"></i>
-                      </a>
-                    </div>
-                  </div>
-                </form>
+                <div class="mt-5 pt-4 d-flex flex-wrap gap-3" style="border-top: 1px solid var(--color-border);">
+                  <a href="{{ url('/produk/beli') }}?id={{ urlencode($product['title']) }}" class="kontak-submit-btn border-0 cursor-pointer text-decoration-none d-inline-flex align-items-center justify-content-center" style="height: 46px; margin: 0; padding: 0 28px; font-size: 0.85rem; letter-spacing: 1px;">
+                    <i class="bi bi-cart-check me-2" style="font-size: 1.1rem;"></i> Lihat Harga &amp; Beli Produk Ini
+                  </a>
+                  <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
+                    Kembali <i class="bi bi-arrow-right ms-2"></i>
+                  </a>
+                </div>
               </div>
             </div>
           @else
@@ -132,7 +109,7 @@
         </button>
         <div class="modal-body text-center p-0">
           <div class="lightbox-image-wrapper">
-            <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
+            <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
           </div>
         </div>
       </div>
@@ -221,15 +198,43 @@
     .modal.show .modal-dialog {
       transform: scale(1);
     }
+    .product-gallery-thumbs {
+      justify-content: center;
+    }
+    .gallery-thumb {
+      width: 64px;
+      height: 64px;
+      border: 1px solid var(--color-border);
+      background-color: #070708;
+      padding: 4px;
+      cursor: pointer;
+      opacity: 0.55;
+      transition: all 0.2s ease;
+    }
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .gallery-thumb:hover {
+      opacity: 0.85;
+    }
+    .gallery-thumb.active {
+      opacity: 1;
+      border-color: var(--color-accent);
+    }
   </style>
   <script>
-    function stepQty(amount) {
-      const input = document.getElementById('qty-input');
-      if (input) {
-        let val = parseInt(input.value) || 1;
-        val = Math.max(1, val + amount);
-        input.value = val;
-      }
+    function switchProductImage(src, thumbEl) {
+      const mainImg = document.getElementById('main-product-image');
+      const lightboxImg = document.getElementById('lightbox-product-image');
+      if (mainImg) mainImg.src = src;
+      if (lightboxImg) lightboxImg.src = src;
+
+      document.querySelectorAll('.gallery-thumb').forEach(function (el) {
+        el.classList.remove('active');
+      });
+      if (thumbEl) thumbEl.classList.add('active');
     }
   </script>
 @endsection

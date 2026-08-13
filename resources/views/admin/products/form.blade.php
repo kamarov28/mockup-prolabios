@@ -93,7 +93,8 @@
 
       <!-- Gambar Produk -->
       <div class="col-12 mt-4">
-        <label class="form-label fw-bold">Gambar Produk</label>
+        <label class="form-label fw-bold">Gambar Utama / Cover Produk</label>
+        <div class="form-text small text-muted mb-2">Gambar ini dipakai untuk thumbnail di katalog, kartu keranjang, dan PDF penawaran.</div>
         <div class="row g-3">
           <div class="col-sm-3 text-center">
             <div class="border rounded bg-light p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
@@ -111,6 +112,31 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Galeri Foto Tambahan -->
+      <div class="col-12 mt-4">
+        <label class="form-label fw-bold">Galeri Foto Tambahan</label>
+        <div class="form-text small text-muted mb-2">Foto tambahan untuk ditampilkan sebagai galeri di halaman detail &amp; belanja produk (maks. 10 foto, di luar gambar cover di atas).</div>
+
+        @if(!empty($product['gallery_images']))
+          <div class="row g-2 mb-3">
+            @foreach($product['gallery_images'] as $galleryPath)
+              <div class="col-4 col-sm-2">
+                <div class="border rounded bg-light p-1 position-relative" style="aspect-ratio: 1/1; overflow: hidden;">
+                  <img src="{{ $galleryPath }}" alt="Galeri produk" class="w-100 h-100" style="object-fit: cover;">
+                  <label class="position-absolute top-0 end-0 m-1 bg-white rounded px-1 py-0 small d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem;" title="Hapus foto ini">
+                    <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
+                    <i class="bi bi-trash text-danger"></i>
+                  </label>
+                </div>
+              </div>
+            @endforeach
+          </div>
+          <div class="form-text small text-danger mb-2">Centang foto yang ingin dihapus, lalu klik simpan.</div>
+        @endif
+
+        <input class="form-control" type="file" id="gallery_files" name="gallery_files[]" accept="image/*" multiple>
       </div>
 
       <!-- Deskripsi -->

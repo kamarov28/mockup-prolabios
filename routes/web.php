@@ -19,6 +19,7 @@ Route::get('/profil', [PageController::class, 'profil']);
 Route::get('/produk', [PageController::class, 'produk']);
 Route::get('/sektor', [PageController::class, 'sektor']);
 Route::get('/produk/detail', [PageController::class, 'detailProduk']);
+Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
 Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi', [PageController::class, 'informasi']);
 Route::get('/kontak', [PageController::class, 'kontak']);
