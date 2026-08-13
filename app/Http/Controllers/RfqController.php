@@ -65,36 +65,40 @@ class RfqController extends Controller
 
         $rfqNumber = 'RFQ-' . date('Ym') . '-' . strtoupper(Str::random(6));
 
-        $rfq = Rfq::create([
-            'rfq_number'   => $rfqNumber,
-            'name'         => $validated['name'],
-            'email'        => $validated['email'],
-            'company_name' => $validated['company_name'],
-            'phone_wa'     => $validated['phone_wa'],
-            'notes'        => $validated['notes'] ?? null,
-        ]);
-
-        foreach ($cart as $item) {
-            $product = null;
-            if (!empty($item['id'])) {
-                $product = $this->dataService->getProductById((int)$item['id']);
-            }
-            if (!$product && !empty($item['title'])) {
-                $product = $this->dataService->getProductByTitle($item['title']);
-            }
-
-            $origPrice = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
-            $qty = max(1, (int)($item['quantity'] ?? 1));
-
-            RfqItem::create([
-                'rfq_id'        => $rfq->id,
-                'product_id'    => $product['id'] ?? ($item['id'] ?? null),
-                'product_title' => $product['title'] ?? $item['title'],
-                'catalog_no'    => $product['catalog'] ?? ($item['catalog'] ?? null),
-                'original_price' => $origPrice,
-                'quantity'      => $qty,
+        $rfq = \Illuminate\Support\Facades\DB::transaction(function () use ($rfqNumber, $validated, $cart) {
+            $rfq = Rfq::create([
+                'rfq_number'   => $rfqNumber,
+                'name'         => $validated['name'],
+                'email'        => $validated['email'],
+                'company_name' => $validated['company_name'],
+                'phone_wa'     => $validated['phone_wa'],
+                'notes'        => $validated['notes'] ?? null,
             ]);
-        }
+
+            foreach ($cart as $item) {
+                $product = null;
+                if (!empty($item['id'])) {
+                    $product = $this->dataService->getProductById((int)$item['id']);
+                }
+                if (!$product && !empty($item['title'])) {
+                    $product = $this->dataService->getProductByTitle($item['title']);
+                }
+
+                $origPrice = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
+                $qty = max(1, (int)($item['quantity'] ?? 1));
+
+                RfqItem::create([
+                    'rfq_id'        => $rfq->id,
+                    'product_id'    => $product['id'] ?? ($item['id'] ?? null),
+                    'product_title' => $product['title'] ?? $item['title'],
+                    'catalog_no'    => $product['catalog'] ?? ($item['catalog'] ?? null),
+                    'original_price' => $origPrice,
+                    'quantity'      => $qty,
+                ]);
+            }
+
+            return $rfq;
+        });
 
         // Clear Cart
         session()->forget('cart');
