@@ -14,9 +14,21 @@ class SecurityHeaders
 
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+        // Content Security Policy (Defense-in-depth against XSS & data injection)
+        $csp = "default-src 'self'; "
+            ."script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "
+            ."style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; "
+            ."img-src 'self' data: blob: https:; "
+            ."font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; "
+            ."connect-src 'self' https:; "
+            ."frame-ancestors 'self'; "
+            ."base-uri 'self'; "
+            ."form-action 'self';";
+
+        $response->headers->set('Content-Security-Policy', $csp);
 
         if ($request->isSecure() || $request->header('X-Forwarded-Proto') === 'https') {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');

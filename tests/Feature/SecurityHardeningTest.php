@@ -80,4 +80,16 @@ class SecurityHardeningTest extends TestCase
         $response->assertJson(['success' => true]);
         Queue::assertNothingPushed();
     }
+
+    public function test_security_headers_include_csp_and_exclude_deprecated_headers(): void
+    {
+        $response = $this->get(route('home'));
+
+        $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
+        $response->assertHeader('X-Content-Type-Options', 'nosniff');
+        $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+        $response->assertHeader('Content-Security-Policy');
+        $this->assertStringContainsString("default-src 'self'", $response->headers->get('Content-Security-Policy'));
+        $this->assertNull($response->headers->get('X-XSS-Protection'));
+    }
 }
