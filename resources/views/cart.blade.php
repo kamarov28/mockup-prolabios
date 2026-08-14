@@ -69,12 +69,12 @@
 
   /* Image Box - Strictly Enforced Dimensions */
   .cart-img-box {
-    width: 72px !important;
-    height: 72px !important;
-    min-width: 72px !important;
-    min-height: 72px !important;
-    max-width: 72px !important;
-    max-height: 72px !important;
+    width: 80px !important;
+    height: 80px !important;
+    min-width: 80px !important;
+    min-height: 80px !important;
+    max-width: 80px !important;
+    max-height: 80px !important;
     flex-shrink: 0 !important;
     border-radius: 10px;
     background: #ffffff;
@@ -84,15 +84,16 @@
     justify-content: center !important;
     padding: 6px;
     overflow: hidden;
+    box-sizing: border-box;
   }
   .cart-img-box img {
+    width: 100% !important;
+    height: 100% !important;
     max-width: 100% !important;
     max-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
     object-fit: contain !important;
     display: block !important;
-    margin: 0 auto !important;
+    margin: auto !important;
   }
 
   /* Qty Pill Horizontal Layout */

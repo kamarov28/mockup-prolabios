@@ -138,46 +138,64 @@ class DataService
     {
         $cacheKey = 'products_list_'.md5(json_encode($filters).'_'.$limit);
 
-        return Cache::remember($cacheKey, 300, function () use ($filters, $limit) {
-            $query = Product::query()->orderBy('id');
+        $cached = Cache::get($cacheKey);
+        if ($cached instanceof \__PHP_Incomplete_Class || ($cached !== null && ! ($cached instanceof Collection))) {
+            Cache::forget($cacheKey);
+            $cached = null;
+        }
 
-            if (! empty($filters['category'])) {
-                $cat = $filters['category'];
-                $catSlug = Str::slug($cat);
-                if ($catSlug === 'culture-media') {
-                    $query->where(function ($q) use ($cat) {
-                        $q->where('category', $cat)
-                            ->orWhere('category', 'LIKE', '%Culture Media%')
-                            ->orWhere('sub_category', 'LIKE', '%Culture Media%');
-                    });
-                } else {
-                    $query->where('category', $cat);
-                }
-            }
+        if ($cached instanceof Collection) {
+            return $cached;
+        }
 
-            if (! empty($filters['sub_category'])) {
-                $subCat = $filters['sub_category'];
-                $query->where(function ($q) use ($subCat) {
-                    $q->where('sub_category', $subCat)
-                        ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+        $query = Product::query()->orderBy('id');
+
+        if (! empty($filters['category'])) {
+            $cat = $filters['category'];
+            $catSlug = Str::slug($cat);
+            if ($catSlug === 'culture-media') {
+                $query->where(function ($q) use ($cat) {
+                    $q->where('category', $cat)
+                        ->orWhere('category', 'LIKE', '%Culture Media%')
+                        ->orWhere('sub_category', 'LIKE', '%Culture Media%');
                 });
+            } else {
+                $query->where('category', $cat);
             }
+        }
 
-            if (! empty($filters['search'])) {
-                $search = $filters['search'];
-                $query->where(function ($q) use ($search) {
-                    $q->where('title', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%")
-                        ->orWhere('catalog', 'like', "%{$search}%");
-                });
-            }
+        if (! empty($filters['sub_category'])) {
+            $subCat = $filters['sub_category'];
+            $query->where(function ($q) use ($subCat) {
+                $q->where('sub_category', $subCat)
+                    ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+            });
+        }
 
-            if ($limit > 0) {
-                $query->limit($limit);
-            }
+        if (! empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('catalog', 'like', "%{$search}%");
+            });
+        }
 
-            return $query->get();
-        });
+        if (! empty($filters['sector'])) {
+            $sector = $filters['sector'];
+            $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+        }
+
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+
+
+        $result = $query->get();
+
+        Cache::put($cacheKey, $result, 300);
+
+        return $result;
     }
 
     public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
@@ -237,16 +255,44 @@ class DataService
 
     public function getProductByTitle(string $title): ?Product
     {
-        return Cache::remember('product_by_title_'.md5($title), 600, function () use ($title) {
-            return Product::where('title', $title)->first();
-        });
+        $cacheKey = 'product_by_title_'.md5($title);
+        $cached = Cache::get($cacheKey);
+        if ($cached instanceof \__PHP_Incomplete_Class) {
+            Cache::forget($cacheKey);
+            $cached = null;
+        }
+
+        if ($cached instanceof Product) {
+            return $cached;
+        }
+
+        $product = Product::where('title', $title)->first();
+        if ($product) {
+            Cache::put($cacheKey, $product, 600);
+        }
+
+        return $product;
     }
 
     public function getProductById(int $id): ?Product
     {
-        return Cache::remember('product_by_id_'.$id, 600, function () use ($id) {
-            return Product::find($id);
-        });
+        $cacheKey = 'product_by_id_'.$id;
+        $cached = Cache::get($cacheKey);
+        if ($cached instanceof \__PHP_Incomplete_Class) {
+            Cache::forget($cacheKey);
+            $cached = null;
+        }
+
+        if ($cached instanceof Product) {
+            return $cached;
+        }
+
+        $product = Product::find($id);
+        if ($product) {
+            Cache::put($cacheKey, $product, 600);
+        }
+
+        return $product;
     }
 
     /**
@@ -420,6 +466,16 @@ class DataService
     {
         $query = DB::table('posts')->orderByDesc('id');
 
+        // Only show published / online posts for public facing queries
+        if (empty($filters['include_all_status'])) {
+            $today = date('Y-m-d');
+            $query->where('status', 'online')
+                ->where(function ($q) use ($today) {
+                    $q->whereNull('date')
+                        ->orWhere('date', '<=', $today);
+                });
+        }
+
         if (! empty($filters['category'])) {
             $cat = strtolower($filters['category']);
             if ($cat === 'info') {
@@ -443,6 +499,16 @@ class DataService
     public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
     {
         $query = DB::table('posts')->orderByDesc('id');
+
+        // Only show published / online posts for public facing queries
+        if (empty($filters['include_all_status'])) {
+            $today = date('Y-m-d');
+            $query->where('status', 'online')
+                ->where(function ($q) use ($today) {
+                    $q->whereNull('date')
+                        ->orWhere('date', '<=', $today);
+                });
+        }
 
         if (! empty($filters['category'])) {
             $cat = strtolower($filters['category']);

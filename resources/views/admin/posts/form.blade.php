@@ -56,21 +56,30 @@
       <div class="col-12 mt-4 pt-3 border-top border-secondary border-opacity-10">
         <div class="row g-4">
           <!-- Status -->
+          @php
+            $currentStatus = $post['status'] ?? 'online';
+            $currentDate = !empty($post['date']) ? date('Y-m-d', strtotime($post['date'])) : '';
+            $today = date('Y-m-d');
+            $isScheduled = ($currentStatus === 'online' && !empty($currentDate) && $currentDate > $today);
+            $defaultOption = $currentStatus === 'draft' ? 'draft' : ($isScheduled ? 'scheduled' : 'online_now');
+            $selectedOption = old('status_option', $defaultOption);
+            $savedDate = old('publish_date', $currentDate ?: $today);
+          @endphp
           <div class="col-md-6">
             <label class="form-label fw-bold d-block">Status Artikel</label>
             <div class="d-flex flex-column gap-2">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="status_option" id="statusDraft" value="draft" {{ old('status_option', ($post['status'] ?? 'online') === 'draft' ? 'draft' : 'online_now') === 'draft' ? 'checked' : '' }}>
+                <input class="form-check-input" type="radio" name="status_option" id="statusDraft" value="draft" {{ $selectedOption === 'draft' ? 'checked' : '' }}>
                 <label class="form-check-label" for="statusDraft">Draft (Simpan sebagai draf)</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="status_option" id="statusOnlineNow" value="online_now" {{ old('status_option', ($post['status'] ?? 'online') === 'online' ? 'online_now' : 'draft') === 'online_now' ? 'checked' : '' }}>
+                <input class="form-check-input" type="radio" name="status_option" id="statusOnlineNow" value="online_now" {{ $selectedOption === 'online_now' ? 'checked' : '' }}>
                 <label class="form-check-label" for="statusOnlineNow">Online Now (Terbitkan Sekarang)</label>
               </div>
               <div class="form-check d-flex align-items-center gap-2">
-                <input class="form-check-input" type="radio" name="status_option" id="statusScheduled" value="scheduled" {{ old('status_option') === 'scheduled' ? 'checked' : '' }}>
+                <input class="form-check-input" type="radio" name="status_option" id="statusScheduled" value="scheduled" {{ $selectedOption === 'scheduled' ? 'checked' : '' }}>
                 <label class="form-check-label me-1" for="statusScheduled">Online pada tanggal:</label>
-                <input type="date" name="publish_date" class="form-control form-control-sm" style="width: 160px;" value="{{ old('publish_date') }}">
+                <input type="date" name="publish_date" id="publish_date_input" class="form-control form-control-sm" style="width: 160px;" value="{{ $savedDate }}">
               </div>
             </div>
           </div>
@@ -170,7 +179,30 @@
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
   <script>
-    // Initialize Summernote
+    // 1. Image Preview Functions
+    function previewLocalImage(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var preview = document.getElementById('image-preview');
+          if (preview) {
+            preview.src = e.target.result;
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function previewUrlImage(url) {
+      if (url && url.trim() !== '') {
+        var preview = document.getElementById('image-preview');
+        if (preview) {
+          preview.src = url.trim();
+        }
+      }
+    }
+
+    // Initialize Summernote & UI events
     $(document).ready(function() {
       $('#content').summernote({
         placeholder: 'Tulis konten artikel lengkap di sini (mendukung gambar, tabel, link, formatting, dll)...',
@@ -187,6 +219,18 @@
         ]
       });
 
+      // Scheduled input auto select radio
+      const scheduledDateInput = document.getElementById('publish_date_input');
+      const statusScheduledRadio = document.getElementById('statusScheduled');
+      if (scheduledDateInput && statusScheduledRadio) {
+        scheduledDateInput.addEventListener('focus', function() {
+          statusScheduledRadio.checked = true;
+        });
+        scheduledDateInput.addEventListener('change', function() {
+          statusScheduledRadio.checked = true;
+        });
+      }
+
       // Real-time slug generator
       const titleInput = document.getElementById('title');
       const slugPreview = document.getElementById('slug-preview');
@@ -194,9 +238,9 @@
         titleInput.addEventListener('input', function() {
           const title = this.value;
           const slug = title.toLowerCase()
-            .replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-            .replace(/\s+/g, '-')        // collapse whitespace and replace by -
-            .replace(/-+/g, '-');        // collapse dashes
+            .replace(/[^a-z0-9 -]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-');
           slugPreview.textContent = slug || 'judul-artikel';
         });
       }
@@ -204,40 +248,38 @@
       // Real-time localStorage auto-save
       const form = document.querySelector('form');
       const categorySelect = document.getElementById('category');
-      
       const DRAFT_KEY = 'prolabios_post_draft';
 
-      // Restore Draft logic
-      const savedDraft = localStorage.getItem(DRAFT_KEY);
-      if (savedDraft) {
-        try {
-          const draft = JSON.parse(savedDraft);
-          if (draft && (draft.title || draft.category || draft.content)) {
-            const restoreConfirm = confirm('Draf tulisan sebelumnya ditemukan. Apakah Anda ingin memulihkan draf tersebut?');
-            if (restoreConfirm) {
-              if (draft.title) {
-                titleInput.value = draft.title;
-                titleInput.dispatchEvent(new Event('input'));
-              }
-              if (draft.category) categorySelect.value = draft.category;
-              if (draft.content) {
-                $('#content').summernote('code', draft.content);
-              }
-            } else {
-              localStorage.removeItem(DRAFT_KEY);
-            }
-          }
-        } catch (e) {
-          console.error('Error parsing draft:', e);
-        }
-      }
-
-      // Periodically save draft every 5 seconds (only when creating, not editing)
+      // Restore Draft logic (only on create mode)
       const isEdit = {{ isset($post) ? 'true' : 'false' }};
       if (!isEdit) {
+        const savedDraft = localStorage.getItem(DRAFT_KEY);
+        if (savedDraft) {
+          try {
+            const draft = JSON.parse(savedDraft);
+            if (draft && (draft.title || draft.category || draft.content)) {
+              const restoreConfirm = confirm('Draf tulisan sebelumnya ditemukan. Apakah Anda ingin memulihkan draf tersebut?');
+              if (restoreConfirm) {
+                if (draft.title && titleInput) {
+                  titleInput.value = draft.title;
+                  titleInput.dispatchEvent(new Event('input'));
+                }
+                if (draft.category && categorySelect) categorySelect.value = draft.category;
+                if (draft.content) {
+                  $('#content').summernote('code', draft.content);
+                }
+              } else {
+                localStorage.removeItem(DRAFT_KEY);
+              }
+            }
+          } catch (e) {
+            console.error('Error parsing draft:', e);
+          }
+        }
+
         setInterval(function() {
-          const currentTitle = titleInput.value;
-          const currentCategory = categorySelect.value;
+          const currentTitle = titleInput ? titleInput.value : '';
+          const currentCategory = categorySelect ? categorySelect.value : '';
           const currentContent = $('#content').summernote('code');
 
           if (currentTitle || currentCategory || (currentContent && currentContent !== '<p><br></p>')) {

@@ -44,7 +44,7 @@
               <!-- Email Pribadi -->
               <div class="mb-3">
                 <label for="email" class="form-label text-white small fw-semibold">Email Pribadi <span class="text-danger">*</span></label>
-                <input type="email" class="form-control rfq-input" id="email" name="email" value="{{ old('email') }}" required placeholder="budi@gmail.com">
+                <input type="email" class="form-control rfq-input" id="email" name="email" value="{{ old('email') }}" required placeholder="budi@gmail.com" autocomplete="email" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
                 <div class="form-text text-muted small">Konfirmasi pengajuan penawaran akan dikirimkan ke email ini.</div>
               </div>
 
@@ -57,7 +57,8 @@
               <!-- Nomor WhatsApp -->
               <div class="mb-3">
                 <label for="phone_wa" class="form-label text-white small fw-semibold">Nomor WhatsApp <span class="text-danger">*</span></label>
-                <input type="text" class="form-control rfq-input" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890">
+                <input type="tel" class="form-control rfq-input" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
+                <div class="form-text text-muted small">Hanya menerima angka / nomor telepon aktif WhatsApp.</div>
               </div>
 
               <!-- Catatan Tambahan -->

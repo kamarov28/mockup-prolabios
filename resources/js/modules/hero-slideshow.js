@@ -5,7 +5,6 @@ import { prefersReducedMotion } from './utils.js';
 
 export function initHeroSlideshow() {
   initHeroBgSlideshow();
-  initHeroKineticGrid();
   initPrincipalSlider();
   initMarqueeVisibility();
 }

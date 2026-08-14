@@ -22,10 +22,7 @@
 
         <!-- Sidebar -->
         <div class="col-lg-3 col-md-4">
-          @php
-            $firstSectorId = (isset($sectors) && count($sectors) > 0) ? $sectors[0]['id'] : 'biomolecular';
-            $activeSector = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId;
-          @endphp
+          {{-- $activeSector is passed from PageController::sektor() --}}
 
           <div class="mb-5">
             <h3 class="profil-sidebar-title">Select a Sector</h3>
@@ -116,18 +113,16 @@
                   @php $hasProducts = false; @endphp
                   @if(isset($products) && count($products) > 0)
                     @foreach($products as $prod)
-                      @if(isset($prod['sector']) && in_array($currentData['id'], explode(',', $prod['sector'])))
-                        @php $hasProducts = true; @endphp
-                        <tr>
-                          <td style="color: var(--color-text-muted); font-size: 0.82rem;">{{ $prod['catalog'] ?? '-' }}</td>
-                          <td>
-                            <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
-                              {{ $prod['title'] }}
-                            </a>
-                          </td>
-                          <td style="color: var(--color-text-muted); font-size: 0.88rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
-                        </tr>
-                      @endif
+                      @php $hasProducts = true; @endphp
+                      <tr>
+                        <td style="color: var(--color-text-muted); font-size: 0.82rem;">{{ $prod['catalog'] ?? '-' }}</td>
+                        <td>
+                          <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
+                            {{ $prod['title'] }}
+                          </a>
+                        </td>
+                        <td style="color: var(--color-text-muted); font-size: 0.88rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
+                      </tr>
                     @endforeach
                   @endif
                 </tbody>

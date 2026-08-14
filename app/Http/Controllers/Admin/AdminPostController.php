@@ -107,9 +107,11 @@ class AdminPostController extends Controller
         $statusOption = $request->input('status_option', 'online_now');
         $status = ($statusOption === 'draft') ? 'draft' : 'online';
 
-        $publishDate = date('d/m/Y');
+        $publishDate = date('Y-m-d');
         if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
-            $publishDate = date('d/m/Y', strtotime($request->input('publish_date')));
+            $publishDate = date('Y-m-d', strtotime($request->input('publish_date')));
+        } elseif ($statusOption === 'draft') {
+            $publishDate = date('Y-m-d');
         }
 
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
@@ -162,9 +164,11 @@ class AdminPostController extends Controller
         $statusOption = $request->input('status_option', 'online_now');
         $status = ($statusOption === 'draft') ? 'draft' : 'online';
 
-        $publishDate = $post['date'] ?? date('d/m/Y');
+        $publishDate = ! empty($post['date']) ? date('Y-m-d', strtotime($post['date'])) : date('Y-m-d');
         if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
-            $publishDate = date('d/m/Y', strtotime($request->input('publish_date')));
+            $publishDate = date('Y-m-d', strtotime($request->input('publish_date')));
+        } elseif ($statusOption === 'online_now') {
+            $publishDate = date('Y-m-d');
         }
 
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';

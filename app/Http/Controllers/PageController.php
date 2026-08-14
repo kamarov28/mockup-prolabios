@@ -124,9 +124,15 @@ class PageController extends Controller
     public function sektor(DataService $dataService)
     {
         $sectors = $dataService->getSectors();
-        $products = $dataService->getProducts([], 16);
 
-        return view('sektor', compact('sectors', 'products'));
+        // Determine active sector from query string (same logic as blade had before)
+        $firstSectorId = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
+        $activeSector  = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId;
+
+        // Fetch all products for this specific sector (no arbitrary row limit)
+        $products = $dataService->getProducts(['sector' => $activeSector]);
+
+        return view('sektor', compact('sectors', 'products', 'activeSector'));
     }
 
     /**

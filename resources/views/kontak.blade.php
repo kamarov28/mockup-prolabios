@@ -64,11 +64,11 @@
               </div>
               <div class="col-md-6">
                 <label for="email" class="kontak-form-label">Email <span style="color: var(--color-accent);">*</span></label>
-                <input type="email" class="form-control kontak-form-input" id="email" name="email" required placeholder="contoh@email.com">
+                <input type="email" class="form-control kontak-form-input" id="email" name="email" required placeholder="contoh@email.com" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
               </div>
               <div class="col-md-6">
                 <label for="telepon" class="kontak-form-label">Phone Number</label>
-                <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="+62 xxx xxxx xxxx">
+                <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="+62 xxx xxxx xxxx" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Hanya boleh berupa angka dan karakter nomor telepon">
               </div>
               <div class="col-md-6">
                 <label for="perusahaan" class="kontak-form-label">Company / Institution</label>
