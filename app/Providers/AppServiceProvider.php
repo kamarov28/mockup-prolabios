@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use App\Services\DataService;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +26,35 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // ----------------------------------------------------
+        // Security Rate Limiters (Strict Per-IP & Endpoint Guards)
+        // ----------------------------------------------------
+        RateLimiter::for('rfq-submission', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip())->response(function () {
+                return back()->withErrors([
+                    'rate_limit' => 'Terlalu banyak permintaan pengajuan penawaran. Silakan tunggu 1 menit sebelum mencoba kembali.',
+                ]);
+            });
+        });
+
+        RateLimiter::for('contact-form', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip())->response(function () {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terlalu banyak pengiriman pesan dari koneksi Anda. Silakan tunggu 1 menit sebelum mencoba lagi.',
+                ], 429);
+            });
+        });
+
+        RateLimiter::for('admin-login', function (Request $request) {
+            $username = (string) $request->input('username', '');
+
+            return Limit::perMinute(5)->by($request->ip().'|'.$username)->response(function () {
+                return back()->withErrors([
+                    'login' => 'Terlalu banyak percobaan login gagal. Silakan tunggu 1 menit.',
+                ]);
+            });
+        });
         try {
             $siteSettings = Cache::remember('homepage_settings_v3', 3600, function () {
                 $dataService = app(DataService::class);

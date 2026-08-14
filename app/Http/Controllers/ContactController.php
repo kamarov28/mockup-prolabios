@@ -12,6 +12,19 @@ class ContactController extends Controller
 {
     public function submit(Request $request)
     {
+        // Anti-Bot Honeypot Guard
+        if ($request->filled('_hp_website')) {
+            Log::channel('contact')->warning('Contact form submission bot honeypot triggered.', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesan Anda berhasil terkirim! Tim kami akan menghubungi Anda sesegera mungkin.',
+            ]);
+        }
+
         // 1. Validasi Input Formulir
         $validated = $request->validate([
             'nama' => 'required|string|max:255',

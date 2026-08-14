@@ -22,7 +22,7 @@ class AdminRfqTest extends TestCase
     {
         parent::setUp();
 
-        $this->adminUser = User::create([
+        $this->adminUser = User::forceCreate([
             'name' => 'Admin Test',
             'email' => 'admin-rfq-test@example.com',
             'password' => Hash::make('secret123'),

@@ -27,14 +27,14 @@ Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi', [PageController::class, 'informasi']);
 Route::get('/kontak', [PageController::class, 'kontak']);
 Route::post('/kontak', [ContactController::class, 'submit'])
-    ->middleware('throttle:5,1')
+    ->middleware('throttle:contact-form')
     ->name('contact.submit');
 
 // ----------------------------------------------------
 // Admin Login Routes
 // ----------------------------------------------------
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:5,1');
+Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:admin-login');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 // ----------------------------------------------------
@@ -47,7 +47,7 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remov
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 Route::get('/rfq/checkout', [RfqController::class, 'checkout'])->name('rfq.checkout');
-Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:10,1')->name('rfq.store');
+Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:rfq-submission')->name('rfq.store');
 Route::get('/rfq/success/{number}', [RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
 
 // ----------------------------------------------------

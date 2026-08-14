@@ -35,6 +35,12 @@
             <form action="{{ route('rfq.store') }}" method="POST">
               @csrf
 
+              {{-- Anti-Bot Honeypot Field (Hidden from authentic users) --}}
+              <div style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+                <label for="_hp_website">Leave this field blank</label>
+                <input type="text" name="_hp_website" id="_hp_website" tabindex="-1" autocomplete="off" value="">
+              </div>
+
               <!-- Nama Lengkap -->
               <div class="mb-3">
                 <label for="name" class="form-label text-white small fw-semibold">Nama Lengkap <span class="text-danger">*</span></label>

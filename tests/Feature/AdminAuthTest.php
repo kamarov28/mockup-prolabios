@@ -19,7 +19,7 @@ class AdminAuthTest extends TestCase
 
     public function test_non_admin_user_is_logged_out_and_denied_access(): void
     {
-        $regularUser = User::create([
+        $regularUser = User::forceCreate([
             'name' => 'Regular User',
             'email' => 'user@example.com',
             'password' => Hash::make('password123'),
@@ -34,7 +34,7 @@ class AdminAuthTest extends TestCase
 
     public function test_admin_user_can_access_dashboard(): void
     {
-        $adminUser = User::create([
+        $adminUser = User::forceCreate([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => Hash::make('password123'),

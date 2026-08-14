@@ -49,6 +49,18 @@ class RfqController extends Controller
 
     public function store(Request $request)
     {
+        // Anti-Bot Honeypot Guard: if invisible field is populated, silently drop spam
+        if ($request->filled('_hp_website')) {
+            \Illuminate\Support\Facades\Log::warning('RFQ submission bot honeypot triggered.', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
+            session()->forget('cart');
+
+            return redirect()->route('home')->with('success', 'Pengajuan penawaran Anda telah kami terima.');
+        }
+
         $cart = session()->get('cart', []);
         if (empty($cart)) {
             return redirect()->route('cart.index')
@@ -60,7 +72,7 @@ class RfqController extends Controller
             'email' => 'required|email|max:255',
             'company_name' => 'required|string|max:255',
             'phone_wa' => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
-            'notes' => 'nullable|string',
+            'notes' => 'nullable|string|max:3000',
         ], [
             'phone_wa.regex' => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
         ]);

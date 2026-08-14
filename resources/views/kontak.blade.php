@@ -57,6 +57,11 @@
 
           <form id="contactForm" class="contact-form" onsubmit="return handleContactForm(event)">
             @csrf
+            {{-- Anti-Bot Honeypot Field --}}
+            <div style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
+              <label for="_hp_website">Leave this field blank</label>
+              <input type="text" name="_hp_website" id="_hp_website" tabindex="-1" autocomplete="off" value="">
+            </div>
             <div class="row g-4">
               <div class="col-md-6">
                 <label for="nama" class="kontak-form-label">Full Name <span style="color: var(--color-accent);">*</span></label>
