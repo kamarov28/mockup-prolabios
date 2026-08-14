@@ -6,6 +6,8 @@ use App\Jobs\SendRfqCustomerReceiptEmailJob;
 use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Models\Rfq;
 use App\Models\RfqItem;
+use App\Services\AuditLogger;
+use App\Services\CaptchaService;
 use App\Services\DataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +61,13 @@ class RfqController extends Controller
             session()->forget('cart');
 
             return redirect()->route('home')->with('success', 'Pengajuan penawaran Anda telah kami terima.');
+        }
+
+        // Production CAPTCHA verification (reCAPTCHA v3 / Cloudflare Turnstile)
+        if (! CaptchaService::verify($request)) {
+            return back()->withInput()->withErrors([
+                'captcha' => 'Verifikasi keamanan bot gagal. Silakan muat ulang halaman dan coba lagi.',
+            ]);
         }
 
         $cart = session()->get('cart', []);
@@ -117,6 +126,13 @@ class RfqController extends Controller
         // Clear Cart & Store Session Token for Success Page Protection
         session()->forget('cart');
         session()->put('submitted_rfq_number', $rfq->rfq_number);
+
+        AuditLogger::log('rfq.submit', 'Rfq', $rfq->id, [
+            'rfq_number' => $rfq->rfq_number,
+            'company' => $rfq->company_name,
+            'email' => $rfq->email,
+            'items_count' => count($cart),
+        ]);
 
         // Dispatch notification emails asynchronously
         try {

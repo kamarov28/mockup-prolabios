@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SendContactEmailJob;
 use App\Models\ContactInquiry;
+use App\Services\AuditLogger;
+use App\Services\CaptchaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -23,6 +25,14 @@ class ContactController extends Controller
                 'success' => true,
                 'message' => 'Pesan Anda berhasil terkirim! Tim kami akan menghubungi Anda sesegera mungkin.',
             ]);
+        }
+
+        // Production CAPTCHA verification (reCAPTCHA v3 / Cloudflare Turnstile)
+        if (! CaptchaService::verify($request)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Verifikasi keamanan bot gagal. Silakan muat ulang halaman.',
+            ], 422);
         }
 
         // 1. Validasi Input Formulir
@@ -60,6 +70,12 @@ class ContactController extends Controller
             // Strip any HTML tags from the message to avoid XSS when rendered in emails
             $validated['pesan'] = strip_tags($validated['pesan'] ?? '');
             $inquiry = ContactInquiry::create(['payload' => $validated]);
+
+            AuditLogger::log('contact.submit', 'ContactInquiry', $inquiry->id, [
+                'nama' => $validated['nama'],
+                'email' => $validated['email'],
+                'subjek' => $validated['subjek_label'] ?? $validated['subjek'],
+            ]);
 
             // 3. Kirim email secara asinkron lewat queue (hanya mengirimkan ID referensi)
             SendContactEmailJob::dispatch($inquiry->id);

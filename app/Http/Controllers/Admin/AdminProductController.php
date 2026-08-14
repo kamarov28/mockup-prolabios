@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -144,7 +145,13 @@ class AdminProductController extends Controller
             'stock' => (int) $request->input('stock', 0),
         ];
 
-        $this->dataService->addProduct($product);
+        $createdProduct = $this->dataService->addProduct($product);
+
+        AuditLogger::log('product.create', 'Product', $createdProduct['id'] ?? null, [
+            'title' => $title,
+            'catalog' => $product['catalog'],
+            'price' => $product['price'],
+        ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
     }
@@ -200,12 +207,24 @@ class AdminProductController extends Controller
 
         $this->dataService->updateProductById($id, $updatedProduct);
 
+        AuditLogger::log('product.update', 'Product', $id, [
+            'title' => $newTitle,
+            'catalog' => $updatedProduct['catalog'],
+            'price' => $updatedProduct['price'],
+        ]);
+
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui!');
     }
 
     public function productsDestroy(int $id)
     {
+        $product = $this->dataService->getProductById($id);
         $this->dataService->deleteProductById($id);
+
+        AuditLogger::log('product.delete', 'Product', $id, [
+            'title' => $product['title'] ?? null,
+            'catalog' => $product['catalog'] ?? null,
+        ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
     }

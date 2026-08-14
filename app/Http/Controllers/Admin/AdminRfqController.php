@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rfq;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 
 class AdminRfqController extends Controller
@@ -47,8 +48,13 @@ class AdminRfqController extends Controller
     public function destroy(int $id)
     {
         $rfq = Rfq::findOrFail($id);
+        $rfqNumber = $rfq->rfq_number;
         $rfq->items()->delete();
         $rfq->delete();
+
+        AuditLogger::log('rfq.delete', 'Rfq', $id, [
+            'rfq_number' => $rfqNumber,
+        ]);
 
         return redirect()->route('admin.rfqs.index')
             ->with('success', 'Data pengajuan RFQ berhasil dihapus.');

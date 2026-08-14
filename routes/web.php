@@ -9,10 +9,16 @@ use App\Http\Controllers\Admin\AdminSectorController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HealthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RfqController;
 use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
+
+// ----------------------------------------------------
+// System Health & Monitoring
+// ----------------------------------------------------
+Route::get('/health', [HealthController::class, 'check'])->name('system.health');
 
 // ----------------------------------------------------
 // Public Frontend Routes

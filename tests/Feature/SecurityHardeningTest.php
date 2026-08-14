@@ -89,7 +89,29 @@ class SecurityHardeningTest extends TestCase
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
         $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->assertHeader('Content-Security-Policy');
-        $this->assertStringContainsString("default-src 'self'", $response->headers->get('Content-Security-Policy'));
+        $csp = $response->headers->get('Content-Security-Policy');
+        $this->assertStringContainsString("default-src 'self'", $csp);
+        $this->assertStringNotContainsString("'unsafe-eval'", $csp);
         $this->assertNull($response->headers->get('X-XSS-Protection'));
+    }
+
+    public function test_system_health_endpoint_returns_operational_status(): void
+    {
+        $response = $this->get(route('system.health'));
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'status',
+            'environment',
+            'timestamp',
+            'checks' => [
+                'database',
+                'queue',
+                'cache',
+                'storage',
+            ],
+        ]);
+        $this->assertEquals('healthy', $response->json('status'));
+        $this->assertEquals('connected', $response->json('checks.database'));
     }
 }
