@@ -2,18 +2,19 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use App\Models\Product;
 
 class ImportOldProductsSeeder extends Seeder
 {
     public function run(): void
     {
         $sqlPath = base_path('prolabio_web.sql');
-        if (!file_exists($sqlPath)) {
+        if (! file_exists($sqlPath)) {
             $this->command->error('File prolabio_web.sql tidak ditemukan!');
+
             return;
         }
 
@@ -23,41 +24,41 @@ class ImportOldProductsSeeder extends Seeder
         $cleanUtf8 = function (string $text): string {
             // Replace common Windows-1252 misencoded sequences in UTF-8
             $map = [
-                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9C" => "–", // en-dash
-                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9D" => "—", // em-dash
-                "\xC3\xA2\xE2\x82\xAC\xC5\x93"     => '"', // left double quote
-                "\xC3\xA2\xE2\x82\xAC\x9D"         => '"', // right double quote
+                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9C" => '–', // en-dash
+                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9D" => '—', // em-dash
+                "\xC3\xA2\xE2\x82\xAC\xC5\x93" => '"', // left double quote
+                "\xC3\xA2\xE2\x82\xAC\x9D" => '"', // right double quote
                 "\xC3\xA2\xE2\x82\xAC\xE2\x84\xA2" => "'", // apostrophe
-                "â€“"                              => "–",
-                "â€”"                              => "—",
-                "â€œ"                              => '"',
-                "â€"                               => '"',
-                "â€™"                              => "'",
-                "â„ƒ"                              => "°C",
-                "â‰"                               => "≥",
-                "ï½ž"                              => "~",
-                "ï¼ˆ"                              => "(",
-                "ï¼‰"                              => ")",
-                "â"                                => "",
+                'â€“' => '–',
+                'â€”' => '—',
+                'â€œ' => '"',
+                'â€' => '"',
+                'â€™' => "'",
+                'â„ƒ' => '°C',
+                'â‰' => '≥',
+                'ï½ž' => '~',
+                'ï¼ˆ' => '(',
+                'ï¼‰' => ')',
+                'â' => '',
             ];
             $text = strtr($text, $map);
 
             // Strip old email footer mentions
-            $text = preg_replace("/<p[^>]*>.*?For inquiry please kindly email to\s*:.*?<\/p>/is", "", $text);
-            $text = preg_replace("/For inquiry please kindly email to\s*:\s*[a-zA-Z0-9\._%+-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}/i", "", $text);
+            $text = preg_replace("/<p[^>]*>.*?For inquiry please kindly email to\s*:.*?<\/p>/is", '', $text);
+            $text = preg_replace("/For inquiry please kindly email to\s*:\s*[a-zA-Z0-9\._%+-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,}/i", '', $text);
 
             return trim($text);
         };
 
         // 1. Build web_channel category lookup map
         $channels = [];
-        if (preg_match_all("/INSERT INTO `web_channel`[^;]+;/s", $sqlContent, $channelBlocks)) {
+        if (preg_match_all('/INSERT INTO `web_channel`[^;]+;/s', $sqlContent, $channelBlocks)) {
             foreach ($channelBlocks[0] as $stmt) {
                 if (preg_match_all("/\((\d+),\s*(\d+),\s*'([^']*)',\s*'([^']*)',\s*'([^']*)',\s*(\d+),\s*(\d+),\s*'([^']*)'\)/", $stmt, $rows, PREG_SET_ORDER)) {
                     foreach ($rows as $r) {
-                        $channels[(int)$r[1]] = [
-                            'id' => (int)$r[1],
-                            'parent_id' => (int)$r[2],
+                        $channels[(int) $r[1]] = [
+                            'id' => (int) $r[1],
+                            'parent_id' => (int) $r[2],
                             'menu' => trim($r[3]),
                             'type' => trim($r[8]),
                         ];
@@ -67,7 +68,7 @@ class ImportOldProductsSeeder extends Seeder
         }
 
         $resolveCategory = function (int $channelId) use ($channels) {
-            if (!isset($channels[$channelId])) {
+            if (! isset($channels[$channelId])) {
                 return ['Microbiology', 'General'];
             }
 
@@ -84,6 +85,7 @@ class ImportOldProductsSeeder extends Seeder
                 if ($parentName === 'Microbiology') {
                     return ['Microbiology', $name];
                 }
+
                 return [$parentName, $name];
             }
 
@@ -95,6 +97,7 @@ class ImportOldProductsSeeder extends Seeder
 
         if (empty($productBlocks[1])) {
             $this->command->error('Tabel crm_product tidak ditemukan dalam SQL dump!');
+
             return;
         }
 
@@ -104,9 +107,9 @@ class ImportOldProductsSeeder extends Seeder
             $tuples = preg_split("/\),\s*[\r\n]+\s*\(/s", trim($rawData));
 
             foreach ($tuples as $tuple) {
-                $tuple = preg_replace("/^\s*\(/", "", $tuple);
-                $tuple = preg_replace("/\);\s*$/", "", $tuple);
-                $tuple = preg_replace("/\)\s*$/", "", $tuple);
+                $tuple = preg_replace("/^\s*\(/", '', $tuple);
+                $tuple = preg_replace("/\);\s*$/", '', $tuple);
+                $tuple = preg_replace("/\)\s*$/", '', $tuple);
 
                 // Tokenizer for SQL tuple values
                 $tokens = [];
@@ -116,7 +119,9 @@ class ImportOldProductsSeeder extends Seeder
                     while ($i < $len && (ctype_space($tuple[$i]) || $tuple[$i] === ',')) {
                         $i++;
                     }
-                    if ($i >= $len) break;
+                    if ($i >= $len) {
+                        break;
+                    }
 
                     if ($tuple[$i] === "'") {
                         $i++;
@@ -159,7 +164,7 @@ class ImportOldProductsSeeder extends Seeder
                         $tokens[] = $str;
                     } else {
                         $val = '';
-                        while ($i < $len && $tuple[$i] !== ',' && !ctype_space($tuple[$i])) {
+                        while ($i < $len && $tuple[$i] !== ',' && ! ctype_space($tuple[$i])) {
                             $val .= $tuple[$i];
                             $i++;
                         }
@@ -171,14 +176,14 @@ class ImportOldProductsSeeder extends Seeder
                     continue;
                 }
 
-                $productId   = (int)($tokens[0] ?? 0);
-                $channelId   = (int)($tokens[2] ?? 0);
-                $rawSector   = trim($tokens[4] ?? '');
-                $title       = $cleanUtf8(trim($tokens[5] ?? ''));
+                $productId = (int) ($tokens[0] ?? 0);
+                $channelId = (int) ($tokens[2] ?? 0);
+                $rawSector = trim($tokens[4] ?? '');
+                $title = $cleanUtf8(trim($tokens[5] ?? ''));
                 $description = $cleanUtf8(trim($tokens[8] ?? ''));
-                $imageName   = trim($tokens[10] ?? '');
-                $price       = (float)($tokens[11] ?? 0);
-                $stock       = (int)($tokens[12] ?? 0);
+                $imageName = trim($tokens[10] ?? '');
+                $price = (float) ($tokens[11] ?? 0);
+                $stock = (int) ($tokens[12] ?? 0);
 
                 if (empty($title)) {
                     continue;
@@ -192,7 +197,7 @@ class ImportOldProductsSeeder extends Seeder
                 }
 
                 $sectorList = [];
-                if (!empty($rawSector)) {
+                if (! empty($rawSector)) {
                     $parts = array_filter(explode('|', $rawSector));
                     foreach ($parts as $p) {
                         $p = trim($p);
@@ -203,26 +208,26 @@ class ImportOldProductsSeeder extends Seeder
                 }
                 $sectorStr = implode(',', $sectorList);
 
-                $imagePath = !empty($imageName) ? "products/" . $imageName : "images/placeholder-product.svg";
+                $imagePath = ! empty($imageName) ? 'products/'.$imageName : 'images/placeholder-product.svg';
 
                 $product = Product::updateOrCreate(
                     ['title' => $title],
                     [
-                        'catalog'      => $catalog,
-                        'description'  => $description,
-                        'category'     => $category,
+                        'catalog' => $catalog,
+                        'description' => $description,
+                        'category' => $category,
                         'sub_category' => $subCategory,
-                        'sector'       => $sectorStr,
-                        'image'        => $imagePath,
-                        'price'        => $price,
-                        'stock'        => $stock,
+                        'sector' => $sectorStr,
+                        'image' => $imagePath,
+                        'price' => $price,
+                        'stock' => $stock,
                     ]
                 );
 
                 foreach ($sectorList as $secId) {
                     DB::table('product_sector')->updateOrInsert([
                         'product_id' => $product->id,
-                        'sector_id'  => $secId,
+                        'sector_id' => $secId,
                     ], [
                         'created_at' => now(),
                         'updated_at' => now(),

@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\DataService;
-use App\Traits\HandlesImageUploads;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
-
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Services\DataService;
+use App\Traits\HandlesImageUploads;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminPostController extends Controller
 {
     use HandlesImageUploads;
+
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -31,7 +30,7 @@ class AdminPostController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                    ->orWhere('content', 'like', "%{$search}%");
             });
         }
 
@@ -62,15 +61,21 @@ class AdminPostController extends Controller
 
         $totalPosts = $query->count();
         $perPage = 10;
-        $totalPages = (int)ceil($totalPosts / $perPage);
-        if ($totalPages < 1) $totalPages = 1;
+        $totalPages = (int) ceil($totalPosts / $perPage);
+        if ($totalPages < 1) {
+            $totalPages = 1;
+        }
 
-        $currentPage = (int)$request->input('page', 1);
-        if ($currentPage < 1) $currentPage = 1;
-        if ($currentPage > $totalPages) $currentPage = $totalPages;
+        $currentPage = (int) $request->input('page', 1);
+        if ($currentPage < 1) {
+            $currentPage = 1;
+        }
+        if ($currentPage > $totalPages) {
+            $currentPage = $totalPages;
+        }
 
         $offset = ($currentPage - 1) * $perPage;
-        $paginatedPosts = $query->skip($offset)->take($perPage)->get()->map(fn($r) => (array) $r)->toArray();
+        $paginatedPosts = $query->skip($offset)->take($perPage)->get()->map(fn ($r) => (array) $r)->toArray();
 
         return view('admin.posts.index', [
             'posts' => $paginatedPosts,
@@ -80,7 +85,7 @@ class AdminPostController extends Controller
             'start_date' => $startDate,
             'end_date' => $endDate,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
         ]);
     }
 
@@ -94,7 +99,7 @@ class AdminPostController extends Controller
         $slug = Str::slug($request->input('title'));
 
         if ($this->dataService->getPostBySlug($slug)) {
-            $slug .= '-' . Str::lower(Str::random(6));
+            $slug .= '-'.Str::lower(Str::random(6));
         }
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80');
@@ -110,14 +115,14 @@ class AdminPostController extends Controller
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
 
         $post = [
-            'slug'        => $slug,
-            'title'       => $request->input('title'),
-            'date'        => $publishDate,
-            'category'    => $request->input('category'),
-            'status'      => $status,
+            'slug' => $slug,
+            'title' => $request->input('title'),
+            'date' => $publishDate,
+            'category' => $request->input('category'),
+            'status' => $status,
             'is_featured' => $isFeatured,
-            'image'       => $image,
-            'content'     => $request->input('content')
+            'image' => $image,
+            'content' => $request->input('content'),
         ];
 
         $this->dataService->addPost($post);
@@ -128,16 +133,17 @@ class AdminPostController extends Controller
     public function postsEdit(string $slug)
     {
         $post = $this->dataService->getPostBySlug($slug);
-        if (!$post) {
+        if (! $post) {
             return redirect()->route('admin.posts')->with('error', 'Artikel tidak ditemukan.');
         }
+
         return view('admin.posts.form', compact('post'));
     }
 
     public function postsUpdate(UpdatePostRequest $request, string $slug)
     {
         $post = $this->dataService->getPostBySlug($slug);
-        if (!$post) {
+        if (! $post) {
             return redirect()->route('admin.posts')->with('error', 'Artikel tidak ditemukan.');
         }
 
@@ -147,7 +153,7 @@ class AdminPostController extends Controller
             $newSlug = Str::slug($newTitle);
 
             if ($newSlug !== $slug && $this->dataService->getPostBySlug($newSlug)) {
-                $newSlug .= '-' . Str::lower(Str::random(6));
+                $newSlug .= '-'.Str::lower(Str::random(6));
             }
         }
 
@@ -164,14 +170,14 @@ class AdminPostController extends Controller
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
 
         $updatedPost = [
-            'slug'        => $newSlug,
-            'title'       => $newTitle,
-            'date'        => $publishDate,
-            'category'    => $request->input('category'),
-            'status'      => $status,
+            'slug' => $newSlug,
+            'title' => $newTitle,
+            'date' => $publishDate,
+            'category' => $request->input('category'),
+            'status' => $status,
             'is_featured' => $isFeatured,
-            'image'       => $image,
-            'content'     => $request->input('content')
+            'image' => $image,
+            'content' => $request->input('content'),
         ];
 
         $this->dataService->updatePost($slug, $updatedPost);
@@ -182,6 +188,7 @@ class AdminPostController extends Controller
     public function postsDestroy(string $slug)
     {
         $this->dataService->deletePost($slug);
+
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil dihapus!');
     }
 }

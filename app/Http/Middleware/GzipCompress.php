@@ -16,7 +16,7 @@ class GzipCompress
         $response = $next($request);
 
         // Skip if client doesn't support gzip or response is binary/streamed
-        if (!function_exists('gzencode') || !$request->hasHeader('Accept-Encoding') || !str_contains($request->header('Accept-Encoding'), 'gzip')) {
+        if (! function_exists('gzencode') || ! $request->hasHeader('Accept-Encoding') || ! str_contains($request->header('Accept-Encoding'), 'gzip')) {
             return $response;
         }
 
@@ -24,7 +24,7 @@ class GzipCompress
         $contentType = $response->headers->get('Content-Type', '');
         $compressible = empty($contentType) || str_contains($contentType, 'text/') || str_contains($contentType, 'application/json') || str_contains($contentType, 'application/xml');
 
-        if (!$compressible || $response->headers->has('Content-Encoding')) {
+        if (! $compressible || $response->headers->has('Content-Encoding')) {
             return $response;
         }
 

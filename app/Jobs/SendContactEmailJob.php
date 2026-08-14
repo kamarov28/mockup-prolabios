@@ -9,8 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SendContactEmailJob implements ShouldQueue
 {
@@ -40,32 +40,33 @@ class SendContactEmailJob implements ShouldQueue
         $correlationId = 'unknown';
         try {
             $inquiry = ContactInquiry::query()->find($this->inquiryId);
-            if (!$inquiry) {
-                Log::channel('contact')->warning("Data inquiry kontak tidak ditemukan untuk ID: " . $this->inquiryId);
+            if (! $inquiry) {
+                Log::channel('contact')->warning('Data inquiry kontak tidak ditemukan untuk ID: '.$this->inquiryId);
+
                 return;
             }
 
             $data = $inquiry->payload;
             if (empty($data)) {
-                Log::channel('contact')->error("Data payload kontak terkorup atau kosong untuk ID: " . $this->inquiryId);
-                throw new \Exception("Payload terkorup atau kosong.");
+                Log::channel('contact')->error('Data payload kontak terkorup atau kosong untuk ID: '.$this->inquiryId);
+                throw new \Exception('Payload terkorup atau kosong.');
             }
 
             $correlationId = $data['correlation_id'] ?? 'unknown';
 
-            Log::channel('contact')->info("Memulai pengiriman email kontak (SendContactEmailJob).", [
+            Log::channel('contact')->info('Memulai pengiriman email kontak (SendContactEmailJob).', [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
             ]);
 
             $recipient = config('contact.to_address', 'marketing@prolabios.com');
-            if (empty($recipient) || !filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-                throw new \Exception("Penerima email tidak valid atau belum dikonfigurasi.");
+            if (empty($recipient) || ! filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+                throw new \Exception('Penerima email tidak valid atau belum dikonfigurasi.');
             }
 
             Mail::to($recipient)->send(new ContactMail($data));
 
-            Log::channel('contact')->info("Email kontak berhasil dikirim secara asinkron.", [
+            Log::channel('contact')->info('Email kontak berhasil dikirim secara asinkron.', [
                 'correlation_id' => $correlationId,
                 'inquiry_id' => $this->inquiryId,
             ]);

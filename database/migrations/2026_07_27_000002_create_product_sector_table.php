@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('product_sector')) {
+        if (! Schema::hasTable('product_sector')) {
             Schema::create('product_sector', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('product_id');
@@ -28,13 +28,13 @@ return new class extends Migration
         if (Schema::hasTable('products')) {
             $products = DB::table('products')->get();
             foreach ($products as $p) {
-                if (!empty($p->sector)) {
+                if (! empty($p->sector)) {
                     $sectorIds = array_filter(array_map('trim', explode(',', $p->sector)));
                     foreach ($sectorIds as $secId) {
-                        if (!empty($secId)) {
+                        if (! empty($secId)) {
                             DB::table('product_sector')->updateOrInsert([
                                 'product_id' => $p->id,
-                                'sector_id'  => $secId,
+                                'sector_id' => $secId,
                             ], [
                                 'created_at' => now(),
                                 'updated_at' => now(),

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Add is_admin column to users table
-        if (!Schema::hasColumn('users', 'is_admin')) {
+        if (! Schema::hasColumn('users', 'is_admin')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->boolean('is_admin')->default(false)->after('password');
             });
@@ -23,14 +23,14 @@ return new class extends Migration
         DB::table('users')->update(['is_admin' => true]);
 
         // 2. Add softDeletes (deleted_at) to rfqs table
-        if (!Schema::hasColumn('rfqs', 'deleted_at')) {
+        if (! Schema::hasColumn('rfqs', 'deleted_at')) {
             Schema::table('rfqs', function (Blueprint $table) {
                 $table->softDeletes()->after('notes');
             });
         }
 
         // 3. Add softDeletes (deleted_at) to rfq_items table
-        if (!Schema::hasColumn('rfq_items', 'deleted_at')) {
+        if (! Schema::hasColumn('rfq_items', 'deleted_at')) {
             Schema::table('rfq_items', function (Blueprint $table) {
                 $table->softDeletes()->after('quantity');
             });

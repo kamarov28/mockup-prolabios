@@ -9,8 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SendRfqCustomerReceiptEmailJob implements ShouldQueue
 {
@@ -49,27 +49,29 @@ class SendRfqCustomerReceiptEmailJob implements ShouldQueue
         try {
             $rfq = Rfq::query()->with('items')->find($this->rfqId);
 
-            if (!$rfq) {
+            if (! $rfq) {
                 Log::warning("RFQ not found for customer receipt email. ID: {$this->rfqId}");
+
                 return;
             }
 
-            if (empty($rfq->email) || !filter_var($rfq->email, FILTER_VALIDATE_EMAIL)) {
-                Log::error("Invalid customer email address for RFQ receipt", [
+            if (empty($rfq->email) || ! filter_var($rfq->email, FILTER_VALIDATE_EMAIL)) {
+                Log::error('Invalid customer email address for RFQ receipt', [
                     'rfq_id' => $this->rfqId,
                     'email' => $rfq->email,
                 ]);
+
                 return;
             }
 
-            Log::info("Sending RFQ customer receipt email", [
+            Log::info('Sending RFQ customer receipt email', [
                 'rfq_number' => $rfq->rfq_number,
                 'customer_email' => $rfq->email,
             ]);
 
             Mail::to($rfq->email)->send(new RfqCustomerReceiptMail($rfq));
 
-            Log::info("RFQ customer receipt email sent successfully", [
+            Log::info('RFQ customer receipt email sent successfully', [
                 'rfq_number' => $rfq->rfq_number,
             ]);
         } catch (\Throwable $e) {

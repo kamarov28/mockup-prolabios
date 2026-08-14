@@ -50,6 +50,12 @@
           </a>
         </div>
 
+        <div class="sidebar-item {{ request()->is('admin/rfqs*') ? 'active' : '' }}">
+          <a href="{{ route('admin.rfqs.index') }}" class="sidebar-link">
+            <i class="bi bi-receipt"></i> Pengajuan RFQ
+          </a>
+        </div>
+
         <div class="sidebar-item {{ request()->routeIs('admin.home.edit') ? 'active' : '' }}">
           <a href="{{ route('admin.home.edit') }}" class="sidebar-link">
             <i class="bi bi-sliders"></i> Pengaturan Web

@@ -15,7 +15,7 @@ return new class extends Migration
             Schema::table('products', function (Blueprint $table) {
                 $table->index('category', 'products_category_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Index might already exist, skip gracefully
         }
 
@@ -23,7 +23,7 @@ return new class extends Migration
             Schema::table('products', function (Blueprint $table) {
                 $table->index('sub_category', 'products_sub_category_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Index might already exist, skip gracefully
         }
     }
@@ -37,7 +37,7 @@ return new class extends Migration
             Schema::table('products', function (Blueprint $table) {
                 $table->dropIndex('products_category_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Index might not exist, skip gracefully
         }
 
@@ -45,7 +45,7 @@ return new class extends Migration
             Schema::table('products', function (Blueprint $table) {
                 $table->dropIndex('products_sub_category_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Index might not exist, skip gracefully
         }
     }

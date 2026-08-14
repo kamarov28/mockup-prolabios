@@ -14,7 +14,7 @@ return new class extends Migration
         if (Schema::hasTable('posts')) {
             $posts = DB::table('posts')->get();
             foreach ($posts as $post) {
-                if (!empty($post->date)) {
+                if (! empty($post->date)) {
                     $timestamp = strtotime($post->date);
                     if ($timestamp !== false) {
                         $isoDate = date('Y-m-d', $timestamp);

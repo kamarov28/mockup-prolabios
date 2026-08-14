@@ -8,6 +8,7 @@ use App\Models\Rfq;
 use App\Models\RfqItem;
 use App\Services\DataService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class RfqController extends Controller
@@ -30,16 +31,16 @@ class RfqController extends Controller
         $total = 0;
         foreach ($cart as $key => $item) {
             $product = null;
-            if (!empty($item['id'])) {
-                $product = $this->dataService->getProductById((int)$item['id']);
+            if (! empty($item['id'])) {
+                $product = $this->dataService->getProductById((int) $item['id']);
             }
-            if (!$product && !empty($item['title'])) {
+            if (! $product && ! empty($item['title'])) {
                 $product = $this->dataService->getProductByTitle($item['title']);
             }
 
-            $price = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
+            $price = $product ? (float) ($product['price'] ?? 0) : (float) ($item['price'] ?? 0);
             $cart[$key]['price'] = $price;
-            $total += ($price * (int)$item['quantity']);
+            $total += ($price * (int) $item['quantity']);
         }
         session()->put('cart', $cart);
 
@@ -55,46 +56,46 @@ class RfqController extends Controller
         }
 
         $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|max:255',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'company_name' => 'required|string|max:255',
-            'phone_wa'     => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
-            'notes'        => 'nullable|string',
+            'phone_wa' => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
+            'notes' => 'nullable|string',
         ], [
             'phone_wa.regex' => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
         ]);
 
-        $rfqNumber = 'RFQ-' . date('Ym') . '-' . strtoupper(Str::random(6));
+        $rfqNumber = 'RFQ-'.date('Ym').'-'.strtoupper(Str::random(6));
 
-        $rfq = \Illuminate\Support\Facades\DB::transaction(function () use ($rfqNumber, $validated, $cart) {
+        $rfq = DB::transaction(function () use ($rfqNumber, $validated, $cart) {
             $rfq = Rfq::create([
-                'rfq_number'   => $rfqNumber,
-                'name'         => $validated['name'],
-                'email'        => $validated['email'],
+                'rfq_number' => $rfqNumber,
+                'name' => $validated['name'],
+                'email' => $validated['email'],
                 'company_name' => $validated['company_name'],
-                'phone_wa'     => $validated['phone_wa'],
-                'notes'        => $validated['notes'] ?? null,
+                'phone_wa' => $validated['phone_wa'],
+                'notes' => $validated['notes'] ?? null,
             ]);
 
             foreach ($cart as $item) {
                 $product = null;
-                if (!empty($item['id'])) {
-                    $product = $this->dataService->getProductById((int)$item['id']);
+                if (! empty($item['id'])) {
+                    $product = $this->dataService->getProductById((int) $item['id']);
                 }
-                if (!$product && !empty($item['title'])) {
+                if (! $product && ! empty($item['title'])) {
                     $product = $this->dataService->getProductByTitle($item['title']);
                 }
 
-                $origPrice = $product ? (float)($product['price'] ?? 0) : (float)($item['price'] ?? 0);
-                $qty = max(1, (int)($item['quantity'] ?? 1));
+                $origPrice = $product ? (float) ($product['price'] ?? 0) : (float) ($item['price'] ?? 0);
+                $qty = max(1, (int) ($item['quantity'] ?? 1));
 
                 RfqItem::create([
-                    'rfq_id'        => $rfq->id,
-                    'product_id'    => $product['id'] ?? ($item['id'] ?? null),
+                    'rfq_id' => $rfq->id,
+                    'product_id' => $product['id'] ?? ($item['id'] ?? null),
                     'product_title' => $product['title'] ?? $item['title'],
-                    'catalog_no'    => $product['catalog'] ?? ($item['catalog'] ?? null),
+                    'catalog_no' => $product['catalog'] ?? ($item['catalog'] ?? null),
                     'original_price' => $origPrice,
-                    'quantity'      => $qty,
+                    'quantity' => $qty,
                 ]);
             }
 
@@ -110,7 +111,7 @@ class RfqController extends Controller
             SendRfqSubmittedEmailJob::dispatch($rfq->id);
             SendRfqCustomerReceiptEmailJob::dispatch($rfq->id);
         } catch (\Throwable $e) {
-            \Log::warning('Failed to dispatch RFQ email jobs: ' . $e->getMessage());
+            \Log::warning('Failed to dispatch RFQ email jobs: '.$e->getMessage());
         }
 
         return redirect()->route('rfq.success', ['number' => $rfq->rfq_number]);

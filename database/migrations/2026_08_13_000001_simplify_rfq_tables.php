@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('rfqs', function (Blueprint $table) {
-            if (!Schema::hasColumn('rfqs', 'name')) {
+            if (! Schema::hasColumn('rfqs', 'name')) {
                 $table->string('name')->after('rfq_number')->default('');
             }
         });
@@ -21,7 +21,7 @@ return new class extends Migration
         // Copy pic_name to name for existing records if pic_name exists
         if (Schema::hasColumn('rfqs', 'pic_name')) {
             DB::table('rfqs')->where('name', '')->orWhereNull('name')->update([
-                'name' => DB::raw('pic_name')
+                'name' => DB::raw('pic_name'),
             ]);
         }
 
@@ -36,7 +36,7 @@ return new class extends Migration
                         $table->dropIndex($indexName);
                     });
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if not found
             }
         }
@@ -48,7 +48,7 @@ return new class extends Migration
                     $columnsToDrop[] = $col;
                 }
             }
-            if (!empty($columnsToDrop)) {
+            if (! empty($columnsToDrop)) {
                 $table->dropColumn($columnsToDrop);
             }
         });
@@ -60,7 +60,7 @@ return new class extends Migration
                     $columnsToDrop[] = $col;
                 }
             }
-            if (!empty($columnsToDrop)) {
+            if (! empty($columnsToDrop)) {
                 $table->dropColumn($columnsToDrop);
             }
         });

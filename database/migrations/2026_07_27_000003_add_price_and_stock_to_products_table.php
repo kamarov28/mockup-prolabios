@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            if (!Schema::hasColumn('products', 'price')) {
+            if (! Schema::hasColumn('products', 'price')) {
                 $table->decimal('price', 15, 2)->default(0)->after('image');
             }
-            if (!Schema::hasColumn('products', 'stock')) {
+            if (! Schema::hasColumn('products', 'stock')) {
                 $table->integer('stock')->default(0)->after('price');
             }
         });

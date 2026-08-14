@@ -1,15 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Services\DataService;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Admin\AdminPrincipalController;
+use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminRfqController;
 use App\Http\Controllers\Admin\AdminSectorController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\RfqController;
 use App\Http\Middleware\AdminAuthenticate;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 
 // ----------------------------------------------------
 // Public Frontend Routes
@@ -23,7 +26,7 @@ Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.
 Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi', [PageController::class, 'informasi']);
 Route::get('/kontak', [PageController::class, 'kontak']);
-Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'submit'])
+Route::post('/kontak', [ContactController::class, 'submit'])
     ->middleware('throttle:5,1')
     ->name('contact.submit');
 
@@ -37,22 +40,22 @@ Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.lo
 // ----------------------------------------------------
 // Cart & B2B RFQ Routes
 // ----------------------------------------------------
-Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/clear', [\App\Http\Controllers\CartController::class, 'clear'])->name('cart.clear');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
-Route::get('/rfq/checkout', [\App\Http\Controllers\RfqController::class, 'checkout'])->name('rfq.checkout');
-Route::post('/rfq/submit', [\App\Http\Controllers\RfqController::class, 'store'])->middleware('throttle:10,1')->name('rfq.store');
-Route::get('/rfq/success/{number}', [\App\Http\Controllers\RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
+Route::get('/rfq/checkout', [RfqController::class, 'checkout'])->name('rfq.checkout');
+Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:10,1')->name('rfq.store');
+Route::get('/rfq/success/{number}', [RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
 
 // ----------------------------------------------------
 // Protected Admin Panel Routes
 // ----------------------------------------------------
 Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
-    
+
     // Home Editor
     Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
     Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
@@ -69,7 +72,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/products/{id}/edit', [AdminProductController::class, 'productsEdit'])->name('admin.products.edit');
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
     Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
-    
+
     // Posts CRUD
     Route::get('/posts', [AdminPostController::class, 'postsIndex'])->name('admin.posts');
     Route::get('/posts/create', [AdminPostController::class, 'postsCreate'])->name('admin.posts.create');
@@ -77,7 +80,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/posts/{slug}/edit', [AdminPostController::class, 'postsEdit'])->name('admin.posts.edit');
     Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'postsUpdate'])->name('admin.posts.update');
     Route::delete('/posts/{slug}', [AdminPostController::class, 'postsDestroy'])->name('admin.posts.destroy');
-    
+
     // Sectors CRUD
     Route::get('/sectors', [AdminSectorController::class, 'sectorsIndex'])->name('admin.sectors');
     Route::get('/sectors/create', [AdminSectorController::class, 'sectorsCreate'])->name('admin.sectors.create');
@@ -87,10 +90,15 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
 
     // Principals CRUD
-    Route::get('/principals', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'index'])->name('admin.principals');
-    Route::get('/principals/create', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'create'])->name('admin.principals.create');
-    Route::post('/principals', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'store'])->name('admin.principals.store');
-    Route::get('/principals/{id}/edit', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
-    Route::match(['post', 'put'], '/principals/{id}', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'update'])->name('admin.principals.update');
-    Route::delete('/principals/{id}', [\App\Http\Controllers\Admin\AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
+    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
+    Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
+    Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
+    Route::get('/principals/{id}/edit', [AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
+    Route::match(['post', 'put'], '/principals/{id}', [AdminPrincipalController::class, 'update'])->name('admin.principals.update');
+    Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
+
+    // RFQ / Inquiries Management
+    Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
+    Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
+    Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');
 });

@@ -36,10 +36,10 @@ class SeedPrincipalsSeeder extends Seeder
                 'logo' => $p['logo'],
                 'status' => $p['status'],
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
 
-        $this->command->info("Seed 15 data lengkap Prinsipal / Mitra Laboratorium berhasil.");
+        $this->command->info('Seed 15 data lengkap Prinsipal / Mitra Laboratorium berhasil.');
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SendRfqSubmittedEmailJob implements ShouldQueue
 {
@@ -32,6 +32,7 @@ class SendRfqSubmittedEmailJob implements ShouldQueue
     public int $timeout = 120;
 
     protected int $rfqId;
+
     protected string $adminEmail;
 
     /**
@@ -51,12 +52,13 @@ class SendRfqSubmittedEmailJob implements ShouldQueue
         try {
             $rfq = Rfq::query()->with('items')->find($this->rfqId);
 
-            if (!$rfq) {
+            if (! $rfq) {
                 Log::warning("RFQ not found for email notification. ID: {$this->rfqId}");
+
                 return;
             }
 
-            Log::info("Sending RFQ submission email", [
+            Log::info('Sending RFQ submission email', [
                 'rfq_number' => $rfq->rfq_number,
                 'company_name' => $rfq->company_name,
                 'admin_email' => $this->adminEmail,
@@ -64,7 +66,7 @@ class SendRfqSubmittedEmailJob implements ShouldQueue
 
             Mail::to($this->adminEmail)->send(new RfqSubmittedMail($rfq));
 
-            Log::info("RFQ submission email sent successfully", [
+            Log::info('RFQ submission email sent successfully', [
                 'rfq_number' => $rfq->rfq_number,
             ]);
         } catch (\Throwable $e) {

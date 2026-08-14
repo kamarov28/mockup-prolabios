@@ -32,13 +32,13 @@ class SeedProductPricesSeeder extends Seeder
                 $price = $defaultPrices[$p->title];
             } else {
                 // Generate realistic price based on product ID
-                $price = ( ($p->id * 37) % 25 + 15 ) * 25000;
+                $price = (($p->id * 37) % 25 + 15) * 25000;
             }
 
             DB::table('products')->where('id', $p->id)->update([
                 'price' => $price,
                 'stock' => 999,
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
             $updated++;
         }

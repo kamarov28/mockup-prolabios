@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Services\DataService;
-use App\Traits\HandlesImageUploads;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
-
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Requests\UpdateSectorRequest;
+use App\Services\DataService;
+use App\Traits\HandlesImageUploads;
 
 class AdminSectorController extends Controller
 {
     use HandlesImageUploads;
+
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -25,6 +22,7 @@ class AdminSectorController extends Controller
     public function sectorsIndex()
     {
         $sectors = $this->dataService->getSectors();
+
         return view('admin.sectors.index', compact('sectors'));
     }
 
@@ -50,7 +48,7 @@ class AdminSectorController extends Controller
             'id' => $id,
             'name' => $request->input('name'),
             'description' => $description,
-            'image' => $image
+            'image' => $image,
         ];
 
         $this->dataService->addSector($sector);
@@ -61,16 +59,17 @@ class AdminSectorController extends Controller
     public function sectorsEdit(string $id)
     {
         $sector = $this->dataService->getSectorById($id);
-        if (!$sector) {
+        if (! $sector) {
             return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
         }
+
         return view('admin.sectors.form', compact('sector'));
     }
 
     public function sectorsUpdate(UpdateSectorRequest $request, string $id)
     {
         $sector = $this->dataService->getSectorById($id);
-        if (!$sector) {
+        if (! $sector) {
             return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
         }
 
@@ -84,7 +83,7 @@ class AdminSectorController extends Controller
             'id' => $id,
             'name' => $request->input('name'),
             'description' => $description,
-            'image' => $image
+            'image' => $image,
         ];
 
         $this->dataService->updateSector($id, $updatedSector);
@@ -95,6 +94,7 @@ class AdminSectorController extends Controller
     public function sectorsDestroy(string $id)
     {
         $this->dataService->deleteSector($id);
+
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil dihapus!');
     }
 }

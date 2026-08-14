@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Rfq;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
 {
     use HandlesImageUploads;
+
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -23,12 +23,14 @@ class AdminDashboardController extends Controller
     public function dashboard()
     {
         // Use COUNT/LIMIT queries instead of loading entire tables to memory
-        $productsCount  = DB::table('products')->count();
-        $postsCount     = DB::table('posts')->count();
-        $sectorsCount   = DB::table('sectors')->count();
+        $productsCount = DB::table('products')->count();
+        $postsCount = DB::table('posts')->count();
+        $sectorsCount = DB::table('sectors')->count();
+        $rfqsCount = DB::table('rfqs')->whereNull('deleted_at')->count();
 
-        $recentProducts = DB::table('products')->latest()->limit(5)->get()->map(fn($r) => (array) $r)->toArray();
-        $recentPosts    = DB::table('posts')->latest()->limit(5)->get()->map(fn($r) => (array) $r)->toArray();
+        $recentProducts = DB::table('products')->latest()->limit(5)->get()->map(fn ($r) => (array) $r)->toArray();
+        $recentPosts = DB::table('posts')->latest()->limit(5)->get()->map(fn ($r) => (array) $r)->toArray();
+        $recentRfqs = Rfq::with('items')->latest()->limit(5)->get();
 
         // Category distribution via GROUP BY (single query, no PHP counting)
         $categoryRows = DB::table('products')
@@ -53,14 +55,15 @@ class AdminDashboardController extends Controller
         $homeData = $this->dataService->getHomepageData();
 
         return view('admin.dashboard', compact(
-            'productsCount', 'postsCount', 'sectorsCount',
-            'recentProducts', 'recentPosts', 'categoryDist', 'homeData'
+            'productsCount', 'postsCount', 'sectorsCount', 'rfqsCount',
+            'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist', 'homeData'
         ));
     }
 
     public function homeEdit()
     {
         $homeData = $this->dataService->getHomepageData();
+
         return view('admin.home-editor', compact('homeData'));
     }
 
@@ -69,7 +72,7 @@ class AdminDashboardController extends Controller
         // Validate section input to prevent unexpected processing
         $section = $request->input('section', 'homepage');
         $allowedSections = ['homepage', 'banners', 'contacts', 'general'];
-        if (!in_array($section, $allowedSections, true)) {
+        if (! in_array($section, $allowedSections, true)) {
             return redirect()->back()->with('error', 'Section tidak valid.');
         }
 
@@ -80,44 +83,44 @@ class AdminDashboardController extends Controller
 
         if ($section === 'homepage') {
             $request->validate([
-                'hero_badge'        => $shortTextRule,
-                'hero_title'        => $shortTextRule,
-                'hero_subtitle'     => $textRule,
-                'hero_cta_text'     => $shortTextRule,
-                'hero_cta_link'     => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
-                'bento_title'       => $shortTextRule,
-                'bento_subtitle'    => $shortTextRule,
-                'sector_title'      => $shortTextRule,
-                'sector_subtitle'   => $shortTextRule,
-                'cta_banner_badge'  => $shortTextRule,
-                'cta_banner_title'  => $shortTextRule,
-                'cta_banner_sub'    => $textRule,
+                'hero_badge' => $shortTextRule,
+                'hero_title' => $shortTextRule,
+                'hero_subtitle' => $textRule,
+                'hero_cta_text' => $shortTextRule,
+                'hero_cta_link' => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'bento_title' => $shortTextRule,
+                'bento_subtitle' => $shortTextRule,
+                'sector_title' => $shortTextRule,
+                'sector_subtitle' => $shortTextRule,
+                'cta_banner_badge' => $shortTextRule,
+                'cta_banner_title' => $shortTextRule,
+                'cta_banner_sub' => $textRule,
                 'cta_banner_btn_text' => $shortTextRule,
-                'cta_banner_btn_url'  => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
-                'sector_link_*'     => 'nullable|string|max:500',
+                'cta_banner_btn_url' => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'sector_link_*' => 'nullable|string|max:500',
             ]);
         }
 
         if ($section === 'contacts') {
             $request->validate([
-                'contact_phone'            => 'nullable|string|max:50',
-                'contact_phone_marketing'  => 'nullable|string|max:50',
-                'contact_phone_finance'    => 'nullable|string|max:50',
+                'contact_phone' => 'nullable|string|max:50',
+                'contact_phone_marketing' => 'nullable|string|max:50',
+                'contact_phone_finance' => 'nullable|string|max:50',
                 'contact_phone_technician' => 'nullable|string|max:50',
-                'contact_email'            => 'nullable|email|max:255',
-                'contact_address'          => 'nullable|string|max:1000',
-                'catalog_pdf_url'          => 'nullable|url|max:2000',
+                'contact_email' => 'nullable|email|max:255',
+                'contact_address' => 'nullable|string|max:1000',
+                'catalog_pdf_url' => 'nullable|url|max:2000',
             ]);
         }
 
         if ($section === 'general') {
             $request->validate([
-                'company_name'       => 'nullable|string|max:255',
-                'operational_hours'  => 'nullable|string|max:255',
-                'social_instagram'   => 'nullable|url|max:500',
-                'social_facebook'    => 'nullable|url|max:500',
-                'social_linkedin'    => 'nullable|url|max:500',
-                'social_twitter'     => 'nullable|url|max:500',
+                'company_name' => 'nullable|string|max:255',
+                'operational_hours' => 'nullable|string|max:255',
+                'social_instagram' => 'nullable|url|max:500',
+                'social_facebook' => 'nullable|url|max:500',
+                'social_linkedin' => 'nullable|url|max:500',
+                'social_twitter' => 'nullable|url|max:500',
             ]);
         }
 
@@ -144,9 +147,9 @@ class AdminDashboardController extends Controller
             for ($i = 0; $i < 4; $i++) {
                 $existingBento = $homeData['bento_cards'][$i] ?? [];
                 $homeData['bento_cards'][$i] = [
-                    'icon'  => $request->input("bento_card_icon_$i", $existingBento['icon'] ?? 'bi-patch-check'),
+                    'icon' => $request->input("bento_card_icon_$i", $existingBento['icon'] ?? 'bi-patch-check'),
                     'title' => $request->input("bento_card_title_$i", $existingBento['title'] ?? ''),
-                    'desc'  => $request->input("bento_card_desc_$i", $existingBento['desc'] ?? ''),
+                    'desc' => $request->input("bento_card_desc_$i", $existingBento['desc'] ?? ''),
                 ];
             }
 
@@ -157,19 +160,19 @@ class AdminDashboardController extends Controller
             foreach ($sectorKeys as $sKey) {
                 $existingSector = $homeData['sector_panels'][$sKey] ?? [];
                 $homeData['sector_panels'][$sKey] = [
-                    'tag'   => $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''),
+                    'tag' => $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''),
                     'title' => $request->input("sector_title_$sKey", $existingSector['title'] ?? ''),
-                    'desc'  => $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''),
-                    'link'  => $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
+                    'desc' => $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''),
+                    'link' => $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
                 ];
             }
 
             // Bottom CTA Banner
-            $homeData['cta_banner_badge']    = $request->input('cta_banner_badge', $homeData['cta_banner_badge'] ?? '');
-            $homeData['cta_banner_title']    = $request->input('cta_banner_title', $homeData['cta_banner_title'] ?? '');
-            $homeData['cta_banner_sub']      = $request->input('cta_banner_sub', $homeData['cta_banner_sub'] ?? '');
+            $homeData['cta_banner_badge'] = $request->input('cta_banner_badge', $homeData['cta_banner_badge'] ?? '');
+            $homeData['cta_banner_title'] = $request->input('cta_banner_title', $homeData['cta_banner_title'] ?? '');
+            $homeData['cta_banner_sub'] = $request->input('cta_banner_sub', $homeData['cta_banner_sub'] ?? '');
             $homeData['cta_banner_btn_text'] = $request->input('cta_banner_btn_text', $homeData['cta_banner_btn_text'] ?? '');
-            $homeData['cta_banner_btn_url']  = $request->input('cta_banner_btn_url', $homeData['cta_banner_btn_url'] ?? '');
+            $homeData['cta_banner_btn_url'] = $request->input('cta_banner_btn_url', $homeData['cta_banner_btn_url'] ?? '');
         }
 
         if ($section === 'banners') {
@@ -218,4 +221,3 @@ class AdminDashboardController extends Controller
         return view('admin.guide');
     }
 }
-

@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -18,13 +19,13 @@ return new class extends Migration
             $adminPassword = env('ADMIN_PASSWORD');
 
             if (empty($adminPassword)) {
-                $adminPassword = \Illuminate\Support\Str::random(16);
+                $adminPassword = Str::random(16);
                 if (app()->runningInConsole()) {
                     echo "\n[SECURITY WARNING] ADMIN_PASSWORD environment variable not set. Generated initial admin password: {$adminPassword}\n";
                 }
             }
 
-            if (!User::where('email', $adminEmail)->orWhere('name', $adminUsername)->exists()) {
+            if (! User::where('email', $adminEmail)->orWhere('name', $adminUsername)->exists()) {
                 User::create([
                     'name' => $adminUsername,
                     'email' => $adminEmail,

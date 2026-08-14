@@ -22,6 +22,17 @@ class RfqItem extends Model
         'quantity',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'original_price' => 'float',
+            'quantity' => 'integer',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     public function rfq(): BelongsTo
     {
         return $this->belongsTo(Rfq::class, 'rfq_id');
@@ -32,4 +43,3 @@ class RfqItem extends Model
         return $this->belongsTo(Product::class, 'product_id');
     }
 }
-

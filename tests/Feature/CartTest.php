@@ -17,15 +17,15 @@ class CartTest extends TestCase
         parent::setUp();
 
         $this->product = Product::create([
-            'title'       => 'Test Agar Media',
-            'catalog'     => 'AG-101',
+            'title' => 'Test Agar Media',
+            'catalog' => 'AG-101',
             'description' => 'Quality testing agar media.',
-            'category'    => 'Culture Media',
-            'sub_category'=> 'Dehydrated Culture Media',
-            'sector'      => 'Microbiology',
-            'price'       => 150000,
-            'stock'       => 5,
-            'image'       => 'https://example.com/image.jpg',
+            'category' => 'Culture Media',
+            'sub_category' => 'Dehydrated Culture Media',
+            'sector' => 'Microbiology',
+            'price' => 150000,
+            'stock' => 5,
+            'image' => 'https://example.com/image.jpg',
         ]);
     }
 
@@ -34,64 +34,69 @@ class CartTest extends TestCase
         $id = $this->product->id;
 
         $response = $this->post(route('cart.add'), [
-            'id'       => $id,
-            'title'    => 'Test Agar Media',
+            'id' => $id,
+            'title' => 'Test Agar Media',
             'quantity' => 2,
         ]);
 
         $response->assertSessionHasNoErrors();
-        $response->assertSessionHas('cart.' . $id . '.quantity', 2);
-        $response->assertSessionHas('cart.' . $id . '.price', 150000.0);
+        $response->assertSessionHas('cart.'.$id.'.quantity', 2);
+        $response->assertSessionHas('cart.'.$id.'.price', 150000.0);
     }
 
-    public function test_cannot_over_order_beyond_available_stock(): void
+    public function test_cannot_over_order_beyond_available_stock_is_converted_to_indent(): void
     {
         $id = $this->product->id;
 
+        // Stock is 5, but ordering 10 should succeed as Indent/Pre-Order
         $response = $this->postJson(route('cart.add'), [
-            'id'       => $id,
-            'title'    => 'Test Agar Media',
+            'id' => $id,
+            'title' => 'Test Agar Media',
             'quantity' => 10,
         ]);
 
-        $response->assertStatus(422)
+        $response->assertStatus(200)
             ->assertJson([
-                'success' => false,
+                'success' => true,
+                'isIndent' => true,
+                'cartCount' => 10,
             ]);
+
+        $response->assertSessionHas('cart.'.$id.'.quantity', 10);
     }
 
-    public function test_cart_update_clamps_quantity_to_stock(): void
+    public function test_cart_update_supports_indent_quantity(): void
     {
         $id = $this->product->id;
 
         // Add 2 items first with session
         $this->withSession([
             'cart' => [
-                (string)$id => [
-                    'id'       => $id,
-                    'title'    => 'Test Agar Media',
-                    'catalog'  => 'AG-101',
-                    'image'    => 'https://example.com/image.jpg',
-                    'price'    => 150000,
-                    'stock'    => 5,
+                (string) $id => [
+                    'id' => $id,
+                    'title' => 'Test Agar Media',
+                    'catalog' => 'AG-101',
+                    'image' => 'https://example.com/image.jpg',
+                    'price' => 150000,
+                    'stock' => 5,
                     'quantity' => 2,
-                ]
-            ]
+                ],
+            ],
         ]);
 
-        // Attempt to update quantity to 99
+        // Attempt to update quantity to 99 (indent)
         $response = $this->postJson(route('cart.update'), [
-            'id'       => $id,
+            'id' => $id,
             'quantity' => 99,
         ]);
 
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'cartCount' => 5, // Clamped to max stock (5)
+                'cartCount' => 99,
             ]);
 
-        $response->assertSessionHas('cart.' . $id . '.quantity', 5);
+        $response->assertSessionHas('cart.'.$id.'.quantity', 99);
     }
 
     public function test_can_remove_item_from_cart(): void
@@ -100,16 +105,16 @@ class CartTest extends TestCase
 
         $this->withSession([
             'cart' => [
-                (string)$id => [
-                    'id'       => $id,
-                    'title'    => 'Test Agar Media',
-                    'catalog'  => 'AG-101',
-                    'image'    => 'https://example.com/image.jpg',
-                    'price'    => 150000,
-                    'stock'    => 5,
+                (string) $id => [
+                    'id' => $id,
+                    'title' => 'Test Agar Media',
+                    'catalog' => 'AG-101',
+                    'image' => 'https://example.com/image.jpg',
+                    'price' => 150000,
+                    'stock' => 5,
                     'quantity' => 2,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $response = $this->postJson(route('cart.remove'), [
@@ -122,7 +127,6 @@ class CartTest extends TestCase
                 'cartCount' => 0,
             ]);
 
-        $response->assertSessionMissing('cart.' . $id);
+        $response->assertSessionMissing('cart.'.$id);
     }
 }
-

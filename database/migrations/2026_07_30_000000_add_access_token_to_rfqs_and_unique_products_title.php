@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
@@ -20,9 +22,9 @@ return new class extends Migration
         });
 
         // Populate existing RFQ records with a generated token
-        $rfqs = \Illuminate\Support\Facades\DB::table('rfqs')->whereNull('access_token')->get();
+        $rfqs = DB::table('rfqs')->whereNull('access_token')->get();
         foreach ($rfqs as $rfq) {
-            \Illuminate\Support\Facades\DB::table('rfqs')
+            DB::table('rfqs')
                 ->where('id', $rfq->id)
                 ->update(['access_token' => Str::random(48)]);
         }
@@ -37,12 +39,12 @@ return new class extends Migration
                 if ($t->hasIndex('products_title_index')) {
                     $table->dropIndex('products_title_index');
                 }
-                if (!$t->hasIndex('products_title_unique')) {
+                if (! $t->hasIndex('products_title_unique')) {
                     $table->unique('title', 'products_title_unique');
                 }
             });
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::warning('products title unique index: ' . $e->getMessage());
+        } catch (Exception $e) {
+            Log::warning('products title unique index: '.$e->getMessage());
         }
     }
 
@@ -61,7 +63,7 @@ return new class extends Migration
                 $table->dropUnique('products_title_unique');
                 $table->index('title', 'products_title_index');
             });
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Silently skip
         }
     }

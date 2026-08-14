@@ -201,17 +201,17 @@
         <div style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 16px !important; flex-wrap: wrap !important;">
           <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: #ffffff;">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: #ff4950; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
-            <span>Keranjang RFQ</span>
+            <span>Keranjang Pengajuan</span>
           </div>
           <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; font-weight: bold;">&gt;</span>
           <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: rgba(255, 255, 255, 0.4);">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
-            <span>Kredensial Korporasi</span>
+            <span>Data Kontak &amp; Instansi</span>
           </div>
           <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; font-weight: bold;">&gt;</span>
           <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: rgba(255, 255, 255, 0.4);">
             <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">3</span>
-            <span>Surat Penawaran Resmi</span>
+            <span>Konfirmasi Selesai</span>
           </div>
         </div>
 
@@ -230,8 +230,8 @@
 
     <!-- Header Title -->
     <div class="mb-4">
-      <h1 class="h3 fw-bold text-white mb-1">Daftar Item Pengajuan RFQ</h1>
-      <p class="text-secondary small mb-0">Kelola item produk &amp; kuantitas pesanan sebelum menerbitkan Surat Penawaran Harga Resmi B2B.</p>
+      <h1 class="h3 fw-bold text-white mb-1">Daftar Item Pengajuan Penawaran</h1>
+      <p class="text-secondary small mb-0">Periksa daftar item dan kuantitas produk sebelum melanjutkan ke form pengajuan.</p>
     </div>
 
     <!-- Alerts -->
@@ -343,7 +343,7 @@
         <div class="col-lg-4">
           <div class="cart-sidebar-panel sticky-top" style="top: 130px; z-index: 100;">
             <h3 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2">
-              <i class="bi bi-receipt text-danger"></i> Ringkasan RFQ
+              <i class="bi bi-receipt text-danger"></i> Ringkasan Pengajuan
             </h3>
 
             <div class="d-flex justify-content-between mb-2 text-secondary small">
@@ -373,14 +373,14 @@
               <div class="d-flex gap-2">
                 <i class="bi bi-shield-check text-success fs-5 flex-shrink-0"></i>
                 <div>
-                  <strong class="text-white d-block mb-1">Ketentuan RFQ Resmi B2B</strong>
-                  Diskon volume kuantitas korporasi &amp; estimasi ongkir akan divalidasi resmi oleh Sales Engineer Prolabios via Surat Penawaran Resmi.
+                  <strong class="text-white d-block mb-1">Informasi Penawaran</strong>
+                  Harga final, diskon khusus kuantitas, dan estimasi waktu pengadaan akan diinformasikan langsung oleh Tim Sales via Email/WhatsApp.
                 </div>
               </div>
             </div>
 
             <a href="{{ route('rfq.checkout') }}" class="btn btn-danger w-100 py-3 fw-semibold text-uppercase tracking-wider rounded-3 shadow">
-              Lanjut Isi Kredensial Korporasi <i class="bi bi-arrow-right ms-2"></i>
+              Lanjut ke Form Pengajuan <i class="bi bi-arrow-right ms-2"></i>
             </a>
 
             <a href="{{ url('/produk') }}" class="btn btn-outline-light w-100 mt-2 py-2 small border-opacity-20">
@@ -394,7 +394,7 @@
       <div class="text-center py-5 rounded-3" style="border: 1px dashed var(--color-border); background: rgba(255,255,255,0.01);">
         <i class="bi bi-cart-x text-secondary" style="font-size: 3.5rem;"></i>
         <h3 class="h5 text-white mt-3 mb-2">Keranjang Belanja Anda Masih Kosong</h3>
-        <p class="text-secondary small mb-4">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat Pengajuan Penawaran (RFQ).</p>
+        <p class="text-secondary small mb-4">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
         <a href="{{ url('/produk') }}" class="btn btn-danger px-4 py-2 fw-semibold">
           <i class="bi bi-grid-3x3-gap me-2"></i> Jelajahi Katalog Produk
         </a>

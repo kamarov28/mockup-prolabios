@@ -22,9 +22,17 @@ class Rfq extends Model
         'notes',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(RfqItem::class, 'rfq_id');
     }
 }
-

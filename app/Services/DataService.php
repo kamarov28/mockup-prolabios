@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -19,7 +19,7 @@ class DataService
     protected function clearProductsCache(): void
     {
         Cache::forget('categories_structure');
-    Cache::forget('products_list_global');
+        Cache::forget('products_list_global');
     }
 
     /**
@@ -33,7 +33,7 @@ class DataService
                 'subs' => [
                     'dehydrated-culture-media' => 'Dehydrated Culture Media',
                     'ready-to-use-culture-media' => 'Ready To Use Culture Media',
-                ]
+                ],
             ],
             'microbiology' => [
                 'name' => 'Microbiology',
@@ -53,8 +53,8 @@ class DataService
                     'biological-indicators' => 'Biological Indicators',
                     'dehydrated-culture-media' => 'Dehydrated Culture Media',
                     'immunology' => 'Immunology',
-                    'endotoxin' => 'Endotoxin'
-                ]
+                    'endotoxin' => 'Endotoxin',
+                ],
             ],
             'reference-standards' => [
                 'name' => 'Reference Standards',
@@ -63,8 +63,8 @@ class DataService
                     'green-standards' => 'Green Standards',
                     'environmental' => 'Environmental Standards',
                     'food-beverages' => 'Food and Beverages Standards',
-                    'agro-chemical' => 'Agro Chemical Standards'
-                ]
+                    'agro-chemical' => 'Agro Chemical Standards',
+                ],
             ],
             'device' => [
                 'name' => 'Device',
@@ -72,8 +72,8 @@ class DataService
                     'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
                     'microbiological-instruments' => 'Microbiological Instruments',
                     'liquid-handling' => 'Liquid Handling',
-                    'thermometer' => 'Thermometer'
-                ]
+                    'thermometer' => 'Thermometer',
+                ],
             ],
             'instruments' => [
                 'name' => 'Instruments',
@@ -82,9 +82,9 @@ class DataService
                     'agar-filler' => 'Agar Filler',
                     'agar-preparator' => 'Agar Preparator',
                     'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
-                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster'
-                ]
-            ]
+                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster',
+                ],
+            ],
         ];
 
         return Cache::remember('categories_structure', 600, function () use ($fallback) {
@@ -102,21 +102,21 @@ class DataService
                 $structure = [];
                 foreach ($dbItems as $item) {
                     $catSlug = Str::slug((string) $item->category);
-                    $subSlug = !empty($item->sub_category) ? Str::slug((string) $item->sub_category) : null;
+                    $subSlug = ! empty($item->sub_category) ? Str::slug((string) $item->sub_category) : null;
 
                     if (empty($catSlug)) {
                         continue;
                     }
 
-                    if (!isset($structure[$catSlug])) {
+                    if (! isset($structure[$catSlug])) {
                         $catName = $fallback[$catSlug]['name'] ?? ucwords(str_replace('-', ' ', $catSlug));
                         $structure[$catSlug] = [
                             'name' => $catName,
-                            'subs' => []
+                            'subs' => [],
                         ];
                     }
 
-                    if (!empty($subSlug)) {
+                    if (! empty($subSlug)) {
                         $subName = $fallback[$catSlug]['subs'][$subSlug] ?? ucwords(str_replace('-', ' ', $subSlug));
                         $structure[$catSlug]['subs'][$subSlug] = $subName;
                     }
@@ -124,7 +124,8 @@ class DataService
 
                 return empty($structure) ? $fallback : $structure;
             } catch (\Exception $e) {
-                Log::warning('Gagal memuat kategori dinamis, menggunakan fallback: ' . $e->getMessage());
+                Log::warning('Gagal memuat kategori dinamis, menggunakan fallback: '.$e->getMessage());
+
                 return $fallback;
             }
         });
@@ -133,48 +134,48 @@ class DataService
     // ----------------------------------------------------
     // Products Service  (MySQL)
     // ----------------------------------------------------
-    public function getProducts(?array $filters = [], int $limit = 0): \Illuminate\Support\Collection
+    public function getProducts(?array $filters = [], int $limit = 0): Collection
     {
-        $cacheKey = 'products_list_' . md5(json_encode($filters) . '_' . $limit);
-        
+        $cacheKey = 'products_list_'.md5(json_encode($filters).'_'.$limit);
+
         return Cache::remember($cacheKey, 300, function () use ($filters, $limit) {
             $query = Product::query()->orderBy('id');
-            
-            if (!empty($filters['category'])) {
+
+            if (! empty($filters['category'])) {
                 $cat = $filters['category'];
                 $catSlug = Str::slug($cat);
                 if ($catSlug === 'culture-media') {
-                    $query->where(function($q) use ($cat) {
+                    $query->where(function ($q) use ($cat) {
                         $q->where('category', $cat)
-                          ->orWhere('category', 'LIKE', '%Culture Media%')
-                          ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                            ->orWhere('category', 'LIKE', '%Culture Media%')
+                            ->orWhere('sub_category', 'LIKE', '%Culture Media%');
                     });
                 } else {
                     $query->where('category', $cat);
                 }
             }
-            
-            if (!empty($filters['sub_category'])) {
+
+            if (! empty($filters['sub_category'])) {
                 $subCat = $filters['sub_category'];
-                $query->where(function($q) use ($subCat) {
+                $query->where(function ($q) use ($subCat) {
                     $q->where('sub_category', $subCat)
-                      ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+                        ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
                 });
             }
-            
-            if (!empty($filters['search'])) {
+
+            if (! empty($filters['search'])) {
                 $search = $filters['search'];
-                $query->where(function($q) use ($search) {
+                $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhere('catalog', 'like', "%{$search}%");
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('catalog', 'like', "%{$search}%");
                 });
             }
-            
+
             if ($limit > 0) {
                 $query->limit($limit);
             }
-            
+
             return $query->get();
         });
     }
@@ -182,8 +183,8 @@ class DataService
     public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
     {
         $page = (int) request()->input('page', 1);
-        $cacheKey = 'products_paginated_' . md5(json_encode($filters) . '_' . $perPage . '_p' . $page);
-        
+        $cacheKey = 'products_paginated_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
+
         $cached = Cache::get($cacheKey);
         if ($cached instanceof \__PHP_Incomplete_Class) {
             Cache::forget($cacheKey);
@@ -196,34 +197,34 @@ class DataService
 
         $query = Product::query()->orderBy('id');
 
-        if (!empty($filters['category'])) {
+        if (! empty($filters['category'])) {
             $cat = $filters['category'];
             $catSlug = Str::slug($cat);
             if ($catSlug === 'culture-media') {
-                $query->where(function($q) use ($cat) {
+                $query->where(function ($q) use ($cat) {
                     $q->where('category', $cat)
-                      ->orWhere('category', 'LIKE', '%Culture Media%')
-                      ->orWhere('sub_category', 'LIKE', '%Culture Media%');
+                        ->orWhere('category', 'LIKE', '%Culture Media%')
+                        ->orWhere('sub_category', 'LIKE', '%Culture Media%');
                 });
             } else {
                 $query->where('category', $cat);
             }
         }
 
-        if (!empty($filters['sub_category'])) {
+        if (! empty($filters['sub_category'])) {
             $subCat = $filters['sub_category'];
-            $query->where(function($q) use ($subCat) {
+            $query->where(function ($q) use ($subCat) {
                 $q->where('sub_category', $subCat)
-                  ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+                    ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
             });
         }
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $search = $filters['search'];
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('catalog', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('catalog', 'like', "%{$search}%");
             });
         }
 
@@ -234,16 +235,18 @@ class DataService
         return $result;
     }
 
-    public function getProductByTitle(string $title): ?\App\Models\Product
+    public function getProductByTitle(string $title): ?Product
     {
-        return Cache::remember('product_by_title_' . md5($title), 600, function () use ($title) {
+        return Cache::remember('product_by_title_'.md5($title), 600, function () use ($title) {
             return Product::where('title', $title)->first();
         });
     }
 
-    public function getProductById(int $id): ?\App\Models\Product
+    public function getProductById(int $id): ?Product
     {
-        return \App\Models\Product::find($id);
+        return Cache::remember('product_by_id_'.$id, 600, function () use ($id) {
+            return Product::find($id);
+        });
     }
 
     /**
@@ -259,68 +262,70 @@ class DataService
             return array_values(array_filter($raw));
         }
         $decoded = json_decode((string) $raw, true);
+
         return is_array($decoded) ? array_values(array_filter($decoded)) : [];
     }
-
-
 
     public function addProduct(array $product): bool
     {
         DB::table('products')->insert([
-            'catalog'      => $product['catalog']      ?? null,
-            'title'        => $product['title'],
-            'description'  => self::sanitizeHtml($product['description'] ?? null),
-            'category'     => $product['category'],
+            'catalog' => $product['catalog'] ?? null,
+            'title' => $product['title'],
+            'description' => self::sanitizeHtml($product['description'] ?? null),
+            'category' => $product['category'],
             'sub_category' => $product['sub_category'] ?? null,
-            'sector'       => $product['sector']       ?? null,
-            'image'        => $product['image']        ?? null,
-            'gallery_images' => !empty($product['gallery_images']) ? json_encode(array_values($product['gallery_images'])) : null,
-            'price'        => $product['price']        ?? 0,
-            'stock'        => $product['stock']        ?? 0,
-            'created_at'   => now(),
-            'updated_at'   => now(),
+            'sector' => $product['sector'] ?? null,
+            'image' => $product['image'] ?? null,
+            'gallery_images' => ! empty($product['gallery_images']) ? json_encode(array_values($product['gallery_images'])) : null,
+            'price' => $product['price'] ?? 0,
+            'stock' => $product['stock'] ?? 0,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
         $this->clearProductsCache();
+
         return true;
     }
 
     public function updateProductById(int $id, array $updatedProduct): bool
     {
         DB::table('products')->where('id', $id)->update([
-            'catalog'      => $updatedProduct['catalog']      ?? null,
-            'title'        => $updatedProduct['title'],
-            'description'  => self::sanitizeHtml($updatedProduct['description'] ?? null),
-            'category'     => $updatedProduct['category'],
+            'catalog' => $updatedProduct['catalog'] ?? null,
+            'title' => $updatedProduct['title'],
+            'description' => self::sanitizeHtml($updatedProduct['description'] ?? null),
+            'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
-            'sector'       => $updatedProduct['sector']       ?? null,
-            'image'        => $updatedProduct['image']        ?? null,
-            'gallery_images' => !empty($updatedProduct['gallery_images']) ? json_encode(array_values($updatedProduct['gallery_images'])) : null,
-            'price'        => $updatedProduct['price']        ?? 0,
-            'stock'        => $updatedProduct['stock']        ?? 0,
-            'updated_at'   => now(),
+            'sector' => $updatedProduct['sector'] ?? null,
+            'image' => $updatedProduct['image'] ?? null,
+            'gallery_images' => ! empty($updatedProduct['gallery_images']) ? json_encode(array_values($updatedProduct['gallery_images'])) : null,
+            'price' => $updatedProduct['price'] ?? 0,
+            'stock' => $updatedProduct['stock'] ?? 0,
+            'updated_at' => now(),
         ]);
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
         $this->clearProductsCache();
+
         return true;
     }
 
     public function updateProduct(string $oldTitle, array $updatedProduct): bool
     {
         DB::table('products')->where('title', $oldTitle)->update([
-            'catalog'      => $updatedProduct['catalog']      ?? null,
-            'title'        => $updatedProduct['title'],
-            'description'  => self::sanitizeHtml($updatedProduct['description'] ?? null),
-            'category'     => $updatedProduct['category'],
+            'catalog' => $updatedProduct['catalog'] ?? null,
+            'title' => $updatedProduct['title'],
+            'description' => self::sanitizeHtml($updatedProduct['description'] ?? null),
+            'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
-            'sector'       => $updatedProduct['sector']       ?? null,
-            'image'        => $updatedProduct['image']        ?? null,
-            'price'        => $updatedProduct['price']        ?? 0,
-            'stock'        => $updatedProduct['stock']        ?? 0,
-            'updated_at'   => now(),
+            'sector' => $updatedProduct['sector'] ?? null,
+            'image' => $updatedProduct['image'] ?? null,
+            'price' => $updatedProduct['price'] ?? 0,
+            'stock' => $updatedProduct['stock'] ?? 0,
+            'updated_at' => now(),
         ]);
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
         $this->clearProductsCache();
+
         return true;
     }
 
@@ -331,11 +336,11 @@ class DataService
             : DB::table('products')->where('title', $productIdOrTitle);
 
         $affected = (clone $query)->where('stock', '>=', $quantity)->decrement('stock', $quantity);
-        
+
         if ($affected > 0) {
             $this->clearProductsCache();
         }
-        
+
         return $affected > 0;
     }
 
@@ -343,7 +348,8 @@ class DataService
     {
         DB::table('products')->where('id', $id)->delete();
         $this->clearProductsCache();
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
+
         return true;
     }
 
@@ -351,7 +357,8 @@ class DataService
     {
         DB::table('products')->where('title', $title)->delete();
         $this->clearProductsCache();
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
+
         return true;
     }
 
@@ -372,17 +379,17 @@ class DataService
                 continue;
             }
             $rows[] = [
-                'catalog'      => $p['catalog']      ?? null,
-                'title'        => $p['title'],
-                'description'  => self::sanitizeHtml($p['description'] ?? null),
-                'category'     => $p['category'],
+                'catalog' => $p['catalog'] ?? null,
+                'title' => $p['title'],
+                'description' => self::sanitizeHtml($p['description'] ?? null),
+                'category' => $p['category'],
                 'sub_category' => $p['sub_category'] ?? null,
-                'sector'       => $p['sector']       ?? null,
-                'image'        => $p['image']        ?? null,
-                'price'        => $p['price']        ?? 0,
-                'stock'        => $p['stock']        ?? 0,
-                'created_at'   => $now,
-                'updated_at'   => $now,
+                'sector' => $p['sector'] ?? null,
+                'image' => $p['image'] ?? null,
+                'price' => $p['price'] ?? 0,
+                'stock' => $p['stock'] ?? 0,
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 
@@ -400,8 +407,9 @@ class DataService
             );
         }
 
-        \App\Models\Product::clearCategoriesCache();
+        Product::clearCategoriesCache();
         $this->clearProductsCache();
+
         return true;
     }
 
@@ -412,10 +420,10 @@ class DataService
     {
         $query = DB::table('posts')->orderByDesc('id');
 
-        if (!empty($filters['category'])) {
+        if (! empty($filters['category'])) {
             $cat = strtolower($filters['category']);
             if ($cat === 'info') {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
                 });
             } else {
@@ -428,7 +436,7 @@ class DataService
         }
 
         return $query->get()
-            ->map(fn($r) => (array) $r)
+            ->map(fn ($r) => (array) $r)
             ->toArray();
     }
 
@@ -436,10 +444,10 @@ class DataService
     {
         $query = DB::table('posts')->orderByDesc('id');
 
-        if (!empty($filters['category'])) {
+        if (! empty($filters['category'])) {
             $cat = strtolower($filters['category']);
             if ($cat === 'info') {
-                $query->where(function($q) {
+                $query->where(function ($q) {
                     $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
                 });
             } else {
@@ -448,50 +456,51 @@ class DataService
         }
 
         return $query->paginate($perPage)
-            ->through(fn($r) => (array) $r)
+            ->through(fn ($r) => (array) $r)
             ->withQueryString();
     }
 
     public function getPostBySlug(string $slug): ?array
     {
         $row = DB::table('posts')->where('slug', $slug)->first();
+
         return $row ? (array) $row : null;
     }
-
-
 
     public function addPost(array $post): bool
     {
         DB::table('posts')->insert([
-            'slug'        => $post['slug'],
-            'title'       => $post['title'],
-            'date'        => $post['date'],
-            'category'    => $post['category'],
-            'status'      => $post['status']      ?? 'online',
+            'slug' => $post['slug'],
+            'title' => $post['title'],
+            'date' => $post['date'],
+            'category' => $post['category'],
+            'status' => $post['status'] ?? 'online',
             'is_featured' => $post['is_featured'] ?? false,
-            'image'       => $post['image']       ?? null,
-            'content'     => self::sanitizeHtml($post['content'] ?? null),
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'image' => $post['image'] ?? null,
+            'content' => self::sanitizeHtml($post['content'] ?? null),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         Cache::forget('blog_category_counts');
+
         return true;
     }
 
     public function updatePost(string $slug, array $updatedPost): bool
     {
         DB::table('posts')->where('slug', $slug)->update([
-            'slug'        => $updatedPost['slug'],
-            'title'       => $updatedPost['title'],
-            'date'        => $updatedPost['date'],
-            'category'    => $updatedPost['category'],
-            'status'      => $updatedPost['status']      ?? 'online',
+            'slug' => $updatedPost['slug'],
+            'title' => $updatedPost['title'],
+            'date' => $updatedPost['date'],
+            'category' => $updatedPost['category'],
+            'status' => $updatedPost['status'] ?? 'online',
             'is_featured' => $updatedPost['is_featured'] ?? false,
-            'image'       => $updatedPost['image']       ?? null,
-            'content'     => self::sanitizeHtml($updatedPost['content'] ?? null),
-            'updated_at'  => now(),
+            'image' => $updatedPost['image'] ?? null,
+            'content' => self::sanitizeHtml($updatedPost['content'] ?? null),
+            'updated_at' => now(),
         ]);
         Cache::forget('blog_category_counts');
+
         return true;
     }
 
@@ -499,6 +508,7 @@ class DataService
     {
         DB::table('posts')->where('slug', $slug)->delete();
         Cache::forget('blog_category_counts');
+
         return true;
     }
 
@@ -516,6 +526,7 @@ class DataService
                     $row['description'] = is_string($row['description'])
                         ? (json_decode($row['description'], true) ?? [])
                         : ($row['description'] ?? []);
+
                     return $row;
                 })
                 ->toArray();
@@ -525,39 +536,42 @@ class DataService
     public function getSectorById(string $id): ?array
     {
         $row = DB::table('sectors')->where('id', $id)->first();
-        if (!$row) return null;
+        if (! $row) {
+            return null;
+        }
         $row = (array) $row;
         $row['description'] = is_string($row['description'])
             ? (json_decode($row['description'], true) ?? [])
             : ($row['description'] ?? []);
+
         return $row;
     }
-
-
 
     public function addSector(array $sector): bool
     {
         DB::table('sectors')->insert([
-            'id'          => $sector['id'],
-            'name'        => $sector['name'],
+            'id' => $sector['id'],
+            'name' => $sector['name'],
             'description' => json_encode($sector['description'] ?? []),
-            'image'       => $sector['image'] ?? null,
-            'created_at'  => now(),
-            'updated_at'  => now(),
+            'image' => $sector['image'] ?? null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         Cache::forget('sectors_list_v2');
+
         return true;
     }
 
     public function updateSector(string $id, array $updatedSector): bool
     {
         DB::table('sectors')->where('id', $id)->update([
-            'name'        => $updatedSector['name'],
+            'name' => $updatedSector['name'],
             'description' => json_encode($updatedSector['description'] ?? []),
-            'image'       => $updatedSector['image'] ?? null,
-            'updated_at'  => now(),
+            'image' => $updatedSector['image'] ?? null,
+            'updated_at' => now(),
         ]);
         Cache::forget('sectors_list_v2');
+
         return true;
     }
 
@@ -565,6 +579,7 @@ class DataService
     {
         DB::table('sectors')->where('id', $id)->delete();
         Cache::forget('sectors_list_v2');
+
         return true;
     }
 
@@ -603,8 +618,8 @@ class DataService
             $encoded = is_array($val) ? json_encode($val) : $val;
             DB::table('homepage_settings')->upsert(
                 [
-                    'key'        => $key,
-                    'value'      => $encoded,
+                    'key' => $key,
+                    'value' => $encoded,
                     'updated_at' => now(),
                     'created_at' => now(),
                 ],
@@ -614,6 +629,7 @@ class DataService
         }
         // Invalidate cached homepage data
         Cache::forget('homepage_data_v1');
+
         return true;
     }
 
@@ -622,8 +638,11 @@ class DataService
     // ----------------------------------------------------
     private function decodeSettingValue(mixed $val): mixed
     {
-        if (!is_string($val)) return $val;
+        if (! is_string($val)) {
+            return $val;
+        }
         $decoded = json_decode($val, true);
+
         // Return decoded array only if it actually IS an array/object; otherwise keep raw string
         return (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : $val;
     }
@@ -632,130 +651,130 @@ class DataService
     {
         return [
             // 1. Hero Section
-            'hero_badge'        => 'PRECISION LABORATORY SOLUTIONS',
-            'hero_title'        => 'Uncompromised <span class="text-accent">Testing Accuracy</span> for Research & Industry.',
-            'hero_subtitle'     => 'Official provider of analytical instruments, culture media, and laboratory reagents meeting strict international quality standards.',
-            'hero_cta_text'     => 'Explore Product Catalog',
-            'hero_cta_link'     => '/produk',
-            'hero_images'       => [
+            'hero_badge' => 'PRECISION LABORATORY SOLUTIONS',
+            'hero_title' => 'Uncompromised <span class="text-accent">Testing Accuracy</span> for Research & Industry.',
+            'hero_subtitle' => 'Official provider of analytical instruments, culture media, and laboratory reagents meeting strict international quality standards.',
+            'hero_cta_text' => 'Explore Product Catalog',
+            'hero_cta_link' => '/produk',
+            'hero_images' => [
                 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
                 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
                 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
             ],
 
             // 2. Bento Infrastructure Grid
-            'bento_title'       => 'Infrastructure & Reliability Standards',
-            'bento_subtitle'    => 'Engineered to fulfill strict regulatory compliance and ensure seamless laboratory testing continuity.',
-            'bento_cards'       => [
+            'bento_title' => 'Infrastructure & Reliability Standards',
+            'bento_subtitle' => 'Engineered to fulfill strict regulatory compliance and ensure seamless laboratory testing continuity.',
+            'bento_cards' => [
                 [
-                    'icon'  => 'bi-patch-check',
+                    'icon' => 'bi-patch-check',
                     'title' => 'ISO & AKL Certified Products',
-                    'desc'  => 'Over 1,000+ officially accredited reagents and instruments, guaranteeing distribution legality for BPOM and ISO 17025 audit compliance.'
+                    'desc' => 'Over 1,000+ officially accredited reagents and instruments, guaranteeing distribution legality for BPOM and ISO 17025 audit compliance.',
                 ],
                 [
-                    'icon'  => 'bi-file-earmark-code',
+                    'icon' => 'bi-file-earmark-code',
                     'title' => 'Instant COA & MSDS Access',
-                    'desc'  => 'Every batch of reagents and culture media comes with official Certificate of Analysis (COA) and MSDS ready for lab validation download.'
+                    'desc' => 'Every batch of reagents and culture media comes with official Certificate of Analysis (COA) and MSDS ready for lab validation download.',
                 ],
                 [
-                    'icon'  => 'bi-snow',
+                    'icon' => 'bi-snow',
                     'title' => 'Safe Cold-Chain Logistics',
-                    'desc'  => 'Tested cold-chain infrastructure ensuring temperature-sensitive reagents remain stable and active upon arrival at your laboratory.'
+                    'desc' => 'Tested cold-chain infrastructure ensuring temperature-sensitive reagents remain stable and active upon arrival at your laboratory.',
                 ],
                 [
-                    'icon'  => 'bi-tools',
+                    'icon' => 'bi-tools',
                     'title' => 'Integrated After-Sales & Calibration',
-                    'desc'  => 'Comprehensive equipment qualification (IQ/OQ/PQ), routine calibration services, and technical training by application specialists.'
-                ]
+                    'desc' => 'Comprehensive equipment qualification (IQ/OQ/PQ), routine calibration services, and technical training by application specialists.',
+                ],
             ],
 
             // 3. Interactive Sector Finder
-            'sector_title'      => 'Interactive Sector Finder',
-            'sector_subtitle'   => 'Select your industry sector to explore tailored testing workflows and relevant products.',
-            'sector_panels'     => [
+            'sector_title' => 'Interactive Sector Finder',
+            'sector_subtitle' => 'Select your industry sector to explore tailored testing workflows and relevant products.',
+            'sector_panels' => [
                 'pharma' => [
-                    'tag'   => 'PHARMACEUTICAL & COSMETICS',
+                    'tag' => 'PHARMACEUTICAL & COSMETICS',
                     'title' => 'Endotoxin Testing & Sterilization Validation',
-                    'desc'  => 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.',
-                    'link'  => '/sektor?s=pharmaceutical#sektor-nav'
+                    'desc' => 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.',
+                    'link' => '/sektor?s=pharmaceutical#sektor-nav',
                 ],
                 'fnb' => [
-                    'tag'   => 'FOOD & BEVERAGE INDUSTRY',
+                    'tag' => 'FOOD & BEVERAGE INDUSTRY',
                     'title' => 'Rapid Pathogen Detection & Hygiene Monitoring',
-                    'desc'  => 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.',
-                    'link'  => '/sektor?s=food#sektor-nav'
+                    'desc' => 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.',
+                    'link' => '/sektor?s=food#sektor-nav',
                 ],
                 'healthcare' => [
-                    'tag'   => 'HEALTHCARE & HOSPITAL CSSD',
+                    'tag' => 'HEALTHCARE & HOSPITAL CSSD',
                     'title' => 'Diagnostics & Sterilization Indicators',
-                    'desc'  => 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.',
-                    'link'  => '/sektor?s=hospital-clinic#sektor-nav'
+                    'desc' => 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.',
+                    'link' => '/sektor?s=hospital-clinic#sektor-nav',
                 ],
                 'brewing' => [
-                    'tag'   => 'BREWING & RESEARCH LABS',
+                    'tag' => 'BREWING & RESEARCH LABS',
                     'title' => 'Spoilage Control & Fermentation Quality',
-                    'desc'  => 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.',
-                    'link'  => '/sektor?s=brewing#sektor-nav'
-                ]
+                    'desc' => 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.',
+                    'link' => '/sektor?s=brewing#sektor-nav',
+                ],
             ],
 
             // 4. Bottom Conversion CTA Banner
-            'cta_banner_badge'     => 'TECHNICAL PROCUREMENT SUPPORT',
-            'cta_banner_title'     => 'Require Custom Procurement or Project Quote?',
-            'cta_banner_sub'       => 'Our application specialists and technical sales team assist with instrument specifications, bulk availability, and compliance documentation.',
-            'cta_banner_btn_text'  => 'Contact Sales / Request Quote',
-            'cta_banner_btn_url'   => '/kontak',
+            'cta_banner_badge' => 'TECHNICAL PROCUREMENT SUPPORT',
+            'cta_banner_title' => 'Require Custom Procurement or Project Quote?',
+            'cta_banner_sub' => 'Our application specialists and technical sales team assist with instrument specifications, bulk availability, and compliance documentation.',
+            'cta_banner_btn_text' => 'Contact Sales / Request Quote',
+            'cta_banner_btn_url' => '/kontak',
 
             // Legacy fallbacks kept for compatibility
-            'focus_title'       => 'Interactive Sector Finder',
-            'focus_cards'       => [],
-            'about_title'       => 'Tentang Prolabios',
+            'focus_title' => 'Interactive Sector Finder',
+            'focus_cards' => [],
+            'about_title' => 'Tentang Prolabios',
             'about_description' => 'Prolabios Mitra Analitika (PMA) dibangun untuk menjadi distributor terkemuka produk mikrobiologi di Indonesia.',
-            'hotline_label'     => 'Layanan Pelanggan 24/7',
-            'hotline_number'    => '0821-8792-9433',
+            'hotline_label' => 'Layanan Pelanggan 24/7',
+            'hotline_number' => '0821-8792-9433',
             'hotline_description' => 'Hubungi kami via telepon atau WhatsApp untuk konsultasi produk.',
 
             // Site-wide contact info
-            'contact_phone'            => '0821-8792-9433',
-            'contact_phone_marketing'  => '021-3874-1447',
-            'contact_phone_finance'    => '021-8792-9433',
+            'contact_phone' => '0821-8792-9433',
+            'contact_phone_marketing' => '021-3874-1447',
+            'contact_phone_finance' => '021-8792-9433',
             'contact_phone_technician' => '0812-837-4867',
-            'contact_email'            => 'marketing@prolabios.com',
-            'contact_address'          => 'Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres, Jakarta Barat, DKI Jakarta 11850',
-            'catalog_pdf_url'          => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
+            'contact_email' => 'marketing@prolabios.com',
+            'contact_address' => 'Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres, Jakarta Barat, DKI Jakarta 11850',
+            'catalog_pdf_url' => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
 
             // General & Social Media settings
-            'company_name'             => 'PT. Prolabios Mitra Analitika',
-            'site_logo'                => '',
-            'operational_hours'        => 'Senin - Jumat: 08.00 - 17.00',
-            'social_instagram'         => 'https://instagram.com/prolabios',
-            'social_facebook'          => 'https://facebook.com/prolabios',
-            'social_linkedin'          => 'https://linkedin.com/company/prolabios',
-            'social_twitter'           => 'https://twitter.com/prolabios',
+            'company_name' => 'PT. Prolabios Mitra Analitika',
+            'site_logo' => '',
+            'operational_hours' => 'Senin - Jumat: 08.00 - 17.00',
+            'social_instagram' => 'https://instagram.com/prolabios',
+            'social_facebook' => 'https://facebook.com/prolabios',
+            'social_linkedin' => 'https://linkedin.com/company/prolabios',
+            'social_twitter' => 'https://twitter.com/prolabios',
 
             // Page: Products
-            'products_title'        => 'Semua Produk',
-            'products_subtitle'     => 'Menampilkan semua produk kami',
+            'products_title' => 'Semua Produk',
+            'products_subtitle' => 'Menampilkan semua produk kami',
             'products_banner_image' => 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
 
             // Page: Sectors
-            'sectors_title'        => 'Sektor Industri',
-            'sectors_subtitle'     => 'Kami melayani berbagai macam sektor industri di Indonesia',
+            'sectors_title' => 'Sektor Industri',
+            'sectors_subtitle' => 'Kami melayani berbagai macam sektor industri di Indonesia',
             'sectors_banner_image' => 'https://images.unsplash.com/photo-1574585141047-92e105e4d9eb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
 
             // Page: Services
-            'services_title'        => 'Layanan Kami',
-            'services_subtitle'     => 'Dukungan purnajual dan layanan konsultasi terpadu',
+            'services_title' => 'Layanan Kami',
+            'services_subtitle' => 'Dukungan purnajual dan layanan konsultasi terpadu',
             'services_banner_image' => 'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
 
             // Page: Information
-            'info_title'        => 'News & Activity',
-            'info_subtitle'     => 'Ikuti berita terkini, tips laboratorium, dan artikel ilmiah',
+            'info_title' => 'News & Activity',
+            'info_subtitle' => 'Ikuti berita terkini, tips laboratorium, dan artikel ilmiah',
             'info_banner_image' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
 
             // Page: Contact
-            'contact_title'        => 'Hubungi Kami',
-            'contact_subtitle'     => 'Ada pertanyaan atau butuh konsultasi? Tim kami siap melayani Anda.',
+            'contact_title' => 'Hubungi Kami',
+            'contact_subtitle' => 'Ada pertanyaan atau butuh konsultasi? Tim kami siap melayani Anda.',
             'contact_banner_image' => 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
         ];
     }
@@ -768,13 +787,13 @@ class DataService
         if (empty($html)) {
             return '';
         }
-        
-        $dom = new \DOMDocument();
+
+        $dom = new \DOMDocument;
         libxml_use_internal_errors(true);
         // Wrap the snippet inside <div> to prevent DOMDocument from adding automatic wrapper tags
-        $dom->loadHTML('<?xml encoding="utf-8" ?><div>' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $dom->loadHTML('<?xml encoding="utf-8" ?><div>'.$html.'</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
-        
+
         $allowedTags = ['p', 'b', 'i', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'br', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img', 'span', 'div', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'blockquote', 'code', 'pre', 'hr', 'sub', 'sup', 'u', 's', 'strike', 'del'];
         $allowedAttributes = [
             'a' => ['href', 'title', 'class', 'target', 'style'],
@@ -800,24 +819,26 @@ class DataService
         $sanitizeNode = function (\DOMNode $node) use (&$sanitizeNode, $allowedTags, $allowedAttributes) {
             if ($node instanceof \DOMElement) {
                 $tagName = strtolower($node->nodeName);
-                if (!in_array($tagName, $allowedTags, true)) {
+                if (! in_array($tagName, $allowedTags, true)) {
                     while ($node->hasChildNodes()) {
                         $node->parentNode->insertBefore($node->firstChild, $node);
                     }
                     $node->parentNode->removeChild($node);
+
                     return;
                 }
-                
+
                 if ($node->hasAttributes()) {
                     $attrsToRemove = [];
                     foreach ($node->attributes as $attr) {
                         $attrName = strtolower($attr->name);
                         $allowedAttrsForTag = $allowedAttributes[$tagName] ?? [];
-                        if (!in_array($attrName, $allowedAttrsForTag, true)) {
+                        if (! in_array($attrName, $allowedAttrsForTag, true)) {
                             $attrsToRemove[] = $attr->name;
+
                             continue;
                         }
-                        
+
                         if ($attrName === 'href' || $attrName === 'src') {
                             $val = trim($attr->value);
                             if (preg_match('/^(javascript|vbscript):/i', $val)) {
@@ -830,7 +851,7 @@ class DataService
                     }
                 }
             }
-            
+
             if ($node->hasChildNodes()) {
                 for ($i = $node->childNodes->length - 1; $i >= 0; $i--) {
                     $child = $node->childNodes->item($i);
@@ -840,7 +861,7 @@ class DataService
                 }
             }
         };
-        
+
         $wrapper = $dom->getElementsByTagName('div')->item(0);
         if ($wrapper) {
             for ($i = $wrapper->childNodes->length - 1; $i >= 0; $i--) {
@@ -850,7 +871,7 @@ class DataService
                 }
             }
         }
-        
+
         $outputHtml = '';
         if ($wrapper) {
             foreach ($wrapper->childNodes as $child) {
@@ -859,7 +880,7 @@ class DataService
         } else {
             $outputHtml = $dom->saveHTML();
         }
-        
+
         return trim($outputHtml);
     }
 }

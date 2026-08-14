@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\DataService;
-use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -17,7 +18,7 @@ class PageController extends Controller
         $homeData = $dataService->getHomepageData();
         $recentPosts = $dataService->getPosts([], 3);
         $featuredProducts = $dataService->getProducts([], 4);
-        
+
         return view('welcome', compact('homeData', 'recentPosts', 'featuredProducts'));
     }
 
@@ -74,7 +75,7 @@ class PageController extends Controller
             'products' => $filteredProducts,
             'categoriesStructure' => $categoriesStructure,
             'activeCategory' => $activeCategory,
-            'activeSubCategory' => $activeSubCategory
+            'activeSubCategory' => $activeSubCategory,
         ]);
     }
 
@@ -92,6 +93,7 @@ class PageController extends Controller
                 $product = $dataService->getProductByTitle((string) $identifier);
             }
         }
+
         return view('detail-produk', compact('product'));
     }
 
@@ -112,6 +114,7 @@ class PageController extends Controller
                 $product = $dataService->getProductByTitle((string) $identifier);
             }
         }
+
         return view('beli-produk', compact('product'));
     }
 
@@ -122,6 +125,7 @@ class PageController extends Controller
     {
         $sectors = $dataService->getSectors();
         $products = $dataService->getProducts([], 16);
+
         return view('sektor', compact('sectors', 'products'));
     }
 
@@ -141,7 +145,7 @@ class PageController extends Controller
         $recentPosts = $dataService->getPosts([], 3);
 
         // Use GROUP BY query instead of loading all posts to memory
-        $categoryCounts = \Illuminate\Support\Facades\Cache::remember('blog_category_counts', 3600, function () {
+        $categoryCounts = Cache::remember('blog_category_counts', 3600, function () {
             $rows = DB::table('posts')
                 ->select('category', DB::raw('COUNT(*) as total'))
                 ->whereNotNull('category')
@@ -149,22 +153,22 @@ class PageController extends Controller
                 ->get()
                 ->keyBy('category');
 
-            $getCt = fn(string $key) => (int) ($rows->get($key)->total ?? 0);
+            $getCt = fn (string $key) => (int) ($rows->get($key)->total ?? 0);
 
             return [
-                'Berita'      => $getCt('Berita'),
-                'Event'       => $getCt('Event'),
+                'Berita' => $getCt('Berita'),
+                'Event' => $getCt('Event'),
                 'Info Terkait' => $getCt('Info Terkait') + $getCt('Info'),
-                'IPTEK'       => $getCt('IPTEK'),
-                'Kegiatan'    => $getCt('Kegiatan'),
+                'IPTEK' => $getCt('IPTEK'),
+                'Kegiatan' => $getCt('Kegiatan'),
             ];
         });
 
         $detail = $request->query('detail');
         $currentBlog = null;
         // Allow alphanumerics, hyphens, underscores, and dots in slugs
-        if ($detail && preg_match('/^[a-zA-Z0-9\-_.]+$/', (string)$detail)) {
-            $currentBlog = $dataService->getPostBySlug((string)$detail);
+        if ($detail && preg_match('/^[a-zA-Z0-9\-_.]+$/', (string) $detail)) {
+            $currentBlog = $dataService->getPostBySlug((string) $detail);
         }
 
         $rawKategori = $request->query('kategori');
@@ -179,11 +183,11 @@ class PageController extends Controller
         $paginatedPosts = $dataService->getPaginatedPosts($filters, 4);
 
         return view('informasi', [
-            'posts'            => $paginatedPosts,
-            'categoryCounts'   => $categoryCounts,
-            'currentBlog'      => $currentBlog,
+            'posts' => $paginatedPosts,
+            'categoryCounts' => $categoryCounts,
+            'currentBlog' => $currentBlog,
             'selectedCategory' => $selectedCategory,
-            'recentPosts'      => $recentPosts
+            'recentPosts' => $recentPosts,
         ]);
     }
 

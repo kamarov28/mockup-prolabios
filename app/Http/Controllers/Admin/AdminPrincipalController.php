@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use App\Traits\HandlesImageUploads;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class AdminPrincipalController extends Controller
 {
@@ -20,7 +19,7 @@ class AdminPrincipalController extends Controller
 
         if ($search) {
             $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%");
+                ->orWhere('address', 'like', "%{$search}%");
         }
 
         $principals = $query->orderBy('name', 'asc')->get();
@@ -43,10 +42,10 @@ class AdminPrincipalController extends Controller
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', null);
 
         DB::table('principals')->insert([
-            'name'       => $request->input('name'),
-            'address'    => $request->input('address'),
-            'logo'       => $logo,
-            'status'     => $request->input('status', 'online'),
+            'name' => $request->input('name'),
+            'address' => $request->input('address'),
+            'logo' => $logo,
+            'status' => $request->input('status', 'online'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -57,7 +56,7 @@ class AdminPrincipalController extends Controller
     public function edit(int $id)
     {
         $principal = DB::table('principals')->where('id', $id)->first();
-        if (!$principal) {
+        if (! $principal) {
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
 
@@ -67,7 +66,7 @@ class AdminPrincipalController extends Controller
     public function update(Request $request, int $id)
     {
         $principal = DB::table('principals')->where('id', $id)->first();
-        if (!$principal) {
+        if (! $principal) {
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
 
@@ -79,14 +78,14 @@ class AdminPrincipalController extends Controller
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', $principal->logo ?? null);
 
         DB::table('principals')->where('id', $id)->update([
-            'name'       => $request->input('name'),
-            'address'    => $request->input('address'),
-            'logo'       => $logo,
-            'status'     => $request->input('status', 'online'),
+            'name' => $request->input('name'),
+            'address' => $request->input('address'),
+            'logo' => $logo,
+            'status' => $request->input('status', 'online'),
             'updated_at' => now(),
         ]);
 
-        \Illuminate\Support\Facades\Cache::forget('active_principals_v4');
+        Cache::forget('active_principals_v4');
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra berhasil diperbarui!');
     }
@@ -94,7 +93,8 @@ class AdminPrincipalController extends Controller
     public function destroy(int $id)
     {
         DB::table('principals')->where('id', $id)->delete();
-        \Illuminate\Support\Facades\Cache::forget('active_principals_v4');
+        Cache::forget('active_principals_v4');
+
         return redirect()->route('admin.principals')->with('success', 'Prinsipal berhasil dihapus!');
     }
 }
