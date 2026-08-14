@@ -118,12 +118,12 @@ class RfqController extends Controller
 
     public function success(Request $request, string $number)
     {
-        $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
-
         // Protection: Ensure only recent session submitter can view the success summary
         if (session('submitted_rfq_number') !== $number) {
             return redirect()->route('home')->with('info', 'Halaman konfirmasi pengajuan telah kedaluwarsa.');
         }
+
+        $rfq = Rfq::with('items')->where('rfq_number', $number)->firstOrFail();
 
         return view('rfq-success', compact('rfq'));
     }

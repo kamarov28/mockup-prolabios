@@ -299,6 +299,7 @@
                 <div class="col-12 col-sm-auto">
                   <form action="{{ route('cart.update') }}" method="POST" class="m-0 cart-update-form" onsubmit="event.preventDefault(); updateCartItemAjax(this);">
                     @csrf
+                    <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                     <input type="hidden" name="title" value="{{ $item['title'] }}">
                     <div class="b2b-qty-pill">
                       <button type="button" class="b2b-qty-btn" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
@@ -323,6 +324,7 @@
 
                     <form action="{{ route('cart.remove') }}" method="POST" class="m-0" onsubmit="event.preventDefault(); removeCartItemAjax(this);">
                       @csrf
+                      <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                       <input type="hidden" name="title" value="{{ $item['title'] }}">
                       <button type="submit" class="btn btn-outline-secondary btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-color: rgba(255,255,255,0.15);" title="Hapus Item" aria-label="Hapus item">
                         <i class="bi bi-x-lg" style="font-size: 0.85rem;"></i>

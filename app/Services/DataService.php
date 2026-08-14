@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
@@ -240,7 +241,6 @@ class DataService
         });
     }
 
-    <?php
     public function getProductById(int $id): ?\App\Models\Product
     {
         return \App\Models\Product::find($id);

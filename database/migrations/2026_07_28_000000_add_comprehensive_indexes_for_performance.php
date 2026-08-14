@@ -77,10 +77,10 @@ return new class extends Migration
         // Sectors table
         try {
             Schema::table('sectors', function (Blueprint $table) {
-                if (!$this->hasIndex('sectors', 'sectors_name_index')) {
+                if (Schema::hasColumn('sectors', 'name') && !$this->hasIndex('sectors', 'sectors_name_index')) {
                     $table->index('name', 'sectors_name_index');
                 }
-                if (!$this->hasIndex('sectors', 'sectors_slug_index')) {
+                if (Schema::hasColumn('sectors', 'slug') && !$this->hasIndex('sectors', 'sectors_slug_index')) {
                     $table->index('slug', 'sectors_slug_index');
                 }
             });
@@ -91,18 +91,18 @@ return new class extends Migration
         // RFQ tables - critical for procurement workflow
         try {
             Schema::table('rfqs', function (Blueprint $table) {
-                if (!$this->hasIndex('rfqs', 'rfqs_user_id_index')) {
+                if (Schema::hasColumn('rfqs', 'user_id') && !$this->hasIndex('rfqs', 'rfqs_user_id_index')) {
                     $table->index('user_id', 'rfqs_user_id_index');
                 }
-                if (!$this->hasIndex('rfqs', 'rfqs_status_index')) {
+                if (Schema::hasColumn('rfqs', 'status') && !$this->hasIndex('rfqs', 'rfqs_status_index')) {
                     $table->index('status', 'rfqs_status_index');
                 }
-                if (!$this->hasIndex('rfqs', 'rfqs_created_at_index')) {
+                if (Schema::hasColumn('rfqs', 'created_at') && !$this->hasIndex('rfqs', 'rfqs_created_at_index')) {
                     $table->index('created_at', 'rfqs_created_at_index');
                 }
                 
                 // Composite for user's RFQs by status
-                if (!$this->hasIndex('rfqs', 'rfqs_user_status_index')) {
+                if (Schema::hasColumn('rfqs', 'user_id') && Schema::hasColumn('rfqs', 'status') && !$this->hasIndex('rfqs', 'rfqs_user_status_index')) {
                     $table->index(['user_id', 'status'], 'rfqs_user_status_index');
                 }
             });
@@ -112,10 +112,10 @@ return new class extends Migration
 
         try {
             Schema::table('rfq_items', function (Blueprint $table) {
-                if (!$this->hasIndex('rfq_items', 'rfq_items_rfq_id_index')) {
+                if (Schema::hasColumn('rfq_items', 'rfq_id') && !$this->hasIndex('rfq_items', 'rfq_items_rfq_id_index')) {
                     $table->index('rfq_id', 'rfq_items_rfq_id_index');
                 }
-                if (!$this->hasIndex('rfq_items', 'rfq_items_product_id_index')) {
+                if (Schema::hasColumn('rfq_items', 'product_id') && !$this->hasIndex('rfq_items', 'rfq_items_product_id_index')) {
                     $table->index('product_id', 'rfq_items_product_id_index');
                 }
             });
@@ -126,10 +126,10 @@ return new class extends Migration
         // Users table
         try {
             Schema::table('users', function (Blueprint $table) {
-                if (!$this->hasIndex('users', 'users_email_index')) {
+                if (Schema::hasColumn('users', 'email') && !$this->hasIndex('users', 'users_email_index')) {
                     $table->index('email', 'users_email_index');
                 }
-                if (!$this->hasIndex('users', 'users_role_index')) {
+                if (Schema::hasColumn('users', 'role') && !$this->hasIndex('users', 'users_role_index')) {
                     $table->index('role', 'users_role_index');
                 }
             });

@@ -25,6 +25,22 @@ return new class extends Migration
             ]);
         }
 
+        $indexesToDrop = ['rfqs_status_index', 'rfqs_user_status_index', 'rfqs_access_token_index'];
+        foreach ($indexesToDrop as $indexName) {
+            try {
+                $driver = Schema::getConnection()->getDriverName();
+                if ($driver === 'sqlite') {
+                    DB::statement("DROP INDEX IF EXISTS {$indexName}");
+                } else {
+                    Schema::table('rfqs', function (Blueprint $table) use ($indexName) {
+                        $table->dropIndex($indexName);
+                    });
+                }
+            } catch (\Throwable $e) {
+                // Ignore if not found
+            }
+        }
+
         Schema::table('rfqs', function (Blueprint $table) {
             $columnsToDrop = [];
             foreach (['company_tax_id', 'pic_name', 'pic_position', 'address', 'status', 'access_token', 'total_offered_amount', 'admin_response_notes', 'valid_until'] as $col) {

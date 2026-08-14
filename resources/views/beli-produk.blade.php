@@ -73,6 +73,7 @@
             <!-- Add to Cart Form -->
             <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form">
               @csrf
+              <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
               <input type="hidden" name="title" value="{{ $product['title'] }}">
 
               <div class="d-flex flex-wrap align-items-end gap-4 mb-4">
