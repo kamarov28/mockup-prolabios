@@ -40,7 +40,18 @@ class AdminProductCategoryController extends Controller
         $request->validate([
             'name'       => 'required|string|max:150',
             'key'        => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key',
-            'parent_id'  => 'nullable|exists:product_categories,id',
+            'parent_id'  => [
+                'nullable',
+                'exists:product_categories,id',
+                function ($attribute, $value, $fail) {
+                    if ($value) {
+                        $parent = ProductCategory::find($value);
+                        if ($parent && !is_null($parent->parent_id)) {
+                            $fail('Subkategori tidak bisa dijadikan induk kategori (maksimal 2 tingkat hirarki).');
+                        }
+                    }
+                },
+            ],
             'sort_order' => 'nullable|integer|min:0',
         ], [
             'key.regex'  => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
@@ -99,17 +110,33 @@ class AdminProductCategoryController extends Controller
         $request->validate([
             'name'       => 'required|string|max:150',
             'key'        => "nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key,{$id}",
-            'parent_id'  => "nullable|exists:product_categories,id",
+            'parent_id'  => [
+                'nullable',
+                'exists:product_categories,id',
+                function ($attribute, $value, $fail) use ($id) {
+                    if ($value) {
+                        if ((int) $value === $id) {
+                            $fail('Kategori tidak bisa menjadi induk dari dirinya sendiri.');
+                            return;
+                        }
+                        $parent = ProductCategory::find($value);
+                        if ($parent && !is_null($parent->parent_id)) {
+                            $fail('Subkategori tidak bisa dijadikan induk kategori (maksimal 2 tingkat hirarki).');
+                        }
+                    }
+                },
+            ],
             'sort_order' => 'nullable|integer|min:0',
         ], [
             'key.regex'  => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
             'key.unique' => 'Key ini sudah dipakai kategori lain.',
         ]);
 
-        // Cegah kategori jadi anak dari dirinya sendiri
         $newParentId = $request->input('parent_id') ?: null;
-        if ($newParentId && (int) $newParentId === $id) {
-            return back()->withInput()->withErrors(['parent_id' => 'Kategori tidak bisa menjadi induk dari dirinya sendiri.']);
+
+        // Cegah kategori yang memiliki anak diubah menjadi subkategori
+        if ($newParentId && $category->children()->exists()) {
+            return back()->withInput()->withErrors(['parent_id' => 'Kategori yang memiliki subkategori tidak dapat dijadikan subkategori. Pindahkan subkategorinya terlebih dahulu.']);
         }
 
         $key = $request->input('key')
@@ -117,13 +144,27 @@ class AdminProductCategoryController extends Controller
             : $category->key;
 
         $old = $category->toArray();
+        $oldKey = $old['key'];
 
-        $category->update([
-            'key'        => $key,
-            'name'       => trim($request->input('name')),
-            'parent_id'  => $newParentId,
-            'sort_order' => (int) $request->input('sort_order', 0),
-        ]);
+        \Illuminate\Support\Facades\DB::transaction(function () use ($category, $key, $oldKey, $request, $newParentId) {
+            $category->update([
+                'key'        => $key,
+                'name'       => trim($request->input('name')),
+                'parent_id'  => $newParentId,
+                'sort_order' => (int) $request->input('sort_order', 0),
+            ]);
+
+            // Cascade key updates to products referencing the old category/sub_category key
+            if ($oldKey !== $key) {
+                \Illuminate\Support\Facades\DB::table('products')
+                    ->where('category', $oldKey)
+                    ->update(['category' => $key]);
+
+                \Illuminate\Support\Facades\DB::table('products')
+                    ->where('sub_category', $oldKey)
+                    ->update(['sub_category' => $key]);
+            }
+        });
 
         AuditLogger::log('product_category.update', 'ProductCategory', $id, [
             'old_name' => $old['name'],
@@ -140,16 +181,22 @@ class AdminProductCategoryController extends Controller
 
     public function destroy(int $id)
     {
-        $category = ProductCategory::withCount('children')->findOrFail($id);
+        $category = ProductCategory::with('children')->withCount('children')->findOrFail($id);
 
-        // Cek apakah masih ada produk yang menggunakan key kategori ini
+        // Kumpulkan semua keys (induk + anak-anaknya) untuk verifikasi relasi produk
+        $allKeys = collect([$category->key])
+            ->merge($category->children->pluck('key'))
+            ->unique()
+            ->all();
+
+        // Cek apakah masih ada produk yang menggunakan key kategori atau subkategori terkait
         $usedByProducts = \Illuminate\Support\Facades\DB::table('products')
-            ->where('category', $category->key)
-            ->orWhere('sub_category', $category->key)
+            ->whereIn('category', $allKeys)
+            ->orWhereIn('sub_category', $allKeys)
             ->exists();
 
         if ($usedByProducts) {
-            return back()->with('error', "Kategori \"{$category->name}\" tidak bisa dihapus karena masih digunakan oleh produk. Pindahkan produk terkait terlebih dahulu.");
+            return back()->with('error', "Kategori \"{$category->name}\" atau subkategorinya tidak bisa dihapus karena masih digunakan oleh produk. Pindahkan produk terkait terlebih dahulu.");
         }
 
         $name = $category->name;

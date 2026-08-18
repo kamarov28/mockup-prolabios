@@ -9,7 +9,7 @@
 <div class="row g-3 mb-4">
 
   <div class="col-md-3">
-    <div class="admin-stat-card" style="border-left: 3px solid var(--color-accent, #FF4950);">
+    <div class="admin-stat-card">
       <span class="admin-stat-label">Pengajuan RFQ</span>
       <div class="admin-stat-value" style="color: var(--color-accent, #FF4950);">{{ $rfqsCount }}</div>
       <a href="{{ route('admin.rfqs.index') }}" class="admin-stat-link">Lihat Semua <i class="bi bi-arrow-right"></i></a>

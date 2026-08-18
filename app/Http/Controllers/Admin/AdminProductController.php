@@ -238,8 +238,9 @@ class AdminProductController extends Controller
     public function productsCreateBulk()
     {
         $sectors = $this->dataService->getSectors();
+        $categoriesStructure = $this->dataService->getCategoriesStructure();
 
-        return view('admin.products.bulk-form', compact('sectors'));
+        return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure'));
     }
 
     public function productsStoreBulk(Request $request)

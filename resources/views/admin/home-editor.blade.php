@@ -57,7 +57,7 @@
 
   <!-- Validation Errors Alert -->
   @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show mb-4 border-0" style="background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444 !important;" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show mb-4 border border-danger-subtle" style="background: rgba(239, 68, 68, 0.12); border-radius: 8px;" role="alert">
       <div class="d-flex align-items-center mb-1">
         <i class="bi bi-exclamation-triangle-fill text-danger fs-5 me-2"></i>
         <strong class="text-danger">Terdapat beberapa data yang belum sesuai:</strong>

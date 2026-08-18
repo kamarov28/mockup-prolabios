@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-08-18T06:31:14.524Z",
+        "reason": "user confirmed: chosen editorial body typography"
+      }
+    ]
+  }
+}

@@ -77,10 +77,9 @@
             <label class="form-label small fw-bold text-secondary">Kategori <span class="text-danger">*</span></label>
             <select name="category[__INDEX__]" class="form-select text-capitalize bulk-category-select" data-id="__INDEX__" required>
               <option value="">-- Pilih Kategori --</option>
-              <option value="microbiology">Microbiology</option>
-              <option value="reference-standards">Reference Standards</option>
-              <option value="device">Device</option>
-              <option value="instruments">Instruments</option>
+              @foreach($categoriesStructure as $catKey => $catData)
+                <option value="{{ $catKey }}">{{ $catData['name'] ?? $catKey }}</option>
+              @endforeach
             </select>
           </div>
 
@@ -135,47 +134,8 @@
 </div>
 
 <script>
-  // Peta data subkategori global
-  const subCategoriesMap = {
-    'microbiology': {
-      'food-safety': 'Food Safety',
-      'antimicrobial': 'Antimicrobial Susceptibility Testing',
-      'identification': 'Microbiological Identification',
-      'preservation': 'Microorganisms Preservation System (BactoBank)',
-      'staining': 'Microbial Staining & Fixatives',
-      'consumables': 'Consumables',
-      'mic-test': 'MIC Test Strip',
-      'qc-organisms': 'QC Organisms',
-      'dip-slide': 'Dip slide',
-      'chemical-indicator': 'Chemical Indicator',
-      'latex-agglutination': 'Latex Agglutination Kits',
-      'ready-culture': 'Ready To Use Culture Media',
-      'biological-indicators': 'Biological Indicators',
-      'dehydrated-culture': 'Dehydrated Culture Media',
-      'immunology': 'Immunology',
-      'endotoxin': 'Endotoxin'
-    },
-    'reference-standards': {
-      'pharmaceutical': 'Pharmaceutical Reference Standards',
-      'green-standards': 'Green Standards',
-      'environmental': 'Environmental Standards',
-      'food-beverages': 'Food and Beverages Standards',
-      'agro-chemical': 'Agro Chemical Standards'
-    },
-    'device': {
-      'bsc-lfc': 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
-      'microbiological-instruments': 'Microbiological Instruments',
-      'liquid-handling': 'Liquid Handling',
-      'thermometer': 'Thermometer'
-    },
-    'instruments': {
-      'liofilchem-giotto-2': 'Liofilchem® Giotto 2',
-      'agar-filler': 'Agar Filler',
-      'agar-preparator': 'Agar Preparator',
-      'kinetic-incubating-reader': 'Kinetic Incubating Microplate Reader',
-      'mica-diamidex': 'MICA® Diamidex - Counting Microorganisms Faster'
-    }
-  };
+  // Peta data subkategori global (dari database)
+  const subCategoriesMap = @json(collect($categoriesStructure)->mapWithKeys(fn($item, $key) => [$key => $item['subs'] ?? []]));
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {

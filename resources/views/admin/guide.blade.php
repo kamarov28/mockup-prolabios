@@ -71,8 +71,8 @@
   }
   .manual-callout-info {
     background: rgba(13, 110, 253, 0.08);
-    border-left: 4px solid #0d6efd;
-    border-radius: 0 8px 8px 0;
+    border: 1px solid rgba(13, 110, 253, 0.25);
+    border-radius: 8px;
     padding: 14px 18px;
     font-size: 0.88rem;
     color: rgba(255, 255, 255, 0.85);
@@ -80,8 +80,8 @@
   }
   .manual-callout-success {
     background: rgba(46, 125, 50, 0.1);
-    border-left: 4px solid #4caf50;
-    border-radius: 0 8px 8px 0;
+    border: 1px solid rgba(76, 175, 80, 0.25);
+    border-radius: 8px;
     padding: 14px 18px;
     font-size: 0.88rem;
     color: rgba(255, 255, 255, 0.85);
