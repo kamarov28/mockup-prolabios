@@ -282,7 +282,11 @@
         const link = e.target.closest('#catalog-section .col-lg-3 a');
         if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
           e.preventDefault();
-          loadProductsAjax(link.href);
+          const linkUrl = new URL(link.href, window.location.origin);
+          linkUrl.searchParams.delete('q');
+          linkUrl.searchParams.delete('search');
+          linkUrl.searchParams.delete('s');
+          loadProductsAjax(linkUrl.toString());
         }
       });
 
@@ -343,6 +347,8 @@
           e.preventDefault();
           const query = localSearch ? localSearch.value.trim() : '';
           const currentUrl = new URL(window.location.href);
+          currentUrl.searchParams.delete('q');
+          currentUrl.searchParams.delete('search');
           if (query) {
             currentUrl.searchParams.set('s', query);
           } else {
@@ -360,6 +366,8 @@
 
           searchDebounceTimer = setTimeout(() => {
             const currentUrl = new URL(window.location.href);
+            currentUrl.searchParams.delete('q');
+            currentUrl.searchParams.delete('search');
             if (query) {
               currentUrl.searchParams.set('s', query);
             } else {
@@ -371,8 +379,7 @@
         });
 
         // Set cursor to end of input if search parameter active
-        if (localSearch.value) {
-          localSearch.focus();
+        if (localSearch.value && document.activeElement === localSearch) {
           const len = localSearch.value.length;
           localSearch.setSelectionRange(len, len);
         }

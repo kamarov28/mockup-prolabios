@@ -101,9 +101,9 @@ export function initSearchOverlay() {
     overlay.classList.add('active');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    setTimeout(function () {
+    requestAnimationFrame(function () {
       input.focus();
-    }, 180);
+    });
   }
 
   function closeOverlay() {
