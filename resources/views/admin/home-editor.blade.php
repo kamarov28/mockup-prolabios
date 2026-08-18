@@ -2,6 +2,7 @@
 
 @php
   $section = request()->get('section');
+  $tabParam = request()->get('tab');
   
   if ($section === 'homepage') {
       $pageTitle = 'Editor Halaman Beranda (Homepage)';
@@ -10,7 +11,7 @@
   } elseif ($section === 'contacts') {
       $pageTitle = 'Pengaturan Kontak & Alamat';
   } elseif ($section === 'general') {
-      $pageTitle = 'Pengaturan Umum, Logo & Media Sosial';
+      $pageTitle = 'Pengaturan Umum, Logo & SEO';
   } else {
       $pageTitle = 'Pengaturan & Editor Halaman Website';
   }
@@ -22,18 +23,54 @@
 @section('admin_content')
 <div class="container-fluid px-0">
 
-  <!-- BACK BUTTON IF ON SUB-SECTION -->
+  <!-- ========================================== -->
+  <!-- TOP SECTION NAVIGATION BAR (If inside a section) -->
+  <!-- ========================================== -->
   @if($section)
-    <div class="mb-4">
-      <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline" style="padding: 6px 16px; font-size: 0.75rem;">
-        <i class="bi bi-arrow-left"></i> <span>Kembali ke Menu Pengaturan</span>
-      </a>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 rounded-3" style="background: var(--color-surface); border: 1px solid var(--color-border);">
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline me-2" style="padding: 6px 14px; font-size: 0.75rem;">
+          <i class="bi bi-grid-fill me-1"></i> <span>Semua Menu</span>
+        </a>
+        <div class="vr bg-secondary opacity-25 d-none d-md-block mx-1"></div>
+        <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-btn {{ $section === 'homepage' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
+          <i class="bi bi-house-door me-1"></i> <span>Beranda</span>
+        </a>
+        <a href="{{ route('admin.home.edit', ['section' => 'banners']) }}" class="admin-btn {{ $section === 'banners' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
+          <i class="bi bi-images me-1"></i> <span>Banner Halaman</span>
+        </a>
+        <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn {{ $section === 'contacts' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
+          <i class="bi bi-telephone-outbound me-1"></i> <span>Kontak & Alamat</span>
+        </a>
+        <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn {{ $section === 'general' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
+          <i class="bi bi-gear-wide-connected me-1"></i> <span>Umum & SEO</span>
+        </a>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-outline text-secondary" style="padding: 6px 12px; font-size: 0.72rem;" title="Lihat Website Publik">
+          <i class="bi bi-box-arrow-up-right me-1"></i> <span>Live Preview</span>
+        </a>
+      </div>
     </div>
   @endif
 
-  <!-- ========================================== -->
-  <!-- MAIN SETTINGS DASHBOARD (No Section Parameter) -->
-  <!-- ========================================== -->
+  <!-- Validation Errors Alert -->
+  @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show mb-4 border-0" style="background: rgba(239, 68, 68, 0.15); border-left: 4px solid #ef4444 !important;" role="alert">
+      <div class="d-flex align-items-center mb-1">
+        <i class="bi bi-exclamation-triangle-fill text-danger fs-5 me-2"></i>
+        <strong class="text-danger">Terdapat beberapa data yang belum sesuai:</strong>
+      </div>
+      <ul class="mb-0 small text-white-50 ps-4">
+        @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
+
   <!-- ========================================== -->
   <!-- MAIN SETTINGS DASHBOARD (No Section Parameter) -->
   <!-- ========================================== -->
@@ -103,7 +140,7 @@
             </div>
             <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Kontak &amp; Alamat</h3>
             <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
-              Kelola nomor WhatsApp Sales/Marketing/Finance, email resmi, alamat lengkap kantor &amp; gudang, serta link unduhan katalog PDF.
+              Kelola nomor WhatsApp Sales/Marketing/Finance, template sapaan WA, email resmi, alamat kantor, dan link peta Google Maps.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
@@ -122,9 +159,9 @@
               </div>
               <span class="admin-badge admin-badge-warning">Setelan Situs</span>
             </div>
-            <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Umum &amp; Sosmed</h3>
+            <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Umum &amp; SEO</h3>
             <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
-              Ubah nama PT / Perusahaan, upload logo website resmi, atur jam operasional layanan, dan kelola link akun Instagram, LinkedIn, Facebook.
+              Ubah nama PT, upload logo &amp; favicon, jam kerja, link akun media sosial, serta meta SEO &amp; Google Search Console.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
@@ -183,37 +220,55 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+      // Sync sub-tabs with URL query param & hidden input
+      const activeTabParam = @json($tabParam);
+      if (activeTabParam) {
+        const targetBtn = document.querySelector(`button[data-bs-target="#${activeTabParam}-panel"]`);
+        if (targetBtn) {
+          const tab = new bootstrap.Tab(targetBtn);
+          tab.show();
+        }
+      }
+
+      // Track active tab and populate hidden tab input
+      const tabButtons = document.querySelectorAll('button[data-bs-toggle="tab"]');
+      tabButtons.forEach(btn => {
+        btn.addEventListener('shown.bs.tab', function(e) {
+          const targetId = e.target.getAttribute('data-bs-target');
+          if (targetId) {
+            const cleanTab = targetId.replace('#', '').replace('-panel', '');
+            const tabInputs = document.querySelectorAll('input[name="tab"]');
+            tabInputs.forEach(input => input.value = cleanTab);
+            
+            // Optionally update browser URL without reload
+            const url = new URL(window.location);
+            url.searchParams.set('tab', cleanTab);
+            window.history.replaceState({}, '', url);
+          }
+        });
+      });
+
       @if($section === 'homepage')
         for (let i = 0; i < 4; i++) {
           bindPreviewListener(`hero_image_file_${i}`, `hero_image_preview_${i}`);
           bindUrlListener(`hero_image_url_${i}`, `hero_image_preview_${i}`);
         }
-        for (let i = 0; i < 3; i++) {
-          bindPreviewListener(`focus_card_file_${i}`, `focus_card_preview_${i}`);
-          bindUrlListener(`focus_card_url_${i}`, `focus_card_preview_${i}`);
-        }
       @endif
 
       @if($section === 'banners')
-        bindPreviewListener('products_banner_file', 'products_banner_preview');
-        bindUrlListener('products_banner_url', 'products_banner_preview');
-        
-        bindPreviewListener('sectors_banner_file', 'sectors_banner_preview');
-        bindUrlListener('sectors_banner_url', 'sectors_banner_preview');
-        
-        bindPreviewListener('services_banner_file', 'services_banner_preview');
-        bindUrlListener('services_banner_url', 'services_banner_preview');
-        
-        bindPreviewListener('info_banner_file', 'info_banner_preview');
-        bindUrlListener('info_banner_url', 'info_banner_preview');
-        
-        bindPreviewListener('contact_banner_file', 'contact_banner_preview');
-        bindUrlListener('contact_banner_url', 'contact_banner_preview');
+        const bannerPages = ['products', 'sectors', 'services', 'info', 'contact'];
+        bannerPages.forEach(p => {
+          bindPreviewListener(`${p}_banner_file`, `${p}_banner_preview`);
+          bindUrlListener(`${p}_banner_url`, `${p}_banner_preview`);
+        });
       @endif
 
       @if($section === 'general')
         bindPreviewListener('site_logo_file', 'site_logo_preview');
         bindUrlListener('site_logo_url', 'site_logo_preview');
+
+        bindPreviewListener('site_favicon_file', 'site_favicon_preview');
+        bindUrlListener('site_favicon_url', 'site_favicon_preview');
       @endif
     });
   </script>

@@ -45,8 +45,7 @@
           <div class="kontak-info-block" style="border-bottom: none;">
             <div class="kontak-info-icon"><i class="bi bi-clock"></i></div>
             <h3 class="kontak-info-title">Operating Hours</h3>
-            <p class="profil-body-text">Monday – Friday: 09.00 – 18.00 WIB</p>
-            <p class="profil-body-text">Saturday – Sunday: Closed</p>
+            <p class="profil-body-text">{{ $siteSettings['operational_hours'] ?? 'Monday – Friday: 08.00 – 17.00 WIB' }}</p>
           </div>
 
         </div>
@@ -62,6 +61,10 @@
               <label for="_hp_website">Leave this field blank</label>
               <input type="text" name="_hp_website" id="_hp_website" tabindex="-1" autocomplete="off" value="">
             </div>
+
+            {{-- reCAPTCHA v3 Token --}}
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-contact">
+
             <div class="row g-4">
               <div class="col-md-6">
                 <label for="nama" class="kontak-form-label">Full Name <span style="color: var(--color-accent);">*</span></label>
@@ -113,13 +116,27 @@
     </div>
   </section>
 
+  @if(!empty($siteSettings['google_maps_embed_url']))
+  <section class="pb-5 pt-0">
+    <div class="container">
+      <div class="rounded-3 overflow-hidden shadow-sm" style="height: 380px; border: 1px solid var(--color-border);">
+        <iframe src="{{ $siteSettings['google_maps_embed_url'] }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+  @endif
+
   @push('scripts')
   @include('partials.gsap-loader')
+
+  @if(config('services.recaptcha.site_key'))
+  <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+  @endif
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-
-      window.handleContactForm = function(e) {
+      window.handleContactForm = async function(e) {
         e.preventDefault();
         const form = document.getElementById('contactForm');
         const success = document.getElementById('formSuccess');
@@ -143,6 +160,21 @@
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Sending...';
 
         const csrfToken = '{{ csrf_token() }}';
+
+        @if(config('services.recaptcha.site_key'))
+        // Generate reCAPTCHA v3 token before submitting
+        let recaptchaToken = '';
+        try {
+          recaptchaToken = await grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'contact_submit'});
+          document.getElementById('g-recaptcha-response-contact').value = recaptchaToken;
+        } catch (err) {
+          console.error('reCAPTCHA error:', err);
+          alert('Security verification failed. Please refresh the page and try again.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+          return false;
+        }
+        @endif
 
         const formData = new FormData(form);
         fetch('{{ route("contact.submit", [], false) }}', {

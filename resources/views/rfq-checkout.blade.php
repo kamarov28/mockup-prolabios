@@ -5,7 +5,7 @@
 @section('content')
 <section class="py-5" style="background-color: var(--color-bg-body); min-height: 80vh; padding-top: 140px !important; padding-bottom: 80px !important;">
   <div class="container py-4">
-    
+
     <div class="max-w-4xl mx-auto">
       <div class="mb-4 text-center">
         <span class="badge bg-danger bg-opacity-20 text-danger px-3 py-2 text-uppercase tracking-wider fw-semibold mb-2">Formulir Pengajuan Penawaran</span>
@@ -76,6 +76,9 @@
               <button type="submit" class="btn btn-danger w-100 py-3 fw-bold text-uppercase tracking-wider">
                 <i class="bi bi-send-fill me-2"></i> Kirim Pengajuan Penawaran
               </button>
+
+              {{-- reCAPTCHA v3 Token --}}
+              <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-rfq">
             </form>
           </div>
         </div>
@@ -125,6 +128,18 @@
     </div>
   </div>
 </section>
+
+@if(config('services.recaptcha.site_key'))
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'rfq_submit'})
+        .then(function(token) {
+            document.getElementById('g-recaptcha-response-rfq').value = token;
+        });
+    });
+</script>
+@endif
 
 <style>
   .rfq-input {

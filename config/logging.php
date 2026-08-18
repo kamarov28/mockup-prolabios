@@ -142,6 +142,13 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'backup' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/backup.log'),
+            'level' => 'info',
+            'replace_placeholders' => true,
+        ],
+
     ],
 
 ];

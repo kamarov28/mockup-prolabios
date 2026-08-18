@@ -2,7 +2,10 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+// Schedule backup otomatis setiap jam 02:00 pagi
+Schedule::command('backup:database')->dailyAt('02:00');
+
+// (Opsional) Restart queue jika pakai worker
+// Schedule::command('queue:restart')->dailyAt('02:05');

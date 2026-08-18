@@ -4,11 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')</title>
-  <meta name="description" content="@yield('meta_description', 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.')">
-  <meta name="keywords" content="@yield('meta_keywords', 'prolabios, alat laboratorium, mikrobiologi, instrumen lab')">
-  <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
-  <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+  <meta name="description" content="@yield('meta_description', $siteSettings['meta_default_description'] ?? 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium dan instrumen.')">
+  <meta name="keywords" content="@yield('meta_keywords', $siteSettings['meta_default_keywords'] ?? 'prolabios, alat laboratorium, mikrobiologi, instrumen lab')">
+  @if(!empty($siteSettings['google_search_console_id']))
+    <meta name="google-site-verification" content="{{ $siteSettings['google_search_console_id'] }}">
+  @endif
+  <link rel="shortcut icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('favicon.ico') }}">
+  <link rel="icon" type="image/png" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
   <!-- Preconnect to CDN & fonts (critical for LCP) -->

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -41,13 +42,18 @@ class AdminPrincipalController extends Controller
 
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', null);
 
-        DB::table('principals')->insert([
+        $id = DB::table('principals')->insertGetId([
             'name' => $request->input('name'),
             'address' => $request->input('address'),
             'logo' => $logo,
             'status' => $request->input('status', 'online'),
             'created_at' => now(),
             'updated_at' => now(),
+        ]);
+
+        AuditLogger::log('principal.create', 'Principal', $id, [
+            'name' => $request->input('name'),
+            'status' => $request->input('status', 'online'),
         ]);
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra baru berhasil ditambahkan!');
@@ -87,13 +93,26 @@ class AdminPrincipalController extends Controller
 
         Cache::forget('active_principals_v4');
 
+        AuditLogger::log('principal.update', 'Principal', $id, [
+            'old_name' => $principal->name,
+            'new_name' => $request->input('name'),
+            'status' => $request->input('status', 'online'),
+        ]);
+
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra berhasil diperbarui!');
     }
 
     public function destroy(int $id)
     {
+        $principal = DB::table('principals')->where('id', $id)->first();
+        $name = $principal?->name;
+
         DB::table('principals')->where('id', $id)->delete();
         Cache::forget('active_principals_v4');
+
+        AuditLogger::log('principal.delete', 'Principal', $id, [
+            'name' => $name,
+        ]);
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal berhasil dihapus!');
     }

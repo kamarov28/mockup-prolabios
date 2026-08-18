@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Requests\UpdateSectorRequest;
+use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 
@@ -53,6 +54,11 @@ class AdminSectorController extends Controller
 
         $this->dataService->addSector($sector);
 
+        AuditLogger::log('sector.create', 'Sector', $id, [
+            'name' => $sector['name'],
+            'id' => $id,
+        ]);
+
         return redirect()->route('admin.sectors')->with('success', 'Sektor industri baru berhasil ditambahkan!');
     }
 
@@ -73,6 +79,7 @@ class AdminSectorController extends Controller
             return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
         }
 
+        $oldName = $sector['name'] ?? null;
         $descRaw = $request->input('description', '');
         $description = array_filter(array_map('trim', explode("\n", $descRaw)));
 
@@ -88,12 +95,26 @@ class AdminSectorController extends Controller
 
         $this->dataService->updateSector($id, $updatedSector);
 
+        AuditLogger::log('sector.update', 'Sector', $id, [
+            'old_name' => $oldName,
+            'new_name' => $updatedSector['name'],
+            'id' => $id,
+        ]);
+
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil diperbarui!');
     }
 
     public function sectorsDestroy(string $id)
     {
+        $sector = $this->dataService->getSectorById($id);
+        $name = $sector['name'] ?? null;
+
         $this->dataService->deleteSector($id);
+
+        AuditLogger::log('sector.delete', 'Sector', $id, [
+            'name' => $name,
+            'id' => $id,
+        ]);
 
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil dihapus!');
     }

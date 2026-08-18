@@ -652,11 +652,21 @@ class DataService
     // ----------------------------------------------------
     // Homepage Config Service  (MySQL — key/value)
     // ----------------------------------------------------
+    /**
+     * Clear all website settings and homepage cache entries.
+     */
+    public static function clearSettingsCache(): void
+    {
+        Cache::forget('homepage_data_v1');
+        Cache::forget('homepage_settings_v3');
+        Cache::forget('site_settings_global');
+    }
+
     public function getHomepageData(): array
     {
         $default = $this->getDefaultHomepageData();
 
-        return Cache::remember('homepage_data_v1', 300, function () use ($default) {
+        return Cache::remember('homepage_data_v1', 3600, function () use ($default) {
             try {
                 $rows = DB::table('homepage_settings')->pluck('value', 'key')->toArray();
             } catch (\Exception $e) {
@@ -693,8 +703,8 @@ class DataService
                 ['value', 'updated_at']
             );
         }
-        // Invalidate cached homepage data
-        Cache::forget('homepage_data_v1');
+        // Invalidate all cached settings data across the entire application
+        self::clearSettingsCache();
 
         return true;
     }
@@ -805,13 +815,19 @@ class DataService
             'contact_phone_marketing' => '021-3874-1447',
             'contact_phone_finance' => '021-8792-9433',
             'contact_phone_technician' => '0812-837-4867',
+            'whatsapp_default_message' => 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.',
             'contact_email' => 'marketing@prolabios.com',
             'contact_address' => 'Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres, Jakarta Barat, DKI Jakarta 11850',
             'catalog_pdf_url' => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
+            'google_maps_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.8624231649987!2d106.69742687595568!3d-6.149170860275924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f8263e620583%3A0xe5a3f47e335272a8!2sPlaza%20De%20Lumina!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid',
 
             // General & Social Media settings
             'company_name' => 'PT. Prolabios Mitra Analitika',
             'site_logo' => '',
+            'site_favicon' => '',
+            'meta_default_description' => 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium, media kultur mikrobiologi, dan instrumen ilmiah di Indonesia.',
+            'meta_default_keywords' => 'prolabios, alat laboratorium, mikrobiologi, instrumen lab, media kultur, bioendo, terragene',
+            'google_search_console_id' => '',
             'operational_hours' => 'Senin - Jumat: 08.00 - 17.00',
             'social_instagram' => 'https://instagram.com/prolabios',
             'social_facebook' => 'https://facebook.com/prolabios',

@@ -9,8 +9,7 @@
           <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="38" width="auto" class="footer-logo" loading="lazy" decoding="async">
         </div>
         <p class="mb-3 mt-3"><strong>{{ strtoupper($siteSettings['company_name'] ?? 'PT PROLABIOS MITRA ANALITIKA') }}</strong><br>
-        Komplek Cibinong Griya Asri Blok: A9/10, RT 01 RW 08<br>
-        Cibinong – Bogor, West Java, Indonesia 16913</p>
+        {!! nl2br(e($siteSettings['contact_address'] ?? "Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres\nJakarta Barat, DKI Jakarta 11850")) !!}</p>
         <div class="d-flex gap-2 mt-3">
           @if(!empty($siteSettings['social_facebook']))
             <a href="{{ $siteSettings['social_facebook'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-icon" aria-label="Facebook"><i class="bi bi-facebook"></i></a>

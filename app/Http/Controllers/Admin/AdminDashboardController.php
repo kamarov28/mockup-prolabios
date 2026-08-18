@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rfq;
+use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -71,13 +72,13 @@ class AdminDashboardController extends Controller
     {
         // Validate section input to prevent unexpected processing
         $section = $request->input('section', 'homepage');
+        $tab = $request->input('tab');
         $allowedSections = ['homepage', 'banners', 'contacts', 'general'];
         if (! in_array($section, $allowedSections, true)) {
             return redirect()->back()->with('error', 'Section tidak valid.');
         }
 
         // Common validation rules shared across sections
-        $urlRule = 'nullable|string|max:2000';
         $textRule = 'nullable|string|max:5000';
         $shortTextRule = 'nullable|string|max:500';
 
@@ -87,7 +88,7 @@ class AdminDashboardController extends Controller
                 'hero_title' => $shortTextRule,
                 'hero_subtitle' => $textRule,
                 'hero_cta_text' => $shortTextRule,
-                'hero_cta_link' => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'hero_cta_link' => 'nullable|string|max:500',
                 'bento_title' => $shortTextRule,
                 'bento_subtitle' => $shortTextRule,
                 'sector_title' => $shortTextRule,
@@ -96,9 +97,20 @@ class AdminDashboardController extends Controller
                 'cta_banner_title' => $shortTextRule,
                 'cta_banner_sub' => $textRule,
                 'cta_banner_btn_text' => $shortTextRule,
-                'cta_banner_btn_url' => 'nullable|string|max:500|regex:/^(\/|https?:\/\/)/',
+                'cta_banner_btn_url' => 'nullable|string|max:500',
                 'sector_link_*' => 'nullable|string|max:500',
             ]);
+        }
+
+        if ($section === 'banners') {
+            $pages = ['products', 'sectors', 'services', 'info', 'contact'];
+            $bannerRules = [];
+            foreach ($pages as $p) {
+                $bannerRules["{$p}_title"] = $shortTextRule;
+                $bannerRules["{$p}_subtitle"] = $textRule;
+                $bannerRules["{$p}_banner_url"] = 'nullable|string|max:2000';
+            }
+            $request->validate($bannerRules);
         }
 
         if ($section === 'contacts') {
@@ -107,9 +119,11 @@ class AdminDashboardController extends Controller
                 'contact_phone_marketing' => 'nullable|string|max:50',
                 'contact_phone_finance' => 'nullable|string|max:50',
                 'contact_phone_technician' => 'nullable|string|max:50',
+                'whatsapp_default_message' => 'nullable|string|max:1000',
                 'contact_email' => 'nullable|email|max:255',
                 'contact_address' => 'nullable|string|max:1000',
-                'catalog_pdf_url' => 'nullable|url|max:2000',
+                'catalog_pdf_url' => 'nullable|string|max:2000',
+                'google_maps_embed_url' => 'nullable|string|max:3000',
             ]);
         }
 
@@ -117,10 +131,13 @@ class AdminDashboardController extends Controller
             $request->validate([
                 'company_name' => 'nullable|string|max:255',
                 'operational_hours' => 'nullable|string|max:255',
-                'social_instagram' => 'nullable|url|max:500',
-                'social_facebook' => 'nullable|url|max:500',
-                'social_linkedin' => 'nullable|url|max:500',
-                'social_twitter' => 'nullable|url|max:500',
+                'meta_default_description' => 'nullable|string|max:1000',
+                'meta_default_keywords' => 'nullable|string|max:1000',
+                'google_search_console_id' => 'nullable|string|max:255',
+                'social_instagram' => 'nullable|string|max:500',
+                'social_facebook' => 'nullable|string|max:500',
+                'social_linkedin' => 'nullable|string|max:500',
+                'social_twitter' => 'nullable|string|max:500',
             ]);
         }
 
@@ -192,14 +209,19 @@ class AdminDashboardController extends Controller
             $homeData['contact_phone_marketing'] = $request->input('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '');
             $homeData['contact_phone_finance'] = $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '');
             $homeData['contact_phone_technician'] = $request->input('contact_phone_technician', $homeData['contact_phone_technician'] ?? '');
+            $homeData['whatsapp_default_message'] = $request->input('whatsapp_default_message', $homeData['whatsapp_default_message'] ?? '');
             $homeData['contact_email'] = $request->input('contact_email', $homeData['contact_email'] ?? '');
             $homeData['contact_address'] = $request->input('contact_address', $homeData['contact_address'] ?? '');
             $homeData['catalog_pdf_url'] = $request->input('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '');
+            $homeData['google_maps_embed_url'] = $request->input('google_maps_embed_url', $homeData['google_maps_embed_url'] ?? '');
         }
 
         if ($section === 'general') {
             $homeData['company_name'] = $request->input('company_name', $homeData['company_name'] ?? '');
             $homeData['operational_hours'] = $request->input('operational_hours', $homeData['operational_hours'] ?? '');
+            $homeData['meta_default_description'] = $request->input('meta_default_description', $homeData['meta_default_description'] ?? '');
+            $homeData['meta_default_keywords'] = $request->input('meta_default_keywords', $homeData['meta_default_keywords'] ?? '');
+            $homeData['google_search_console_id'] = $request->input('google_search_console_id', $homeData['google_search_console_id'] ?? '');
             $homeData['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
             $homeData['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');
             $homeData['social_linkedin'] = $request->input('social_linkedin', $homeData['social_linkedin'] ?? '');
@@ -209,11 +231,26 @@ class AdminDashboardController extends Controller
             $homeData['site_logo'] = $this->handleImageUpload(
                 $request, 'site_logo_file', 'site_logo_url', $existingLogo
             );
+
+            $existingFavicon = $homeData['site_favicon'] ?? '';
+            $homeData['site_favicon'] = $this->handleImageUpload(
+                $request, 'site_favicon_file', 'site_favicon_url', $existingFavicon
+            );
         }
 
         $this->dataService->saveHomepageData($homeData);
 
-        return redirect()->route('admin.home.edit', ['section' => $section])->with('success', 'Pengaturan berhasil disimpan!');
+        AuditLogger::log('settings.update', 'Settings', $section, [
+            'section' => $section,
+            'tab' => $tab,
+        ]);
+
+        $redirectParams = ['section' => $section];
+        if ($tab) {
+            $redirectParams['tab'] = $tab;
+        }
+
+        return redirect()->route('admin.home.edit', $redirectParams)->with('success', 'Pengaturan berhasil disimpan!');
     }
 
     public function guide()

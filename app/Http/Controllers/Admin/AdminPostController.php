@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -128,6 +129,14 @@ class AdminPostController extends Controller
         ];
 
         $this->dataService->addPost($post);
+        $savedPost = $this->dataService->getPostBySlug($slug);
+
+        AuditLogger::log('post.create', 'Post', $savedPost['id'] ?? $slug, [
+            'title' => $post['title'],
+            'slug' => $slug,
+            'category' => $post['category'],
+            'status' => $post['status'],
+        ]);
 
         return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil disimpan!');
     }
@@ -149,6 +158,7 @@ class AdminPostController extends Controller
             return redirect()->route('admin.posts')->with('error', 'Artikel tidak ditemukan.');
         }
 
+        $oldTitle = $post['title'];
         $newTitle = $request->input('title');
         $newSlug = $post['slug'];
         if ($newTitle !== $post['title']) {
@@ -186,12 +196,28 @@ class AdminPostController extends Controller
 
         $this->dataService->updatePost($slug, $updatedPost);
 
+        AuditLogger::log('post.update', 'Post', $post['id'] ?? $slug, [
+            'old_title' => $oldTitle,
+            'new_title' => $newTitle,
+            'slug' => $newSlug,
+            'status' => $updatedPost['status'],
+        ]);
+
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil diperbarui!');
     }
 
     public function postsDestroy(string $slug)
     {
+        $post = $this->dataService->getPostBySlug($slug);
+        $title = $post['title'] ?? null;
+        $id = $post['id'] ?? null;
+
         $this->dataService->deletePost($slug);
+
+        AuditLogger::log('post.delete', 'Post', $id ?? $slug, [
+            'title' => $title,
+            'slug' => $slug,
+        ]);
 
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil dihapus!');
     }

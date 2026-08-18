@@ -61,11 +61,8 @@ class AppServiceProvider extends ServiceProvider
             });
         });
         try {
-            $siteSettings = Cache::remember('homepage_settings_v3', 3600, function () {
-                $dataService = app(DataService::class);
-
-                return $dataService->getHomepageData();
-            });
+            $dataService = app(DataService::class);
+            $siteSettings = $dataService->getHomepageData();
 
             // Clean phone number for WhatsApp API
             $rawPhone = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone'] ?? '0821-8792-9433');
@@ -74,6 +71,8 @@ class AppServiceProvider extends ServiceProvider
             // Clean technician phone number for WhatsApp API
             $rawPhoneTech = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone_technician'] ?? '0812-837-4867');
             $waNumberTech = (strpos($rawPhoneTech, '0') === 0) ? '62'.substr($rawPhoneTech, 1) : $rawPhoneTech;
+
+            $waDefaultMsg = urlencode($siteSettings['whatsapp_default_message'] ?? 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.');
 
             $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
                 $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
@@ -104,6 +103,7 @@ class AppServiceProvider extends ServiceProvider
             View::share('siteSettings', $siteSettings);
             View::share('waNumber', $waNumber);
             View::share('waNumberTech', $waNumberTech);
+            View::share('waDefaultMsg', $waDefaultMsg);
             View::share('searchSuggestions', $searchSuggestions);
         } catch (\Exception $e) {
             // Safe fallback during command execution
