@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminPrincipalController;
+use App\Http\Controllers\Admin\AdminProductCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminRfqController;
 use App\Http\Controllers\Admin\AdminSectorController;
@@ -79,7 +80,18 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
     Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
 
-    // Posts CRUD
+    // Product Categories CRUD
+    Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');
+    Route::get('/categories/create', [AdminProductCategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/categories', [AdminProductCategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/categories/{id}/edit', [AdminProductCategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::match(['post', 'put'], '/categories/{id}', [AdminProductCategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/categories/{id}', [AdminProductCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+
+    // API: subcategories for dynamic product form dropdown
+    Route::get('/api/subcategories', [AdminProductCategoryController::class, 'apiSubcategories'])->name('admin.api.subcategories');
+
+
     Route::get('/posts', [AdminPostController::class, 'postsIndex'])->name('admin.posts');
     Route::get('/posts/create', [AdminPostController::class, 'postsCreate'])->name('admin.posts.create');
     Route::post('/posts', [AdminPostController::class, 'postsStore'])->name('admin.posts.store');

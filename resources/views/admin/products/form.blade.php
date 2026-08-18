@@ -58,13 +58,22 @@
       <!-- Kategori Utama -->
       <div class="col-md-6">
         <label for="category" class="form-label fw-bold">Kategori <span class="text-danger">*</span></label>
-        <select class="form-select" id="admin-category-select" name="category" required>
+        <select class="form-select" id="admin-category-select" name="category" required
+                data-api-url="{{ route('admin.api.subcategories') }}">
           <option value="">-- Pilih Kategori --</option>
-          <option value="microbiology" {{ old('category', $product['category'] ?? '') === 'microbiology' ? 'selected' : '' }}>Microbiology</option>
-          <option value="reference-standards" {{ old('category', $product['category'] ?? '') === 'reference-standards' ? 'selected' : '' }}>Reference Standards</option>
-          <option value="device" {{ old('category', $product['category'] ?? '') === 'device' ? 'selected' : '' }}>Device</option>
-          <option value="instruments" {{ old('category', $product['category'] ?? '') === 'instruments' ? 'selected' : '' }}>Instruments</option>
+          @foreach($categories as $cat)
+            <option value="{{ $cat->key }}"
+                    data-id="{{ $cat->id }}"
+                    {{ old('category', $product['category'] ?? '') === $cat->key ? 'selected' : '' }}>
+              {{ $cat->name }}
+            </option>
+          @endforeach
         </select>
+        <div class="form-text">
+          <a href="{{ route('admin.categories.index') }}" target="_blank" class="text-muted small">
+            <i class="bi bi-diagram-3 me-1"></i>Kelola kategori
+          </a>
+        </div>
       </div>
 
       <!-- Sektor Industri -->
@@ -78,18 +87,20 @@
         </select>
       </div>
 
-      <!-- Subkategori (Dependent Dropdown) -->
+      <!-- Subkategori (Dependent Dropdown — AJAX) -->
       <div class="col-12 my-3" id="sub-category-block" style="display: none;">
         <div class="p-3 rounded bg-light border">
           <label for="sub_category" class="form-label fw-bold text-dark">
             <i class="bi bi-diagram-3 text-primary me-2"></i>Subkategori Pilihan <span class="text-danger">*</span>
           </label>
-          <select class="form-select bg-white" id="admin-subcategory-select" name="sub_category" data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
+          <select class="form-select bg-white" id="admin-subcategory-select" name="sub_category"
+                  data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
             <option value="">-- Pilih Subkategori --</option>
           </select>
           <div class="form-text small text-muted mt-1">Sesuaikan subkategori berdasarkan rumpun produk yang Anda pilih di atas.</div>
         </div>
       </div>
+
 
       <!-- Gambar Produk -->
       <div class="col-12 mt-4">
@@ -210,88 +221,72 @@
       }
     }
 
-    // 2. Dropdown dynamic mapping logic
-    var subCategoriesMap = {
-      'microbiology': {
-        'food-safety': 'Food Safety',
-        'antimicrobial': 'Antimicrobial Susceptibility Testing',
-        'identification': 'Microbiological Identification',
-        'preservation': 'Microorganisms Preservation System (BactoBank)',
-        'staining': 'Microbial Staining & Fixatives',
-        'consumables': 'Consumables',
-        'mic-test': 'MIC Test Strip',
-        'qc-organisms': 'QC Organisms',
-        'dip-slide': 'Dip slide',
-        'chemical-indicator': 'Chemical Indicator',
-        'latex-agglutination': 'Latex Agglutination Kits',
-        'ready-culture': 'Ready To Use Culture Media',
-        'biological-indicators': 'Biological Indicators',
-        'dehydrated-culture': 'Dehydrated Culture Media',
-        'immunology': 'Immunology',
-        'endotoxin': 'Endotoxin'
-      },
-      'reference-standards': {
-        'pharmaceutical': 'Pharmaceutical Reference Standards',
-        'green-standards': 'Green Standards',
-        'environmental': 'Environmental Standards',
-        'food-beverages': 'Food and Beverages Standards',
-        'agro-chemical': 'Agro Chemical Standards'
-      },
-      'device': {
-        'bsc-lfc': 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
-        'microbiological-instruments': 'Microbiological Instruments',
-        'liquid-handling': 'Liquid Handling',
-        'thermometer': 'Thermometer'
-      },
-      'instruments': {
-        'liofilchem-giotto-2': 'Liofilchem Giotto 2',
-        'agar-filler': 'Agar Filler',
-        'agar-preparator': 'Agar Preparator',
-        'kinetic-incubating-reader': 'Kinetic Incubating Microplate Reader',
-        'mica-diamidex': 'MICA Diamidex - Counting Microorganisms Faster'
-      }
-    };
-
-    var categorySelect = document.getElementById('admin-category-select');
+    // 2. Dynamic subcategory loader via AJAX
+    var categorySelect    = document.getElementById('admin-category-select');
     var subcategorySelect = document.getElementById('admin-subcategory-select');
-    var block = document.getElementById('sub-category-block');
+    var block             = document.getElementById('sub-category-block');
+    var apiUrl            = categorySelect ? categorySelect.getAttribute('data-api-url') : '';
 
-    function updateSubCategories(categoryVal) {
+    function updateSubCategories(selectedOption) {
       if (!subcategorySelect || !block) return;
 
-      var savedSubCategory = subcategorySelect.getAttribute('data-saved') || '';
+      var categoryId  = selectedOption ? selectedOption.getAttribute('data-id') : null;
+      var savedSubKey = subcategorySelect.getAttribute('data-saved') || '';
+
       subcategorySelect.innerHTML = '<option value="">-- Pilih Subkategori --</option>';
 
-      if (categoryVal && subCategoriesMap[categoryVal]) {
-        var subs = subCategoriesMap[categoryVal];
-        
-        Object.keys(subs).forEach(function(key) {
-          var option = document.createElement('option');
-          option.value = key;
-          option.textContent = subs[key];
-          if (savedSubCategory === key) {
-            option.selected = true;
-          }
-          subcategorySelect.appendChild(option);
-        });
-
-        block.style.display = 'block';
-        subcategorySelect.required = true;
-      } else {
-        block.style.display = 'none';
+      if (!categoryId) {
+        block.style.display   = 'none';
         subcategorySelect.required = false;
-        subcategorySelect.value = '';
+        return;
       }
+
+      // Show loading state
+      block.style.display = 'block';
+      subcategorySelect.disabled = true;
+      subcategorySelect.innerHTML = '<option value="">Memuat sub-kategori...</option>';
+
+      fetch(apiUrl + '?parent_id=' + encodeURIComponent(categoryId))
+        .then(function(r) { return r.json(); })
+        .then(function(subs) {
+          subcategorySelect.innerHTML = '<option value="">-- Pilih Subkategori --</option>';
+
+          if (subs.length === 0) {
+            // Category exists but has no subcategories — hide block
+            block.style.display = 'none';
+            subcategorySelect.required = false;
+          } else {
+            subs.forEach(function(sub) {
+              var opt = document.createElement('option');
+              opt.value       = sub.key;
+              opt.textContent = sub.name;
+              if (savedSubKey === sub.key) opt.selected = true;
+              subcategorySelect.appendChild(opt);
+            });
+            block.style.display        = 'block';
+            subcategorySelect.required = true;
+          }
+          subcategorySelect.disabled = false;
+        })
+        .catch(function() {
+          subcategorySelect.innerHTML = '<option value="">Gagal memuat sub-kategori</option>';
+          subcategorySelect.disabled  = false;
+          block.style.display = 'none';
+        });
     }
 
     if (categorySelect) {
       categorySelect.addEventListener('change', function() {
-        updateSubCategories(this.value);
+        subcategorySelect.removeAttribute('data-saved'); // Reset saved on manual change
+        updateSubCategories(this.options[this.selectedIndex]);
       });
+
+      // On page load, load subs if category is already selected (edit mode)
       if (categorySelect.value) {
-        updateSubCategories(categorySelect.value);
+        updateSubCategories(categorySelect.options[categorySelect.selectedIndex]);
       }
     }
+
 
     // 3. Initialize Summernote
     $(document).ready(function() {

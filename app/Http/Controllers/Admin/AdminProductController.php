@@ -106,20 +106,23 @@ class AdminProductController extends Controller
     public function productsCreate()
     {
         $sectors = $this->dataService->getSectors();
+        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+            ->orderBy('sort_order')->orderBy('name')->get();
 
         $product = [
-            'title' => '',
-            'catalog' => '',
-            'category' => '',
-            'sub_category' => '',
-            'sector' => '',
-            'image' => '',
+            'title'         => '',
+            'catalog'       => '',
+            'category'      => '',
+            'sub_category'  => '',
+            'sector'        => '',
+            'image'         => '',
             'gallery_images' => [],
-            'description' => '',
+            'description'   => '',
         ];
 
-        return view('admin.products.form', compact('sectors', 'product'));
+        return view('admin.products.form', compact('sectors', 'product', 'categories'));
     }
+
 
     public function productsStore(StoreProductRequest $request)
     {
@@ -162,10 +165,13 @@ class AdminProductController extends Controller
         if (! $product) {
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
-        $sectors = $this->dataService->getSectors();
+        $sectors    = $this->dataService->getSectors();
+        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+            ->orderBy('sort_order')->orderBy('name')->get();
 
-        return view('admin.products.form', compact('product', 'sectors'));
+        return view('admin.products.form', compact('product', 'sectors', 'categories'));
     }
+
 
     public function productsUpdate(UpdateProductRequest $request, int $id)
     {

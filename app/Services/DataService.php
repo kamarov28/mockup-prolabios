@@ -28,108 +28,106 @@ class DataService
     public function getCategoriesStructure(): array
     {
         $fallback = [
-            'culture-media' => [
-                'name' => 'Culture Media',
-                'subs' => [
-                    'dehydrated-culture-media' => 'Dehydrated Culture Media',
-                    'ready-to-use-culture-media' => 'Ready To Use Culture Media',
-                ],
-            ],
             'microbiology' => [
                 'name' => 'Microbiology',
                 'subs' => [
-                    'food-safety' => 'Food Safety',
-                    'antimicrobial' => 'Antimicrobial Susceptibility Testing',
-                    'identification' => 'Microbiological Identification',
-                    'preservation' => 'Microorganisms Preservation System (BactoBank)',
-                    'staining' => 'Microbial Staining & Fixatives',
-                    'consumables' => 'Consumables',
-                    'mic-test' => 'MIC Test Strip',
-                    'qc-organisms' => 'QC Organisms',
-                    'dip-slide' => 'Dip slide',
-                    'chemical-indicator' => 'Chemical Indicator',
-                    'latex-agglutination' => 'Latex Agglutination Kits',
+                    'food-safety'               => 'Food Safety',
+                    'antimicrobial'             => 'Antimicrobial Susceptibility Testing',
+                    'identification'            => 'Microbiological Identification',
+                    'preservation'              => 'Microorganisms Preservation System (BactoBank)',
+                    'staining'                  => 'Microbial Staining & Fixatives',
+                    'consumables'               => 'Consumables',
+                    'mic-test'                  => 'MIC Test Strip',
+                    'qc-organisms'              => 'QC Organisms',
+                    'dip-slide'                 => 'Dip slide',
+                    'chemical-indicator'        => 'Chemical Indicator',
+                    'latex-agglutination'       => 'Latex Agglutination Kits',
                     'ready-to-use-culture-media' => 'Ready To Use Culture Media',
-                    'biological-indicators' => 'Biological Indicators',
-                    'dehydrated-culture-media' => 'Dehydrated Culture Media',
-                    'immunology' => 'Immunology',
-                    'endotoxin' => 'Endotoxin',
+                    'biological-indicators'     => 'Biological Indicators',
+                    'dehydrated-culture-media'  => 'Dehydrated Culture Media',
+                    'immunology'                => 'Immunology',
+                    'endotoxin'                 => 'Endotoxin',
                 ],
             ],
             'reference-standards' => [
                 'name' => 'Reference Standards',
                 'subs' => [
-                    'pharmaceutical' => 'Pharmaceutical Reference Standards',
+                    'pharmaceutical'  => 'Pharmaceutical Reference Standards',
                     'green-standards' => 'Green Standards',
-                    'environmental' => 'Environmental Standards',
-                    'food-beverages' => 'Food and Beverages Standards',
-                    'agro-chemical' => 'Agro Chemical Standards',
+                    'environmental'   => 'Environmental Standards',
+                    'food-beverages'  => 'Food and Beverages Standards',
+                    'agro-chemical'   => 'Agro Chemical Standards',
                 ],
             ],
             'device' => [
                 'name' => 'Device',
                 'subs' => [
-                    'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+                    'bsc-lfc'                    => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
                     'microbiological-instruments' => 'Microbiological Instruments',
-                    'liquid-handling' => 'Liquid Handling',
-                    'thermometer' => 'Thermometer',
+                    'liquid-handling'            => 'Liquid Handling',
+                    'thermometer'                => 'Thermometer',
                 ],
             ],
             'instruments' => [
                 'name' => 'Instruments',
                 'subs' => [
-                    'liofilchem-giotto-2' => 'Liofilchem® Giotto 2',
-                    'agar-filler' => 'Agar Filler',
-                    'agar-preparator' => 'Agar Preparator',
+                    'liofilchem-giotto-2'       => 'Liofilchem® Giotto 2',
+                    'agar-filler'               => 'Agar Filler',
+                    'agar-preparator'           => 'Agar Preparator',
                     'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
-                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster',
+                    'mica-diamidex'             => 'MICA® Diamidex - Counting Microorganisms Faster',
                 ],
             ],
         ];
 
         return Cache::remember('categories_structure', 600, function () use ($fallback) {
             try {
-                $dbItems = DB::table('products')
-                    ->select('category', 'sub_category')
-                    ->whereNotNull('category')
-                    ->distinct()
-                    ->get();
+                // ── Read from product_categories table (dynamic) ──────────────
+                $tableExists = DB::getSchemaBuilder()->hasTable('product_categories');
 
-                if ($dbItems->isEmpty()) {
+                if (! $tableExists) {
                     return $fallback;
                 }
 
+                $parents = DB::table('product_categories')
+                    ->whereNull('parent_id')
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get();
+
+                if ($parents->isEmpty()) {
+                    return $fallback;
+                }
+
+                $allChildren = DB::table('product_categories')
+                    ->whereNotNull('parent_id')
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get()
+                    ->groupBy('parent_id');
+
                 $structure = [];
-                foreach ($dbItems as $item) {
-                    $catSlug = Str::slug((string) $item->category);
-                    $subSlug = ! empty($item->sub_category) ? Str::slug((string) $item->sub_category) : null;
-
-                    if (empty($catSlug)) {
-                        continue;
+                foreach ($parents as $parent) {
+                    $subs = [];
+                    foreach ($allChildren->get($parent->id, collect()) as $child) {
+                        $subs[$child->key] = $child->name;
                     }
-
-                    if (! isset($structure[$catSlug])) {
-                        $catName = $fallback[$catSlug]['name'] ?? ucwords(str_replace('-', ' ', $catSlug));
-                        $structure[$catSlug] = [
-                            'name' => $catName,
-                            'subs' => [],
-                        ];
-                    }
-
-                    if (! empty($subSlug)) {
-                        $subName = $fallback[$catSlug]['subs'][$subSlug] ?? ucwords(str_replace('-', ' ', $subSlug));
-                        $structure[$catSlug]['subs'][$subSlug] = $subName;
-                    }
+                    $structure[$parent->key] = [
+                        'name' => $parent->name,
+                        'subs' => $subs,
+                    ];
                 }
 
                 return empty($structure) ? $fallback : $structure;
+
             } catch (\Exception $e) {
-                Log::warning('Gagal memuat kategori dinamis, menggunakan fallback: '.$e->getMessage());
+                Log::warning('Gagal memuat kategori dari product_categories, menggunakan fallback: ' . $e->getMessage());
 
                 return $fallback;
             }
         });
     }
+
 
     // ----------------------------------------------------
     // Products Service  (MySQL)

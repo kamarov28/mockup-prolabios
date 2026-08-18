@@ -70,11 +70,18 @@
           </a>
         </div>
 
+        <div class="sidebar-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
+          <a href="{{ route('admin.categories.index') }}" class="sidebar-link">
+            <i class="bi bi-diagram-3"></i> Kategori Produk
+          </a>
+        </div>
+
         <div class="sidebar-item {{ request()->is('admin/principals*') ? 'active' : '' }}">
           <a href="{{ route('admin.principals') }}" class="sidebar-link">
             <i class="bi bi-award"></i> Prinsipal / Mitra
           </a>
         </div>
+
 
         <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
           <a href="{{ route('admin.posts') }}" class="sidebar-link">
