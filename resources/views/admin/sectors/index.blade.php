@@ -25,13 +25,13 @@
               <th style="width: 160px;">ID Sektor</th>
               <th>Nama</th>
               <th>Deskripsi</th>
-              <th style="text-align: right; padding-right: 24px;">Aksi</th>
+              <th style="text-align: right; padding-right: 24px; width: 120px;">Aksi</th>
             </tr>
           </thead>
           <tbody>
             @foreach($sectors as $sec)
               <tr>
-                <td><code>{{ $sec['id'] }}</code></td>
+                <td><code class="cell-code">{{ $sec['id'] }}</code></td>
                 <td class="cell-title">{{ $sec['name'] }}</td>
                 <td class="cell-muted" style="max-width: 460px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                   @if(count($sec['description'] ?? []) > 0)
@@ -41,16 +41,23 @@
                   @endif
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ route('admin.sectors.edit', ['id' => $sec['id']]) }}" class="admin-action-link edit" title="Edit">
-                    <i class="bi bi-pencil-square"></i> Edit
-                  </a>
-                  <form action="{{ route('admin.sectors.destroy', ['id' => $sec['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $sec['name'] }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
+                  <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                    <a href="{{ route('admin.sectors.edit', ['id' => $sec['id']]) }}"
+                       class="admin-action-link edit" title="Edit"
+                       style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <form action="{{ route('admin.sectors.destroy', ['id' => $sec['id']]) }}" method="POST"
+                          class="form-delete" data-name="{{ $sec['name'] }}"
+                          style="display: contents;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="admin-action-link delete" title="Hapus"
+                              style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             @endforeach
@@ -72,7 +79,7 @@
 @section('admin_scripts')
 <script>
   document.querySelectorAll('.form-delete').forEach(form => {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       const name = this.getAttribute('data-name');
       Swal.fire({

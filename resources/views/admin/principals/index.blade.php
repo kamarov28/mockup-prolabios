@@ -7,7 +7,6 @@
 
 <div class="admin-card">
 
-  {{-- Header --}}
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Konten & Partner</span>
@@ -18,7 +17,6 @@
     </a>
   </div>
 
-  {{-- Filter Form --}}
   <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
     <form action="{{ route('admin.principals') }}" method="GET">
       <div class="row g-3">
@@ -41,7 +39,6 @@
     </form>
   </div>
 
-  {{-- Table --}}
   <div class="admin-card-body-flush">
     @if(count($principals) > 0)
       <div class="table-responsive">
@@ -53,7 +50,7 @@
               <th>Negara / Alamat</th>
               <th>Logo</th>
               <th>Status</th>
-              <th style="text-align: right; padding-right: 24px;">Aksi</th>
+              <th style="text-align: right; padding-right: 24px; width: 120px;">Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -79,26 +76,29 @@
                 </td>
                 <td>
                   @if($p->status === 'online')
-                    <span class="admin-badge admin-badge-success">
-                      Online
-                    </span>
+                    <span class="admin-badge admin-badge-success">Online</span>
                   @else
-                    <span class="admin-badge admin-badge-muted">
-                      Draft / Sembunyi
-                    </span>
+                    <span class="admin-badge admin-badge-muted">Draft / Sembunyi</span>
                   @endif
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ route('admin.principals.edit', $p->id) }}" class="admin-action-link edit" title="Edit">
-                    <i class="bi bi-pencil-square"></i> Edit
-                  </a>
-                  <form action="{{ route('admin.principals.destroy', $p->id) }}" method="POST" class="d-inline form-delete" data-name="{{ $p->name }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
+                  <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                    <a href="{{ route('admin.principals.edit', $p->id) }}"
+                       class="admin-action-link edit" title="Edit"
+                       style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <form action="{{ route('admin.principals.destroy', $p->id) }}" method="POST"
+                          class="form-delete" data-name="{{ $p->name }}"
+                          style="display: contents;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="admin-action-link delete" title="Hapus"
+                              style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             @endforeach
@@ -120,7 +120,7 @@
 @section('admin_scripts')
 <script>
   document.querySelectorAll('.form-delete').forEach(form => {
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
       const name = this.getAttribute('data-name');
       Swal.fire({
