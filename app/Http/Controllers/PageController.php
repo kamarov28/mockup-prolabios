@@ -204,4 +204,20 @@ class PageController extends Controller
     {
         return view('kontak');
     }
+
+    /**
+     * Display the privacy policy page (Kebijakan Privasi - UU PDP).
+     */
+    public function privacy()
+    {
+        return view('kebijakan-privasi');
+    }
+
+    /**
+     * Display the terms of service page (Syarat & Ketentuan).
+     */
+    public function terms()
+    {
+        return view('syarat-ketentuan');
+    }
 }

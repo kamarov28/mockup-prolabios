@@ -76,8 +76,13 @@
     
     <hr class="border-secondary mt-4 mb-3" style="opacity: 0.25;">
     
-    <div class="text-center text-light small fw-medium" style="color: #cbd5e1 !important; opacity: 1 !important;">
-      <p class="mb-0">&copy; 2026 PT Prolabios Mitra Analitika. All Rights Reserved.</p>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small fw-medium gap-2" style="color: #cbd5e1 !important; opacity: 1 !important;">
+      <p class="mb-0">&copy; {{ date('Y') }} PT Prolabios Mitra Analitika. All Rights Reserved.</p>
+      <div class="d-flex gap-3">
+        <a href="{{ route('privacy') }}" class="footer-legal-link" style="color: #94a3b8; text-decoration: none; font-size: 0.8rem; transition: color 0.2s;">Kebijakan Privasi</a>
+        <span style="color: rgba(255,255,255,0.2);">&bull;</span>
+        <a href="{{ route('terms') }}" class="footer-legal-link" style="color: #94a3b8; text-decoration: none; font-size: 0.8rem; transition: color 0.2s;">Syarat &amp; Ketentuan</a>
+      </div>
     </div>
   </div>
 </footer>

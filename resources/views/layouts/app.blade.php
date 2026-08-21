@@ -41,19 +41,49 @@
   <!-- Page Preloads -->
   @yield('preload')
 
-  <!-- Open Graph / Facebook / Twitter Metadata -->
+  <!-- Open Graph / Facebook Metadata -->
+  <meta property="og:site_name" content="{{ $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika' }}">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
   <meta property="og:url" content="{{ request()->url() }}">
   <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta property="og:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
   <meta property="og:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
 
+  <!-- Twitter Card Metadata -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="{{ request()->url() }}">
   <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
+  <meta name="twitter:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
+
+  <!-- Google Analytics 4 / GTM (If configured via .env or SiteSettings) -->
+  @php
+    $gaId = config('services.google_analytics_id', env('GOOGLE_ANALYTICS_ID', $siteSettings['google_analytics_id'] ?? null));
+    $gtmId = config('services.google_tag_manager_id', env('GOOGLE_TAG_MANAGER_ID', $siteSettings['google_tag_manager_id'] ?? null));
+  @endphp
+  @if(!empty($gaId))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ $gaId }}');
+    </script>
+  @endif
+  @if(!empty($gtmId))
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
+  @endif
 </head>
 <body>
+  @if(!empty($gtmId))
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  @endif
 
   <!-- Header / Navigation -->
   @include('layouts.partials.navbar')
@@ -64,6 +94,9 @@
 
   <!-- Corporate Footer -->
   @include('layouts.partials.footer')
+
+  <!-- Cookie Consent Notice -->
+  @include('layouts.partials.cookie-consent')
 
   <!-- Bootstrap first (components), then app (site behavior). Defer keeps HTML parse unblocked. -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>

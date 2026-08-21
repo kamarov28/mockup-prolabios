@@ -24,6 +24,11 @@
   </style>
 </head>
 <body>
+  <!-- Preheader Text (Visible in email client preview) -->
+  <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;">
+    Konfirmasi Tanda Terima: Permintaan Penawaran {{ $rfq->rfq_number }} telah kami terima dan sedang diproses tim sales.
+  </div>
+
   <div class="container">
     <div class="header">
       <h2>PT. PROLABIOS MITRA ANALITIKA</h2>

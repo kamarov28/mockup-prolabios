@@ -12,14 +12,29 @@ use Illuminate\Support\Str;
 class DataService
 {
     /**
-     * Clear all product-related cache entries.
-     * Compatible with database, file, array, redis, and memcached cache drivers.
-     * Call this after any product create/update/delete operation.
+     * Get the current products cache version integer.
+     */
+    public static function getProductsCacheVersion(): int
+    {
+        return (int) Cache::get('products_cache_version', 1);
+    }
+
+    /**
+     * Clear all product-related cache entries including individual product lookups.
+     * Increments the cache version to instantly invalidate getProductById and getProductByTitle keys.
      */
     protected function clearProductsCache(): void
     {
         Cache::forget('categories_structure');
         Cache::forget('products_list_global');
+        Cache::forget('search_suggestions_v2');
+        Cache::forget('search_suggestions');
+
+        try {
+            Cache::increment('products_cache_version');
+        } catch (\Throwable $e) {
+            Cache::put('products_cache_version', time());
+        }
     }
 
     /**
@@ -253,7 +268,8 @@ class DataService
 
     public function getProductByTitle(string $title): ?Product
     {
-        $cacheKey = 'product_by_title_'.md5($title);
+        $v = self::getProductsCacheVersion();
+        $cacheKey = "product_by_title_{$v}_".md5($title);
         $cached = Cache::get($cacheKey);
         if ($cached instanceof \__PHP_Incomplete_Class) {
             Cache::forget($cacheKey);
@@ -274,7 +290,8 @@ class DataService
 
     public function getProductById(int $id): ?Product
     {
-        $cacheKey = 'product_by_id_'.$id;
+        $v = self::getProductsCacheVersion();
+        $cacheKey = "product_by_id_{$v}_".$id;
         $cached = Cache::get($cacheKey);
         if ($cached instanceof \__PHP_Incomplete_Class) {
             Cache::forget($cacheKey);

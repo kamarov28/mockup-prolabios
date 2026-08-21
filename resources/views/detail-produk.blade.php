@@ -237,4 +237,65 @@
       if (thumbEl) thumbEl.classList.add('active');
     }
   </script>
+
+  @if($product)
+    <!-- Google Rich Snippets / Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "{{ addslashes($product['title']) }}",
+      "image": [
+        "{{ !empty($product['image']) ? (str_starts_with($product['image'], 'http') ? $product['image'] : url($product['image'])) : asset('images/placeholder.svg') }}"
+      ],
+      "description": "{{ addslashes(Str::limit(strip_tags($product['description'] ?? 'Instrumen dan reagen laboratorium analitika berkualitas tinggi dari PT. Prolabios Mitra Analitika.'), 200)) }}",
+      "sku": "{{ !empty($product['catalog']) ? addslashes($product['catalog']) : 'PLB-' . $product['id'] }}",
+      "mpn": "{{ !empty($product['catalog']) ? addslashes($product['catalog']) : 'PLB-' . $product['id'] }}",
+      "brand": {
+        "@type": "Brand",
+        "name": "{{ !empty($product['sector']) ? ucwords(str_replace('-', ' ', $product['sector'])) : 'Prolabios' }}"
+      },
+      "category": "{{ !empty($product['category']) ? ucwords(str_replace('-', ' ', $product['category'])) : 'Laboratorium' }}",
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ url()->current() }}?id={{ $product['id'] }}",
+        "priceCurrency": "IDR",
+        "price": "{{ !empty($product['price']) && $product['price'] > 0 ? (float) $product['price'] : 0 }}",
+        "priceValidUntil": "{{ date('Y-12-31', strtotime('+1 year')) }}",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "{{ (!isset($product['stock']) || (int)$product['stock'] > 0) ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder' }}",
+        "seller": {
+          "@type": "Organization",
+          "name": "PT. Prolabios Mitra Analitika"
+        }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Beranda",
+          "item": "{{ url('/') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Katalog Produk",
+          "item": "{{ url('/produk') }}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{{ addslashes($product['title']) }}",
+          "item": "{{ url()->current() }}?id={{ $product['id'] }}"
+        }
+      ]
+    }
+    </script>
+  @endif
 @endsection

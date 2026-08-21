@@ -26,6 +26,11 @@
   </style>
 </head>
 <body>
+  <!-- Preheader Text (Visible in email client preview) -->
+  <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;mso-hide:all;">
+    Pengajuan Penawaran Baru: {{ $rfq->rfq_number }} dari {{ $rfq->name }} ({{ $rfq->company_name }}). Total {{ count($rfq->items) }} produk.
+  </div>
+
   <div class="container">
     <div class="header">
       <h2>PT. PROLABIOS MITRA ANALITIKA</h2>

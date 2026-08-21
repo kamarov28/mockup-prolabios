@@ -13,8 +13,15 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RfqController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
+
+// ----------------------------------------------------
+// SEO & Crawlers
+// ----------------------------------------------------
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('seo.sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('seo.robots');
 
 // ----------------------------------------------------
 // System Health & Monitoring
@@ -33,6 +40,8 @@ Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.
 Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi', [PageController::class, 'informasi']);
 Route::get('/kontak', [PageController::class, 'kontak']);
+Route::get('/kebijakan-privasi', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/syarat-ketentuan', [PageController::class, 'terms'])->name('terms');
 Route::post('/kontak', [ContactController::class, 'submit'])
     ->middleware('throttle:contact-form')
     ->name('contact.submit');
