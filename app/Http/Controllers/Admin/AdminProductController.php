@@ -8,14 +8,21 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
+use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminProductController extends Controller
 {
-    use HandlesImageUploads;
+    use HandlesImageUploads, PaginatesQuery;
 
     protected DataService $dataService;
+
+    /** Number of products to display per admin list page */
+    private const PRODUCTS_PER_PAGE = 15;
+
+    /** Maximum gallery images stored per product */
+    private const MAX_GALLERY_IMAGES = 10;
 
     public function __construct(DataService $dataService)
     {
@@ -49,7 +56,7 @@ class AdminProductController extends Controller
         }
 
         $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $endDate   = $request->input('end_date');
         if ($startDate) {
             $query->whereDate('created_at', '>=', $startDate);
         }
@@ -58,71 +65,51 @@ class AdminProductController extends Controller
         }
 
         $sort = $request->input('sort', 'newest');
-        if ($sort === 'oldest') {
-            $query->orderBy('created_at', 'asc')->orderBy('id', 'asc');
-        } elseif ($sort === 'name_asc') {
-            $query->orderBy('title', 'asc');
-        } elseif ($sort === 'name_desc') {
-            $query->orderBy('title', 'desc');
-        } else {
-            $query->orderBy('created_at', 'desc')->orderBy('id', 'desc');
-        }
+        match ($sort) {
+            'oldest'    => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
+            'name_asc'  => $query->orderBy('title', 'asc'),
+            'name_desc' => $query->orderBy('title', 'desc'),
+            default     => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+        };
 
-        $totalProducts = $query->count();
-        $perPage = 15;
-        $totalPages = (int) ceil($totalProducts / $perPage);
-        if ($totalPages < 1) {
-            $totalPages = 1;
-        }
-
-        $currentPage = (int) $request->input('page', 1);
-        if ($currentPage < 1) {
-            $currentPage = 1;
-        }
-        if ($currentPage > $totalPages) {
-            $currentPage = $totalPages;
-        }
-
-        $offset = ($currentPage - 1) * $perPage;
-
-        $paginatedProducts = $query->skip($offset)->take($perPage)->get()->map(fn ($r) => (array) $r)->toArray();
+        ['items' => $products, 'currentPage' => $currentPage, 'totalPages' => $totalPages]
+            = $this->paginateQuery($query, $request, self::PRODUCTS_PER_PAGE);
 
         $sectors = $this->dataService->getSectors();
 
         return view('admin.products.index', [
-            'products' => $paginatedProducts,
-            'sectors' => $sectors,
-            'search' => $search,
-            'category' => $category,
-            'sector' => $sector,
-            'sort' => $sort,
-            'start_date' => $startDate,
-            'end_date' => $endDate,
+            'products'    => $products,
+            'sectors'     => $sectors,
+            'search'      => $search,
+            'category'    => $category,
+            'sector'      => $sector,
+            'sort'        => $sort,
+            'start_date'  => $startDate,
+            'end_date'    => $endDate,
             'currentPage' => $currentPage,
-            'totalPages' => $totalPages,
+            'totalPages'  => $totalPages,
         ]);
     }
 
     public function productsCreate()
     {
-        $sectors = $this->dataService->getSectors();
+        $sectors    = $this->dataService->getSectors();
         $categories = \App\Models\ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
 
         $product = [
-            'title'         => '',
-            'catalog'       => '',
-            'category'      => '',
-            'sub_category'  => '',
-            'sector'        => '',
-            'image'         => '',
+            'title'          => '',
+            'catalog'        => '',
+            'category'       => '',
+            'sub_category'   => '',
+            'sector'         => '',
+            'image'          => '',
             'gallery_images' => [],
-            'description'   => '',
+            'description'    => '',
         ];
 
         return view('admin.products.form', compact('sectors', 'product', 'categories'));
     }
-
 
     public function productsStore(StoreProductRequest $request)
     {
@@ -132,28 +119,28 @@ class AdminProductController extends Controller
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
+        $image         = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
         $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
 
         $product = [
-            'catalog' => $request->input('catalog') ?: '',
-            'title' => $title,
-            'description' => $request->input('description') ?: '',
-            'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: '',
-            'sector' => $request->input('sector') ?: '',
-            'image' => $image,
+            'catalog'        => $request->input('catalog') ?: '',
+            'title'          => $title,
+            'description'    => $request->input('description') ?: '',
+            'category'       => $request->input('category'),
+            'sub_category'   => $request->input('sub_category') ?: '',
+            'sector'         => $request->input('sector') ?: '',
+            'image'          => $image,
             'gallery_images' => $galleryImages,
-            'price' => (float) $request->input('price', 0),
-            'stock' => (int) $request->input('stock', 0),
+            'price'          => (float) $request->input('price', 0),
+            'stock'          => (int) $request->input('stock', 0),
         ];
 
         $createdProduct = $this->dataService->addProduct($product);
 
         AuditLogger::log('product.create', 'Product', $createdProduct['id'] ?? null, [
-            'title' => $title,
+            'title'   => $title,
             'catalog' => $product['catalog'],
-            'price' => $product['price'],
+            'price'   => $product['price'],
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
@@ -171,7 +158,6 @@ class AdminProductController extends Controller
 
         return view('admin.products.form', compact('product', 'sectors', 'categories'));
     }
-
 
     public function productsUpdate(UpdateProductRequest $request, int $id)
     {
@@ -191,32 +177,34 @@ class AdminProductController extends Controller
 
         // Keep existing gallery images except those the admin explicitly marked for removal
         $existingGallery = $product['gallery_images'] ?? [];
-        $toRemove = (array) $request->input('remove_gallery', []);
+        $toRemove        = (array) $request->input('remove_gallery', []);
         if (! empty($toRemove)) {
             $existingGallery = array_values(array_diff($existingGallery, $toRemove));
         }
         $newGalleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
-        $galleryImages = array_values(array_slice(array_merge($existingGallery, $newGalleryImages), 0, 10));
+        $galleryImages    = array_values(
+            array_slice(array_merge($existingGallery, $newGalleryImages), 0, self::MAX_GALLERY_IMAGES)
+        );
 
         $updatedProduct = [
-            'catalog' => $request->input('catalog') ?: '',
-            'title' => $newTitle,
-            'description' => $request->input('description') ?: '',
-            'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: '',
-            'sector' => $request->input('sector') ?: '',
-            'image' => $image,
+            'catalog'        => $request->input('catalog') ?: '',
+            'title'          => $newTitle,
+            'description'    => $request->input('description') ?: '',
+            'category'       => $request->input('category'),
+            'sub_category'   => $request->input('sub_category') ?: '',
+            'sector'         => $request->input('sector') ?: '',
+            'image'          => $image,
             'gallery_images' => $galleryImages,
-            'price' => (float) $request->input('price', 0),
-            'stock' => (int) $request->input('stock', 0),
+            'price'          => (float) $request->input('price', 0),
+            'stock'          => (int) $request->input('stock', 0),
         ];
 
         $this->dataService->updateProductById($id, $updatedProduct);
 
         AuditLogger::log('product.update', 'Product', $id, [
-            'title' => $newTitle,
+            'title'   => $newTitle,
             'catalog' => $updatedProduct['catalog'],
-            'price' => $updatedProduct['price'],
+            'price'   => $updatedProduct['price'],
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui!');
@@ -228,7 +216,7 @@ class AdminProductController extends Controller
         $this->dataService->deleteProductById($id);
 
         AuditLogger::log('product.delete', 'Product', $id, [
-            'title' => $product['title'] ?? null,
+            'title'   => $product['title'] ?? null,
             'catalog' => $product['catalog'] ?? null,
         ]);
 
@@ -237,7 +225,7 @@ class AdminProductController extends Controller
 
     public function productsCreateBulk()
     {
-        $sectors = $this->dataService->getSectors();
+        $sectors             = $this->dataService->getSectors();
         $categoriesStructure = $this->dataService->getCategoriesStructure();
 
         return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure'));
@@ -245,20 +233,20 @@ class AdminProductController extends Controller
 
     public function productsStoreBulk(Request $request)
     {
-        $titles = $request->input('title', []);
+        $titles          = $request->input('title', []);
         $productsToStore = [];
 
         foreach ($titles as $id => $title) {
-            $title = trim($title);
+            $title    = trim($title);
             $category = trim($request->input("category.{$id}", ''));
 
             if (empty($title) || empty($category)) {
                 continue;
             }
 
-            $catalog = trim($request->input("catalog.{$id}", ''));
+            $catalog     = trim($request->input("catalog.{$id}", ''));
             $subCategory = trim($request->input("sub_category.{$id}", ''));
-            $sector = trim($request->input("sector.{$id}", ''));
+            $sector      = trim($request->input("sector.{$id}", ''));
             $description = trim($request->input("description.{$id}", ''));
 
             // Use HandlesImageUploads trait — same security, WebP conversion, size limits as single upload
@@ -270,15 +258,15 @@ class AdminProductController extends Controller
             );
 
             $productsToStore[] = [
-                'catalog' => $catalog,
-                'title' => $title,
-                'category' => $category,
+                'catalog'      => $catalog,
+                'title'        => $title,
+                'category'     => $category,
                 'sub_category' => $subCategory,
-                'sector' => $sector ?: null,
-                'description' => $description,
-                'image' => $image,
-                'price' => 0,
-                'stock' => 0,
+                'sector'       => $sector ?: null,
+                'description'  => $description,
+                'image'        => $image,
+                'price'        => 0,
+                'stock'        => 0,
             ];
         }
 

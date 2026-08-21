@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Log;
 
 class CaptchaService
 {
+    /** Minimum reCAPTCHA v3 score to be considered human (0.0–1.0; higher = more confident) */
+    private const MIN_HUMAN_SCORE = 0.5;
+
     /**
      * Verify CAPTCHA token (reCAPTCHA v3 or Cloudflare Turnstile) if enabled in config.
      * Gracefully passes in local/testing when no secret keys are configured.
-     *
-     * @param Request $request
-     * @return bool
      */
     public static function verify(Request $request): bool
     {
@@ -38,19 +38,19 @@ class CaptchaService
                 $response = Http::asForm()
                     ->timeout(5)
                     ->post('https://www.google.com/recaptcha/api/siteverify', [
-                        'secret' => $recaptchaSecret,
+                        'secret'   => $recaptchaSecret,
                         'response' => $token,
                         'remoteip' => $request->ip(),
                     ]);
 
-                $data = $response->json();
+                $data    = $response->json();
                 $success = (bool) ($data['success'] ?? false);
-                $score = (float) ($data['score'] ?? 0.0);
+                $score   = (float) ($data['score'] ?? 0.0);
 
-                if (! $success || $score < 0.5) {
+                if (! $success || $score < self::MIN_HUMAN_SCORE) {
                     Log::warning('Captcha verification failed or low score.', [
-                        'ip' => $request->ip(),
-                        'score' => $score,
+                        'ip'     => $request->ip(),
+                        'score'  => $score,
                         'errors' => $data['error-codes'] ?? [],
                     ]);
 
@@ -61,7 +61,7 @@ class CaptchaService
             } catch (\Throwable $e) {
                 Log::error('Error contacting reCAPTCHA API: '.$e->getMessage());
 
-                // Fail open or fail closed depending on requirements; fail-open for network timeouts
+                // Fail open on network timeouts so legitimate users are not blocked
                 return true;
             }
         }
@@ -79,7 +79,7 @@ class CaptchaService
                 $response = Http::asForm()
                     ->timeout(5)
                     ->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-                        'secret' => $turnstileSecret,
+                        'secret'   => $turnstileSecret,
                         'response' => $token,
                         'remoteip' => $request->ip(),
                     ]);

@@ -3,22 +3,24 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Storage;
 
 class DatabaseBackup extends Command
 {
-    protected $signature = 'backup:database';
+    protected $signature   = 'backup:database';
     protected $description = 'Create a compressed database backup and clean old backups';
+
+    /** Number of most-recent backups to keep; older files are deleted */
+    private const BACKUP_RETENTION_COUNT = 7;
 
     public function handle(): int
     {
-        $db = config('database.connections.mysql');
+        $db        = config('database.connections.mysql');
         $timestamp = now()->format('Y-m-d-His');
-        $filename = "prolabios-{$timestamp}.sql";
-        $tempPath = storage_path("app/backup/{$filename}");
+        $filename  = "prolabios-{$timestamp}.sql";
+        $tempPath  = storage_path("app/backup/{$filename}");
 
         // Ensure backup directory exists
-        if (!is_dir(storage_path('app/backup'))) {
+        if (! is_dir(storage_path('app/backup'))) {
             mkdir(storage_path('app/backup'), 0755, true);
         }
 
@@ -34,18 +36,19 @@ class DatabaseBackup extends Command
 
         exec($command, $output, $exitCode);
 
-        if ($exitCode !== 0 || !file_exists($tempPath) || filesize($tempPath) === 0) {
+        if ($exitCode !== 0 || ! file_exists($tempPath) || filesize($tempPath) === 0) {
             $this->error('Database backup failed!');
             \Log::channel('backup')->error('Database backup failed', [
                 'exit_code' => $exitCode,
                 'timestamp' => now(),
             ]);
+
             return 1;
         }
 
         // Compress with gzip
         $gzPath = "{$tempPath}.gz";
-        exec("gzip -c " . escapeshellarg($tempPath) . " > " . escapeshellarg($gzPath));
+        exec('gzip -c '.escapeshellarg($tempPath).' > '.escapeshellarg($gzPath));
         unlink($tempPath); // Delete raw SQL, keep .gz only
 
         $size = round(filesize($gzPath) / 1024 / 1024, 2); // MB
@@ -53,12 +56,12 @@ class DatabaseBackup extends Command
         $this->info("✅ Backup created: {$filename}.gz ({$size} MB)");
 
         \Log::channel('backup')->info('Database backup created', [
-            'file' => "{$filename}.gz",
-            'size_mb' => $size,
+            'file'      => "{$filename}.gz",
+            'size_mb'   => $size,
             'timestamp' => now(),
         ]);
 
-        // Cleanup: keep only last 7 backups
+        // Cleanup: keep only last BACKUP_RETENTION_COUNT backups
         $this->cleanupOldBackups();
 
         return 0;
@@ -68,18 +71,18 @@ class DatabaseBackup extends Command
     {
         $files = glob(storage_path('app/backup/prolabios-*.sql.gz'));
 
-        if (count($files) <= 7) {
+        if (count($files) <= self::BACKUP_RETENTION_COUNT) {
             return;
         }
 
-        // Sort by modified time (oldest first)
-        usort($files, fn($a, $b) => filemtime($a) <=> filemtime($b));
+        // Sort ascending by modified time (oldest first)
+        usort($files, fn ($a, $b) => filemtime($a) <=> filemtime($b));
 
-        $toDelete = array_slice($files, 0, count($files) - 7);
+        $toDelete = array_slice($files, 0, count($files) - self::BACKUP_RETENTION_COUNT);
 
         foreach ($toDelete as $file) {
             unlink($file);
-            $this->warn("🗑️ Deleted old backup: " . basename($file));
+            $this->warn('🗑️ Deleted old backup: '.basename($file));
         }
     }
 }
