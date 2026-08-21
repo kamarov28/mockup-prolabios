@@ -36,10 +36,16 @@ class Product extends Model
 
     // ----------------------------------------------------
     // Relationships
+    // products.category / sub_category store ProductCategory.key (slug), not name
     // ----------------------------------------------------
     public function categoryRelation(): BelongsTo
     {
-        return $this->belongsTo(ProductCategory::class, 'category', 'name');
+        return $this->belongsTo(ProductCategory::class, 'category', 'key');
+    }
+
+    public function subCategoryRelation(): BelongsTo
+    {
+        return $this->belongsTo(ProductCategory::class, 'sub_category', 'key');
     }
 
     public function rfqItems(): HasMany
