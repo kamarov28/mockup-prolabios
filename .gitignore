@@ -24,9 +24,14 @@ yarn-error.log
 .DS_Store
 Thumbs.db
 
-# User-uploaded media (keep folder, ignore files)
+# User-uploaded media (legacy path — keep folder, ignore files)
 /public/uploads/*
 !/public/uploads/.gitkeep
+
+# Uploads on the public disk (storage/app/public)
+/storage/app/public/uploads
+/storage/app/public/*
+!/storage/app/public/.gitkeep
 
 # Large static assets — host externally (Drive / CDN)
 /public/catalog.pdf

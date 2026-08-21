@@ -3,18 +3,25 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 trait HandlesImageUploads
 {
     /**
-     * Securely handle image uploads with size, extension, mime checks, auto WebP conversion, and path traversal protection.
+     * Securely handle image uploads with size, extension, mime checks, auto WebP conversion,
+     * and path traversal protection.
+     *
+     * Files are stored on the "public" disk (storage/app/public/{folder}) and served via
+     * /storage/{folder}/... after `php artisan storage:link`.
+     *
+     * Legacy paths under /uploads/ remain accepted as URL fallbacks so existing DB rows still work.
      *
      * @param  string  $fileKey  Input key for file upload
      * @param  string  $urlKey  Input key for URL fallback
-     * @param  string|null  $fallback  Default image URL
-     * @param  string  $folder  Target upload folder inside public/
+     * @param  string|null  $fallback  Default image URL / path
+     * @param  string  $folder  Target folder on the public disk
      * @param  int  $maxSizeBytes  Max file size limit (5MB default)
      */
     protected function handleImageUpload(
@@ -25,6 +32,8 @@ trait HandlesImageUploads
         string $folder = 'uploads',
         int $maxSizeBytes = 5242880
     ): ?string {
+        $folder = trim($folder, '/');
+
         if ($request->hasFile($fileKey)) {
             $file = $request->file($fileKey);
 
@@ -44,7 +53,7 @@ trait HandlesImageUploads
                     ]);
                 }
 
-                if (! in_array($extension, $allowedExtensions)) {
+                if (! in_array($extension, $allowedExtensions, true)) {
                     throw ValidationException::withMessages([
                         $fileKey => ['Format gambar tidak valid. Gunakan format JPG, JPEG, PNG, WEBP, atau GIF.'],
                     ]);
@@ -52,18 +61,13 @@ trait HandlesImageUploads
 
                 $mimeType = $file->getMimeType();
                 $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-                if (! in_array($mimeType, $allowedMimes)) {
+                if (! in_array($mimeType, $allowedMimes, true)) {
                     throw ValidationException::withMessages([
                         $fileKey => ['Tipe file yang diunggah bukan file gambar yang sah.'],
                     ]);
                 }
 
-                $targetDir = public_path($folder);
-                if (! file_exists($targetDir)) {
-                    mkdir($targetDir, 0755, true);
-                }
-
-                // Automatic WebP Conversion & Resizing (70-85% file size reduction)
+                // Prefer WebP re-encode (resize oversized images, strip metadata)
                 if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
                     $rawContent = file_get_contents($file->getRealPath());
                     $img = @imagecreatefromstring($rawContent);
@@ -72,7 +76,6 @@ trait HandlesImageUploads
                         $width = imagesx($img);
                         $height = imagesy($img);
 
-                        // Downscale oversized images exceeding 1920px width
                         if ($width > 1920) {
                             $newWidth = 1920;
                             $newHeight = (int) round(($height / $width) * 1920);
@@ -87,33 +90,47 @@ trait HandlesImageUploads
                         }
 
                         $webpFilename = time().'_'.Str::random(16).'.webp';
-                        $fullPath = $targetDir.'/'.$webpFilename;
+                        $relativePath = $folder.'/'.$webpFilename;
 
-                        imagewebp($img, $fullPath, 82);
+                        ob_start();
+                        imagewebp($img, null, 82);
+                        $binary = ob_get_clean();
                         imagedestroy($img);
 
-                        return '/'.trim($folder, '/').'/'.$webpFilename;
+                        if ($binary !== false && $binary !== '') {
+                            Storage::disk('public')->put($relativePath, $binary);
+
+                            return '/storage/'.$relativePath;
+                        }
                     }
                 }
 
-                // Fallback standard move if GD conversion skipped
+                // Fallback: store original extension via Storage
                 $filename = time().'_'.Str::random(16).'.'.$extension;
-                $file->move($targetDir, $filename);
+                $relativePath = $folder.'/'.$filename;
+                Storage::disk('public')->putFileAs($folder, $file, $filename);
 
-                return '/'.trim($folder, '/').'/'.$filename;
+                return '/storage/'.$relativePath;
             }
         }
 
-        $url = trim($request->input($urlKey, ''));
-        if (! empty($url)) {
-            // Allow local relative paths (e.g. /uploads/filename.webp)
-            if (str_starts_with($url, '/uploads/') || str_starts_with($url, 'uploads/') || str_starts_with($url, '/images/') || str_starts_with($url, 'images/')) {
+        $url = trim((string) $request->input($urlKey, ''));
+        if ($url !== '') {
+            // Local relative paths — legacy /uploads and new /storage/uploads
+            if (
+                str_starts_with($url, '/uploads/')
+                || str_starts_with($url, 'uploads/')
+                || str_starts_with($url, '/storage/')
+                || str_starts_with($url, 'storage/')
+                || str_starts_with($url, '/images/')
+                || str_starts_with($url, 'images/')
+            ) {
                 return str_starts_with($url, '/') ? $url : '/'.$url;
             }
 
             $sanitized = filter_var($url, FILTER_SANITIZE_URL);
             $valid = filter_var($sanitized, FILTER_VALIDATE_URL);
-            if ($valid && in_array(strtolower(parse_url($valid, PHP_URL_SCHEME)), ['http', 'https'])) {
+            if ($valid && in_array(strtolower((string) parse_url($valid, PHP_URL_SCHEME)), ['http', 'https'], true)) {
                 return $valid;
             }
 
@@ -124,16 +141,14 @@ trait HandlesImageUploads
     }
 
     /**
-     * Securely handle multiple image uploads (e.g. a product photo gallery).
-     * Reuses the exact same validation/hardening rules as handleImageUpload()
-     * (extension allowlist, MIME check, SVG block, WebP re-encode + resize,
-     * random filename) for every file in the batch.
+     * Securely handle multiple image uploads (e.g. product photo gallery).
+     * Same validation rules as handleImageUpload(); stored on the public disk.
      *
      * @param  string  $fileKey  Input key for the file[] array (e.g. 'gallery_files')
-     * @param  string  $folder  Target upload folder inside public/
+     * @param  string  $folder  Target folder on the public disk
      * @param  int  $maxSizeBytes  Max size per file (5MB default)
      * @param  int  $maxFiles  Max number of files accepted per request (10 default)
-     * @return array<int, string> List of stored relative image paths
+     * @return array<int, string> List of public URL paths (/storage/...)
      */
     protected function handleMultipleImageUploads(
         Request $request,
@@ -146,6 +161,7 @@ trait HandlesImageUploads
             return [];
         }
 
+        $folder = trim($folder, '/');
         $files = $request->file($fileKey);
         if (! is_array($files)) {
             $files = [$files];
@@ -168,7 +184,7 @@ trait HandlesImageUploads
             $extension = strtolower($file->getClientOriginalExtension());
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
 
-            if ($extension === 'svg' || ! in_array($extension, $allowedExtensions)) {
+            if ($extension === 'svg' || ! in_array($extension, $allowedExtensions, true)) {
                 throw ValidationException::withMessages([
                     $fileKey => ['Format gambar galeri tidak valid. Gunakan JPG, JPEG, PNG, WEBP, atau GIF.'],
                 ]);
@@ -176,15 +192,10 @@ trait HandlesImageUploads
 
             $mimeType = $file->getMimeType();
             $allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-            if (! in_array($mimeType, $allowedMimes)) {
+            if (! in_array($mimeType, $allowedMimes, true)) {
                 throw ValidationException::withMessages([
                     $fileKey => ['Salah satu file yang diunggah bukan file gambar yang sah.'],
                 ]);
-            }
-
-            $targetDir = public_path($folder);
-            if (! file_exists($targetDir)) {
-                mkdir($targetDir, 0755, true);
             }
 
             $storedPath = null;
@@ -211,19 +222,25 @@ trait HandlesImageUploads
                     }
 
                     $webpFilename = time().'_'.Str::random(16).'.webp';
-                    $fullPath = $targetDir.'/'.$webpFilename;
+                    $relativePath = $folder.'/'.$webpFilename;
 
-                    imagewebp($img, $fullPath, 82);
+                    ob_start();
+                    imagewebp($img, null, 82);
+                    $binary = ob_get_clean();
                     imagedestroy($img);
 
-                    $storedPath = '/'.trim($folder, '/').'/'.$webpFilename;
+                    if ($binary !== false && $binary !== '') {
+                        Storage::disk('public')->put($relativePath, $binary);
+                        $storedPath = '/storage/'.$relativePath;
+                    }
                 }
             }
 
             if ($storedPath === null) {
                 $filename = time().'_'.Str::random(16).'.'.$extension;
-                $file->move($targetDir, $filename);
-                $storedPath = '/'.trim($folder, '/').'/'.$filename;
+                $relativePath = $folder.'/'.$filename;
+                Storage::disk('public')->putFileAs($folder, $file, $filename);
+                $storedPath = '/storage/'.$relativePath;
             }
 
             $stored[] = $storedPath;
