@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Product;
+use App\Services\DataService;
 
 /**
  * ResolvesProducts
@@ -19,13 +20,14 @@ trait ResolvesProducts
     protected function resolveProduct(?string $id, ?string $title): ?Product
     {
         $product = null;
+        $service = isset($this->dataService) ? $this->dataService : app(DataService::class);
 
         if (! empty($id)) {
-            $product = $this->dataService->getProductById((int) $id);
+            $product = $service->getProductById((int) $id);
         }
 
         if (! $product && ! empty($title)) {
-            $product = $this->dataService->getProductByTitle($title);
+            $product = $service->getProductByTitle($title);
         }
 
         return $product;
