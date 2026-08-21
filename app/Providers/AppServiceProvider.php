@@ -60,6 +60,34 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
         });
+
+        // Frontend-only shared data (WA numbers, site settings, search suggestions).
+        // Skip entirely on admin routes — admin layout does not use these variables
+        // and loading them on every /admin/* request adds unnecessary DB/cache work.
+        $this->shareFrontendViewData();
+    }
+
+    /**
+     * Share public-site variables with Blade views.
+     * Only runs for non-admin, non-console requests.
+     */
+    protected function shareFrontendViewData(): void
+    {
+        // Skip during artisan/console and admin panel requests
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
+        try {
+            $request = request();
+            if ($request && $request->is('admin', 'admin/*')) {
+                return;
+            }
+        } catch (\Throwable $e) {
+            // request() may not be available in some early boot contexts
+            return;
+        }
+
         try {
             $dataService = app(DataService::class);
             $siteSettings = $dataService->getHomepageData();
@@ -106,7 +134,7 @@ class AppServiceProvider extends ServiceProvider
             View::share('waDefaultMsg', $waDefaultMsg);
             View::share('searchSuggestions', $searchSuggestions);
         } catch (\Exception $e) {
-            // Safe fallback during command execution
+            // Safe fallback during early boot / missing tables
         }
     }
 }
