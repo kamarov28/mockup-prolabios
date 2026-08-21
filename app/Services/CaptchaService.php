@@ -13,14 +13,19 @@ class CaptchaService
 
     /**
      * Verify CAPTCHA token (reCAPTCHA v3 or Cloudflare Turnstile) if enabled in config.
-     * Gracefully passes in local/testing when no secret keys are configured.
+     *
+     * Behaviour:
+     * - No secret keys configured → pass (local/dev; honeypot + rate limit still apply)
+     * - Secret configured + missing/invalid token → fail
+     * - API network error in production → fail closed
+     * - API network error in local/testing → fail open (so dev is not blocked)
      */
     public static function verify(Request $request): bool
     {
         $recaptchaSecret = config('services.recaptcha.secret');
         $turnstileSecret = config('services.turnstile.secret');
 
-        // If no CAPTCHA service configured in .env, rely on Honeypot + Rate Limiter
+        // If no CAPTCHA service configured, rely on Honeypot + Rate Limiter
         if (empty($recaptchaSecret) && empty($turnstileSecret)) {
             return true;
         }
@@ -61,8 +66,7 @@ class CaptchaService
             } catch (\Throwable $e) {
                 Log::error('Error contacting reCAPTCHA API: '.$e->getMessage());
 
-                // Fail open on network timeouts so legitimate users are not blocked
-                return true;
+                return self::onProviderError();
             }
         }
 
@@ -90,10 +94,25 @@ class CaptchaService
             } catch (\Throwable $e) {
                 Log::error('Error contacting Turnstile API: '.$e->getMessage());
 
-                return true;
+                return self::onProviderError();
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Network / provider errors: fail closed in production, fail open elsewhere.
+     */
+    private static function onProviderError(): bool
+    {
+        if (app()->environment('production')) {
+            Log::warning('Captcha provider unreachable — failing closed in production.');
+
+            return false;
+        }
+
+        // Local / testing: do not block developers when CAPTCHA API is down
         return true;
     }
 }
