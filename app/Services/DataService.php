@@ -815,9 +815,9 @@ class DataService
             'contact_phone_technician' => '0812-837-4867',
             'whatsapp_default_message' => 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.',
             'contact_email' => 'marketing@prolabios.com',
-            'contact_address' => 'Ruko Plaza de Lumina Blok B No. 27, Semanan, Kalideres, Jakarta Barat, DKI Jakarta 11850',
+            'contact_address' => 'GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914',
             'catalog_pdf_url' => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
-            'google_maps_embed_url' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.8624231649987!2d106.69742687595568!3d-6.149170860275924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f8263e620583%3A0xe5a3f47e335272a8!2sPlaza%20De%20Lumina!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid',
+            'google_maps_embed_url' => 'https://maps.google.com/maps?q=PT.+Prolabios+Mitra+Analitika&t=&z=17&ie=UTF8&iwloc=&output=embed',
 
             // General & Social Media settings
             'company_name' => 'PT. Prolabios Mitra Analitika',
@@ -867,6 +867,9 @@ class DataService
         if (empty($html)) {
             return '';
         }
+
+        // Clean up literal string '\r\n' or '\n' or '\r' if stored as text literals
+        $html = str_replace(['\r\n', '\r', '\n'], "\n", $html);
 
         $dom = new \DOMDocument;
         libxml_use_internal_errors(true);

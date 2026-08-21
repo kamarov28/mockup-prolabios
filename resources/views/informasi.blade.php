@@ -9,22 +9,24 @@
 @endif
 
 @section('content')
-  <!-- Editorial Page Header -->
-  <div class="editorial-page-header">
-    <div class="container">
-      <span class="editorial-page-label">News & Articles</span>
-      <h1 class="editorial-page-title">Information</h1>
-      <p class="editorial-page-subtitle">Latest news and articles about laboratory and industry</p>
+  @if(!$currentBlog)
+    <!-- Editorial Page Header -->
+    <div class="editorial-page-header">
+      <div class="container">
+        <span class="editorial-page-label">News & Articles</span>
+        <h1 class="editorial-page-title">Information</h1>
+        <p class="editorial-page-subtitle">Latest news and articles about laboratory and industry</p>
+      </div>
     </div>
-  </div>
+  @endif
 
   <!-- Informasi Content -->
-  <section class="section-main">
+  <section class="section-main {{ $currentBlog ? 'blog-detail-section' : '' }}" @if($currentBlog) style="padding-top: 140px !important;" @endif>
     <div class="container">
       <div class="row g-5">
 
-        <!-- Main Content (Left) -->
-        <div class="col-lg-8 col-md-7 {{ $currentBlog ? 'order-first' : 'order-last order-md-1' }}">
+        <!-- Main Content -->
+        <div class="{{ $currentBlog ? 'col-lg-10 col-xl-8 mx-auto' : 'col-lg-8 col-md-7 order-last order-md-1' }}">
           @if($currentBlog)
             <!-- Detail View -->
             <div>
@@ -95,58 +97,60 @@
           @endif
         </div>
 
-        <!-- Sidebar (Right) -->
-        <div class="col-lg-4 col-md-5 {{ $currentBlog ? 'order-last' : 'order-first order-md-2' }}">
+        @if(!$currentBlog)
+          <!-- Sidebar (Right) -->
+          <div class="col-lg-4 col-md-5 order-first order-md-2">
 
-          <!-- Category Filter -->
-          <div class="mb-5">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
-              <h3 class="profil-sidebar-title" style="margin-bottom: 0; flex: 1;">Article Categories</h3>
-              @if($selectedCategory)
-                <a href="{{ url('/informasi') }}" style="font-family: var(--font-headline); font-size: 0.7rem; color: var(--color-accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;"><i class="bi bi-x-circle me-1"></i>Reset</a>
+            <!-- Category Filter -->
+            <div class="mb-5">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
+                <h3 class="profil-sidebar-title" style="margin-bottom: 0; flex: 1;">Article Categories</h3>
+                @if($selectedCategory)
+                  <a href="{{ url('/informasi') }}" style="font-family: var(--font-headline); font-size: 0.7rem; color: var(--color-accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;"><i class="bi bi-x-circle me-1"></i>Reset</a>
+                @endif
+              </div>
+              <div style="border-bottom: 1px solid var(--color-border); margin-bottom: 16px; padding-bottom: 12px;"></div>
+              <nav class="layanan-sidebar-nav">
+                @foreach($categoryCounts as $catName => $count)
+                  @php
+                    $catSlug = '';
+                    if ($catName === 'Berita') $catSlug = 'berita';
+                    elseif ($catName === 'Event') $catSlug = 'event';
+                    elseif ($catName === 'Info Terkait') $catSlug = 'info';
+                    elseif ($catName === 'IPTEK') $catSlug = 'iptek';
+                    elseif ($catName === 'Kegiatan') $catSlug = 'kegiatan';
+                  @endphp
+                  <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
+                     class="layanan-sidebar-link {{ $selectedCategory == $catSlug ? 'is-active' : '' }}"
+                     style="display: flex; justify-content: space-between;">
+                    {{ $catName }}
+                    <span style="font-size: 0.72rem; color: var(--color-text-muted);">{{ $count }}</span>
+                  </a>
+                @endforeach
+              </nav>
+            </div>
+
+            <!-- Recent Posts -->
+            <div>
+              <h3 class="profil-sidebar-title">Latest News</h3>
+              @if(count($recentPosts) > 0)
+                @foreach($recentPosts as $index => $rPost)
+                  <div style="padding: 14px 0; {{ $index !== count($recentPosts) - 1 ? 'border-bottom: 1px solid var(--color-border);' : '' }}">
+                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">
+                      <i class="bi bi-calendar3 me-1"></i> {{ $rPost['date'] }}
+                    </div>
+                    <h4 style="font-size: 0.88rem; line-height: 1.5; margin: 0;">
+                      <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" style="color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">{{ $rPost['title'] }}</a>
+                    </h4>
+                  </div>
+                @endforeach
+              @else
+                <p class="profil-body-text">No recent news available.</p>
               @endif
             </div>
-            <div style="border-bottom: 1px solid var(--color-border); margin-bottom: 16px; padding-bottom: 12px;"></div>
-            <nav class="layanan-sidebar-nav">
-              @foreach($categoryCounts as $catName => $count)
-                @php
-                  $catSlug = '';
-                  if ($catName === 'Berita') $catSlug = 'berita';
-                  elseif ($catName === 'Event') $catSlug = 'event';
-                  elseif ($catName === 'Info Terkait') $catSlug = 'info';
-                  elseif ($catName === 'IPTEK') $catSlug = 'iptek';
-                  elseif ($catName === 'Kegiatan') $catSlug = 'kegiatan';
-                @endphp
-                <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
-                   class="layanan-sidebar-link {{ $selectedCategory == $catSlug ? 'is-active' : '' }}"
-                   style="display: flex; justify-content: space-between;">
-                  {{ $catName }}
-                  <span style="font-size: 0.72rem; color: var(--color-text-muted);">{{ $count }}</span>
-                </a>
-              @endforeach
-            </nav>
-          </div>
 
-          <!-- Recent Posts -->
-          <div>
-            <h3 class="profil-sidebar-title">Latest News</h3>
-            @if(count($recentPosts) > 0)
-              @foreach($recentPosts as $index => $rPost)
-                <div style="padding: 14px 0; {{ $index !== count($recentPosts) - 1 ? 'border-bottom: 1px solid var(--color-border);' : '' }}">
-                  <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">
-                    <i class="bi bi-calendar3 me-1"></i> {{ $rPost['date'] }}
-                  </div>
-                  <h4 style="font-size: 0.88rem; line-height: 1.5; margin: 0;">
-                    <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" style="color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.3s ease;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='rgba(255,255,255,0.75)'">{{ $rPost['title'] }}</a>
-                  </h4>
-                </div>
-              @endforeach
-            @else
-              <p class="profil-body-text">No recent news available.</p>
-            @endif
           </div>
-
-        </div>
+        @endif
       </div>
     </div>
   </section>
