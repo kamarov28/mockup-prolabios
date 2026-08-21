@@ -47,21 +47,26 @@
           <span class="admin-badge admin-badge-accent">Urutan: {{ $parent->sort_order }}</span>
         </div>
 
-        <div class="d-flex gap-2 flex-shrink-0">
+        <div class="d-flex align-items-center gap-2 flex-shrink-0">
           <a href="{{ route('admin.categories.create', ['parent_id' => $parent->id]) }}"
              class="admin-btn admin-btn-outline" title="Tambah sub-kategori">
             <i class="bi bi-plus-lg"></i> Sub-kategori
           </a>
-          <a href="{{ route('admin.categories.edit', $parent->id) }}"
-             class="admin-action-link edit" title="Edit">
-            <i class="bi bi-pencil-square"></i>
-          </a>
-          <form method="POST" action="{{ route('admin.categories.destroy', $parent->id) }}" class="d-inline">
-            @csrf @method('DELETE')
-            <button type="submit" class="admin-action-link delete" title="Hapus">
-              <i class="bi bi-trash"></i>
-            </button>
-          </form>
+          <div class="d-flex align-items-center gap-1">
+            <a href="{{ route('admin.categories.edit', $parent->id) }}"
+               class="admin-action-link edit" title="Edit"
+               style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0;">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <form method="POST" action="{{ route('admin.categories.destroy', $parent->id) }}"
+                  style="display: contents;">
+              @csrf @method('DELETE')
+              <button type="submit" class="admin-action-link delete" title="Hapus"
+                      style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0;">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </div>
         </div>
       </div>
 
@@ -94,16 +99,21 @@
                   {{ $child->sort_order }}
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ route('admin.categories.edit', $child->id) }}"
-                     class="admin-action-link edit" title="Edit">
-                    <i class="bi bi-pencil-square"></i>
-                  </a>
-                  <form method="POST" action="{{ route('admin.categories.destroy', $child->id) }}" class="d-inline">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </form>
+                  <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                    <a href="{{ route('admin.categories.edit', $child->id) }}"
+                       class="admin-action-link edit" title="Edit"
+                       style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                      <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <form method="POST" action="{{ route('admin.categories.destroy', $child->id) }}"
+                          style="display: contents;">
+                      @csrf @method('DELETE')
+                      <button type="submit" class="admin-action-link delete" title="Hapus"
+                              style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               @endforeach
