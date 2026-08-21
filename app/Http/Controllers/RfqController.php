@@ -10,12 +10,15 @@ use App\Models\RfqItem;
 use App\Services\AuditLogger;
 use App\Services\CaptchaService;
 use App\Services\DataService;
+use App\Traits\ResolvesProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class RfqController extends Controller
 {
+    use ResolvesProducts;
+
     protected DataService $dataService;
 
     /** Maximum character length for the optional notes field */
@@ -27,29 +30,6 @@ class RfqController extends Controller
     public function __construct(DataService $dataService)
     {
         $this->dataService = $dataService;
-    }
-
-    // -------------------------------------------------------------------------
-    // Private Helpers
-    // -------------------------------------------------------------------------
-
-    /**
-     * Resolve a Product Eloquent model by id (preferred) then by title.
-     * Returns null when neither lookup finds a match.
-     */
-    private function resolveProduct(?string $id, ?string $title): ?Product
-    {
-        $product = null;
-
-        if (! empty($id)) {
-            $product = $this->dataService->getProductById((int) $id);
-        }
-
-        if (! $product && ! empty($title)) {
-            $product = $this->dataService->getProductByTitle($title);
-        }
-
-        return $product;
     }
 
     // -------------------------------------------------------------------------

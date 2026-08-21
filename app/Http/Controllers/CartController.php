@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Services\DataService;
+use App\Traits\ResolvesProducts;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    use ResolvesProducts;
+
     protected DataService $dataService;
 
     public function __construct(DataService $dataService)
@@ -18,25 +21,6 @@ class CartController extends Controller
     // -------------------------------------------------------------------------
     // Private Helpers
     // -------------------------------------------------------------------------
-
-    /**
-     * Resolve a Product Eloquent model by id (preferred) then by title.
-     * Returns null when neither lookup finds a match.
-     */
-    private function resolveProduct(?string $id, ?string $title): ?Product
-    {
-        $product = null;
-
-        if (! empty($id)) {
-            $product = $this->dataService->getProductById((int) $id);
-        }
-
-        if (! $product && ! empty($title)) {
-            $product = $this->dataService->getProductByTitle($title);
-        }
-
-        return $product;
-    }
 
     /**
      * Find the session-cart array key that matches the given product id or title.
