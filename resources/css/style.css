@@ -414,7 +414,7 @@ h1, h2, h3, h4, h5, h6,
   width: 180px; /* Uniform width */
   height: 90px; /* Uniform height */
   background-color: #ffffff !important;
-  border-radius: 8px;
+  border-radius: 0px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease;
   flex-shrink: 0;
@@ -467,7 +467,7 @@ h1, h2, h3, h4, h5, h6,
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-radius: 12px;
+  border-radius: 0px !important;
   padding: 12px 20px;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -589,7 +589,7 @@ h1, h2, h3, h4, h5, h6,
    Premium Blog Card Styles
    ========================================================================== */
 .blog-card {
-  border-radius: 12px !important;
+  border-radius: 0px !important;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
   background-color: var(--color-bg-white) !important;
@@ -597,6 +597,7 @@ h1, h2, h3, h4, h5, h6,
 
 [data-theme="dark"] .blog-card {
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
@@ -700,7 +701,7 @@ h1, h2, h3, h4, h5, h6,
    Premium Product Cards & Table Styles (Sektor/Produk Page)
    ========================================================================== */
 .product-card-premium {
-  border-radius: 12px !important;
+  border-radius: 0px !important;
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
   background-color: var(--color-bg-white) !important;
@@ -712,6 +713,7 @@ h1, h2, h3, h4, h5, h6,
 
 [data-theme="dark"] .product-card-premium {
   border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important;
 }
 
 .product-card-premium:hover {
@@ -728,6 +730,7 @@ h1, h2, h3, h4, h5, h6,
   overflow: hidden;
   height: 200px;
   background-color: #ffffff;
+  border-radius: 0px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1363,6 +1366,26 @@ input:focus-visible,
   .marquee-content-single {
     animation: none !important;
   }
+}
+
+/* Hide browser-native number spinner toggles (Firefox, WebKit, Edge) */
+input[type=number],
+.hide-spinner,
+input.b2b-qty-input,
+.b2b-qty-input {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button,
+.hide-spinner::-webkit-outer-spin-button,
+.hide-spinner::-webkit-inner-spin-button,
+input.b2b-qty-input::-webkit-outer-spin-button,
+input.b2b-qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  display: none !important;
+  margin: 0 !important;
 }
 
 

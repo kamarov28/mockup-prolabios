@@ -3,216 +3,29 @@
 @section('title', 'Keranjang Belanja B2B - PT. Prolabios Mitra Analitika')
 
 @push('styles')
-<style>
-  .cart-page-bg {
-    background-color: #070708;
-    min-height: 85vh;
-  }
-
-  /* Progress Stepper */
-  .cart-stepper-wrap {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .stepper-steps {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .step-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
-  }
-  .step-pill.active {
-    color: #ffffff;
-  }
-  .step-pill .step-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.5);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  .step-pill.active .step-num {
-    background: #ff4950;
-    color: #ffffff;
-  }
-
-  /* Item Card Panel */
-  .cart-item-card {
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1rem;
-    transition: border-color 0.2s ease, transform 0.2s ease;
-  }
-  .cart-item-card:hover {
-    border-color: rgba(255, 73, 80, 0.3);
-  }
-
-  /* Image Box - Strictly Enforced Dimensions */
-  .cart-img-box {
-    width: 80px !important;
-    height: 80px !important;
-    min-width: 80px !important;
-    min-height: 80px !important;
-    max-width: 80px !important;
-    max-height: 80px !important;
-    flex-shrink: 0 !important;
-    border-radius: 10px;
-    background: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 6px;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-  .cart-img-box img {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: contain !important;
-    display: block !important;
-    margin: auto !important;
-  }
-
-  /* Qty Pill Horizontal Layout */
-  .b2b-qty-pill {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: #0f1015 !important;
-    border: 1px solid rgba(255, 73, 80, 0.35) !important;
-    border-radius: 100px !important;
-    padding: 4px 8px !important;
-    gap: 4px !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
-  }
-  button.b2b-qty-btn,
-  .b2b-qty-btn {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50% !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #ffffff !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    font-size: 0.9rem !important;
-    transition: all 0.25s ease !important;
-    padding: 0 !important;
-    line-height: 1 !important;
-    outline: none !important;
-    box-shadow: none !important;
-  }
-  button.b2b-qty-btn:hover,
-  .b2b-qty-btn:hover {
-    background: rgba(255, 73, 80, 0.25) !important;
-    border-color: #ff4950 !important;
-    color: #ffffff !important;
-    transform: scale(1.1) !important;
-  }
-  input.b2b-qty-input,
-  .b2b-qty-input {
-    width: 44px !important;
-    height: 32px !important;
-    background: transparent !important;
-    border: none !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 0.95rem !important;
-    text-align: center !important;
-    outline: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    appearance: textfield !important;
-    -moz-appearance: textfield !important;
-    -webkit-appearance: none !important;
-  }
-  input.b2b-qty-input::-webkit-inner-spin-button,
-  input.b2b-qty-input::-webkit-outer-spin-button {
-    -webkit-appearance: none !important;
-    margin: 0 !important;
-  }
-
-  /* Catalog Code Badge */
-  .cart-cat-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 0.72rem;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  /* Sidebar Card */
-  .cart-sidebar-panel {
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
-  }
-
-  .rfq-info-box {
-    background: rgba(255, 73, 80, 0.04);
-    border: 1px solid rgba(255, 73, 80, 0.15);
-    border-radius: 12px;
-    padding: 1rem;
-    font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.75);
-    line-height: 1.5;
-  }
-</style>
 @endpush
 
 @section('content')
-<section class="cart-page-bg" style="padding-top: 155px !important; padding-bottom: 80px !important;">
+<section class="cart-page-bg" style="padding-top: 140px !important; padding-bottom: 80px !important;">
   <div class="container py-2">
 
     <!-- Stepper Navigation -->
-    <div class="cart-stepper-wrap" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem;">
-      <div style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between !important; flex-wrap: wrap !important; gap: 16px;">
-        <div style="display: flex !important; flex-direction: row !important; align-items: center !important; gap: 16px !important; flex-wrap: wrap !important;">
-          <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: #ffffff;">
-            <span style="width: 24px; height: 24px; border-radius: 50%; background: #ff4950; color: #ffffff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
-            <span>Keranjang Pengajuan</span>
+    <div class="cart-stepper-wrap">
+      <div class="d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
+        <div class="d-flex flex-row align-items-center gap-3 flex-wrap">
+          <div class="d-inline-flex align-items-center gap-2 text-white">
+            <span class="step-num-badge step-num-active">1</span>
+            <span class="step-label">Keranjang Pengajuan</span>
           </div>
-          <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; font-weight: bold;">&gt;</span>
-          <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: rgba(255, 255, 255, 0.4);">
-            <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
-            <span>Data Kontak &amp; Instansi</span>
+          <span style="color: rgba(255, 255, 255, 0.2); font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2" style="color: var(--color-text-muted);">
+            <span class="step-num-badge step-num-inactive">2</span>
+            <span class="step-label" style="opacity: 0.6;">Data Kontak &amp; Instansi</span>
           </div>
-          <span style="color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; font-weight: bold;">&gt;</span>
-          <div style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; font-size: 0.82rem; font-weight: 600; color: rgba(255, 255, 255, 0.4);">
-            <span style="width: 24px; height: 24px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5); display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">3</span>
-            <span>Konfirmasi Selesai</span>
+          <span style="color: rgba(255, 255, 255, 0.2); font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2" style="color: var(--color-text-muted);">
+            <span class="step-num-badge step-num-inactive">3</span>
+            <span class="step-label" style="opacity: 0.6;">Konfirmasi Selesai</span>
           </div>
         </div>
 
@@ -220,7 +33,7 @@
           <div>
             <form action="{{ route('cart.clear') }}" method="POST" onsubmit="confirmClearCart(event, this);" class="m-0">
               @csrf
-              <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-1 text-uppercase fw-semibold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+              <button type="submit" class="cart-clear-btn">
                 <i class="bi bi-trash3 me-1"></i> Kosongkan Keranjang
               </button>
             </form>
@@ -231,20 +44,20 @@
 
     <!-- Header Title -->
     <div class="mb-4">
-      <h1 class="h3 fw-bold text-white mb-1">Daftar Item Pengajuan Penawaran</h1>
-      <p class="text-secondary small mb-0">Periksa daftar item dan kuantitas produk sebelum melanjutkan ke form pengajuan.</p>
+      <h1 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 8px !important;">Daftar Item Pengajuan Penawaran</h1>
+      <p class="profil-body-text mb-0">Periksa daftar item dan kuantitas produk sebelum melanjutkan ke form pengajuan.</p>
     </div>
 
     <!-- Alerts -->
     @if(session('success'))
-      <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-3 mb-4" role="alert">
+      <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     @endif
 
     @if(session('error'))
-      <div class="alert alert-danger bg-danger bg-opacity-10 text-danger border-danger border-opacity-20 alert-dismissible fade show rounded-3 mb-4" role="alert">
+      <div class="alert alert-danger bg-danger bg-opacity-10 text-danger border-danger border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -269,13 +82,13 @@
 
                 <!-- 2. Product Name & Catalog & Stock Status -->
                 <div class="col">
-                  <a href="{{ url('/produk/detail') }}?id={{ urlencode($item['title']) }}" class="text-white text-decoration-none fw-semibold d-block mb-1 text-hover-danger" style="font-size: 0.98rem; line-height: 1.35;">
+                  <a href="{{ url('/produk/detail') }}?id={{ urlencode($item['title']) }}" class="text-white text-decoration-none fw-semibold d-block mb-1" style="font-family: var(--font-headline); font-size: 1.05rem; line-height: 1.35;">
                     {{ $item['title'] }}
                   </a>
-                  <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                  <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
                     @if(!empty($item['catalog']))
                       <span class="cart-cat-badge">
-                        <i class="bi bi-hash"></i>Cat: {{ $item['catalog'] }}
+                        CAT. {{ $item['catalog'] }}
                       </span>
                     @endif
 
@@ -285,12 +98,12 @@
                     @endphp
 
                     @if(!$isIndent)
-                      <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-2 py-1" style="font-size: 0.72rem;">
+                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); padding: 2px 8px; background: rgba(74, 222, 128, 0.06);">
                         <i class="bi bi-box-seam me-1"></i> Ready Stock
                       </span>
                     @else
-                      <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 px-2 py-1" style="font-size: 0.72rem;" title="Stok ready {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses secara Indent / Pre-Order.">
-                        <i class="bi bi-clock-history me-1"></i> Status: Indent / Pre-Order (Ready: {{ $stockVal }}, Indent: {{ $item['quantity'] - $stockVal }})
+                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); padding: 2px 8px; background: rgba(251, 191, 36, 0.06);" title="Stok ready {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses secara Indent / Pre-Order.">
+                        <i class="bi bi-clock-history me-1"></i> Indent / Pre-Order (Ready: {{ $stockVal }})
                       </span>
                     @endif
                   </div>
@@ -306,7 +119,7 @@
                       <button type="button" class="b2b-qty-btn" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
                         <i class="bi bi-dash-lg"></i>
                       </button>
-                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="b2b-qty-input cart-qty-input" onchange="updateCartItemAjax(this.form)">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="b2b-qty-input cart-qty-input hide-spinner" onchange="updateCartItemAjax(this.form)">
                       <button type="button" class="b2b-qty-btn" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
                         <i class="bi bi-plus-lg"></i>
                       </button>
@@ -318,7 +131,7 @@
                 <div class="col-auto text-end">
                   <div class="d-flex align-items-center gap-3">
                     <div>
-                      <span class="fw-bold item-subtotal-val" style="color: var(--color-accent); font-size: 1rem;">
+                      <span class="item-subtotal-val" style="font-family: var(--font-headline); font-weight: 700; color: var(--color-accent); font-size: 1.1rem;">
                         {{ $item['price'] > 0 ? 'Rp ' . number_format($item['price'] * $item['quantity'], 0, ',', '.') : 'Est. Penawaran' }}
                       </span>
                     </div>
@@ -327,7 +140,7 @@
                       @csrf
                       <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                       <input type="hidden" name="title" value="{{ $item['title'] }}">
-                      <button type="submit" class="btn btn-outline-secondary btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border-color: rgba(255,255,255,0.15);" title="Hapus Item" aria-label="Hapus item">
+                      <button type="submit" class="btn btn-sm p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border: 1px solid var(--color-border); border-radius: 0; background: transparent; color: var(--color-text-muted);" title="Hapus Item" aria-label="Hapus item">
                         <i class="bi bi-x-lg" style="font-size: 0.85rem;"></i>
                       </button>
                     </form>
@@ -343,13 +156,13 @@
         <!-- Right Column: Summary & Checkout CTA -->
         <div class="col-lg-4">
           <div class="cart-sidebar-panel sticky-top" style="top: 130px; z-index: 100;">
-            <h3 class="h5 fw-bold text-white mb-3 d-flex align-items-center gap-2">
-              <i class="bi bi-receipt text-danger"></i> Ringkasan Pengajuan
+            <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
+              <i class="bi bi-receipt" style="color: var(--color-accent);"></i> Ringkasan Pengajuan
             </h3>
 
             <div class="d-flex justify-content-between mb-2 text-secondary small">
-              <span>Total Volume Barang:</span>
-              <strong class="text-white fs-6" id="sidebar-total-units">
+              <span style="color: var(--color-text-muted);">Total Volume Barang:</span>
+              <strong class="text-white" style="font-family: var(--font-headline);" id="sidebar-total-units">
                 {{ array_sum(array_column($cart, 'quantity')) }} Unit
               </strong>
             </div>
@@ -362,29 +175,29 @@
             @endphp
 
             <div class="d-flex justify-content-between mb-3 text-secondary small">
-              <span>Estimasi Subtotal Katalog:</span>
-              <strong style="color: var(--color-accent);" class="fs-6" id="sidebar-total-estimate">
+              <span style="color: var(--color-text-muted);">Estimasi Subtotal Katalog:</span>
+              <strong style="font-family: var(--font-headline); font-size: 1.25rem; color: var(--color-accent);" id="sidebar-total-estimate">
                 {{ $totalEstimate > 0 ? 'Rp ' . number_format($totalEstimate, 0, ',', '.') : 'Rp 0' }}
               </strong>
             </div>
 
-            <hr class="border-secondary border-opacity-20 my-3">
+            <hr style="border-color: var(--color-border); margin: 1.25rem 0;">
 
             <div class="rfq-info-box mb-4">
               <div class="d-flex gap-2">
-                <i class="bi bi-shield-check text-success fs-5 flex-shrink-0"></i>
+                <i class="bi bi-shield-check fs-5 flex-shrink-0" style="color: #4ade80;"></i>
                 <div>
-                  <strong class="text-white d-block mb-1">Informasi Penawaran</strong>
+                  <strong class="text-white d-block mb-1" style="font-family: var(--font-headline); font-size: 0.82rem; letter-spacing: 0.5px;">Informasi Penawaran</strong>
                   Harga final, diskon khusus kuantitas, dan estimasi waktu pengadaan akan diinformasikan langsung oleh Tim Sales via Email/WhatsApp.
                 </div>
               </div>
             </div>
 
-            <a href="{{ route('rfq.checkout') }}" class="btn btn-danger w-100 py-3 fw-semibold text-uppercase tracking-wider rounded-3 shadow">
+            <a href="{{ route('rfq.checkout') }}" class="rfq-primary-btn">
               Lanjut ke Form Pengajuan <i class="bi bi-arrow-right ms-2"></i>
             </a>
 
-            <a href="{{ url('/produk') }}" class="btn btn-outline-light w-100 mt-2 py-2 small border-opacity-20">
+            <a href="{{ url('/produk') }}" class="rfq-secondary-btn">
               <i class="bi bi-plus-lg me-1"></i> Tambah Produk Lain
             </a>
           </div>
@@ -392,13 +205,11 @@
 
       </div>
     @else
-      <div class="text-center py-5 rounded-3" style="border: 1px dashed var(--color-border); background: rgba(255,255,255,0.01);">
-        <i class="bi bi-cart-x text-secondary" style="font-size: 3.5rem;"></i>
-        <h3 class="h5 text-white mt-3 mb-2">Keranjang Belanja Anda Masih Kosong</h3>
-        <p class="text-secondary small mb-4">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
-        <a href="{{ url('/produk') }}" class="btn btn-danger px-4 py-2 fw-semibold">
-          <i class="bi bi-grid-3x3-gap me-2"></i> Jelajahi Katalog Produk
-        </a>
+      <div class="empty-state-card" style="border: 1px solid var(--color-border); background: #0c0d12; padding: 80px 20px;">
+        <i class="bi bi-cart-x" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
+        <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Keranjang Belanja Masih Kosong</h2>
+        <p class="profil-body-text mb-4">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
+        <a href="{{ url('/produk') }}" class="profil-cta-btn">Jelajahi Katalog Produk <i class="bi bi-arrow-right"></i></a>
       </div>
     @endif
 
@@ -452,11 +263,10 @@
           totalEstEl.textContent = data.totalFormatted;
         }
 
-        const navBadge = document.getElementById('cart-badge-count');
-        if (navBadge) {
-          navBadge.textContent = data.cartCount;
-          navBadge.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-        }
+        document.querySelectorAll('.nav-cart-badge').forEach(el => {
+          el.textContent = data.cartCount;
+          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+        });
       }
     })
     .catch(err => console.error('Ajax Cart Error:', err));
@@ -548,11 +358,10 @@
           totalEstEl.textContent = data.totalFormatted;
         }
 
-        const navBadge = document.getElementById('cart-badge-count');
-        if (navBadge) {
-          navBadge.textContent = data.cartCount;
-          navBadge.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-        }
+        document.querySelectorAll('.nav-cart-badge').forEach(el => {
+          el.textContent = data.cartCount;
+          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+        });
 
         if (typeof Swal !== 'undefined') {
           Swal.fire({

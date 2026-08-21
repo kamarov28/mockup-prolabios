@@ -33,6 +33,8 @@
   <!-- Custom CSS via Vite -->
   @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
 
+  @stack('styles')
+
   <!-- SweetAlert2 (defer non-blocking) -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 
