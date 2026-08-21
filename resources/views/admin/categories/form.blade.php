@@ -2,22 +2,44 @@
 
 @php
   $isEdit     = isset($category) && $category;
-  $titleText  = $isEdit ? 'Edit Kategori: ' . $category->name : 'Tambah Kategori / Sub-Kategori';
+  $titleText  = $isEdit ? 'Edit Kategori' : 'Tambah Kategori';
   $actionUrl  = $isEdit
     ? route('admin.categories.update', $category->id)
     : route('admin.categories.store');
 @endphp
 
-@section('title', $titleText)
+@section('title', $isEdit ? 'Edit Kategori: ' . $category->name : 'Tambah Kategori')
 @section('page_title', $titleText)
 
 @section('admin_content')
-<div class="card bg-white shadow-sm" style="max-width: 640px; margin: 0 auto;">
-  <div class="card-header">
-    <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-diagram-3 text-danger me-2"></i>{{ $titleText }}</h5>
+
+{{-- Page Header --}}
+<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
+  <div>
+    <span class="admin-page-label">Konten</span>
+    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
+    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+      @if($isEdit)
+        Mengedit: <strong style="color: var(--color-text-main);">{{ $category->name }}</strong>
+      @else
+        Buat kategori utama atau sub-kategori baru untuk katalog produk.
+      @endif
+    </p>
+  </div>
+  <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-outline">
+    <i class="bi bi-arrow-left"></i> Kembali
+  </a>
+</div>
+
+<div class="admin-card" style="max-width: 640px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Formulir</span>
+      <h3 class="admin-card-header-title mb-0">Data Kategori</h3>
+    </div>
   </div>
 
-  <form action="{{ $actionUrl }}" method="POST" class="card-body p-4">
+  <form action="{{ $actionUrl }}" method="POST" class="admin-card-body">
     @csrf
     @if($isEdit) @method('PUT') @endif
 
@@ -31,79 +53,88 @@
       </div>
     @endif
 
-    <div class="row g-3">
+    <div class="d-flex flex-column gap-4">
+
       {{-- Nama --}}
-      <div class="col-12">
-        <label for="name" class="form-label fw-bold">Nama Kategori <span class="text-danger">*</span></label>
+      <div class="admin-form-group mb-0">
+        <label for="name" class="admin-form-label">Nama Kategori <span style="color: var(--color-accent);">*</span></label>
         <input type="text" class="form-control" id="name" name="name"
                value="{{ old('name', $category->name ?? '') }}"
                placeholder="Contoh: Microbiology atau Food Safety"
                required autofocus>
-        <div class="form-text">Nama ini akan ditampilkan di sidebar produk dan di dropdown form produk.</div>
+        <p class="form-text mb-0 mt-2">Ditampilkan di sidebar produk dan dropdown form produk.</p>
       </div>
 
       {{-- Key / Slug --}}
-      <div class="col-12">
-        <label for="key" class="form-label fw-bold">Key (Slug)</label>
+      <div class="admin-form-group mb-0">
+        <label for="key" class="admin-form-label">Key (Slug)</label>
         <input type="text" class="form-control font-monospace" id="key" name="key"
                value="{{ old('key', $category->key ?? '') }}"
                placeholder="Dibuat otomatis dari nama jika dikosongkan"
                pattern="[a-z0-9\-]+"
                title="Hanya huruf kecil, angka, dan tanda hubung">
-        <div class="form-text">Identifier unik. Hanya huruf kecil, angka, dan <code>-</code>. Contoh: <code>food-safety</code>. Jika dikosongkan, akan dibuat otomatis dari nama.</div>
+        <p class="form-text mb-0 mt-2">
+          Identifier unik. Hanya huruf kecil, angka, dan <code>-</code>.
+          Contoh: <code>food-safety</code>. Kosongkan untuk generate otomatis.
+        </p>
         @if($isEdit)
-          <div class="form-text text-warning">
-            <i class="bi bi-exclamation-triangle me-1"></i>Mengubah key akan memutus hubungan produk-produk yang sudah menggunakan key lama.
-          </div>
+          <p class="form-text mb-0 mt-2" style="color: #f59e0b;">
+            <i class="bi bi-exclamation-triangle me-1"></i>
+            Mengubah key akan ikut meng-update produk yang memakai key lama.
+          </p>
         @endif
       </div>
 
       {{-- Parent / Induk --}}
-      <div class="col-12">
-        <label for="parent_id" class="form-label fw-bold">Tipe</label>
+      <div class="admin-form-group mb-0">
+        <label for="parent_id" class="admin-form-label">Tipe</label>
         <select class="form-select" id="parent_id" name="parent_id">
-          <option value="">📁 Kategori Utama (tanpa induk)</option>
+          <option value="">Kategori Utama (tanpa induk)</option>
           @foreach($parents as $parent)
             <option value="{{ $parent->id }}"
               {{ (string)(old('parent_id', $selectedParentId ?? '')) === (string)$parent->id ? 'selected' : '' }}>
-              └─ Sub-kategori dari: {{ $parent->name }}
+              Sub-kategori dari: {{ $parent->name }}
             </option>
           @endforeach
         </select>
-        <div class="form-text">Pilih "Kategori Utama" jika ini adalah kategori tingkat pertama (Microbiology, Device, dst.), atau pilih induknya jika ini adalah sub-kategori.</div>
+        <p class="form-text mb-0 mt-2">
+          Pilih "Kategori Utama" untuk tingkat pertama (Microbiology, Device, dst.),
+          atau pilih induk jika ini sub-kategori.
+        </p>
       </div>
 
       {{-- Sort Order --}}
-      <div class="col-md-4">
-        <label for="sort_order" class="form-label fw-bold">Urutan Tampil</label>
+      <div class="admin-form-group mb-0" style="max-width: 180px;">
+        <label for="sort_order" class="admin-form-label">Urutan Tampil</label>
         <input type="number" class="form-control" id="sort_order" name="sort_order"
                value="{{ old('sort_order', $category->sort_order ?? 0) }}"
                min="0" placeholder="0">
-        <div class="form-text">Angka lebih kecil tampil lebih awal di sidebar.</div>
+        <p class="form-text mb-0 mt-2">Angka lebih kecil tampil lebih awal.</p>
       </div>
+
     </div>
 
     {{-- Buttons --}}
-    <div class="mt-4 border-top pt-3 d-flex justify-content-between">
-      <a href="{{ route('admin.categories.index') }}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left me-1"></i> Batal
+    <div class="d-flex justify-content-between align-items-center gap-3 mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
+      <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-outline">
+        <i class="bi bi-arrow-left"></i> Batal
       </a>
-      <button type="submit" class="btn btn-success px-4">
-        <i class="bi bi-check-lg me-1"></i> Simpan
+      <button type="submit" class="admin-btn admin-btn-primary">
+        <i class="bi bi-check-lg"></i> Simpan
       </button>
     </div>
   </form>
 </div>
+
 @endsection
 
 @section('admin_scripts')
 <script>
-  // Auto-generate key dari name kalau key kosong
   const nameInput = document.getElementById('name');
   const keyInput  = document.getElementById('key');
 
   nameInput.addEventListener('input', function () {
-    if (keyInput.dataset.edited) return; // User sudah manual edit key
+    if (keyInput.dataset.edited) return;
     const slug = this.value
       .toLowerCase()
       .trim()
@@ -114,8 +145,12 @@
   });
 
   keyInput.addEventListener('input', function () {
-    // Tandai bahwa user sudah manual edit
     this.dataset.edited = this.value ? '1' : '';
   });
+
+  // On edit: mark key as already set so auto-slug doesn't overwrite
+  @if($isEdit)
+    keyInput.dataset.edited = '1';
+  @endif
 </script>
 @endsection
