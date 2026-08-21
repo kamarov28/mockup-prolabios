@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRfqRequest;
 use App\Jobs\SendRfqCustomerReceiptEmailJob;
 use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Models\Product;
@@ -20,9 +21,6 @@ class RfqController extends Controller
     use ResolvesProducts;
 
     protected DataService $dataService;
-
-    /** Maximum character length for the optional notes field */
-    private const MAX_NOTES_LENGTH = 3000;
 
     /** Character length of the random suffix appended to RFQ numbers */
     private const RFQ_SUFFIX_LENGTH = 6;
@@ -57,7 +55,7 @@ class RfqController extends Controller
         return view('rfq-checkout', compact('cart', 'total'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRfqRequest $request)
     {
         // Anti-Bot Honeypot Guard: if invisible field is populated, silently drop spam
         if ($request->filled('_hp_website')) {
@@ -84,15 +82,7 @@ class RfqController extends Controller
                 ->with('error', 'Keranjang belanja Anda masih kosong.');
         }
 
-        $validated = $request->validate([
-            'name'         => 'required|string|max:255',
-            'email'        => 'required|email|max:255',
-            'company_name' => 'required|string|max:255',
-            'phone_wa'     => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
-            'notes'        => 'nullable|string|max:'.self::MAX_NOTES_LENGTH,
-        ], [
-            'phone_wa.regex' => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
-        ]);
+        $validated = $request->validated();
 
         $rfqNumber = 'RFQ-'.date('Ym').'-'.strtoupper(Str::random(self::RFQ_SUFFIX_LENGTH));
 
