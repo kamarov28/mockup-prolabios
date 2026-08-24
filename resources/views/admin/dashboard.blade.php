@@ -134,11 +134,11 @@
               <tbody>
                 @foreach($recentProducts as $p)
                   <tr>
-                    <td class="cell-muted">{{ $p['catalog_no'] ?? '-' }}</td>
+                    <td class="cell-muted">{{ $p['catalog'] ?: '—' }}</td>
                     <td>
-                      <a href="{{ route('admin.products.edit', $p['id']) }}" class="cell-title text-decoration-none">{{ $p['title'] }}</a>
+                      <a href="{{ route('admin.products.edit', $p['id']) }}" class="cell-title text-decoration-none">{{ \Illuminate\Support\Str::limit($p['title'] ?? '', 40) }}</a>
                     </td>
-                    <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category'] ?? '-') }}</span></td>
+                    <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category'] ?? '') }}</span></td>
                   </tr>
                 @endforeach
               </tbody>
@@ -177,9 +177,9 @@
                 @foreach($recentPosts as $post)
                   <tr>
                     <td>
-                      <a href="{{ route('admin.posts.edit', $post['slug']) }}" class="cell-title text-decoration-none">{{ $post['title'] }}</a>
+                      <a href="{{ route('admin.posts.edit', $post['slug']) }}" class="cell-title text-decoration-none">{{ \Illuminate\Support\Str::limit($post['title'] ?? '', 50) }}</a>
                     </td>
-                    <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] ?? '-' }}</span></td>
+                    <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] ?? '—' }}</span></td>
                   </tr>
                 @endforeach
               </tbody>
@@ -195,10 +195,9 @@
 
   </div>
 
-  {{-- Right: Sync & Chart --}}
+  {{-- Right: Chart --}}
   <div class="col-lg-4 d-flex flex-column gap-4">
 
-    {{-- Product Distribution Chart --}}
     <div class="admin-card">
       <div class="admin-card-header">
         <div>
@@ -212,66 +211,54 @@
         </div>
         <div class="w-100">
           @php
-            $colors = ['#FF4950', '#38bdf8', '#2ecc71', '#f59e0b', '#a78bfa', '#f472b6', '#94a3b8', '#fb923c', '#34d399', '#60a5fa'];
-            $i = 0;
+            $colors = ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8', '#4ade80'];
+            $ci = 0; $cc = count($colors);
           @endphp
-          @foreach($categoryDist as $label => $count)
-            <div class="d-flex align-items-center justify-content-between mb-2" style="font-size: 0.78rem;">
-              <span class="d-flex align-items-center gap-2" style="color: var(--color-text-muted);">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $colors[$i % count($colors)] }}; display: inline-block;"></span>
-                {{ $label }}
+          @foreach($categoryDist as $catName => $count)
+            @php $col = $colors[$ci % $cc]; $ci++; @endphp
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
+              <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px; color: var(--color-text-muted);">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $col }}; flex-shrink: 0;"></span>
+                {{ $catName }}
               </span>
-              <strong style="color: var(--color-text-main);">{{ $count }}</strong>
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">{{ $count }}</span>
             </div>
-            @php $i++; @endphp
           @endforeach
         </div>
       </div>
     </div>
 
   </div>
-
 </div>
 
 @endsection
 
 @section('admin_scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  (function () {
-    const labels = @json(array_keys($categoryDist));
-    const data = @json(array_values($categoryDist));
-    const colors = ['#FF4950', '#38bdf8', '#2ecc71', '#f59e0b', '#a78bfa', '#f472b6', '#94a3b8', '#fb923c', '#34d399', '#60a5fa'];
-    const ctx = document.getElementById('categoryChart');
-    if (!ctx) return;
+  document.addEventListener('DOMContentLoaded', function() {
+    const el = document.getElementById('categoryChart');
+    if (!el) return;
+    const ctx = el.getContext('2d');
     new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels,
+        labels: {!! json_encode(array_keys($categoryDist)) !!},
         datasets: [{
-          data,
-          backgroundColor: colors.slice(0, labels.length),
-          borderWidth: 0,
-          hoverOffset: 4
+          data: {!! json_encode(array_values($categoryDist)) !!},
+          backgroundColor: ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8'],
+          hoverOffset: 6,
+          borderWidth: 2,
+          borderColor: '#0e0e10'
         }]
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: '#141416',
-            titleColor: '#fff',
-            bodyColor: 'rgba(255,255,255,0.7)',
-            borderColor: 'rgba(255,255,255,0.08)',
-            borderWidth: 1,
-            padding: 10
-          }
-        },
-        cutout: '68%'
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        cutout: '72%'
       }
     });
-  })();
+  });
 </script>
 @endsection
