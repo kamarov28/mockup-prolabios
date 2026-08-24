@@ -1,195 +1,186 @@
-# PT. Prolabios Mitra Analitika — B2B Catalog & RFQ Portal
+# Prolabios — B2B Catalog & RFQ Portal
 
-Platform web katalog B2B + **Request for Quotation (RFQ)** untuk **PT. Prolabios Mitra Analitika** (peralatan laboratorium, reagen, media kultur, instrumen analisis).
+Portal katalog dan pengajuan penawaran (RFQ) untuk **PT. Prolabios Mitra Analitika**.
 
-Dibangun dengan **Laravel 13**, Blade, Tailwind CSS, dan Vite.
-
-> **Catatan workflow (produksi saat ini):**  
-> Setelah pembeli submit RFQ, proses penawaran dilanjutkan **via WhatsApp / Sales**.  
-> Alur multi-fase penuh (diskon admin, PDF quotation, approve online, potong stok) **belum** diaktifkan sebagai alur utama — README ini mencerminkan perilaku sistem yang jalan sekarang.
+Stack: **Laravel 13** · **PHP 8.3+** · **Blade** · **Tailwind CSS v4** · **Vite**
 
 ---
 
-## Daftar Isi
+## Apa ini?
 
-1. [Fitur yang tersedia](#fitur-yang-tersedia)
-2. [Alur RFQ (aktual)](#alur-rfq-aktual)
-3. [Admin panel](#admin-panel)
-4. [Keamanan](#keamanan)
-5. [Instalasi lokal](#instalasi-lokal)
-6. [Deploy checklist](#deploy-checklist)
+Website B2B untuk:
 
----
+- Menampilkan katalog produk laboratorium (reagen, media, instrumen, dll.)
+- Keranjang pengajuan RFQ
+- Submit permintaan penawaran → data masuk admin + email
+- **Follow-up penawaran dilanjutkan lewat WhatsApp / Sales** (bukan checkout e-commerce penuh)
 
-## Fitur yang tersedia
-
-### Publik
-- Katalog produk (kategori, subkategori, sektor, pencarian, paginasi)
-- Detail produk & halaman beli / stok
-- Keranjang RFQ (session) + update qty
-- Form RFQ (data perusahaan & kontak) → simpan ke database + notifikasi email (job)
-- Halaman sukses RFQ (dilindungi session submitter)
-- Halaman profil, sektor, layanan, informasi/artikel, kontak
-- Sitemap & robots
-
-### Admin (`/admin`)
-- Dashboard
-- CRUD produk (tunggal + bulk), kategori, sektor, prinsipal
-- CRUD artikel / berita
-- Editor homepage, banner, kontak, SEO
-- Daftar & detail RFQ masuk
-- Audit log aktivitas penting
+Bukan marketplace retail. Fokusnya katalog + lead RFQ korporasi.
 
 ---
 
-## Alur RFQ (aktual)
+## Alur RFQ (yang jalan sekarang)
 
 ```
-[1] Jelajah katalog / detail produk
-        ↓
-[2] Tambah ke keranjang RFQ (session)
-        ↓
-[3] Checkout — isi data perusahaan & PIC
-        ↓
-[4] Submit RFQ → nomor unik (RFQ-YYYYMM-XXXXXX)
-        ↓
-[5] Email konfirmasi (buyer) + alert (internal) via queue job
-        ↓
-[6] Lanjut negosiasi & penawaran via WhatsApp / Sales
+Katalog / detail produk
+        →  Keranjang (session)
+        →  Form data perusahaan + PIC
+        →  Submit → nomor RFQ + simpan DB + email job
+        →  Halaman sukses
+        →  Sales follow-up via WhatsApp
 ```
 
-### Detail singkat
+Admin melihat pengajuan di **`/admin/rfqs`**.
 
-1. **Keranjang** — item disimpan di session; harga/stok di-refresh dari DB saat checkout bila memungkinkan.
-2. **Submit** — validasi form request, honeypot anti-bot, CAPTCHA (jika key diisi), rate limit, transaksi DB (`rfqs` + `rfq_items`).
-3. **Sukses** — hanya session yang baru submit nomor tersebut yang bisa buka `/rfq/success/{number}`.
-4. **Admin** — melihat daftar RFQ di `/admin/rfqs` untuk follow-up manual (WA).
+### Belum diaktifkan sebagai alur utama
 
-### Yang belum menjadi alur utama
+- Diskon / price override di admin  
+- PDF surat penawaran otomatis  
+- Approve online + signed URL  
+- Potong stok otomatis  
 
-- Price override / diskon per baris di admin  
-- Generate PDF surat penawaran resmi  
-- Portal track + approve online + signed URL  
-- Auto-decrement stok saat approve  
-
-Fitur-fitur di atas bisa dikembangkan nanti; untuk operasional saat ini **lanjut WA sudah cukup**.
-
-```mermaid
-sequenceDiagram
-    actor Buyer as Pembeli
-    participant Web as Portal
-    participant API as Laravel
-    participant DB as Database
-    participant Mail as Queue/Email
-    actor Sales as Sales (WhatsApp)
-
-    Buyer->>Web: Tambah produk ke keranjang
-    Buyer->>Web: Isi form RFQ & submit
-    Web->>API: POST /rfq/submit
-    API->>DB: Simpan RFQ + items
-    API->>Mail: Dispatch email jobs
-    API-->>Buyer: Halaman sukses + nomor RFQ
-    Sales->>Web: Lihat RFQ di /admin/rfqs
-    Sales->>Buyer: Lanjut penawaran via WhatsApp
-```
+Kalau nanti dibutuhkan, itu development terpisah. Saat ini **submit RFQ → WA** sudah sesuai operasional.
 
 ---
 
-## Admin panel
+## Struktur aplikasi (singkat)
 
-1. Buka `/admin/login` (user dengan `is_admin = true`).
-2. Kelola katalog, konten, dan **Penawaran (RFQ)** dari sidebar.
-3. RFQ baru → hubungi PIC lewat nomor WA yang tercatat di pengajuan.
-
----
-
-## Keamanan
-
-| Kontrol | Keterangan |
-|--------|------------|
-| CSRF | Semua form state-changing |
-| Admin middleware | Session + flag `is_admin` |
-| Rate limit | Login admin, kontak, submit RFQ |
-| Honeypot + CAPTCHA | Form publik (CAPTCHA fail-closed di production jika secret diisi) |
-| Upload | MIME check, block SVG, re-encode WebP, simpan di `storage` (public disk) |
-| Session | Encrypt; `SESSION_SECURE_COOKIE=true` di production |
-| HTML konten | Sanitasi untuk rich text |
-
-Production `.env` minimal:
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-SESSION_SECURE_COOKIE=true
-# Isi salah satu:
-RECAPTCHA_SITE_KEY=
-RECAPTCHA_SECRET_KEY=
-# atau
-TURNSTILE_SITE_KEY=
-TURNSTILE_SECRET_KEY=
-```
-
-Setelah deploy:
-
-```bash
-php artisan storage:link
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-```
+| Area | Isi |
+|------|-----|
+| Publik | Home, produk, sektor, layanan, artikel, kontak, cart, RFQ |
+| Admin | Produk, kategori, sektor, prinsipal, artikel, RFQ, editor homepage/SEO |
+| Service | `DataService` (facade) → Product / Post / Sector / Homepage |
+| Model | `Product`, `ProductCategory`, `Post`, `Sector`, `Rfq`, `RfqItem`, `User`, … |
+| Upload | `storage/app/public` via disk `public` (`php artisan storage:link`) |
 
 ---
 
-## Instalasi lokal
+## Requirements
 
-### Persyaratan
-- PHP **8.3+** (`pdo`, `mbstring`, `openssl`, `tokenizer`, `xml`, `gd` direkomendasikan untuk WebP)
-- Composer, Node.js 18+, npm
-- SQLite (default) atau MySQL/MariaDB
+- PHP **8.3+** (disarankan extension `gd` untuk konversi WebP)
+- Composer
+- Node.js **18+** & npm
+- SQLite (default dev) atau MySQL/MariaDB
 
-### Langkah
+---
+
+## Setup lokal
 
 ```bash
 git clone https://github.com/kamarov28/mockup-prolabios.git
 cd mockup-prolabios
 
 cp .env.example .env
-# sesuaikan DB & APP_URL
-
 composer install
 npm install
+
 php artisan key:generate
 php artisan migrate --seed
 php artisan storage:link
+
 npm run build
+# atau untuk dev:
+# npm run dev
 
 php artisan serve
 ```
 
-Buka `http://127.0.0.1:8000`.
+Buka [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-Admin: buat user admin lewat seeder / tinker (`is_admin = true`), atau ikuti seed yang ada di project.
+### Environment penting
 
-### Tes (opsional)
+```env
+APP_NAME="Prolabios"
+APP_URL=http://127.0.0.1:8000
+
+# Database (contoh SQLite default di .env.example — sesuaikan jika MySQL)
+DB_CONNECTION=sqlite
+
+# Session (di production wajib secure)
+SESSION_DRIVER=database
+SESSION_ENCRYPT=true
+SESSION_SECURE_COOKIE=true   # false jika local HTTP
+
+# Admin awal — lihat seeder / buat user is_admin=true
+
+# CAPTCHA (opsional di local; wajib diisi saat production)
+RECAPTCHA_SITE_KEY=
+RECAPTCHA_SECRET_KEY=
+# atau Cloudflare Turnstile:
+TURNSTILE_SITE_KEY=
+TURNSTILE_SECRET_KEY=
+```
+
+### Admin
+
+- URL: `/admin/login`
+- User harus `is_admin = true` di tabel `users`
+- Ikuti seeder project atau buat manual via tinker
+
+---
+
+## Scripts berguna
 
 ```bash
+# Frontend
+npm run dev          # Vite HMR
+npm run build        # production assets
+
+# Backend
+php artisan migrate
+php artisan storage:link
+php artisan queue:work    # jika email pakai queue
+
+# Tes
 php artisan test
 ```
 
-Ada feature test untuk auth admin, cart, alur RFQ, dan hardening security.
+Feature test yang ada: auth admin, cart, RFQ flow, security hardening.
+
+---
+
+## Keamanan (ringkas)
+
+- CSRF di form state-changing
+- Middleware admin + `is_admin`
+- Rate limit: login admin, kontak, submit RFQ
+- Honeypot + CAPTCHA (fail-closed di production jika secret di-set)
+- Upload: validasi MIME, block SVG, re-encode WebP, path di storage publik
+- Session encrypt; secure cookie di production
+- Sanitasi HTML untuk konten rich text (Summernote)
+
+**Production wajib:**
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+SESSION_SECURE_COOKIE=true
+```
 
 ---
 
 ## Deploy checklist
 
-- [ ] `APP_DEBUG=false`, `APP_ENV=production`
-- [ ] `APP_KEY` unik, tidak commit `.env`
-- [ ] HTTPS + `SESSION_SECURE_COOKIE=true`
-- [ ] CAPTCHA keys diisi
-- [ ] `php artisan storage:link`
-- [ ] Queue worker jalan jika email pakai `database`/`redis` queue
-- [ ] Backup database rutin
+1. Set `.env` production (debug off, URL HTTPS, DB, mail, CAPTCHA)
+2. `composer install --no-dev -o`
+3. `npm ci && npm run build`
+4. `php artisan migrate --force`
+5. `php artisan storage:link`
+6. `php artisan config:cache && php artisan route:cache && php artisan view:cache`
+7. Pastikan queue worker jalan jika `QUEUE_CONNECTION` bukan `sync`
+8. Backup DB secara berkala
 
 ---
 
-&copy; 2026 **PT. Prolabios Mitra Analitika**
+## Catatan teknis
+
+- **URL detail produk** memakai id numerik: `/produk/detail?id=12` (title lama masih di-fallback di backend untuk bookmark).
+- **Upload baru** ke `storage/app/public/uploads` → URL `/storage/uploads/...`. Path legacy `/uploads/...` masih didukung.
+- **RFQ success page** hanya bisa dibuka oleh session yang baru saja submit nomor tersebut.
+
+---
+
+## Lisensi / kepemilikan
+
+Kode dan konten untuk keperluan **PT. Prolabios Mitra Analitika**.  
+© 2026 PT. Prolabios Mitra Analitika.
