@@ -102,8 +102,14 @@ class PageController extends Controller
     {
         $sectors = $dataService->getSectors();
 
-        $firstSectorId = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
-        $activeSector  = request()->get('s') ?? request()->get('kategori') ?? $firstSectorId;
+        $validIds = array_column($sectors, 'id');
+        $requested = request()->get('s') ?? request()->get('kategori');
+
+        if ($requested && in_array($requested, $validIds, true)) {
+            $activeSector = $requested;
+        } else {
+            $activeSector = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
+        }
 
         $products = $dataService->getProducts(['sector' => $activeSector]);
 

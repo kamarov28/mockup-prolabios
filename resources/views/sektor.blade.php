@@ -51,12 +51,16 @@
         <div class="col-lg-9 col-md-8">
           @php
             $currentData = null;
-            if (isset($sectors)) {
+            if (isset($sectors) && count($sectors) > 0) {
                 foreach ($sectors as $sec) {
                     if ($sec['id'] == $activeSector) {
                         $currentData = $sec;
                         break;
                     }
+                }
+                if (!$currentData) {
+                    $currentData = $sectors[0];
+                    $activeSector = $currentData['id'];
                 }
             }
 
@@ -207,11 +211,18 @@
           const urlObj = new URL(this.href);
           const sectorId = urlObj.searchParams.get('s');
           if (!sectorId) return;
-          const sector = sectors.find(s => s.id === sectorId);
+          let sector = sectors.find(s => s.id === sectorId);
+          if (!sector && sectors.length > 0) {
+            sector = sectors[0];
+          }
           if (!sector) return;
 
           sidebarLinks.forEach(l => l.classList.remove('is-active'));
-          this.classList.add('is-active');
+          const matchingLink = Array.from(sidebarLinks).find(l => {
+            const u = new URL(l.href);
+            return u.searchParams.get('s') === sector.id;
+          }) || this;
+          matchingLink.classList.add('is-active');
 
           const titleEl = contentArea.querySelector('.profil-section-title');
           if (titleEl) titleEl.textContent = sector.name;
