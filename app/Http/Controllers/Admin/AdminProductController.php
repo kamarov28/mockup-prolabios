@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\ProductCategory;
 use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class AdminProductController extends Controller
 {
@@ -23,6 +25,9 @@ class AdminProductController extends Controller
 
     /** Maximum gallery images stored per product */
     private const MAX_GALLERY_IMAGES = 10;
+
+    /** Maximum products accepted in one bulk submit */
+    private const MAX_BULK_PRODUCTS = 50;
 
     public function __construct(DataService $dataService)
     {
@@ -76,7 +81,7 @@ class AdminProductController extends Controller
             = $this->paginateQuery($query, $request, self::PRODUCTS_PER_PAGE);
 
         $sectors = $this->dataService->getSectors();
-        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+        $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get(['id', 'name', 'key']);
@@ -99,7 +104,7 @@ class AdminProductController extends Controller
     public function productsCreate()
     {
         $sectors    = $this->dataService->getSectors();
-        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+        $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
 
         $product = [
@@ -158,7 +163,7 @@ class AdminProductController extends Controller
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
         $sectors    = $this->dataService->getSectors();
-        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+        $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
 
         return view('admin.products.form', compact('product', 'sectors', 'categories'));
@@ -174,15 +179,19 @@ class AdminProductController extends Controller
         $newTitle = $request->input('title');
         $existing = $this->dataService->getProductByTitle($newTitle);
 
-        if ($existing && (int) ($existing['id'] ?? 0) !== $id) {
+        // getProductByTitle may return Model or array-like
+        $existingId = is_object($existing) ? (int) ($existing->id ?? 0) : (int) ($existing['id'] ?? 0);
+        if ($existing && $existingId !== $id) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image']);
+        $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image'] ?? $product->image ?? null);
 
-        // Keep existing gallery images except those the admin explicitly marked for removal
-        $existingGallery = $product['gallery_images'] ?? [];
-        $toRemove        = (array) $request->input('remove_gallery', []);
+        $existingGallery = $product['gallery_images'] ?? $product->gallery_images ?? [];
+        if (! is_array($existingGallery)) {
+            $existingGallery = [];
+        }
+        $toRemove = (array) $request->input('remove_gallery', []);
         if (! empty($toRemove)) {
             $existingGallery = array_values(array_diff($existingGallery, $toRemove));
         }
@@ -221,8 +230,8 @@ class AdminProductController extends Controller
         $this->dataService->deleteProductById($id);
 
         AuditLogger::log('product.delete', 'Product', $id, [
-            'title'   => $product['title'] ?? null,
-            'catalog' => $product['catalog'] ?? null,
+            'title'   => is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null),
+            'catalog' => is_object($product) ? ($product->catalog ?? null) : ($product['catalog'] ?? null),
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
@@ -238,27 +247,52 @@ class AdminProductController extends Controller
 
     public function productsStoreBulk(Request $request)
     {
-        $titles          = $request->input('title', []);
+        $titles = $request->input('title', []);
+
+        if (! is_array($titles) || count($titles) === 0) {
+            return redirect()->back()->with('error', 'Tidak ada data produk yang dikirim.');
+        }
+
+        if (count($titles) > self::MAX_BULK_PRODUCTS) {
+            return redirect()->back()->with('error', 'Maksimal '.self::MAX_BULK_PRODUCTS.' produk per sekali submit.');
+        }
+
+        // Only accept known category keys (parents + children)
+        $allowedCategoryKeys = ProductCategory::query()->pluck('key')->filter()->all();
+        $allowedCategoryKeys = array_fill_keys($allowedCategoryKeys, true);
+
         $productsToStore = [];
+        $skipped = 0;
 
-        foreach ($titles as $id => $title) {
-            $title    = trim($title);
-            $category = trim($request->input("category.{$id}", ''));
+        foreach ($titles as $rowKey => $title) {
+            if (count($productsToStore) >= self::MAX_BULK_PRODUCTS) {
+                break;
+            }
 
-            if (empty($title) || empty($category)) {
+            $title    = Str::limit(trim((string) $title), 255, '');
+            $category = Str::limit(trim((string) $request->input("category.{$rowKey}", '')), 255, '');
+
+            if ($title === '' || $category === '') {
+                $skipped++;
+
                 continue;
             }
 
-            $catalog     = trim($request->input("catalog.{$id}", ''));
-            $subCategory = trim($request->input("sub_category.{$id}", ''));
-            $sector      = trim($request->input("sector.{$id}", ''));
-            $description = trim($request->input("description.{$id}", ''));
+            if ($allowedCategoryKeys !== [] && ! isset($allowedCategoryKeys[$category])) {
+                $skipped++;
 
-            // Use HandlesImageUploads trait — same security, WebP conversion, size limits as single upload
+                continue;
+            }
+
+            $catalog     = Str::limit(trim((string) $request->input("catalog.{$rowKey}", '')), 255, '');
+            $subCategory = Str::limit(trim((string) $request->input("sub_category.{$rowKey}", '')), 255, '');
+            $sector      = Str::limit(trim((string) $request->input("sector.{$rowKey}", '')), 255, '');
+            $description = Str::limit(trim((string) $request->input("description.{$rowKey}", '')), 10000, '');
+
             $image = $this->handleImageUpload(
                 $request,
-                "image_file.{$id}",
-                "image_url.{$id}",
+                "image_file.{$rowKey}",
+                "image_url.{$rowKey}",
                 '/images/placeholder.svg'
             );
 
@@ -267,7 +301,7 @@ class AdminProductController extends Controller
                 'title'        => $title,
                 'category'     => $category,
                 'sub_category' => $subCategory,
-                'sector'       => $sector ?: null,
+                'sector'       => $sector !== '' ? $sector : null,
                 'description'  => $description,
                 'image'        => $image,
                 'price'        => 0,
@@ -279,9 +313,19 @@ class AdminProductController extends Controller
         if ($savedCount > 0) {
             $this->dataService->upsertProducts($productsToStore);
 
-            return redirect()->route('admin.products')->with('success', "Berhasil menyimpan $savedCount produk secara massal!");
+            AuditLogger::log('product.bulk_create', 'Product', null, [
+                'saved'   => $savedCount,
+                'skipped' => $skipped,
+            ]);
+
+            $msg = "Berhasil menyimpan {$savedCount} produk secara massal!";
+            if ($skipped > 0) {
+                $msg .= " ({$skipped} baris dilewati karena data tidak valid.)";
+            }
+
+            return redirect()->route('admin.products')->with('success', $msg);
         }
 
-        return redirect()->back()->with('error', 'Tidak ada data produk valid yang disimpan. Harap isi minimal judul dan kategori produk.');
+        return redirect()->back()->with('error', 'Tidak ada data produk valid yang disimpan. Pastikan judul dan kategori terisi, dan kategori terdaftar di sistem.');
     }
 }
