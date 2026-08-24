@@ -1,15 +1,13 @@
 @extends('layouts.app')
 
-@section('title', $product ? $product['title'] . ' - Prolabios' : 'Produk Tidak Ditemukan - Prolabios')
+@section('title', $product ? ($product['title'] . ' - Prolabios') : 'Produk Tidak Ditemukan - Prolabios')
 
-@if(isset($product) && $product)
-  @section('og_title', $product['title'] . ' | PROLABIOS')
-  @section('og_description', Str::limit(strip_tags($product['description']), 150))
-  @section('og_image', $product['image'])
-@endif
+{{-- OG tags: jangan bungkus @section di dalam @if (merusak compiler Blade) --}}
+@section('og_title', $product ? ($product['title'] . ' | PROLABIOS') : 'PROLABIOS')
+@section('og_description', $product ? \Illuminate\Support\Str::limit(strip_tags($product['description'] ?? ''), 150) : 'Produk laboratorium Prolabios')
+@section('og_image', $product ? ($product['image'] ?? '') : '')
 
 @section('content')
-  <!-- Editorial Page Header -->
   <div class="editorial-page-header">
     <div class="container">
       <span class="editorial-page-label">Detail Produk</span>
@@ -21,11 +19,14 @@
   <section class="section-main">
     <div class="container">
       <div class="row g-5">
-        
-        <!-- Main Content (Full Width) -->
         <div class="col-12">
           @if($product)
-            <!-- Title Area -->
+            @php
+              $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
+              $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
+              $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
+            @endphp
+
             <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 24px; margin-bottom: 40px;">
               <h1 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
               @if(!empty($product['category']))
@@ -35,15 +36,8 @@
               @endif
             </div>
 
-            <!-- Product Details Area -->
             <div class="row g-5">
-              <!-- Product Image Gallery -->
               <div class="col-md-5">
-                @php
-                  $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
-                  $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
-                  $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
-                @endphp
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
                   <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument &amp; Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
                 </div>
@@ -57,8 +51,7 @@
                   </div>
                 @endif
               </div>
-              
-              <!-- Product Specs -->
+
               <div class="col-md-7">
                 @if(!empty($product['catalog']))
                   <div class="mb-4">
@@ -85,6 +78,83 @@
                 </div>
               </div>
             </div>
+
+            {{-- Lightbox --}}
+            <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content bg-transparent border-0 shadow-none position-relative">
+                  <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                  <div class="modal-body text-center p-0">
+                    <div class="lightbox-image-wrapper">
+                      <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{-- JSON-LD --}}
+            <script type="application/ld+json">
+            {!! json_encode([
+              '@context' => 'https://schema.org/',
+              '@type' => 'Product',
+              'name' => $product['title'],
+              'image' => [
+                !empty($product['image'])
+                  ? (str_starts_with($product['image'], 'http') ? $product['image'] : url($product['image']))
+                  : asset('images/placeholder.svg'),
+              ],
+              'description' => \Illuminate\Support\Str::limit(strip_tags($product['description'] ?? 'Instrumen dan reagen laboratorium analitika berkualitas tinggi dari PT. Prolabios Mitra Analitika.'), 200),
+              'sku' => !empty($product['catalog']) ? $product['catalog'] : ('PLB-' . $product['id']),
+              'mpn' => !empty($product['catalog']) ? $product['catalog'] : ('PLB-' . $product['id']),
+              'brand' => [
+                '@type' => 'Brand',
+                'name' => !empty($product['sector']) ? ucwords(str_replace('-', ' ', $product['sector'])) : 'Prolabios',
+              ],
+              'category' => !empty($product['category']) ? ucwords(str_replace('-', ' ', $product['category'])) : 'Laboratorium',
+              'offers' => [
+                '@type' => 'Offer',
+                'url' => url('/produk/detail') . '?id=' . $product['id'],
+                'priceCurrency' => 'IDR',
+                'price' => (!empty($product['price']) && $product['price'] > 0) ? (float) $product['price'] : 0,
+                'priceValidUntil' => date('Y-12-31', strtotime('+1 year')),
+                'itemCondition' => 'https://schema.org/NewCondition',
+                'availability' => ((!isset($product['stock']) || (int) $product['stock'] > 0) ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder'),
+                'seller' => [
+                  '@type' => 'Organization',
+                  'name' => 'PT. Prolabios Mitra Analitika',
+                ],
+              ],
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+            </script>
+            <script type="application/ld+json">
+            {!! json_encode([
+              '@context' => 'https://schema.org',
+              '@type' => 'BreadcrumbList',
+              'itemListElement' => [
+                [
+                  '@type' => 'ListItem',
+                  'position' => 1,
+                  'name' => 'Beranda',
+                  'item' => url('/'),
+                ],
+                [
+                  '@type' => 'ListItem',
+                  'position' => 2,
+                  'name' => 'Katalog Produk',
+                  'item' => url('/produk'),
+                ],
+                [
+                  '@type' => 'ListItem',
+                  'position' => 3,
+                  'name' => $product['title'],
+                  'item' => url('/produk/detail') . '?id=' . $product['id'],
+                ],
+              ],
+            ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+            </script>
           @else
             <div class="empty-state-card">
               <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
@@ -94,28 +164,9 @@
             </div>
           @endif
         </div>
-        
       </div>
     </div>
   </section>
-
-  @if($product)
-  <!-- Image Lightbox Modal -->
-  <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content bg-transparent border-0 shadow-none position-relative">
-        <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Close">
-          <i class="bi bi-x-lg"></i>
-        </button>
-        <div class="modal-body text-center p-0">
-          <div class="lightbox-image-wrapper">
-            <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  @endif
 
   <style>
     .detail-product-img-wrap {
@@ -230,72 +281,10 @@
       const lightboxImg = document.getElementById('lightbox-product-image');
       if (mainImg) mainImg.src = src;
       if (lightboxImg) lightboxImg.src = src;
-
       document.querySelectorAll('.gallery-thumb').forEach(function (el) {
         el.classList.remove('active');
       });
       if (thumbEl) thumbEl.classList.add('active');
     }
   </script>
-
-  @if($product)
-    <!-- Google Rich Snippets / Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org/",
-      "@type": "Product",
-      "name": "{{ addslashes($product['title']) }}",
-      "image": [
-        "{{ !empty($product['image']) ? (str_starts_with($product['image'], 'http') ? $product['image'] : url($product['image'])) : asset('images/placeholder.svg') }}"
-      ],
-      "description": "{{ addslashes(Str::limit(strip_tags($product['description'] ?? 'Instrumen dan reagen laboratorium analitika berkualitas tinggi dari PT. Prolabios Mitra Analitika.'), 200)) }}",
-      "sku": "{{ !empty($product['catalog']) ? addslashes($product['catalog']) : 'PLB-' . $product['id'] }}",
-      "mpn": "{{ !empty($product['catalog']) ? addslashes($product['catalog']) : 'PLB-' . $product['id'] }}",
-      "brand": {
-        "@type": "Brand",
-        "name": "{{ !empty($product['sector']) ? ucwords(str_replace('-', ' ', $product['sector'])) : 'Prolabios' }}"
-      },
-      "category": "{{ !empty($product['category']) ? ucwords(str_replace('-', ' ', $product['category'])) : 'Laboratorium' }}",
-      "offers": {
-        "@type": "Offer",
-        "url": "{{ url()->current() }}?id={{ $product['id'] }}",
-        "priceCurrency": "IDR",
-        "price": "{{ !empty($product['price']) && $product['price'] > 0 ? (float) $product['price'] : 0 }}",
-        "priceValidUntil": "{{ date('Y-12-31', strtotime('+1 year')) }}",
-        "itemCondition": "https://schema.org/NewCondition",
-        "availability": "{{ (!isset($product['stock']) || (int)$product['stock'] > 0) ? 'https://schema.org/InStock' : 'https://schema.org/PreOrder' }}",
-        "seller": {
-          "@type": "Organization",
-          "name": "PT. Prolabios Mitra Analitika"
-        }
-      }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Beranda",
-          "item": "{{ url('/') }}"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Katalog Produk",
-          "item": "{{ url('/produk') }}"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "{{ addslashes($product['title']) }}",
-          "item": "{{ url()->current() }}?id={{ $product['id'] }}"
-        }
-      ]
-    }
-    </script>
-  @endif
 @endsection
