@@ -76,10 +76,15 @@ class AdminProductController extends Controller
             = $this->paginateQuery($query, $request, self::PRODUCTS_PER_PAGE);
 
         $sectors = $this->dataService->getSectors();
+        $categories = \App\Models\ProductCategory::whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'name', 'key']);
 
         return view('admin.products.index', [
             'products'    => $products,
             'sectors'     => $sectors,
+            'categories'  => $categories,
             'search'      => $search,
             'category'    => $category,
             'sector'      => $sector,
