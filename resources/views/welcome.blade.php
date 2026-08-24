@@ -51,15 +51,11 @@
                       CAT. {{ $prod['catalog'] }}
                     </div>
                   @endif
-                  <h3 class="card-title fs-6 fw-semibold mb-2">
-                    <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
+                  <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
+                    <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
-                  <p class="product-card-desc mb-3 flex-grow-1">
-                    {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) }}
-                  </p>
-
-                  <div class="mt-auto pt-2 d-flex align-items-center justify-content-between border-top border-secondary border-opacity-10">
-                    <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
+                  <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
+                    <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
                   </div>
                 </div>
               </div>
