@@ -1120,3 +1120,50 @@ nav[role="navigation"][aria-label*="pagination"] {
   min-width: 2rem;
   min-height: 2rem;
 }
+
+/* ==========================================================================
+   21. Bootstrap badge neutralization (dark editorial)
+   ========================================================================== */
+.badge {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  line-height: 1.2;
+  vertical-align: middle;
+}
+.badge.bg-success, .badge.text-bg-success, .badge.bg-success.bg-opacity-20 {
+  color: #2ecc71 !important;
+  background: rgba(46, 204, 113, 0.06) !important;
+  border-color: rgba(46, 204, 113, 0.2) !important;
+}
+.badge.bg-warning, .badge.text-bg-warning, .badge.bg-warning.bg-opacity-20 {
+  color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.06) !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+.badge.bg-danger, .badge.text-bg-danger, .badge.bg-danger.bg-opacity-20 {
+  color: #ff6b72 !important;
+  background: rgba(255, 73, 80, 0.06) !important;
+  border-color: rgba(255, 73, 80, 0.2) !important;
+}
+.badge.bg-info, .badge.text-bg-info, .badge.bg-info.bg-opacity-20 {
+  color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.06) !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+.badge.bg-primary, .badge.text-bg-primary, .badge.bg-primary.bg-opacity-20 {
+  color: var(--color-accent) !important;
+  background: rgba(255, 73, 80, 0.06) !important;
+  border-color: rgba(255, 73, 80, 0.2) !important;
+}
+.badge.bg-secondary, .badge.text-bg-secondary, .badge.bg-secondary.bg-opacity-20,
+.badge.bg-dark, .badge.text-bg-dark {
+  color: var(--color-text-muted) !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: var(--color-border) !important;
+}
