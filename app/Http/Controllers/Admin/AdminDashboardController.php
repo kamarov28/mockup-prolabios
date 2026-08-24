@@ -54,11 +54,9 @@ class AdminDashboardController extends Controller
             $categoryDist = ['Belum Ada Produk' => 0];
         }
 
-        $homeData = $this->dataService->getHomepageData();
-
         return view('admin.dashboard', compact(
             'productsCount', 'postsCount', 'sectorsCount', 'rfqsCount',
-            'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist', 'homeData'
+            'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist'
         ));
     }
 
