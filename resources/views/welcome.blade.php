@@ -27,7 +27,7 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <h2 class="typo-section-title">Featured Instruments &amp; Reagents</h2>
+          <h2 class="typo-section-title">Featured Instruments & Reagents</h2>
           <p class="typo-section-sub">High-reliability analytical devices and reagents designed to streamline your laboratory workflow.</p>
         </div>
         <div class="mt-3 mt-md-0">
@@ -43,7 +43,7 @@
             <div class="col">
               <div class="card h-100 product-card-premium border-0" style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }};">
                 <div class="img-wrap">
-                  <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product &amp; Analytical Instrument" loading="lazy" decoding="async">
+                  <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product & Analytical Instrument" loading="lazy" decoding="async">
                 </div>
                 <div class="card-body p-4 d-flex flex-column">
                   @if(!empty($prod['catalog']))
@@ -52,10 +52,10 @@
                     </div>
                   @endif
                   <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
-                    <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
+                    <a href="{{ !empty($prod['slug'] ?? null) ? url('/produk/'.$prod['slug']) : url('/produk/detail?id='.$prod['id']) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
                   <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                    <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
+                    <a href="{{ !empty($prod['slug'] ?? null) ? url('/produk/'.$prod['slug']) : url('/produk/detail?id='.$prod['id']) }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
                   </div>
                 </div>
               </div>
@@ -95,7 +95,6 @@
   @include('partials.gsap-loader')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Interactive Sector Finder Tab Logic
       const tabBtns = document.querySelectorAll('.hitech-tab-btn');
       const tabPanels = document.querySelectorAll('.hitech-tab-panel');
 
