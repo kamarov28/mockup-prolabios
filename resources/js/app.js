@@ -10,6 +10,37 @@ import { initCatalogCart } from './modules/catalog-cart.js';
 import { revealHeroStatic } from './modules/typography-split.js';
 import { initGSAPAnimations } from './modules/animations.js';
 
+/**
+ * Sticky left sidebar on product catalog & sector pages (desktop).
+ * CSS: public/css/sticky-sidebar.css (.page-sidebar-sticky)
+ * Re-applies after AJAX swaps (MutationObserver).
+ */
+function applyStickySidebars() {
+  const selectors = [
+    '#catalog-section .col-lg-3',
+    '#sektor-sidebar',
+    '#sektor-nav .col-lg-3',
+  ];
+  selectors.forEach(function (sel) {
+    document.querySelectorAll(sel).forEach(function (el) {
+      el.classList.add('page-sidebar-sticky');
+    });
+  });
+}
+
+function initStickySidebars() {
+  applyStickySidebars();
+
+  ['catalog-section', 'sektor-nav'].forEach(function (id) {
+    const section = document.getElementById(id);
+    if (!section || section.dataset.stickyObserved === '1') return;
+    section.dataset.stickyObserved = '1';
+    new MutationObserver(function () {
+      applyStickySidebars();
+    }).observe(section, { childList: true, subtree: true });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   function safeInit(name, fn) {
     if (typeof fn === 'function') {
@@ -26,8 +57,10 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initHeroSlideshow', initHeroSlideshow);
   safeInit('initAnimations', initAnimations);
   safeInit('initCatalogCart', initCatalogCart);
+  safeInit('initStickySidebars', initStickySidebars);
 });
 
 // Expose key global window helpers required by Blade views
 window.initGSAPAnimations = initGSAPAnimations;
 window.revealHeroStatic = revealHeroStatic;
+window.initStickySidebars = initStickySidebars;
