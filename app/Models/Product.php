@@ -83,6 +83,10 @@ class Product extends Model
         return $query->where('category', $category);
     }
 
+    /**
+     * Filter by sector via product_sector pivot only (source of truth).
+     * Admin may still store CSV on products.sector; that is synced to pivot on save.
+     */
     public function scopeBySector(Builder $query, string $sector): Builder
     {
         $sector = trim($sector);
@@ -90,22 +94,11 @@ class Product extends Model
             return $query;
         }
 
-        return $query->where(function (Builder $q) use ($sector) {
-            $q->whereExists(function ($sub) use ($sector) {
-                $sub->select(DB::raw(1))
-                    ->from('product_sector')
-                    ->whereColumn('product_sector.product_id', 'products.id')
-                    ->where('product_sector.sector_id', $sector);
-            });
-
-            $driver = $q->getConnection()->getDriverName();
-            if ($driver === 'sqlite') {
-                $q->orWhere('sector', $sector)
-                    ->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
-            } else {
-                $q->orWhere('sector', $sector)
-                    ->orWhereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
-            }
+        return $query->whereExists(function ($sub) use ($sector) {
+            $sub->select(DB::raw(1))
+                ->from('product_sector')
+                ->whereColumn('product_sector.product_id', 'products.id')
+                ->where('product_sector.sector_id', $sector);
         });
     }
 
@@ -137,9 +130,6 @@ class Product extends Model
     // Slug helpers
     // ----------------------------------------------------
 
-    /**
-     * Build a unique slug from a title (or other base string).
-     */
     public static function uniqueSlugFrom(string $title, ?int $ignoreId = null): string
     {
         $base = Str::slug($title);
@@ -176,6 +166,9 @@ class Product extends Model
         return array_values(array_unique(array_filter($ids, fn (string $id) => $id !== '')));
     }
 
+    /**
+     * Keep product_sector pivot in sync with the admin CSV `sector` column.
+     */
     public function syncSectorsFromCsv(?string $sectorCsv = null): void
     {
         $this->sectors()->sync(self::parseSectorIds($sectorCsv ?? $this->sector));
@@ -193,7 +186,6 @@ class Product extends Model
             : 'Est. Penawaran';
     }
 
-    /** Canonical public URL path segment. */
     public function getUrlAttribute(): string
     {
         $slug = $this->slug ?: static::uniqueSlugFrom((string) $this->title, $this->id);
@@ -217,7 +209,12 @@ class Product extends Model
             }
         });
 
-        static::saved(function () {
+        static::saved(function (Product $product) {
+            // CSV sector column is input-only; pivot is source of truth for reads
+            if ($product->wasRecentlyCreated || $product->wasChanged('sector')) {
+                $product->syncSectorsFromCsv($product->sector);
+            }
+
             Cache::forget('categories_structure');
             try {
                 Cache::increment('products_cache_version');
