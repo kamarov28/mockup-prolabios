@@ -117,7 +117,7 @@
                       <tr>
                         <td style="color: var(--color-text-muted); font-size: 0.82rem;">{{ $prod['catalog'] ?? '-' }}</td>
                         <td>
-                          <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
+                          <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
                             {{ $prod['title'] }}
                           </a>
                         </td>
@@ -157,10 +157,10 @@
                           <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
                         @endif
                         <h4 class="card-title fs-6 fw-bold">
-                          <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
+                          <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
                         </h4>
                         <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 16px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
-                        <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+                        <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
                       </div>
                     </div>
                   </div>
@@ -269,7 +269,7 @@
 
               const tdTitle = document.createElement('td');
               const aTitle = document.createElement('a');
-              aTitle.href = detailProductUrl + '?id=' + encodeURIComponent(prod.title || '');
+              aTitle.href = detailProductUrl + '?id=' + encodeURIComponent(prod.id || '');
               aTitle.className = 'text-decoration-none fw-semibold';
               aTitle.style.color = 'var(--color-accent)';
               aTitle.textContent = prod.title || '';

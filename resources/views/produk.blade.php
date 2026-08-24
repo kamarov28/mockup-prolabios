@@ -137,14 +137,14 @@
                       </div>
                     @endif
                     <h3 class="card-title fs-6 fw-semibold mb-2">
-                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="product-card-link">{{ $prod['title'] }}</a>
+                      <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-link">{{ $prod['title'] }}</a>
                     </h3>
                     <p class="product-card-desc mb-3 flex-grow-1">
                       {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) }}
                     </p>
 
                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                      <a href="{{ url('/produk/detail') }}?id={{ urlencode($prod['title']) }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
+                      <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
                         <i class="bi bi-eye me-1"></i> Lihat Detail Produk
                       </a>
                     </div>
@@ -173,15 +173,24 @@
   @push('scripts')
   @include('partials.gsap-loader')
   <script>
+    let currentFetchController = null;
+
     // AJAX Dynamic Loader for Catalog Navigation
-    function loadProductsAjax(url, updateHistory = true) {
+    function loadProductsAjax(url, updateHistory = true, isLiveSearch = false) {
+      // Abort previous in-flight request to prevent race conditions & flickering
+      if (currentFetchController) {
+        currentFetchController.abort();
+      }
+      currentFetchController = new AbortController();
+
       const container = document.getElementById('product-container');
       if (container) {
-        container.style.opacity = '0.4';
-        container.style.transition = 'opacity 0.2s ease-in-out';
+        container.style.opacity = isLiveSearch ? '0.75' : '0.4';
+        container.style.transition = 'opacity 0.15s ease-in-out';
       }
 
       fetch(url, {
+        signal: currentFetchController.signal,
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
         }
@@ -191,10 +200,10 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        // 1. Update Left Sidebar (Box 1 Categories and Box 2 Subcategories)
+        // 1. Update Left Sidebar (Categories & Subcategories)
         const currentSidebar = document.querySelector('#catalog-section .col-lg-3');
         const newSidebar = doc.querySelector('#catalog-section .col-lg-3');
-        if (currentSidebar && newSidebar) {
+        if (currentSidebar && newSidebar && !isLiveSearch) {
           const collapseEl = document.getElementById('sidebarCollapse');
           const isCollapseOpen = collapseEl ? collapseEl.classList.contains('show') : false;
 
@@ -228,65 +237,64 @@
 
         // 4. Update History state
         if (updateHistory) {
-          window.history.pushState({ url: url }, '', url);
+          window.history.replaceState({ url: url }, '', url);
         }
 
-        // 5. Re-initialize scroll entrance reveal animations on new elements
-        if (typeof initScrollAnimations === 'function') {
-          initScrollAnimations();
-        }
-        if (typeof initGSAPAnimations === 'function') {
-          initGSAPAnimations();
-        }
+        // 5. Re-initialize entrance animations only on explicit navigation (NOT on live typing)
+        if (!isLiveSearch) {
+          if (typeof initScrollAnimations === 'function') {
+            initScrollAnimations();
+          }
+          if (typeof initGSAPAnimations === 'function') {
+            initGSAPAnimations();
+          }
 
-        // Close mobile filter/sidebar collapse after selection
-        const sidebarCollapse = document.getElementById('sidebarCollapse');
-        if (sidebarCollapse && window.innerWidth < 768) {
-          const bsCollapse = bootstrap.Collapse.getInstance(sidebarCollapse);
-          if (bsCollapse) {
-            bsCollapse.hide();
-          } else {
-            sidebarCollapse.classList.remove('show');
+          // Close mobile filter/sidebar collapse after selection
+          const sidebarCollapse = document.getElementById('sidebarCollapse');
+          if (sidebarCollapse && window.innerWidth < 768) {
+            const bsCollapse = bootstrap.Collapse.getInstance(sidebarCollapse);
+            if (bsCollapse) {
+              bsCollapse.hide();
+            } else {
+              sidebarCollapse.classList.remove('show');
+            }
+          }
+
+          // Smooth scroll to catalog section only on category/filter click
+          const catalogSec = document.getElementById('catalog-section');
+          if (catalogSec) {
+            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }
 
-        // 6. Preserve active search query in search input
+        // 6. Preserve active search query if input is not focused
         const localSearch = document.getElementById('local-search-input');
-        if (localSearch) {
+        if (localSearch && document.activeElement !== localSearch) {
           const currentUrlObj = new URL(url, window.location.origin);
           const activeSearchQuery = currentUrlObj.searchParams.get('s') || currentUrlObj.searchParams.get('q') || '';
           localSearch.value = activeSearchQuery;
-          if (activeSearchQuery && document.activeElement === localSearch) {
-            const len = activeSearchQuery.length;
-            localSearch.setSelectionRange(len, len);
-          }
-        }
-
-        // Smooth scroll to catalog section top
-        const catalogSec = document.getElementById('catalog-section');
-        if (catalogSec) {
-          catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       })
       .catch(error => {
+        if (error.name === 'AbortError') {
+          // Ignore aborted request from rapid keystrokes
+          return;
+        }
         console.error('AJAX Load Failed, falling back to full reload:', error);
         window.location.href = url;
       });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-
-
       // 1. Intercept sidebar catalog links clicks to load instantly via AJAX
       document.addEventListener('click', function(e) {
-        const link = e.target.closest('#catalog-section .col-lg-3 a');
+        const link = e.target.closest('#catalog-section .col-lg-3 a') || e.target.closest('.pagination a');
         if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
           e.preventDefault();
           const linkUrl = new URL(link.href, window.location.origin);
           linkUrl.searchParams.delete('q');
           linkUrl.searchParams.delete('search');
-          linkUrl.searchParams.delete('s');
-          loadProductsAjax(linkUrl.toString());
+          loadProductsAjax(linkUrl.toString(), true, false);
         }
       });
 
@@ -334,7 +342,7 @@
 
       // 2. Popstate listener to handle browser back & forward buttons instantly
       window.addEventListener('popstate', function() {
-        loadProductsAjax(window.location.href, false);
+        loadProductsAjax(window.location.href, false, false);
       });
 
       // 3. Dynamic Server-Side Search (AJAX Debounced Search across full Database)
@@ -355,7 +363,7 @@
             currentUrl.searchParams.delete('s');
           }
           currentUrl.searchParams.delete('page');
-          loadProductsAjax(currentUrl.toString());
+          loadProductsAjax(currentUrl.toString(), true, false);
         });
       }
 
@@ -374,15 +382,9 @@
               currentUrl.searchParams.delete('s');
             }
             currentUrl.searchParams.delete('page');
-            loadProductsAjax(currentUrl.toString());
-          }, 350);
+            loadProductsAjax(currentUrl.toString(), true, true);
+          }, 250);
         });
-
-        // Set cursor to end of input if search parameter active
-        if (localSearch.value && document.activeElement === localSearch) {
-          const len = localSearch.value.length;
-          localSearch.setSelectionRange(len, len);
-        }
       }
     });
   </script>

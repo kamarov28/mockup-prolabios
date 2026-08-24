@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="mt-5 pt-4 d-flex flex-wrap gap-3" style="border-top: 1px solid var(--color-border);">
-                  <a href="{{ url('/produk/beli') }}?id={{ urlencode($product['title']) }}" class="kontak-submit-btn border-0 cursor-pointer text-decoration-none d-inline-flex align-items-center justify-content-center" style="height: 46px; margin: 0; padding: 0 28px; font-size: 0.85rem; letter-spacing: 1px;">
+                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="kontak-submit-btn border-0 cursor-pointer text-decoration-none d-inline-flex align-items-center justify-content-center" style="height: 46px; margin: 0; padding: 0 28px; font-size: 0.85rem; letter-spacing: 1px;">
                     <i class="bi bi-cart-check me-2" style="font-size: 1.1rem;"></i> Lihat Harga &amp; Beli Produk Ini
                   </a>
                   <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">

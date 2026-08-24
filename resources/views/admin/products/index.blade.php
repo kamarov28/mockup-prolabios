@@ -38,22 +38,20 @@
           </div>
         </div>
         <div class="col-md-3">
-          <select name="category" class="form-select" aria-label="Filter Kategori">
-            <option value="">Semua Kategori</option>
-            <option value="microbiology"       {{ $category === 'microbiology' ? 'selected' : '' }}>Microbiology</option>
-            <option value="reference-standards" {{ $category === 'reference-standards' ? 'selected' : '' }}>Reference Standards</option>
-            <option value="device"             {{ $category === 'device' ? 'selected' : '' }}>Device</option>
-            <option value="instruments"        {{ $category === 'instruments' ? 'selected' : '' }}>Instruments</option>
-            <option value="culture-media"      {{ $category === 'culture-media' ? 'selected' : '' }}>Culture Media</option>
-          </select>
+            <select name="category" class="form-select" aria-label="Filter Kategori">
+              <option value="">Semua Kategori</option>
+              @foreach($categories as $cat)
+                <option value="{{ $cat->key }}" {{ $category === $cat->key ? 'selected' : '' }}>{{ $cat->name }}</option>
+              @endforeach
+            </select>
         </div>
         <div class="col-md-3">
-          <select name="sector" class="form-select" aria-label="Filter Sektor">
-            <option value="">Semua Sektor</option>
-            @foreach($sectors as $sec)
-              <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
-            @endforeach
-          </select>
+            <select name="sector" class="form-select" aria-label="Filter Sektor">
+              <option value="">Semua Sektor</option>
+              @foreach($sectors as $sec)
+                <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
+              @endforeach
+            </select>
         </div>
         <div class="col-md-2">
           <button type="button" class="admin-btn admin-btn-ghost w-100 justify-content-center"
@@ -140,10 +138,10 @@
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category']) }}</span></td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ url('/produk/detail') }}?id={{ urlencode($p['title']) }}" target="_blank" class="admin-action-link view" title="Lihat">
+                  <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat">
                     <i class="bi bi-eye"></i>
                   </a>
-                  <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ urlencode($p['title']) }}" title="Salin link">
+                  <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ $p['id'] }}" title="Salin link">
                     <i class="bi bi-clipboard"></i>
                   </button>
                   <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit">
