@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
-  <!-- Font: Space Grotesk ΓÇö same as main website -->
+  <!-- Font: Space Grotesk — same as main website -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,30 +16,27 @@
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-  <!-- Bootstrap 5 CSS (Layout utilities) -->
+  <!-- Bootstrap 5 CSS (Layout utilities only — visual system = admin.css) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-  <!-- Admin Design System (Vite ΓÇö HMR Enabled) -->
+  <!-- Admin Design System (Vite) -->
   @vite(['resources/css/admin.css'])
 
   @yield('admin_styles')
 </head>
-<body>
+<body class="admin-panel">
   <!-- Progress Loading Bar -->
   <div id="page-loading-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--color-accent, #FF4950); z-index: 9999; transition: width 0.4s ease, opacity 0.4s ease; opacity: 0; pointer-events: none;"></div>
 
   <div id="admin-wrapper">
-    <!-- ΓöÇΓöÇ Sidebar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ -->
     <aside id="admin-sidebar">
 
-      <!-- Brand -->
       <div class="sidebar-brand">
         <a href="{{ url('/') }}">
           <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios Logo">
         </a>
       </div>
 
-      <!-- Navigation -->
       <div class="sidebar-menu">
 
         <span class="sidebar-nav-label">Panel</span>
@@ -82,7 +79,6 @@
           </a>
         </div>
 
-
         <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
           <a href="{{ route('admin.posts') }}" class="sidebar-link">
             <i class="bi bi-file-text"></i> Artikel
@@ -103,7 +99,6 @@
           </a>
         </div>
 
-        <!-- Logout -->
         <hr class="sidebar-sep" style="margin-top: auto;">
         <div class="sidebar-item">
           <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
@@ -117,10 +112,8 @@
       </div>
     </aside>
 
-    <!-- ΓöÇΓöÇ Main Content ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ -->
     <div id="admin-content">
 
-      <!-- Sticky Header -->
       <header class="admin-header">
         <p class="admin-header-title">@yield('page_title', 'Dashboard')</p>
         <div class="admin-header-actions">
@@ -135,7 +128,6 @@
         </div>
       </header>
 
-      <!-- Page Body -->
       <main class="admin-body">
         @yield('admin_content')
       </main>
@@ -143,19 +135,14 @@
     </div>
   </div>
 
-  <!-- Scroll to Top -->
   <button type="button" id="scroll-to-top" aria-label="Scroll to top" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text-muted); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1050;">
     <i class="bi bi-arrow-up" style="font-size: 1rem;"></i>
   </button>
 
-  <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // ΓöÇΓöÇ Toast Helper ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
@@ -168,7 +155,6 @@
       }
     });
 
-    // ΓöÇΓöÇ Flash Messages ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     @if(session('success'))
       Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
     @endif
@@ -176,7 +162,6 @@
       Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
     @endif
 
-    // ΓöÇΓöÇ Delete Confirmation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     document.addEventListener('submit', function(e) {
       const form = e.target;
       const methodInput = form.querySelector('input[name="_method"]');
@@ -200,7 +185,6 @@
       }
     });
 
-    // ΓöÇΓöÇ Logout Confirmation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const logoutForm = document.getElementById('logout-form');
     if (logoutForm) {
       logoutForm.addEventListener('submit', function(e) {
@@ -221,7 +205,6 @@
       });
     }
 
-    // ΓöÇΓöÇ Copy Link Helper ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     document.addEventListener('click', function(e) {
       const copyBtn = e.target.closest('.btn-copy-link');
       if (copyBtn) {
@@ -236,7 +219,6 @@
       }
     });
 
-    // ΓöÇΓöÇ Unsaved Changes Guard ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     let isFormDirty = false;
     document.addEventListener('input', function(e) {
       if (e.target.closest('form') && !e.target.matches('input[name="s"], #local-search-input'))
@@ -285,7 +267,6 @@
       if (isFormDirty) { e.preventDefault(); e.returnValue = ''; }
     });
 
-    // ΓöÇΓöÇ Progress Loading Bar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const loadingBar = document.getElementById('page-loading-bar');
     if (loadingBar) {
       loadingBar.style.opacity = '1';
@@ -306,7 +287,6 @@
       });
     }
 
-    // ΓöÇΓöÇ Scroll to Top ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const scrollBtn = document.getElementById('scroll-to-top');
     if (scrollBtn) {
       window.addEventListener('scroll', function() {
@@ -321,7 +301,6 @@
       scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
 
-    // ΓöÇΓöÇ Search Hotkey (/) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     document.addEventListener('keydown', function(e) {
       const active = document.activeElement;
       if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) return;
@@ -330,14 +309,13 @@
         if (input) { e.preventDefault(); input.focus(); input.select(); }
       }
     });
-    // ΓöÇΓöÇ Drag-to-Scroll for Responsive Tables ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
     document.querySelectorAll('.table-responsive').forEach(function(slider) {
       let isDown = false;
       let startX;
       let scrollLeft;
 
       slider.addEventListener('mousedown', (e) => {
-        // Prevent drag trigger if clicking on interactive elements like links or buttons
         if (e.target.closest('a, button, input, select')) return;
         isDown = true;
         slider.style.cursor = 'grabbing';
@@ -359,7 +337,7 @@
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 1.8; // scroll-speed multiplier
+        const walk = (x - startX) * 1.8;
         slider.scrollLeft = scrollLeft - walk;
       });
     });
