@@ -18,7 +18,7 @@
     </a>
     <h1 class="h3 fw-bold text-white mb-2" style="font-family: var(--font-headline);">
       {{ $rfq->rfq_number }}
-      <span class="badge border ms-2 px-2 py-1 fs-6 {{ $rfq->status_badge_class }}">{{ $rfq->status_label }}</span>
+      <span class="admin-badge {{ $rfq->status_badge_class }} ms-2" style="font-size: 0.75rem; vertical-align: middle;">{{ $rfq->status_label }}</span>
     </h1>
   </div>
   <div class="d-inline-flex gap-2 flex-wrap">
