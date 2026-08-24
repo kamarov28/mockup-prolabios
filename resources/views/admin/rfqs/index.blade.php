@@ -132,9 +132,31 @@
         </table>
       </div>
 
+      {{-- Pagination — sama style dengan tabel produk --}}
       @if($rfqs->hasPages())
-        <div class="p-3 border-top border-secondary border-opacity-10 d-flex justify-content-center">
-          {{ $rfqs->links() }}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--color-border);">
+          <span style="font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.5px;">
+            Halaman <strong style="color: var(--color-text-main);">{{ $rfqs->currentPage() }}</strong> dari <strong style="color: var(--color-text-main);">{{ $rfqs->lastPage() }}</strong>
+          </span>
+          <nav aria-label="Navigasi halaman">
+            <ul class="pagination pagination-sm mb-0">
+              <li class="page-item {{ $rfqs->onFirstPage() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $rfqs->previousPageUrl() ?? '#' }}" aria-label="Sebelumnya">
+                  <i class="bi bi-chevron-left"></i>
+                </a>
+              </li>
+              @for($i = 1; $i <= $rfqs->lastPage(); $i++)
+                <li class="page-item {{ $rfqs->currentPage() == $i ? 'active' : '' }}">
+                  <a class="page-link" href="{{ $rfqs->url($i) }}">{{ $i }}</a>
+                </li>
+              @endfor
+              <li class="page-item {{ !$rfqs->hasMorePages() ? 'disabled' : '' }}">
+                <a class="page-link" href="{{ $rfqs->nextPageUrl() ?? '#' }}" aria-label="Berikutnya">
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       @endif
 
