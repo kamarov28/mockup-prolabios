@@ -2,28 +2,63 @@
 
 namespace App\Services;
 
-use App\Models\Post;
-use App\Models\Principal;
+use App\Helpers\HtmlSanitizer;
 use App\Models\Product;
-use App\Models\ProductCategory;
-use App\Models\Sector;
 use Illuminate\Support\Collection;
 
+/**
+ * DataService
+ *
+ * Central service facade delegating to focused domain services:
+ * - ProductService: Catalog, categories structure, live stock, and product caching
+ * - PostService: Articles, news, events, and category counts
+ * - SectorService: Industry sectors and applications
+ * - HomepageService: Homepage layout data, banners, and general site settings
+ * - HtmlSanitizer: Rich-text sanitization
+ */
 class DataService
 {
     public function __construct(
-        protected HomepageService $homepage,
         protected ProductService $products,
-        protected SectorService $sectors,
         protected PostService $posts,
+        protected SectorService $sectors,
+        protected HomepageService $homepage
     ) {}
 
-    public function getProducts(): Collection
+    // ----------------------------------------------------
+    // Products Domain (Delegates to ProductService)
+    // ----------------------------------------------------
+    public static function getProductsCacheVersion(): int
     {
-        return $this->products->getProducts();
+        return ProductService::getProductsCacheVersion();
     }
 
-    public function getProductById(int|string $id): ?Product
+    public function clearProductsCache(): void
+    {
+        $this->products->clearProductsCache();
+    }
+
+    public function getCategoriesStructure(): array
+    {
+        return $this->products->getCategoriesStructure();
+    }
+
+    public function getProducts(?array $filters = [], int $limit = 0): Collection
+    {
+        return $this->products->getProducts($filters, $limit);
+    }
+
+    public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
+    {
+        return $this->products->getPaginatedProducts($filters, $perPage);
+    }
+
+    public function getProductByTitle(string $title): ?Product
+    {
+        return $this->products->getProductByTitle($title);
+    }
+
+    public function getProductById(int $id): ?Product
     {
         return $this->products->getProductById($id);
     }
@@ -33,29 +68,108 @@ class DataService
         return $this->products->getProductBySlug($slug);
     }
 
-    public function getCategories(): Collection
+    public function addProduct(array $product): ?Product
     {
-        return ProductCategory::query()->orderBy('name')->get();
+        return $this->products->addProduct($product);
     }
 
-    public function getPrincipals(): Collection
+    public function updateProductById(int $id, array $updatedProduct): bool
     {
-        return Principal::query()->orderBy('name')->get();
+        return $this->products->updateProductById($id, $updatedProduct);
     }
 
-    public function getSectors(): Collection
+    public function updateProduct(string $oldTitle, array $updatedProduct): bool
+    {
+        return $this->products->updateProduct($oldTitle, $updatedProduct);
+    }
+
+    public function decrementStock(string $title, int $quantity): bool
+    {
+        return $this->products->decrementStock($title, $quantity);
+    }
+
+    public function deleteProductById(int $id): bool
+    {
+        return $this->products->deleteProductById($id);
+    }
+
+    public function deleteProduct(string $title): bool
+    {
+        return $this->products->deleteProduct($title);
+    }
+
+    public function upsertProducts(array $rows): array
+    {
+        return $this->products->upsertProducts($rows);
+    }
+
+    // ----------------------------------------------------
+    // Posts Domain (Delegates to PostService)
+    // ----------------------------------------------------
+    public function getPosts(?array $filters = [], int $limit = 0): array
+    {
+        return $this->posts->getPosts($filters, $limit);
+    }
+
+    public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
+    {
+        return $this->posts->getPaginatedPosts($filters, $perPage);
+    }
+
+    public function getPostBySlug(string $slug): ?array
+    {
+        return $this->posts->getPostBySlug($slug);
+    }
+
+    public function addPost(array $post): bool
+    {
+        return $this->posts->addPost($post);
+    }
+
+    public function updatePost(string $slug, array $updatedPost): bool
+    {
+        return $this->posts->updatePost($slug, $updatedPost);
+    }
+
+    public function deletePost(string $slug): bool
+    {
+        return $this->posts->deletePost($slug);
+    }
+
+    // ----------------------------------------------------
+    // Sectors Domain (Delegates to SectorService)
+    // ----------------------------------------------------
+    public function getSectors(): array
     {
         return $this->sectors->getSectors();
     }
 
-    public function getPosts(): Collection
+    public function getSectorById(string $id): ?array
     {
-        return $this->posts->getPosts();
+        return $this->sectors->getSectorById($id);
     }
 
-    public function getPostBySlug(string $slug): ?Post
+    public function addSector(array $sector): bool
     {
-        return $this->posts->getPostBySlug($slug);
+        return $this->sectors->addSector($sector);
+    }
+
+    public function updateSector(string $id, array $updatedSector): bool
+    {
+        return $this->sectors->updateSector($id, $updatedSector);
+    }
+
+    public function deleteSector(string $id): bool
+    {
+        return $this->sectors->deleteSector($id);
+    }
+
+    // ----------------------------------------------------
+    // Homepage & Settings Domain (Delegates to HomepageService)
+    // ----------------------------------------------------
+    public static function clearSettingsCache(): void
+    {
+        HomepageService::clearSettingsCache();
     }
 
     public function getHomepageData(): array
@@ -76,5 +190,13 @@ class DataService
     public function getDefaultHomepageData(): array
     {
         return $this->homepage->getDefaultHomepageData();
+    }
+
+    // ----------------------------------------------------
+    // HTML Sanitization (Delegates to HtmlSanitizer)
+    // ----------------------------------------------------
+    public static function sanitizeHtml(?string $html): string
+    {
+        return HtmlSanitizer::clean($html);
     }
 }
