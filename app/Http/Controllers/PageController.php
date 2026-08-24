@@ -115,7 +115,7 @@ class PageController extends Controller
         return view('layanan');
     }
 
-    public function informasi(Request $request, DataService $dataService)
+    public function informasi(Request $request, DataService $dataService, ?string $slug = null)
     {
         $recentPosts = $dataService->getPosts([], 3);
 
@@ -138,10 +138,13 @@ class PageController extends Controller
             ];
         });
 
-        $detail = $request->query('detail');
+        $detail = $slug ?? $request->query('detail');
         $currentBlog = null;
-        if ($detail && preg_match('/^[a-zA-Z0-9\-_.]+$/', (string) $detail)) {
+        if ($detail) {
             $currentBlog = $dataService->getPostBySlug((string) $detail);
+            if (! $currentBlog) {
+                $currentBlog = $dataService->getPostBySlug(Str::slug((string) $detail));
+            }
         }
 
         $rawKategori = $request->query('kategori');

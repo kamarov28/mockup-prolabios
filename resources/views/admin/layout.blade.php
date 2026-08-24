@@ -7,26 +7,41 @@
   <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+
+  <!-- Font: Space Grotesk ΓÇö same as main website -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Bootstrap 5 CSS (Layout utilities) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Admin Design System (Vite ΓÇö HMR Enabled) -->
   @vite(['resources/css/admin.css'])
+
   @yield('admin_styles')
 </head>
 <body>
+  <!-- Progress Loading Bar -->
   <div id="page-loading-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--color-accent, #FF4950); z-index: 9999; transition: width 0.4s ease, opacity 0.4s ease; opacity: 0; pointer-events: none;"></div>
 
   <div id="admin-wrapper">
+    <!-- ΓöÇΓöÇ Sidebar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ -->
     <aside id="admin-sidebar">
+
+      <!-- Brand -->
       <div class="sidebar-brand">
         <a href="{{ url('/') }}">
           <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios Logo">
         </a>
       </div>
 
+      <!-- Navigation -->
       <div class="sidebar-menu">
+
         <span class="sidebar-nav-label">Panel</span>
 
         <div class="sidebar-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -67,116 +82,168 @@
           </a>
         </div>
 
+
         <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
           <a href="{{ route('admin.posts') }}" class="sidebar-link">
-            <i class="bi bi-file-earmark-text"></i> Artikel
+            <i class="bi bi-file-text"></i> Artikel
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/sectors*') ? 'active' : '' }}">
           <a href="{{ route('admin.sectors') }}" class="sidebar-link">
-            <i class="bi bi-building"></i> Sektor
+            <i class="bi bi-layers"></i> Sektor
           </a>
         </div>
 
         <span class="sidebar-nav-label" style="margin-top: 8px;">Bantuan</span>
 
-        <div class="sidebar-item {{ request()->is('admin/help*') ? 'active' : '' }}">
-          <a href="{{ url('/admin/help') }}" class="sidebar-link">
+        <div class="sidebar-item {{ request()->routeIs('admin.guide') ? 'active' : '' }}">
+          <a href="{{ route('admin.guide') }}" class="sidebar-link">
             <i class="bi bi-book"></i> Panduan Admin
           </a>
         </div>
-      </div>
 
-      <div class="sidebar-footer">
-        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
-          @csrf
-          <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;text-align:left;">
-            <i class="bi bi-box-arrow-left"></i> Keluar
-          </button>
-        </form>
+        <!-- Logout -->
+        <hr class="sidebar-sep" style="margin-top: auto;">
+        <div class="sidebar-item">
+          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="sidebar-link" style="color: rgba(255,73,80,0.7) !important;">
+              <i class="bi bi-arrow-bar-left"></i> Keluar
+            </button>
+          </form>
+        </div>
+
       </div>
     </aside>
 
+    <!-- ΓöÇΓöÇ Main Content ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ -->
     <div id="admin-content">
-      <header id="admin-topbar">
-        <div class="topbar-left">
-          <button type="button" id="sidebar-toggle" class="btn btn-link d-lg-none p-0 me-2" style="color:inherit;" aria-label="Toggle menu">
-            <i class="bi bi-list fs-4"></i>
-          </button>
-          <span class="topbar-title">@yield('page_title', 'Admin')</span>
-        </div>
-        <div class="topbar-right d-flex align-items-center gap-3">
-          <span class="topbar-user d-none d-md-inline"><i class="bi bi-person-circle"></i> {{ auth()->user()->name ?? 'admin' }}</span>
-          <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-ghost admin-btn-sm">
-            <i class="bi bi-box-arrow-up-right"></i> Lihat Web
+
+      <!-- Sticky Header -->
+      <header class="admin-header">
+        <p class="admin-header-title">@yield('page_title', 'Dashboard')</p>
+        <div class="admin-header-actions">
+          <span class="admin-header-user">
+            <i class="bi bi-person-circle"></i>
+            Administrator
+          </span>
+          <a href="{{ url('/') }}" target="_blank" class="admin-header-web-link">
+            <i class="bi bi-box-arrow-up-right"></i>
+            Lihat Web
           </a>
         </div>
       </header>
 
-      <main class="admin-page-body">
-        @if(session('success'))
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
-        @if(session('error'))
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-          </div>
-        @endif
-
+      <!-- Page Body -->
+      <main class="admin-body">
         @yield('admin_content')
       </main>
+
     </div>
   </div>
 
-  <button type="button" id="scroll-to-top" aria-label="Scroll to top" style="position:fixed;bottom:24px;right:24px;width:40px;height:40px;border-radius:50%;border:1px solid var(--color-border,#333);background:#121214;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;visibility:hidden;z-index:50;transition:opacity .25s;">
-    <i class="bi bi-arrow-up"></i>
+  <!-- Scroll to Top -->
+  <button type="button" id="scroll-to-top" aria-label="Scroll to top" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text-muted); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1050;">
+    <i class="bi bi-arrow-up" style="font-size: 1rem;"></i>
   </button>
 
+  <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
+    // ΓöÇΓöÇ Toast Helper ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const Toast = Swal.mixin({
-      toast: true, position: 'top-end', showConfirmButton: false, timer: 2800, timerProgressBar: true,
-      background: '#1a1a1e', color: '#fff'
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 4000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      }
     });
-    @if(session('success')) Toast.fire({ icon: 'success', title: @json(session('success')) }); @endif
-    @if(session('error')) Toast.fire({ icon: 'error', title: @json(session('error')) }); @endif
 
-    document.getElementById('sidebar-toggle')?.addEventListener('click', function () {
-      document.getElementById('admin-sidebar')?.classList.toggle('open');
-      document.getElementById('admin-wrapper')?.classList.toggle('sidebar-open');
+    // ΓöÇΓöÇ Flash Messages ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    @if(session('success'))
+      Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
+    @endif
+    @if(session('error'))
+      Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
+    @endif
+
+    // ΓöÇΓöÇ Delete Confirmation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    document.addEventListener('submit', function(e) {
+      const form = e.target;
+      const methodInput = form.querySelector('input[name="_method"]');
+      if (methodInput && methodInput.value.toUpperCase() === 'DELETE') {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Hapus Data?',
+          text: 'Data yang dihapus tidak dapat dipulihkan.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Hapus',
+          cancelButtonText: 'Batal',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'admin-btn admin-btn-danger mx-2',
+            cancelButton: 'admin-btn admin-btn-ghost mx-2',
+            popup: ''
+          },
+          buttonsStyling: false
+        }).then((result) => { if (result.isConfirmed) form.submit(); });
+      }
     });
 
-    document.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn-copy-link');
-      if (btn) {
-        const url = btn.getAttribute('data-url');
+    // ΓöÇΓöÇ Logout Confirmation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    const logoutForm = document.getElementById('logout-form');
+    if (logoutForm) {
+      logoutForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+          title: 'Keluar dari Admin?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Keluar',
+          cancelButtonText: 'Batal',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'admin-btn admin-btn-danger mx-2',
+            cancelButton: 'admin-btn admin-btn-ghost mx-2'
+          },
+          buttonsStyling: false
+        }).then((result) => { if (result.isConfirmed) logoutForm.submit(); });
+      });
+    }
+
+    // ΓöÇΓöÇ Copy Link Helper ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    document.addEventListener('click', function(e) {
+      const copyBtn = e.target.closest('.btn-copy-link');
+      if (copyBtn) {
+        const url = copyBtn.getAttribute('data-url');
         if (url) {
-          navigator.clipboard.writeText(url).then(() => Toast.fire({ icon: 'success', title: 'Tautan disalin!' }))
-            .catch(() => Toast.fire({ icon: 'error', title: 'Gagal menyalin.' }));
+          navigator.clipboard.writeText(url).then(() => {
+            Toast.fire({ icon: 'success', title: 'Tautan disalin!' });
+          }).catch(() => {
+            Toast.fire({ icon: 'error', title: 'Gagal menyalin.' });
+          });
         }
       }
     });
 
+    // ΓöÇΓöÇ Unsaved Changes Guard ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     let isFormDirty = false;
-    function isDataEntryForm(form) {
-      if (!form) return false;
-      const method = (form.getAttribute('method') || 'GET').toUpperCase();
-      return method === 'POST' || method === 'PUT' || method === 'PATCH';
-    }
     document.addEventListener('input', function(e) {
-      const form = e.target.closest('form');
-      if (isDataEntryForm(form) && !e.target.matches('input[name="s"], #local-search-input'))
+      if (e.target.closest('form') && !e.target.matches('input[name="s"], #local-search-input'))
         isFormDirty = true;
     });
     document.addEventListener('change', function(e) {
-      const form = e.target.closest('form');
-      if (isDataEntryForm(form) && !e.target.matches('input[name="s"], #local-search-input, select[name="category"], select[name="sector"], select[name="sort"]'))
+      if (e.target.closest('form') && !e.target.matches('input[name="s"], #local-search-input'))
         isFormDirty = true;
     });
     document.addEventListener('submit', function() { isFormDirty = false; });
@@ -218,6 +285,7 @@
       if (isFormDirty) { e.preventDefault(); e.returnValue = ''; }
     });
 
+    // ΓöÇΓöÇ Progress Loading Bar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const loadingBar = document.getElementById('page-loading-bar');
     if (loadingBar) {
       loadingBar.style.opacity = '1';
@@ -226,8 +294,19 @@
         loadingBar.style.opacity = '0';
         setTimeout(() => { loadingBar.style.width = '0%'; }, 400);
       }, 400);
+      document.addEventListener('click', function(e) {
+        const link = e.target.closest('a');
+        if (link && !isFormDirty) {
+          const href = link.getAttribute('href');
+          if (href && href !== '#' && !href.startsWith('javascript:') && link.getAttribute('target') !== '_blank') {
+            loadingBar.style.opacity = '1';
+            loadingBar.style.width = '70%';
+          }
+        }
+      });
     }
 
+    // ΓöÇΓöÇ Scroll to Top ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const scrollBtn = document.getElementById('scroll-to-top');
     if (scrollBtn) {
       window.addEventListener('scroll', function() {
@@ -241,7 +320,51 @@
       });
       scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     }
+
+    // ΓöÇΓöÇ Search Hotkey (/) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    document.addEventListener('keydown', function(e) {
+      const active = document.activeElement;
+      if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) return;
+      if (e.key === '/') {
+        const input = document.querySelector('input[name="s"], #local-search-input');
+        if (input) { e.preventDefault(); input.focus(); input.select(); }
+      }
+    });
+    // ΓöÇΓöÇ Drag-to-Scroll for Responsive Tables ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    document.querySelectorAll('.table-responsive').forEach(function(slider) {
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+
+      slider.addEventListener('mousedown', (e) => {
+        // Prevent drag trigger if clicking on interactive elements like links or buttons
+        if (e.target.closest('a, button, input, select')) return;
+        isDown = true;
+        slider.style.cursor = 'grabbing';
+        startX = e.pageX - slider.offsetLeft;
+        scrollLeft = slider.scrollLeft;
+      });
+
+      slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.style.cursor = 'grab';
+      });
+
+      slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startX) * 1.8; // scroll-speed multiplier
+        slider.scrollLeft = scrollLeft - walk;
+      });
+    });
   </script>
+
   @yield('admin_scripts')
 </body>
 </html>

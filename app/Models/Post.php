@@ -21,11 +21,44 @@ class Post extends Model
     protected function casts(): array
     {
         return [
-            'date'        => 'date',
             'is_featured' => 'boolean',
             'created_at'  => 'datetime',
             'updated_at'  => 'datetime',
         ];
+    }
+
+    public function getDateAttribute($value): ?\Carbon\Carbon
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        if ($value instanceof \Carbon\CarbonInterface) {
+            return \Carbon\Carbon::instance($value);
+        }
+
+        $indoMonths = [
+            'Januari' => 'January', 'Jan' => 'Jan',
+            'Februari' => 'February', 'Feb' => 'Feb',
+            'Maret' => 'March', 'Mar' => 'Mar',
+            'April' => 'April', 'Apr' => 'Apr',
+            'Mei' => 'May',
+            'Juni' => 'June', 'Jun' => 'Jun',
+            'Juli' => 'July', 'Jul' => 'Jul',
+            'Agustus' => 'August', 'Agu' => 'Aug', 'Agt' => 'Aug',
+            'September' => 'September', 'Sep' => 'Sep',
+            'Oktober' => 'October', 'Okt' => 'Oct',
+            'November' => 'November', 'Nov' => 'Nov',
+            'Desember' => 'December', 'Des' => 'Dec',
+        ];
+
+        try {
+            $normalized = str_ireplace(array_keys($indoMonths), array_values($indoMonths), (string) $value);
+
+            return \Carbon\Carbon::parse($normalized);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     // ----------------------------------------------------

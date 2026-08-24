@@ -132,7 +132,7 @@
                   <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ url('/informasi/' . $post['slug']) }}" target="_blank" class="admin-action-link view" title="Lihat">
+                  <a href="{{ url('/informasi') }}?detail={{ urlencode($post['slug']) }}" target="_blank" class="admin-action-link view" title="Lihat">
                     <i class="bi bi-eye"></i>
                   </a>
                   <a href="{{ route('admin.posts.edit', ['slug' => $post['slug']]) }}" class="admin-action-link edit" title="Edit">

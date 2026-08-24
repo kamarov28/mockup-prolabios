@@ -38,7 +38,7 @@ Route::get('/sektor', [PageController::class, 'sektor']);
 Route::get('/produk/detail', [PageController::class, 'detailProduk']);
 Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
 Route::get('/layanan', [PageController::class, 'layanan']);
-Route::get('/informasi', [PageController::class, 'informasi']);
+Route::get('/informasi/{slug?}', [PageController::class, 'informasi'])->name('informasi');
 Route::get('/kontak', [PageController::class, 'kontak']);
 Route::get('/kebijakan-privasi', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/syarat-ketentuan', [PageController::class, 'terms'])->name('terms');
