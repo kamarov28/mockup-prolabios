@@ -111,14 +111,11 @@ class PageController extends Controller
             $activeSector = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
         }
 
-        // Paginate — never load entire sector catalog into memory
+        // Paginate — filter = pivot OR legacy CSV (see Product::scopeBySector)
         $products = $dataService->getPaginatedProducts(['sector' => $activeSector], 24);
 
-        // Small related strip (other products, not full sector dump)
-        $relatedProducts = $dataService->getProducts([], 6)
-            ->reject(fn ($p) => (string) $p->id === '' )
-            ->take(3)
-            ->values();
+        // Related cards: same sector, limited (not global first-6 every time)
+        $relatedProducts = $dataService->getProducts(['sector' => $activeSector], 3);
 
         return view('sektor', compact('sectors', 'products', 'activeSector', 'relatedProducts'));
     }

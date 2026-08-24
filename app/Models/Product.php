@@ -39,7 +39,7 @@ class Product extends Model
     // ----------------------------------------------------
     // Relationships
     // products.category / sub_category store ProductCategory.key (slug), not name
-    // products.sector remains CSV for legacy writes; product_sector is canonical for reads
+    // products.sector CSV + product_sector pivot (both checked on read)
     // ----------------------------------------------------
     public function categoryRelation(): BelongsTo
     {
@@ -76,16 +76,35 @@ class Product extends Model
     }
 
     /**
-     * Filter by sector id via product_sector pivot (index-friendly EXISTS).
-     * CSV column is write-side legacy only; keep pivot in sync via syncSectorsFromCsv().
+     * Match sector via pivot (preferred) OR legacy CSV column.
+     * Same semantics as the old client-side: sector.split(',').includes(id)
      */
     public function scopeBySector(Builder $query, string $sector): Builder
     {
-        return $query->whereExists(function ($sub) use ($sector) {
-            $sub->select(DB::raw(1))
-                ->from('product_sector')
-                ->whereColumn('product_sector.product_id', 'products.id')
-                ->where('product_sector.sector_id', $sector);
+        $sector = trim($sector);
+        if ($sector === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $q) use ($sector) {
+            // 1) product_sector pivot
+            $q->whereExists(function ($sub) use ($sector) {
+                $sub->select(DB::raw(1))
+                    ->from('product_sector')
+                    ->whereColumn('product_sector.product_id', 'products.id')
+                    ->where('product_sector.sector_id', $sector);
+            });
+
+            // 2) Legacy CSV on products.sector (exact, or token in list)
+            $driver = $q->getConnection()->getDriverName();
+            if ($driver === 'sqlite') {
+                $q->orWhere('sector', $sector)
+                    ->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
+            } else {
+                // MySQL / MariaDB
+                $q->orWhere('sector', $sector)
+                    ->orWhereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            }
         });
     }
 
