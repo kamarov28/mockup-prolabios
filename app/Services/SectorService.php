@@ -2,53 +2,39 @@
 
 namespace App\Services;
 
+use App\Models\Sector;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class SectorService
 {
     public function getSectors(): array
     {
         return Cache::remember('sectors_list_v2', 3600, function () {
-            return DB::table('sectors')
-                ->orderBy('name')
+            return Sector::orderBy('name')
                 ->get()
-                ->map(function ($r) {
-                    $row = (array) $r;
-                    $row['description'] = is_string($row['description'])
-                        ? (json_decode($row['description'], true) ?? [])
-                        : ($row['description'] ?? []);
-
-                    return $row;
-                })
+                ->map(fn (Sector $s) => $this->toArray($s))
                 ->toArray();
         });
     }
 
     public function getSectorById(string $id): ?array
     {
-        $row = DB::table('sectors')->where('id', $id)->first();
-        if (! $row) {
-            return null;
-        }
-        $row = (array) $row;
-        $row['description'] = is_string($row['description'])
-            ? (json_decode($row['description'], true) ?? [])
-            : ($row['description'] ?? []);
+        $sector = Sector::find($id);
 
-        return $row;
+        return $sector ? $this->toArray($sector) : null;
     }
 
     public function addSector(array $sector): bool
     {
-        DB::table('sectors')->insert([
+        Sector::create([
             'id'          => $sector['id'],
             'name'        => $sector['name'],
-            'description' => json_encode($sector['description'] ?? []),
+            'description' => is_array($sector['description'] ?? null)
+                ? $sector['description']
+                : (json_decode($sector['description'] ?? '[]', true) ?? []),
             'image'       => $sector['image'] ?? null,
-            'created_at'  => now(),
-            'updated_at'  => now(),
         ]);
+
         Cache::forget('sectors_list_v2');
 
         return true;
@@ -56,12 +42,19 @@ class SectorService
 
     public function updateSector(string $id, array $updatedSector): bool
     {
-        DB::table('sectors')->where('id', $id)->update([
+        $sector = Sector::find($id);
+        if (! $sector) {
+            return false;
+        }
+
+        $sector->update([
             'name'        => $updatedSector['name'],
-            'description' => json_encode($updatedSector['description'] ?? []),
+            'description' => is_array($updatedSector['description'] ?? null)
+                ? $updatedSector['description']
+                : (json_decode($updatedSector['description'] ?? '[]', true) ?? []),
             'image'       => $updatedSector['image'] ?? null,
-            'updated_at'  => now(),
         ]);
+
         Cache::forget('sectors_list_v2');
 
         return true;
@@ -69,9 +62,32 @@ class SectorService
 
     public function deleteSector(string $id): bool
     {
-        DB::table('sectors')->where('id', $id)->delete();
+        $sector = Sector::find($id);
+        if (! $sector) {
+            return false;
+        }
+
+        $deleted = $sector->delete();
         Cache::forget('sectors_list_v2');
 
-        return true;
+        return (bool) $deleted;
+    }
+
+    private function toArray(Sector $sector): array
+    {
+        $desc = $sector->description;
+        if (is_string($desc)) {
+            $desc = json_decode($desc, true) ?? [];
+        }
+
+        return [
+            'id'          => $sector->id,
+            'name'        => $sector->name,
+            'description' => is_array($desc) ? $desc : [],
+            'image'       => $sector->image,
+            'created_at'  => optional($sector->created_at)?->toDateTimeString(),
+            'updated_at'  => optional($sector->updated_at)?->toDateTimeString(),
+        ];
     }
 }
+

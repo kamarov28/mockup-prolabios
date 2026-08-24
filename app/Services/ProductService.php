@@ -202,7 +202,11 @@ class ProductService
 
         if (! empty($filters['sector'])) {
             $sector = $filters['sector'];
-            $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            if (DB::connection()->getDriverName() === 'sqlite') {
+                $query->whereRaw("',' || sector || ',' LIKE ?", ["%,{$sector},%"]);
+            } else {
+                $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            }
         }
 
         if ($limit > 0) {
@@ -266,7 +270,11 @@ class ProductService
 
         if (! empty($filters['sector'])) {
             $sector = $filters['sector'];
-            $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            if (DB::connection()->getDriverName() === 'sqlite') {
+                $query->whereRaw("',' || sector || ',' LIKE ?", ["%,{$sector},%"]);
+            } else {
+                $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            }
         }
 
         $result = $query->paginate($perPage)->withQueryString();
