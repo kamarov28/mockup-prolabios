@@ -10,11 +10,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            if (! Schema::hasColumn('products', 'slug')) {
+        if (! Schema::hasColumn('products', 'slug')) {
+            Schema::table('products', function (Blueprint $table) {
                 $table->string('slug', 255)->nullable()->after('title');
-            }
-        });
+            });
+        }
 
         // Backfill unique slugs from title
         $used = [];
@@ -33,7 +33,13 @@ return new class extends Migration
 
                 $slug = $base;
                 $i = 2;
-                while (isset($used[$slug]) || DB::table('products')->where('slug', $slug)->where('id', '!=', $row->id)->exists()) {
+                while (isset($used[$slug])) {
+                    $slug = $base.'-'.$i;
+                    $i++;
+                }
+
+                // Also avoid colliding with any existing DB row not in this chunk yet
+                while (DB::table('products')->where('slug', $slug)->where('id', '!=', $row->id)->exists()) {
                     $slug = $base.'-'.$i;
                     $i++;
                 }
@@ -43,28 +49,39 @@ return new class extends Migration
             }
         });
 
-        // Unique index (nullable rows already filled)
-        Schema::table('products', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            // Prefer try/catch for drivers without doctrine
+        // Unique index — skip if already present
+        $indexExists = false;
+        try {
+            $sm = Schema::getConnection()->select("SHOW INDEX FROM products WHERE Key_name = 'products_slug_unique'");
+            $indexExists = ! empty($sm);
+        } catch (\Throwable $e) {
+            // SQLite / other: try creating and ignore duplicate
+        }
+
+        if (! $indexExists) {
             try {
-                $table->unique('slug', 'products_slug_unique');
+                Schema::table('products', function (Blueprint $table) {
+                    $table->unique('slug', 'products_slug_unique');
+                });
             } catch (\Throwable $e) {
-                // already exists
+                // Index may already exist under another name
             }
-        });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            try {
+        try {
+            Schema::table('products', function (Blueprint $table) {
                 $table->dropUnique('products_slug_unique');
-            } catch (\Throwable $e) {
-            }
-            if (Schema::hasColumn('products', 'slug')) {
+            });
+        } catch (\Throwable $e) {
+        }
+
+        if (Schema::hasColumn('products', 'slug')) {
+            Schema::table('products', function (Blueprint $table) {
                 $table->dropColumn('slug');
-            }
-        });
+            });
+        }
     }
 };
