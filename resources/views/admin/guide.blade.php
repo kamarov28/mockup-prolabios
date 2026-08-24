@@ -1,393 +1,316 @@
 @extends('admin.layout')
 
-@section('title', 'Buku Panduan Operasional Admin')
-@section('page_title', 'Buku Panduan & Manual Operasional Admin')
+@section('title', 'Panduan Admin')
+@section('page_title', 'Panduan Admin')
 
 @section('admin_content')
+
+{{-- Hero --}}
+<div class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-body" style="padding: 28px 32px;">
+    <span class="admin-badge admin-badge-accent" style="margin-bottom: 12px;">Manual Operasional</span>
+    <h1 style="font-family: var(--font-headline); font-size: 1.5rem; font-weight: 700; color: var(--color-text-main); margin: 0 0 8px; letter-spacing: -0.3px;">
+      Panduan Admin Prolabios
+    </h1>
+    <p style="font-size: 0.88rem; color: var(--color-text-muted); margin: 0; max-width: 640px; line-height: 1.65;">
+      Ringkasan cara mengelola portal B2B: RFQ, katalog produk, konten website, dan data pendukung.
+      Ikuti alur operasional yang <strong style="color: var(--color-text-main);">sedang aktif</strong> di sistem saat ini.
+    </p>
+  </div>
+</div>
+
+{{-- TOC --}}
+<div class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Navigasi</span>
+      <h2 class="admin-card-header-title">Daftar Isi</h2>
+    </div>
+  </div>
+  <div class="admin-card-body" style="padding: 16px 20px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px;">
+      <a href="#rfq" class="guide-toc-link"><i class="bi bi-receipt"></i> RFQ / Penawaran</a>
+      <a href="#produk" class="guide-toc-link"><i class="bi bi-box-seam"></i> Produk &amp; Katalog</a>
+      <a href="#kategori" class="guide-toc-link"><i class="bi bi-diagram-3"></i> Kategori &amp; Sektor</a>
+      <a href="#konten" class="guide-toc-link"><i class="bi bi-sliders"></i> Beranda &amp; Konten</a>
+      <a href="#artikel" class="guide-toc-link"><i class="bi bi-file-text"></i> Artikel &amp; Prinsipal</a>
+      <a href="#keamanan" class="guide-toc-link"><i class="bi bi-shield-check"></i> Keamanan &amp; Tips</a>
+    </div>
+  </div>
+</div>
+
+{{-- RFQ --}}
+<div id="rfq" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Modul utama</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-receipt me-2" style="color: var(--color-accent);"></i>Pengajuan RFQ</h2>
+    </div>
+    <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Buka daftar RFQ</a>
+  </div>
+  <div class="admin-card-body">
+    <p class="guide-lead">
+      Portal ini <strong>bukan checkout e-commerce</strong>. Fokusnya: katalog + lead RFQ korporasi.
+      Follow-up penawaran dilanjutkan lewat <strong>WhatsApp / Sales</strong>.
+    </p>
+
+    <h3 class="guide-h3">Alur yang aktif sekarang</h3>
+    <ol class="guide-steps">
+      <li>Customer pilih produk → keranjang RFQ (session)</li>
+      <li>Isi data perusahaan + PIC → submit</li>
+      <li>Sistem simpan RFQ + kirim notifikasi email (jika queue/mail aktif)</li>
+      <li>Admin lihat di <code>/admin/rfqs</code> → hubungi via WA</li>
+      <li>Ubah status &amp; isi catatan internal sesuai progress</li>
+    </ol>
+
+    <h3 class="guide-h3">Status RFQ</h3>
+    <div class="table-responsive">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Arti</th>
+            <th>Tindakan admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="admin-badge admin-badge-warning">Baru</span></td>
+            <td>Pengajuan baru masuk, belum ditindaklanjuti.</td>
+            <td>Buka detail → hubungi WA → update status.</td>
+          </tr>
+          <tr>
+            <td><span class="admin-badge admin-badge-info">Dihubungi</span></td>
+            <td>Sudah dihubungi sales / sedang negosiasi.</td>
+            <td>Lanjutkan follow-up; catat hasil di catatan internal.</td>
+          </tr>
+          <tr>
+            <td><span class="admin-badge admin-badge-accent">Quoted</span></td>
+            <td>Penawaran harga sudah disampaikan ke customer.</td>
+            <td>Tunggu konfirmasi; update ke Selesai bila deal/tidak.</td>
+          </tr>
+          <tr>
+            <td><span class="admin-badge admin-badge-muted">Selesai</span></td>
+            <td>Proses ditutup (deal atau tidak dilanjutkan).</td>
+            <td>Arsip; bisa dihapus bila data uji/spam.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="guide-h3">Cara kerja di detail RFQ</h3>
+    <ul class="guide-list">
+      <li>Tombol <strong>Hubungi via WA</strong> membuka chat dengan pesan siap kirim (nomor RFQ + nama perusahaan).</li>
+      <li>Ubah <strong>Status</strong> dan isi <strong>Catatan internal</strong> (hanya terlihat admin), lalu Simpan.</li>
+      <li>Filter di daftar: kata kunci, status, rentang tanggal.</li>
+    </ul>
+
+    <div class="guide-note">
+      <i class="bi bi-info-circle"></i>
+      <div>
+        <strong>Belum jadi alur utama</strong> (jika nanti dibutuhkan, development terpisah):
+        diskon/price override di admin, PDF surat penawaran otomatis, approve online + signed URL, potong stok otomatis.
+        Operasional saat ini: <em>submit RFQ → follow-up WA</em>.
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- Produk --}}
+<div id="produk" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Katalog</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-box-seam me-2" style="color: var(--color-accent);"></i>Produk</h2>
+    </div>
+    <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola produk</a>
+  </div>
+  <div class="admin-card-body">
+    <ul class="guide-list">
+      <li><strong>Tambah / edit</strong> produk: judul, katalog no, harga, stok, kategori, sektor, deskripsi, gambar.</li>
+      <li><strong>Bulk import</strong> tersedia lewat menu create bulk (CSV) bila perlu unggah banyak item sekaligus.</li>
+      <li>Gambar disimpan di storage publik; pastikan <code>php artisan storage:link</code> sudah dijalankan di server.</li>
+      <li>URL publik produk memakai slug; detail legacy by id masih didukung di backend.</li>
+    </ul>
+  </div>
+</div>
+
+{{-- Kategori & Sektor --}}
+<div id="kategori" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Taksonomi</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-diagram-3 me-2" style="color: var(--color-accent);"></i>Kategori &amp; Sektor</h2>
+    </div>
+  </div>
+  <div class="admin-card-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <h3 class="guide-h3" style="margin-top: 0;">Kategori produk</h3>
+        <p class="guide-lead" style="margin-bottom: 0;">
+          Menu <strong>Kategori Produk</strong> — pengelompokan katalog (mis. Microbiology, Instruments).
+          Hubungkan ke produk saat create/edit.
+        </p>
+      </div>
+      <div>
+        <h3 class="guide-h3" style="margin-top: 0;">Sektor industri</h3>
+        <p class="guide-lead" style="margin-bottom: 0;">
+          Menu <strong>Sektor</strong> — target industri (Hospital, Pharma, Food, dll.) yang tampil di filter/listing publik.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- Beranda --}}
+<div id="konten" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Website</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-sliders me-2" style="color: var(--color-accent);"></i>Pengaturan Web / Beranda</h2>
+    </div>
+    <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Edit beranda</a>
+  </div>
+  <div class="admin-card-body">
+    <p class="guide-lead">Edit konten beranda tanpa ubah kode:</p>
+    <ul class="guide-list">
+      <li><strong>Hero</strong> — badge text, judul, subtitle, gambar slideshow (jika tersedia di form).</li>
+      <li>Bagian keunggulan / bento dan sektor fokus (sesuai field di form Pengaturan Web).</li>
+      <li>Simpan perubahan → refresh halaman publik untuk melihat hasil.</li>
+    </ul>
+  </div>
+</div>
+
+{{-- Artikel & Prinsipal --}}
+<div id="artikel" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Konten &amp; mitra</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-file-text me-2" style="color: var(--color-accent);"></i>Artikel &amp; Prinsipal</h2>
+    </div>
+  </div>
+  <div class="admin-card-body">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <h3 class="guide-h3" style="margin-top: 0;">Artikel</h3>
+        <ul class="guide-list">
+          <li>Buat/edit berita atau edukasi lab.</li>
+          <li>Editor rich text (Summernote) untuk heading, list, gambar.</li>
+          <li>Publikasikan agar tampil di halaman informasi.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="guide-h3" style="margin-top: 0;">Prinsipal / Mitra</h3>
+        <ul class="guide-list">
+          <li>Unggah logo pabrikan/mitra (Oxoid, Merck, dll.).</li>
+          <li>Tampil di area mitra / marquee beranda (sesuai template situs).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- Keamanan --}}
+<div id="keamanan" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Operasional aman</span>
+      <h2 class="admin-card-header-title"><i class="bi bi-shield-check me-2" style="color: var(--color-accent);"></i>Keamanan &amp; tips</h2>
+    </div>
+  </div>
+  <div class="admin-card-body">
+    <ul class="guide-list">
+      <li>Jangan bagikan akun admin. User harus <code>is_admin = true</code>.</li>
+      <li>Production: <code>APP_DEBUG=false</code>, HTTPS, session secure cookie, CAPTCHA diisi.</li>
+      <li>Upload: validasi MIME, SVG diblok, prefer WebP; file di <code>storage/app/public</code>.</li>
+      <li>Rate limit aktif di login admin, form kontak, dan submit RFQ.</li>
+      <li>Hapus RFQ uji/spam dari daftar bila perlu; data penting sebaiknya diarsip lewat status <strong>Selesai</strong>.</li>
+    </ul>
+  </div>
+</div>
+
 <style>
-  .manual-hero-banner {
-    background: linear-gradient(135deg, rgba(255, 73, 80, 0.15) 0%, rgba(14, 14, 16, 1) 100%);
-    border: 1px solid rgba(255, 73, 80, 0.3);
-    border-radius: 16px;
-    padding: 32px;
-    margin-bottom: 28px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
-  }
-  .manual-chapter-card {
-    background: #0e0e10;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 28px;
-    margin-bottom: 28px;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-    scroll-margin-top: 80px;
-  }
-  .manual-chapter-title {
-    font-family: var(--font-headline);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #ffffff;
+  .guide-toc-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 20px;
-  }
-  .manual-subchapter-title {
-    font-family: var(--font-headline);
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #ff4950;
-    margin-top: 24px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .manual-step-item {
-    background: #141416;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 14px;
-    display: flex;
-    gap: 16px;
-    align-items: flex-start;
-  }
-  .manual-step-badge {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: #ff4950;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-    box-shadow: 0 0 12px rgba(255, 73, 80, 0.4);
-  }
-  .manual-callout-info {
-    background: rgba(13, 110, 253, 0.08);
-    border: 1px solid rgba(13, 110, 253, 0.25);
-    border-radius: 8px;
-    padding: 14px 18px;
-    font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin: 16px 0;
-  }
-  .manual-callout-success {
-    background: rgba(46, 125, 50, 0.1);
-    border: 1px solid rgba(76, 175, 80, 0.25);
-    border-radius: 8px;
-    padding: 14px 18px;
-    font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.85);
-    margin: 16px 0;
-  }
-  .manual-toc-item {
-    background: #141416;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 12px 16px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.88rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.2s ease;
-  }
-  .manual-toc-item:hover {
-    border-color: #ff4950;
-    color: #ff4950;
-    transform: translateX(4px);
-  }
-  .manual-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 14px 0;
-    font-size: 0.85rem;
-  }
-  .manual-table th {
-    background: #18191c;
-    color: rgba(255, 255, 255, 0.8);
+    gap: 10px;
     padding: 10px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-family: var(--font-headline);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.6px;
     text-transform: uppercase;
-    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   }
-  .manual-table td {
-    padding: 10px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.75);
-    background: #111215;
+  .guide-toc-link i { color: var(--color-accent); opacity: 0.85; }
+  .guide-toc-link:hover {
+    color: var(--color-text-main);
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .guide-lead {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+    margin: 0 0 18px;
+  }
+  .guide-h3 {
+    font-family: var(--font-headline);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    margin: 22px 0 10px;
+  }
+  .guide-steps {
+    margin: 0 0 8px;
+    padding-left: 1.25rem;
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+  .guide-steps li { margin-bottom: 4px; }
+  .guide-list {
+    margin: 0;
+    padding-left: 1.15rem;
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+  .guide-list li { margin-bottom: 6px; }
+  .guide-note {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    background: rgba(56, 189, 248, 0.06);
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.6;
+  }
+  .guide-note i { color: #38bdf8; flex-shrink: 0; margin-top: 2px; }
+  .guide-note strong { color: var(--color-text-main); }
+  code {
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 0.8em;
+    color: var(--color-accent);
+    background: rgba(255, 73, 80, 0.06);
+    border: 1px solid rgba(255, 73, 80, 0.12);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  @media (max-width: 768px) {
+    .admin-card-body > div[style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
   }
 </style>
 
-<div class="max-w-4xl mx-auto">
-  
-  <!-- Header Banner -->
-  <div class="manual-hero-banner">
-    <div class="d-flex align-items-center gap-2 mb-2">
-      <span class="badge px-3 py-2 text-uppercase fw-bold" style="background: rgba(255, 73, 80, 0.2); color: #ff4950; border: 1px solid rgba(255, 73, 80, 0.4); border-radius: 20px;">
-        <i class="bi bi-journal-bookmark-fill me-1"></i> BUKU MANUAL OPERASIONAL ADMIN
-      </span>
-    </div>
-    <h1 class="h2 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Panduan Pengelolaan B2B E-Procurement &amp; Portal Website</h1>
-    <p class="text-secondary small mb-0" style="max-width: 680px; line-height: 1.6;">
-      Selamat datang di Buku Manual Resmi <strong>PT. Prolabios Mitra Analitika</strong>. Panduan ini berisi petunjuk langkah demi langkah lengkap untuk mengelola pengajuan penawaran B2B (RFQ), penetapan diskon korporasi, pengelolaan katalog produk, hingga pengaturan konten utama website.
-    </p>
-  </div>
-
-  <!-- Quick Nav / Daftar Isi -->
-  <div class="manual-chapter-card">
-    <h3 class="h6 fw-bold text-white mb-3 text-uppercase letter-spacing-1 d-flex align-items-center gap-2">
-      <i class="bi bi-list-nested text-danger"></i> Daftar Isi Manual Operasional
-    </h3>
-    <div class="row g-2">
-      <div class="col-md-6">
-        <a href="#bab-1" class="manual-toc-item">
-          <span>BAB 1: Pengelolaan Penawaran B2B (RFQ System)</span>
-          <i class="bi bi-arrow-right-short fs-5"></i>
-        </a>
-      </div>
-      <div class="col-md-6">
-        <a href="#bab-2" class="manual-toc-item">
-          <span>BAB 2: Katalog Produk &amp; Impor Masal (Bulk)</span>
-          <i class="bi bi-arrow-right-short fs-5"></i>
-        </a>
-      </div>
-      <div class="col-md-6">
-        <a href="#bab-3" class="manual-toc-item">
-          <span>BAB 3: Pengaturan Beranda (Homepage CMS)</span>
-          <i class="bi bi-arrow-right-short fs-5"></i>
-        </a>
-      </div>
-      <div class="col-md-6">
-        <a href="#bab-4" class="manual-toc-item">
-          <span>BAB 4: Manajemen Artikel &amp; Prinsipal Lisensi</span>
-          <i class="bi bi-arrow-right-short fs-5"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- BAB 1 -->
-  <div id="bab-1" class="manual-chapter-card">
-    <div class="manual-chapter-title">
-      <i class="bi bi-file-earmark-text-fill text-danger fs-4"></i>
-      <span>BAB 1: Pengelolaan Pengajuan Penawaran Harga B2B (RFQ System)</span>
-    </div>
-
-    <p class="text-secondary small mb-3">
-      Sistem *Request for Quotation* (RFQ) menangani seluruh alur transaksi penawaran harga berskala B2B/korporasi dari institusi, laboratorium, dan industri.
-    </p>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-diagram-3-fill"></i> 1.1 Memahami Status Pengajuan RFQ
-    </div>
-    <p class="text-secondary small mb-2">Terdapat 3 status utama dalam alur pengajuan penawaran:</p>
-    <table class="manual-table">
-      <thead>
-        <tr>
-          <th style="width: 140px;">Status</th>
-          <th>Deskripsi &amp; Arti Status</th>
-          <th>Tindakan Selanjutnya</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="badge" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); font-weight: 600; padding: 5px 10px;">Pending Review</span></td>
-          <td>Pembeli korporasi baru saja selesai mengajukan formulir RFQ dari website. Penawaran belum di-review oleh sales.</td>
-          <td>Admin Sales membuka detail &amp; menetapkan harga satuan resmi.</td>
-        </tr>
-        <tr>
-          <td><span class="badge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); font-weight: 600; padding: 5px 10px;">Quotation Sent</span></td>
-          <td>Tim Sales telah memasukkan harga satuan, diskon, &amp; menerbitkan PDF Surat Penawaran Resmi ke pembeli.</td>
-          <td>Menunggu pembeli melakukan konfirmasi / menyetujui penawaran.</td>
-        </tr>
-        <tr>
-          <td><span class="badge" style="background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); font-weight: 600; padding: 5px 10px;">Approved</span></td>
-          <td>Pembeli telah menyetujui penawaran harga. <strong>Stok produk di basis data otomatis terpotong</strong>.</td>
-          <td>Tim Finance &amp; Logistik menerbitkan Invoice &amp; mengirimkan barang.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-pencil-square"></i> 1.2 Langkah Penyesuaian Harga &amp; Pemberian Diskon Korporasi
-    </div>
-
-    <div class="manual-step-item">
-      <div class="manual-step-badge">1</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Akses Menu Penawaran (RFQ)</h5>
-        <p class="text-muted small mb-0">
-          Pada sidebar kiri, klik menu <strong>Penawaran (RFQ)</strong>. Cari pengajuan berdasarkan Nama Perusahaan atau Nomor RFQ (misal: <code>RFQ-202607-XXXXXX</code>), lalu klik tombol <span class="badge bg-danger">Beri Feedback</span>.
-        </p>
-      </div>
-    </div>
-
-    <div class="manual-step-item">
-      <div class="manual-step-badge">2</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Mengubah Harga Satuan per Item (Direct Discount)</h5>
-        <p class="text-muted small mb-2">
-          Pada tabel <em>1. Penyesuaian Harga Penawaran per Item</em>, ubah nominal pada kolom <strong>Harga Satuan (Rp)</strong> untuk item yang ingin didiskon. Subtotal dan total harga penawaran akan otomatis terhitung secara instan.
-        </p>
-        <div class="manual-callout-info my-2">
-          <strong>Skenario Contoh:</strong><br>
-          • Harga Katalog Normal MRS Broth: <code>Rp 420.000</code><br>
-          • Jika memberikan diskon grosir 5%, ubah angka menjadi <code>399000</code>. Subtotal untuk 2 unit otomatis menjadi <code>Rp 798.000</code>.
-        </div>
-      </div>
-    </div>
-
-    <div class="manual-step-item">
-      <div class="manual-step-badge">3</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Mengisi Catatan Sales &amp; Masa Berlaku</h5>
-        <p class="text-muted small mb-0">
-          Tuliskan rincian diskon atau bonus pada textarea <strong>Catatan Penawaran Sales untuk Korporasi</strong> (contoh: <em>"Termasuk Diskon Volume Kuantitas 5% dan Bebas Biaya Kirim area Jabodetabek"</em>). Tentukan tanggal batas berlaku penawaran pada field <strong>Penawaran Berlaku Sampai Tanggal</strong>.
-        </p>
-      </div>
-    </div>
-
-    <div class="manual-step-item">
-      <div class="manual-step-badge">4</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Penerbitan Surat Penawaran &amp; Pengiriman Email</h5>
-        <p class="text-muted small mb-0">
-          Klik tombol <strong>Simpan &amp; Kirim Feedback Email ke Korporasi</strong>. Sistem akan otomatis menyusun PDF Surat Penawaran Resmi dan mengirimkan notifikasi email ke pembeli.
-        </p>
-      </div>
-    </div>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-shield-check"></i> 1.3 Keamanan Akses RFQ &amp; Signed Link Tracking
-    </div>
-    <div class="manual-callout-info my-2">
-      <strong><i class="bi bi-lock-fill me-1"></i> Proteksi Token Akses (Anti-IDOR) &amp; Signed URL:</strong><br>
-      • Setiap pengajuan RFQ kini dilengkapi dengan <code>access_token</code> unik (48-karakter acak). Dokumen RFQ hanya dapat dibuka melalui link resmi bernavigasi token.<br>
-      • Tombol <strong>"Setujui Penawaran &amp; Proses PO"</strong> pada halaman pembeli dilindungi oleh <em>Cryptographic Signed URL</em> dari Laravel. Hal ini menjamin bahwa persetujuan transaksi sah dan tidak dapat dimanipulasi dari luar.
-    </div>
-
-    <div class="manual-callout-success">
-      <i class="bi bi-check-circle-fill me-1"></i> <strong>Otomasi Stok Setelah Approval:</strong> Begitu pembeli menyetujui penawaran melalui link resmi, sistem secara otomatis mengalokasikan stok di database dengan transaksi aman (row-locking) sehingga jumlah stok produk di gudang terpotong secara real-time dan akurat.
-    </div>
-  </div>
-
-  <!-- BAB 2 -->
-  <div id="bab-2" class="manual-chapter-card">
-    <div class="manual-chapter-title">
-      <i class="bi bi-box-seam-fill text-danger fs-4"></i>
-      <span>BAB 2: Manajemen Katalog Produk &amp; Impor Masal (Bulk Import)</span>
-    </div>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-plus-circle-fill"></i> 2.1 Menambah &amp; Mengedit Produk Tunggal
-    </div>
-    <p class="text-secondary small mb-3">
-      Buka menu <strong>Produk</strong> di sidebar, lalu klik <strong>+ Tambah Produk Baru</strong>. Lengkapi parameter berikut:
-    </p>
-    <ul class="text-muted small ps-3 mb-3" style="line-height: 1.8;">
-      <li><strong>Nama Produk:</strong> Nama instrumen / reagen (misal: <em>MRS Broth Granulated</em>).</li>
-      <li><strong>Nomor Katalog (CAT Code):</strong> Kode unik pabrikan (misal: <code>CAT. 610025</code>).</li>
-      <li><strong>Kategori:</strong> Pilih kategori utama (misal: <em>Culture Media / Microbiology</em>).</li>
-      <li><strong>Harga Est. Penawaran:</strong> Price list standar acuan (dapat di-override saat RFQ).</li>
-      <li><strong>Gambar Produk:</strong> Upload foto produk format PNG/JPG/WebP resmi pabrikan. <em>(Sistem secara otomatis mengompresi dan mengonversi gambar ke format modern WebP dengan efisiensi memori hingga 80% tanpa mengurangi kualitas visual)</em>.</li>
-    </ul>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-file-earmark-spreadsheet-fill"></i> 2.2 Panduan Impor Masal (Bulk CSV / Excel)
-    </div>
-    <p class="text-secondary small mb-2">
-      Untuk mengunggah ratusan produk sekaligus, gunakan fitur <strong>Impor Masal</strong> di menu Produk:
-    </p>
-    <div class="manual-step-item">
-      <div class="manual-step-badge">1</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Unduh Template CSV</h5>
-        <p class="text-muted small mb-0">Klik tombol <em>Download Format Template CSV</em> pada halaman Impor Masal.</p>
-      </div>
-    </div>
-    <div class="manual-step-item">
-      <div class="manual-step-badge">2</div>
-      <div>
-        <h5 class="fw-bold text-white small mb-1">Struktur Kolom CSV yang Wajib Diisi</h5>
-        <table class="manual-table my-2">
-          <thead>
-            <tr>
-              <th>Nama Kolom</th>
-              <th>Status</th>
-              <th>Contoh Isi Data</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><code>title</code></td><td><span class="text-danger fw-bold">Wajib</span></td><td>MRS Broth Granulated</td></tr>
-            <tr><td><code>catalog</code></td><td>Opsional</td><td>610025</td></tr>
-            <tr><td><code>category</code></td><td><span class="text-danger fw-bold">Wajib</span></td><td>Culture Media</td></tr>
-            <tr><td><code>price</code></td><td>Opsional</td><td>420000</td></tr>
-            <tr><td><code>stock</code></td><td>Opsional</td><td>100</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- BAB 3 -->
-  <div id="bab-3" class="manual-chapter-card">
-    <div class="manual-chapter-title">
-      <i class="bi bi-sliders text-danger fs-4"></i>
-      <span>BAB 3: Pengaturan Halaman Beranda (Homepage CMS Editor)</span>
-    </div>
-
-    <p class="text-secondary small mb-3">
-      Buka menu <strong>Pengaturan Web</strong> pada sidebar admin untuk mengedit tampilan beranda tanpa mengubah kode program:
-    </p>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-images"></i> 3.1 Hero Banner &amp; Slideshow Latar Belakang
-    </div>
-    <ul class="text-muted small ps-3 mb-3" style="line-height: 1.8;">
-      <li><strong>Hero Badge Text:</strong> Teks pill atas (default: <em>PRECISION LABORATORY SOLUTIONS</em>).</li>
-      <li><strong>Hero Title:</strong> Judul utama beranda. Gunakan tag <code>&lt;span class="text-accent"&gt;Teks&lt;/span&gt;</code> untuk warna merah dan <code>&lt;span class="typo-outline"&gt;Teks&lt;/span&gt;</code> untuk teks outline transparan.</li>
-      <li><strong>Hero Slideshow Images (4 Slot):</strong> Masukkan 4 URL gambar instrumen laboratorium resolusi tinggi. Gambar akan berganti otomatis secara dinamis setiap 5 detik.</li>
-    </ul>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-grid-3x3-gap-fill"></i> 3.2 Bento Grid &amp; Sektor Industri Fokus
-    </div>
-    <p class="text-secondary small mb-0">
-      Anda dapat mengedit judul, deskripsi, dan ikon untuk 4 kartu Bento Keunggulan serta 4 Sektor Industri Utama (Mikrobiologi, Farmasi, Makanan &amp; Minuman, R&amp;D).
-    </p>
-  </div>
-
-  <!-- BAB 4 -->
-  <div id="bab-4" class="manual-chapter-card">
-    <div class="manual-chapter-title">
-      <i class="bi bi-newspaper text-danger fs-4"></i>
-      <span>BAB 4: Manajemen Artikel Blog &amp; Lisensi Prinsipal Global</span>
-    </div>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-file-richtext-fill"></i> 4.1 Mengedit &amp; Mempublikasikan Artikel
-    </div>
-    <p class="text-secondary small mb-3">
-      Pada menu <strong>Artikel</strong>, Anda dapat membuat berita teknis atau edukasi laboratorium. Gunakan fitur *Rich Text Editor* untuk menambahkan gambar pendukung, heading, dan daftar poin.
-    </p>
-
-    <div class="manual-subchapter-title">
-      <i class="bi bi-award-fill"></i> 4.2 Mengelola Logo Prinsipal / Mitra Lisensi
-    </div>
-    <p class="text-secondary small mb-0">
-      Pada menu <strong>Prinsipal / Mitra</strong>, Anda dapat mengunggah logo lisensi pabrikan global (seperti Oxoid, Thermo Scientific, Merck, Himedia, dll.) yang akan tampil pada banner running marquee di beranda.
-    </p>
-  </div>
-
-</div>
 @endsection
