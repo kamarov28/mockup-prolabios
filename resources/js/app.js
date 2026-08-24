@@ -13,8 +13,9 @@ import { initGSAPAnimations } from './modules/animations.js';
 /**
  * Sticky left sidebar on product catalog & sector pages (desktop).
  * CSS: public/css/sticky-sidebar.css (.page-sidebar-sticky)
+ * Re-applies after AJAX swaps (MutationObserver).
  */
-function initStickySidebars() {
+function applyStickySidebars() {
   const selectors = [
     '#catalog-section .col-lg-3',
     '#sektor-sidebar',
@@ -24,6 +25,19 @@ function initStickySidebars() {
     document.querySelectorAll(sel).forEach(function (el) {
       el.classList.add('page-sidebar-sticky');
     });
+  });
+}
+
+function initStickySidebars() {
+  applyStickySidebars();
+
+  ['catalog-section', 'sektor-nav'].forEach(function (id) {
+    const section = document.getElementById(id);
+    if (!section || section.dataset.stickyObserved === '1') return;
+    section.dataset.stickyObserved = '1';
+    new MutationObserver(function () {
+      applyStickySidebars();
+    }).observe(section, { childList: true, subtree: true });
   });
 }
 
