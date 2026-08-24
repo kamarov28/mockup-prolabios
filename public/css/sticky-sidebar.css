@@ -1,29 +1,56 @@
-/* Sticky catalog / sector left sidebar — follows scroll on desktop */
+/*
+ * Sticky left sidebars (produk / sektor)
+ * Note: body { overflow-x: hidden } breaks position:sticky in some browsers.
+ * Override to overflow-x: clip (keeps horizontal clip, allows sticky).
+ */
+html, body {
+  overflow-x: clip;
+}
+
 @media (min-width: 768px) {
+  /* Row must not stretch children to full height */
+  #catalog-section > .container > .row,
+  #sektor-nav > .container > .row {
+    align-items: flex-start !important;
+  }
+
+  /* Sticky the left column itself — no JS class required */
+  #catalog-section > .container > .row > .col-lg-3,
+  #catalog-section > .container > .row > .col-md-4,
+  #sektor-nav > .container > .row > .col-lg-3,
+  #sektor-nav > .container > .row > .col-md-4,
+  #sektor-sidebar,
   .page-sidebar-sticky {
-    position: sticky;
-    top: 96px; /* below fixed floating navbar */
-    align-self: flex-start;
+    position: sticky !important;
+    top: 96px !important;
+    align-self: flex-start !important;
     max-height: calc(100vh - 112px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    z-index: 5;
+    z-index: 20;
     scrollbar-width: thin;
   }
 
-  .page-sidebar-sticky::-webkit-scrollbar {
+  .page-sidebar-sticky::-webkit-scrollbar,
+  #catalog-section > .container > .row > .col-lg-3::-webkit-scrollbar,
+  #sektor-nav > .container > .row > .col-lg-3::-webkit-scrollbar {
     width: 6px;
   }
 
-  .page-sidebar-sticky::-webkit-scrollbar-thumb {
-    background: var(--color-border, rgba(255, 255, 255, 0.08));
+  .page-sidebar-sticky::-webkit-scrollbar-thumb,
+  #catalog-section > .container > .row > .col-lg-3::-webkit-scrollbar-thumb,
+  #sektor-nav > .container > .row > .col-lg-3::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
     border-radius: 4px;
   }
 }
 
 @media (max-width: 767.98px) {
+  #catalog-section > .container > .row > .col-lg-3,
+  #sektor-nav > .container > .row > .col-lg-3,
+  #sektor-sidebar,
   .page-sidebar-sticky {
-    position: static;
+    position: static !important;
     max-height: none;
     overflow: visible;
   }
