@@ -6,6 +6,7 @@
   $actionUrl = $isEdit
     ? route('admin.sectors.update', ['id' => $sector['id']])
     : route('admin.sectors.store');
+  $previewImage = old('image_url', $sector['image'] ?? 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=600&q=80');
 @endphp
 
 @section('title', $isEdit ? 'Edit Sektor: ' . $sector['name'] : 'Tambah Sektor')
@@ -53,24 +54,56 @@
     @endif
 
     <div class="d-flex flex-column gap-4">
-      <div class="admin-form-group mb-0">
-        <label for="name" class="admin-form-label">Nama Sektor <span style="color: var(--color-accent);">*</span></label>
-        <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $sector['name'] ?? '') }}" required autofocus>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="admin-form-group mb-0">
+            <label for="id" class="admin-form-label">ID Sektor <span style="color: var(--color-accent);">*</span></label>
+            <input type="text" class="form-control font-monospace" id="id" name="id"
+                   value="{{ old('id', $sector['id'] ?? '') }}"
+                   required placeholder="Contoh: pharmaceutical"
+                   {{ $isEdit ? 'readonly' : '' }}>
+            <p class="form-text mb-0 mt-2">Hanya huruf, angka, dan tanda hubung.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="admin-form-group mb-0">
+            <label for="name" class="admin-form-label">Nama Sektor <span style="color: var(--color-accent);">*</span></label>
+            <input type="text" class="form-control" id="name" name="name"
+                   value="{{ old('name', $sector['name'] ?? '') }}"
+                   required placeholder="Contoh: Pharmaceutical" autofocus>
+          </div>
+        </div>
       </div>
 
       <div class="admin-form-group mb-0">
-        <label for="id" class="admin-form-label">ID / Slug <span style="color: var(--color-accent);">*</span></label>
-        <input type="text" class="form-control" id="id" name="id" value="{{ old('id', $sector['id'] ?? '') }}" required
-               {{ $isEdit ? 'readonly' : '' }}>
-        @if($isEdit)
-          <p class="form-text mb-0 mt-2">ID tidak bisa diubah saat edit.</p>
-        @endif
-      </div>
-
-      <div class="admin-form-group mb-0">
-        <label for="description" class="admin-form-label">Deskripsi</label>
-        <textarea class="form-control" id="description" name="description" rows="6"
+        <label for="description" class="admin-form-label">Deskripsi Sektor</label>
+        <textarea class="form-control" id="description" name="description" rows="8"
                   placeholder="Setiap baris baru = paragraf baru di halaman sektor.">{{ old('description', $isEdit && isset($sector['description']) ? (is_array($sector['description']) ? implode("\n", $sector['description']) : $sector['description']) : '') }}</textarea>
+        <p class="form-text mb-0 mt-2">Pisahkan paragraf dengan Enter.</p>
+      </div>
+
+      <div class="admin-form-group mb-0 pt-3" style="border-top: 1px solid var(--color-border);">
+        <label class="admin-form-label">Gambar Utama Sektor</label>
+        <div class="row g-3 align-items-center">
+          <div class="col-md-3">
+            <div style="width: 100%; aspect-ratio: 16/9; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.03);">
+              <img id="image_preview" src="{{ $previewImage }}" alt="Preview"
+                   style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="mb-3">
+              <label for="image_file" class="admin-form-label">Upload File Lokal</label>
+              <input type="file" id="image_file" class="form-control" name="image_file" accept="image/*">
+            </div>
+            <div>
+              <label for="image_url" class="admin-form-label">Atau URL Gambar</label>
+              <input type="text" class="form-control" id="image_url" name="image_url"
+                     value="{{ old('image_url', $sector['image'] ?? '') }}"
+                     placeholder="https://...">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -85,4 +118,19 @@
   </form>
 </div>
 
+@endsection
+
+@section('admin_scripts')
+<script>
+  document.getElementById('image_file')?.addEventListener('change', function () {
+    if (this.files && this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => { document.getElementById('image_preview').src = e.target.result; };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+  document.getElementById('image_url')?.addEventListener('input', function () {
+    if (this.value.trim()) document.getElementById('image_preview').src = this.value.trim();
+  });
+</script>
 @endsection
