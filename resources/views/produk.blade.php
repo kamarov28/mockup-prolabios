@@ -24,7 +24,7 @@
         <div class="col-lg-3 col-md-4">
           <!-- Mobile Filter Toggle Button -->
           <button class="catalog-filter-toggle-btn w-100 d-md-none mb-4 d-flex align-items-center justify-content-between py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
-            <span><i class="bi bi-funnel me-2"></i>Filter &amp; Kategori</span>
+            <span><i class="bi bi-funnel me-2"></i>Filter & Kategori</span>
             <i class="bi bi-chevron-down"></i>
           </button>
 
@@ -122,13 +122,15 @@
             <input type="text" id="local-search-input" name="s" placeholder="Search reagents or CAT. code..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
           </form>
 
-          <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
+          <div class="ajax-loading-wrap" id="product-ajax-wrap" aria-busy="false">
+            <div class="ajax-loading-overlay" aria-hidden="true"><div class="ajax-spinner" role="status" aria-label="Loading"></div></div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
                 <div class="card h-100 product-card-premium border-0">
                   <div class="img-wrap">
-                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product &amp; Analytical Instrument" loading="lazy" decoding="async">
+                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product & Analytical Instrument" loading="lazy" decoding="async">
                   </div>
                   <div class="card-body p-4 d-flex flex-column">
                     @if(!empty($prod['catalog']))
@@ -159,6 +161,7 @@
               </div>
             @endif
           </div>
+          </div><!-- /product-ajax-wrap -->
 
           <div class="d-flex justify-content-center mt-5" id="dynamic-pagination">
             {{ $products->links('pagination::bootstrap-5') }}
@@ -170,63 +173,128 @@
 
 
 
+  @push('styles')
+  <style>
+    .ajax-loading-wrap { position: relative; min-height: 200px; }
+    .ajax-loading-wrap.is-loading { pointer-events: none; }
+    .ajax-loading-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: none; align-items: flex-start; justify-content: center;
+      padding-top: 48px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(1px);
+      border-radius: 8px;
+    }
+    .ajax-loading-wrap.is-loading .ajax-loading-overlay { display: flex; }
+    .ajax-spinner {
+      width: 36px; height: 36px;
+      border: 2px solid rgba(255,73,80,0.25);
+      border-top-color: var(--color-accent, #ff4950);
+      border-radius: 50%;
+      animation: ajax-spin 0.7s linear infinite;
+    }
+    @keyframes ajax-spin { to { transform: rotate(360deg); } }
+    .ajax-loading-wrap.is-loading #product-container > .col.product-card,
+    .ajax-loading-wrap.is-loading #product-container > .col-12 { visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0; }
+    .ajax-skel-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--color-border, rgba(255,255,255,0.08));
+      border-radius: 8px;
+      overflow: hidden;
+      height: 100%;
+    }
+    .ajax-skel-img {
+      aspect-ratio: 16/10;
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%;
+      animation: ajax-shimmer 1.2s ease-in-out infinite;
+    }
+    .ajax-skel-line {
+      height: 10px; border-radius: 4px; margin: 10px 16px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%;
+      animation: ajax-shimmer 1.2s ease-in-out infinite;
+    }
+    .ajax-skel-line.short { width: 40%; }
+    .ajax-skel-line.med { width: 70%; }
+    @keyframes ajax-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+  @endpush
+
   @push('scripts')
   @include('partials.gsap-loader')
   <script>
     let currentFetchController = null;
 
-    // AJAX Dynamic Loader for Catalog Navigation
+    function setProductLoading(on, isLiveSearch) {
+      const wrap = document.getElementById('product-ajax-wrap');
+      if (!wrap) return;
+      wrap.classList.toggle('is-loading', !!on);
+      wrap.setAttribute('aria-busy', on ? 'true' : 'false');
+      const overlay = wrap.querySelector('.ajax-loading-overlay');
+      if (overlay) overlay.setAttribute('aria-hidden', on ? 'false' : 'true');
+      if (on && !isLiveSearch) {
+        const grid = document.getElementById('product-container');
+        if (grid && !grid.querySelector('.ajax-skel-col')) {
+          const skel = document.createDocumentFragment();
+          for (let i = 0; i < 6; i++) {
+            const col = document.createElement('div');
+            col.className = 'col ajax-skel-col';
+            col.innerHTML = '<div class="ajax-skel-card"><div class="ajax-skel-img"></div><div class="ajax-skel-line short"></div><div class="ajax-skel-line med"></div><div class="ajax-skel-line"></div></div>';
+            skel.appendChild(col);
+          }
+          grid.appendChild(skel);
+        }
+      }
+      if (!on) {
+        document.querySelectorAll('#product-container .ajax-skel-col').forEach(function (el) { el.remove(); });
+      }
+    }
+
     function loadProductsAjax(url, updateHistory = true, isLiveSearch = false) {
-      // Abort previous in-flight request to prevent race conditions & flickering
       if (currentFetchController) {
         currentFetchController.abort();
       }
       currentFetchController = new AbortController();
 
+      setProductLoading(true, isLiveSearch);
       const container = document.getElementById('product-container');
-      if (container) {
-        container.style.opacity = isLiveSearch ? '0.75' : '0.4';
+      if (container && isLiveSearch) {
+        container.style.opacity = '0.7';
         container.style.transition = 'opacity 0.15s ease-in-out';
       }
 
       fetch(url, {
         signal: currentFetchController.signal,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        }
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
       })
       .then(response => response.text())
       .then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        // 1. Update Left Sidebar (Categories & Subcategories)
         const currentSidebar = document.querySelector('#catalog-section .col-lg-3');
         const newSidebar = doc.querySelector('#catalog-section .col-lg-3');
         if (currentSidebar && newSidebar && !isLiveSearch) {
           const collapseEl = document.getElementById('sidebarCollapse');
           const isCollapseOpen = collapseEl ? collapseEl.classList.contains('show') : false;
-
           currentSidebar.innerHTML = newSidebar.innerHTML;
-
           if (isCollapseOpen) {
             const newCollapseEl = document.getElementById('sidebarCollapse');
-            if (newCollapseEl) {
-              newCollapseEl.classList.add('show');
-            }
+            if (newCollapseEl) newCollapseEl.classList.add('show');
           }
         }
 
-        // 2. Update Category Header Title and Subtitle
         const currentTitle = document.getElementById('category-title');
         const newTitle = doc.getElementById('category-title');
         const currentSubtitle = document.getElementById('category-subtitle');
         const newSubtitle = doc.getElementById('category-subtitle');
-
         if (currentTitle && newTitle) currentTitle.innerHTML = newTitle.innerHTML;
         if (currentSubtitle && newSubtitle) currentSubtitle.innerHTML = newSubtitle.innerHTML;
 
-        // 3. Update Product Cards Grid Container
         const currentGrid = document.getElementById('product-container');
         const newGrid = doc.getElementById('product-container');
         if (currentGrid && newGrid) {
@@ -235,58 +303,46 @@
           currentGrid.style.opacity = '1';
         }
 
-        // 4. Update History state
+        const currentPag = document.getElementById('dynamic-pagination');
+        const newPag = doc.getElementById('dynamic-pagination');
+        if (currentPag && newPag) currentPag.innerHTML = newPag.innerHTML;
+
+        setProductLoading(false, isLiveSearch);
+
         if (updateHistory) {
           window.history.replaceState({ url: url }, '', url);
         }
 
-        // 5. Re-initialize entrance animations only on explicit navigation (NOT on live typing)
         if (!isLiveSearch) {
-          if (typeof initScrollAnimations === 'function') {
-            initScrollAnimations();
-          }
-          if (typeof initGSAPAnimations === 'function') {
-            initGSAPAnimations();
-          }
+          if (typeof initScrollAnimations === 'function') initScrollAnimations();
+          if (typeof initGSAPAnimations === 'function') initGSAPAnimations();
 
-          // Close mobile filter/sidebar collapse after selection
           const sidebarCollapse = document.getElementById('sidebarCollapse');
           if (sidebarCollapse && window.innerWidth < 768) {
             const bsCollapse = bootstrap.Collapse.getInstance(sidebarCollapse);
-            if (bsCollapse) {
-              bsCollapse.hide();
-            } else {
-              sidebarCollapse.classList.remove('show');
-            }
+            if (bsCollapse) bsCollapse.hide();
+            else sidebarCollapse.classList.remove('show');
           }
 
-          // Smooth scroll to catalog section only on category/filter click
           const catalogSec = document.getElementById('catalog-section');
-          if (catalogSec) {
-            catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
+          if (catalogSec) catalogSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // 6. Preserve active search query if input is not focused
         const localSearch = document.getElementById('local-search-input');
         if (localSearch && document.activeElement !== localSearch) {
           const currentUrlObj = new URL(url, window.location.origin);
-          const activeSearchQuery = currentUrlObj.searchParams.get('s') || currentUrlObj.searchParams.get('q') || '';
-          localSearch.value = activeSearchQuery;
+          localSearch.value = currentUrlObj.searchParams.get('s') || currentUrlObj.searchParams.get('q') || '';
         }
       })
       .catch(error => {
-        if (error.name === 'AbortError') {
-          // Ignore aborted request from rapid keystrokes
-          return;
-        }
+        if (error.name === 'AbortError') return;
+        setProductLoading(false, isLiveSearch);
         console.error('AJAX Load Failed, falling back to full reload:', error);
         window.location.href = url;
       });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      // 1. Intercept sidebar catalog links clicks to load instantly via AJAX
       document.addEventListener('click', function(e) {
         const link = e.target.closest('#catalog-section .col-lg-3 a') || e.target.closest('.pagination a');
         if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
@@ -298,7 +354,6 @@
         }
       });
 
-      // Accordion Toggle for Categories
       document.addEventListener('click', function(e) {
         const btn = e.target.closest('.category-accordion-btn');
         if (btn) {
@@ -307,24 +362,16 @@
           const targetGroup = document.getElementById(targetId);
           if (targetGroup) {
             const isHidden = targetGroup.classList.contains('d-none');
-            
-            // Tutup semua sub-kategori lain yang sedang terbuka
             document.querySelectorAll('.sub-category-group').forEach(group => {
-              if (group.id !== targetId) {
-                group.classList.add('d-none');
-              }
+              if (group.id !== targetId) group.classList.add('d-none');
             });
             document.querySelectorAll('.category-accordion-btn').forEach(otherBtn => {
               if (otherBtn !== btn) {
                 otherBtn.classList.remove('is-active');
                 const otherChevron = otherBtn.querySelector('.chevron-icon');
-                if (otherChevron) {
-                  otherChevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
-                }
+                if (otherChevron) otherChevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
               }
             });
-
-            // Toggle status active pada kategori yang diklik
             if (isHidden) {
               targetGroup.classList.remove('d-none');
               btn.classList.add('is-active');
@@ -340,12 +387,10 @@
         }
       });
 
-      // 2. Popstate listener to handle browser back & forward buttons instantly
       window.addEventListener('popstate', function() {
         loadProductsAjax(window.location.href, false, false);
       });
 
-      // 3. Dynamic Server-Side Search (AJAX Debounced Search across full Database)
       const localSearch = document.getElementById('local-search-input');
       const searchForm = document.getElementById('catalog-search-form');
       let searchDebounceTimer = null;
@@ -357,11 +402,8 @@
           const currentUrl = new URL(window.location.href);
           currentUrl.searchParams.delete('q');
           currentUrl.searchParams.delete('search');
-          if (query) {
-            currentUrl.searchParams.set('s', query);
-          } else {
-            currentUrl.searchParams.delete('s');
-          }
+          if (query) currentUrl.searchParams.set('s', query);
+          else currentUrl.searchParams.delete('s');
           currentUrl.searchParams.delete('page');
           loadProductsAjax(currentUrl.toString(), true, false);
         });
@@ -371,16 +413,12 @@
         localSearch.addEventListener('input', function() {
           clearTimeout(searchDebounceTimer);
           const query = this.value.trim();
-
           searchDebounceTimer = setTimeout(() => {
             const currentUrl = new URL(window.location.href);
             currentUrl.searchParams.delete('q');
             currentUrl.searchParams.delete('search');
-            if (query) {
-              currentUrl.searchParams.set('s', query);
-            } else {
-              currentUrl.searchParams.delete('s');
-            }
+            if (query) currentUrl.searchParams.set('s', query);
+            else currentUrl.searchParams.delete('s');
             currentUrl.searchParams.delete('page');
             loadProductsAjax(currentUrl.toString(), true, true);
           }, 250);
