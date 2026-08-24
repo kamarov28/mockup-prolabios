@@ -80,8 +80,16 @@ class Product extends Model
     public function scopeBySector(Builder $query, string $sector): Builder
     {
         return $query->where(function (Builder $q) use ($sector) {
-            $q->whereHas('sectors', fn (Builder $sq) => $sq->where('sectors.id', $sector))
-                ->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
+            $q->whereHas('sectors', fn (Builder $sq) => $sq->where('sectors.id', $sector));
+
+            // Legacy CSV fallback (driver-aware)
+            $driver = $q->getConnection()->getDriverName();
+            if ($driver === 'sqlite') {
+                $q->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
+            } else {
+                // MySQL / MariaDB
+                $q->orWhereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
+            }
         });
     }
 
