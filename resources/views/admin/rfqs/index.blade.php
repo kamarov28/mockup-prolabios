@@ -84,7 +84,7 @@
                   </a>
                 </td>
                 <td>
-                  <span class="badge border px-2 py-1 small {{ $rfq->status_badge_class }}">
+                  <span class="admin-badge {{ $rfq->status_badge_class }}">
                     {{ $rfq->status_label }}
                   </span>
                 </td>
