@@ -38,6 +38,7 @@
 
   <form action="{{ $actionUrl }}" method="POST" enctype="multipart/form-data" class="admin-card-body">
     @csrf
+    @if(!empty($isEdit)) @method('PUT') @endif
 
     @if ($errors->any())
       <div class="alert alert-danger mb-4">
