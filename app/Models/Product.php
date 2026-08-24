@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -38,7 +39,7 @@ class Product extends Model
     // ----------------------------------------------------
     // Relationships
     // products.category / sub_category store ProductCategory.key (slug), not name
-    // products.sector remains CSV for legacy; product_sector pivot is canonical for queries
+    // products.sector remains CSV for legacy writes; product_sector is canonical for reads
     // ----------------------------------------------------
     public function categoryRelation(): BelongsTo
     {
@@ -75,26 +76,39 @@ class Product extends Model
     }
 
     /**
-     * Filter by sector id via pivot (preferred) with CSV column fallback for legacy rows.
+     * Filter by sector id via product_sector pivot (index-friendly EXISTS).
+     * CSV column is write-side legacy only; keep pivot in sync via syncSectorsFromCsv().
      */
     public function scopeBySector(Builder $query, string $sector): Builder
     {
-        return $query->where(function (Builder $q) use ($sector) {
-            $q->whereHas('sectors', fn (Builder $sq) => $sq->where('sectors.id', $sector));
-
-            // Legacy CSV fallback (driver-aware)
-            $driver = $q->getConnection()->getDriverName();
-            if ($driver === 'sqlite') {
-                $q->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
-            } else {
-                // MySQL / MariaDB
-                $q->orWhereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
-            }
+        return $query->whereExists(function ($sub) use ($sector) {
+            $sub->select(DB::raw(1))
+                ->from('product_sector')
+                ->whereColumn('product_sector.product_id', 'products.id')
+                ->where('product_sector.sector_id', $sector);
         });
     }
 
+    /**
+     * Full-text on MySQL/MariaDB; LIKE fallback elsewhere (SQLite dev).
+     */
     public function scopeSearch(Builder $query, string $term): Builder
     {
+        $term = trim($term);
+        if ($term === '') {
+            return $query;
+        }
+
+        $driver = $query->getConnection()->getDriverName();
+
+        if (in_array($driver, ['mysql', 'mariadb'], true)) {
+            return $query->where(function (Builder $q) use ($term) {
+                $q->whereFullText(['title', 'description'], $term)
+                    ->orWhere('catalog', 'like', $term.'%')
+                    ->orWhere('title', 'like', $term.'%');
+            });
+        }
+
         return $query->where(function (Builder $q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
                 ->orWhere('catalog', 'like', "%{$term}%")
@@ -162,7 +176,6 @@ class Product extends Model
         });
 
         static::deleted(function (Product $product) {
-            // Detach pivot rows when hard-deleting a product
             $product->sectors()->detach();
 
             Cache::forget('categories_structure');
