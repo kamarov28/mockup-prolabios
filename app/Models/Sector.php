@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Sector extends Model
 {
@@ -26,5 +27,11 @@ class Sector extends Model
             'created_at'  => 'datetime',
             'updated_at'  => 'datetime',
         ];
+    }
+
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_sector', 'sector_id', 'product_id')
+            ->withTimestamps();
     }
 }

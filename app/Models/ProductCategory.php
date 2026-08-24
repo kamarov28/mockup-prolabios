@@ -11,10 +11,13 @@ class ProductCategory extends Model
 {
     protected $fillable = ['key', 'name', 'parent_id', 'sort_order'];
 
-    protected $casts = [
-        'parent_id'  => 'integer',
-        'sort_order' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'parent_id'  => 'integer',
+            'sort_order' => 'integer',
+        ];
+    }
 
     // ── Relations ──────────────────────────────────────────────────────────
 
