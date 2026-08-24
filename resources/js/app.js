@@ -12,7 +12,7 @@ import { initGSAPAnimations } from './modules/animations.js';
 
 /**
  * Sticky left sidebar on product catalog & sector pages (desktop).
- * CSS lives in public/css/sticky-sidebar.css (.page-sidebar-sticky).
+ * CSS: public/css/sticky-sidebar.css (.page-sidebar-sticky)
  */
 function initStickySidebars() {
   const selectors = [
@@ -49,3 +49,4 @@ document.addEventListener('DOMContentLoaded', function () {
 // Expose key global window helpers required by Blade views
 window.initGSAPAnimations = initGSAPAnimations;
 window.revealHeroStatic = revealHeroStatic;
+window.initStickySidebars = initStickySidebars;
