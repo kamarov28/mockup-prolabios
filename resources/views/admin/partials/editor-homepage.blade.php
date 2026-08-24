@@ -38,7 +38,7 @@
             <input type="text" class="form-control bg-dark text-white border-secondary border-opacity-20 @error('hero_title') is-invalid @enderror" id="hero_title" name="hero_title" value="{{ old('hero_title', $homeData['hero_title'] ?? '') }}" required>
             @error('hero_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
             <div class="form-text mt-2 small text-secondary">
-              Gunakan <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded">&lt;span class="text-accent"&gt;Kata&lt;/span&gt;</code> untuk warna merah solid, atau <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded">&lt;span class="typo-outline"&gt;Kata&lt;/span&gt;</code> untuk outline transparan.
+              Gunakan <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="text-accent">Kata</span></code> untuk warna merah solid, atau <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="typo-outline">Kata</span></code> untuk outline transparan.
             </div>
           </div>
         </div>
@@ -72,9 +72,9 @@
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="admin-badge admin-badge-accent">Slide #{{ $i + 1 }}</span>
                     @if($imgUrl)
-                      <span class="badge bg-success bg-opacity-20 text-success" style="font-size: 0.65rem;">Terisi</span>
+                      <span class="admin-badge admin-badge-success">Terisi</span>
                     @else
-                      <span class="badge bg-secondary bg-opacity-20 text-secondary" style="font-size: 0.65rem;">Kosong</span>
+                      <span class="admin-badge admin-badge-muted">Kosong</span>
                     @endif
                   </div>
                   <div class="rounded border border-secondary border-opacity-20 overflow-hidden mb-3 bg-dark" style="aspect-ratio: 16/9;">
@@ -97,7 +97,7 @@
 
       <!-- Sub-panel 2: Bento Grid Standar -->
       <div class="tab-pane fade" id="bento-panel" role="tabpanel">
-        <h2 class="h5 fw-bold mb-4 text-white border-bottom border-secondary border-opacity-20 pb-3" style="font-family: var(--font-headline);">Bento Grid Standards &amp; Infrastructure</h2>
+        <h2 class="h5 fw-bold mb-4 text-white border-bottom border-secondary border-opacity-20 pb-3" style="font-family: var(--font-headline);">Bento Grid Standards & Infrastructure</h2>
         
         <div class="row g-3 mb-4">
           <div class="col-md-6">
