@@ -21,7 +21,7 @@
       <div class="row g-5">
 
         <!-- Sidebar -->
-        <div class="col-lg-3 col-md-4">
+        <div class="col-lg-3 col-md-4" id="sektor-sidebar">
           {{-- $activeSector is passed from PageController::sektor() --}}
 
           <div class="mb-5">
@@ -30,7 +30,8 @@
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
                   <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav"
-                     class="layanan-sidebar-link {{ $activeSector == $sec['id'] ? 'is-active' : '' }}">
+                     class="layanan-sidebar-link {{ $activeSector == $sec['id'] ? 'is-active' : '' }}"
+                     data-sector-id="{{ $sec['id'] }}">
                     {{ $sec['name'] }}
                   </a>
                 @endforeach
@@ -48,7 +49,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-9 col-md-8">
+        <div class="col-lg-9 col-md-8" id="sektor-main">
           @php
             $currentData = null;
             if (isset($sectors) && count($sectors) > 0) {
@@ -104,7 +105,7 @@
               </span>
             </div>
 
-            <div class="table-responsive mt-2">
+            <div class="table-responsive mt-2" id="sektor-product-table-wrap">
               <table class="table custom-table align-middle" style="min-width: 650px;">
                 <thead>
                   <tr>
@@ -133,21 +134,23 @@
               </table>
             </div>
 
-            @if(!$hasProducts)
-              <p style="color: var(--color-text-muted); font-size: 0.9rem; padding: 16px 0; border-top: 1px solid var(--color-border);">
-                Belum ada produk spesifik untuk sektor ini. <a href="{{ url('/produk') }}" style="color: var(--color-accent);">Lihat semua produk kami</a>.
-              </p>
-            @else
-              <div class="d-flex justify-content-center mt-4">
-                {{ $products->appends(request()->except('page'))->fragment('sektor-nav')->links('pagination::bootstrap-5') }}
-              </div>
-            @endif
+            <div id="sektor-pagination-or-empty">
+              @if(!$hasProducts)
+                <p style="color: var(--color-text-muted); font-size: 0.9rem; padding: 16px 0; border-top: 1px solid var(--color-border);">
+                  Belum ada produk spesifik untuk sektor ini. <a href="{{ url('/produk') }}" style="color: var(--color-accent);">Lihat semua produk kami</a>.
+                </p>
+              @else
+                <div class="d-flex justify-content-center mt-4">
+                  {{ $products->appends(request()->except('page'))->fragment('sektor-nav')->links('pagination::bootstrap-5') }}
+                </div>
+              @endif
+            </div>
 
             <hr style="border-color: var(--color-border); margin: 48px 0;">
 
             <!-- Related Products -->
             <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Related Product</h3>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+            <div class="row row-cols-1 row-cols-md-3 g-4 mt-2" id="sektor-related">
               @php
                 $related = $relatedProducts ?? collect();
                 if ($related->isEmpty() && isset($products) && count($products) > 0) {
@@ -190,11 +193,99 @@
   @push('scripts')
   @include('partials.gsap-loader')
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof initGSAPAnimations === 'function') {
-        initGSAPAnimations();
+    (function () {
+      let fetchController = null;
+
+      function loadSektorAjax(url, updateHistory) {
+        if (fetchController) {
+          fetchController.abort();
+        }
+        fetchController = new AbortController();
+
+        const main = document.getElementById('sektor-main');
+        if (main) {
+          main.style.opacity = '0.45';
+          main.style.transition = 'opacity 0.15s ease-in-out';
+          main.style.pointerEvents = 'none';
+        }
+
+        fetch(url, {
+          signal: fetchController.signal,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.text();
+          })
+          .then(function (html) {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+
+            const newMain = doc.getElementById('sektor-main');
+            const newSidebar = doc.getElementById('sektor-sidebar');
+            const curMain = document.getElementById('sektor-main');
+            const curSidebar = document.getElementById('sektor-sidebar');
+
+            if (curMain && newMain) {
+              curMain.innerHTML = newMain.innerHTML;
+              curMain.style.opacity = '1';
+              curMain.style.pointerEvents = '';
+            }
+            if (curSidebar && newSidebar) {
+              curSidebar.innerHTML = newSidebar.innerHTML;
+            }
+
+            if (updateHistory) {
+              window.history.pushState({ url: url }, '', url);
+            }
+
+            if (typeof initGSAPAnimations === 'function') {
+              initGSAPAnimations();
+            }
+
+            const section = document.getElementById('sektor-nav');
+            if (section) {
+              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          })
+          .catch(function (err) {
+            if (err.name === 'AbortError') return;
+            console.error('Sektor AJAX failed, full navigation:', err);
+            window.location.href = url;
+          });
       }
-    });
+
+      document.addEventListener('click', function (e) {
+        const link = e.target.closest('#sektor-sidebar a.layanan-sidebar-link, #sektor-main .pagination a');
+        if (!link || !link.getAttribute('href') || link.getAttribute('href').startsWith('#')) {
+          return;
+        }
+
+        // Only intercept same-origin /sektor links
+        try {
+          const u = new URL(link.href, window.location.origin);
+          if (u.origin !== window.location.origin) return;
+          if (!u.pathname.replace(/\/$/, '').endsWith('/sektor') && u.pathname !== '/sektor') {
+            // allow paths that contain sektor
+            if (!u.pathname.includes('sektor')) return;
+          }
+        } catch (err) {
+          return;
+        }
+
+        e.preventDefault();
+        loadSektorAjax(link.href, true);
+      });
+
+      window.addEventListener('popstate', function () {
+        loadSektorAjax(window.location.href, false);
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof initGSAPAnimations === 'function') {
+          initGSAPAnimations();
+        }
+      });
+    })();
   </script>
   @endpush
 @endsection
