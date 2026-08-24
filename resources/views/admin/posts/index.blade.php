@@ -21,7 +21,7 @@
   {{-- Filter Form --}}
   <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
     <form action="{{ route('admin.posts') }}" method="GET">
-      <div class="row g-3">
+      <div class="row g-3 align-items-center">
         <div class="col-md-5">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; transition: border-color 0.25s ease;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: transparent; border-right: 1px solid var(--color-border);">
@@ -32,20 +32,26 @@
                    placeholder="Cari judul atau isi artikel..." value="{{ $search }}" aria-label="Kata kunci pencarian">
           </div>
         </div>
-        <div class="col-md-4">
-          <select name="category" class="form-select" aria-label="Filter Kategori">
+        <div class="col-md-3">
+          <select name="category" class="form-select" aria-label="Filter Kategori"
+                  onchange="this.form.submit()">
             <option value="">Semua Kategori</option>
             <option value="Berita"   {{ $category === 'Berita' ? 'selected' : '' }}>Berita</option>
             <option value="Kegiatan" {{ $category === 'Kegiatan' ? 'selected' : '' }}>Kegiatan</option>
             <option value="Event"    {{ $category === 'Event' ? 'selected' : '' }}>Event</option>
           </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
+          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
+            <i class="bi bi-search"></i> Cari
+          </button>
+        </div>
+        <div class="col-md-2">
           <button type="button" class="admin-btn admin-btn-ghost w-100 justify-content-center"
                   data-bs-toggle="collapse" data-bs-target="#advancedPostFilterBlock"
                   aria-expanded="{{ ($sort !== 'newest' || $start_date || $end_date) ? 'true' : 'false' }}"
                   aria-controls="advancedPostFilterBlock">
-            <i class="bi bi-sliders"></i> Filter Lanjutan
+            <i class="bi bi-sliders"></i> Lanjutan
           </button>
         </div>
       </div>
@@ -57,9 +63,9 @@
             <div class="col-md-4">
               <label class="admin-form-label" for="sort">Urutkan</label>
               <select name="sort" id="sort" class="form-select">
-                <option value="newest"     {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Diterbitkan</option>
-                <option value="oldest"     {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Diterbitkan</option>
-                <option value="title_asc"  {{ $sort === 'title_asc' ? 'selected' : '' }}>Judul (A–Z)</option>
+                <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru</option>
+                <option value="oldest" {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama</option>
+                <option value="title_asc" {{ $sort === 'title_asc' ? 'selected' : '' }}>Judul (A–Z)</option>
                 <option value="title_desc" {{ $sort === 'title_desc' ? 'selected' : '' }}>Judul (Z–A)</option>
               </select>
             </div>
@@ -113,18 +119,12 @@
                 <td>
                   <div class="d-flex flex-column gap-1 align-items-start">
                     @if(($post['status'] ?? 'online') === 'online')
-                      <span class="admin-badge admin-badge-success">
-                        Published
-                      </span>
+                      <span class="admin-badge admin-badge-success">Published</span>
                     @else
-                      <span class="admin-badge admin-badge-warning">
-                        Draft / Offline
-                      </span>
+                      <span class="admin-badge admin-badge-warning">Draft / Offline</span>
                     @endif
                     @if(!empty($post['is_featured']))
-                      <span class="admin-badge admin-badge-warning">
-                        <i class="bi bi-star-fill me-1"></i> Highlight
-                      </span>
+                      <span class="admin-badge" style="background: rgba(234,179,8,0.15); color: #eab308;">★ Highlight</span>
                     @endif
                   </div>
                 </td>
@@ -132,12 +132,9 @@
                   <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}" target="_blank" class="admin-action-link view" title="Lihat">
+                  <a href="{{ url('/informasi/' . $post['slug']) }}" target="_blank" class="admin-action-link view" title="Lihat">
                     <i class="bi bi-eye"></i>
                   </a>
-                  <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/informasi') }}?detail={{ $post['slug'] }}" title="Salin link">
-                    <i class="bi bi-clipboard"></i>
-                  </button>
                   <a href="{{ route('admin.posts.edit', ['slug' => $post['slug']]) }}" class="admin-action-link edit" title="Edit">
                     <i class="bi bi-pencil-square"></i> Edit
                   </a>
@@ -155,13 +152,12 @@
         </table>
       </div>
 
-      {{-- Pagination --}}
       @if($totalPages > 1)
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--color-border);">
           <span style="font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.5px;">
             Halaman <strong style="color: var(--color-text-main);">{{ $currentPage }}</strong> dari <strong style="color: var(--color-text-main);">{{ $totalPages }}</strong>
           </span>
-          <nav aria-label="Navigasi halaman artikel">
+          <nav aria-label="Navigasi halaman">
             <ul class="pagination pagination-sm mb-0">
               <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $currentPage - 1])) }}" aria-label="Sebelumnya">
