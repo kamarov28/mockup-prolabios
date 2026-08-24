@@ -3,85 +3,57 @@
 namespace App\Services;
 
 use App\Helpers\HtmlSanitizer;
+use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class PostService
 {
     public function getPosts(?array $filters = [], int $limit = 0): array
     {
-        $query = DB::table('posts')->orderByDesc('id');
+        $query = Post::query()->orderByDesc('id');
 
-        // Only show published / online posts for public facing queries
         if (empty($filters['include_all_status'])) {
-            $today = date('Y-m-d');
-            $query->where('status', 'online')
-                ->where(function ($q) use ($today) {
-                    $q->whereNull('date')
-                        ->orWhere('date', '<=', $today);
-                });
+            $query->online();
         }
 
         if (! empty($filters['category'])) {
-            $cat = strtolower($filters['category']);
-            if ($cat === 'info') {
-                $query->where(function ($q) {
-                    $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
-                });
-            } else {
-                $query->whereRaw('LOWER(category) = ?', [$cat]);
-            }
+            $query->byCategory($filters['category']);
         }
 
         if ($limit > 0) {
             $query->limit($limit);
         }
 
-        return $query->get()
-            ->map(fn ($r) => (array) $r)
-            ->toArray();
+        return $query->get()->map(fn (Post $p) => $this->toArray($p))->all();
     }
 
     public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
     {
-        $query = DB::table('posts')->orderByDesc('id');
+        $query = Post::query()->orderByDesc('id');
 
-        // Only show published / online posts for public facing queries
         if (empty($filters['include_all_status'])) {
-            $today = date('Y-m-d');
-            $query->where('status', 'online')
-                ->where(function ($q) use ($today) {
-                    $q->whereNull('date')
-                        ->orWhere('date', '<=', $today);
-                });
+            $query->online();
         }
 
         if (! empty($filters['category'])) {
-            $cat = strtolower($filters['category']);
-            if ($cat === 'info') {
-                $query->where(function ($q) {
-                    $q->where('category', 'Info Terkait')->orWhere('category', 'Info');
-                });
-            } else {
-                $query->whereRaw('LOWER(category) = ?', [$cat]);
-            }
+            $query->byCategory($filters['category']);
         }
 
         return $query->paginate($perPage)
-            ->through(fn ($r) => (array) $r)
+            ->through(fn (Post $p) => $this->toArray($p))
             ->withQueryString();
     }
 
     public function getPostBySlug(string $slug): ?array
     {
-        $row = DB::table('posts')->where('slug', $slug)->first();
+        $post = Post::query()->where('slug', $slug)->first();
 
-        return $row ? (array) $row : null;
+        return $post ? $this->toArray($post) : null;
     }
 
     public function addPost(array $post): bool
     {
-        DB::table('posts')->insert([
+        Post::create([
             'slug'        => $post['slug'],
             'title'       => $post['title'],
             'date'        => $post['date'],
@@ -90,9 +62,8 @@ class PostService
             'is_featured' => $post['is_featured'] ?? false,
             'image'       => $post['image'] ?? null,
             'content'     => HtmlSanitizer::clean($post['content'] ?? null),
-            'created_at'  => now(),
-            'updated_at'  => now(),
         ]);
+
         Cache::forget('blog_category_counts');
 
         return true;
@@ -100,7 +71,12 @@ class PostService
 
     public function updatePost(string $slug, array $updatedPost): bool
     {
-        DB::table('posts')->where('slug', $slug)->update([
+        $post = Post::query()->where('slug', $slug)->first();
+        if (! $post) {
+            return false;
+        }
+
+        $post->update([
             'slug'        => $updatedPost['slug'],
             'title'       => $updatedPost['title'],
             'date'        => $updatedPost['date'],
@@ -109,8 +85,8 @@ class PostService
             'is_featured' => $updatedPost['is_featured'] ?? false,
             'image'       => $updatedPost['image'] ?? null,
             'content'     => HtmlSanitizer::clean($updatedPost['content'] ?? null),
-            'updated_at'  => now(),
         ]);
+
         Cache::forget('blog_category_counts');
 
         return true;
@@ -118,9 +94,30 @@ class PostService
 
     public function deletePost(string $slug): bool
     {
-        DB::table('posts')->where('slug', $slug)->delete();
+        $deleted = Post::query()->where('slug', $slug)->delete();
         Cache::forget('blog_category_counts');
 
-        return true;
+        return $deleted > 0;
+    }
+
+    /**
+     * Stable array shape for Blade (keeps $post['title'] access).
+     * Date cast as Y-m-d string so views tidak dapat Carbon object.
+     */
+    private function toArray(Post $post): array
+    {
+        return [
+            'id'          => $post->id,
+            'slug'        => $post->slug,
+            'title'       => $post->title,
+            'date'        => $post->date ? $post->date->format('Y-m-d') : null,
+            'category'    => $post->category,
+            'status'      => $post->status,
+            'is_featured' => (bool) $post->is_featured,
+            'image'       => $post->image,
+            'content'     => $post->content,
+            'created_at'  => optional($post->created_at)?->toDateTimeString(),
+            'updated_at'  => optional($post->updated_at)?->toDateTimeString(),
+        ];
     }
 }

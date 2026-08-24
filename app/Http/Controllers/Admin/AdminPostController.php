@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Post;
 use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AdminPostController extends Controller
@@ -19,7 +19,6 @@ class AdminPostController extends Controller
 
     protected DataService $dataService;
 
-    /** Number of posts to display per admin list page */
     private const POSTS_PER_PAGE = 10;
 
     public function __construct(DataService $dataService)
@@ -29,31 +28,23 @@ class AdminPostController extends Controller
 
     public function postsIndex(Request $request)
     {
-        $query = DB::table('posts');
-
-        $search = $request->input('s');
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('content', 'like', "%{$search}%");
-            });
-        }
-
-        $category = $request->input('category');
-        if ($category) {
-            $query->where('category', $category);
-        }
-
+        $search    = $request->input('s');
+        $category  = $request->input('category');
         $startDate = $request->input('start_date');
         $endDate   = $request->input('end_date');
-        if ($startDate) {
-            $query->whereDate('created_at', '>=', $startDate);
-        }
-        if ($endDate) {
-            $query->whereDate('created_at', '<=', $endDate);
-        }
+        $sort      = $request->input('sort', 'newest');
 
-        $sort = $request->input('sort', 'newest');
+        $query = Post::query()
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('title', 'like', "%{$search}%")
+                        ->orWhere('content', 'like', "%{$search}%");
+                });
+            })
+            ->when($category, fn ($q) => $q->where('category', $category))
+            ->when($startDate, fn ($q) => $q->whereDate('created_at', '>=', $startDate))
+            ->when($endDate, fn ($q) => $q->whereDate('created_at', '<=', $endDate));
+
         match ($sort) {
             'oldest'     => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             'title_asc'  => $query->orderBy('title', 'asc'),
@@ -61,8 +52,9 @@ class AdminPostController extends Controller
             default      => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
         };
 
+        // PaginatesQuery expects base Query\Builder; toBase() keeps same WHERE/ORDER
         ['items' => $posts, 'currentPage' => $currentPage, 'totalPages' => $totalPages]
-            = $this->paginateQuery($query, $request, self::POSTS_PER_PAGE);
+            = $this->paginateQuery($query->toBase(), $request, self::POSTS_PER_PAGE);
 
         return view('admin.posts.index', [
             'posts'       => $posts,
@@ -83,13 +75,14 @@ class AdminPostController extends Controller
 
     public function postsStore(StorePostRequest $request)
     {
-        $slug = Str::slug($request->input('title'));
+        $title = $request->input('title');
+        $slug  = Str::slug($title);
 
         if ($this->dataService->getPostBySlug($slug)) {
             $slug .= '-'.Str::lower(Str::random(6));
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80');
+        $image = $this->handleImageUpload($request, 'image_file', 'image_url', null);
 
         $statusOption = $request->input('status_option', 'online_now');
         $status       = ($statusOption === 'draft') ? 'draft' : 'online';
@@ -97,15 +90,13 @@ class AdminPostController extends Controller
         $publishDate = date('Y-m-d');
         if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
             $publishDate = date('Y-m-d', strtotime($request->input('publish_date')));
-        } elseif ($statusOption === 'draft') {
-            $publishDate = date('Y-m-d');
         }
 
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
 
         $post = [
             'slug'        => $slug,
-            'title'       => $request->input('title'),
+            'title'       => $title,
             'date'        => $publishDate,
             'category'    => $request->input('category'),
             'status'      => $status,
@@ -115,16 +106,14 @@ class AdminPostController extends Controller
         ];
 
         $this->dataService->addPost($post);
-        $savedPost = $this->dataService->getPostBySlug($slug);
 
-        AuditLogger::log('post.create', 'Post', $savedPost['id'] ?? $slug, [
-            'title'    => $post['title'],
-            'slug'     => $slug,
-            'category' => $post['category'],
-            'status'   => $post['status'],
+        AuditLogger::log('post.create', 'Post', null, [
+            'title'  => $title,
+            'slug'   => $slug,
+            'status' => $status,
         ]);
 
-        return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil disimpan!');
+        return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil dipublikasikan!');
     }
 
     public function postsEdit(string $slug)
