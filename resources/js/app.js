@@ -10,6 +10,23 @@ import { initCatalogCart } from './modules/catalog-cart.js';
 import { revealHeroStatic } from './modules/typography-split.js';
 import { initGSAPAnimations } from './modules/animations.js';
 
+/**
+ * Sticky left sidebar on product catalog & sector pages (desktop).
+ * CSS lives in public/css/sticky-sidebar.css (.page-sidebar-sticky).
+ */
+function initStickySidebars() {
+  const selectors = [
+    '#catalog-section .col-lg-3',
+    '#sektor-sidebar',
+    '#sektor-nav .col-lg-3',
+  ];
+  selectors.forEach(function (sel) {
+    document.querySelectorAll(sel).forEach(function (el) {
+      el.classList.add('page-sidebar-sticky');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   function safeInit(name, fn) {
     if (typeof fn === 'function') {
@@ -26,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initHeroSlideshow', initHeroSlideshow);
   safeInit('initAnimations', initAnimations);
   safeInit('initCatalogCart', initCatalogCart);
+  safeInit('initStickySidebars', initStickySidebars);
 });
 
 // Expose key global window helpers required by Blade views
