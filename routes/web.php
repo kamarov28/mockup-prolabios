@@ -33,10 +33,18 @@ Route::get('/health', [HealthController::class, 'check'])->name('system.health')
 // ----------------------------------------------------
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/profil', [PageController::class, 'profil']);
-Route::get('/produk', [PageController::class, 'produk']);
-Route::get('/sektor', [PageController::class, 'sektor']);
-Route::get('/produk/detail', [PageController::class, 'detailProduk']);
+Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
+
+// Legacy query-string detail (?id=) → 301 to /produk/{slug}
+Route::get('/produk/detail', [PageController::class, 'detailProdukLegacy'])->name('produk.detail.legacy');
 Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
+
+// Canonical product detail by slug (must stay after /produk/detail & /produk/beli)
+Route::get('/produk/{slug}', [PageController::class, 'detailProduk'])
+    ->where('slug', '[A-Za-z0-9\-]+')
+    ->name('produk.detail');
+
+Route::get('/sektor', [PageController::class, 'sektor']);
 Route::get('/layanan', [PageController::class, 'layanan']);
 Route::get('/informasi/{slug?}', [PageController::class, 'informasi'])->name('informasi');
 Route::get('/kontak', [PageController::class, 'kontak']);
@@ -72,14 +80,11 @@ Route::get('/rfq/success/{number}', [RfqController::class, 'success'])->middlewa
 Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 
-    // Home Editor
     Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
     Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
 
-    // Admin Documentation & Operational Guide
     Route::get('/guide', [AdminDashboardController::class, 'guide'])->name('admin.guide');
 
-    // Products CRUD
     Route::get('/products', [AdminProductController::class, 'productsIndex'])->name('admin.products');
     Route::get('/products/create', [AdminProductController::class, 'productsCreate'])->name('admin.products.create');
     Route::get('/products/create-bulk', [AdminProductController::class, 'productsCreateBulk'])->name('admin.products.create.bulk');
@@ -89,7 +94,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
     Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
 
-    // Product Categories CRUD
     Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');
     Route::get('/categories/create', [AdminProductCategoryController::class, 'create'])->name('admin.categories.create');
     Route::post('/categories', [AdminProductCategoryController::class, 'store'])->name('admin.categories.store');
@@ -97,9 +101,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/categories/{id}', [AdminProductCategoryController::class, 'update'])->name('admin.categories.update');
     Route::delete('/categories/{id}', [AdminProductCategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
-    // API: subcategories for dynamic product form dropdown
     Route::get('/api/subcategories', [AdminProductCategoryController::class, 'apiSubcategories'])->name('admin.api.subcategories');
-
 
     Route::get('/posts', [AdminPostController::class, 'postsIndex'])->name('admin.posts');
     Route::get('/posts/create', [AdminPostController::class, 'postsCreate'])->name('admin.posts.create');
@@ -108,7 +110,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'postsUpdate'])->name('admin.posts.update');
     Route::delete('/posts/{slug}', [AdminPostController::class, 'postsDestroy'])->name('admin.posts.destroy');
 
-    // Sectors CRUD
     Route::get('/sectors', [AdminSectorController::class, 'sectorsIndex'])->name('admin.sectors');
     Route::get('/sectors/create', [AdminSectorController::class, 'sectorsCreate'])->name('admin.sectors.create');
     Route::post('/sectors', [AdminSectorController::class, 'sectorsStore'])->name('admin.sectors.store');
@@ -116,7 +117,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'sectorsUpdate'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
 
-    // Principals CRUD
     Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
     Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
     Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
@@ -124,7 +124,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/principals/{id}', [AdminPrincipalController::class, 'update'])->name('admin.principals.update');
     Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
 
-    // RFQ / Inquiries Management
     Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
     Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
     Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');

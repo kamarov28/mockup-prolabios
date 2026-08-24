@@ -67,19 +67,42 @@ class PageController extends Controller
         ]);
     }
 
-    public function detailProduk(Request $request, DataService $dataService)
+    /**
+     * Canonical product detail: /produk/{slug}
+     */
+    public function detailProduk(string $slug, DataService $dataService)
     {
-        // Prefer numeric product id (?id=123). Title lookup kept only for legacy bookmarks.
+        $product = $dataService->getProductBySlug($slug);
+
+        if (! $product) {
+            abort(404);
+        }
+
+        return view('detail-produk', compact('product'));
+    }
+
+    /**
+     * Legacy /produk/detail?id=123 → permanent redirect to /produk/{slug}
+     */
+    public function detailProdukLegacy(Request $request, DataService $dataService)
+    {
         $product = null;
         $identifier = $request->query('id');
+
         if ($identifier !== null && $identifier !== '') {
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                $product = $dataService->getProductByTitle((string) $identifier);
+                $product = $dataService->getProductByTitle((string) $identifier)
+                    ?? $dataService->getProductBySlug(Str::slug((string) $identifier));
             }
         }
 
+        if ($product && ! empty($product->slug)) {
+            return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
+        }
+
+        // Soft landing: still show detail if we found product without slug, else empty view
         return view('detail-produk', compact('product'));
     }
 
@@ -91,7 +114,8 @@ class PageController extends Controller
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                $product = $dataService->getProductByTitle((string) $identifier);
+                $product = $dataService->getProductByTitle((string) $identifier)
+                    ?? $dataService->getProductBySlug(Str::slug((string) $identifier));
             }
         }
 
@@ -111,10 +135,7 @@ class PageController extends Controller
             $activeSector = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
         }
 
-        // Paginate — filter = pivot OR legacy CSV (see Product::scopeBySector)
         $products = $dataService->getPaginatedProducts(['sector' => $activeSector], 24);
-
-        // Related cards: same sector, limited (not global first-6 every time)
         $relatedProducts = $dataService->getProducts(['sector' => $activeSector], 3);
 
         return view('sektor', compact('sectors', 'products', 'activeSector', 'relatedProducts'));

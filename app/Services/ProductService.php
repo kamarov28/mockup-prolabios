@@ -19,6 +19,7 @@ class ProductService
             'id',
             'catalog',
             'title',
+            'slug',
             'description',
             'category',
             'sub_category',
@@ -31,17 +32,11 @@ class ProductService
         ];
     }
 
-    /**
-     * Get the current products cache version integer.
-     */
     public static function getProductsCacheVersion(): int
     {
         return (int) Cache::get('products_cache_version', 1);
     }
 
-    /**
-     * Bump version so all versioned product list/detail keys miss immediately.
-     */
     public function clearProductsCache(): void
     {
         Cache::forget('categories_structure');
@@ -57,9 +52,6 @@ class ProductService
     }
 
     /**
-     * Rehydrate Product models from cached attribute arrays
-     * (compatible with cache.serializable_classes = false).
-     *
      * @param  list<array<string, mixed>>  $rows
      * @return Collection<int, Product>
      */
@@ -70,61 +62,57 @@ class ProductService
         );
     }
 
-    /**
-     * Get the category and subcategory hierarchy structure.
-     * Uses ProductCategory.key (not a non-existent slug column).
-     */
     public function getCategoriesStructure(): array
     {
         $fallback = [
             'microbiology' => [
                 'name' => 'Microbiology',
                 'subs' => [
-                    'food-safety'               => 'Food Safety',
-                    'antimicrobial'             => 'Antimicrobial Susceptibility Testing',
-                    'identification'            => 'Microbiological Identification',
-                    'preservation'              => 'Microorganisms Preservation System (BactoBank)',
-                    'staining'                  => 'Microbial Staining & Fixatives',
-                    'consumables'               => 'Consumables',
-                    'mic-test'                  => 'MIC Test Strip',
-                    'qc-organisms'              => 'QC Organisms',
-                    'dip-slide'                 => 'Dip slide',
-                    'chemical-indicator'        => 'Chemical Indicator',
-                    'latex-agglutination'       => 'Latex Agglutination Kits',
+                    'food-safety' => 'Food Safety',
+                    'antimicrobial' => 'Antimicrobial Susceptibility Testing',
+                    'identification' => 'Microbiological Identification',
+                    'preservation' => 'Microorganisms Preservation System (BactoBank)',
+                    'staining' => 'Microbial Staining & Fixatives',
+                    'consumables' => 'Consumables',
+                    'mic-test' => 'MIC Test Strip',
+                    'qc-organisms' => 'QC Organisms',
+                    'dip-slide' => 'Dip slide',
+                    'chemical-indicator' => 'Chemical Indicator',
+                    'latex-agglutination' => 'Latex Agglutination Kits',
                     'ready-to-use-culture-media' => 'Ready To Use Culture Media',
-                    'biological-indicators'     => 'Biological Indicators',
-                    'dehydrated-culture-media'  => 'Dehydrated Culture Media',
-                    'immunology'                => 'Immunology',
-                    'endotoxin'                 => 'Endotoxin',
+                    'biological-indicators' => 'Biological Indicators',
+                    'dehydrated-culture-media' => 'Dehydrated Culture Media',
+                    'immunology' => 'Immunology',
+                    'endotoxin' => 'Endotoxin',
                 ],
             ],
             'reference-standards' => [
                 'name' => 'Reference Standards',
                 'subs' => [
-                    'pharmaceutical'  => 'Pharmaceutical Reference Standards',
+                    'pharmaceutical' => 'Pharmaceutical Reference Standards',
                     'green-standards' => 'Green Standards',
-                    'environmental'   => 'Environmental Standards',
-                    'food-beverages'  => 'Food and Beverages Standards',
-                    'agro-chemical'   => 'Agro Chemical Standards',
+                    'environmental' => 'Environmental Standards',
+                    'food-beverages' => 'Food and Beverages Standards',
+                    'agro-chemical' => 'Agro Chemical Standards',
                 ],
             ],
             'device' => [
                 'name' => 'Device',
                 'subs' => [
-                    'bsc-lfc'                    => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
+                    'bsc-lfc' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)',
                     'microbiological-instruments' => 'Microbiological Instruments',
-                    'liquid-handling'            => 'Liquid Handling',
-                    'thermometer'                => 'Thermometer',
+                    'liquid-handling' => 'Liquid Handling',
+                    'thermometer' => 'Thermometer',
                 ],
             ],
             'instruments' => [
                 'name' => 'Instruments',
                 'subs' => [
-                    'liofilchem-giotto-2'       => 'Liofilchem® Giotto 2',
-                    'agar-filler'               => 'Agar Filler',
-                    'agar-preparator'           => 'Agar Preparator',
+                    'liofilchem-giotto-2' => 'Liofilchem® Giotto 2',
+                    'agar-filler' => 'Agar Filler',
+                    'agar-preparator' => 'Agar Preparator',
                     'kinetic-incubating-reader' => 'Kinetic Incubating Microplate Reader',
-                    'mica-diamidex'             => 'MICA® Diamidex - Counting Microorganisms Faster',
+                    'mica-diamidex' => 'MICA® Diamidex - Counting Microorganisms Faster',
                 ],
             ],
             'food-beverage' => [
@@ -173,7 +161,6 @@ class ProductService
                         $childKey = $child->key ?: Str::slug($child->name);
                         $subs[$childKey] = $child->name;
                     }
-
                     $structure[$key] = [
                         'name' => $category->name,
                         'subs' => $subs,
@@ -187,9 +174,6 @@ class ProductService
         });
     }
 
-    /**
-     * Apply common list filters (category, sub_category, search, sector).
-     */
     protected function applyProductFilters($query, ?array $filters = []): void
     {
         if (! empty($filters['category'])) {
@@ -208,7 +192,6 @@ class ProductService
 
         if (! empty($filters['sub_category'])) {
             $subCat = $filters['sub_category'];
-            // Prefer exact key/name match (index-friendly); keep loose match as secondary
             $query->where(function ($q) use ($subCat) {
                 $q->where('sub_category', $subCat)
                     ->orWhere('sub_category', 'LIKE', $subCat.'%');
@@ -271,7 +254,7 @@ class ProductService
                 $perPage,
                 $page,
                 [
-                    'path'  => request()->url(),
+                    'path' => request()->url(),
                     'query' => request()->query(),
                 ]
             ))->withQueryString();
@@ -337,19 +320,47 @@ class ProductService
         return $product;
     }
 
+    public function getProductBySlug(string $slug): ?Product
+    {
+        $slug = trim($slug);
+        if ($slug === '') {
+            return null;
+        }
+
+        $v = self::getProductsCacheVersion();
+        $cacheKey = "product_by_slug_{$v}_".md5($slug);
+        $cached = Cache::get($cacheKey);
+
+        if (is_array($cached)) {
+            return (new Product)->newFromBuilder($cached);
+        }
+
+        if ($cached instanceof Product) {
+            return $cached;
+        }
+
+        $product = Product::where('slug', $slug)->first();
+        if ($product) {
+            Cache::put($cacheKey, $product->getAttributes(), 600);
+        }
+
+        return $product;
+    }
+
     public function addProduct(array $product): ?Product
     {
+        // slug auto-filled by Product::saving
         $created = Product::create([
-            'catalog'        => $product['catalog'] ?? null,
-            'title'          => $product['title'],
-            'description'    => HtmlSanitizer::clean($product['description'] ?? null),
-            'category'       => $product['category'],
-            'sub_category'   => $product['sub_category'] ?? null,
-            'sector'         => $product['sector'] ?? null,
-            'image'          => $product['image'] ?? null,
+            'catalog' => $product['catalog'] ?? null,
+            'title' => $product['title'],
+            'description' => HtmlSanitizer::clean($product['description'] ?? null),
+            'category' => $product['category'],
+            'sub_category' => $product['sub_category'] ?? null,
+            'sector' => $product['sector'] ?? null,
+            'image' => $product['image'] ?? null,
             'gallery_images' => ! empty($product['gallery_images']) ? array_values($product['gallery_images']) : null,
-            'price'          => $product['price'] ?? 0,
-            'stock'          => $product['stock'] ?? 0,
+            'price' => $product['price'] ?? 0,
+            'stock' => $product['stock'] ?? 0,
         ]);
 
         $created->syncSectorsFromCsv($created->sector);
@@ -368,16 +379,16 @@ class ProductService
         }
 
         $product->update([
-            'catalog'        => $updatedProduct['catalog'] ?? null,
-            'title'          => $updatedProduct['title'],
-            'description'    => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
-            'category'       => $updatedProduct['category'],
-            'sub_category'   => $updatedProduct['sub_category'] ?? null,
-            'sector'         => $updatedProduct['sector'] ?? null,
-            'image'          => $updatedProduct['image'] ?? null,
+            'catalog' => $updatedProduct['catalog'] ?? null,
+            'title' => $updatedProduct['title'],
+            'description' => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
+            'category' => $updatedProduct['category'],
+            'sub_category' => $updatedProduct['sub_category'] ?? null,
+            'sector' => $updatedProduct['sector'] ?? null,
+            'image' => $updatedProduct['image'] ?? null,
             'gallery_images' => ! empty($updatedProduct['gallery_images']) ? array_values($updatedProduct['gallery_images']) : null,
-            'price'          => $updatedProduct['price'] ?? 0,
-            'stock'          => $updatedProduct['stock'] ?? 0,
+            'price' => $updatedProduct['price'] ?? 0,
+            'stock' => $updatedProduct['stock'] ?? 0,
         ]);
 
         $product->syncSectorsFromCsv($product->sector);
@@ -396,15 +407,15 @@ class ProductService
         }
 
         $product->update([
-            'catalog'      => $updatedProduct['catalog'] ?? null,
-            'title'        => $updatedProduct['title'],
-            'description'  => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
-            'category'     => $updatedProduct['category'],
+            'catalog' => $updatedProduct['catalog'] ?? null,
+            'title' => $updatedProduct['title'],
+            'description' => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
+            'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
-            'sector'       => $updatedProduct['sector'] ?? null,
-            'image'        => $updatedProduct['image'] ?? null,
-            'price'        => $updatedProduct['price'] ?? 0,
-            'stock'        => $updatedProduct['stock'] ?? 0,
+            'sector' => $updatedProduct['sector'] ?? null,
+            'image' => $updatedProduct['image'] ?? null,
+            'price' => $updatedProduct['price'] ?? 0,
+            'stock' => $updatedProduct['stock'] ?? 0,
         ]);
 
         $product->syncSectorsFromCsv($product->sector);
@@ -469,17 +480,17 @@ class ProductService
                 continue;
             }
             $rows[] = [
-                'catalog'      => $p['catalog'] ?? null,
-                'title'        => $p['title'],
-                'description'  => HtmlSanitizer::clean($p['description'] ?? null),
-                'category'     => $p['category'],
+                'catalog' => $p['catalog'] ?? null,
+                'title' => $p['title'],
+                'description' => HtmlSanitizer::clean($p['description'] ?? null),
+                'category' => $p['category'],
                 'sub_category' => $p['sub_category'] ?? null,
-                'sector'       => $p['sector'] ?? null,
-                'image'        => $p['image'] ?? null,
-                'price'        => $p['price'] ?? 0,
-                'stock'        => $p['stock'] ?? 0,
-                'created_at'   => $now,
-                'updated_at'   => $now,
+                'sector' => $p['sector'] ?? null,
+                'image' => $p['image'] ?? null,
+                'price' => $p['price'] ?? 0,
+                'stock' => $p['stock'] ?? 0,
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 
@@ -497,6 +508,10 @@ class ProductService
             $titles = array_column($rows, 'title');
             Product::whereIn('title', $titles)->orderBy('id')->chunkById(100, function ($chunk) {
                 foreach ($chunk as $product) {
+                    if (empty($product->slug)) {
+                        $product->slug = Product::uniqueSlugFrom((string) $product->title, $product->id);
+                        $product->saveQuietly();
+                    }
                     $product->syncSectorsFromCsv($product->sector);
                 }
             });

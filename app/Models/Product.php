@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
     protected $fillable = [
         'catalog',
         'title',
+        'slug',
         'description',
         'category',
         'sub_category',
@@ -36,10 +38,16 @@ class Product extends Model
         ];
     }
 
+    /**
+     * Public product URLs use slug: /produk/{slug}
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     // ----------------------------------------------------
     // Relationships
-    // products.category / sub_category store ProductCategory.key (slug), not name
-    // products.sector CSV + product_sector pivot (both checked on read)
     // ----------------------------------------------------
     public function categoryRelation(): BelongsTo
     {
@@ -75,10 +83,6 @@ class Product extends Model
         return $query->where('category', $category);
     }
 
-    /**
-     * Match sector via pivot (preferred) OR legacy CSV column.
-     * Same semantics as the old client-side: sector.split(',').includes(id)
-     */
     public function scopeBySector(Builder $query, string $sector): Builder
     {
         $sector = trim($sector);
@@ -87,7 +91,6 @@ class Product extends Model
         }
 
         return $query->where(function (Builder $q) use ($sector) {
-            // 1) product_sector pivot
             $q->whereExists(function ($sub) use ($sector) {
                 $sub->select(DB::raw(1))
                     ->from('product_sector')
@@ -95,22 +98,17 @@ class Product extends Model
                     ->where('product_sector.sector_id', $sector);
             });
 
-            // 2) Legacy CSV on products.sector (exact, or token in list)
             $driver = $q->getConnection()->getDriverName();
             if ($driver === 'sqlite') {
                 $q->orWhere('sector', $sector)
                     ->orWhereRaw("',' || COALESCE(sector, '') || ',' LIKE ?", ["%,{$sector},%"]);
             } else {
-                // MySQL / MariaDB
                 $q->orWhere('sector', $sector)
                     ->orWhereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
             }
         });
     }
 
-    /**
-     * Full-text on MySQL/MariaDB; LIKE fallback elsewhere (SQLite dev).
-     */
     public function scopeSearch(Builder $query, string $term): Builder
     {
         $term = trim($term);
@@ -136,12 +134,35 @@ class Product extends Model
     }
 
     // ----------------------------------------------------
-    // Helpers
+    // Slug helpers
     // ----------------------------------------------------
 
     /**
-     * Parse CSV sector string into unique non-empty sector ids.
-     *
+     * Build a unique slug from a title (or other base string).
+     */
+    public static function uniqueSlugFrom(string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title);
+        if ($base === '') {
+            $base = 'product';
+        }
+
+        $slug = $base;
+        $i = 2;
+        while (true) {
+            $q = static::query()->where('slug', $slug);
+            if ($ignoreId !== null) {
+                $q->where('id', '!=', $ignoreId);
+            }
+            if (! $q->exists()) {
+                return $slug;
+            }
+            $slug = $base.'-'.$i;
+            $i++;
+        }
+    }
+
+    /**
      * @return list<string>
      */
     public static function parseSectorIds(?string $sectorCsv): array
@@ -155,9 +176,6 @@ class Product extends Model
         return array_values(array_unique(array_filter($ids, fn (string $id) => $id !== '')));
     }
 
-    /**
-     * Keep product_sector pivot in sync with the legacy CSV `sector` column.
-     */
     public function syncSectorsFromCsv(?string $sectorCsv = null): void
     {
         $this->sectors()->sync(self::parseSectorIds($sectorCsv ?? $this->sector));
@@ -175,9 +193,14 @@ class Product extends Model
             : 'Est. Penawaran';
     }
 
-    // ----------------------------------------------------
-    // Cache Eviction Lifecycle
-    // ----------------------------------------------------
+    /** Canonical public URL path segment. */
+    public function getUrlAttribute(): string
+    {
+        $slug = $this->slug ?: static::uniqueSlugFrom((string) $this->title, $this->id);
+
+        return url('/produk/'.$slug);
+    }
+
     public static function clearCategoriesCache(): void
     {
         Cache::forget('categories_structure');
@@ -185,6 +208,15 @@ class Product extends Model
 
     protected static function booted(): void
     {
+        static::saving(function (Product $product) {
+            if (empty($product->slug) || $product->isDirty('title')) {
+                $product->slug = static::uniqueSlugFrom(
+                    (string) ($product->title ?: 'product'),
+                    $product->id
+                );
+            }
+        });
+
         static::saved(function () {
             Cache::forget('categories_structure');
             try {
