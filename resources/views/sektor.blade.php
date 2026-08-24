@@ -190,11 +190,58 @@
     </div>
   </section>
 
+  @push('styles')
+  <style>
+    #sektor-main { position: relative; }
+    #sektor-main.is-loading { pointer-events: none; }
+    #sektor-main .ajax-loading-overlay {
+      position: absolute; inset: 0; z-index: 6;
+      display: none; align-items: flex-start; justify-content: center;
+      padding-top: 80px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(1px);
+      border-radius: 8px;
+    }
+    #sektor-main.is-loading .ajax-loading-overlay { display: flex; }
+    #sektor-main.is-loading > *:not(.ajax-loading-overlay) { opacity: 0.3; transition: opacity 0.15s; }
+    .ajax-spinner {
+      width: 36px; height: 36px;
+      border: 2px solid rgba(255,73,80,0.25);
+      border-top-color: var(--color-accent, #ff4950);
+      border-radius: 50%;
+      animation: ajax-spin 0.7s linear infinite;
+    }
+    @keyframes ajax-spin { to { transform: rotate(360deg); } }
+  </style>
+  @endpush
+
   @push('scripts')
   @include('partials.gsap-loader')
   <script>
     (function () {
       let fetchController = null;
+
+      function setSektorLoading(on) {
+        const main = document.getElementById('sektor-main');
+        if (!main) return;
+        main.classList.toggle('is-loading', !!on);
+        main.setAttribute('aria-busy', on ? 'true' : 'false');
+        let overlay = main.querySelector(':scope > .ajax-loading-overlay');
+        if (on) {
+          if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'ajax-loading-overlay';
+            overlay.setAttribute('aria-hidden', 'false');
+            overlay.innerHTML = '<div class="ajax-spinner" role="status" aria-label="Loading"></div>';
+            main.insertBefore(overlay, main.firstChild);
+          } else {
+            overlay.style.display = 'flex';
+            overlay.setAttribute('aria-hidden', 'false');
+          }
+        } else if (overlay) {
+          overlay.remove();
+        }
+      }
 
       function loadSektorAjax(url, updateHistory) {
         if (fetchController) {
@@ -202,12 +249,7 @@
         }
         fetchController = new AbortController();
 
-        const main = document.getElementById('sektor-main');
-        if (main) {
-          main.style.opacity = '0.45';
-          main.style.transition = 'opacity 0.15s ease-in-out';
-          main.style.pointerEvents = 'none';
-        }
+        setSektorLoading(true);
 
         fetch(url, {
           signal: fetchController.signal,
@@ -227,8 +269,7 @@
 
             if (curMain && newMain) {
               curMain.innerHTML = newMain.innerHTML;
-              curMain.style.opacity = '1';
-              curMain.style.pointerEvents = '';
+              setSektorLoading(false);
             }
             if (curSidebar && newSidebar) {
               curSidebar.innerHTML = newSidebar.innerHTML;
@@ -249,6 +290,7 @@
           })
           .catch(function (err) {
             if (err.name === 'AbortError') return;
+            setSektorLoading(false);
             console.error('Sektor AJAX failed, full navigation:', err);
             window.location.href = url;
           });
@@ -260,12 +302,10 @@
           return;
         }
 
-        // Only intercept same-origin /sektor links
         try {
           const u = new URL(link.href, window.location.origin);
           if (u.origin !== window.location.origin) return;
           if (!u.pathname.replace(/\/$/, '').endsWith('/sektor') && u.pathname !== '/sektor') {
-            // allow paths that contain sektor
             if (!u.pathname.includes('sektor')) return;
           }
         } catch (err) {
