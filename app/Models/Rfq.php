@@ -61,11 +61,12 @@ class Rfq extends Model
 
     public function getStatusBadgeClassAttribute(): string
     {
+        // Pakai admin-badge-* (dark-theme aware) supaya teks selalu terbaca
         return match ($this->status) {
-            self::STATUS_CONTACTED => 'bg-info bg-opacity-20 text-info border-info',
-            self::STATUS_QUOTED => 'bg-primary bg-opacity-20 text-primary border-primary',
-            self::STATUS_CLOSED => 'bg-secondary bg-opacity-20 text-secondary border-secondary',
-            default => 'bg-warning bg-opacity-20 text-warning border-warning',
+            self::STATUS_CONTACTED => 'admin-badge-info',
+            self::STATUS_QUOTED => 'admin-badge-accent',
+            self::STATUS_CLOSED => 'admin-badge-muted',
+            default => 'admin-badge-warning', // Baru — teks kuning + bg soft
         };
     }
 
