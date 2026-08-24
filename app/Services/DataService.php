@@ -63,6 +63,11 @@ class DataService
         return $this->products->getProductById($id);
     }
 
+    public function getProductBySlug(string $slug): ?Product
+    {
+        return $this->products->getProductBySlug($slug);
+    }
+
     public function addProduct(array $product): ?Product
     {
         return $this->products->addProduct($product);
