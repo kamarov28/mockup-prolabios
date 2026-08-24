@@ -39,6 +39,7 @@ class ProductService
 
     /**
      * Get the category and subcategory hierarchy structure.
+     * Uses ProductCategory.key (not a non-existent slug column).
      */
     public function getCategoriesStructure(): array
     {
@@ -133,14 +134,14 @@ class ProductService
 
                 $structure = [];
                 foreach ($categories as $category) {
-                    $slug = $category->slug ?: Str::slug($category->name);
+                    $key = $category->key ?: Str::slug($category->name);
                     $subs = [];
                     foreach ($category->children as $child) {
-                        $childSlug = $child->slug ?: Str::slug($child->name);
-                        $subs[$childSlug] = $child->name;
+                        $childKey = $child->key ?: Str::slug($child->name);
+                        $subs[$childKey] = $child->name;
                     }
 
-                    $structure[$slug] = [
+                    $structure[$key] = [
                         'name' => $category->name,
                         'subs' => $subs,
                     ];
@@ -153,22 +154,11 @@ class ProductService
         });
     }
 
-    public function getProducts(?array $filters = [], int $limit = 0): Collection
+    /**
+     * Apply common list filters (category, sub_category, search, sector).
+     */
+    protected function applyProductFilters($query, ?array $filters = []): void
     {
-        $cacheKey = 'products_list_'.md5(json_encode($filters).'_'.$limit);
-
-        $cached = Cache::get($cacheKey);
-        if ($cached instanceof \__PHP_Incomplete_Class || ($cached !== null && ! ($cached instanceof Collection))) {
-            Cache::forget($cacheKey);
-            $cached = null;
-        }
-
-        if ($cached instanceof Collection) {
-            return $cached;
-        }
-
-        $query = Product::query()->orderBy('id');
-
         if (! empty($filters['category'])) {
             $cat = $filters['category'];
             $catSlug = Str::slug($cat);
@@ -201,13 +191,26 @@ class ProductService
         }
 
         if (! empty($filters['sector'])) {
-            $sector = $filters['sector'];
-            if (DB::connection()->getDriverName() === 'sqlite') {
-                $query->whereRaw("',' || sector || ',' LIKE ?", ["%,{$sector},%"]);
-            } else {
-                $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
-            }
+            $query->bySector($filters['sector']);
         }
+    }
+
+    public function getProducts(?array $filters = [], int $limit = 0): Collection
+    {
+        $cacheKey = 'products_list_'.md5(json_encode($filters).'_'.$limit);
+
+        $cached = Cache::get($cacheKey);
+        if ($cached instanceof \__PHP_Incomplete_Class || ($cached !== null && ! ($cached instanceof Collection))) {
+            Cache::forget($cacheKey);
+            $cached = null;
+        }
+
+        if ($cached instanceof Collection) {
+            return $cached;
+        }
+
+        $query = Product::query()->orderBy('id');
+        $this->applyProductFilters($query, $filters);
 
         if ($limit > 0) {
             $query->limit($limit);
@@ -236,46 +239,7 @@ class ProductService
         }
 
         $query = Product::query()->orderBy('id');
-
-        if (! empty($filters['category'])) {
-            $cat = $filters['category'];
-            $catSlug = Str::slug($cat);
-            if ($catSlug === 'culture-media') {
-                $query->where(function ($q) use ($cat) {
-                    $q->where('category', $cat)
-                        ->orWhere('category', 'LIKE', '%Culture Media%')
-                        ->orWhere('sub_category', 'LIKE', '%Culture Media%');
-                });
-            } else {
-                $query->where('category', $cat);
-            }
-        }
-
-        if (! empty($filters['sub_category'])) {
-            $subCat = $filters['sub_category'];
-            $query->where(function ($q) use ($subCat) {
-                $q->where('sub_category', $subCat)
-                    ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
-            });
-        }
-
-        if (! empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('catalog', 'like', "%{$search}%");
-            });
-        }
-
-        if (! empty($filters['sector'])) {
-            $sector = $filters['sector'];
-            if (DB::connection()->getDriverName() === 'sqlite') {
-                $query->whereRaw("',' || sector || ',' LIKE ?", ["%,{$sector},%"]);
-            } else {
-                $query->whereRaw('FIND_IN_SET(?, sector) > 0', [$sector]);
-            }
-        }
+        $this->applyProductFilters($query, $filters);
 
         $result = $query->paginate($perPage)->withQueryString();
 
@@ -343,6 +307,8 @@ class ProductService
             'stock'          => $product['stock'] ?? 0,
         ]);
 
+        $created->syncSectorsFromCsv($created->sector);
+
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
@@ -369,6 +335,8 @@ class ProductService
             'stock'          => $updatedProduct['stock'] ?? 0,
         ]);
 
+        $product->syncSectorsFromCsv($product->sector);
+
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
@@ -393,6 +361,8 @@ class ProductService
             'price'        => $updatedProduct['price'] ?? 0,
             'stock'        => $updatedProduct['stock'] ?? 0,
         ]);
+
+        $product->syncSectorsFromCsv($product->sector);
 
         Product::clearCategoriesCache();
         $this->clearProductsCache();
@@ -478,6 +448,12 @@ class ProductService
                 ['title'],
                 ['catalog', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock', 'updated_at']
             );
+
+            // Re-sync pivot for all titles touched by this batch
+            $titles = array_column($rows, 'title');
+            Product::whereIn('title', $titles)->get()->each(function (Product $product) {
+                $product->syncSectorsFromCsv($product->sector);
+            });
         });
 
         Product::clearCategoriesCache();
