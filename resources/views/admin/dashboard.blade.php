@@ -66,8 +66,9 @@
               <thead>
                 <tr>
                   <th>Nomor RFQ</th>
+                  <th>Status</th>
                   <th>Pemohon &amp; Instansi</th>
-                  <th>Jumlah Produk</th>
+                  <th>Item</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -80,13 +81,14 @@
                       </a>
                     </td>
                     <td>
+                      <span class="admin-badge {{ $rfq->status_badge_class }}">{{ $rfq->status_label }}</span>
+                    </td>
+                    <td>
                       <strong class="d-block text-white" style="font-size: 0.85rem;">{{ $rfq->name }}</strong>
                       <span class="text-secondary small">{{ $rfq->company_name }}</span>
                     </td>
                     <td>
-                      <span class="badge bg-secondary bg-opacity-20 text-light border border-secondary border-opacity-30">
-                        {{ $rfq->items->count() }} Macam Produk
-                      </span>
+                      <span class="admin-badge admin-badge-muted">{{ $rfq->items->count() }} item</span>
                     </td>
                     <td>
                       <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-btn admin-btn-ghost admin-btn-sm">
@@ -132,30 +134,25 @@
               <tbody>
                 @foreach($recentProducts as $p)
                   <tr>
-                    <td class="cell-muted">{{ $p['catalog'] ?: '—' }}</td>
+                    <td class="cell-muted">{{ $p['catalog_no'] ?? '-' }}</td>
                     <td>
-                      <div class="d-flex align-items-center gap-3">
-                        <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}"
-                             style="width: 32px; height: 32px; object-fit: contain; background: rgba(255,255,255,0.03); border-radius: 4px; border: 1px solid var(--color-border);">
-                        <span class="cell-title">{{ $p['title'] }}</span>
-                      </div>
+                      <a href="{{ route('admin.products.edit', $p['id']) }}" class="cell-title text-decoration-none">{{ $p['title'] }}</a>
                     </td>
-                    <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category']) }}</span></td>
+                    <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category'] ?? '-') }}</span></td>
                   </tr>
                 @endforeach
               </tbody>
             </table>
           </div>
         @else
-          <div class="text-center py-5">
-            <i class="bi bi-box-seam" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
-            <p class="mt-3" style="color: var(--color-text-muted); font-size: 0.85rem;">Belum ada data produk.</p>
+          <div class="text-center py-4">
+            <p class="mb-0" style="color: var(--color-text-muted); font-size: 0.85rem;">Belum ada produk.</p>
           </div>
         @endif
       </div>
     </div>
 
-    {{-- Recent Articles --}}
+    {{-- Recent Posts --}}
     <div class="admin-card">
       <div class="admin-card-header">
         <div>
@@ -163,7 +160,7 @@
           <h2 class="admin-card-header-title">Artikel Terbaru</h2>
         </div>
         <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
-          <i class="bi bi-plus-lg"></i> Tulis
+          <i class="bi bi-plus-lg"></i> Tambah
         </a>
       </div>
       <div class="admin-card-body-flush">
@@ -172,7 +169,6 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Tanggal</th>
                   <th>Judul</th>
                   <th>Kategori</th>
                 </tr>
@@ -180,18 +176,18 @@
               <tbody>
                 @foreach($recentPosts as $post)
                   <tr>
-                    <td class="cell-muted" style="white-space: nowrap;">{{ $post['date'] }}</td>
-                    <td class="cell-title">{{ Str::limit($post['title'], 48) }}</td>
-                    <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] }}</span></td>
+                    <td>
+                      <a href="{{ route('admin.posts.edit', $post['slug']) }}" class="cell-title text-decoration-none">{{ $post['title'] }}</a>
+                    </td>
+                    <td><span class="admin-badge admin-badge-success text-capitalize">{{ $post['category'] ?? '-' }}</span></td>
                   </tr>
                 @endforeach
               </tbody>
             </table>
           </div>
         @else
-          <div class="text-center py-5">
-            <i class="bi bi-file-text" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
-            <p class="mt-3" style="color: var(--color-text-muted); font-size: 0.85rem;">Belum ada artikel diterbitkan.</p>
+          <div class="text-center py-4">
+            <p class="mb-0" style="color: var(--color-text-muted); font-size: 0.85rem;">Belum ada artikel.</p>
           </div>
         @endif
       </div>
@@ -201,8 +197,6 @@
 
   {{-- Right: Sync & Chart --}}
   <div class="col-lg-4 d-flex flex-column gap-4">
-
-
 
     {{-- Product Distribution Chart --}}
     <div class="admin-card">
@@ -218,57 +212,66 @@
         </div>
         <div class="w-100">
           @php
-            $colors = ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8', '#4ade80'];
-            $ci = 0; $cc = count($colors);
+            $colors = ['#FF4950', '#38bdf8', '#2ecc71', '#f59e0b', '#a78bfa', '#f472b6', '#94a3b8', '#fb923c', '#34d399', '#60a5fa'];
+            $i = 0;
           @endphp
-          @foreach($categoryDist as $catName => $count)
-            @php $col = $colors[$ci % $cc]; $ci++; @endphp
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
-              <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px; color: var(--color-text-muted);">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $col }}; flex-shrink: 0;"></span>
-                {{ $catName }}
+          @foreach($categoryDist as $label => $count)
+            <div class="d-flex align-items-center justify-content-between mb-2" style="font-size: 0.78rem;">
+              <span class="d-flex align-items-center gap-2" style="color: var(--color-text-muted);">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $colors[$i % count($colors)] }}; display: inline-block;"></span>
+                {{ $label }}
               </span>
-              <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">{{ $count }}</span>
+              <strong style="color: var(--color-text-main);">{{ $count }}</strong>
             </div>
+            @php $i++; @endphp
           @endforeach
         </div>
       </div>
     </div>
 
   </div>
+
 </div>
 
 @endsection
 
 @section('admin_scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-
-    // ── Doughnut Chart ────────────────────────────────────────────────────
-    const ctx = document.getElementById('categoryChart').getContext('2d');
+  (function () {
+    const labels = @json(array_keys($categoryDist));
+    const data = @json(array_values($categoryDist));
+    const colors = ['#FF4950', '#38bdf8', '#2ecc71', '#f59e0b', '#a78bfa', '#f472b6', '#94a3b8', '#fb923c', '#34d399', '#60a5fa'];
+    const ctx = document.getElementById('categoryChart');
+    if (!ctx) return;
     new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: {!! json_encode(array_keys($categoryDist)) !!},
+        labels,
         datasets: [{
-          data: {!! json_encode(array_values($categoryDist)) !!},
-          backgroundColor: ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8'],
-          hoverOffset: 6,
-          borderWidth: 2,
-          borderColor: '#0e0e10'
+          data,
+          backgroundColor: colors.slice(0, labels.length),
+          borderWidth: 0,
+          hoverOffset: 4
         }]
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        cutout: '72%'
+        maintainAspectRatio: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#141416',
+            titleColor: '#fff',
+            bodyColor: 'rgba(255,255,255,0.7)',
+            borderColor: 'rgba(255,255,255,0.08)',
+            borderWidth: 1,
+            padding: 10
+          }
+        },
+        cutout: '68%'
       }
     });
-
-
-
-  });
+  })();
 </script>
 @endsection
