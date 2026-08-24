@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\AuditLogger;
 use App\Services\DataService;
@@ -36,7 +37,7 @@ class AdminProductController extends Controller
 
     public function productsIndex(Request $request)
     {
-        $query = DB::table('products');
+        $query = Product::query();
 
         $search = $request->input('s');
         if ($search) {
@@ -54,10 +55,14 @@ class AdminProductController extends Controller
 
         $sector = $request->input('sector');
         if ($sector) {
-            $query->where(function ($q) use ($sector) {
-                $q->where('sector', $sector)
-                    ->orWhereRaw('FIND_IN_SET(?, sector)', [$sector]);
-            });
+            if (DB::connection()->getDriverName() === 'sqlite') {
+                $query->whereRaw("',' || sector || ',' LIKE ?", ["%,{$sector},%"]);
+            } else {
+                $query->where(function ($q) use ($sector) {
+                    $q->where('sector', $sector)
+                        ->orWhereRaw('FIND_IN_SET(?, sector)', [$sector]);
+                });
+            }
         }
 
         $startDate = $request->input('start_date');

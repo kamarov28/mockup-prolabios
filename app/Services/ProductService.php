@@ -328,9 +328,9 @@ class ProductService
         return $product;
     }
 
-    public function addProduct(array $product): bool
+    public function addProduct(array $product): ?Product
     {
-        DB::table('products')->insert([
+        $created = Product::create([
             'catalog'        => $product['catalog'] ?? null,
             'title'          => $product['title'],
             'description'    => HtmlSanitizer::clean($product['description'] ?? null),
@@ -338,21 +338,25 @@ class ProductService
             'sub_category'   => $product['sub_category'] ?? null,
             'sector'         => $product['sector'] ?? null,
             'image'          => $product['image'] ?? null,
-            'gallery_images' => ! empty($product['gallery_images']) ? json_encode(array_values($product['gallery_images'])) : null,
+            'gallery_images' => ! empty($product['gallery_images']) ? array_values($product['gallery_images']) : null,
             'price'          => $product['price'] ?? 0,
             'stock'          => $product['stock'] ?? 0,
-            'created_at'     => now(),
-            'updated_at'     => now(),
         ]);
+
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
-        return true;
+        return $created;
     }
 
     public function updateProductById(int $id, array $updatedProduct): bool
     {
-        DB::table('products')->where('id', $id)->update([
+        $product = Product::find($id);
+        if (! $product) {
+            return false;
+        }
+
+        $product->update([
             'catalog'        => $updatedProduct['catalog'] ?? null,
             'title'          => $updatedProduct['title'],
             'description'    => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
@@ -360,11 +364,11 @@ class ProductService
             'sub_category'   => $updatedProduct['sub_category'] ?? null,
             'sector'         => $updatedProduct['sector'] ?? null,
             'image'          => $updatedProduct['image'] ?? null,
-            'gallery_images' => ! empty($updatedProduct['gallery_images']) ? json_encode(array_values($updatedProduct['gallery_images'])) : null,
+            'gallery_images' => ! empty($updatedProduct['gallery_images']) ? array_values($updatedProduct['gallery_images']) : null,
             'price'          => $updatedProduct['price'] ?? 0,
             'stock'          => $updatedProduct['stock'] ?? 0,
-            'updated_at'     => now(),
         ]);
+
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
@@ -373,7 +377,12 @@ class ProductService
 
     public function updateProduct(string $oldTitle, array $updatedProduct): bool
     {
-        DB::table('products')->where('title', $oldTitle)->update([
+        $product = Product::where('title', $oldTitle)->first();
+        if (! $product) {
+            return false;
+        }
+
+        $product->update([
             'catalog'      => $updatedProduct['catalog'] ?? null,
             'title'        => $updatedProduct['title'],
             'description'  => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
@@ -383,8 +392,8 @@ class ProductService
             'image'        => $updatedProduct['image'] ?? null,
             'price'        => $updatedProduct['price'] ?? 0,
             'stock'        => $updatedProduct['stock'] ?? 0,
-            'updated_at'   => now(),
         ]);
+
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
@@ -394,8 +403,8 @@ class ProductService
     public function decrementStock(int|string $productIdOrTitle, int $quantity = 1): bool
     {
         $query = is_numeric($productIdOrTitle)
-            ? DB::table('products')->where('id', $productIdOrTitle)
-            : DB::table('products')->where('title', $productIdOrTitle);
+            ? Product::where('id', $productIdOrTitle)
+            : Product::where('title', $productIdOrTitle);
 
         $affected = (clone $query)->where('stock', '>=', $quantity)->decrement('stock', $quantity);
 
@@ -408,7 +417,11 @@ class ProductService
 
     public function deleteProductById(int $id): bool
     {
-        DB::table('products')->where('id', $id)->delete();
+        $product = Product::find($id);
+        if ($product) {
+            $product->delete();
+        }
+
         $this->clearProductsCache();
         Product::clearCategoriesCache();
 
@@ -417,7 +430,11 @@ class ProductService
 
     public function deleteProduct(string $title): bool
     {
-        DB::table('products')->where('title', $title)->delete();
+        $product = Product::where('title', $title)->first();
+        if ($product) {
+            $product->delete();
+        }
+
         $this->clearProductsCache();
         Product::clearCategoriesCache();
 
@@ -456,7 +473,7 @@ class ProductService
         }
 
         DB::transaction(function () use ($rows) {
-            DB::table('products')->upsert(
+            Product::upsert(
                 $rows,
                 ['title'],
                 ['catalog', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock', 'updated_at']

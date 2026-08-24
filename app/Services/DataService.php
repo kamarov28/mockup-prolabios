@@ -63,7 +63,7 @@ class DataService
         return $this->products->getProductById($id);
     }
 
-    public function addProduct(array $product): bool
+    public function addProduct(array $product): ?Product
     {
         return $this->products->addProduct($product);
     }
