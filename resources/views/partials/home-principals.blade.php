@@ -48,12 +48,16 @@
     });
   @endphp
   @if(!empty($activePrincipals))
-    <div class="marquee-container" style="position: relative; display: flex; overflow: hidden; user-select: none; padding: 1.5rem 0;">
-      <div class="marquee-content" style="display: flex; flex-shrink: 0; gap: 3rem; align-items: center; animation: marquee 40s linear infinite;">
-        @foreach(array_merge($activePrincipals, $activePrincipals) as $pr)
-          <div class="marquee-item" style="flex-shrink: 0; height: 48px; display: flex; align-items: center; justify-content: center; opacity: 0.85; filter: grayscale(100%) brightness(1.2); transition: all 0.3s ease;">
-            <img src="{{ $pr['logo'] ?? asset('images/placeholder.svg') }}" alt="{{ $pr['name'] ?? 'Partner' }}" style="max-height: 40px; max-width: 140px; object-fit: contain;" loading="lazy" decoding="async">
-          </div>
+    <div class="marquee-container" style="position: relative; display: flex; overflow: hidden; user-select: none; padding: 15px 0;">
+      <div class="marquee-content">
+        <!-- Loop 1 -->
+        @foreach($activePrincipals as $pr)
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
+        @endforeach
+
+        <!-- Loop 2 (seamless infinite marquee) -->
+        @foreach($activePrincipals as $pr)
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
         @endforeach
       </div>
     </div>
