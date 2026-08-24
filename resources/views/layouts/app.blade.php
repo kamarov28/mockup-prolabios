@@ -32,6 +32,7 @@
 
   <!-- Custom CSS via Vite -->
   @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
+  <link rel="stylesheet" href="{{ asset('css/sticky-sidebar.css') }}">
 
   @stack('styles')
 

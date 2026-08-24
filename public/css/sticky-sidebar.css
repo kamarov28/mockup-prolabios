@@ -1,0 +1,30 @@
+/* Sticky catalog / sector left sidebar — follows scroll on desktop */
+@media (min-width: 768px) {
+  .page-sidebar-sticky {
+    position: sticky;
+    top: 96px; /* below fixed floating navbar */
+    align-self: flex-start;
+    max-height: calc(100vh - 112px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    z-index: 5;
+    scrollbar-width: thin;
+  }
+
+  .page-sidebar-sticky::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .page-sidebar-sticky::-webkit-scrollbar-thumb {
+    background: var(--color-border, rgba(255, 255, 255, 0.08));
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-sidebar-sticky {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
