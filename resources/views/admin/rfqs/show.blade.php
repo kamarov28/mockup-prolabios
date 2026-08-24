@@ -5,18 +5,25 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+@if(session('success'))
+  <div class="alert alert-success border-0 mb-4" style="background: rgba(25,135,84,0.15); color: #75b798;">
+    {{ session('success') }}
+  </div>
+@endif
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
   <div>
     <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost mb-2">
       <i class="bi bi-arrow-left"></i> Kembali ke Daftar RFQ
     </a>
-    <h1 class="h3 fw-bold text-white mb-0" style="font-family: var(--font-headline);">
+    <h1 class="h3 fw-bold text-white mb-2" style="font-family: var(--font-headline);">
       {{ $rfq->rfq_number }}
+      <span class="badge border ms-2 px-2 py-1 fs-6 {{ $rfq->status_badge_class }}">{{ $rfq->status_label }}</span>
     </h1>
   </div>
-  <div class="d-inline-flex gap-2">
-    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rfq->phone_wa) }}?text=Halo%20{{ urlencode($rfq->name) }}%20dari%20{{ urlencode($rfq->company_name) }},%20kami%20dari%20Tim%20Sales%20Prolabios%20terkait%20pengajuan%20penawaran%20{{ $rfq->rfq_number }}" 
-       target="_blank" class="admin-btn admin-btn-primary" style="background: #25D366; border-color: #25D366;">
+  <div class="d-inline-flex gap-2 flex-wrap">
+    <a href="{{ $rfq->whatsapp_url }}"
+       target="_blank" rel="noopener" class="admin-btn admin-btn-primary" style="background: #25D366; border-color: #25D366;">
       <i class="bi bi-whatsapp"></i> Hubungi Customer via WA
     </a>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-ghost">
@@ -27,7 +34,6 @@
 
 <div class="row g-4">
 
-  {{-- Left Column: Products List --}}
   <div class="col-lg-8">
     <div class="admin-card">
       <div class="admin-card-header">
@@ -55,7 +61,7 @@
             <tbody>
               @php $totalEst = 0; @endphp
               @foreach($rfq->items as $item)
-                @php 
+                @php
                   $lineTotal = $item->original_price * $item->quantity;
                   $totalEst += $lineTotal;
                   $stockVal = $item->product ? (int)$item->product->stock : 0;
@@ -108,13 +114,48 @@
     </div>
   </div>
 
-  {{-- Right Column: Customer Info & Notes --}}
   <div class="col-lg-4">
     <div class="admin-card mb-4">
       <div class="admin-card-header">
         <div>
+          <span class="admin-card-header-label">Follow-up Sales</span>
+          <h2 class="admin-card-header-title">Status & Catatan Internal</h2>
+        </div>
+      </div>
+      <div class="admin-card-body">
+        <form action="{{ route('admin.rfqs.update', $rfq->id) }}" method="POST">
+          @csrf
+          @method('PUT')
+          <div class="mb-3">
+            <label class="form-label text-secondary small">Status pengajuan</label>
+            <select name="status" class="form-select" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
+              @foreach(\App\Models\Rfq::statusOptions() as $value => $label)
+                <option value="{{ $value }}" @selected(old('status', $rfq->status ?: 'new') === $value)>{{ $label }}</option>
+              @endforeach
+            </select>
+            @error('status')
+              <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-secondary small">Catatan internal (tidak terlihat customer)</label>
+            <textarea name="admin_notes" rows="4" class="form-control" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);" placeholder="Mis. sudah telepon 24/08, tunggu PO, dll.">{{ old('admin_notes', $rfq->admin_notes) }}</textarea>
+            @error('admin_notes')
+              <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+          </div>
+          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
+            <i class="bi bi-check2 me-1"></i> Simpan Status
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="admin-card mb-4">
+      <div class="admin-card-header">
+        <div>
           <span class="admin-card-header-label">Profil Pemohon</span>
-          <h2 class="admin-card-header-title">Data Kontak &amp; Instansi</h2>
+          <h2 class="admin-card-header-title">Data Kontak & Instansi</h2>
         </div>
       </div>
 
@@ -138,7 +179,7 @@
 
         <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
           <span class="text-secondary small d-block mb-1">Nomor WhatsApp:</span>
-          <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $rfq->phone_wa) }}" target="_blank" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
+          <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
             <i class="bi bi-whatsapp"></i> {{ $rfq->phone_wa }}
           </a>
         </div>
@@ -157,7 +198,6 @@
       </div>
     </div>
 
-    {{-- Delete Action --}}
     <div class="admin-card">
       <div class="admin-card-body">
         <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pengajuan ini?');">

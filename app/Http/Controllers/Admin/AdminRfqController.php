@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rfq;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdminRfqController extends Controller
 {
@@ -22,6 +23,11 @@ class AdminRfqController extends Controller
                     ->orWhere('company_name', 'like', "%{$search}%")
                     ->orWhere('phone_wa', 'like', "%{$search}%");
             });
+        }
+
+        $status = $request->input('status');
+        if ($status && array_key_exists($status, Rfq::statusOptions())) {
+            $query->where('status', $status);
         }
 
         $startDate = $request->input('start_date');
@@ -43,6 +49,30 @@ class AdminRfqController extends Controller
         $rfq = Rfq::with(['items.product'])->findOrFail($id);
 
         return view('admin.rfqs.show', compact('rfq'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $rfq = Rfq::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(array_keys(Rfq::statusOptions()))],
+            'admin_notes' => ['nullable', 'string', 'max:5000'],
+        ]);
+
+        $rfq->update([
+            'status' => $validated['status'],
+            'admin_notes' => $validated['admin_notes'] ?? null,
+        ]);
+
+        AuditLogger::log('rfq.update', 'Rfq', $id, [
+            'rfq_number' => $rfq->rfq_number,
+            'status' => $rfq->status,
+        ]);
+
+        return redirect()
+            ->route('admin.rfqs.show', $rfq->id)
+            ->with('success', 'Status & catatan internal RFQ berhasil disimpan.');
     }
 
     public function destroy(int $id)

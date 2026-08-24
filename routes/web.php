@@ -17,29 +17,18 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
 
-// ----------------------------------------------------
-// SEO & Crawlers
-// ----------------------------------------------------
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('seo.sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('seo.robots');
 
-// ----------------------------------------------------
-// System Health & Monitoring
-// ----------------------------------------------------
 Route::get('/health', [HealthController::class, 'check'])->name('system.health');
 
-// ----------------------------------------------------
-// Public Frontend Routes
-// ----------------------------------------------------
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/profil', [PageController::class, 'profil']);
 Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
 
-// Legacy query-string detail (?id=) → 301 to /produk/{slug}
 Route::get('/produk/detail', [PageController::class, 'detailProdukLegacy'])->name('produk.detail.legacy');
 Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
 
-// Canonical product detail by slug (must stay after /produk/detail & /produk/beli)
 Route::get('/produk/{slug}', [PageController::class, 'detailProduk'])
     ->where('slug', '[A-Za-z0-9\-]+')
     ->name('produk.detail');
@@ -54,16 +43,10 @@ Route::post('/kontak', [ContactController::class, 'submit'])
     ->middleware('throttle:contact-form')
     ->name('contact.submit');
 
-// ----------------------------------------------------
-// Admin Login Routes
-// ----------------------------------------------------
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:admin-login');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-// ----------------------------------------------------
-// Cart & B2B RFQ Routes
-// ----------------------------------------------------
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
@@ -74,9 +57,6 @@ Route::get('/rfq/checkout', [RfqController::class, 'checkout'])->name('rfq.check
 Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:rfq-submission')->name('rfq.store');
 Route::get('/rfq/success/{number}', [RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
 
-// ----------------------------------------------------
-// Protected Admin Panel Routes
-// ----------------------------------------------------
 Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
 
@@ -126,5 +106,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
 
     Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
     Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
+    Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
     Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');
 });
