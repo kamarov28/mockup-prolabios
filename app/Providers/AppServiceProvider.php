@@ -105,21 +105,28 @@ class AppServiceProvider extends ServiceProvider
             $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
                 $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
                 try {
-                    $productTitles = DB::table('products')->pluck('title')->toArray();
+                    // Cap rows — full pluck of every title is O(n) memory on large catalogs
+                    $productTitles = DB::table('products')
+                        ->orderByDesc('id')
+                        ->limit(200)
+                        ->pluck('title')
+                        ->toArray();
+
                     if (! empty($productTitles)) {
                         $wordsList = [];
+                        $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'];
                         foreach ($productTitles as $title) {
                             $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
                             $words = explode(' ', $clean);
                             foreach ($words as $word) {
                                 $word = trim($word);
-                                if (strlen($word) > 3 && ! in_array(strtolower($word), ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'])) {
+                                if (strlen($word) > 3 && ! in_array(strtolower($word), $skip, true)) {
                                     $wordsList[] = $word;
                                 }
                             }
                         }
                         if (! empty($wordsList)) {
-                            return array_slice(array_unique($wordsList), 0, 7);
+                            return array_slice(array_values(array_unique($wordsList)), 0, 7);
                         }
                     }
                 } catch (\Exception $e) {

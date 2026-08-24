@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Helpers\HtmlSanitizer;
 use App\Models\Product;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,25 @@ use Illuminate\Support\Str;
 
 class ProductService
 {
+    /** Columns needed for public catalog / sector listings (avoid SELECT *). */
+    protected function listColumns(): array
+    {
+        return [
+            'id',
+            'catalog',
+            'title',
+            'description',
+            'category',
+            'sub_category',
+            'sector',
+            'image',
+            'price',
+            'stock',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
     /**
      * Get the current products cache version integer.
      */
@@ -20,8 +40,7 @@ class ProductService
     }
 
     /**
-     * Clear all product-related cache entries including individual product lookups.
-     * Increments the cache version to instantly invalidate getProductById and getProductByTitle keys.
+     * Bump version so all versioned product list/detail keys miss immediately.
      */
     public function clearProductsCache(): void
     {
@@ -35,6 +54,20 @@ class ProductService
         } catch (\Throwable $e) {
             Cache::put('products_cache_version', time());
         }
+    }
+
+    /**
+     * Rehydrate Product models from cached attribute arrays
+     * (compatible with cache.serializable_classes = false).
+     *
+     * @param  list<array<string, mixed>>  $rows
+     * @return Collection<int, Product>
+     */
+    protected function hydrateProducts(array $rows): Collection
+    {
+        return collect($rows)->map(
+            fn (array $attrs) => (new Product)->newFromBuilder($attrs)
+        );
     }
 
     /**
@@ -175,19 +208,15 @@ class ProductService
 
         if (! empty($filters['sub_category'])) {
             $subCat = $filters['sub_category'];
+            // Prefer exact key/name match (index-friendly); keep loose match as secondary
             $query->where(function ($q) use ($subCat) {
                 $q->where('sub_category', $subCat)
-                    ->orWhere('sub_category', 'LIKE', "%{$subCat}%");
+                    ->orWhere('sub_category', 'LIKE', $subCat.'%');
             });
         }
 
         if (! empty($filters['search'])) {
-            $search = $filters['search'];
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('catalog', 'like', "%{$search}%");
-            });
+            $query->search((string) $filters['search']);
         }
 
         if (! empty($filters['sector'])) {
@@ -197,19 +226,18 @@ class ProductService
 
     public function getProducts(?array $filters = [], int $limit = 0): Collection
     {
-        $cacheKey = 'products_list_'.md5(json_encode($filters).'_'.$limit);
+        $v = self::getProductsCacheVersion();
+        $cacheKey = 'products_list_'.$v.'_'.md5(json_encode($filters).'_'.$limit);
 
         $cached = Cache::get($cacheKey);
-        if ($cached instanceof \__PHP_Incomplete_Class || ($cached !== null && ! ($cached instanceof Collection))) {
-            Cache::forget($cacheKey);
-            $cached = null;
+        if (is_array($cached)) {
+            return $this->hydrateProducts($cached);
         }
 
-        if ($cached instanceof Collection) {
-            return $cached;
-        }
+        $query = Product::query()
+            ->select($this->listColumns())
+            ->orderBy('id');
 
-        $query = Product::query()->orderBy('id');
         $this->applyProductFilters($query, $filters);
 
         if ($limit > 0) {
@@ -218,34 +246,51 @@ class ProductService
 
         $result = $query->get();
 
-        Cache::put($cacheKey, $result, 300);
+        Cache::put(
+            $cacheKey,
+            $result->map(fn (Product $p) => $p->getAttributes())->all(),
+            300
+        );
 
         return $result;
     }
 
     public function getPaginatedProducts(?array $filters = [], int $perPage = 12)
     {
-        $page = (int) request()->input('page', 1);
-        $cacheKey = 'products_paginated_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
+        $v = self::getProductsCacheVersion();
+        $page = max(1, (int) request()->input('page', 1));
+        $cacheKey = 'products_paginated_'.$v.'_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
 
         $cached = Cache::get($cacheKey);
-        if ($cached instanceof \__PHP_Incomplete_Class) {
-            Cache::forget($cacheKey);
-            $cached = null;
+        if (is_array($cached) && isset($cached['total'], $cached['items']) && is_array($cached['items'])) {
+            $items = $this->hydrateProducts($cached['items']);
+
+            return (new LengthAwarePaginator(
+                $items,
+                (int) $cached['total'],
+                $perPage,
+                $page,
+                [
+                    'path'  => request()->url(),
+                    'query' => request()->query(),
+                ]
+            ))->withQueryString();
         }
 
-        if ($cached) {
-            return $cached;
-        }
+        $query = Product::query()
+            ->select($this->listColumns())
+            ->orderBy('id');
 
-        $query = Product::query()->orderBy('id');
         $this->applyProductFilters($query, $filters);
 
-        $result = $query->paginate($perPage)->withQueryString();
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->withQueryString();
 
-        Cache::put($cacheKey, $result, 300);
+        Cache::put($cacheKey, [
+            'total' => $paginator->total(),
+            'items' => $paginator->getCollection()->map(fn (Product $p) => $p->getAttributes())->all(),
+        ], 300);
 
-        return $result;
+        return $paginator;
     }
 
     public function getProductByTitle(string $title): ?Product
@@ -253,9 +298,9 @@ class ProductService
         $v = self::getProductsCacheVersion();
         $cacheKey = "product_by_title_{$v}_".md5($title);
         $cached = Cache::get($cacheKey);
-        if ($cached instanceof \__PHP_Incomplete_Class) {
-            Cache::forget($cacheKey);
-            $cached = null;
+
+        if (is_array($cached)) {
+            return (new Product)->newFromBuilder($cached);
         }
 
         if ($cached instanceof Product) {
@@ -264,7 +309,7 @@ class ProductService
 
         $product = Product::where('title', $title)->first();
         if ($product) {
-            Cache::put($cacheKey, $product, 600);
+            Cache::put($cacheKey, $product->getAttributes(), 600);
         }
 
         return $product;
@@ -275,9 +320,9 @@ class ProductService
         $v = self::getProductsCacheVersion();
         $cacheKey = "product_by_id_{$v}_".$id;
         $cached = Cache::get($cacheKey);
-        if ($cached instanceof \__PHP_Incomplete_Class) {
-            Cache::forget($cacheKey);
-            $cached = null;
+
+        if (is_array($cached)) {
+            return (new Product)->newFromBuilder($cached);
         }
 
         if ($cached instanceof Product) {
@@ -286,7 +331,7 @@ class ProductService
 
         $product = Product::find($id);
         if ($product) {
-            Cache::put($cacheKey, $product, 600);
+            Cache::put($cacheKey, $product->getAttributes(), 600);
         }
 
         return $product;
@@ -449,10 +494,11 @@ class ProductService
                 ['catalog', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock', 'updated_at']
             );
 
-            // Re-sync pivot for all titles touched by this batch
             $titles = array_column($rows, 'title');
-            Product::whereIn('title', $titles)->get()->each(function (Product $product) {
-                $product->syncSectorsFromCsv($product->sector);
+            Product::whereIn('title', $titles)->orderBy('id')->chunkById(100, function ($chunk) {
+                foreach ($chunk as $product) {
+                    $product->syncSectorsFromCsv($product->sector);
+                }
             });
         });
 

@@ -137,6 +137,10 @@
               <p style="color: var(--color-text-muted); font-size: 0.9rem; padding: 16px 0; border-top: 1px solid var(--color-border);">
                 Belum ada produk spesifik untuk sektor ini. <a href="{{ url('/produk') }}" style="color: var(--color-accent);">Lihat semua produk kami</a>.
               </p>
+            @else
+              <div class="d-flex justify-content-center mt-4">
+                {{ $products->appends(request()->except('page'))->fragment('sektor-nav')->links('pagination::bootstrap-5') }}
+              </div>
             @endif
 
             <hr style="border-color: var(--color-border); margin: 48px 0;">
@@ -144,32 +148,31 @@
             <!-- Related Products -->
             <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Related Product</h3>
             <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
-              @if(isset($products) && count($products) > 0)
-                @php
-                  $related = collect($products)->filter(function($p) use ($currentData) {
-                      return isset($p['sector']) && $p['sector'] != $currentData['id'];
-                  })->shuffle()->take(3);
-                @endphp
-                @foreach($related as $prod)
-                  <div class="col">
-                    <div class="card h-100 product-card-premium border-0">
-                      <div class="img-wrap">
-                        <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Sector Product &amp; Analytical Instrument" loading="lazy" decoding="async">
-                      </div>
-                      <div class="card-body p-3">
-                        @if(!empty($prod['catalog']))
-                          <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
-                        @endif
-                        <h4 class="card-title fs-6 fw-bold">
-                          <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
-                        </h4>
-                        <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 16px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
-                        <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
-                      </div>
+              @php
+                $related = $relatedProducts ?? collect();
+                if ($related->isEmpty() && isset($products) && count($products) > 0) {
+                    $related = collect($products)->take(3);
+                }
+              @endphp
+              @foreach($related as $prod)
+                <div class="col">
+                  <div class="card h-100 product-card-premium border-0">
+                    <div class="img-wrap">
+                      <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Sector Product & Analytical Instrument" loading="lazy" decoding="async">
+                    </div>
+                    <div class="card-body p-3">
+                      @if(!empty($prod['catalog']))
+                        <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
+                      @endif
+                      <h4 class="card-title fs-6 fw-bold">
+                        <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
+                      </h4>
+                      <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 16px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
+                      <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
                     </div>
                   </div>
-                @endforeach
-              @endif
+                </div>
+              @endforeach
             </div>
 
             <!-- Mobile-only CTA Box -->
@@ -188,133 +191,9 @@
   @include('partials.gsap-loader')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-
-
-      function decodeHtmlEntity(str) {
-        if (!str) return '';
-        const txt = document.createElement("textarea");
-        txt.innerHTML = str;
-        return txt.value;
+      if (typeof initGSAPAnimations === 'function') {
+        initGSAPAnimations();
       }
-
-      const sectors = @json($sectors);
-      const products = @json($products);
-      const detailProductUrl = "{{ url('/produk/detail') }}";
-      const allProductsUrl = "{{ url('/produk') }}";
-
-      const sidebarLinks = document.querySelectorAll('#sektor-nav .layanan-sidebar-link');
-      const contentArea = document.querySelector('#sektor-nav .col-lg-9');
-
-      sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const urlObj = new URL(this.href);
-          const sectorId = urlObj.searchParams.get('s');
-          if (!sectorId) return;
-          let sector = sectors.find(s => s.id === sectorId);
-          if (!sector && sectors.length > 0) {
-            sector = sectors[0];
-          }
-          if (!sector) return;
-
-          sidebarLinks.forEach(l => l.classList.remove('is-active'));
-          const matchingLink = Array.from(sidebarLinks).find(l => {
-            const u = new URL(l.href);
-            return u.searchParams.get('s') === sector.id;
-          }) || this;
-          matchingLink.classList.add('is-active');
-
-          const titleEl = contentArea.querySelector('.profil-section-title');
-          if (titleEl) titleEl.textContent = sector.name;
-
-          const imgEl = contentArea.querySelector('.profil-hero-img img');
-          if (imgEl) {
-            let sectorImg = sector.image || "{{ $defaultImage }}";
-            if (sectorImg.startsWith('/')) sectorImg = "{{ url('/') }}" + sectorImg;
-            imgEl.src = sectorImg;
-            imgEl.alt = sector.name + ' Sector';
-          }
-
-          // Update description paragraphs
-          const bodyTexts = contentArea.querySelectorAll('p.profil-body-text');
-          const firstHr = contentArea.querySelector('hr');
-          bodyTexts.forEach(p => { if (firstHr && p.compareDocumentPosition(firstHr) & Node.DOCUMENT_POSITION_FOLLOWING) p.remove(); });
-
-          if (firstHr && titleEl) {
-            if (sector.description && sector.description.length > 0) {
-              [...sector.description].reverse().forEach(descText => {
-                const p = document.createElement('p');
-                p.className = 'profil-body-text mb-4';
-                p.textContent = descText;
-                titleEl.parentNode.insertBefore(p, firstHr);
-              });
-            } else {
-              const p2 = document.createElement('p');
-              p2.className = 'profil-body-text mb-4';
-              p2.textContent = 'Jelajahi rangkaian produk spesifik yang kami tawarkan untuk memenuhi kebutuhan pengujian harian laboratorium Anda.';
-
-              const p1 = document.createElement('p');
-              p1.className = 'profil-body-text mb-4';
-              p1.appendChild(document.createTextNode('Kami menyediakan berbagai solusi mutakhir untuk mendukung aktivitas dan pengujian di sektor '));
-              const strong = document.createElement('strong');
-              strong.textContent = sector.name;
-              p1.appendChild(strong);
-              p1.appendChild(document.createTextNode('.'));
-
-              titleEl.parentNode.insertBefore(p2, firstHr);
-              titleEl.parentNode.insertBefore(p1, firstHr);
-            }
-          }
-
-          // Update product table
-          const tbody = contentArea.querySelector('table tbody');
-          if (tbody) {
-            tbody.innerHTML = '';
-            const sectorProducts = products.filter(p => p.sector && p.sector.split(',').includes(sector.id));
-            sectorProducts.forEach(prod => {
-              const tr = document.createElement('tr');
-
-              const tdCatalog = document.createElement('td');
-              tdCatalog.style.cssText = 'color: var(--color-text-muted); font-size: 0.82rem;';
-              tdCatalog.textContent = prod.catalog || '-';
-
-              const tdTitle = document.createElement('td');
-              const aTitle = document.createElement('a');
-              aTitle.href = detailProductUrl + '?id=' + encodeURIComponent(prod.id || '');
-              aTitle.className = 'text-decoration-none fw-semibold';
-              aTitle.style.color = 'var(--color-accent)';
-              aTitle.textContent = prod.title || '';
-              tdTitle.appendChild(aTitle);
-
-              const tdDesc = document.createElement('td');
-              tdDesc.style.cssText = 'color: var(--color-text-muted); font-size: 0.88rem;';
-              const cleanDesc = (decodeHtmlEntity(prod.description || '').replace(/<\/?[^>]+(>|$)/g, '').trim()).substring(0, 150) || '-';
-              tdDesc.textContent = cleanDesc;
-
-              tr.appendChild(tdCatalog);
-              tr.appendChild(tdTitle);
-              tr.appendChild(tdDesc);
-              tbody.appendChild(tr);
-            });
-          }
-
-          history.pushState(null, '', window.location.pathname + '?s=' + sector.id);
-
-          if (typeof initGSAPAnimations === 'function') {
-            initGSAPAnimations();
-          }
-        });
-      });
-
-      window.addEventListener('popstate', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const sectorId = urlParams.get('s') || 'brewing';
-        const activeLink = Array.from(sidebarLinks).find(link => {
-          const urlObj = new URL(link.href);
-          return urlObj.searchParams.get('s') === sectorId;
-        });
-        if (activeLink) activeLink.dispatchEvent(new Event('click'));
-      });
     });
   </script>
   @endpush
