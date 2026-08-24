@@ -3,27 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Principal;
 use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class AdminPrincipalController extends Controller
 {
     use HandlesImageUploads;
 
+    /** Cache key must match resources/views/partials/home-principals.blade.php */
+    private const ACTIVE_PRINCIPALS_CACHE = 'active_principals_v5';
+
     public function index(Request $request)
     {
         $search = $request->input('s');
-        $query = DB::table('principals');
 
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('address', 'like', "%{$search}%");
-        }
-
-        $principals = $query->orderBy('name', 'asc')->get();
+        $principals = Principal::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('address', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('name')
+            ->get();
 
         return view('admin.principals.index', compact('principals', 'search'));
     }
@@ -36,24 +41,25 @@ class AdminPrincipalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:online,draft',
+            'name'    => 'required|string|max:255',
+            'address' => 'nullable|string|max:1000',
+            'status'  => 'required|in:online,draft',
         ]);
 
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', null);
 
-        $id = DB::table('principals')->insertGetId([
-            'name' => $request->input('name'),
+        $principal = Principal::create([
+            'name'    => $request->input('name'),
             'address' => $request->input('address'),
-            'logo' => $logo,
-            'status' => $request->input('status', 'online'),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'logo'    => $logo,
+            'status'  => $request->input('status', 'online'),
         ]);
 
-        AuditLogger::log('principal.create', 'Principal', $id, [
-            'name' => $request->input('name'),
-            'status' => $request->input('status', 'online'),
+        Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+
+        AuditLogger::log('principal.create', 'Principal', $principal->id, [
+            'name'   => $principal->name,
+            'status' => $principal->status,
         ]);
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra baru berhasil ditambahkan!');
@@ -61,7 +67,7 @@ class AdminPrincipalController extends Controller
 
     public function edit(int $id)
     {
-        $principal = DB::table('principals')->where('id', $id)->first();
+        $principal = Principal::find($id);
         if (! $principal) {
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
@@ -71,32 +77,34 @@ class AdminPrincipalController extends Controller
 
     public function update(Request $request, int $id)
     {
-        $principal = DB::table('principals')->where('id', $id)->first();
+        $principal = Principal::find($id);
         if (! $principal) {
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:online,draft',
+            'name'    => 'required|string|max:255',
+            'address' => 'nullable|string|max:1000',
+            'status'  => 'required|in:online,draft',
         ]);
 
-        $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', $principal->logo ?? null);
+        $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', $principal->logo);
 
-        DB::table('principals')->where('id', $id)->update([
-            'name' => $request->input('name'),
+        $oldName = $principal->name;
+
+        $principal->update([
+            'name'    => $request->input('name'),
             'address' => $request->input('address'),
-            'logo' => $logo,
-            'status' => $request->input('status', 'online'),
-            'updated_at' => now(),
+            'logo'    => $logo,
+            'status'  => $request->input('status', 'online'),
         ]);
 
-        Cache::forget('active_principals_v4');
+        Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
 
-        AuditLogger::log('principal.update', 'Principal', $id, [
-            'old_name' => $principal->name,
-            'new_name' => $request->input('name'),
-            'status' => $request->input('status', 'online'),
+        AuditLogger::log('principal.update', 'Principal', $principal->id, [
+            'old_name' => $oldName,
+            'new_name' => $principal->name,
+            'status'   => $principal->status,
         ]);
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra berhasil diperbarui!');
@@ -104,11 +112,14 @@ class AdminPrincipalController extends Controller
 
     public function destroy(int $id)
     {
-        $principal = DB::table('principals')->where('id', $id)->first();
+        $principal = Principal::find($id);
         $name = $principal?->name;
 
-        DB::table('principals')->where('id', $id)->delete();
-        Cache::forget('active_principals_v4');
+        if ($principal) {
+            $principal->delete();
+        }
+
+        Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
 
         AuditLogger::log('principal.delete', 'Principal', $id, [
             'name' => $name,
