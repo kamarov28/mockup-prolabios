@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\HomepageSetting;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +41,7 @@ class HomepageService
         $default = $this->getDefaultHomepageData();
 
         try {
-            $rows = DB::table('homepage_settings')->pluck('value', 'key')->toArray();
+            $rows = HomepageSetting::query()->pluck('value', 'key')->toArray();
         } catch (\Exception $e) {
             // Table not yet created (first boot before migrate) – fall back to defaults
             return $default;
@@ -78,7 +79,7 @@ class HomepageService
 
                 $encoded = is_array($val) ? json_encode($val, JSON_UNESCAPED_UNICODE) : $val;
 
-                DB::table('homepage_settings')->upsert(
+                HomepageSetting::query()->upsert(
                     [
                         'key'        => $key,
                         'value'      => $encoded,

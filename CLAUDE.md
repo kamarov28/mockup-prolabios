@@ -54,11 +54,14 @@ php artisan db:backup
 **PT. Prolabios Mitra Analitika** is a B2B E-Procurement & Request for Quotation (RFQ) platform built on **Laravel 13.x**, PHP 8.3+, Tailwind CSS v4, and Vite.
 
 ### Core Domain: B2B RFQ Workflow
-1. **Catalog Carting (AJAX / Session)**: Buyers add products to RFQ cart (`/cart`, `CartController`).
-2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (NIB/NPWP, corporate email, PIC). Dispatches asynchronous jobs for receipt and admin notifications (`app/Jobs/SendRfq*Job.php`).
-3. **Admin Feedback & Pricing Matrix (`AdminRfqController`)**: Sales teams override unit prices, add volume discounts, and set expiration dates for quotations.
-4. **Official PDF Generation**: Generates print-ready quotation documents directly via Blade template views without external PDF engines.
-5. **Signed Route Approval**: Buyer approval triggers inventory reservation via cryptographic signed routes (`URL::signedRoute`).
+1. **Catalog Carting (Session)**: Buyers add products to RFQ cart (`/cart`, `CartController`).
+2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (company info, corporate email, PIC). Dispatches asynchronous jobs for receipt and admin notifications (`app/Jobs/SendRfq*Job.php`).
+3. **Operational Follow-up**: Primary workflow forwards RFQ to Sales via WhatsApp / Admin dashboard (`/admin/rfqs`).
+4. **Access Control**: RFQ success page restricted to submitting session. Product detail uses numeric IDs (`/produk/detail?id=12`).
+
+### Security & Upload Conventions
+- **Uploads**: Handled via `storage/app/public/uploads` (accessible via `/storage/uploads/...`). SVG blocked, images re-encoded to WebP via GD.
+- **Security Middlewares**: CSRF, rate-limiting on login/RFQ submission/contact forms, honeypot + CAPTCHA validation (`CaptchaService`), HTML sanitization for rich text.
 
 ### Directory Structure & Conventions
 - `app/Http/Controllers/`: Public-facing controllers (`PageController`, `CartController`, `RfqController`, `ContactController`).

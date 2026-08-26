@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Services\DataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -153,7 +154,7 @@ class PageController extends Controller
         $recentPosts = $dataService->getPosts([], 3);
 
         $categoryCounts = Cache::remember('blog_category_counts', 3600, function () {
-            $rows = DB::table('posts')
+            $rows = Post::query()
                 ->select('category', DB::raw('COUNT(*) as total'))
                 ->whereNotNull('category')
                 ->groupBy('category')

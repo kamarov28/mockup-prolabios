@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
+use App\Models\Product;
 use App\Models\Rfq;
+use App\Models\Sector;
 use App\Services\AuditLogger;
 use App\Services\DataService;
 use App\Services\HomepageSettingsUpdater;
@@ -20,17 +23,17 @@ class AdminDashboardController extends Controller
     public function dashboard()
     {
         // Use COUNT/LIMIT queries instead of loading entire tables to memory
-        $productsCount = DB::table('products')->count();
-        $postsCount = DB::table('posts')->count();
-        $sectorsCount = DB::table('sectors')->count();
-        $rfqsCount = DB::table('rfqs')->whereNull('deleted_at')->count();
+        $productsCount = Product::count();
+        $postsCount = Post::count();
+        $sectorsCount = Sector::count();
+        $rfqsCount = Rfq::count();
 
-        $recentProducts = DB::table('products')->latest()->limit(5)->get()->map(fn ($r) => (array) $r)->toArray();
-        $recentPosts = DB::table('posts')->latest()->limit(5)->get()->map(fn ($r) => (array) $r)->toArray();
+        $recentProducts = Product::latest()->limit(5)->get()->toArray();
+        $recentPosts = Post::latest()->limit(5)->get()->toArray();
         $recentRfqs = Rfq::with('items')->latest()->limit(5)->get();
 
         // Category distribution via GROUP BY (single query, no PHP counting)
-        $categoryRows = DB::table('products')
+        $categoryRows = Product::query()
             ->select('category', DB::raw('COUNT(*) as total'))
             ->whereNotNull('category')
             ->where('category', '!=', '')

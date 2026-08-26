@@ -156,12 +156,10 @@ class AdminProductCategoryController extends Controller
 
             // Cascade key updates to products referencing the old category/sub_category key
             if ($oldKey !== $key) {
-                \Illuminate\Support\Facades\DB::table('products')
-                    ->where('category', $oldKey)
+                Product::where('category', $oldKey)
                     ->update(['category' => $key]);
 
-                \Illuminate\Support\Facades\DB::table('products')
-                    ->where('sub_category', $oldKey)
+                Product::where('sub_category', $oldKey)
                     ->update(['sub_category' => $key]);
             }
         });

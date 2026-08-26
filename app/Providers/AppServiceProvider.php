@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use App\Services\DataService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -85,7 +86,7 @@ class AppServiceProvider extends ServiceProvider
             $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
                 $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
                 try {
-                    $productTitles = DB::table('products')
+                    $productTitles = Product::query()
                         ->orderByDesc('id')
                         ->limit(200)
                         ->pluck('title')
