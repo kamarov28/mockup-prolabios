@@ -1,0 +1,15 @@
+/* site/00-tokens.css — Design tokens (fonts) (split from experimental-typo.css) */
+/* ==========================================================================
+   Prolabios Ultra-Minimalist Typography Stylesheet (Experimental)
+   Fonts load once from layouts/app.blade.php (no @import — blocks render)
+   ========================================================================== */
+
+:root {
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-bg: #070708;
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #8E8E93;
+  --color-accent: #FF4950;
+  --color-border: rgba(255, 255, 255, 0.08);
+}
