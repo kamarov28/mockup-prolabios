@@ -4,32 +4,52 @@ namespace App\Traits;
 
 use App\Models\Product;
 use App\Services\DataService;
+use App\Services\ProductService;
+use Illuminate\Support\Str;
 
 /**
- * ResolvesProducts
- *
- * Trait to look up a Product model either by ID (preferred) or by Title fallback.
- * Shared between CartController, RfqController, and other customer-facing controllers.
+ * Resolve Product by id (preferred), then slug, then title.
+ * Shared by CartController and RfqController.
  */
 trait ResolvesProducts
 {
-    /**
-     * Resolve a Product Eloquent model by ID (preferred) then by Title.
-     * Returns null when neither lookup finds a match.
-     */
     protected function resolveProduct(?string $id, ?string $title): ?Product
     {
-        $product = null;
-        $service = isset($this->dataService) ? $this->dataService : app(DataService::class);
+        $service = $this->productLookupService();
 
         if (! empty($id)) {
             $product = $service->getProductById((int) $id);
+            if ($product) {
+                return $product;
+            }
         }
 
-        if (! $product && ! empty($title)) {
-            $product = $service->getProductByTitle($title);
+        if (empty($title)) {
+            return null;
         }
 
-        return $product;
+        // Prefer slug-shaped lookup before exact title (legacy cart rows may store either)
+        $slug = Str::slug($title);
+        if ($slug !== '') {
+            $product = $service->getProductBySlug($slug);
+            if ($product) {
+                return $product;
+            }
+        }
+
+        return $service->getProductByTitle($title);
+    }
+
+    private function productLookupService(): DataService|ProductService
+    {
+        if (isset($this->products) && $this->products instanceof ProductService) {
+            return $this->products;
+        }
+
+        if (isset($this->dataService) && $this->dataService instanceof DataService) {
+            return $this->dataService;
+        }
+
+        return app(DataService::class);
     }
 }
