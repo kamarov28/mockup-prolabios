@@ -18,15 +18,6 @@ class CartController extends Controller
         $this->dataService = $dataService;
     }
 
-    // -------------------------------------------------------------------------
-    // Private Helpers
-    // -------------------------------------------------------------------------
-
-    /**
-     * Find the session-cart array key that matches the given product id or title.
-     * Tries direct key lookup first (O(1)), then falls back to a linear scan for
-     * legacy carts that were keyed by title or other values.
-     */
     private function findCartKey(array $cart, string $id = '', string $title = ''): ?string
     {
         if (! empty($id) && isset($cart[(string) $id])) {
@@ -37,10 +28,9 @@ class CartController extends Controller
             return $title;
         }
 
-        // Linear scan — handles legacy carts keyed by title or other values
         foreach ($cart as $k => $item) {
-            $idMatch    = ! empty($id)    && isset($item['id'])    && (int) $item['id']   === (int) $id;
-            $titleMatch = ! empty($title) && isset($item['title']) && $item['title']       === $title;
+            $idMatch = ! empty($id) && isset($item['id']) && (int) $item['id'] === (int) $id;
+            $titleMatch = ! empty($title) && isset($item['title']) && $item['title'] === $title;
 
             if ($idMatch || $titleMatch) {
                 return $k;
@@ -50,28 +40,20 @@ class CartController extends Controller
         return null;
     }
 
-    /**
-     * Normalise a Product Eloquent model into a plain cart-row array.
-     * DataService always returns ?Product so we can safely use typed properties.
-     *
-     * @param  float  $priceOverride  Fallback price when product price is 0
-     */
     private function productToCartRow(Product $product, int $quantity, float $priceOverride = 0.0): array
     {
         return [
-            'id'       => $product->id,
-            'title'    => $product->title,
-            'catalog'  => $product->catalog  ?? '',
-            'image'    => $product->image    ?? '',
-            'price'    => (float) $product->price > 0 ? (float) $product->price : $priceOverride,
-            'stock'    => (int) ($product->stock ?? 0),
+            'id' => $product->id,
+            'slug' => $product->slug ?? '',
+            'title' => $product->title,
+            'catalog' => $product->catalog ?? '',
+            'image' => $product->image ?? '',
+            'price' => (float) $product->price > 0 ? (float) $product->price : $priceOverride,
+            'stock' => (int) ($product->stock ?? 0),
             'quantity' => $quantity,
         ];
     }
 
-    /**
-     * Calculate the grand total from the current session cart.
-     */
     private function cartTotal(array $cart): float
     {
         return (float) array_sum(array_map(
@@ -80,34 +62,30 @@ class CartController extends Controller
         ));
     }
 
-    // -------------------------------------------------------------------------
-    // Actions
-    // -------------------------------------------------------------------------
-
     public function index()
     {
-        $cart         = session()->get('cart', []);
-        $total        = 0;
+        $cart = session()->get('cart', []);
+        $total = 0;
         $migratedCart = [];
 
         foreach ($cart as $key => $item) {
             $product = $this->resolveProduct($item['id'] ?? null, $item['title'] ?? null);
 
             if ($product) {
-                $cartKey              = (string) $product->id;
-                $row                  = $this->productToCartRow($product, (int) ($item['quantity'] ?? 1), (float) ($item['price'] ?? 0));
+                $cartKey = (string) $product->id;
+                $row = $this->productToCartRow($product, (int) ($item['quantity'] ?? 1), (float) ($item['price'] ?? 0));
                 $migratedCart[$cartKey] = $row;
                 $total += $row['price'] * $row['quantity'];
             } else {
-                // Product deleted from DB — preserve cart row as-is
-                $cartKey              = (string) ($item['id'] ?? $key);
-                $row                  = [
-                    'id'       => $item['id']      ?? $key,
-                    'title'    => $item['title']   ?? $key,
-                    'catalog'  => $item['catalog'] ?? '',
-                    'image'    => $item['image']   ?? '',
-                    'price'    => (float) ($item['price'] ?? 0),
-                    'stock'    => (int) ($item['stock'] ?? 0),
+                $cartKey = (string) ($item['id'] ?? $key);
+                $row = [
+                    'id' => $item['id'] ?? $key,
+                    'slug' => $item['slug'] ?? '',
+                    'title' => $item['title'] ?? $key,
+                    'catalog' => $item['catalog'] ?? '',
+                    'image' => $item['image'] ?? '',
+                    'price' => (float) ($item['price'] ?? 0),
+                    'stock' => (int) ($item['stock'] ?? 0),
                     'quantity' => (int) ($item['quantity'] ?? 1),
                 ];
                 $migratedCart[$cartKey] = $row;
@@ -122,9 +100,9 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        $id    = $request->input('id');
+        $id = $request->input('id');
         $title = $request->input('title');
-        $qty   = max(1, (int) $request->input('quantity', 1));
+        $qty = max(1, (int) $request->input('quantity', 1));
 
         $product = $this->resolveProduct($id, $title);
 
@@ -136,37 +114,36 @@ class CartController extends Controller
             return redirect()->back()->with('error', 'Produk tidak ditemukan.');
         }
 
-        $cart    = session()->get('cart', []);
+        $cart = session()->get('cart', []);
         $cartKey = (string) $product->id;
 
-        // Migrate any legacy title-keyed entry for this product
         if (! isset($cart[$cartKey]) && isset($cart[$product->title])) {
             $cart[$cartKey] = $cart[$product->title];
             unset($cart[$product->title]);
         }
 
         $currentQty = (int) ($cart[$cartKey]['quantity'] ?? 0);
-        $newQty     = $currentQty + $qty;
-        $stock      = (int) ($product->stock ?? 0);
-        $isIndent   = ($stock > 0 && $newQty > $stock) || ($stock === 0);
+        $newQty = $currentQty + $qty;
+        $stock = (int) ($product->stock ?? 0);
+        $isIndent = ($stock > 0 && $newQty > $stock) || ($stock === 0);
 
         $cart[$cartKey] = $this->productToCartRow($product, $newQty);
 
         session()->put('cart', $cart);
 
-        $cartCount      = array_sum(array_column($cart, 'quantity'));
+        $cartCount = array_sum(array_column($cart, 'quantity'));
         $successMessage = $isIndent
             ? 'Produk berhasil ditambahkan ke keranjang (Status: Indent / Pre-Order)!'
             : 'Produk berhasil ditambahkan ke keranjang!';
 
         if ($request->wantsJson()) {
             return response()->json([
-                'success'   => true,
-                'message'   => $successMessage,
+                'success' => true,
+                'message' => $successMessage,
                 'cartCount' => $cartCount,
-                'isIndent'  => $isIndent,
-                'stock'     => $stock,
-                'quantity'  => $newQty,
+                'isIndent' => $isIndent,
+                'stock' => $stock,
+                'quantity' => $newQty,
             ]);
         }
 
@@ -175,39 +152,41 @@ class CartController extends Controller
 
     public function update(Request $request)
     {
-        $id      = (string) $request->input('id', '');
-        $title   = (string) $request->input('title', '');
-        $qty     = max(1, (int) $request->input('quantity', 1));
-        $cart    = session()->get('cart', []);
+        $id = (string) $request->input('id', '');
+        $title = (string) $request->input('title', '');
+        $qty = max(1, (int) $request->input('quantity', 1));
+        $cart = session()->get('cart', []);
         $cartKey = $this->findCartKey($cart, $id, $title);
 
         if ($cartKey !== null && isset($cart[$cartKey])) {
-            // Refresh stock from DB so we don't trust stale session data
             $product = $this->resolveProduct(
                 (string) ($cart[$cartKey]['id'] ?? ''),
                 (string) ($cart[$cartKey]['title'] ?? '')
             );
 
-            $cart[$cartKey]['stock']    = $product
+            $cart[$cartKey]['stock'] = $product
                 ? (int) ($product->stock ?? 0)
                 : (int) ($cart[$cartKey]['stock'] ?? 0);
             $cart[$cartKey]['quantity'] = $qty;
+            if ($product && ! empty($product->slug)) {
+                $cart[$cartKey]['slug'] = $product->slug;
+            }
             session()->put('cart', $cart);
         }
 
         if ($request->ajax() || $request->wantsJson()) {
-            $total        = $this->cartTotal($cart);
+            $total = $this->cartTotal($cart);
             $itemSubtotal = ($cartKey !== null && isset($cart[$cartKey]))
                 ? (($cart[$cartKey]['price'] ?? 0) * ($cart[$cartKey]['quantity'] ?? 0))
                 : 0;
 
             return response()->json([
-                'success'        => true,
-                'cart'           => $cart,
-                'total'          => $total,
+                'success' => true,
+                'cart' => $cart,
+                'total' => $total,
                 'totalFormatted' => $total > 0 ? 'Rp '.number_format($total, 0, ',', '.') : 'Rp 0',
-                'itemSubtotal'   => $itemSubtotal > 0 ? 'Rp '.number_format($itemSubtotal, 0, ',', '.') : 'Est. Penawaran',
-                'cartCount'      => array_sum(array_column($cart, 'quantity')),
+                'itemSubtotal' => $itemSubtotal > 0 ? 'Rp '.number_format($itemSubtotal, 0, ',', '.') : 'Est. Penawaran',
+                'cartCount' => array_sum(array_column($cart, 'quantity')),
             ]);
         }
 
@@ -216,9 +195,9 @@ class CartController extends Controller
 
     public function remove(Request $request)
     {
-        $id        = (string) $request->input('id', '');
-        $title     = (string) $request->input('title', '');
-        $cart      = session()->get('cart', []);
+        $id = (string) $request->input('id', '');
+        $title = (string) $request->input('title', '');
+        $cart = session()->get('cart', []);
         $targetKey = $this->findCartKey($cart, $id, $title);
 
         if ($targetKey !== null && isset($cart[$targetKey])) {
@@ -230,11 +209,11 @@ class CartController extends Controller
             $total = $this->cartTotal($cart);
 
             return response()->json([
-                'success'        => true,
-                'cart'           => $cart,
-                'total'          => $total,
+                'success' => true,
+                'cart' => $cart,
+                'total' => $total,
                 'totalFormatted' => $total > 0 ? 'Rp '.number_format($total, 0, ',', '.') : 'Rp 0',
-                'cartCount'      => array_sum(array_column($cart, 'quantity')),
+                'cartCount' => array_sum(array_column($cart, 'quantity')),
             ]);
         }
 
