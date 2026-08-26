@@ -14,26 +14,17 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        require_once app_path('Helpers/product_url.php');
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
 
-        // ----------------------------------------------------
-        // Security Rate Limiters (Strict Per-IP & Endpoint Guards)
-        // ----------------------------------------------------
         RateLimiter::for('rfq-submission', function (Request $request) {
             return Limit::perMinute(3)->by($request->ip())->response(function () {
                 return back()->withErrors([
@@ -61,19 +52,11 @@ class AppServiceProvider extends ServiceProvider
             });
         });
 
-        // Frontend-only shared data (WA numbers, site settings, search suggestions).
-        // Skip entirely on admin routes — admin layout does not use these variables
-        // and loading them on every /admin/* request adds unnecessary DB/cache work.
         $this->shareFrontendViewData();
     }
 
-    /**
-     * Share public-site variables with Blade views.
-     * Only runs for non-admin, non-console requests.
-     */
     protected function shareFrontendViewData(): void
     {
-        // Skip during artisan/console and admin panel requests
         if ($this->app->runningInConsole()) {
             return;
         }
@@ -84,7 +67,6 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
         } catch (\Throwable $e) {
-            // request() may not be available in some early boot contexts
             return;
         }
 
@@ -92,11 +74,9 @@ class AppServiceProvider extends ServiceProvider
             $dataService = app(DataService::class);
             $siteSettings = $dataService->getHomepageData();
 
-            // Clean phone number for WhatsApp API
             $rawPhone = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone'] ?? '0821-8792-9433');
             $waNumber = (strpos($rawPhone, '0') === 0) ? '62'.substr($rawPhone, 1) : $rawPhone;
 
-            // Clean technician phone number for WhatsApp API
             $rawPhoneTech = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone_technician'] ?? '0812-837-4867');
             $waNumberTech = (strpos($rawPhoneTech, '0') === 0) ? '62'.substr($rawPhoneTech, 1) : $rawPhoneTech;
 
@@ -105,7 +85,6 @@ class AppServiceProvider extends ServiceProvider
             $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
                 $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
                 try {
-                    // Cap rows — full pluck of every title is O(n) memory on large catalogs
                     $productTitles = DB::table('products')
                         ->orderByDesc('id')
                         ->limit(200)
@@ -141,7 +120,6 @@ class AppServiceProvider extends ServiceProvider
             View::share('waDefaultMsg', $waDefaultMsg);
             View::share('searchSuggestions', $searchSuggestions);
         } catch (\Exception $e) {
-            // Safe fallback during early boot / missing tables
         }
     }
 }
