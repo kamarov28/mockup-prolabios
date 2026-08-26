@@ -1,5 +1,31 @@
-/* ==========================================================================
-   DEPRECATED: use resources/css/site.css
-   Kept as alias so old Vite/layout references still work during transition.
-   ========================================================================== */
-@import './site.css';
+/*
+ * TEMP: this file was briefly replaced during a CSS split.
+ * Restore the full stylesheet locally (required for public UI):
+ *
+ *   curl -L -o resources/css/experimental-typo.css \
+ *     https://raw.githubusercontent.com/kamarov28/mockup-prolabios/c59ea4625a780ff42842a827c19ffef10e6deb0b/resources/css/experimental-typo.css
+ *
+ *   npm run build
+ *   git add resources/css/experimental-typo.css
+ *   git commit -m "fix(css): restore full experimental-typo cascade"
+ *   git push
+ *
+ * Optional split (after restore): see scripts note in chat / site-part-a|b approach.
+ */
+
+/* Fallback tokens so page is not completely unstyled while restoring */
+:root {
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --color-bg: #070708;
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #8E8E93;
+  --color-accent: #FF4950;
+  --color-border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+}
