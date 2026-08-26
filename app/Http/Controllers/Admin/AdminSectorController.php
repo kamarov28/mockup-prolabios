@@ -6,23 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Requests\UpdateSectorRequest;
 use App\Services\AuditLogger;
-use App\Services\DataService;
+use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
 
 class AdminSectorController extends Controller
 {
     use HandlesImageUploads;
 
-    protected DataService $dataService;
+    protected SectorService $sectors;
 
-    public function __construct(DataService $dataService)
+    public function __construct(SectorService $sectors)
     {
-        $this->dataService = $dataService;
+        $this->sectors = $sectors;
     }
 
     public function sectorsIndex()
     {
-        $sectors = $this->dataService->getSectors();
+        $sectors = $this->sectors->getSectors();
 
         return view('admin.sectors.index', compact('sectors'));
     }
@@ -36,7 +36,7 @@ class AdminSectorController extends Controller
     {
         $id = strtolower($request->input('id'));
 
-        if ($this->dataService->getSectorById($id)) {
+        if ($this->sectors->getSectorById($id)) {
             return redirect()->back()->withInput()->with('error', 'Sektor dengan ID tersebut sudah ada.');
         }
 
@@ -52,7 +52,7 @@ class AdminSectorController extends Controller
             'image' => $image,
         ];
 
-        $this->dataService->addSector($sector);
+        $this->sectors->addSector($sector);
 
         AuditLogger::log('sector.create', 'Sector', $id, [
             'name' => $sector['name'],
@@ -64,7 +64,7 @@ class AdminSectorController extends Controller
 
     public function sectorsEdit(string $id)
     {
-        $sector = $this->dataService->getSectorById($id);
+        $sector = $this->sectors->getSectorById($id);
         if (! $sector) {
             return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
         }
@@ -74,7 +74,7 @@ class AdminSectorController extends Controller
 
     public function sectorsUpdate(UpdateSectorRequest $request, string $id)
     {
-        $sector = $this->dataService->getSectorById($id);
+        $sector = $this->sectors->getSectorById($id);
         if (! $sector) {
             return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
         }
@@ -93,7 +93,7 @@ class AdminSectorController extends Controller
             'image' => $image,
         ];
 
-        $this->dataService->updateSector($id, $updatedSector);
+        $this->sectors->updateSector($id, $updatedSector);
 
         AuditLogger::log('sector.update', 'Sector', $id, [
             'old_name' => $oldName,
@@ -106,10 +106,10 @@ class AdminSectorController extends Controller
 
     public function sectorsDestroy(string $id)
     {
-        $sector = $this->dataService->getSectorById($id);
+        $sector = $this->sectors->getSectorById($id);
         $name = $sector['name'] ?? null;
 
-        $this->dataService->deleteSector($id);
+        $this->sectors->deleteSector($id);
 
         AuditLogger::log('sector.delete', 'Sector', $id, [
             'name' => $name,
