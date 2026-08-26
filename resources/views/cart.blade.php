@@ -82,7 +82,7 @@
 
                 <!-- 2. Product Name & Catalog & Stock Status -->
                 <div class="col">
-                  <a href="{{ url('/produk/detail') }}?id={{ $item['id'] }}" class="text-white text-decoration-none fw-semibold d-block mb-1" style="font-family: var(--font-headline); font-size: 1.05rem; line-height: 1.35;">
+                  <a href="{{ product_url($item) }}" class="text-white text-decoration-none fw-semibold d-block mb-1" style="font-family: var(--font-headline); font-size: 1.05rem; line-height: 1.35;">
                     {{ $item['title'] }}
                   </a>
                   <div class="d-flex flex-wrap align-items-center gap-2 mt-2">

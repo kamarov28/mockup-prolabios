@@ -116,7 +116,7 @@
               'category' => !empty($product['category']) ? ucwords(str_replace('-', ' ', $product['category'])) : 'Laboratorium',
               'offers' => [
                 '@type' => 'Offer',
-                'url' => url('/produk/detail') . '?id=' . $product['id'],
+                'url' => product_url($product),
                 'priceCurrency' => 'IDR',
                 'price' => (!empty($product['price']) && $product['price'] > 0) ? (float) $product['price'] : 0,
                 'priceValidUntil' => date('Y-12-31', strtotime('+1 year')),
@@ -150,7 +150,7 @@
                   '@type' => 'ListItem',
                   'position' => 3,
                   'name' => $product['title'],
-                  'item' => url('/produk/detail') . '?id=' . $product['id'],
+                  'item' => product_url($product),
                 ],
               ],
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}

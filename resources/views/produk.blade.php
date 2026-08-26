@@ -139,14 +139,14 @@
                       </div>
                     @endif
                     <h3 class="card-title fs-6 fw-semibold mb-2">
-                      <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="product-card-link">{{ $prod['title'] }}</a>
+                      <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
                     </h3>
                     <p class="product-card-desc mb-3 flex-grow-1">
                       {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) }}
                     </p>
 
                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                      <a href="{{ url('/produk/detail') }}?id={{ $prod['id'] }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
+                      <a href="{{ product_url($prod) }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
                         <i class="bi bi-eye me-1"></i> Lihat Detail Produk
                       </a>
                     </div>

@@ -30,7 +30,7 @@
 
             <!-- Back to description link -->
             <div class="mb-4">
-              <a href="{{ url('/produk/detail') }}?id={{ $product['id'] }}" class="text-decoration-none" style="color: var(--color-text-muted); font-size: 0.82rem;">
+              <a href="{{ product_url($product) }}" class="text-decoration-none" style="color: var(--color-text-muted); font-size: 0.82rem;">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Deskripsi &amp; Spesifikasi Produk
               </a>
             </div>

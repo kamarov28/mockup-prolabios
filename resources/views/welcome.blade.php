@@ -52,10 +52,10 @@
                     </div>
                   @endif
                   <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
-                    <a href="{{ !empty($prod['slug'] ?? null) ? url('/produk/'.$prod['slug']) : url('/produk/detail?id='.$prod['id']) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
+                    <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
                   <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                    <a href="{{ !empty($prod['slug'] ?? null) ? url('/produk/'.$prod['slug']) : url('/produk/detail?id='.$prod['id']) }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
+                    <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">View Specs <i class="bi bi-arrow-right ms-1"></i></a>
                   </div>
                 </div>
               </div>
