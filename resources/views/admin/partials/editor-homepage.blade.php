@@ -38,7 +38,11 @@
             <input type="text" class="form-control bg-dark text-white border-secondary border-opacity-20 @error('hero_title') is-invalid @enderror" id="hero_title" name="hero_title" value="{{ old('hero_title', $homeData['hero_title'] ?? '') }}" required>
             @error('hero_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
             <div class="form-text mt-2 small text-secondary">
-              Gunakan <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="text-accent">Kata</span></code> untuk warna merah solid, atau <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="typo-outline">Kata</span></code> untuk outline transparan.
+              Bisa sisipkan HTML kecil di judul:
+              <code class="bg-black text-secondary border border-secondary border-opacity-25 px-2 py-1 rounded d-inline-block mt-1"><span class="text-accent">Lab</span></code>
+              → teks merah solid;
+              <code class="bg-black text-secondary border border-secondary border-opacity-25 px-2 py-1 rounded d-inline-block mt-1"><span class="typo-outline">Lab</span></code>
+              → outline transparan. Contoh: <em>Solusi <span class="text-accent">Lab</span> untuk Industri</em>
             </div>
           </div>
         </div>
