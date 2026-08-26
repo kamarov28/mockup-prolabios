@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateRfqRequest;
 use App\Models\Rfq;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class AdminRfqController extends Controller
 {
@@ -51,14 +51,11 @@ class AdminRfqController extends Controller
         return view('admin.rfqs.show', compact('rfq'));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdateRfqRequest $request, int $id)
     {
         $rfq = Rfq::findOrFail($id);
 
-        $validated = $request->validate([
-            'status' => ['required', Rule::in(array_keys(Rfq::statusOptions()))],
-            'admin_notes' => ['nullable', 'string', 'max:5000'],
-        ]);
+        $validated = $request->validated();
 
         $rfq->update([
             'status' => $validated['status'],

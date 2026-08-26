@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePrincipalRequest;
+use App\Http\Requests\UpdatePrincipalRequest;
 use App\Models\Principal;
 use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
@@ -38,27 +40,21 @@ class AdminPrincipalController extends Controller
         return view('admin.principals.form');
     }
 
-    public function store(Request $request)
+    public function store(StorePrincipalRequest $request)
     {
-        $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'nullable|string|max:1000',
-            'status'  => 'required|in:online,draft',
-        ]);
-
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', null);
 
         $principal = Principal::create([
-            'name'    => $request->input('name'),
+            'name' => $request->input('name'),
             'address' => $request->input('address'),
-            'logo'    => $logo,
-            'status'  => $request->input('status', 'online'),
+            'logo' => $logo,
+            'status' => $request->input('status', 'online'),
         ]);
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
 
         AuditLogger::log('principal.create', 'Principal', $principal->id, [
-            'name'   => $principal->name,
+            'name' => $principal->name,
             'status' => $principal->status,
         ]);
 
@@ -75,28 +71,22 @@ class AdminPrincipalController extends Controller
         return view('admin.principals.form', compact('principal'));
     }
 
-    public function update(Request $request, int $id)
+    public function update(UpdatePrincipalRequest $request, int $id)
     {
         $principal = Principal::find($id);
         if (! $principal) {
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
 
-        $request->validate([
-            'name'    => 'required|string|max:255',
-            'address' => 'nullable|string|max:1000',
-            'status'  => 'required|in:online,draft',
-        ]);
-
         $logo = $this->handleImageUpload($request, 'logo_file', 'logo_url', $principal->logo);
 
         $oldName = $principal->name;
 
         $principal->update([
-            'name'    => $request->input('name'),
+            'name' => $request->input('name'),
             'address' => $request->input('address'),
-            'logo'    => $logo,
-            'status'  => $request->input('status', 'online'),
+            'logo' => $logo,
+            'status' => $request->input('status', 'online'),
         ]);
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
@@ -104,7 +94,7 @@ class AdminPrincipalController extends Controller
         AuditLogger::log('principal.update', 'Principal', $principal->id, [
             'old_name' => $oldName,
             'new_name' => $principal->name,
-            'status'   => $principal->status,
+            'status' => $principal->status,
         ]);
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal / Mitra berhasil diperbarui!');
