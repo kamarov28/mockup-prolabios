@@ -159,7 +159,7 @@
               @endphp
               @foreach($related as $prod)
                 <div class="col">
-                  <div class="card h-100 product-card-premium border-0">
+                  <div class="card h-100 product-card border-0">
                     <div class="img-wrap">
                       <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Sector Product & Analytical Instrument" loading="lazy" decoding="async">
                     </div>

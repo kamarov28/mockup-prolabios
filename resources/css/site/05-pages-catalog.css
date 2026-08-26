@@ -128,31 +128,31 @@
 /* ==========================================================================
    Editorial Product Card Overrides
    ========================================================================== */
-.product-card-premium {
+.product-card {
   background: rgba(255, 255, 255, 0.02) !important;
   border: 1px solid var(--color-border) !important;
   border-radius: 0px !important;
   transition: all 0.3s ease !important;
 }
-[data-theme="dark"] .product-card-premium,
-[data-theme="light"] .product-card-premium {
+[data-theme="dark"] .product-card,
+[data-theme="light"] .product-card {
   background: rgba(255, 255, 255, 0.02) !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0px !important;
 }
-.product-card-premium:hover {
+.product-card:hover {
   border-color: rgba(255, 73, 80, 0.4) !important;
   transform: translateY(-4px) !important;
   background: rgba(255, 255, 255, 0.035) !important;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
 }
-[data-theme="dark"] .product-card-premium:hover,
-[data-theme="light"] .product-card-premium:hover {
+[data-theme="dark"] .product-card:hover,
+[data-theme="light"] .product-card:hover {
   border-color: rgba(255, 73, 80, 0.4) !important;
   background: rgba(255, 255, 255, 0.035) !important;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
 }
-.product-card-premium .img-wrap {
+.product-card .img-wrap {
   background-color: #070708 !important; /* Matches main bg */
   border-bottom: 1px solid var(--color-border) !important;
   border-radius: 0px !important;
@@ -160,13 +160,13 @@
   height: 200px !important;
   overflow: hidden;
 }
-[data-theme="dark"] .product-card-premium .img-wrap,
-[data-theme="light"] .product-card-premium .img-wrap {
+[data-theme="dark"] .product-card .img-wrap,
+[data-theme="light"] .product-card .img-wrap {
   background-color: #070708 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0px !important;
 }
-.product-card-premium .img-wrap img {
+.product-card .img-wrap img {
   width: 100% !important;
   height: 100% !important;
   max-width: 100% !important;
@@ -176,43 +176,43 @@
   filter: grayscale(40%);
   transition: all 0.4s ease !important;
 }
-.product-card-premium:hover .img-wrap img {
+.product-card:hover .img-wrap img {
   filter: grayscale(0%) scale(1.03) !important;
 }
-.product-card-premium .card-body {
+.product-card .card-body {
   background-color: transparent !important;
   padding: 20px !important;
   border-radius: 0px !important;
 }
-[data-theme="dark"] .product-card-premium .card-body,
-[data-theme="light"] .product-card-premium .card-body {
+[data-theme="dark"] .product-card .card-body,
+[data-theme="light"] .product-card .card-body {
   background-color: transparent !important;
   border-radius: 0px !important;
 }
-.product-card-premium .card-title a {
+.product-card .card-title a {
   font-family: var(--font-headline) !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
   color: #fff !important;
   transition: color 0.3s ease;
 }
-.product-card-premium:hover .card-title a {
+.product-card:hover .card-title a {
   color: var(--color-accent) !important;
 }
-.product-card-premium .card-text {
+.product-card .card-text {
   font-family: var(--font-body) !important;
   color: var(--color-text-muted) !important;
   font-size: 0.82rem !important;
   line-height: 1.6 !important;
 }
-.product-card-premium .btn {
+.product-card .btn {
   border-radius: 0px !important;
   border: 1px solid var(--color-border) !important;
   background: transparent !important;
   color: #fff !important;
   transition: all 0.3s ease;
 }
-.product-card-premium:hover .btn {
+.product-card:hover .btn {
   border-color: var(--color-accent) !important;
   color: var(--color-accent) !important;
 }

@@ -1,6 +1,6 @@
 /* site/01-base.css */
 /* ==========================================================================
-   Prolabios Ultra-Minimalist Typography Stylesheet (Experimental)
+   Prolabios Site typography Typography Stylesheet (Experimental)
    Fonts load once from layouts/app.blade.php (no @import — blocks render)
    ========================================================================== */
 
@@ -24,7 +24,7 @@ html, body {
 }
 
 /* Hide top bar */
-.premium-top-bar {
+.site-utility-bar {
   display: none !important;
 }
 
@@ -133,7 +133,7 @@ html, body {
   filter: none !important;
 }
 
-/* Premium Download Button Override */
+/* Download button Button Override */
 .navbar .btn-outline-danger {
   font-family: var(--font-headline) !important;
   font-size: 0.72rem !important;
@@ -632,13 +632,13 @@ html, body {
 }
 
 /* Footer Minimalist */
-.premium-footer {
+.site-footer {
   background: var(--color-bg) !important;
   border-top: 1px solid var(--color-border) !important;
   padding: 100px 0 50px !important;
 }
-.premium-footer h3,
-.premium-footer h5 {
+.site-footer h3,
+.site-footer h5 {
   font-family: var(--font-headline) !important;
   color: #fff !important;
   font-size: 0.9rem !important;
@@ -646,19 +646,19 @@ html, body {
   text-transform: uppercase;
   margin-bottom: 24px !important;
 }
-.premium-footer p, 
-.premium-footer ul,
-.premium-footer li, 
-.premium-footer a {
+.site-footer p, 
+.site-footer ul,
+.site-footer li, 
+.site-footer a {
   font-family: var(--font-body) !important;
   font-size: 0.9rem !important;
   color: var(--color-text-muted) !important;
   line-height: 1.8 !important;
 }
-.premium-footer a:hover {
+.site-footer a:hover {
   color: var(--color-accent) !important;
 }
-.premium-footer hr {
+.site-footer hr {
   border-color: var(--color-border) !important;
   margin: 40px 0 24px !important;
 }
@@ -863,13 +863,13 @@ html, body {
   }
   
   /* Top bar adjustments */
-  .premium-top-bar {
+  .site-utility-bar {
     padding: 10px 0 !important;
   }
-  .premium-top-bar span, .premium-top-bar a {
+  .site-utility-bar span, .site-utility-bar a {
     font-size: 0.75rem !important;
   }
-  .premium-top-bar .search-form {
+  .site-utility-bar .search-form {
     display: none !important;
   }
 }

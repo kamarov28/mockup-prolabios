@@ -128,7 +128,7 @@
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
-                <div class="card h-100 product-card-premium border-0">
+                <div class="card h-100 product-card border-0">
                   <div class="img-wrap">
                     <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product & Analytical Instrument" loading="lazy" decoding="async">
                   </div>

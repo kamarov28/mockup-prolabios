@@ -1,5 +1,5 @@
 <!-- Top Bar (Search & Contact) -->
-<div class="premium-top-bar py-2">
+<div class="site-utility-bar py-2">
   <div class="container d-flex flex-wrap justify-content-between align-items-center small">
     <div>
       <span><i class="bi bi-telephone-fill text-primary me-1"></i> Contact Us: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
@@ -9,8 +9,8 @@
     <div class="mt-2 mt-md-0">
       <form class="d-flex search-form" action="{{ url('/produk') }}" method="GET">
         <div class="input-group input-group-sm">
-          <input type="text" name="q" class="form-control search-input-pill" placeholder="Search products..." aria-label="Search laboratory products and reagents" value="{{ request()->query('q') ?? request()->query('s') }}">
-          <button class="btn search-btn-pill" type="submit" aria-label="Submit search query">
+          <input type="text" name="q" class="form-control utility-search-input" placeholder="Search products..." aria-label="Search laboratory products and reagents" value="{{ request()->query('q') ?? request()->query('s') }}">
+          <button class="btn utility-search-btn" type="submit" aria-label="Submit search query">
             <i class="bi bi-search"></i>
           </button>
         </div>

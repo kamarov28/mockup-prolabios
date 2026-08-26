@@ -1,5 +1,5 @@
 <!-- Corporate Footer -->
-<footer class="premium-footer pt-5 pb-3 mt-auto">
+<footer class="site-footer pt-5 pb-3 mt-auto">
   <div class="container">
     <div class="row gy-4">
       
