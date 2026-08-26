@@ -220,13 +220,21 @@
     });
 
     let isFormDirty = false;
+    function isFilterOrSearch(target) {
+      const form = target.closest('form');
+      if (!form) return true;
+      if (form.method && form.method.toUpperCase() === 'GET') return true;
+      if (target.matches('input[name="s"], input[name="q"], input[name="search"], #local-search-input, select[name="category"], select[name="sector"], select[name="sort"], input[name="start_date"], input[name="end_date"]')) return true;
+      return false;
+    }
+
     document.addEventListener('input', function(e) {
-      if (e.target.closest('form') && !e.target.matches('input[name="s"], #local-search-input'))
-        isFormDirty = true;
+      if (isFilterOrSearch(e.target)) return;
+      isFormDirty = true;
     });
     document.addEventListener('change', function(e) {
-      if (e.target.closest('form') && !e.target.matches('input[name="s"], #local-search-input'))
-        isFormDirty = true;
+      if (isFilterOrSearch(e.target)) return;
+      isFormDirty = true;
     });
     document.addEventListener('submit', function() { isFormDirty = false; });
     document.addEventListener('DOMContentLoaded', function() {

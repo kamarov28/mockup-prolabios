@@ -19,14 +19,16 @@ class HtmlSanitizer
             return '';
         }
 
-        // Allowed formatting tags for rich text
-        $allowedTags = '<p><br><strong><b><em><i><u><ul><ol><li><h2><h3><h4><h5><h6><table><thead><tbody><tr><th><td><span><div><blockquote><a>';
+        // Allowed formatting tags for rich text (including images, tables, embeds)
+        $allowedTags = '<p><br><strong><b><em><i><u><s><del><sub><sup><ul><ol><li><h2><h3><h4><h5><h6><table><thead><tbody><tfoot><tr><th><td><span><div><blockquote><a><img><hr><iframe><figure><figcaption><code><pre>';
 
         $stripped = strip_tags($html, $allowedTags);
 
-        // Remove dangerous JS attributes (on*, javascript:, data:)
+        // Remove dangerous JS attributes (e.g. onclick, onerror, onload, onmouseover)
         $cleaned = preg_replace('/(<[^>]+?)\son[a-zA-Z]+\s*=\s*(".*?"|\'.*?\'|[^\s>]+)/i', '$1', $stripped);
-        $cleaned = preg_replace('/href\s*=\s*("|\')\s*(javascript|data):[^\'"]*\1/i', 'href="#"', (string) $cleaned);
+
+        // Remove javascript: and vbscript: pseudoprotocols in href or src
+        $cleaned = preg_replace('/(href|src)\s*=\s*("|\')\s*(javascript|vbscript):[^\'"]*\2/i', '$1="#"', (string) $cleaned);
 
         return trim((string) $cleaned);
     }

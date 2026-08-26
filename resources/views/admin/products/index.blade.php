@@ -26,7 +26,7 @@
   {{-- Filter Form --}}
   <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
     <form action="{{ route('admin.products') }}" method="GET">
-      <div class="row g-3">
+      <div class="row g-3 align-items-center">
         <div class="col-md-4">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; transition: border-color 0.25s ease;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: transparent; border-right: 1px solid var(--color-border);">
@@ -34,37 +34,42 @@
             </span>
             <input type="text" name="s" id="local-search-input"
                    style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem;"
-                   placeholder="Cari nama, katalog..." value="{{ $search }}" aria-label="Kata kunci pencarian">
+                   placeholder="Cari nama atau nomor katalog..." value="{{ $search }}" aria-label="Kata kunci pencarian">
           </div>
         </div>
-        <div class="col-md-3">
-            <select name="category" class="form-select" aria-label="Filter Kategori">
-              <option value="">Semua Kategori</option>
-              @foreach($categories as $cat)
-                <option value="{{ $cat->key }}" {{ $category === $cat->key ? 'selected' : '' }}>{{ $cat->name }}</option>
-              @endforeach
-            </select>
+        <div class="col-md-2">
+          <select name="category" class="form-select" aria-label="Filter Kategori" onchange="this.form.submit()">
+            <option value="">Semua Kategori</option>
+            @foreach($categories as $cat)
+              <option value="{{ $cat->key }}" {{ $category === $cat->key ? 'selected' : '' }}>{{ $cat->name }}</option>
+            @endforeach
+          </select>
         </div>
-        <div class="col-md-3">
-            <select name="sector" class="form-select" aria-label="Filter Sektor">
-              <option value="">Semua Sektor</option>
-              @foreach($sectors as $sec)
-                <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
-              @endforeach
-            </select>
+        <div class="col-md-2">
+          <select name="sector" class="form-select" aria-label="Filter Sektor" onchange="this.form.submit()">
+            <option value="">Semua Sektor</option>
+            @foreach($sectors as $sec)
+              <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
+            <i class="bi bi-search"></i> Cari
+          </button>
         </div>
         <div class="col-md-2">
           <button type="button" class="admin-btn admin-btn-ghost w-100 justify-content-center"
-                  data-bs-toggle="collapse" data-bs-target="#advancedFilterBlock"
+                  data-bs-toggle="collapse" data-bs-target="#advancedProductFilterBlock"
                   aria-expanded="{{ ($sort !== 'newest' || $start_date || $end_date) ? 'true' : 'false' }}"
-                  aria-controls="advancedFilterBlock">
-            <i class="bi bi-sliders"></i> Filter
+                  aria-controls="advancedProductFilterBlock">
+            <i class="bi bi-sliders"></i> Lanjutan
           </button>
         </div>
       </div>
 
       {{-- Advanced Collapse --}}
-      <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedFilterBlock">
+      <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedProductFilterBlock">
         <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 16px;">
           <div class="row g-3 align-items-end">
             <div class="col-md-4">
