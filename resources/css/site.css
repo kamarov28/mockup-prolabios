@@ -1,15 +1,11 @@
-/* ==========================================================================
-   Prolabios public site styles (split modules)
-   Loaded via Vite: resources/css/site.css
-   ========================================================================== */
-
-@import './site/00-tokens.css';
-@import './site/01-base.css';
-@import './site/02-hero.css';
-@import './site/03-home.css';
-@import './site/04-motion.css';
-@import './site/05-theme.css';
-@import './site/06-pages.css';
-@import './site/07-login.css';
-@import './site/08-b2b.css';
-@import './site/09-cart.css';
+/* Prolabios public site styles — modular entry (Vite) */
+@import './site-modules/00-tokens.css';
+@import './site-modules/01-base.css';
+@import './site-modules/02-hero.css';
+@import './site-modules/03-home.css';
+@import './site-modules/04-motion.css';
+@import './site-modules/05-theme.css';
+@import './site-modules/06-pages.css';
+@import './site-modules/07-login.css';
+@import './site-modules/08-b2b.css';
+@import './site-modules/09-cart.css';
