@@ -12,13 +12,16 @@ $files = [
     'resources/views/beli-produk.blade.php',
     'resources/views/cart.blade.php',
 ];
+
+// Single-quoted so $prod / $product are NOT interpolated by PHP
 $map = [
-    "{{ url('/produk/detail') }}?id={{ $prod['id'] }}" => "{{ product_url($prod) }}",
-    "{{ url('/produk/detail') }}?id={{ $product['id'] }}" => "{{ product_url($product) }}",
-    "{{ url('/produk/detail') }}?id={{ $item['id'] }}" => "{{ product_url($item) }}",
-    "url('/produk/detail') . '?id=' . $product['id']" => "product_url($product)",
-    "{{ !empty($prod['slug'] ?? null) ? url('/produk/'.$prod['slug']) : url('/produk/detail?id='.$prod['id']) }}" => "{{ product_url($prod) }}",
+    '{{ url(\'/produk/detail\') }}?id={{ $prod[\'id\'] }}' => '{{ product_url($prod) }}',
+    '{{ url(\'/produk/detail\') }}?id={{ $product[\'id\'] }}' => '{{ product_url($product) }}',
+    '{{ url(\'/produk/detail\') }}?id={{ $item[\'id\'] }}' => '{{ product_url($item) }}',
+    'url(\'/produk/detail\') . \'?id=\' . $product[\'id\']' => 'product_url($product)',
+    '{{ !empty($prod[\'slug\'] ?? null) ? url(\'/produk/\'.$prod[\'slug\']) : url(\'/produk/detail?id=\'.$prod[\'id\']) }}' => '{{ product_url($prod) }}',
 ];
+
 foreach ($files as $rel) {
     $path = $root.DIRECTORY_SEPARATOR.str_replace('/', DIRECTORY_SEPARATOR, $rel);
     if (! is_file($path)) {
