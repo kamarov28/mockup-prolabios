@@ -1,23 +1,13 @@
 # Code efficiency — phased cleanup
 
 Working branch: **`chore/code-efficiency`**
-Tracking issue: open issue *chore: phased code efficiency cleanup*
+Tracking issue: [#13](https://github.com/kamarov28/mockup-prolabios/issues/13)
 
 ## Principles
 
 1. **If it works, don't break it** — no big-bang rewrite.
 2. One phase ≈ one PR when possible.
 3. Smoke after each phase: admin RFQ, product CRUD, homepage settings save, cart → RFQ submit.
-
-## Current snapshot (why this plan)
-
-| Area | Note |
-|------|------|
-| `DataService` | Thin pass-through to Product/Post/Sector/Homepage — double surface area |
-| Product APIs | Dual identity: title **and** id/slug |
-| `AdminDashboardController::homeUpdate` | Large single method; already stable partial-save |
-| CSS | Admin design system + Bootstrap; public `style` + heavy `experimental-typo` |
-| JSON migrate command | One-shot legacy |
 
 ## Phases
 
@@ -28,49 +18,42 @@ Tracking issue: open issue *chore: phased code efficiency cleanup*
 - [x] Bootstrap badge → editorial tokens in `admin.css`
 - [ ] Optional: remaining Blade `badge bg-*` → `admin-badge-*`
 
-### Phase 1 — Split `homeUpdate` (start here)
-**Risk:** low · **Value:** maintainability
+### Phase 1 — Split `homeUpdate`
+**Status:** implemented on this branch — **test before merge**
 
-- Extract per-section validation (homepage / banners / contacts / general)
-- Extract patch builders; controller only orchestrates
-- Keep: `getHomepageDataFresh`, partial `saveHomepageData`, HtmlSanitizer, maps URL check
+- [x] `App\Services\HomepageSettingsUpdater` — validate + buildPatch per section
+- [x] `AdminDashboardController::homeUpdate` thinned to orchestrate only
+- [x] Keep: `getHomepageDataFresh`, partial `saveHomepageData`, HtmlSanitizer, maps URL check
+
+**Smoke test checklist**
+1. Admin → Pengaturan Web → Hero: ubah teks → Simpan → refresh OK
+2. Tab Bento / Sector / CTA: simpan masing-masing
+3. Banner page images: URL atau upload
+4. Kontak: email/telepon; maps URL invalid harus error flash
+5. Umum: logo/favicon optional
+6. Section lain tidak ikut terhapus saat simpan satu section
 
 ### Phase 2 — Product identity
 **Risk:** medium
 
-- Audit `getProductByTitle`, title-based update/delete
-- Canonical public URL: **slug** (id for admin)
-- Title remains unique + display only
+- [ ] Audit `getProductByTitle` / update-delete by title
+- [ ] Canonical public URL: **slug** (id for admin)
 
 ### Phase 3 — Thin DataService usage
-**Risk:** low–medium
-
-- Prefer injecting domain services where the controller is clearly one domain
-- Keep facade where multi-domain is convenient (e.g. dashboard counts)
+- [ ] Prefer domain services where controller is one domain
 
 ### Phase 4 — Public CSS tokens
-**Risk:** medium (visual)
-
-- Inventory overlap `style.css` vs `experimental-typo.css`
-- Unify tokens; reduce duplicate `!important`
+- [ ] Inventory `style.css` vs `experimental-typo.css`
 
 ### Phase 5 — Dead weight
+- [ ] `MigrateJsonToDb`, `decrementStock` path
 
-- `MigrateJsonToDb`: archive or remove if unused
-- Confirm `decrementStock` still on a live path
+## How to test this branch locally
 
-## Out of scope (for now)
-
-- Gutenberg / block CMS
-- Email provider switch (deferred)
-- Full Bootstrap removal from admin
-
-## How we cook
-
-```text
+```powershell
 git fetch origin
 git checkout chore/code-efficiency
 git pull origin chore/code-efficiency
-# work → commit → push
-# open PR into main when phase is smoke-tested
+# no npm needed for this PHP-only phase
+php artisan serve
 ```
