@@ -1,0 +1,192 @@
+/* site/03-theme.css */
+/* ==========================================================================
+   Global Dark Editorial Theme Overrides (Unify all pages)
+   ========================================================================== */
+
+/* 1. Global Section Backgrounds */
+section, .bg-light, .bg-white {
+  background-color: var(--color-bg) !important;
+}
+
+/* 2. Text Colors Unification */
+.text-muted, .text-black-50, .text-secondary {
+  color: var(--color-text-muted) !important;
+}
+h1, h2, h3, h4, h5, h6, .fw-bold, .card-title, .modal-title {
+  color: var(--color-text-main) !important;
+}
+p, span, li, td, th, label {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+a {
+  color: var(--color-text-main);
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--color-accent);
+}
+
+/* 3. Global Cards & Box Containers */
+.card, .sidebar-cta-box, .bg-white.p-4.rounded.shadow-sm, .card-body {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 0px !important;
+}
+
+/* 4. List Groups (Sidebar filter) */
+.list-group-item {
+  background-color: transparent !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.list-group-item:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: var(--color-accent) !important;
+  padding-left: 12px;
+}
+.list-group-item.active {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+  color: var(--color-accent) !important;
+  border-color: var(--color-border) !important;
+  font-weight: 600;
+}
+
+/* 5. Form Inputs (Contact form, Search fields) */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .input-group-text,
+.form-control,
+.form-select,
+.input-group-text {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  color: #fff !important;
+  border-radius: 0px !important;
+}
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus,
+.form-control:focus,
+.form-select:focus {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+[data-theme="dark"] .form-select,
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+.input-group-text {
+  border-right: none !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* 6. Buttons */
+.btn-danger, .btn-primary, .btn-submit {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+  font-family: var(--font-headline);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-radius: 0px !important;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+.btn-danger:hover, .btn-primary:hover {
+  background-color: #ff333d !important;
+  border-color: #ff333d !important;
+  transform: translateY(-2px);
+}
+.btn-outline-danger {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+.btn-outline-danger:hover {
+  background: transparent !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+
+/* 8. Table overrides (Detail specifications) */
+.table {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background-color: transparent !important;
+  border-color: var(--color-border) !important;
+}
+.table th, .table td {
+  border-bottom-color: var(--color-border) !important;
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* 9. Pagination Styling */
+.pagination .page-link {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border-color: var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.pagination .page-item.active .page-link {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+.pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Editorial Page Headers (Replaces photo banner headers on all sub-pages)
+   ========================================================================== */
+.editorial-page-header {
+  padding: 140px 0 40px;
+  border-bottom: 1px solid var(--color-border);
+}
+.editorial-page-header + section {
+  padding-top: 48px !important;
+}
+.blog-detail-section {
+  padding-top: 140px !important;
+}
+@media (max-width: 991.98px) {
+  .blog-detail-section {
+    padding-top: 110px !important;
+  }
+}
+.editorial-page-label {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+  padding: 6px 14px;
+  border: 1px solid var(--color-accent);
+}
+.editorial-page-title {
+  font-family: var(--font-headline) !important;
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.editorial-page-subtitle {
+  font-family: var(--font-body);
+  font-size: 1.05rem !important;
+  color: var(--color-text-muted) !important;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Hide old-school photo banner headers */
+.page-header {
+  display: none !important;
+}
+

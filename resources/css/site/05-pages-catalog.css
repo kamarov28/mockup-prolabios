@@ -1,0 +1,309 @@
+/* site/05-pages-catalog.css */
+/* ==========================================================================
+   Produk Page — Sidebar & Search Input
+   ========================================================================== */
+.produk-search-wrap {
+  position: relative;
+}
+.produk-search-wrap input {
+  background-color: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  color: rgba(255,255,255,0.85) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  padding: 10px 16px 10px 42px !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+.produk-search-wrap input:focus {
+  border-color: rgba(255,255,255,0.25) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.produk-search-wrap i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.3);
+  font-size: 0.9rem;
+}
+.produk-category-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  color: #fff !important;
+  margin-bottom: 4px;
+}
+.produk-category-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Editorial Blog Card Overrides (Informasi Page)
+   ========================================================================== */
+.blog-card {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+[data-theme="dark"] .blog-card,
+[data-theme="light"] .blog-card {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+.blog-card:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-4px) !important;
+}
+[data-theme="dark"] .blog-card:hover,
+[data-theme="light"] .blog-card:hover {
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+}
+.blog-card-img-wrap img {
+  filter: grayscale(80%);
+  transition: filter 0.4s ease;
+}
+.blog-card:hover .blog-card-img-wrap img {
+  filter: grayscale(0%);
+}
+.blog-card-body {
+  background-color: transparent !important;
+  padding: 24px !important;
+}
+[data-theme="dark"] .blog-card-body {
+  background-color: transparent !important;
+}
+.blog-card-title a {
+  font-family: var(--font-headline) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  transition: color 0.3s ease;
+}
+.blog-card:hover .blog-card-title a {
+  color: var(--color-accent) !important;
+}
+.blog-card-text {
+  font-family: var(--font-body) !important;
+  color: var(--color-text-muted) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+}
+.blog-card-category {
+  font-family: var(--font-headline) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  border-radius: 0px !important;
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  padding: 4px 10px !important;
+}
+[data-theme="dark"] .blog-card-category {
+  background-color: transparent !important;
+  color: var(--color-accent) !important;
+}
+.blog-card-date {
+  border-radius: 0px !important;
+  background-color: var(--color-accent) !important;
+  box-shadow: none !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+[data-theme="dark"] .blog-card-date {
+  background-color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Editorial Product Card Overrides
+   ========================================================================== */
+.product-card-premium {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important;
+  transition: all 0.3s ease !important;
+}
+[data-theme="dark"] .product-card-premium,
+[data-theme="light"] .product-card-premium {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0px !important;
+}
+.product-card-premium:hover {
+  border-color: rgba(255, 73, 80, 0.4) !important;
+  transform: translateY(-4px) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+}
+[data-theme="dark"] .product-card-premium:hover,
+[data-theme="light"] .product-card-premium:hover {
+  border-color: rgba(255, 73, 80, 0.4) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+}
+.product-card-premium .img-wrap {
+  background-color: #070708 !important; /* Matches main bg */
+  border-bottom: 1px solid var(--color-border) !important;
+  border-radius: 0px !important;
+  padding: 0 !important;
+  height: 200px !important;
+  overflow: hidden;
+}
+[data-theme="dark"] .product-card-premium .img-wrap,
+[data-theme="light"] .product-card-premium .img-wrap {
+  background-color: #070708 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0px !important;
+}
+.product-card-premium .img-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0px !important;
+  filter: grayscale(40%);
+  transition: all 0.4s ease !important;
+}
+.product-card-premium:hover .img-wrap img {
+  filter: grayscale(0%) scale(1.03) !important;
+}
+.product-card-premium .card-body {
+  background-color: transparent !important;
+  padding: 20px !important;
+  border-radius: 0px !important;
+}
+[data-theme="dark"] .product-card-premium .card-body,
+[data-theme="light"] .product-card-premium .card-body {
+  background-color: transparent !important;
+  border-radius: 0px !important;
+}
+.product-card-premium .card-title a {
+  font-family: var(--font-headline) !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+.product-card-premium:hover .card-title a {
+  color: var(--color-accent) !important;
+}
+.product-card-premium .card-text {
+  font-family: var(--font-body) !important;
+  color: var(--color-text-muted) !important;
+  font-size: 0.82rem !important;
+  line-height: 1.6 !important;
+}
+.product-card-premium .btn {
+  border-radius: 0px !important;
+  border: 1px solid var(--color-border) !important;
+  background: transparent !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+.product-card-premium:hover .btn {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+/* ==========================================================================
+   Editorial Table Overrides (Sektor Page)
+   ========================================================================== */
+.custom-table {
+  background-color: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0px !important; /* Sharp corners */
+}
+.custom-table th {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.custom-table td {
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
+.custom-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: #fff !important;
+}
+[data-theme="dark"] .custom-table th,
+[data-theme="light"] .custom-table th {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .custom-table td,
+[data-theme="light"] .custom-table td {
+  background-color: transparent !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .custom-table tr:hover td,
+[data-theme="light"] .custom-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  color: #fff !important;
+}
+
+/* 9. Pagination Styling */
+.pagination {
+  border-radius: 0px !important;
+}
+.pagination .page-item {
+  margin: 0 2px;
+}
+.pagination .page-link,
+[data-theme="dark"] .pagination .page-link,
+[data-theme="light"] .pagination .page-link {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-radius: 0px !important; /* Sharp corners */
+  padding: 10px 18px !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.82rem !important;
+  transition: all 0.3s ease !important;
+}
+.pagination .page-item.active .page-link,
+[data-theme="dark"] .pagination .page-item.active .page-link,
+[data-theme="light"] .pagination .page-item.active .page-link {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: #fff !important;
+}
+.pagination .page-link:hover,
+[data-theme="dark"] .pagination .page-link:hover,
+[data-theme="light"] .pagination .page-link:hover {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--color-accent) !important;
+}
+.pagination .page-item.disabled .page-link,
+[data-theme="dark"] .pagination .page-item.disabled .page-link,
+[data-theme="light"] .pagination .page-item.disabled .page-link {
+  background-color: rgba(255, 255, 255, 0.01) !important;
+  border-color: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+}
+
+@media (max-width: 576px) {
+  .pagination .page-link,
+  [data-theme="dark"] .pagination .page-link,
+  [data-theme="light"] .pagination .page-link {
+    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+  }
+}
+

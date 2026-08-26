@@ -1,0 +1,377 @@
+/* site/04-pages-core.css */
+/* ==========================================================================
+   Profil Page — Editorial Components
+   ========================================================================== */
+
+.profil-sidebar-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4) !important;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+.profil-social-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6) !important;
+  text-decoration: none;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.profil-social-link:hover {
+  color: var(--color-accent) !important;
+  padding-left: 6px;
+}
+.profil-cta-box {
+  border: 1px solid var(--color-border);
+  padding: 24px;
+}
+.profil-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--color-accent) !important;
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent);
+  padding-bottom: 2px;
+  transition: all 0.3s ease;
+}
+.profil-cta-btn i {
+  transition: transform 0.3s ease;
+}
+.profil-cta-btn:hover i {
+  transform: translateX(4px);
+}
+.profil-hero-img {
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+.profil-hero-img img {
+  filter: grayscale(30%);
+  transition: filter 0.5s ease, height 0.3s ease;
+}
+@media (max-width: 768px) {
+  .profil-hero-img img {
+    height: 200px !important;
+    object-fit: cover !important;
+  }
+}
+.profil-hero-img:hover img {
+  filter: grayscale(0%);
+}
+.profil-section-label {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+.profil-section-title {
+  font-family: var(--font-headline) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px;
+  color: #fff !important;
+  margin-bottom: 16px !important;
+}
+.profil-body-text {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.8) !important;
+}
+.profil-body-text img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin: 12px 0;
+}
+.profil-body-text table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.02);
+}
+.profil-body-text table th,
+.profil-body-text table td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 14px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.profil-body-text table th {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-weight: 600;
+}
+.profil-body-text h1, .profil-body-text h2, .profil-body-text h3, 
+.profil-body-text h4, .profil-body-text h5, .profil-body-text h6 {
+  color: #ffffff !important;
+  margin-top: 1.2em;
+  margin-bottom: 0.6em;
+  font-family: var(--font-headline);
+}
+.profil-body-text ul, .profil-body-text ol {
+  padding-left: 24px;
+  margin: 12px 0;
+}
+.profil-body-text blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+.profil-vm-card {
+  border: 1px solid var(--color-border);
+  padding: 28px;
+  height: 100%;
+  transition: border-color 0.3s ease;
+}
+.profil-vm-card:hover {
+  border-color: rgba(255,255,255,0.15);
+}
+.profil-vm-icon {
+  font-size: 1.4rem;
+  color: var(--color-accent);
+  margin-bottom: 16px;
+}
+.profil-vm-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 12px;
+}
+.profil-mission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.profil-mission-list li {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6) !important;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border);
+  line-height: 1.5;
+}
+.profil-mission-list li:last-child {
+  border-bottom: none;
+}
+.profil-value-card {
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0;
+}
+.profil-value-letter {
+  font-family: var(--font-headline);
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+.profil-value-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.9rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Layanan / Sektor Page — Sidebar Nav & Feature Cards
+   ========================================================================== */
+.layanan-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+}
+.layanan-sidebar-link {
+  display: block;
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.55) !important;
+  text-decoration: none;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  letter-spacing: 0.2px;
+}
+.layanan-sidebar-link:hover {
+  color: rgba(255,255,255,0.9) !important;
+  padding-left: 6px;
+}
+.layanan-sidebar-link.is-active {
+  color: #fff !important;
+  font-weight: 600;
+  border-bottom-color: var(--color-accent);
+}
+
+/* Sub-categories styling */
+.sub-category-group {
+  display: flex;
+  flex-direction: column;
+}
+.sub-category-link {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45) !important;
+  text-decoration: none;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: all 0.3s ease;
+  line-height: 1.4;
+  display: block;
+}
+.sub-category-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+  padding-left: 4px;
+}
+.sub-category-link.is-active {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+.layanan-feature-card {
+  border-top: 1px solid var(--color-border);
+  padding: 24px 0;
+  height: 100%;
+}
+.layanan-feature-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.layanan-cta-strip {
+  border: 1px solid var(--color-border);
+  padding: 32px;
+}
+.layanan-cta-title {
+  font-family: var(--font-headline) !important;
+  font-size: 1.3rem !important;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+
+/* ==========================================================================
+   Kontak Page — Info Blocks & Form Inputs
+   ========================================================================== */
+.kontak-info-block {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.kontak-info-icon {
+  font-size: 1.2rem;
+  color: var(--color-accent);
+  margin-bottom: 12px;
+}
+.kontak-info-title {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.4) !important;
+  margin-bottom: 10px;
+}
+.kontak-info-link {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.65) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  margin-bottom: 4px;
+}
+.kontak-info-link:hover {
+  color: var(--color-accent) !important;
+}
+.kontak-form-label {
+  display: block;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.5) !important;
+  margin-bottom: 8px;
+}
+[data-theme="dark"] .kontak-form-input,
+[data-theme="dark"] input.kontak-form-input,
+[data-theme="dark"] textarea.kontak-form-input,
+[data-theme="dark"] select.kontak-form-input,
+.kontak-form-input {
+  background-color: rgba(255,255,255,0.03) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  color: rgba(255,255,255,0.85) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  padding: 12px 16px !important;
+  transition: border-color 0.3s ease !important;
+  box-shadow: none !important;
+}
+[data-theme="dark"] .kontak-form-input:focus,
+[data-theme="dark"] input.kontak-form-input:focus,
+[data-theme="dark"] textarea.kontak-form-input:focus,
+[data-theme="dark"] select.kontak-form-input:focus,
+.kontak-form-input:focus {
+  border-color: rgba(255,255,255,0.3) !important;
+  background-color: rgba(255,255,255,0.04) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+[data-theme="dark"] .kontak-form-input::placeholder,
+.kontak-form-input::placeholder {
+  color: rgba(255,255,255,0.25) !important;
+}
+.kontak-form-input option {
+  background-color: #111;
+  color: rgba(255,255,255,0.85);
+}
+.kontak-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-headline);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #fff !important;
+  background-color: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  border-radius: 0 !important;
+  padding: 14px 32px !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+}
+.kontak-submit-btn:hover {
+  background-color: transparent !important;
+  color: var(--color-accent) !important;
+}
+

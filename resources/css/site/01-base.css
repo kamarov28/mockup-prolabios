@@ -1,0 +1,919 @@
+/* site/01-base.css */
+/* ==========================================================================
+   Prolabios Ultra-Minimalist Typography Stylesheet (Experimental)
+   Fonts load once from layouts/app.blade.php (no @import — blocks render)
+   ========================================================================== */
+
+:root {
+  --font-headline: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-bg: #070708;
+  --color-text-main: #FFFFFF;
+  --color-text-muted: #8E8E93;
+  --color-accent: #FF4950;
+  --color-border: rgba(255, 255, 255, 0.08);
+}
+
+/* Base Overrides */
+html, body {
+  background-color: var(--color-bg) !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* Hide top bar */
+.premium-top-bar {
+  display: none !important;
+}
+
+/* Minimalist Floating Sharp Navbar Override - Architectural Precision */
+.navbar,
+[data-theme="dark"] .navbar {
+  position: fixed !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 40px) !important;
+  max-width: 1280px !important;
+  z-index: 99999 !important;
+  background: rgba(5, 7, 9, 0.95) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 73, 80, 0.35) !important;
+  border-radius: 0px !important;
+  padding: 8px 20px !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
+}
+
+@media (max-width: 991.98px) {
+  .navbar,
+  [data-theme="dark"] .navbar,
+  .navbar.header-scrolled {
+    position: fixed !important;
+    top: 16px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    border-radius: 0px !important;
+    padding: 10px 16px !important;
+    margin: 0 !important;
+    z-index: 99999 !important;
+  }
+  .navbar-brand {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-right: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+  .navbar-brand img {
+    max-width: 140px !important;
+    max-height: 24px !important;
+    object-fit: contain !important;
+  }
+  .navbar-collapse {
+    border-radius: 0px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .navbar-collapse.collapsing {
+    transition: height 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    overflow: hidden !important;
+  }
+}
+
+.navbar.header-scrolled {
+  background: rgba(5, 7, 9, 0.95) !important;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.7) !important;
+  border-color: rgba(255, 73, 80, 0.35) !important;
+}
+.navbar-nav {
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+}
+.navbar-brand img {
+  filter: brightness(0) invert(1);
+  max-width: 175px !important;
+  height: auto !important;
+}
+.navbar-light .navbar-nav .nav-link {
+  font-family: var(--font-headline) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding: 6px 0 !important;
+  white-space: nowrap !important;
+  transition: color 0.3s ease;
+}
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link.active {
+  color: var(--color-accent) !important;
+}
+.navbar-nav .nav-item {
+  padding: 0 5px !important;
+}
+@media (min-width: 1200px) {
+  .navbar-nav .nav-item {
+    padding: 0 7px !important;
+  }
+}
+.navbar-light .navbar-toggler {
+  border: none !important;
+  padding: 0 !important;
+}
+.navbar-light .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.95%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+  filter: none !important;
+}
+
+/* Premium Download Button Override */
+.navbar .btn-outline-danger {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  background: transparent !important;
+  border-radius: 0px !important;
+  padding: 8px 18px !important;
+  transition: all 0.3s ease !important;
+}
+.navbar .btn-outline-danger:hover {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  background: transparent !important;
+}
+
+/* Theme / Motion toggles style */
+#theme-toggle, #motion-toggle {
+  color: var(--color-text-muted) !important;
+}
+#theme-toggle:hover, #motion-toggle:hover {
+  color: #fff !important;
+}
+
+/* Spacious Sections */
+.section-spacious {
+  padding: 100px 0 !important;
+  position: relative;
+  border-bottom: 1px solid var(--color-border);
+  /* Skip layout/paint work for off-screen sections where supported */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 520px;
+}
+/* Hero must paint immediately for LCP — never defer */
+.section-spacious.typo-hero {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+.section-spacious:last-of-type {
+  border-bottom: none;
+}
+
+/* Typography Hero Layout */
+.typo-hero {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 120px !important;
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+.typo-hero-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-bg-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  opacity: 0;
+  z-index: 1;
+  transform: translateZ(0) scale(1);
+  filter: brightness(0.9) contrast(105%);
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+}
+.hero-bg-slide.active {
+  opacity: 0.7;
+  z-index: 2;
+}
+.no-motion .hero-bg-slide {
+  will-change: auto;
+}
+.no-motion .hero-bg-slide.active {
+  opacity: 0.7;
+  will-change: auto;
+}
+.typo-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background: linear-gradient(
+    to right, 
+    rgba(5, 7, 9, 0.85) 0%, 
+    rgba(5, 7, 9, 0.6) 45%, 
+    rgba(5, 7, 9, 0.25) 80%, 
+    rgba(5, 7, 9, 0.1) 100%
+  ), 
+  linear-gradient(
+    to top, 
+    #050709 0%, 
+    rgba(5, 7, 9, 0) 35%
+  );
+  pointer-events: none;
+}
+.typo-hero-entrance {
+  position: relative;
+  z-index: 5;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+/* Eyebrow / brand label above hero title */
+/* Minimalist Hero Slideshow Controls & Indicators */
+.typo-hero-controls {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(5, 7, 9, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 8px 18px;
+  border-radius: 0px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.hero-counter-box {
+  font-family: var(--font-headline);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.hero-counter-num {
+  color: var(--color-accent) !important;
+  font-weight: 700;
+}
+.hero-counter-sep {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+.hero-counter-total {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.hero-progress-bar-wrap {
+  width: 90px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 0px !important;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+.hero-progress-fill {
+  display: block !important;
+  height: 100% !important;
+  width: 0%;
+  background: #ff4950 !important;
+  border-radius: 0px !important;
+  box-shadow: 0 0 10px rgba(255, 73, 80, 0.8) !important;
+}
+.hero-progress-fill.running {
+  width: 100% !important;
+  transition: width 5s linear !important;
+}
+.typo-hero-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  padding: 4px 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.typo-hero-ctrl-btn:hover {
+  color: var(--color-accent);
+  transform: scale(1.15);
+}
+
+.typo-eyebrow {
+  display: inline-block;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #070708;
+  background: var(--color-accent);
+  padding: 0.4rem 0.85rem;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+  line-height: 1.2;
+}
+
+.typo-hero-title {
+  font-family: var(--font-headline);
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  margin-bottom: 40px;
+  color: #fff;
+  max-width: 920px;
+}
+.typo-hero-title .text-accent,
+.typo-hero-title .word-inner.text-accent,
+.typo-hero-title .word-mask.text-accent {
+  color: var(--color-accent) !important;
+}
+.typo-outline {
+  color: transparent !important;
+  -webkit-text-stroke: 1.5px var(--color-accent) !important;
+}
+.typo-lead {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  max-width: 620px;
+  color: var(--color-text-muted);
+  margin-bottom: 50px;
+}
+
+/* ── GSAP typography split masks (clip-up / line reveal) ── */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.word-mask .word-inner {
+  display: inline-block;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.line-mask .line-inner {
+  display: block;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+/* Nested outline words keep stroke after split */
+.typo-outline,
+.typo-outline .word-inner {
+  color: transparent !important;
+  -webkit-text-stroke: 1.5px var(--color-accent) !important;
+}
+.typo-outline .word-mask {
+  padding-right: 0.15em;
+  margin-right: -0.15em;
+}
+
+/* Section heads (shared homepage type system) */
+.typo-section-label {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-text-muted) !important;
+  margin-bottom: 0.85rem;
+  display: block;
+}
+.typo-section-title {
+  font-family: var(--font-headline);
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+.typo-section-sub {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  max-width: 36rem;
+}
+
+/* Minimalist Button Link */
+.typo-btn-link {
+  font-family: var(--font-headline);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff !important;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #ff4950;
+  padding-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.typo-btn-link--ghost {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.typo-btn-link:hover {
+  color: #fff !important;
+  border-color: #fff !important;
+  transform: translateX(4px);
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+.typo-btn-link--ghost:hover {
+  border-color: var(--color-accent) !important;
+}
+
+/* Index List Sektor Fokus */
+.typo-index-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.typo-index-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 50px 0;
+  border-bottom: 1px solid var(--color-border);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.typo-index-item:first-child {
+  border-top: 1px solid var(--color-border);
+}
+.typo-index-number {
+  font-family: var(--font-headline);
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  width: 140px;
+  flex-shrink: 0;
+}
+.typo-index-content {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+}
+.typo-index-text {
+  max-width: 700px;
+}
+.typo-index-title {
+  font-family: var(--font-headline);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+.typo-index-desc {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+.typo-index-link {
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 4px;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+.typo-index-link:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.typo-index-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  padding-left: 24px;
+}
+.typo-index-item:hover .typo-index-desc {
+  color: #ffffff;
+}
+
+/* Brand Statement Banner */
+.typo-brand-statement {
+  background: #000;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 28px 0;
+}
+.typo-statement-lead {
+  font-family: var(--font-headline);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--color-text-main);
+  text-transform: uppercase;
+}
+.typo-statement-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+.typo-pill-accent,
+.typo-pill-outline {
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  padding: 6px 16px;
+  border-radius: 0px !important;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.typo-pill-accent {
+  background: rgba(211, 47, 47, 0.1);
+  border: 1px solid rgba(211, 47, 47, 0.2);
+  color: var(--color-accent);
+}
+.typo-pill-outline {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Blog Cards Minimalist - Editorial Column Style */
+[data-theme="dark"] .card.typo-blog-card,
+.card.typo-blog-card {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  border-left: 1px solid var(--color-border) !important;
+  padding: 0 0 0 40px !important; /* Reset layout-level padding */
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition: all 0.3s ease;
+}
+.typo-blog-card .card-body {
+  padding: 0 32px 0 0 !important; /* Push inner content away from the right edge */
+  background: transparent !important;
+  border: none !important;
+}
+/* Remove left border for the first column in the row */
+.row > div:first-child .card.typo-blog-card {
+  border-left: none !important;
+  padding-left: 0 !important;
+  padding-right: 24px !important; /* Keep balance for first item */
+}
+.typo-blog-card:hover {
+  border-left-color: var(--color-accent) !important;
+  padding-left: 44px !important; /* Minimal shift adjustment */
+}
+.typo-blog-card-meta {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  margin-bottom: 14px;
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.typo-blog-card-title {
+  font-family: var(--font-headline);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.4;
+  letter-spacing: -0.5px;
+}
+.typo-blog-card-title a {
+  color: #fff !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.typo-blog-card:hover .typo-blog-card-title a,
+.typo-blog-card-title a:hover {
+  color: var(--color-accent) !important;
+}
+.typo-blog-card-desc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+/* Footer Minimalist */
+.premium-footer {
+  background: var(--color-bg) !important;
+  border-top: 1px solid var(--color-border) !important;
+  padding: 100px 0 50px !important;
+}
+.premium-footer h3,
+.premium-footer h5 {
+  font-family: var(--font-headline) !important;
+  color: #fff !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 24px !important;
+}
+.premium-footer p, 
+.premium-footer ul,
+.premium-footer li, 
+.premium-footer a {
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  color: var(--color-text-muted) !important;
+  line-height: 1.8 !important;
+}
+.premium-footer a:hover {
+  color: var(--color-accent) !important;
+}
+.premium-footer hr {
+  border-color: var(--color-border) !important;
+  margin: 40px 0 24px !important;
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse-inner {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 991px) {
+  .navbar-brand img {
+    max-width: 180px !important;
+  }
+  /* Navbar Collapse Panel - Clean Seamless Layout inside Navbar */
+  .navbar-collapse-inner {
+    width: 100%;
+  }
+  @media (max-width: 991px) {
+    .navbar-collapse-inner {
+      background: transparent !important;
+      border: none !important;
+      border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+      border-radius: 0px !important;
+      margin-top: 10px;
+      padding: 12px 0 6px 0 !important;
+      box-shadow: none !important;
+      transition: opacity 0.2s ease;
+    }
+    .navbar-collapse.collapsing .navbar-collapse-inner {
+      opacity: 0.5;
+    }
+  }
+  .navbar-nav {
+    align-items: flex-start !important;
+    width: 100%;
+  }
+  .navbar-nav .nav-item {
+    padding: 0 !important;
+    width: 100%;
+  }
+  .navbar-light .navbar-nav .nav-link {
+    font-size: 0.85rem !important;
+    padding: 12px 8px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    width: 100%;
+    display: block;
+  }
+  .navbar-light .navbar-nav .nav-link::after {
+    display: none !important;
+  }
+  .navbar .btn-outline-danger {
+    margin-top: 15px !important;
+    margin-bottom: 10px !important;
+    display: inline-flex !important;
+    width: auto !important;
+  }
+  .navbar-utilities {
+    margin-top: 15px !important;
+    padding-top: 15px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    width: 100%;
+    justify-content: flex-start !important;
+  }
+
+.nav-cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--color-accent, #ff4950);
+  color: #ffffff;
+  font-family: var(--font-headline);
+  font-size: 0.62rem;
+  font-weight: 700;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 0px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(255, 73, 80, 0.4);
+}
+
+  .typo-hero {
+    padding-top: 130px !important;
+  }
+  .typo-hero-title {
+    font-size: clamp(2.0rem, 7vw, 2.8rem) !important;
+    letter-spacing: -1.5px;
+  }
+  .section-spacious {
+    padding: 80px 0 !important;
+  }
+  .typo-index-item {
+    flex-direction: column;
+    padding: 30px 0;
+  }
+  .typo-index-number {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+  }
+  .typo-index-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .typo-index-title {
+    font-size: 1.4rem;
+  }
+  [data-theme="dark"] .card.typo-blog-card,
+  .card.typo-blog-card {
+    border-left: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    padding-bottom: 30px !important;
+    margin-bottom: 20px;
+  }
+  .row > div:last-child .card.typo-blog-card {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0;
+  }
+  [data-theme="dark"] .card.typo-blog-card:hover,
+  .card.typo-blog-card:hover {
+    padding-left: 12px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .typo-hero {
+    padding-top: 110px !important;
+  }
+  .typo-hero-title {
+    font-size: 2.1rem !important;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin-bottom: 25px;
+  }
+  .typo-lead {
+    font-size: 1.05rem !important;
+    line-height: 1.6;
+    margin-bottom: 35px;
+  }
+  .section-spacious {
+    padding: 60px 0 !important;
+  }
+  .typo-hero-ctas {
+    gap: 15px !important;
+  }
+  .typo-hero-ctas .typo-btn-link {
+    font-size: 0.85rem !important;
+    padding: 10px 16px !important;
+  }
+  
+  /* Sektor Fokus - Index list adjustments */
+  .typo-index-item {
+    padding: 24px 0 !important;
+  }
+  .typo-index-number {
+    font-size: 1.4rem !important;
+    margin-bottom: 8px !important;
+  }
+  .typo-index-title {
+    font-size: 1.3rem !important;
+    margin-bottom: 10px !important;
+  }
+  .typo-index-desc {
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
+  }
+  .typo-index-link {
+    font-size: 0.8rem !important;
+  }
+
+  /* Partner marquee logo boxes scale down */
+  .marquee-logo-box {
+    width: 140px !important;
+    height: 70px !important;
+  }
+  .marquee-logo-box img {
+    max-height: 55% !important;
+  }
+  .marquee-container {
+    gap: 25px !important;
+    padding: 10px 0 !important;
+  }
+
+  /* Marquee banner compact scale */
+  .typo-marquee {
+    padding: 16px 0 !important;
+  }
+  .typo-marquee-content {
+    font-size: 0.9rem !important;
+    letter-spacing: 1px !important;
+  }
+  
+  /* Top bar adjustments */
+  .premium-top-bar {
+    padding: 10px 0 !important;
+  }
+  .premium-top-bar span, .premium-top-bar a {
+    font-size: 0.75rem !important;
+  }
+  .premium-top-bar .search-form {
+    display: none !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand img {
+    max-width: 140px !important;
+  }
+  .typo-hero {
+    padding-top: 100px !important;
+  }
+  .typo-hero-title {
+    font-size: 1.8rem !important;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+  }
+  .typo-hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .typo-hero-ctas .typo-btn-link {
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+  }
+  
+  /* Sektor Fokus (Index item) Detail Link block style */
+  .typo-index-content {
+    width: 100%;
+  }
+  .typo-index-text {
+    margin-bottom: 15px;
+  }
+  
+  /* News section headers stacking */
+  .typo-section-title {
+    font-size: 1.75rem !important;
+  }
+  .typo-section-head {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px;
+  }
+}
+

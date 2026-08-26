@@ -1,0 +1,240 @@
+/* site/09-cart-rfq.css */
+/* ==========================================================================
+   Cart & RFQ Basket Styling — Prolabios Dark Editorial Language
+   ========================================================================== */
+.cart-page-bg {
+  background-color: var(--color-bg-body, #050709);
+  min-height: 85vh;
+}
+
+.cart-stepper-wrap {
+  background: #0c0d12;
+  border: 1px solid var(--color-border);
+  border-radius: 0 !important;
+  padding: 1rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.step-num-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.step-num-active {
+  background: var(--color-accent);
+  color: #ffffff;
+}
+
+.step-num-inactive {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+.step-label {
+  font-family: var(--font-headline);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.cart-clear-btn {
+  font-family: var(--font-headline);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: transparent !important;
+  color: var(--color-accent) !important;
+  border: 1px solid rgba(255, 73, 80, 0.35) !important;
+  border-radius: 0px !important;
+  padding: 6px 14px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+.cart-clear-btn:hover {
+  background: rgba(255, 73, 80, 0.15) !important;
+  color: #ffffff !important;
+  border-color: var(--color-accent) !important;
+}
+
+.cart-item-card {
+  background: #0c0d12;
+  border: 1px solid var(--color-border);
+  border-radius: 0 !important;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.cart-item-card:hover {
+  border-color: rgba(255, 73, 80, 0.4);
+}
+
+.cart-img-box {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  min-height: 80px !important;
+  max-width: 80px !important;
+  max-height: 80px !important;
+  flex-shrink: 0 !important;
+  border-radius: 0 !important;
+  background: #000000;
+  border: 1px solid var(--color-border);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.cart-img-box img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: auto !important;
+}
+
+.cart-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 2px 8px;
+  border-radius: 0 !important;
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.cart-sidebar-panel {
+  background: #0c0d12;
+  border: 1px solid var(--color-border);
+  border-radius: 0 !important;
+  padding: 1.5rem;
+}
+
+.cart-sidebar-title {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.rfq-info-box {
+  background: rgba(255, 73, 80, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: 0 !important;
+  padding: 1rem;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.rfq-primary-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 48px !important;
+  background: var(--color-accent) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--color-accent) !important;
+  border-radius: 0 !important;
+  text-transform: uppercase !important;
+  font-family: var(--font-headline) !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  font-size: 0.82rem !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.rfq-primary-btn:hover {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+}
+
+.rfq-secondary-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 44px !important;
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  text-transform: uppercase !important;
+  font-family: var(--font-headline) !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  font-size: 0.78rem !important;
+  text-decoration: none !important;
+  margin-top: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.rfq-secondary-btn:hover {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+.rfq-input {
+  background-color: #000000 !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+  color: #ffffff !important;
+  font-size: 0.88rem !important;
+  padding: 10px 14px !important;
+}
+
+.rfq-input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: none !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+@media (max-width: 991.98px) {
+  .rfq-checkout-row {
+    --bs-gutter-y: 0 !important;
+  }
+  .rfq-card-form {
+    border-bottom: none !important;
+    padding-bottom: 1.5rem !important;
+  }
+  .rfq-card-summary {
+    border-top: 1px dashed rgba(255, 255, 255, 0.12) !important;
+    padding-top: 1.5rem !important;
+  }
+}
+
+

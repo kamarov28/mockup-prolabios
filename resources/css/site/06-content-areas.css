@@ -1,0 +1,322 @@
+/* site/06-content-areas.css */
+/* ==========================================================================
+   Editorial Content Areas
+   ========================================================================== */
+
+/* Section Wrappers - remove Bootstrap cruft */
+.bg-white.p-4.rounded.shadow-sm,
+.bg-white.p-4.p-md-5.rounded.shadow-sm,
+.bg-white.p-4.p-md-5.rounded.shadow-sm.border-0,
+.bg-white.p-4.p-md-5.rounded.shadow-sm.border-0.h-100 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+/* Sidebar boxes - strip Bootstrap styling */
+.bg-white.p-4.rounded.shadow-sm.border-0 {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Sidebar titles */
+.bg-white.p-4.rounded.shadow-sm.border-0 h2,
+.bg-white.p-4.rounded.shadow-sm h2 {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  border-width: 1px !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 20px !important;
+}
+
+/* Sidebar CTA boxes */
+.sidebar-cta-box {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+}
+
+/* Content images */
+.overflow-hidden.rounded.shadow-sm {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+/* Section headings inside content */
+section h2.fw-bold,
+section h3.fw-bold {
+  font-family: var(--font-headline) !important;
+  letter-spacing: -0.5px;
+}
+
+/* Section dividers */
+section hr {
+  border-color: var(--color-border) !important;
+  opacity: 1 !important;
+}
+
+/* Badges */
+.badge {
+  background-color: transparent !important;
+  border: 1px solid var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  font-family: var(--font-headline);
+  font-size: 0.65rem !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-radius: 0 !important;
+  padding: 4px 10px !important;
+}
+
+/* Vision/Mission/Values cards on profile page */
+.card.border-0.shadow-sm.h-100.bg-light {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-left: none !important;
+  border-top: none !important;
+}
+
+/* Bootstrap alert overrides */
+.alert {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  border-radius: 2px !important;
+}
+
+
+/* Custom table editorial styling */
+.custom-table, .table {
+  border-collapse: collapse !important;
+}
+.custom-table thead th, .table thead th {
+  font-family: var(--font-headline) !important;
+  font-size: 0.72rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.5px !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--color-border) !important;
+  padding: 12px 16px !important;
+}
+.custom-table tbody td, .table tbody td {
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--color-border) !important;
+  font-size: 0.9rem !important;
+}
+
+/* Service/Sector feature cards */
+.card.h-100.border-0.shadow-sm.bg-light {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-top: none !important;
+}
+
+/* Contact info cards */
+.card.border-0.shadow-sm.mb-4 {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: none !important;
+  border-radius: 2px !important;
+  border-left: none !important;
+}
+
+/* Social media buttons */
+.btn-outline-primary, .btn-outline-secondary, .btn-outline-info,
+.btn-outline-success, .btn-outline-warning, .btn-outline-dark, .btn-outline-light {
+  background: transparent !important;
+  border-color: var(--color-border) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-radius: 2px !important;
+  font-family: var(--font-headline);
+  font-size: 0.78rem !important;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+.btn-outline-primary:hover, .btn-outline-secondary:hover, .btn-outline-info:hover,
+.btn-outline-success:hover, .btn-outline-warning:hover, .btn-outline-dark:hover, .btn-outline-light:hover {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+  background: transparent !important;
+}
+
+/* Hero Manual Slider Controls */
+.typo-hero-controls {
+  position: absolute;
+  bottom: 40px;
+  right: 15px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+.typo-hero-ctrl-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-text-main);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  outline: none;
+}
+.typo-hero-ctrl-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
+.typo-hero-ctrl-btn:active {
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  .typo-hero {
+    padding-bottom: 120px !important;
+  }
+  .typo-hero-controls {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    right: auto;
+    transform: none;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 12px;
+    width: 100%;
+  }
+  .typo-hero-ctrl-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Animated Hamburger Menu (from Uiverse.io by JulanDeAlb) */
+.hamburger {
+  cursor: pointer;
+  display: none;
+}
+@media (max-width: 991.98px) {
+  .hamburger {
+    display: inline-block;
+  }
+}
+.hamburger input {
+  display: none;
+}
+.hamburger svg {
+  height: 2.2rem;
+  width: 2.2rem;
+  transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: block;
+}
+.hamburger .line {
+  fill: none;
+  stroke: #ffffff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hamburger .line-top-bottom {
+  stroke-dasharray: 12 63;
+}
+.hamburger input:checked + svg {
+  transform: rotate(-45deg);
+}
+.hamburger input:checked + svg .line-top-bottom {
+  stroke-dasharray: 20 300;
+  stroke-dashoffset: -32.42;
+}
+
+/* Single-track Infinite Marquee Rework */
+.marquee-content-single {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100%;
+  gap: 3rem;
+  padding-right: 3rem;
+  animation: scroll-marquee-single 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll-marquee-single {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.marquee-container:hover .marquee-content-single {
+  animation-play-state: paused;
+}
+
+/* Custom Catalog Filter Button on Mobile */
+.catalog-filter-toggle-btn {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 8px !important;
+  font-family: var(--font-headline);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.8) !important;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.catalog-filter-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Custom Scrollbar for Responsive Tables (Mobile Indicator) */
+.table-responsive {
+  scrollbar-color: var(--color-accent) rgba(255, 255, 255, 0.03); /* Firefox */
+  scrollbar-width: thin;
+}
+.table-responsive::-webkit-scrollbar {
+  -webkit-appearance: none;
+  height: 6px; /* Ketebalan scrollbar horizontal */
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 100px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--color-accent); /* Aksen Merah Prolabios */
+  border-radius: 100px;
+  transition: background 0.3s ease;
+}
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #ff4d5a;
+}
+

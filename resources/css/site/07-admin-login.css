@@ -1,0 +1,153 @@
+/* site/07-admin-login.css */
+/* ==========================================================================
+   Admin Login Page Styling (Vite Integrated)
+   ========================================================================== */
+.login-body-wrapper {
+  font-family: 'Instrument Sans', 'Inter', sans-serif;
+  background-color: #070708;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+/* Ambient Glow Backgrounds */
+.login-body-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 73, 80, 0.05) 0%, rgba(255, 73, 80, 0) 70%);
+  top: -100px;
+  left: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+.login-body-wrapper::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 73, 80, 0.03) 0%, rgba(255, 73, 80, 0) 70%);
+  bottom: -150px;
+  right: -150px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-card {
+  background-color: #0e0e10;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  z-index: 10;
+  position: relative;
+}
+.login-header {
+  background-color: #070708;
+  padding: 3rem 2rem 2.2rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.login-header img {
+  height: 42px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+.login-body {
+  padding: 2.5rem 2.2rem;
+}
+.login-body .form-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-bottom: 8px;
+}
+.login-body .input-group {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.015);
+}
+.login-body .input-group:focus-within {
+  border-color: #ff4950;
+  box-shadow: 0 0 0 4px rgba(255, 73, 80, 0.12);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+.login-body .input-group-text {
+  background-color: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-size: 0.95rem;
+  padding-left: 14px;
+  padding-right: 12px;
+}
+.login-body .form-control {
+  background-color: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.9rem;
+  padding: 12px 14px 12px 0;
+}
+.login-body .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+.login-body .form-control:focus {
+  box-shadow: none !important;
+  color: #ffffff;
+}
+.login-body .btn-primary {
+  background-color: #ff4950 !important;
+  border-color: #ff4950 !important;
+  padding: 12px !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+.login-body .btn-primary:hover, .login-body .btn-primary:focus {
+  background-color: #e03e45 !important;
+  border-color: #e03e45 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255, 73, 80, 0.25) !important;
+}
+.login-body .btn-primary:active {
+  transform: translateY(0);
+}
+.btn-back-home {
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+.btn-back-home:hover {
+  color: #ffffff !important;
+}
+.login-body .alert-danger {
+  background-color: rgba(255, 73, 80, 0.06) !important;
+  border: 1px solid rgba(255, 73, 80, 0.15) !important;
+  color: #ff6b72 !important;
+  border-radius: 8px;
+}
+.login-body .alert-success {
+  background-color: rgba(46, 204, 113, 0.06) !important;
+  border: 1px solid rgba(46, 204, 113, 0.15) !important;
+  color: #2ecc71 !important;
+  border-radius: 8px;
+}
+
