@@ -7,7 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Services\AuditLogger;
-use App\Services\DataService;
+use App\Services\PostService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
@@ -17,13 +17,13 @@ class AdminPostController extends Controller
 {
     use HandlesImageUploads, PaginatesQuery;
 
-    protected DataService $dataService;
+    protected PostService $posts;
 
     private const POSTS_PER_PAGE = 10;
 
-    public function __construct(DataService $dataService)
+    public function __construct(PostService $posts)
     {
-        $this->dataService = $dataService;
+        $this->posts = $posts;
     }
 
     public function postsIndex(Request $request)
@@ -78,7 +78,7 @@ class AdminPostController extends Controller
         $title = $request->input('title');
         $slug  = Str::slug($title);
 
-        if ($this->dataService->getPostBySlug($slug)) {
+        if ($this->posts->getPostBySlug($slug)) {
             $slug .= '-'.Str::lower(Str::random(6));
         }
 
@@ -105,7 +105,7 @@ class AdminPostController extends Controller
             'content'     => $request->input('content'),
         ];
 
-        $this->dataService->addPost($post);
+        $this->posts->addPost($post);
 
         AuditLogger::log('post.create', 'Post', null, [
             'title'  => $title,
@@ -118,7 +118,7 @@ class AdminPostController extends Controller
 
     public function postsEdit(string $slug)
     {
-        $post = $this->dataService->getPostBySlug($slug);
+        $post = $this->posts->getPostBySlug($slug);
         if (! $post) {
             return redirect()->route('admin.posts')->with('error', 'Artikel tidak ditemukan.');
         }
@@ -128,7 +128,7 @@ class AdminPostController extends Controller
 
     public function postsUpdate(UpdatePostRequest $request, string $slug)
     {
-        $post = $this->dataService->getPostBySlug($slug);
+        $post = $this->posts->getPostBySlug($slug);
         if (! $post) {
             return redirect()->route('admin.posts')->with('error', 'Artikel tidak ditemukan.');
         }
@@ -139,7 +139,7 @@ class AdminPostController extends Controller
         if ($newTitle !== $post['title']) {
             $newSlug = Str::slug($newTitle);
 
-            if ($newSlug !== $slug && $this->dataService->getPostBySlug($newSlug)) {
+            if ($newSlug !== $slug && $this->posts->getPostBySlug($newSlug)) {
                 $newSlug .= '-'.Str::lower(Str::random(6));
             }
         }
@@ -169,7 +169,7 @@ class AdminPostController extends Controller
             'content'     => $request->input('content'),
         ];
 
-        $this->dataService->updatePost($slug, $updatedPost);
+        $this->posts->updatePost($slug, $updatedPost);
 
         AuditLogger::log('post.update', 'Post', $post['id'] ?? $slug, [
             'old_title' => $oldTitle,
@@ -183,11 +183,11 @@ class AdminPostController extends Controller
 
     public function postsDestroy(string $slug)
     {
-        $post  = $this->dataService->getPostBySlug($slug);
+        $post  = $this->posts->getPostBySlug($slug);
         $title = $post['title'] ?? null;
         $id    = $post['id'] ?? null;
 
-        $this->dataService->deletePost($slug);
+        $this->posts->deletePost($slug);
 
         AuditLogger::log('post.delete', 'Post', $id ?? $slug, [
             'title' => $title,

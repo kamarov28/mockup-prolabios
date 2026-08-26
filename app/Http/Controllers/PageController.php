@@ -93,8 +93,9 @@ class PageController extends Controller
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                $product = $dataService->getProductByTitle((string) $identifier)
-                    ?? $dataService->getProductBySlug(Str::slug((string) $identifier));
+                // Prefer slug, then legacy title match
+                $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
+                    ?? $dataService->getProductByTitle((string) $identifier);
             }
         }
 
@@ -114,8 +115,9 @@ class PageController extends Controller
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                $product = $dataService->getProductByTitle((string) $identifier)
-                    ?? $dataService->getProductBySlug(Str::slug((string) $identifier));
+                // Prefer slug, then legacy title match
+                $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
+                    ?? $dataService->getProductByTitle((string) $identifier);
             }
         }
 

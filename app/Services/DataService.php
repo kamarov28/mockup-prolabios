@@ -10,10 +10,10 @@ use Illuminate\Support\Collection;
  * DataService
  *
  * Central service facade delegating to focused domain services:
- * - ProductService: Catalog, categories structure, live stock, and product caching
+ * - ProductService: Catalog, categories structure, and product caching
  * - PostService: Articles, news, events, and category counts
  * - SectorService: Industry sectors and applications
- * - HomepageService: Homepage layout data, banners, and general site settings
+ * - HomepageService: Homepage layout data and general site settings
  * - HtmlSanitizer: Rich-text sanitization
  */
 class DataService
@@ -78,24 +78,9 @@ class DataService
         return $this->products->updateProductById($id, $updatedProduct);
     }
 
-    public function updateProduct(string $oldTitle, array $updatedProduct): bool
-    {
-        return $this->products->updateProduct($oldTitle, $updatedProduct);
-    }
-
-    public function decrementStock(string $title, int $quantity): bool
-    {
-        return $this->products->decrementStock($title, $quantity);
-    }
-
     public function deleteProductById(int $id): bool
     {
         return $this->products->deleteProductById($id);
-    }
-
-    public function deleteProduct(string $title): bool
-    {
-        return $this->products->deleteProduct($title);
     }
 
     public function upsertProducts(array $rows): array

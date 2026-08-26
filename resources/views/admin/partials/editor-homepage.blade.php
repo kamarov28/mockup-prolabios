@@ -37,8 +37,15 @@
             <label for="hero_title" class="admin-card-header-label mb-2">Hero Title / Slogan Utama</label>
             <input type="text" class="form-control bg-dark text-white border-secondary border-opacity-20 @error('hero_title') is-invalid @enderror" id="hero_title" name="hero_title" value="{{ old('hero_title', $homeData['hero_title'] ?? '') }}" required>
             @error('hero_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            <div class="form-text mt-2 small text-secondary">
-              Gunakan <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="text-accent">Kata</span></code> untuk warna merah solid, atau <code class="bg-black text-danger border border-danger border-opacity-20 px-2 py-1 rounded"><span class="typo-outline">Kata</span></code> untuk outline transparan.
+            <div class="form-text mt-2 small text-secondary lh-base">
+              Bisa sisipkan HTML kecil di judul (copy-paste ke field di atas):
+              <div class="mt-2 d-flex flex-column gap-1">
+                <code class="bg-black text-white border border-secondary border-opacity-25 px-2 py-1 rounded user-select-all" style="font-size: 0.7rem; white-space: normal;">{{ '<span class="text-accent">Trusted</span>' }}</code>
+                <span class="text-secondary" style="font-size: 0.65rem;">→ teks merah solid</span>
+                <code class="bg-black text-white border border-secondary border-opacity-25 px-2 py-1 rounded user-select-all" style="font-size: 0.7rem; white-space: normal;">{{ '<span class="typo-outline">Trusted</span>' }}</code>
+                <span class="text-secondary" style="font-size: 0.65rem;">→ outline transparan</span>
+              </div>
+              <div class="mt-2" style="font-size: 0.65rem;">Contoh isi field: <code class="text-white">{{ '<span class="typo-outline">Trusted</span> Analytical & Microbiology Solutions' }}</code></div>
             </div>
           </div>
         </div>

@@ -349,7 +349,6 @@ class ProductService
 
     public function addProduct(array $product): ?Product
     {
-        // slug auto-filled by Product::saving
         $created = Product::create([
             'catalog' => $product['catalog'] ?? null,
             'title' => $product['title'],
@@ -399,64 +398,9 @@ class ProductService
         return true;
     }
 
-    public function updateProduct(string $oldTitle, array $updatedProduct): bool
-    {
-        $product = Product::where('title', $oldTitle)->first();
-        if (! $product) {
-            return false;
-        }
-
-        $product->update([
-            'catalog' => $updatedProduct['catalog'] ?? null,
-            'title' => $updatedProduct['title'],
-            'description' => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
-            'category' => $updatedProduct['category'],
-            'sub_category' => $updatedProduct['sub_category'] ?? null,
-            'sector' => $updatedProduct['sector'] ?? null,
-            'image' => $updatedProduct['image'] ?? null,
-            'price' => $updatedProduct['price'] ?? 0,
-            'stock' => $updatedProduct['stock'] ?? 0,
-        ]);
-
-        $product->syncSectorsFromCsv($product->sector);
-
-        Product::clearCategoriesCache();
-        $this->clearProductsCache();
-
-        return true;
-    }
-
-    public function decrementStock(int|string $productIdOrTitle, int $quantity = 1): bool
-    {
-        $query = is_numeric($productIdOrTitle)
-            ? Product::where('id', $productIdOrTitle)
-            : Product::where('title', $productIdOrTitle);
-
-        $affected = (clone $query)->where('stock', '>=', $quantity)->decrement('stock', $quantity);
-
-        if ($affected > 0) {
-            $this->clearProductsCache();
-        }
-
-        return $affected > 0;
-    }
-
     public function deleteProductById(int $id): bool
     {
         $product = Product::find($id);
-        if ($product) {
-            $product->delete();
-        }
-
-        $this->clearProductsCache();
-        Product::clearCategoriesCache();
-
-        return true;
-    }
-
-    public function deleteProduct(string $title): bool
-    {
-        $product = Product::where('title', $title)->first();
         if ($product) {
             $product->delete();
         }

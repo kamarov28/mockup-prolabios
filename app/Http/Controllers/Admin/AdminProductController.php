@@ -8,7 +8,8 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\AuditLogger;
-use App\Services\DataService;
+use App\Services\ProductService;
+use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
@@ -19,7 +20,9 @@ class AdminProductController extends Controller
 {
     use HandlesImageUploads, PaginatesQuery;
 
-    protected DataService $dataService;
+    protected ProductService $products;
+
+    protected SectorService $sectors;
 
     /** Number of products to display per admin list page */
     private const PRODUCTS_PER_PAGE = 15;
@@ -30,9 +33,10 @@ class AdminProductController extends Controller
     /** Maximum products accepted in one bulk submit */
     private const MAX_BULK_PRODUCTS = 50;
 
-    public function __construct(DataService $dataService)
+    public function __construct(ProductService $products, SectorService $sectors)
     {
-        $this->dataService = $dataService;
+        $this->products = $products;
+        $this->sectors = $sectors;
     }
 
     public function productsIndex(Request $request)
@@ -85,7 +89,7 @@ class AdminProductController extends Controller
         ['items' => $products, 'currentPage' => $currentPage, 'totalPages' => $totalPages]
             = $this->paginateQuery($query, $request, self::PRODUCTS_PER_PAGE);
 
-        $sectors = $this->dataService->getSectors();
+        $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')
             ->orderBy('name')
@@ -108,7 +112,7 @@ class AdminProductController extends Controller
 
     public function productsCreate()
     {
-        $sectors    = $this->dataService->getSectors();
+        $sectors    = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
 
@@ -130,7 +134,7 @@ class AdminProductController extends Controller
     {
         $title = $request->input('title');
 
-        if ($this->dataService->getProductByTitle($title)) {
+        if ($this->products->getProductByTitle($title)) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
 
@@ -150,7 +154,7 @@ class AdminProductController extends Controller
             'stock'          => (int) $request->input('stock', 0),
         ];
 
-        $createdProduct = $this->dataService->addProduct($product);
+        $createdProduct = $this->products->addProduct($product);
 
         AuditLogger::log('product.create', 'Product', $createdProduct['id'] ?? null, [
             'title'   => $title,
@@ -163,11 +167,11 @@ class AdminProductController extends Controller
 
     public function productsEdit(int $id)
     {
-        $product = $this->dataService->getProductById($id);
+        $product = $this->products->getProductById($id);
         if (! $product) {
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
-        $sectors    = $this->dataService->getSectors();
+        $sectors    = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
 
@@ -176,13 +180,13 @@ class AdminProductController extends Controller
 
     public function productsUpdate(UpdateProductRequest $request, int $id)
     {
-        $product = $this->dataService->getProductById($id);
+        $product = $this->products->getProductById($id);
         if (! $product) {
             return redirect()->route('admin.products')->with('error', 'Produk tidak ditemukan.');
         }
 
         $newTitle = $request->input('title');
-        $existing = $this->dataService->getProductByTitle($newTitle);
+        $existing = $this->products->getProductByTitle($newTitle);
 
         // getProductByTitle may return Model or array-like
         $existingId = is_object($existing) ? (int) ($existing->id ?? 0) : (int) ($existing['id'] ?? 0);
@@ -218,7 +222,7 @@ class AdminProductController extends Controller
             'stock'          => (int) $request->input('stock', 0),
         ];
 
-        $this->dataService->updateProductById($id, $updatedProduct);
+        $this->products->updateProductById($id, $updatedProduct);
 
         AuditLogger::log('product.update', 'Product', $id, [
             'title'   => $newTitle,
@@ -231,8 +235,8 @@ class AdminProductController extends Controller
 
     public function productsDestroy(int $id)
     {
-        $product = $this->dataService->getProductById($id);
-        $this->dataService->deleteProductById($id);
+        $product = $this->products->getProductById($id);
+        $this->products->deleteProductById($id);
 
         AuditLogger::log('product.delete', 'Product', $id, [
             'title'   => is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null),
@@ -244,8 +248,8 @@ class AdminProductController extends Controller
 
     public function productsCreateBulk()
     {
-        $sectors             = $this->dataService->getSectors();
-        $categoriesStructure = $this->dataService->getCategoriesStructure();
+        $sectors             = $this->sectors->getSectors();
+        $categoriesStructure = $this->products->getCategoriesStructure();
 
         return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure'));
     }
@@ -316,7 +320,7 @@ class AdminProductController extends Controller
 
         $savedCount = count($productsToStore);
         if ($savedCount > 0) {
-            $this->dataService->upsertProducts($productsToStore);
+            $this->products->upsertProducts($productsToStore);
 
             AuditLogger::log('product.bulk_create', 'Product', null, [
                 'saved'   => $savedCount,
