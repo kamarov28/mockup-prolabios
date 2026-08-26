@@ -44,6 +44,7 @@ class AdminRfqTest extends TestCase
             'company_name' => 'Fakultas Farmasi Universitas X',
             'phone_wa' => '081299988877',
             'notes' => 'Kirim ke lab lantai 3.',
+            'status' => 'new',
         ]);
 
         RfqItem::create([
@@ -74,6 +75,37 @@ class AdminRfqTest extends TestCase
         $response->assertSee('RFQ-202608-ADMINTEST');
         $response->assertSee('Test Media');
         $response->assertSee('Kirim ke lab lantai 3.');
+    }
+
+    public function test_admin_can_update_rfq_status_and_notes(): void
+    {
+        $response = $this->actingAs($this->adminUser)->put(
+            route('admin.rfqs.update', $this->rfq->id),
+            [
+                'status' => 'contacted',
+                'admin_notes' => 'Sudah WA ke klien 26 Agu.',
+            ]
+        );
+
+        $response->assertRedirect(route('admin.rfqs.show', $this->rfq->id));
+        $response->assertSessionHas('success');
+
+        $this->rfq->refresh();
+        $this->assertEquals('contacted', $this->rfq->status);
+        $this->assertEquals('Sudah WA ke klien 26 Agu.', $this->rfq->admin_notes);
+    }
+
+    public function test_admin_rfq_status_must_be_valid(): void
+    {
+        $response = $this->actingAs($this->adminUser)->from(route('admin.rfqs.show', $this->rfq->id))
+            ->put(route('admin.rfqs.update', $this->rfq->id), [
+                'status' => 'not-a-real-status',
+                'admin_notes' => 'x',
+            ]);
+
+        $response->assertSessionHasErrors('status');
+        $this->rfq->refresh();
+        $this->assertEquals('new', $this->rfq->status);
     }
 
     public function test_admin_can_delete_rfq(): void
