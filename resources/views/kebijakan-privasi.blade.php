@@ -27,14 +27,14 @@
 
             <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">1. Pendahuluan</h2>
             <p class="mb-4 lh-lg">
-              Selamat datang di situs web resmi <strong>PT. Prolabios Mitra Analitika</strong> ("kami", "perusahaan"). Kami sangat menghargai privasi dan menjunjung tinggi perlindungan data pribadi serta informasi bisnis Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi yang Anda berikan saat menggunakan layanan atau mengajukan permohonan penawaran harga (<em>Request for Quotation / RFQ</em>) melalui situs ini.
+              Selamat datang di situs web resmi <strong>PT. Prolabios Mitra Analitika</strong> ("kami", "perusahaan"). Kami sangat menghargai privasi dan menjunjung tinggi perlindungan data pribadi serta informasi bisnis Anda. Kebijakan Privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, dan melindungi informasi pribadi yang Anda berikan saat menggunakan layanan atau mengajukan permohonan penawaran harga (<em>permintaan penawaran</em>) melalui situs ini.
             </p>
 
             <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">2. Data yang Kami Kumpulkan</h2>
             <p class="mb-2 lh-lg">Kami mengumpulkan informasi yang Anda berikan secara sukarela saat berinteraksi dengan platform kami, antara lain:</p>
             <ul class="mb-4 lh-lg ps-3">
               <li><strong>Informasi Identitas &amp; Kontak:</strong> Nama lengkap, alamat email institusi/perusahaan, nomor telepon/WhatsApp, dan nama instansi/perusahaan/laboratorium Anda.</li>
-              <li><strong>Informasi Pengadaan &amp; RFQ:</strong> Daftar produk yang diminati, jumlah kuantitas, catatan spesifikasi khusus, serta riwayat permintaan penawaran resmi.</li>
+              <li><strong>Informasi Pengadaan &amp; Penawaran:</strong> Daftar produk yang diminati, jumlah kuantitas, catatan spesifikasi khusus, serta riwayat permintaan penawaran resmi.</li>
               <li><strong>Data Teknis &amp; Penggunaan:</strong> Alamat Protokol Internet (IP address), jenis peramban (browser), informasi log keamanan, dan data analitik interaksi web non-identitas pribadi.</li>
             </ul>
 
