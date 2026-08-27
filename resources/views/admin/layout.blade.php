@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@yield('title', 'Admin Panel') | PROLABIOS</title>a
+  <title>@yield('title', 'Admin Panel') | PROLABIOS</title>
+  {{-- Critical: prevent white flash before admin.css (Vite) loads --}}
+  <style>
+    html { color-scheme: dark; background-color: #070708; }
+    html, body { margin: 0; padding: 0; background-color: #070708 !important; color: #ffffff; }
+    body.admin-panel { background-color: #070708 !important; }
+  </style>
   <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
@@ -135,7 +141,7 @@
     </div>
   </div>
 
-  <button type="button" id="scroll-to-top" aria-label="Scroll to top" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text-muted); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1050;">
+  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text-muted); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1050;">
     <i class="bi bi-arrow-up" style="font-size: 1rem;"></i>
   </button>
 
