@@ -8,7 +8,7 @@
     </div>
 
     <p class="mb-3" style="font-size: 0.82rem; line-height: 1.55; color: #94a3b8;">
-      Kami menggunakan cookie untuk memastikan navigasi katalog instrumen dan reagen lab berjalan optimal serta memproses permohonan penawaran (RFQ) Anda sesuai UU No. 27 Tahun 2022 (UU PDP).
+      Kami menggunakan cookie untuk memastikan navigasi katalog instrumen dan reagen lab berjalan optimal serta memproses permintaan penawaran Anda sesuai UU No. 27 Tahun 2022 (UU PDP).
     </p>
 
     <div class="d-flex align-items-center justify-content-between gap-3 pt-2" style="border-top: 1px solid rgba(255,255,255,0.08);">
