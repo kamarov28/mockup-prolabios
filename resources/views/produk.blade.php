@@ -130,7 +130,7 @@
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
                 <div class="card h-100 product-card border-0">
                   <div class="img-wrap">
-                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Laboratorium" loading="lazy" decoding="async">
+                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250">
                   </div>
                   <div class="card-body p-4 d-flex flex-column">
                     @if(!empty($prod['catalog']))
@@ -142,7 +142,7 @@
                       <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
                     </h3>
                     <p class="product-card-desc mb-3 flex-grow-1">
-                      {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) }}
+                      {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 75) ?: 'Produk laboratorium' }}
                     </p>
 
                     <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
