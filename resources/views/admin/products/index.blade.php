@@ -68,7 +68,6 @@
         </div>
       </div>
 
-      {{-- Advanced Collapse --}}
       <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedProductFilterBlock">
         <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 16px;">
           <div class="row g-3 align-items-end">
@@ -100,14 +99,13 @@
     </form>
   </div>
 
-  {{-- Table --}}
   <div class="admin-card-body-flush">
     @if(count($products) > 0)
       <div class="table-responsive">
         <table class="admin-table">
           <thead>
             <tr>
-              <th>Gambar</th>
+              <th style="width: 52px;"></th>
               <th>Katalog</th>
               <th>Nama Produk</th>
               <th>Harga</th>
@@ -120,14 +118,10 @@
           <tbody>
             @foreach($products as $p)
               <tr>
+                {{-- Icon only: no <img> network requests (was blocking navigate-away) --}}
                 <td>
-                  <div style="width: 44px; height: 44px; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center;">
-                    <img src="{{ $p['image'] ?: asset('images/placeholder.svg') }}"
-                         alt=""
-                         width="44" height="44"
-                         loading="lazy"
-                         decoding="async"
-                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                  <div style="width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
+                    <i class="bi bi-box-seam" style="font-size: 0.95rem;"></i>
                   </div>
                 </td>
                 <td class="cell-code">{{ $p['catalog'] ?: '—' }}</td>
@@ -154,7 +148,7 @@
                   <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit">
                     <i class="bi bi-pencil-square"></i> Edit
                   </a>
-                  <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $p['title'] }}">
+                  <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ e($p['title'] ?? '') }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="admin-action-link delete" title="Hapus">
@@ -168,7 +162,6 @@
         </table>
       </div>
 
-      {{-- Pagination --}}
       @if($totalPages > 1)
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--color-border);">
           <span style="font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.5px;">
@@ -182,7 +175,6 @@
                 </a>
               </li>
               @php
-                // Windowed pagination — avoid rendering hundreds of page links
                 $window = 2;
                 $start = max(1, $currentPage - $window);
                 $end = min($totalPages, $currentPage + $window);
