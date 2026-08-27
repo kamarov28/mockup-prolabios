@@ -12,7 +12,11 @@ use Illuminate\Support\Str;
 
 class ProductService
 {
-    /** Columns needed for public catalog / sector listings (avoid SELECT *). */
+    /**
+     * Columns for public catalog / sector / home cards.
+     * Intentionally excludes description & gallery_images (heavy HTML / JSON).
+     * Detail pages use getProductById / getProductBySlug (full row).
+     */
     protected function listColumns(): array
     {
         return [
@@ -20,7 +24,6 @@ class ProductService
             'catalog',
             'title',
             'slug',
-            'description',
             'category',
             'sub_category',
             'sector',
@@ -210,7 +213,8 @@ class ProductService
     public function getProducts(?array $filters = [], int $limit = 0): Collection
     {
         $v = self::getProductsCacheVersion();
-        $cacheKey = 'products_list_'.$v.'_'.md5(json_encode($filters).'_'.$limit);
+        // Bump key suffix so old cache entries that still hold description are ignored
+        $cacheKey = 'products_list_v2_'.$v.'_'.md5(json_encode($filters).'_'.$limit);
 
         $cached = Cache::get($cacheKey);
         if (is_array($cached)) {
@@ -242,7 +246,7 @@ class ProductService
     {
         $v = self::getProductsCacheVersion();
         $page = max(1, (int) request()->input('page', 1));
-        $cacheKey = 'products_paginated_'.$v.'_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
+        $cacheKey = 'products_paginated_v2_'.$v.'_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
 
         $cached = Cache::get($cacheKey);
         if (is_array($cached) && isset($cached['total'], $cached['items']) && is_array($cached['items'])) {
@@ -266,7 +270,7 @@ class ProductService
 
         $this->applyProductFilters($query, $filters);
 
-        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->withQueryString();
+        $paginator = $query->paginate($perPage, $this->listColumns(), 'page', $page)->withQueryString();
 
         Cache::put($cacheKey, [
             'total' => $paginator->total(),
