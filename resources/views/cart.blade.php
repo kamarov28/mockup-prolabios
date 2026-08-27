@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Keranjang Belanja B2B - PT. Prolabios Mitra Analitika')
+@section('title', 'Keranjang Pengajuan Penawaran - PT. Prolabios Mitra Analitika')
 
 @push('styles')
 @endpush
@@ -52,14 +52,14 @@
     @if(session('success'))
       <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
       </div>
     @endif
 
     @if(session('error'))
       <div class="alert alert-danger bg-danger bg-opacity-10 text-danger border-danger border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
       </div>
     @endif
 
@@ -76,7 +76,7 @@
                 <!-- 1. Thumbnail Image -->
                 <div class="col-auto">
                   <div class="cart-img-box">
-                    <img src="{{ $item['image'] ?: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $item['title'] }} — RFQ Basket Item" loading="lazy" decoding="async">
+                    <img src="{{ $item['image'] ?: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $item['title'] }} — Item keranjang" loading="lazy" decoding="async">
                   </div>
                 </div>
 
@@ -99,11 +99,11 @@
 
                     @if(!$isIndent)
                       <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); padding: 2px 8px; background: rgba(74, 222, 128, 0.06);">
-                        <i class="bi bi-box-seam me-1"></i> Ready Stock
+                        <i class="bi bi-box-seam me-1"></i> Stok Siap
                       </span>
                     @else
-                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); padding: 2px 8px; background: rgba(251, 191, 36, 0.06);" title="Stok ready {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses secara Indent / Pre-Order.">
-                        <i class="bi bi-clock-history me-1"></i> Indent / Pre-Order (Ready: {{ $stockVal }})
+                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); padding: 2px 8px; background: rgba(251, 191, 36, 0.06);" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
+                        <i class="bi bi-clock-history me-1"></i> Pesanan khusus (siap: {{ $stockVal }})
                       </span>
                     @endif
                   </div>
@@ -279,7 +279,7 @@
       return;
     }
     Swal.fire({
-      title: 'Kosongkan Keranjang RFQ?',
+      title: 'Kosongkan keranjang pengajuan?',
       text: 'Seluruh item produk di dalam keranjang akan dihapus.',
       icon: 'warning',
       showCancelButton: true,
@@ -305,7 +305,7 @@
 
     Swal.fire({
       title: 'Hapus Item Produk?',
-      text: 'Item produk ini akan dihapus dari pengajuan RFQ.',
+      text: 'Item produk ini akan dihapus dari pengajuan penawaran.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#ff4950',

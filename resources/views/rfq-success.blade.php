@@ -28,7 +28,7 @@
         </h3>
 
         <div class="row g-2 text-white small mb-3">
-          <div class="col-sm-4" style="color: var(--color-text-muted);">Nomor RFQ:</div>
+          <div class="col-sm-4" style="color: var(--color-text-muted);">Nomor Pengajuan:</div>
           <div class="col-sm-8"><strong style="color: var(--color-accent); font-family: var(--font-headline);">{{ $rfq->rfq_number }}</strong></div>
 
           <div class="col-sm-4" style="color: var(--color-text-muted);">Nama Instansi:</div>

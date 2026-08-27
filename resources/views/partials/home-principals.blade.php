@@ -1,7 +1,7 @@
 <!-- 2. Trusted Principals Marquee -->
 <section class="hitech-marquee-section">
   <div class="container mb-3 text-center">
-    <span class="hitech-label-muted">Authorized Global Principals &amp; Partners</span>
+    <span class="hitech-label-muted">Prinsipal &amp; Mitra Global Resmi</span>
   </div>
   @php
     $activePrincipals = \Illuminate\Support\Facades\Cache::remember('active_principals_v5', 600, function () {
@@ -52,12 +52,12 @@
       <div class="marquee-content">
         <!-- Loop 1 -->
         @foreach($activePrincipals as $pr)
-          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Logo prinsipal resmi" loading="lazy" decoding="async"></div>
         @endforeach
 
         <!-- Loop 2 (seamless infinite marquee) -->
         @foreach($activePrincipals as $pr)
-          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Authorized Principal Manufacturer Logo" loading="lazy" decoding="async"></div>
+          <div class="marquee-logo-box"><img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Logo prinsipal resmi" loading="lazy" decoding="async"></div>
         @endforeach
       </div>
     </div>

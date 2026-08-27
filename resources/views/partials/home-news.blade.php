@@ -3,12 +3,12 @@
   <div class="container">
     <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
       <div>
-        <h2 class="typo-section-title">Insights &amp; Laboratory Education</h2>
-        <p class="typo-section-sub">Testing application guides, ISO/BPOM regulatory updates, and Prolabios activity news.</p>
+        <h2 class="typo-section-title">Wawasan &amp; Edukasi Laboratorium</h2>
+        <p class="typo-section-sub">Panduan aplikasi pengujian, update regulasi ISO/BPOM, dan berita kegiatan Prolabios.</p>
       </div>
       <div class="mt-3 mt-md-0">
-        <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;" aria-label="View All Articles and Information">
-          View All Articles <i class="bi bi-arrow-right"></i>
+        <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;" aria-label="Lihat semua artikel dan informasi">
+          Lihat Semua Artikel <i class="bi bi-arrow-right"></i>
         </a>
       </div>
     </div>
@@ -37,7 +37,7 @@
         @endforeach
       @else
         <div class="col-12 text-center py-4">
-          <p class="text-muted">No recent articles available.</p>
+          <p class="text-muted">Belum ada artikel terbaru.</p>
         </div>
       @endif
     </div>

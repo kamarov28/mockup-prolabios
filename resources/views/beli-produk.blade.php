@@ -14,7 +14,7 @@
     <div class="container">
       <span class="editorial-page-label">Belanja Produk</span>
       <p class="editorial-page-title">Harga &amp; Ketersediaan Stok</p>
-      <p class="editorial-page-subtitle">Ajukan penawaran resmi (RFQ) untuk produk ini</p>
+      <p class="editorial-page-subtitle">Ajukan permintaan penawaran resmi untuk produk ini</p>
     </div>
   </div>
 
@@ -57,16 +57,16 @@
 
               @if($stock > 0)
                 <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
-                  <i class="bi bi-box-seam me-1"></i> Ready Stock: {{ $stock }} unit
+                  <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
                 </span>
               @else
                 <span class="badge bg-warning bg-opacity-20 text-warning px-3 py-2">
-                  <i class="bi bi-clock-history me-1"></i> Stok Kosong — Tersedia Sistem Indent
+                  <i class="bi bi-clock-history me-1"></i> Stok kosong — tersedia sebagai pesanan khusus
                 </span>
               @endif
 
               <p class="profil-body-text small mt-3 mb-0" style="opacity: 0.75;">
-                Harga di atas bersifat estimasi awal. Harga &amp; diskon final akan dikonfirmasi oleh Tim Sales kami melalui Surat Penawaran Resmi (PDF) setelah RFQ Anda ditinjau.
+                Harga di atas bersifat estimasi awal. Harga &amp; diskon final akan dikonfirmasi oleh Tim Sales kami melalui Surat Penawaran Resmi (PDF) setelah pengajuan Anda ditinjau.
               </p>
             </div>
 
@@ -91,14 +91,14 @@
                 </div>
 
                 <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
-                  <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang RFQ
+                  <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang Penawaran
                 </button>
               </div>
 
               <!-- Live Indent Notice -->
               <div id="indent-notice" class="p-3 rounded border border-warning border-opacity-30 bg-warning bg-opacity-10 text-warning small" style="display: none;">
                 <i class="bi bi-info-circle me-1"></i>
-                Jumlah yang Anda pesan melebihi stok ready ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>Indent / Pre-Order</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
+                Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
               </div>
             </form>
 
@@ -107,7 +107,7 @@
                 Kembali ke Katalog <i class="bi bi-arrow-right ms-2"></i>
               </a>
               <a href="{{ route('cart.index') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none ms-2" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
-                <i class="bi bi-cart me-2"></i> Lihat Keranjang RFQ
+                <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
               </a>
             </div>
 

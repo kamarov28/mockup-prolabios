@@ -9,9 +9,9 @@
   <!-- Editorial Page Header -->
   <div class="editorial-page-header">
     <div class="container">
-      <span class="editorial-page-label">Industrial Sector</span>
-      <h1 class="editorial-page-title">Focus Sectors</h1>
-      <p class="editorial-page-subtitle">Serving various industrial sectors with cutting-edge analytics solutions</p>
+      <span class="editorial-page-label">Sektor Industri</span>
+      <h1 class="editorial-page-title">Sektor Fokus</h1>
+      <p class="editorial-page-subtitle">Melayani berbagai sektor industri dengan solusi analisis yang andal</p>
     </div>
   </div>
 
@@ -25,7 +25,7 @@
           {{-- $activeSector is passed from PageController::sektor() --}}
 
           <div class="mb-5">
-            <h3 class="profil-sidebar-title">Select a Sector</h3>
+            <h3 class="profil-sidebar-title">Pilih Sektor</h3>
             <nav class="layanan-sidebar-nav">
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
@@ -42,9 +42,9 @@
           </div>
 
           <div class="profil-cta-box d-none d-md-block">
-            <h3 class="profil-sidebar-title">Looking for tailored solutions?</h3>
-            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your industry-specific needs with our technical team.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Free Consultation <i class="bi bi-arrow-right"></i></a>
+            <h3 class="profil-sidebar-title">Mencari solusi yang sesuai kebutuhan?</h3>
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan industri Anda dengan tim teknis kami.</p>
+            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
           </div>
         </div>
 
@@ -95,8 +95,8 @@
             <hr style="border-color: var(--color-border); margin: 48px 0;">
 
             <!-- Product Table -->
-            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Discover Our Products</h3>
-            <p class="profil-body-text mb-4">We offer a wide variety of specialized products designed to support operational activities, research, and analysis in the <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong> sector.</p>
+            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Jelajahi Produk Kami</h3>
+            <p class="profil-body-text mb-4">Kami menawarkan berbagai produk khusus untuk mendukung operasional, riset, dan analisis di sektor <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong>.</p>
 
             <!-- Mobile Swipe Indicator -->
             <div class="d-md-none text-end mb-2">
@@ -109,9 +109,9 @@
               <table class="table custom-table align-middle" style="min-width: 650px;">
                 <thead>
                   <tr>
-                    <th>Catalogue</th>
-                    <th>Product</th>
-                    <th>Application</th>
+                    <th>Katalog</th>
+                    <th>Produk</th>
+                    <th>Aplikasi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -149,7 +149,7 @@
             <hr style="border-color: var(--color-border); margin: 48px 0;">
 
             <!-- Related Products -->
-            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Related Product</h3>
+            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Produk Terkait</h3>
             <div class="row row-cols-1 row-cols-md-3 g-4 mt-2" id="sektor-related">
               @php
                 $related = $relatedProducts ?? collect();
@@ -161,7 +161,7 @@
                 <div class="col">
                   <div class="card h-100 product-card border-0">
                     <div class="img-wrap">
-                      <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Sector Product & Analytical Instrument" loading="lazy" decoding="async">
+                      <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Sektor" loading="lazy" decoding="async">
                     </div>
                     <div class="card-body p-3">
                       @if(!empty($prod['catalog']))
@@ -180,9 +180,9 @@
 
             <!-- Mobile-only CTA Box -->
             <div class="profil-cta-box d-md-none mt-5">
-              <h3 class="profil-sidebar-title">Looking for tailored solutions?</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your industry-specific needs with our technical team.</p>
-              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Free Consultation <i class="bi bi-arrow-right"></i></a>
+              <h3 class="profil-sidebar-title">Mencari solusi yang sesuai kebutuhan?</h3>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan industri Anda dengan tim teknis kami.</p>
+              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
             </div>
           @endif
         </div>
@@ -232,7 +232,7 @@
             overlay = document.createElement('div');
             overlay.className = 'ajax-loading-overlay';
             overlay.setAttribute('aria-hidden', 'false');
-            overlay.innerHTML = '<div class="ajax-spinner" role="status" aria-label="Loading"></div>';
+            overlay.innerHTML = '<div class="ajax-spinner" role="status" aria-label="Memuat"></div>';
             main.insertBefore(overlay, main.firstChild);
           } else {
             overlay.style.display = 'flex';

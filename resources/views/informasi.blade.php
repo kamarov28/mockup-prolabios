@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', isset($currentBlog) && $currentBlog ? $currentBlog['title'] . ' | PROLABIOS' : 'News & Events | PROLABIOS')
+@section('title', isset($currentBlog) && $currentBlog ? $currentBlog['title'] . ' | PROLABIOS' : 'Berita & Informasi | PROLABIOS')
 
 @if(isset($currentBlog) && $currentBlog)
   @section('og_title', $currentBlog['title'])
@@ -13,9 +13,9 @@
     <!-- Editorial Page Header -->
     <div class="editorial-page-header">
       <div class="container">
-        <span class="editorial-page-label">News & Articles</span>
-        <h1 class="editorial-page-title">Information</h1>
-        <p class="editorial-page-subtitle">Latest news and articles about laboratory and industry</p>
+        <span class="editorial-page-label">Berita & Artikel</span>
+        <h1 class="editorial-page-title">Informasi</h1>
+        <p class="editorial-page-subtitle">Berita dan artikel terbaru seputar laboratorium dan industri</p>
       </div>
     </div>
   @endif
@@ -31,7 +31,7 @@
             <!-- Detail View -->
             <div>
               <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="profil-cta-btn mb-5 d-inline-flex" style="color: var(--color-text-muted) !important; border-color: var(--color-border);">
-                <i class="bi bi-arrow-left"></i> Back to News
+                <i class="bi bi-arrow-left"></i> Kembali ke Informasi
               </a>
 
               <div style="margin-bottom: 20px; margin-top: 20px;">
@@ -89,9 +89,9 @@
             @else
               <div class="empty-state-card">
                 <i class="bi bi-newspaper" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
-                <h2 class="profil-section-title" style="font-size: 1.4rem !important;">No Articles Yet</h2>
-                <p class="profil-body-text mb-4">No articles found for this category.</p>
-                <a href="{{ url('/informasi') }}" class="profil-cta-btn">View All Articles <i class="bi bi-arrow-right"></i></a>
+                <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Belum Ada Artikel</h2>
+                <p class="profil-body-text mb-4">Tidak ada artikel untuk kategori ini.</p>
+                <a href="{{ url('/informasi') }}" class="profil-cta-btn">Lihat Semua Artikel <i class="bi bi-arrow-right"></i></a>
               </div>
             @endif
           @endif
@@ -104,9 +104,9 @@
             <!-- Category Filter -->
             <div class="mb-5">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
-                <h3 class="profil-sidebar-title" style="margin-bottom: 0; flex: 1;">Article Categories</h3>
+                <h3 class="profil-sidebar-title" style="margin-bottom: 0; flex: 1;">Kategori Artikel</h3>
                 @if($selectedCategory)
-                  <a href="{{ url('/informasi') }}" style="font-family: var(--font-headline); font-size: 0.7rem; color: var(--color-accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;"><i class="bi bi-x-circle me-1"></i>Reset</a>
+                  <a href="{{ url('/informasi') }}" style="font-family: var(--font-headline); font-size: 0.7rem; color: var(--color-accent); text-decoration: none; text-transform: uppercase; letter-spacing: 1px;"><i class="bi bi-x-circle me-1"></i>Atur Ulang</a>
                 @endif
               </div>
               <div style="border-bottom: 1px solid var(--color-border); margin-bottom: 16px; padding-bottom: 12px;"></div>
@@ -132,7 +132,7 @@
 
             <!-- Recent Posts -->
             <div>
-              <h3 class="profil-sidebar-title">Latest News</h3>
+              <h3 class="profil-sidebar-title">Berita Terbaru</h3>
               @if(count($recentPosts) > 0)
                 @foreach($recentPosts as $index => $rPost)
                   <div style="padding: 14px 0; {{ $index !== count($recentPosts) - 1 ? 'border-bottom: 1px solid var(--color-border);' : '' }}">
@@ -145,7 +145,7 @@
                   </div>
                 @endforeach
               @else
-                <p class="profil-body-text">No recent news available.</p>
+                <p class="profil-body-text">Belum ada berita terbaru.</p>
               @endif
             </div>
 

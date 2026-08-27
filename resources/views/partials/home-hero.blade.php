@@ -17,7 +17,7 @@
       <img
         class="hero-bg-slide @if($index === 0) active @endif"
         src="{{ $imgUrl }}"
-        alt="Prolabios Laboratory Equipment"
+        alt="Peralatan laboratorium Prolabios"
         decoding="async"
         @if($index === 0)
           fetchpriority="high"
@@ -36,19 +36,19 @@
   <div class="container" style="position: relative; z-index: 2;">
     <div class="typo-hero-entrance col-lg-8 ps-0">
       <div class="mb-3">
-        <span class="typo-pill-outline">{{ $homeData['hero_badge'] ?? 'PRECISION LABORATORY SOLUTIONS' }}</span>
+        <span class="typo-pill-outline">{{ $homeData['hero_badge'] ?? 'SOLUSI LABORATORIUM TERPERCAYA' }}</span>
       </div>
       <h1 class="typo-hero-title mb-3">
-        {!! $homeData['hero_title'] ?? 'Uncompromised <span class="text-accent">Testing Accuracy</span> for Research &amp; Industry.' !!}
+        {!! $homeData['hero_title'] ?? 'Akurasi pengujian yang <span class="text-accent">terpercaya</span> untuk riset &amp; industri.' !!}
       </h1>
       <p class="typo-lead mb-4">
-        {{ $homeData['hero_subtitle'] ?? 'Official provider of analytical instruments, culture media, and laboratory reagents meeting strict international quality standards.' }}
+        {{ $homeData['hero_subtitle'] ?? 'Penyedia instrumen analisis, media kultur, dan reagen laboratorium dengan standar kualitas internasional.' }}
       </p>
       
       <!-- Focused Primary CTA -->
       <div class="d-flex flex-wrap gap-3 typo-hero-ctas align-items-center mt-3">
         <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="typo-btn-link">
-          {{ $homeData['hero_cta_text'] ?? 'Explore Product Catalog' }} <i class="bi bi-arrow-right ms-2"></i>
+          {{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }} <i class="bi bi-arrow-right ms-2"></i>
         </a>
       </div>
     </div>
@@ -67,10 +67,10 @@
         </div>
 
         <div class="hero-arrow-btns d-flex align-items-center gap-2">
-          <button id="hero-prev" class="typo-hero-ctrl-btn" aria-label="Previous Slide">
+          <button id="hero-prev" class="typo-hero-ctrl-btn" aria-label="Slide sebelumnya">
             <i class="bi bi-arrow-left"></i>
           </button>
-          <button id="hero-next" class="typo-hero-ctrl-btn" aria-label="Next Slide">
+          <button id="hero-next" class="typo-hero-ctrl-btn" aria-label="Slide berikutnya">
             <i class="bi bi-arrow-right"></i>
           </button>
         </div>

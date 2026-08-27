@@ -2,15 +2,15 @@
 <div class="site-utility-bar py-2">
   <div class="container d-flex flex-wrap justify-content-between align-items-center small">
     <div>
-      <span><i class="bi bi-telephone-fill text-primary me-1"></i> Contact Us: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
+      <span><i class="bi bi-telephone-fill text-primary me-1"></i> Hubungi Kami: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
       <span class="mx-2 text-muted opacity-50">|</span>
       <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="text-decoration-none fw-medium"><i class="bi bi-envelope-fill text-primary me-1"></i> {{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
     </div>
     <div class="mt-2 mt-md-0">
       <form class="d-flex search-form" action="{{ url('/produk') }}" method="GET">
         <div class="input-group input-group-sm">
-          <input type="text" name="q" class="form-control utility-search-input" placeholder="Search products..." aria-label="Search laboratory products and reagents" value="{{ request()->query('q') ?? request()->query('s') }}">
-          <button class="btn utility-search-btn" type="submit" aria-label="Submit search query">
+          <input type="text" name="q" class="form-control utility-search-input" placeholder="Cari produk..." aria-label="Cari produk laboratorium dan reagen" value="{{ request()->query('q') ?? request()->query('s') }}">
+          <button class="btn utility-search-btn" type="submit" aria-label="Cari">
             <i class="bi bi-search"></i>
           </button>
         </div>
@@ -29,14 +29,14 @@
     <!-- Mobile Actions (Cart & Search) -->
     <div class="d-flex align-items-center gap-3 ms-auto me-3 d-lg-none">
       @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
-      <a href="{{ route('cart.index') }}" class="text-white position-relative d-inline-flex align-items-center p-1" title="Keranjang Belanja B2B" aria-label="Keranjang Belanja B2B">
+      <a href="{{ route('cart.index') }}" class="text-white position-relative d-inline-flex align-items-center p-1" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
         <i class="bi bi-cart3" style="font-size: 1.25rem;"></i>
         <span class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
           {{ $cartCount }}
         </span>
       </a>
 
-      <button type="button" id="mobile-search-open" class="btn p-1 border-0 bg-transparent text-white d-inline-flex align-items-center" title="Search Products" aria-label="Search Products" aria-haspopup="dialog" aria-controls="search-overlay">
+      <button type="button" id="mobile-search-open" class="btn p-1 border-0 bg-transparent text-white d-inline-flex align-items-center" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
         <i class="bi bi-search" style="font-size: 1.15rem;"></i>
       </button>
     </div>
@@ -53,40 +53,40 @@
       <div class="navbar-collapse-inner">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 fw-semibold">
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
+            <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('profil*') ? 'active' : '' }}" href="{{ url('/profil') }}">Profile</a>
+            <a class="nav-link {{ request()->is('profil*') ? 'active' : '' }}" href="{{ url('/profil') }}">Profil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('produk*') ? 'active' : '' }}" href="{{ url('/produk') }}">Products</a>
+            <a class="nav-link {{ request()->is('produk*') ? 'active' : '' }}" href="{{ url('/produk') }}">Produk</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('sektor*') ? 'active' : '' }}" href="{{ url('/sektor') }}">Sectors</a>
+            <a class="nav-link {{ request()->is('sektor*') ? 'active' : '' }}" href="{{ url('/sektor') }}">Sektor</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('layanan*') ? 'active' : '' }}" href="{{ url('/layanan') }}">Services</a>
+            <a class="nav-link {{ request()->is('layanan*') ? 'active' : '' }}" href="{{ url('/layanan') }}">Layanan</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('informasi*') ? 'active' : '' }}" href="{{ url('/informasi') }}">News &amp; Articles</a>
+            <a class="nav-link {{ request()->is('informasi*') ? 'active' : '' }}" href="{{ url('/informasi') }}">Informasi</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{ request()->is('kontak*') ? 'active' : '' }}" href="{{ url('/kontak') }}">Contacts</a>
+            <a class="nav-link {{ request()->is('kontak*') ? 'active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
           </li>
           <li class="nav-item ms-lg-2">
             <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 d-inline-flex align-items-center gap-2" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
-              <i class="bi bi-download"></i> Download the Catalog
+              <i class="bi bi-download"></i> Unduh Katalog
             </a>
           </li>
           <li class="nav-item d-none d-lg-flex align-items-center gap-3 ms-lg-2 mt-3 mt-lg-0 navbar-utilities">
-            <a href="{{ route('cart.index') }}" class="nav-link p-0 text-white position-relative" title="Keranjang Belanja B2B" aria-label="Keranjang Belanja B2B">
+            <a href="{{ route('cart.index') }}" class="nav-link p-0 text-white position-relative" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
               <i class="bi bi-cart3" style="font-size: 1.25rem; vertical-align: middle;"></i>
               @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
               <span id="cart-badge-count" class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
                 {{ $cartCount }}
               </span>
             </a>
-            <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent ms-2" title="Search Products" aria-label="Search Products" aria-haspopup="dialog" aria-controls="search-overlay">
+            <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent ms-2" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
               <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
             </button>
           </li>
