@@ -3,19 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AdminProductCategoryController extends Controller
 {
     public function index()
     {
-        $parents = ProductCategory::whereNull('parent_id')
+        // Lean columns + eager children — avoid N+1 and excess payload
+        $parents = ProductCategory::query()
+            ->whereNull('parent_id')
+            ->select(['id', 'key', 'name', 'parent_id', 'sort_order'])
             ->withCount('children')
-            ->with(['children' => fn ($q) => $q->orderBy('sort_order')->orderBy('name')])
+            ->with([
+                'children' => fn ($q) => $q
+                    ->select(['id', 'key', 'name', 'parent_id', 'sort_order'])
+                    ->orderBy('sort_order')
+                    ->orderBy('name'),
+            ])
             ->orderBy('sort_order')
             ->orderBy('name')
             ->get();
@@ -25,12 +35,15 @@ class AdminProductCategoryController extends Controller
 
     public function create(Request $request)
     {
-        $parents = ProductCategory::whereNull('parent_id')->orderBy('sort_order')->orderBy('name')->get();
+        $parents = ProductCategory::whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get(['id', 'key', 'name']);
         $selectedParentId = $request->query('parent_id');
 
         return view('admin.categories.form', [
-            'category'        => null,
-            'parents'         => $parents,
+            'category'         => null,
+            'parents'          => $parents,
             'selectedParentId' => $selectedParentId,
         ]);
     }
@@ -46,7 +59,7 @@ class AdminProductCategoryController extends Controller
                 function ($attribute, $value, $fail) {
                     if ($value) {
                         $parent = ProductCategory::find($value);
-                        if ($parent && !is_null($parent->parent_id)) {
+                        if ($parent && ! is_null($parent->parent_id)) {
                             $fail('Subkategori tidak bisa dijadikan induk kategori (maksimal 2 tingkat hirarki).');
                         }
                     }
@@ -62,9 +75,8 @@ class AdminProductCategoryController extends Controller
             ? Str::slug($request->input('key'))
             : Str::slug($request->input('name'));
 
-        // Ensure key uniqueness if auto-generated
         if (ProductCategory::where('key', $key)->exists()) {
-            $key = $key . '-' . Str::random(4);
+            $key = $key.'-'.Str::random(4);
         }
 
         $cat = ProductCategory::create([
@@ -92,9 +104,9 @@ class AdminProductCategoryController extends Controller
     {
         $category = ProductCategory::findOrFail($id);
         $parents  = ProductCategory::whereNull('parent_id')
-            ->where('id', '!=', $id)  // Kategori tidak bisa jadi anak dirinya sendiri
+            ->where('id', '!=', $id)
             ->orderBy('sort_order')->orderBy('name')
-            ->get();
+            ->get(['id', 'key', 'name']);
 
         return view('admin.categories.form', [
             'category'         => $category,
@@ -117,10 +129,11 @@ class AdminProductCategoryController extends Controller
                     if ($value) {
                         if ((int) $value === $id) {
                             $fail('Kategori tidak bisa menjadi induk dari dirinya sendiri.');
+
                             return;
                         }
                         $parent = ProductCategory::find($value);
-                        if ($parent && !is_null($parent->parent_id)) {
+                        if ($parent && ! is_null($parent->parent_id)) {
                             $fail('Subkategori tidak bisa dijadikan induk kategori (maksimal 2 tingkat hirarki).');
                         }
                     }
@@ -134,7 +147,6 @@ class AdminProductCategoryController extends Controller
 
         $newParentId = $request->input('parent_id') ?: null;
 
-        // Cegah kategori yang memiliki anak diubah menjadi subkategori
         if ($newParentId && $category->children()->exists()) {
             return back()->withInput()->withErrors(['parent_id' => 'Kategori yang memiliki subkategori tidak dapat dijadikan subkategori. Pindahkan subkategorinya terlebih dahulu.']);
         }
@@ -146,7 +158,7 @@ class AdminProductCategoryController extends Controller
         $old = $category->toArray();
         $oldKey = $old['key'];
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($category, $key, $oldKey, $request, $newParentId) {
+        DB::transaction(function () use ($category, $key, $oldKey, $request, $newParentId) {
             $category->update([
                 'key'        => $key,
                 'name'       => trim($request->input('name')),
@@ -154,13 +166,9 @@ class AdminProductCategoryController extends Controller
                 'sort_order' => (int) $request->input('sort_order', 0),
             ]);
 
-            // Cascade key updates to products referencing the old category/sub_category key
             if ($oldKey !== $key) {
-                Product::where('category', $oldKey)
-                    ->update(['category' => $key]);
-
-                Product::where('sub_category', $oldKey)
-                    ->update(['sub_category' => $key]);
+                Product::where('category', $oldKey)->update(['category' => $key]);
+                Product::where('sub_category', $oldKey)->update(['sub_category' => $key]);
             }
         });
 
@@ -181,16 +189,16 @@ class AdminProductCategoryController extends Controller
     {
         $category = ProductCategory::with('children')->withCount('children')->findOrFail($id);
 
-        // Kumpulkan semua keys (induk + anak-anaknya) untuk verifikasi relasi produk
         $allKeys = collect([$category->key])
             ->merge($category->children->pluck('key'))
             ->unique()
             ->all();
 
-        // Cek apakah masih ada produk yang menggunakan key kategori atau subkategori terkait
-        $usedByProducts = \Illuminate\Support\Facades\DB::table('products')
-            ->whereIn('category', $allKeys)
-            ->orWhereIn('sub_category', $allKeys)
+        $usedByProducts = DB::table('products')
+            ->where(function ($q) use ($allKeys) {
+                $q->whereIn('category', $allKeys)
+                    ->orWhereIn('sub_category', $allKeys);
+            })
             ->exists();
 
         if ($usedByProducts) {
@@ -199,7 +207,6 @@ class AdminProductCategoryController extends Controller
 
         $name = $category->name;
 
-        // Cascade delete children is handled by DB foreign key (onDelete cascade)
         $category->delete();
 
         AuditLogger::log('product_category.delete', 'ProductCategory', $id, ['name' => $name]);
