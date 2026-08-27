@@ -27,7 +27,7 @@
 
             <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">1. Ketentuan Umum</h2>
             <p class="mb-4 lh-lg">
-              Syarat dan Ketentuan ini mengatur akses dan penggunaan situs web <strong>PT. Prolabios Mitra Analitika</strong> ("kami") yang ditujukan untuk memfasilitasi informasi katalog teknis, spesifikasi instrumen laboratorium, serta permohonan pengajuan penawaran harga resmi (<em>Request for Quotation / RFQ</em>) bagi pelanggan korporat, institusi pendidikan, industri farmasi, pangan, riset, dan lembaga pemerintah.
+              Syarat dan Ketentuan ini mengatur akses dan penggunaan situs web <strong>PT. Prolabios Mitra Analitika</strong> ("kami") yang ditujukan untuk memfasilitasi informasi katalog teknis, spesifikasi instrumen laboratorium, serta permohonan pengajuan penawaran harga resmi (<em>permintaan penawaran</em>) bagi pelanggan korporat, institusi pendidikan, industri farmasi, pangan, riset, dan lembaga pemerintah.
             </p>
 
             <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">2. Katalog Produk &amp; Informasi Teknis</h2>
@@ -35,13 +35,13 @@
               Seluruh spesifikasi produk, foto, brosur katalog, nomor katalog, dan deskripsi aplikasi yang tercantum pada situs web ini disajikan dengan tingkat akurasi sebaik mungkin berdasarkan data prinsipal manufaktur. Kami berhak memperbarui atau merevisi spesifikasi teknis sewaktu-waktu tanpa pemberitahuan sebelumnya guna mencerminkan pembaruan produk dari pabrikan.
             </p>
 
-            <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">3. Pengajuan Permohonan Penawaran (RFQ)</h2>
+            <h2 class="h4 mb-3" style="color: var(--color-text-main); font-family: var(--font-headline);">3. Pengajuan Permohonan Penawaran </h2>
             <p class="mb-2 lh-lg">
-              Pengiriman daftar produk melalui fitur keranjang (<em>Cart</em>) dan formulir RFQ di situs ini merupakan <strong>permohonan penawaran harga non-mengikat</strong>, bukan transaksi pembayaran langsung secara daring:
+              Pengiriman daftar produk melalui fitur keranjang (<em>Cart</em>) dan formulir pengajuan penawaran di situs ini merupakan <strong>permohonan penawaran harga non-mengikat</strong>, bukan transaksi pembayaran langsung secara daring:
             </p>
             <ul class="mb-4 lh-lg ps-3">
               <li>Harga yang tertera pada situs (jika ada) merupakan estimasi referensi dan belum mengikat sebelum diterbitkan Surat Penawaran Resmi (<em>Quotation Letter</em>) oleh staf penjualan resmi kami.</li>
-              <li>Status ketersediaan stok dapat berubah sewaktu-waktu. Produk yang berstatus <em>Indent / Pre-Order</em> memerlukan estimasi waktu pabrikasi dan importasi resmi.</li>
+              <li>Status ketersediaan stok dapat berubah sewaktu-waktu. Produk yang berstatus <em>pesanan khusus (indent)</em> memerlukan estimasi waktu pabrikasi dan importasi resmi.</li>
               <li>Perjanjian jual beli yang mengikat baru terjadi setelah pihak pembeli menerbitkan <em>Purchase Order</em> (PO) resmi yang telah disetujui bersama sesuai kesepakatan tertulis.</li>
             </ul>
 
