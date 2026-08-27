@@ -122,15 +122,17 @@
               <tr>
                 <td>
                   <div style="width: 44px; height: 44px; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center;">
-                    <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <img src="{{ $p['image'] ?: asset('images/placeholder.svg') }}"
+                         alt=""
+                         width="44" height="44"
+                         loading="lazy"
+                         decoding="async"
+                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
                   </div>
                 </td>
                 <td class="cell-code">{{ $p['catalog'] ?: '—' }}</td>
                 <td>
                   <div class="cell-title">{{ $p['title'] }}</div>
-                  <div class="cell-muted" style="max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                    {{ strip_tags(html_entity_decode($p['description'] ?? '')) ?: 'Tidak ada deskripsi' }}
-                  </div>
                 </td>
                 <td style="white-space: nowrap; font-weight: 600; color: var(--color-accent);">
                   {{ ($p['price'] ?? 0) > 0 ? 'Rp ' . number_format($p['price'], 0, ',', '.') : 'Hubungi Kami' }}
@@ -140,7 +142,7 @@
                     {{ $p['stock'] ?? 0 }} Unit
                   </span>
                 </td>
-                <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category']) }}</span></td>
+                <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category'] ?? '') }}</span></td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>
                 <td style="text-align: right; white-space: nowrap;">
                   <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat">
@@ -179,11 +181,29 @@
                   <i class="bi bi-chevron-left"></i>
                 </a>
               </li>
-              @for($i = 1; $i <= $totalPages; $i++)
+              @php
+                // Windowed pagination — avoid rendering hundreds of page links
+                $window = 2;
+                $start = max(1, $currentPage - $window);
+                $end = min($totalPages, $currentPage + $window);
+              @endphp
+              @if($start > 1)
+                <li class="page-item"><a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => 1])) }}">1</a></li>
+                @if($start > 2)
+                  <li class="page-item disabled"><span class="page-link">…</span></li>
+                @endif
+              @endif
+              @for($i = $start; $i <= $end; $i++)
                 <li class="page-item {{ $currentPage == $i ? 'active' : '' }}">
                   <a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => $i])) }}">{{ $i }}</a>
                 </li>
               @endfor
+              @if($end < $totalPages)
+                @if($end < $totalPages - 1)
+                  <li class="page-item disabled"><span class="page-link">…</span></li>
+                @endif
+                <li class="page-item"><a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => $totalPages])) }}">{{ $totalPages }}</a></li>
+              @endif
               <li class="page-item {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => $currentPage + 1])) }}" aria-label="Berikutnya">
                   <i class="bi bi-chevron-right"></i>
@@ -208,7 +228,6 @@
 
 @section('admin_scripts')
 <script>
-  // Focus style on search group
   const sg = document.getElementById('search-group');
   const si = document.getElementById('local-search-input');
   if (sg && si) {
@@ -216,7 +235,6 @@
     si.addEventListener('blur',  () => sg.style.borderColor = 'var(--color-border)');
   }
 
-  // Delete confirmations
   document.querySelectorAll('.form-delete').forEach(form => {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
