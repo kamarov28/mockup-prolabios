@@ -10,9 +10,9 @@
   <!-- Page Header -->
   <div class="editorial-page-header">
     <div class="container">
-      <span class="editorial-page-label">catalog</span>
-      <h1 class="editorial-page-title">Products & Instruments</h1>
-      <p class="editorial-page-subtitle">{{ $siteSettings['products_subtitle'] ?? 'Prolabios Complete Catalog of Laboratory Products' }}</p>
+      <span class="editorial-page-label">katalog</span>
+      <h1 class="editorial-page-title">Produk & Instrumen</h1>
+      <p class="editorial-page-subtitle">{{ $siteSettings['products_subtitle'] ?? 'Katalog lengkap produk laboratorium Prolabios' }}</p>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
               <nav class="layanan-sidebar-nav" id="produk-sidebar">
                 <a href="{{ url('/produk') }}?category=all#catalog-section"
                    class="layanan-sidebar-link {{ $activeCategory === 'all' ? 'is-active' : '' }}">
-                  All Categories
+                  Semua Kategori
                 </a>
                 @foreach($categoriesStructure as $catKey => $catData)
                   @if(!empty($catData['subs']))
@@ -76,10 +76,10 @@
             </div>
 
             <div class="profil-cta-box">
-              <h3 class="profil-sidebar-title">Need Help?</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Discuss your product needs with our technical team.</p>
-              <a href="{{ url('/kontak') }}?subjek=inquiry" class="profil-cta-btn d-block mb-3">Ask About a Product <i class="bi bi-arrow-right"></i></a>
-              <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Download the PDF Catalog</a>
+              <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan produk Anda dengan tim teknis kami.</p>
+              <a href="{{ url('/kontak') }}?subjek=inquiry" class="profil-cta-btn d-block mb-3">Tanya Produk <i class="bi bi-arrow-right"></i></a>
+              <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="profil-social-link"><i class="bi bi-download"></i> Unduh Katalog PDF</a>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
           <div class="mb-4">
             <h2 class="produk-category-title mb-1" id="category-title">
               @if($activeCategory === 'all')
-                All Products
+                Semua Produk
               @else
                 {{ $categoriesStructure[$activeCategory]['name'] }}
                 @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
@@ -100,9 +100,9 @@
             </h2>
             <span class="produk-category-subtitle d-block" id="category-subtitle">
               @if($activeCategory === 'all')
-                  Displaying the entire product catalog
+                  Menampilkan seluruh katalog produk
               @else
-                Showing results for {{ $categoriesStructure[$activeCategory]['name'] }}
+                Menampilkan hasil untuk {{ $categoriesStructure[$activeCategory]['name'] }}
                 @if($activeSubCategory && $activeSubCategory !== 'all' && isset($categoriesStructure[$activeCategory]['subs'][$activeSubCategory]))
                   ({{ $categoriesStructure[$activeCategory]['subs'][$activeSubCategory] }})
                 @endif
@@ -119,18 +119,18 @@
               <input type="hidden" name="subcategory" value="{{ request()->query('subcategory') }}">
             @endif
             <i class="bi bi-search" style="cursor: pointer;" onclick="document.getElementById('catalog-search-form').submit();"></i>
-            <input type="text" id="local-search-input" name="s" placeholder="Search reagents or CAT. code..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
+            <input type="text" id="local-search-input" name="s" placeholder="Cari produk, reagen, atau kode katalog..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
           </form>
 
           <div class="ajax-loading-wrap" id="product-ajax-wrap" aria-busy="false">
-            <div class="ajax-loading-overlay" aria-hidden="true"><div class="ajax-spinner" role="status" aria-label="Loading"></div></div>
+            <div class="ajax-loading-overlay" aria-hidden="true"><div class="ajax-spinner" role="status" aria-label="Memuat"></div></div>
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col product-card" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
                 <div class="card h-100 product-card border-0">
                   <div class="img-wrap">
-                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Laboratory Product & Analytical Instrument" loading="lazy" decoding="async">
+                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Laboratorium" loading="lazy" decoding="async">
                   </div>
                   <div class="card-body p-4 d-flex flex-column">
                     @if(!empty($prod['catalog']))
@@ -157,7 +157,7 @@
             @else
               <div class="col-12" style="padding: 60px 0; border: 1px solid var(--color-border); text-align: center;">
                 <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--color-text-muted); display: block; margin-bottom: 16px;"></i>
-                <p style="color: var(--color-text-muted);">There are no specific products in this category yet.</p>
+                <p style="color: var(--color-text-muted);">Belum ada produk spesifik di kategori ini.</p>
               </div>
             @endif
           </div>
