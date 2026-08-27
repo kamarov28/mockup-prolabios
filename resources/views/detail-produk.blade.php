@@ -71,7 +71,7 @@
             <div class="row g-5">
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Analytical Laboratory Instrument & Reagent" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
                 </div>
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
@@ -88,7 +88,7 @@
                 @if(!empty($product['catalog']))
                   <div class="mb-4">
                     <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 6px 14px; display: inline-block;">
-                      Catalogue No: {{ $product['catalog'] }}
+                      No. Katalog: {{ $product['catalog'] }}
                     </span>
                   </div>
                 @endif
@@ -115,7 +115,7 @@
             <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content bg-transparent border-0 shadow-none position-relative">
-                  <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Close">
+                  <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Tutup">
                     <i class="bi bi-x-lg"></i>
                   </button>
                   <div class="modal-body text-center p-0">
