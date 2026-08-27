@@ -29,6 +29,19 @@ class AdminProductController extends Controller
 
     private const MAX_BULK_PRODUCTS = 50;
 
+    /** Columns needed for admin list only (skip heavy description / gallery). */
+    private const INDEX_COLUMNS = [
+        'id',
+        'catalog',
+        'title',
+        'category',
+        'sector',
+        'image',
+        'price',
+        'stock',
+        'created_at',
+    ];
+
     public function __construct(ProductService $products, SectorService $sectors)
     {
         $this->products = $products;
@@ -37,10 +50,11 @@ class AdminProductController extends Controller
 
     public function productsIndex(Request $request)
     {
-        $query = Product::query();
+        $query = Product::query()->select(self::INDEX_COLUMNS);
 
         $search = $request->input('s');
         if ($search) {
+            // Filter may use description; column itself is not selected for the list payload
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('catalog', 'like', "%{$search}%")
