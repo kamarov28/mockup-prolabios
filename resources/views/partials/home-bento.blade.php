@@ -1,4 +1,4 @@
-<!-- 3. Value Pillars Grid (Bento) -->
+<!-- 3. Value Pillars Grid (Asymmetric High-Craft Bento) -->
 <section class="section-spacious">
   <div class="container">
     <div class="row mb-5 typo-section-head">
@@ -8,26 +8,97 @@
       </div>
     </div>
 
+    <!-- Asymmetric Bento Layout: 1 Lead Anchor Card + 3 Supporting Functional Cards -->
     <div class="row g-4">
-      @php
-        $bentoCards = $homeData['bento_cards'] ?? [
-          ['icon' => 'bi-patch-check', 'title' => 'Produk Bersertifikat ISO & AKL', 'desc' => 'Lebih dari 1.000 reagen dan instrumen resmi, mendukung legalitas distribusi untuk audit BPOM dan ISO 17025.'],
-          ['icon' => 'bi-file-earmark-code', 'title' => 'Akses COA & MSDS Siap Pakai', 'desc' => 'Setiap batch reagen dan media kultur dilengkapi Certificate of Analysis (COA) dan MSDS resmi, siap diunduh untuk validasi lab.'],
-          ['icon' => 'bi-snow', 'title' => 'Pengiriman Cold-Chain yang Aman', 'desc' => 'Infrastruktur cold-chain yang teruji agar reagen sensitif suhu tetap stabil sampai di laboratorium Anda.'],
-          ['icon' => 'bi-tools', 'title' => 'After-Sales & Kalibrasi Terpadu', 'desc' => 'Kualifikasi alat (IQ/OQ/PQ), layanan kalibrasi rutin, dan pelatihan teknis oleh spesialis aplikasi.']
-        ];
-      @endphp
+      <!-- 1. Lead Anchor Card (Full Width Highlight - Compliance & COA Engine) -->
+      <div class="col-lg-7">
+        <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5" style="border: 1px solid var(--color-border); background: linear-gradient(145deg, rgba(255, 73, 80, 0.04) 0%, rgba(18, 18, 20, 0.95) 100%);">
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 rounded-pill font-monospace" style="font-size: 0.75rem;">
+                <i class="bi bi-shield-check me-1"></i> VALIDASI &amp; COMPLIANCE
+              </span>
+              <span class="text-white-50 small font-monospace">ISO 17025 • BPOM • AKL</span>
+            </div>
 
-      @foreach($bentoCards as $idx => $card)
-        <div class="col-lg-6">
-          <div class="hitech-bento-card">
-            <div class="hitech-bento-number">{{ sprintf('%02d', $idx + 1) }}</div>
-            <div class="hitech-bento-icon"><i class="bi {{ $card['icon'] ?? 'bi-patch-check' }}"></i></div>
-            <h3 class="hitech-bento-title">{{ $card['title'] ?? '' }}</h3>
-            <p class="hitech-bento-desc">{{ $card['desc'] ?? '' }}</p>
+            <h3 class="hitech-bento-title fs-4 mb-3">Dokumentasi COA, MSDS &amp; Sertifikasi Resmi Siap Audit</h3>
+            <p class="hitech-bento-desc mb-4">
+              Setiap batch reagen mikrobiologi dan instrumen analitika disertai Certificate of Analysis (COA), sertifikat kalibrasi pabrikan, serta nomor izin edar Kemenkes RI (AKL/AKD) lengkap untuk kelancaran audit regulasi Anda.
+            </p>
+          </div>
+
+          <!-- Micro Visual Widget: Live Batch Certificate Mock -->
+          <div class="p-3 rounded-3 mt-3" style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.07);">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom border-white border-opacity-10 text-white-50" style="font-size: 0.75rem;">
+              <span class="font-monospace"><i class="bi bi-file-earmark-text text-accent me-1"></i> BATCH-2026-TERRA09</span>
+              <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Verified &amp; Passed</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center text-white-50" style="font-size: 0.8rem;">
+              <span>Terragene SCBI Biological Indicator</span>
+              <a href="{{ url('/kontak?subjek=request_coa') }}" class="text-accent text-decoration-none fw-medium">
+                Minta Dokumen <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
           </div>
         </div>
-      @endforeach
+      </div>
+
+      <!-- 2. Cold Chain Infrastructure -->
+      <div class="col-lg-5">
+        <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5" style="border: 1px solid var(--color-border);">
+          <div>
+            <div class="hitech-bento-icon mb-3"><i class="bi bi-snow text-accent"></i></div>
+            <h3 class="hitech-bento-title fs-5 mb-2">Logistik Cold-Chain Terkontrol (2°C – 8°C)</h3>
+            <p class="hitech-bento-desc">
+              Reagen sensitif suhu, enzim, dan media siap pakai dikemas dengan insulasi termal khusus dan pemantauan suhu berkala hingga tiba di laboratorium.
+            </p>
+          </div>
+          <div class="pt-3 border-top border-white border-opacity-10 text-white-50 font-monospace" style="font-size: 0.75rem;">
+            <i class="bi bi-thermometer-snow text-info me-1"></i> Temperatur Terjaga • Packing Farmasi
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Technical After-Sales & Calibration -->
+      <div class="col-lg-5">
+        <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5" style="border: 1px solid var(--color-border);">
+          <div>
+            <div class="hitech-bento-icon mb-3"><i class="bi bi-tools text-accent"></i></div>
+            <h3 class="hitech-bento-title fs-5 mb-2">Layanan Teknis IQ/OQ/PQ &amp; Kalibrasi</h3>
+            <p class="hitech-bento-desc">
+              Didukung teknisi bersertifikasi untuk instalasi, kualifikasi operasional, pemeliharaan preventif, dan kalibrasi rutin mikropipet serta instrumen lab.
+            </p>
+          </div>
+          <div class="pt-3 border-top border-white border-opacity-10">
+            <a href="{{ url('/layanan') }}" class="text-accent text-decoration-none fw-medium" style="font-size: 0.85rem;">
+              Lihat Layanan Kalibrasi <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Multi-Sector Catalog Density -->
+      <div class="col-lg-7">
+        <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5" style="border: 1px solid var(--color-border);">
+          <div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div class="hitech-bento-icon m-0"><i class="bi bi-box-seam text-accent"></i></div>
+              <span class="font-monospace text-white-50 small">1,000+ SKU READY STOCK</span>
+            </div>
+            <h3 class="hitech-bento-title fs-5 mb-2">Akses Cepat 1.000+ Produk &amp; Reagen Multi-Brand</h3>
+            <p class="hitech-bento-desc mb-3">
+              Kemitraan resmi dengan prinsipal global (Bioendo, Terragene, Scharlau, C-Technologies, dll) untuk pasokan reagen, instrumen otomatisasi, dan konsumabel lab tanpa hambatan rantai pasok.
+            </p>
+          </div>
+          <div class="d-flex flex-wrap gap-2 pt-2">
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Endotoxin LAL</span>
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Culture Media</span>
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Biological Indicator</span>
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Air Sampler</span>
+            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Liquid Handling</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

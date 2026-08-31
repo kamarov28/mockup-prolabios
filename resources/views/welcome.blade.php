@@ -22,13 +22,13 @@
   <!-- 4. Interactive Sector Finder -->
   @include('partials.home-focus')
 
-  <!-- 5. Bestseller Showcase -->
+  <!-- 5. Bestseller Showcase (Asymmetric Lead Product Grid) -->
   <section class="section-spacious typo-products-section" style="border-bottom: 1px solid var(--color-border);">
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <h2 class="typo-section-title">Produk Unggulan</h2>
-          <p class="typo-section-sub">Perangkat dan reagen laboratorium yang andal untuk mendukung pekerjaan lab Anda.</p>
+          <h2 class="typo-section-title">Produk &amp; Reagen Unggulan</h2>
+          <p class="typo-section-sub">Instrumen teruji dan media kultur standar farmakope siap pakai untuk kebutuhan pengujian lab.</p>
         </div>
         <div class="mt-3 mt-md-0">
           <a href="{{ url('/produk') }}" class="typo-btn-link" style="font-size: 0.85rem;">
@@ -37,14 +37,26 @@
         </div>
       </div>
 
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 align-items-stretch">
         @if(isset($featuredProducts) && count($featuredProducts) > 0)
-          @foreach($featuredProducts as $prod)
+          @foreach($featuredProducts as $idx => $prod)
+            @php $isLead = ($idx === 0); @endphp
             <div class="col">
-              <div class="card h-100 product-card border-0" style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }};">
+              <div class="card h-100 product-card border-0 @if($isLead) position-relative @endif"
+                   style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }}; @if($isLead) border: 1px solid rgba(255, 73, 80, 0.4) !important; background: linear-gradient(180deg, rgba(255,73,80,0.06) 0%, rgba(18,18,20,0.98) 100%); @endif">
+
+                @if($isLead)
+                  <div class="position-absolute top-0 start-0 m-3 z-2">
+                    <span class="badge bg-danger text-white px-2 py-1 font-monospace" style="font-size: 0.65rem; letter-spacing: 0.5px;">
+                      <i class="bi bi-star-fill me-1"></i> REKOMENDASI QC
+                    </span>
+                  </div>
+                @endif
+
                 <div class="img-wrap">
                   <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk laboratorium" loading="lazy" decoding="async">
                 </div>
+
                 <div class="card-body p-4 d-flex flex-column">
                   <div class="d-flex flex-wrap gap-1 align-items-center mb-2">
                     @if(!empty($prod['catalog']))
@@ -58,11 +70,20 @@
                       </span>
                     @endif
                   </div>
+
                   <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
                     <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
-                  <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                    <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">Lihat Detail <i class="bi bi-arrow-right ms-1"></i></a>
+
+                  <p class="product-card-desc mb-3 flex-grow-1 text-white-50" style="font-size: 0.82rem; line-height: 1.5;">
+                    {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
+                  </p>
+
+                  <div class="mt-auto pt-3 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                    <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none fw-medium" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
+                      Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                    <span class="text-white-50 small font-monospace"><i class="bi bi-file-earmark-check text-accent"></i> COA</span>
                   </div>
                 </div>
               </div>
