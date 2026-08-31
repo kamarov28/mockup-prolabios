@@ -113,7 +113,7 @@
               </div>
 
               <div>
-                <button type="submit" class="rfq-primary-btn w-100 mb-2" style="border: none;">
+                <button type="submit" id="rfqSubmitBtn" class="rfq-primary-btn w-100 mb-2" style="border: none;">
                   <i class="bi bi-send-fill me-2"></i> Kirim Pengajuan Penawaran
                 </button>
 
@@ -132,6 +132,21 @@
     </div>
   </div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('rfqForm');
+    const btn = document.getElementById('rfqSubmitBtn');
+    if (form && btn) {
+      form.addEventListener('submit', function() {
+        if (form.checkValidity()) {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Mengirim Pengajuan...';
+        }
+      });
+    }
+  });
+</script>
 
 @if(config('services.recaptcha.site_key'))
 <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>

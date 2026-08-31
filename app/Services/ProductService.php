@@ -47,6 +47,7 @@ class ProductService
         Cache::forget('products_list_global');
         Cache::forget('search_suggestions_v2');
         Cache::forget('search_suggestions');
+        Cache::forget('sitemap_xml_cache');
 
         try {
             Cache::increment('products_cache_version');
