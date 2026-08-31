@@ -24,11 +24,11 @@ class HtmlSanitizer
 
         $stripped = strip_tags($html, $allowedTags);
 
-        // Remove dangerous JS attributes (e.g. onclick, onerror, onload, onmouseover)
-        $cleaned = preg_replace('/(<[^>]+?)\son[a-zA-Z]+\s*=\s*(".*?"|\'.*?\'|[^\s>]+)/i', '$1', $stripped);
+        // Remove dangerous JS / event attributes (e.g. onclick, onerror, onload, onmouseover, formaction, etc.)
+        $cleaned = preg_replace('/\s+on[a-zA-Z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $stripped);
 
-        // Remove javascript: and vbscript: pseudoprotocols in href or src
-        $cleaned = preg_replace('/(href|src)\s*=\s*("|\')\s*(javascript|vbscript):[^\'"]*\2/i', '$1="#"', (string) $cleaned);
+        // Remove javascript:, vbscript:, and data: URI schemes in href / src / action (prevent XSS via scheme)
+        $cleaned = preg_replace('/(href|src|action)\s*=\s*("|\')\s*(javascript|vbscript|data\s*:\s*text\/html):[^\'"]*\2/i', '$1="#"', (string) $cleaned);
 
         return trim((string) $cleaned);
     }

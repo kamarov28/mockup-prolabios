@@ -24,17 +24,28 @@ class DatabaseBackup extends Command
             mkdir(storage_path('app/backup'), 0755, true);
         }
 
-        // Build mysqldump command
+        // Create temporary MySQL defaults-extra-file to avoid exposing credentials in CLI process args
+        $cnfFile = tempnam(sys_get_temp_dir(), 'mycnf_');
+        $cnfContent = "[mysqldump]\n"
+            ."host = \"".addcslashes($db['host'] ?? '127.0.0.1', "\"\\")."\"\n"
+            ."user = \"".addcslashes($db['username'] ?? '', "\"\\")."\"\n"
+            ."password = \"".addcslashes($db['password'] ?? '', "\"\\")."\"\n";
+        file_put_contents($cnfFile, $cnfContent);
+
+        // Build mysqldump command using defaults file
         $command = sprintf(
-            'mysqldump --single-transaction --quick --lock-tables=false -h%s -u%s -p%s %s > %s 2>/dev/null',
-            escapeshellarg($db['host'] ?? '127.0.0.1'),
-            escapeshellarg($db['username']),
-            escapeshellarg($db['password']),
+            'mysqldump --defaults-extra-file=%s --single-transaction --quick --lock-tables=false %s > %s 2>/dev/null',
+            escapeshellarg($cnfFile),
             escapeshellarg($db['database']),
             escapeshellarg($tempPath)
         );
 
         exec($command, $output, $exitCode);
+
+        // Immediately purge the temporary config file containing DB credentials
+        if (file_exists($cnfFile)) {
+            unlink($cnfFile);
+        }
 
         if ($exitCode !== 0 || ! file_exists($tempPath) || filesize($tempPath) === 0) {
             $this->error('Database backup failed!');

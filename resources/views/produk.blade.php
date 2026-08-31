@@ -133,11 +133,18 @@
                     <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250">
                   </div>
                   <div class="card-body p-4 d-flex flex-column">
-                    @if(!empty($prod['catalog']))
-                      <div class="product-cat-code mb-2">
-                        CAT. {{ $prod['catalog'] }}
-                      </div>
-                    @endif
+                    <div class="d-flex flex-wrap gap-1 align-items-center mb-2">
+                      @if(!empty($prod['catalog']))
+                        <div class="product-cat-code">
+                          CAT. {{ $prod['catalog'] }}
+                        </div>
+                      @endif
+                      @if(!empty($prod->principal))
+                        <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
+                          <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
+                        </span>
+                      @endif
+                    </div>
                     <h3 class="card-title fs-6 fw-semibold mb-2">
                       <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
                     </h3>

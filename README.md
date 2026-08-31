@@ -1,186 +1,39 @@
-# Prolabios — B2B Catalog & RFQ Portal
+# 📚 Dokumentasi Arsitektur & Panduan Sistem PROLABIOS
 
-Portal katalog dan pengajuan penawaran (RFQ) untuk **PT. Prolabios Mitra Analitika**.
+Selamat datang di repositori resmi **PT. Prolabios Mitra Analitika** — Platform B2B E-Procurement & Request for Quotation (RFQ) berbasis Laravel 13.x, Tailwind CSS v4, dan Vite.
 
-Stack: **Laravel 13** · **PHP 8.3+** · **Blade** · **Tailwind CSS v4** · **Vite**
-
----
-
-## Apa ini?
-
-Website B2B untuk:
-
-- Menampilkan katalog produk laboratorium (reagen, media, instrumen, dll.)
-- Keranjang pengajuan RFQ
-- Submit permintaan penawaran → data masuk admin + email
-- **Follow-up penawaran dilanjutkan lewat WhatsApp / Sales** (bukan checkout e-commerce penuh)
-
-Bukan marketplace retail. Fokusnya katalog + lead RFQ korporasi.
+Dokumentasi ini dirancang modular per alur kerja (*flow-by-flow*) agar mudah dipelajari oleh developer maupun maintainer baru.
 
 ---
 
-## Alur RFQ (yang jalan sekarang)
+## 🗺️ Peta Dokumentasi
 
-```
-Katalog / detail produk
-        →  Keranjang (session)
-        →  Form data perusahaan + PIC
-        →  Submit → nomor RFQ + simpan DB + email job
-        →  Halaman sukses
-        →  Sales follow-up via WhatsApp
-```
-
-Admin melihat pengajuan di **`/admin/rfqs`**.
-
-### Belum diaktifkan sebagai alur utama
-
-- Diskon / price override di admin  
-- PDF surat penawaran otomatis  
-- Approve online + signed URL  
-- Potong stok otomatis  
-
-Kalau nanti dibutuhkan, itu development terpisah. Saat ini **submit RFQ → WA** sudah sesuai operasional.
+| Dokumen | Deskripsi Alur / Topik | Target Pembaca |
+|---|---|---|
+| [**01. Quick Start & Setup**](docs/01-setup-and-workflow.md) | Panduan instalasi lokal, environment, database seeder, dan command CLI penting. | Developer Baru / DevOps |
+| [**02. Architecture & Directory Structure**](docs/02-architecture-overview.md) | Penjelasan pola arsitektur (Thin Controllers, Service Layer, Traits), dependensi, dan hirarki folder. | Developer / Lead Eng |
+| [**03. B2B RFQ & Cart Flow**](docs/03-b2b-rfq-flow.md) | Alur lengkap mulai dari keranjang belanja session, validasi checkout, antrean email notifikasi, hingga session security. | Backend Dev / Maintainer |
+| [**04. Product & Catalog Engine**](docs/04-product-and-catalog.md) | Logika katalog, multi-level kategori/subkategori, sektor laboratorium, lean payload query, dan caching versioning. | Backend / Fullstack Dev |
+| [**05. Media & Image Upload Pipeline**](docs/05-media-and-uploads.md) | Pipeline sanitasi gambar, blokir SVG, auto re-encode WebP via GD, stripping metadata, dan storage disk. | Security / Backend Dev |
+| [**06. Admin Dashboard & Authentication**](docs/06-admin-and-auth.md) | Guard autentikasi admin, role checking, audit logger, session protection, dan CMS management. | Backend Dev |
+| [**07. Security & Hardening Matrix**](docs/07-security-and-hardening.md) | Content Security Policy (CSP), TrustProxies, rate limiting, anti-bot honeypot & CAPTCHA, sanitasi HTML. | DevOps / Security Eng |
+| [**08. Testing & Quality Assurance**](docs/08-testing-and-qa.md) | Panduan menjalankan automated test suite (PHPUnit), skenario pengujian, Pint linter, dan Larastan. | QA / Developer |
+| [**09. Production Deployment Guide**](docs/09-deployment-guide.md) | Checklist deployment server, reverse proxy/Nginx, SSL/HTTPS, Redis cache, queue worker, dan database backup. | DevOps / SysAdmin |
 
 ---
 
-## Struktur aplikasi (singkat)
-
-| Area | Isi |
-|------|-----|
-| Publik | Home, produk, sektor, layanan, artikel, kontak, cart, RFQ |
-| Admin | Produk, kategori, sektor, prinsipal, artikel, RFQ, editor homepage/SEO |
-| Service | `DataService` (facade) → Product / Post / Sector / Homepage |
-| Model | `Product`, `ProductCategory`, `Post`, `Sector`, `Rfq`, `RfqItem`, `User`, … |
-| Upload | `storage/app/public` via disk `public` (`php artisan storage:link`) |
-
----
-
-## Requirements
-
-- PHP **8.3+** (disarankan extension `gd` untuk konversi WebP)
-- Composer
-- Node.js **18+** & npm
-- SQLite (default dev) atau MySQL/MariaDB
-
----
-
-## Setup lokal
+## 🚀 Quick Command Cheatsheet
 
 ```bash
-git clone https://github.com/kamarov28/mockup-prolabios.git
-cd mockup-prolabios
-
-cp .env.example .env
-composer install
-npm install
-
-php artisan key:generate
-php artisan migrate --seed
-php artisan storage:link
-
-npm run build
-# atau untuk dev:
-# npm run dev
-
-php artisan serve
-```
-
-Buka [http://127.0.0.1:8000](http://127.0.0.1:8000).
-
-### Environment penting
-
-```env
-APP_NAME="Prolabios"
-APP_URL=http://127.0.0.1:8000
-
-# Database (contoh SQLite default di .env.example — sesuaikan jika MySQL)
-DB_CONNECTION=sqlite
-
-# Session (di production wajib secure)
-SESSION_DRIVER=database
-SESSION_ENCRYPT=true
-SESSION_SECURE_COOKIE=true   # false jika local HTTP
-
-# Admin awal — lihat seeder / buat user is_admin=true
-
-# CAPTCHA (opsional di local; wajib diisi saat production)
-RECAPTCHA_SITE_KEY=
-RECAPTCHA_SECRET_KEY=
-# atau Cloudflare Turnstile:
-TURNSTILE_SITE_KEY=
-TURNSTILE_SECRET_KEY=
-```
-
-### Admin
-
-- URL: `/admin/login`
-- User harus `is_admin = true` di tabel `users`
-- Ikuti seeder project atau buat manual via tinker
-
----
-
-## Scripts berguna
-
-```bash
-# Frontend
-npm run dev          # Vite HMR
-npm run build        # production assets
-
-# Backend
-php artisan migrate
-php artisan storage:link
-php artisan queue:work    # jika email pakai queue
-
-# Tes
+# Menjalankan seluruh test suite
 php artisan test
+
+# Format kode standar Laravel Pint
+./vendor/bin/pint
+
+# Static analysis (PHPStan / Larastan)
+./vendor/bin/phpstan analyse
+
+# Membersihkan cache & compile optimasi production
+php artisan optimize
 ```
-
-Feature test yang ada: auth admin, cart, RFQ flow, security hardening.
-
----
-
-## Keamanan (ringkas)
-
-- CSRF di form state-changing
-- Middleware admin + `is_admin`
-- Rate limit: login admin, kontak, submit RFQ
-- Honeypot + CAPTCHA (fail-closed di production jika secret di-set)
-- Upload: validasi MIME, block SVG, re-encode WebP, path di storage publik
-- Session encrypt; secure cookie di production
-- Sanitasi HTML untuk konten rich text (Summernote)
-
-**Production wajib:**
-
-```env
-APP_ENV=production
-APP_DEBUG=false
-SESSION_SECURE_COOKIE=true
-```
-
----
-
-## Deploy checklist
-
-1. Set `.env` production (debug off, URL HTTPS, DB, mail, CAPTCHA)
-2. `composer install --no-dev -o`
-3. `npm ci && npm run build`
-4. `php artisan migrate --force`
-5. `php artisan storage:link`
-6. `php artisan config:cache && php artisan route:cache && php artisan view:cache`
-7. Pastikan queue worker jalan jika `QUEUE_CONNECTION` bukan `sync`
-8. Backup DB secara berkala
-
----
-
-## Catatan teknis
-
-- **URL detail produk** memakai id numerik: `/produk/detail?id=12` (title lama masih di-fallback di backend untuk bookmark).
-- **Upload baru** ke `storage/app/public/uploads` → URL `/storage/uploads/...`. Path legacy `/uploads/...` masih didukung.
-- **RFQ success page** hanya bisa dibuka oleh session yang baru saja submit nomor tersebut.
-
----
-
-## Lisensi / kepemilikan
-
-Kode dan konten untuk keperluan **PT. Prolabios Mitra Analitika**.  
-© 2026 PT. Prolabios Mitra Analitika.

@@ -102,6 +102,24 @@
         </div>
         <div class="col-md-6">
           <div class="admin-form-group mb-0">
+            <label for="principal_id" class="admin-form-label">Prinsipal / Manufaktur Asal</label>
+            <select class="form-select" id="principal_id" name="principal_id">
+              <option value="">-- Tanpa Prinsipal Khusus --</option>
+              @foreach($principals as $pr)
+                <option value="{{ $pr->id }}" {{ (string) old('principal_id', $product['principal_id'] ?? '') === (string) $pr->id ? 'selected' : '' }}>
+                  {{ $pr->name }} @if(!empty($pr->address)) ({{ $pr->address }}) @endif
+                </option>
+              @endforeach
+            </select>
+            <p class="form-text mb-0 mt-2">
+              <a href="{{ route('admin.principals.index') }}" target="_blank" style="color: var(--color-text-muted);">
+                <i class="bi bi-building me-1"></i>Kelola data prinsipal
+              </a>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="admin-form-group mb-0">
             <label for="sector" class="admin-form-label">Sektor Industri</label>
             <select class="form-select" id="sector" name="sector">
               <option value="">-- Umum / Semua Sektor --</option>

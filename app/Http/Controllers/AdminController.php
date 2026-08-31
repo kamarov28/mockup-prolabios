@@ -11,13 +11,15 @@ class AdminController extends Controller
     // ----------------------------------------------------
     // Admin Authentication Handlers
     // ----------------------------------------------------
-    public function showLogin()
+    public function showLogin(\App\Services\HomepageService $homepage)
     {
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');
         }
 
-        return view('admin.login');
+        $homeData = $homepage->getHomepageData();
+
+        return view('admin.login', compact('homeData'));
     }
 
     public function login(Request $request)

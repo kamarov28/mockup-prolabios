@@ -46,11 +46,18 @@
                   <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk laboratorium" loading="lazy" decoding="async">
                 </div>
                 <div class="card-body p-4 d-flex flex-column">
-                  @if(!empty($prod['catalog']))
-                    <div class="product-cat-code mb-2">
-                      CAT. {{ $prod['catalog'] }}
-                    </div>
-                  @endif
+                  <div class="d-flex flex-wrap gap-1 align-items-center mb-2">
+                    @if(!empty($prod['catalog']))
+                      <div class="product-cat-code">
+                        CAT. {{ $prod['catalog'] }}
+                      </div>
+                    @endif
+                    @if(!empty($prod->principal))
+                      <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
+                        <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
+                      </span>
+                    @endif
+                  </div>
                   <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
                     <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
@@ -82,10 +89,16 @@
       <h2 class="hitech-final-title">{{ $homeData['cta_banner_title'] ?? 'Butuh penawaran khusus atau proyek pengadaan?' }}</h2>
       <p class="hitech-final-sub">{{ $homeData['cta_banner_sub'] ?? 'Tim sales kami siap membantu spesifikasi alat, ketersediaan stok, dan dokumen pendukung.' }}</p>
       
-      <div class="d-flex flex-wrap gap-3 justify-content-center align-items-center mt-4">
+      <div class="d-flex flex-column align-items-center gap-3 mt-4">
         <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="typo-btn-link">
           {{ $homeData['cta_banner_btn_text'] ?? 'Hubungi Sales / Minta Penawaran' }} <i class="bi bi-arrow-right ms-2"></i>
         </a>
+        <div class="d-flex align-items-center gap-2 text-white-50 mt-1" style="font-size: 0.8rem;">
+          <span>Sudah memilih produk?</span>
+          <a href="{{ url('/cart') }}" class="text-accent text-decoration-none fw-medium">
+            <i class="bi bi-cart3 me-1"></i> Buka Keranjang RFQ
+          </a>
+        </div>
       </div>
     </div>
   </section>

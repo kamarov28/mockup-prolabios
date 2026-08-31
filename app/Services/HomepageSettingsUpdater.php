@@ -213,6 +213,11 @@ class HomepageSettingsUpdater
             $request, 'site_favicon_file', 'site_favicon_url', $existingFavicon
         );
 
+        $existingLoginBg = $homeData['admin_login_bg'] ?? '';
+        $patch['admin_login_bg'] = $this->handleImageUpload(
+            $request, 'admin_login_bg_file', 'admin_login_bg_url', $existingLoginBg
+        );
+
         return $patch;
     }
 }

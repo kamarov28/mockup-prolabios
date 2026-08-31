@@ -119,6 +119,7 @@ class AdminProductController extends Controller
         $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
+        $principals = \App\Models\Principal::orderBy('name')->get();
 
         $product = [
             'title' => '',
@@ -126,12 +127,13 @@ class AdminProductController extends Controller
             'category' => '',
             'sub_category' => '',
             'sector' => '',
+            'principal_id' => '',
             'image' => '',
             'gallery_images' => [],
             'description' => '',
         ];
 
-        return view('admin.products.form', compact('sectors', 'product', 'categories'));
+        return view('admin.products.form', compact('sectors', 'product', 'categories', 'principals'));
     }
 
     public function productsStore(StoreProductRequest $request)
@@ -152,6 +154,7 @@ class AdminProductController extends Controller
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
+            'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
             'gallery_images' => $galleryImages,
             'price' => (float) $request->input('price', 0),
@@ -178,8 +181,9 @@ class AdminProductController extends Controller
         $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
+        $principals = \App\Models\Principal::orderBy('name')->get();
 
-        return view('admin.products.form', compact('product', 'sectors', 'categories'));
+        return view('admin.products.form', compact('product', 'sectors', 'categories', 'principals'));
     }
 
     public function productsUpdate(UpdateProductRequest $request, int $id)
@@ -219,6 +223,7 @@ class AdminProductController extends Controller
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
+            'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
             'gallery_images' => $galleryImages,
             'price' => (float) $request->input('price', 0),

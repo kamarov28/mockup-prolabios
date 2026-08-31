@@ -172,6 +172,28 @@
             </div>
           </div>
         </div>
+
+        <div class="col-12">
+          <label class="admin-card-header-label mb-2">Background Banner Login Admin (Kolom Kanan)</label>
+          <div class="row g-3 align-items-center p-3 rounded-3 bg-black border border-secondary border-opacity-20">
+            <div class="col-sm-3 text-center">
+              <div class="border border-secondary border-opacity-20 rounded bg-dark p-2 mx-auto d-flex align-items-center justify-content-center overflow-hidden" style="width: 160px; height: 90px;">
+                <img id="admin_login_bg_preview" src="{{ !empty($homeData['admin_login_bg']) ? $homeData['admin_login_bg'] : 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="Preview Login Background" class="w-100 h-100" style="object-fit: cover;">
+              </div>
+            </div>
+            <div class="col-sm-9">
+              <div class="mb-2">
+                <label for="admin_login_bg_file" class="form-label small text-secondary fw-bold mb-1">Upload Background Baru</label>
+                <input class="form-control form-control-sm bg-dark text-white border-secondary border-opacity-20" type="file" id="admin_login_bg_file" name="admin_login_bg_file" accept="image/*">
+              </div>
+              <div>
+                <label for="admin_login_bg_url" class="form-label small text-secondary fw-bold mb-1">Atau Gunakan URL Gambar</label>
+                <input type="text" class="form-control form-control-sm bg-dark text-white border-secondary border-opacity-20" id="admin_login_bg_url" name="admin_login_bg_url" value="{{ old('admin_login_bg_url', $homeData['admin_login_bg'] ?? '') }}" placeholder="https://images.unsplash.com/...">
+              </div>
+              <p class="form-text text-secondary mb-0 mt-1 small">Foto laboratorium beresolusi tinggi untuk kolom visual pada halaman /admin/login.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Pengaturan SEO & Meta Global -->

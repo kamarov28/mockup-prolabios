@@ -879,92 +879,242 @@ label {
   .admin-header { padding: 0 20px; }
 }
 
-/* ΓöÇΓöÇ 17. Login page (Vite-integrated) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
-.login-body-wrapper {
+/* ── 17. Split-Screen Login Page ─────────────────────────────────────── */
+.login-split-page {
   font-family: var(--font-body) !important;
-  background: var(--color-bg) !important;
+  background-color: var(--color-bg) !important;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.login-split-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  position: relative;
-  overflow: hidden;
-}
-.login-body-wrapper::before {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(255, 73, 80, 0.05) 0%, transparent 70%);
-  top: -100px; left: -100px;
-  pointer-events: none;
-}
-.login-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8);
+  min-height: 100vh;
   width: 100%;
-  max-width: 400px;
-  overflow: hidden;
+}
+
+/* Kolom Kiri: Form */
+.login-split-form-col {
+  flex: 1;
+  max-width: 520px;
+  background-color: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px;
   position: relative;
-  z-index: 10;
+  z-index: 2;
 }
-.login-header {
-  background: var(--color-bg);
-  padding: 36px 28px 28px;
-  text-align: center;
-  border-bottom: 1px solid var(--color-border);
+
+.login-form-wrapper {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
 }
-.login-header img {
-  height: 36px;
+
+.login-brand-logo {
+  height: 38px;
   filter: brightness(0) invert(1);
-  margin-bottom: 12px;
+  display: block;
 }
-.login-body { padding: 28px; }
-.login-body .form-label {
-  font-size: 0.6rem !important;
+
+.login-badge-pill {
+  font-family: var(--font-headline);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--color-accent);
+  background: rgba(255, 73, 80, 0.1);
+  border: 1px solid rgba(255, 73, 80, 0.25);
+  padding: 3px 8px;
+  display: inline-block;
+}
+
+.login-heading {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.login-subheading {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.login-form-fields .form-label {
+  font-family: var(--font-headline);
+  font-size: 0.68rem !important;
   font-weight: 700 !important;
-  letter-spacing: 2px !important;
+  letter-spacing: 1px !important;
   text-transform: uppercase !important;
   color: var(--color-text-muted) !important;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
-.login-body .input-group {
+
+.login-form-fields .input-group {
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--color-border);
   border-radius: 6px;
   overflow: hidden;
   transition: all 0.25s ease;
 }
-.login-body .input-group:focus-within {
+
+.login-form-fields .input-group:focus-within {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.12);
+  background: rgba(255, 255, 255, 0.04);
 }
-.login-body .input-group-text {
+
+.login-form-fields .input-group-text {
   background: transparent !important;
   border: none !important;
   color: var(--color-text-muted) !important;
-  padding: 11px 12px 11px 16px !important;
+  padding: 11px 14px !important;
+  font-size: 1rem;
 }
-.login-body .form-control {
+
+.login-form-fields .form-control {
   background: transparent !important;
   border: none !important;
   color: var(--color-text-main) !important;
-  padding: 11px 16px 11px 10px !important;
+  padding: 11px 14px 11px 4px !important;
+  font-size: 0.9rem;
 }
-.login-body .form-control:focus { box-shadow: none !important; }
-.login-body .btn-primary { letter-spacing: 1.5px !important; }
+
+.login-form-fields .form-control:focus {
+  box-shadow: none !important;
+  color: #ffffff !important;
+}
+
+.login-form-fields .btn-primary {
+  font-family: var(--font-headline);
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.5px !important;
+  text-transform: uppercase !important;
+  background: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease;
+}
+
+.login-form-fields .btn-primary:hover {
+  background: #e03e45 !important;
+  border-color: #e03e45 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(255, 73, 80, 0.25);
+}
+
 .btn-back-home {
   font-family: var(--font-headline);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   color: var(--color-text-muted) !important;
   transition: color 0.2s ease;
 }
-.btn-back-home:hover { color: #ffffff !important; }
+
+.btn-back-home:hover {
+  color: #ffffff !important;
+}
+
+/* Kolom Kanan: Cinematic Visual */
+.login-split-visual-col {
+  flex: 1.4;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 64px;
+  background-color: #050709;
+  overflow: hidden;
+}
+
+.login-visual-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=85');
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(35%) brightness(0.7);
+  transform: scale(1.03);
+  transition: transform 10s ease;
+}
+
+.login-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7, 7, 8, 0.92) 0%, rgba(14, 14, 16, 0.65) 60%, rgba(7, 7, 8, 0.95) 100%);
+}
+
+.login-visual-content {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+}
+
+.login-visual-title {
+  font-family: var(--font-headline);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+
+.login-visual-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+}
+
+.login-visual-metrics .metric-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 20px;
+  border-radius: 6px;
+}
+
+.login-visual-metrics .metric-val {
+  font-family: var(--font-headline);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.login-visual-metrics .metric-lbl {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 991px) {
+  .login-split-container {
+    flex-direction: column;
+  }
+  .login-split-form-col {
+    max-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 40px 24px;
+  }
+  .login-split-visual-col {
+    display: none;
+  }
+}
 
 /* ΓöÇΓöÇ 18. Dashboard Menu Dark Mode Overrides ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
 /* Kartu 1: Halaman Beranda (Nuansa Merah) */

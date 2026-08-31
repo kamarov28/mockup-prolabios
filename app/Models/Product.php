@@ -21,6 +21,7 @@ class Product extends Model
         'category',
         'sub_category',
         'sector',
+        'principal_id',
         'image',
         'gallery_images',
         'price',
@@ -57,6 +58,11 @@ class Product extends Model
     public function subCategoryRelation(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'sub_category', 'key');
+    }
+
+    public function principal(): BelongsTo
+    {
+        return $this->belongsTo(Principal::class, 'principal_id');
     }
 
     public function sectors(): BelongsToMany

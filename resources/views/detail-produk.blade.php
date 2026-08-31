@@ -85,13 +85,22 @@
               </div>
 
               <div class="col-md-7">
-                @if(!empty($product['catalog']))
-                  <div class="mb-4">
+                <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
+                  @if(!empty($product['catalog']))
                     <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 6px 14px; display: inline-block;">
                       No. Katalog: {{ $product['catalog'] }}
                     </span>
-                  </div>
-                @endif
+                  @endif
+
+                  @if(!empty($product->principal))
+                    <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #ffffff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px;">
+                      <i class="bi bi-building" style="color: var(--color-accent);"></i> {{ $product->principal->name }}
+                      @if(!empty($product->principal->address))
+                        <span class="text-white-50 ms-1">({{ $product->principal->address }})</span>
+                      @endif
+                    </span>
+                  @endif
+                </div>
 
                 <div class="mt-4">
                   <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>

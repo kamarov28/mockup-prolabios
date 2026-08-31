@@ -21,9 +21,7 @@
       @foreach($bentoCards as $idx => $card)
         <div class="col-lg-6">
           <div class="hitech-bento-card">
-            @if($idx === 1)
-              <div class="hitech-bento-number">02</div>
-            @endif
+            <div class="hitech-bento-number">{{ sprintf('%02d', $idx + 1) }}</div>
             <div class="hitech-bento-icon"><i class="bi {{ $card['icon'] ?? 'bi-patch-check' }}"></i></div>
             <h3 class="hitech-bento-title">{{ $card['title'] ?? '' }}</h3>
             <p class="hitech-bento-desc">{{ $card['desc'] ?? '' }}</p>

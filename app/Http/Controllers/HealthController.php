@@ -17,6 +17,7 @@ class HealthController extends Controller
         $status = 'healthy';
         $httpCode = 200;
         $details = [];
+        $isLocal = app()->environment('local');
 
         // 1. Database Connectivity Check
         try {
@@ -25,7 +26,8 @@ class HealthController extends Controller
         } catch (\Throwable $e) {
             $status = 'unhealthy';
             $httpCode = 503;
-            $details['database'] = 'disconnected ('.$e->getMessage().')';
+            $details['database'] = $isLocal ? 'disconnected ('.$e->getMessage().')' : 'disconnected';
+            \Log::error('Health check DB connection failed: '.$e->getMessage());
         }
 
         // 2. Queue Backlog and Failure Checks
@@ -37,8 +39,6 @@ class HealthController extends Controller
             $failedJobs = $hasFailedJobsTable ? DB::table('failed_jobs')->count() : 0;
 
             $details['queue'] = [
-                'pending' => $pendingJobs,
-                'failed' => $failedJobs,
                 'status' => $pendingJobs > 200 ? 'backlogged' : 'normal',
             ];
 
@@ -48,8 +48,8 @@ class HealthController extends Controller
         } catch (\Throwable $e) {
             $details['queue'] = [
                 'status' => 'error',
-                'message' => $e->getMessage(),
             ];
+            \Log::error('Health check Queue inspect failed: '.$e->getMessage());
         }
 
         // 3. Cache Driver Check
@@ -58,7 +58,8 @@ class HealthController extends Controller
             $cacheOk = Cache::get('_health_check_ping') === 1;
             $details['cache'] = $cacheOk ? 'operational' : 'degraded';
         } catch (\Throwable $e) {
-            $details['cache'] = 'error ('.$e->getMessage().')';
+            $details['cache'] = 'error';
+            \Log::error('Health check Cache ping failed: '.$e->getMessage());
         }
 
         // 4. Storage Write Check
@@ -71,11 +72,13 @@ class HealthController extends Controller
             $status = 'degraded';
         }
 
-        return response()->json([
+        $payload = [
             'status' => $status,
-            'environment' => config('app.env'),
+            'environment' => $isLocal || app()->runningUnitTests() ? config('app.env') : 'production',
             'timestamp' => now()->toIso8601String(),
             'checks' => $details,
-        ], $httpCode);
+        ];
+
+        return response()->json($payload, $httpCode);
     }
 }
