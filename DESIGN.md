@@ -1,75 +1,61 @@
-# Design System: Trade Show Booth (PT. Prolabios Mitra Analitika)
+# Design System: Trade Show Booth (Playful Exhibition)
 
 ## 1. Overview & Thesis
-The **Trade Show Booth** design system establishes a high-clarity, industrial-editorial aesthetic for PT. Prolabios Mitra Analitika's B2B procurement and RFQ platform. It draws direct inspiration from premium trade show exhibition stands: physical tactile surfaces, sharp technical precision, architectural structure, and authoritative high-contrast typography.
 
-The experience defaults to an intentional warm-industrial palette (`#D6D0C5` Natural background, `#A6171C` Ruby structural accents, and `#F1C045` Sunny navigational highlights) that replaces generic dark-tech tropes with a tangible physical world.
+**Trade Show Booth** is a warm, high-energy B2B catalog experience inspired by a premium exhibition floor — not a dark ops dashboard.
 
----
+The palette is inherently **playful and tactile**:
+- **Natural** `#D6D0C5` — matte booth wall / unbleached card stock
+- **Ruby** `#A6171C` — bold brand stripe, active states
+- **Sunny** `#F1C045` — the “energy” color: primary actions, badges, progress, cart pulse
 
-## 2. Color Palette & Strategy
-
-### Primary & Accent Tokens
-- **Natural (`--color-natural` / `--color-bg-body`)**: `#D6D0C5`
-  - Core canvas surface, invoking physical matte exhibition booths and high-grade unbleached card stock.
-- **Natural Dark (`--color-natural-dark` / `--color-bg-dark`)**: `#C8C1B4`
-  - Alternating section backgrounds, subtle framing panels, and card contrast backings.
-- **Natural Light (`--color-natural-light` / `--color-bg-gray`)**: `#EDE8E0`
-  - Elevated card surfaces, subtle metric containers, and nested structural compartments.
-- **Ruby (`--color-primary` / `--color-ruby`)**: `#A6171C`
-  - Primary brand anchor, utility bar background, active navigation markers, key CTAs, and border highlights.
-- **Ruby Dark (`--color-secondary`)**: `#7A1015`
-  - Deep active/hover states for buttons, gradient stops for hero banners and sidebar CTA panels.
-- **Sunny (`--color-accent` / `--color-sunny`)**: `#F1C045`
-  - High-visibility action badges, cart item counters, utility bar active hovers, and hero primary action button.
-
-### Neutral & Surface Tokens
-- **Text Main (`--color-text-main`)**: `#1A1A1A` (90%+ contrast against natural & white surfaces)
-- **Text Muted (`--color-text-muted`)**: `#6B6B6B` / `#5A5A5A` (Secondary metadata, supporting descriptions)
-- **White (`--color-bg-white`)**: `#FFFFFF` (Product card interiors, bento widgets, form fields)
-- **Border Default (`--color-border`)**: `rgba(0, 0, 0, 0.12)` (0px radius crisp line division)
-- **Footer Ground (`.site-footer`)**: `#1A1A1A` with a `3px solid #A6171C` top boundary.
+Personality targets: approachable lab partner, clear hierarchy, optimistic CTAs. Avoid cold slate, pure black sections, and military-dark hero overlays unless a photo needs legibility.
 
 ---
 
-## 3. Typography Ramp & Hierarchy
+## 2. Color roles (playful mapping)
 
-### Font Families
-- **Headline / Technical Display**: `'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
-- **Body & Editorial**: `'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`
-- **Monospace & SKU Codes**: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace` (`font-feature-settings: "tnum" 1`)
+| Token | Hex | Role |
+|-------|-----|------|
+| Natural | `#D6D0C5` | Page canvas |
+| Natural Light | `#EDE8E0` | Soft section bands, elevated panels |
+| Natural Dark | `#C8C1B4` | Subtle dividers / hover wells |
+| Ruby | `#A6171C` | Brand, nav active, links, outline CTAs |
+| Ruby Dark | `#7A1015` | Hover on Ruby fills |
+| Sunny | `#F1C045` | **Primary buttons**, badges, cart, hero progress |
+| Ink | `#1A1A1A` | Headlines & body |
+| Muted | `#5A5A5A` / `#6B6B6B` | Supporting copy |
+| Paper | `#FFFFFF` | Cards, forms |
 
-### Scale & Application
-- **Hero Title (`.typo-hero-title`, `.hero-headline`)**: `clamp(2.4rem, 6.5vw, 4.8rem)`, `font-weight: 700-800`, `letter-spacing: -0.04em`, line-height `1.08`.
-- **Editorial Page Titles (`.editorial-page-title`)**: `3.5rem`, `font-weight: 700`, `letter-spacing: -2px`.
-- **Section Titles (`.typo-section-title`)**: `clamp(1.75rem, 3.2vw, 2.25rem)`, `letter-spacing: -0.03em`.
-- **Index Numbers (`.typo-index-number`)**: `2.2rem`, `font-weight: 500`, `#A6171C`.
-- **Section Labels & Eyebrows (`.typo-section-label`, `.editorial-page-label`)**: `0.7rem - 0.75rem`, uppercase, `letter-spacing: 0.18em - 3px`, `font-weight: 600`.
-- **Body Text**: `0.95rem - 1.05rem`, line-height `1.65 - 1.7`.
-- **Product Catalog Codes (`.product-cat-code`, `.catalogue-no`)**: `0.72rem`, tabular mono figures, padded pill border.
-
----
-
-## 4. Named Architectural Rules & Components
-
-1. **Sharp Geometry (Zero-Radius Rule)**
-   - All interactive surfaces, buttons, cards, navbar containers, and form controls enforce `border-radius: 0px` (or minimal contextual pill tags for SKU/status tags only).
-
-2. **Exhibition Utility Top Bar + Sticky Navigation**
-   - Utility Top Bar is anchored with `#A6171C` Ruby, displaying direct phone, email, and integrated search.
-   - Sticky navbar uses `rgba(214, 208, 197, 0.97)` with `backdrop-filter: blur(12px)` and a `2px solid #A6171C` bottom border.
-
-3. **High-Contrast Bento & Spec Cards**
-   - Cards (`.card`, `.product-card`, `.hitech-bento-card`) feature clean `#FFFFFF` surfaces with subtle `1px solid rgba(0, 0, 0, 0.08)` borders, lifting smoothly on hover (`translateY(-6px)` to `-8px`).
-
-4. **Principal Continuous Marquee**
-   - Marquee containers use `#FFFFFF` logo pods (`180px x 90px`) flanked by left/right gradient masking blending seamlessly into `#D6D0C5`.
-
-5. **Motion Contract & Accessibility Safeguard**
-   - Smooth cubic-bezier transitions (`cubic-bezier(0.16, 1, 0.3, 1)`).
-   - Strict `prefers-reduced-motion` and `.no-motion` overrides disabling all looping marquees, animations, and transitions.
+**Rule:** If the user should click it first, prefer **Sunny** fill + dark ink text. Ruby is for brand structure and secondary outlines.
 
 ---
 
-## 5. Deliberate Build Exclusions & Non-Canonized Elements
-- Legacy dark-mode only selectors and redundant glow pseudo-elements outside light-mode scope are deprecated and omitted from current surface authoring.
+## 3. Layout & UX principles
+
+1. **Warm canvas first** — sections sit on Natural / Natural Light, never pure black.
+2. **Sunny = action** — catalog download, RFQ, hero primary, cart badge.
+3. **Soft lift, not harsh chrome** — cards use white paper + soft warm shadow; hover lifts + thin Ruby or Sunny edge.
+4. **Hero photo** — use a **warm dim** overlay (ink at ~55–70% with slight Ruby tint), not a pure black scrub. Controls bar can stay Ruby; progress track is Sunny.
+5. **Tabs / sector finder** — friendly underline or pill; active = Ruby text + Sunny/Ruby marker.
+6. **Typography** — Space Grotesk headlines, Instrument Sans body; keep high contrast on Natural.
+7. **Radius** — slightly softened on pills/badges (SKU, status); large structural frames may stay crisp for booth geometry.
+8. **Footer** — dark ink ground is OK as a “floor plate”; top edge Ruby stripe; social hover Sunny or Ruby.
+
+---
+
+## 4. Component checklist
+
+- Navbar: Natural glass, Ruby hairline bottom, **Sunny** “Unduh Katalog” fill optional, cart badge Sunny
+- Product cards: white paper, warm shadow, Ruby cat-code chip, clear dark titles
+- Bento / infrastructure: white or soft Natural Light panels, readable ink
+- Sector finder: full Natural canvas, dark titles, paper product panel
+- Final CTA: Natural Light band, ink headline, Sunny or Ruby text link
+
+---
+
+## 5. Non-goals
+
+- Dark-mode-first editorial (Linear/Anduril black panels) on public pages
+- White text on near-black content sections
+- Primary CTAs that are only outline-gray with no Sunny energy
