@@ -1,93 +1,101 @@
 /* site/03-theme.css */
 /* ==========================================================================
-   Global Dark Editorial Theme Overrides (Unify all pages)
+   Global Light Editorial Theme — Trade Show Booth
+   Natural #D6D0C5 · Ruby #A6171C · Sunny #F1C045
    ========================================================================== */
 
 /* 1. Global Section Backgrounds */
 section, .bg-light, .bg-white {
-  background-color: var(--color-bg) !important;
+  background-color: var(--color-bg, #D6D0C5) !important;
 }
 
 /* 2. Text Colors Unification */
 .text-muted, .text-black-50, .text-secondary {
-  color: var(--color-text-muted) !important;
+  color: var(--color-text-muted, #6B6B6B) !important;
 }
 h1, h2, h3, h4, h5, h6, .fw-bold, .card-title, .modal-title {
-  color: var(--color-text-main) !important;
+  color: var(--color-text-main, #1A1A1A) !important;
 }
 p, span, li, td, th, label {
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: rgba(26, 26, 26, 0.85) !important;
 }
 a {
-  color: var(--color-text-main);
+  color: var(--color-text-main, #1A1A1A);
   transition: color 0.3s ease;
 }
 a:hover {
-  color: var(--color-accent);
+  color: var(--color-accent, #A6171C);
 }
 
 /* 3. Global Cards & Box Containers */
-.card, .sidebar-cta-box, .bg-white.p-4.rounded.shadow-sm, .card-body {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid var(--color-border) !important;
+.card, .bg-white.p-4.rounded.shadow-sm, .card-body {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: none !important;
   border-radius: 0px !important;
+}
+.sidebar-cta-box {
+  background: linear-gradient(135deg, #A6171C 0%, #7A1015 100%) !important;
+  border: 1px solid transparent !important;
+  border-radius: 0 !important;
+  color: #fff !important;
+}
+.sidebar-cta-box h2,
+.sidebar-cta-box p,
+.sidebar-cta-box span {
+  color: #fff !important;
 }
 
 /* 4. List Groups (Sidebar filter) */
 .list-group-item {
   background-color: transparent !important;
-  border-bottom: 1px solid var(--color-border) !important;
-  color: rgba(255, 255, 255, 0.6) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: rgba(26, 26, 26, 0.7) !important;
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .list-group-item:hover {
-  background-color: rgba(255, 255, 255, 0.03) !important;
-  color: var(--color-accent) !important;
+  background-color: rgba(166, 23, 28, 0.06) !important;
+  color: #A6171C !important;
   padding-left: 12px;
 }
 .list-group-item.active {
-  background-color: rgba(255, 255, 255, 0.04) !important;
-  color: var(--color-accent) !important;
-  border-color: var(--color-border) !important;
+  background-color: rgba(166, 23, 28, 0.1) !important;
+  color: #A6171C !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
   font-weight: 600;
 }
 
-/* 5. Form Inputs (Contact form, Search fields) */
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .form-select,
-[data-theme="dark"] .input-group-text,
+/* 5. Form Inputs */
 .form-control,
 .form-select,
 .input-group-text {
-  background-color: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid var(--color-border) !important;
-  color: #fff !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.15) !important;
+  color: #1A1A1A !important;
   border-radius: 0px !important;
 }
-[data-theme="dark"] .form-control:focus,
-[data-theme="dark"] .form-select:focus,
 .form-control:focus,
 .form-select:focus {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  border-color: var(--color-accent) !important;
-  box-shadow: none !important;
-  color: #fff !important;
+  background-color: #FFFFFF !important;
+  border-color: #A6171C !important;
+  box-shadow: 0 0 0 0.2rem rgba(166, 23, 28, 0.15) !important;
+  color: #1A1A1A !important;
 }
-[data-theme="dark"] .form-select,
-.form-select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+.form-control::placeholder {
+  color: #9B9B9B !important;
 }
 .input-group-text {
   border-right: none !important;
-  color: var(--color-text-muted) !important;
+  color: #6B6B6B !important;
 }
 
 /* 6. Buttons */
-.btn-danger, .btn-primary, .btn-submit {
-  background-color: var(--color-accent) !important;
-  border-color: var(--color-accent) !important;
-  color: #fff !important;
+.btn-danger,
+.btn-primary,
+.btn-submit {
+  background-color: #F1C045 !important;
+  border-color: #F1C045 !important;
+  color: #1A1A1A !important;
   font-family: var(--font-headline);
   text-transform: uppercase;
   font-size: 0.8rem;
@@ -95,56 +103,59 @@ a:hover {
   border-radius: 0px !important;
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
-.btn-danger:hover, .btn-primary:hover {
-  background-color: #ff333d !important;
-  border-color: #ff333d !important;
+.btn-danger:hover,
+.btn-primary:hover,
+.btn-submit:hover {
+  background-color: #ddb03a !important;
+  border-color: #ddb03a !important;
+  color: #1A1A1A !important;
   transform: translateY(-2px);
 }
 .btn-outline-danger {
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
+  border-color: #A6171C !important;
+  color: #A6171C !important;
+  background: transparent !important;
 }
 .btn-outline-danger:hover {
-  background: transparent !important;
-  border-color: var(--color-accent) !important;
-  color: var(--color-accent) !important;
+  background: #A6171C !important;
+  border-color: #A6171C !important;
+  color: #fff !important;
 }
 
-
-/* 8. Table overrides (Detail specifications) */
+/* 7. Tables */
 .table {
-  color: rgba(255, 255, 255, 0.8) !important;
-  background-color: transparent !important;
-  border-color: var(--color-border) !important;
+  color: rgba(26, 26, 26, 0.85) !important;
+  background-color: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
 }
-.table th, .table td {
-  border-bottom-color: var(--color-border) !important;
+.table th,
+.table td {
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
   background-color: transparent !important;
-  color: rgba(255, 255, 255, 0.75) !important;
+  color: rgba(26, 26, 26, 0.85) !important;
 }
 
-/* 9. Pagination Styling */
+/* 8. Pagination */
 .pagination .page-link {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-  border-color: var(--color-border) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  background-color: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #1A1A1A !important;
 }
 .pagination .page-item.active .page-link {
-  background-color: var(--color-accent) !important;
-  border-color: var(--color-accent) !important;
+  background-color: #A6171C !important;
+  border-color: #A6171C !important;
   color: #fff !important;
 }
 .pagination .page-link:hover {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-  color: var(--color-accent) !important;
+  background-color: rgba(166, 23, 28, 0.06) !important;
+  color: #A6171C !important;
 }
 
-/* ==========================================================================
-   Editorial Page Headers (Replaces photo banner headers on all sub-pages)
-   ========================================================================== */
+/* 9. Editorial Page Headers */
 .editorial-page-header {
   padding: 140px 0 40px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg, #D6D0C5) !important;
 }
 .editorial-page-header + section {
   padding-top: 48px !important;
@@ -164,10 +175,10 @@ a:hover {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 3px;
-  color: var(--color-accent);
+  color: #A6171C;
   margin-bottom: 16px;
   padding: 6px 14px;
-  border: 1px solid var(--color-accent);
+  border: 1px solid #A6171C;
 }
 .editorial-page-title {
   font-family: var(--font-headline) !important;
@@ -176,11 +187,12 @@ a:hover {
   letter-spacing: -2px;
   line-height: 1.1;
   margin-bottom: 16px;
+  color: #1A1A1A !important;
 }
 .editorial-page-subtitle {
   font-family: var(--font-body);
   font-size: 1.05rem !important;
-  color: var(--color-text-muted) !important;
+  color: #6B6B6B !important;
   max-width: 600px;
   line-height: 1.6;
 }
@@ -189,4 +201,3 @@ a:hover {
 .page-header {
   display: none !important;
 }
-

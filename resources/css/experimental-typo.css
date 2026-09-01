@@ -8,3 +8,5 @@
 @import './site/07-admin-login.css';
 @import './site/08-b2b-hitech.css';
 @import './site/09-cart-rfq.css';
+/* Light overrides last — wins residual dark hardcodes */
+@import './site/light-mode.css';
