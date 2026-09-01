@@ -1,0 +1,49 @@
+{
+  "theme": "Trade Show Booth",
+  "colors": {
+    "palette": {
+      "natural": "#D6D0C5",
+      "naturalDark": "#C8C1B4",
+      "naturalLight": "#EDE8E0",
+      "ruby": "#A6171C",
+      "rubyDark": "#7A1015",
+      "sunny": "#F1C045",
+      "white": "#FFFFFF",
+      "textMain": "#1A1A1A",
+      "textMuted": "#6B6B6B"
+    },
+    "semantic": {
+      "bgBody": "var(--color-natural)",
+      "bgSectionDark": "var(--color-natural-dark)",
+      "bgSectionLight": "var(--color-natural-light)",
+      "primary": "var(--color-ruby)",
+      "primaryActive": "var(--color-secondary)",
+      "accent": "var(--color-sunny)",
+      "border": "rgba(0, 0, 0, 0.12)",
+      "footerBg": "#1A1A1A"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headline": "'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif",
+      "sans": "'Instrument Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+      "mono": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    },
+    "ramp": {
+      "hero": "clamp(2.4rem, 6.5vw, 4.8rem)",
+      "pageTitle": "3.5rem",
+      "sectionTitle": "clamp(1.75rem, 3.2vw, 2.25rem)",
+      "indexNumber": "2.2rem",
+      "cardTitle": "1.15rem - 1.35rem",
+      "body": "0.95rem - 1.05rem",
+      "label": "0.7rem - 0.75rem",
+      "skuCode": "0.72rem"
+    }
+  },
+  "geometry": {
+    "borderRadius": "0px",
+    "cardBorder": "1px solid rgba(0, 0, 0, 0.08)",
+    "navBorder": "2px solid #A6171C",
+    "footerBorder": "3px solid #A6171C"
+  }
+}

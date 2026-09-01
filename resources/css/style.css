@@ -825,9 +825,7 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 800 !important;
 }
 .hero-headline span.highlight-text {
-  background: linear-gradient(135deg, #FF6B6B, #D32F2F);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-primary, #A6171C);
 }
 .hero-carousel-wrapper {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
