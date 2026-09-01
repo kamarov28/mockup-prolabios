@@ -25,15 +25,18 @@
   <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
     <form action="{{ route('admin.rfqs.index') }}" method="GET">
       <div class="row g-3">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); border-right: 1px solid var(--color-border);">
               <i class="bi bi-search" style="font-size: 0.8rem;"></i>
             </span>
             <input type="text" name="s" id="local-search-input"
                    style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-size: 0.88rem;"
-                   placeholder="Cari nomor RFQ, nama, instansi, WA, email..." value="{{ request('s') }}" aria-label="Kata kunci pencarian">
+                   placeholder="Cari RFQ, pemohon, instansi, WA..." value="{{ request('s') }}" aria-label="Kata kunci pencarian">
           </div>
+        </div>
+        <div class="col-md-3">
+          <input type="text" name="product_name" class="form-control" value="{{ request('product_name') }}" placeholder="Filter nama produk / SKU..." aria-label="Filter Produk" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
         </div>
         <div class="col-md-2">
           <select name="status" class="form-select" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
@@ -43,17 +46,18 @@
             @endforeach
           </select>
         </div>
-        <div class="col-md-2">
-          <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}" aria-label="Dari Tanggal" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
+        <div class="col-md-3">
+          <div class="input-group">
+            <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}" title="Dari Tanggal" aria-label="Dari Tanggal" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
+            <span class="input-group-text" style="background: transparent; color: var(--color-text-muted); border-color: var(--color-border);">-</span>
+            <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}" title="Sampai Tanggal" aria-label="Sampai Tanggal" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
+          </div>
         </div>
-        <div class="col-md-2">
-          <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}" aria-label="Sampai Tanggal" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
-        </div>
-        <div class="col-md-2 d-flex gap-1">
-          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center" title="Filter Data">
+        <div class="col-md-1 d-flex gap-1">
+          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center" title="Terapkan Filter">
             <i class="bi bi-funnel"></i>
           </button>
-          @if(request('s') || request('status') || request('start_date') || request('end_date'))
+          @if(request('s') || request('product_name') || request('status') || request('start_date') || request('end_date'))
             <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter">
               <i class="bi bi-x-lg"></i>
             </a>

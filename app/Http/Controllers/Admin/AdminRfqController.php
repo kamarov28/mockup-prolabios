@@ -236,6 +236,20 @@ class AdminRfqController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
+        // Filter berdasarkan Produk (ID produk atau keyword nama/SKU produk)
+        $productId = $request->input('product_id');
+        $productQuery = $request->input('product_name');
+        if ($productId) {
+            $query->whereHas('items', function ($q) use ($productId) {
+                $q->where('product_id', $productId);
+            });
+        } elseif ($productQuery) {
+            $query->whereHas('items', function ($q) use ($productQuery) {
+                $q->where('product_title', 'like', "%{$productQuery}%")
+                    ->orWhere('catalog_no', 'like', "%{$productQuery}%");
+            });
+        }
+
         return $query;
     }
 

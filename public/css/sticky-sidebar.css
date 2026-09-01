@@ -15,12 +15,15 @@ html, body {
   }
 
   /* Sticky the left column itself — no JS class required */
+  #catalog-section .col-lg-3,
   #catalog-section > .container > .row > .col-lg-3,
   #catalog-section > .container > .row > .col-md-4,
   #sektor-nav > .container > .row > .col-lg-3,
   #sektor-nav > .container > .row > .col-md-4,
   #sektor-sidebar,
-  .page-sidebar-sticky {
+  .page-sidebar-sticky,
+  .catalog-sidebar-sticky {
+    position: -webkit-sticky !important;
     position: sticky !important;
     top: 96px !important;
     align-self: flex-start !important;

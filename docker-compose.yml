@@ -8,45 +8,131 @@ services:
     container_name: prolabios_app
     restart: unless-stopped
     ports:
-      - "8000:80"
+      - "${APP_PORT:-8000}:80"
+    environment:
+      APP_NAME: "${APP_NAME:-Prolabios}"
+      APP_ENV: "${APP_ENV:-local}"
+      APP_KEY: "${APP_KEY:-}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      APP_URL: "${APP_URL:-http://localhost:8000}"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DOCKER_DB_DATABASE:-prolabios_db}"
+      DB_USERNAME: "${DOCKER_DB_USERNAME:-prolabios_user}"
+      DB_PASSWORD: "${DOCKER_DB_PASSWORD:-prolabios_password}"
+      SESSION_DRIVER: redis
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      RUN_MIGRATIONS: "true"
     volumes:
       - .:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prolabios_queue
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
+    environment:
+      APP_NAME: "${APP_NAME:-Prolabios}"
+      APP_ENV: "${APP_ENV:-local}"
+      APP_KEY: "${APP_KEY:-}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DOCKER_DB_DATABASE:-prolabios_db}"
+      DB_USERNAME: "${DOCKER_DB_USERNAME:-prolabios_user}"
+      DB_PASSWORD: "${DOCKER_DB_PASSWORD:-prolabios_password}"
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
+    depends_on:
+      - app
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: prolabios_scheduler
+    restart: unless-stopped
+    command: php artisan schedule:work
+    environment:
+      APP_NAME: "${APP_NAME:-Prolabios}"
+      APP_ENV: "${APP_ENV:-local}"
+      APP_KEY: "${APP_KEY:-}"
+      APP_DEBUG: "${APP_DEBUG:-true}"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: "${DOCKER_DB_DATABASE:-prolabios_db}"
+      DB_USERNAME: "${DOCKER_DB_USERNAME:-prolabios_user}"
+      DB_PASSWORD: "${DOCKER_DB_PASSWORD:-prolabios_password}"
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/node_modules
+      - /var/www/html/vendor
+    depends_on:
+      - app
 
   db:
     image: mysql:8.0
     container_name: prolabios_db
     restart: unless-stopped
     ports:
-      - "33061:3306"
+      - "${FORWARD_DB_PORT:-33061}:3306"
     environment:
-      MYSQL_DATABASE: prolabios_db
-      MYSQL_USER: prolabios_user
-      MYSQL_PASSWORD: prolabios_password
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: "${DOCKER_DB_DATABASE:-prolabios_db}"
+      MYSQL_USER: "${DOCKER_DB_USERNAME:-prolabios_user}"
+      MYSQL_PASSWORD: "${DOCKER_DB_PASSWORD:-prolabios_password}"
+      MYSQL_ROOT_PASSWORD: "${DOCKER_DB_ROOT_PASSWORD:-root_password}"
     volumes:
       - dbdata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-p${DOCKER_DB_ROOT_PASSWORD:-root_password}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:alpine
     container_name: prolabios_redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - "${FORWARD_REDIS_PORT:-6379}:6379"
+    volumes:
+      - redisdata:/data
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: prolabios_pma
     restart: unless-stopped
     ports:
-      - "8081:80"
+      - "${FORWARD_PMA_PORT:-8081}:80"
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: "${DOCKER_DB_ROOT_PASSWORD:-root_password}"
     depends_on:
       - db
 
 volumes:
   dbdata:
+  redisdata:

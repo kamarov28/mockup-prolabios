@@ -1,7 +1,18 @@
+# Multi-stage Dockerfile: Frontend asset builder + Production PHP Apache
+# Stage 1: Build frontend assets with Node
+FROM node:20-alpine AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY resources resources
+COPY vite.config.js ./
+RUN npm run build
+
+# Stage 2: Production PHP Apache
 FROM php:8.4-apache
 
-# Install system dependencies & PHP extensions (GD with WebP support, PDO MySQL, Zip, Redis, OPcache)
-RUN apt-get update && apt-get install -y \
+# Install system dependencies & PHP extensions (GD WebP/JPEG, PDO MySQL, Zip, Redis, OPcache)
+RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
@@ -12,43 +23,68 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install pdo pdo_mysql gd zip opcache \
+    && docker-php-ext-install -j$(nproc) pdo pdo_mysql gd zip opcache \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Configure OPcache for Windows Docker performance (with 2s timestamp revalidation for dev edits)
-RUN echo "opcache.enable=1\n\
-opcache.enable_cli=1\n\
-opcache.memory_consumption=256\n\
-opcache.interned_strings_buffer=32\n\
-opcache.max_accelerated_files=20000\n\
-opcache.revalidate_freq=2\n\
-opcache.validate_timestamps=1\n\
-opcache.fast_shutdown=1" > /usr/local/etc/php/conf.d/opcache-recommended.ini
+# Configure Production OPcache
+RUN { \
+    echo 'opcache.enable=1'; \
+    echo 'opcache.enable_cli=1'; \
+    echo 'opcache.memory_consumption=256'; \
+    echo 'opcache.interned_strings_buffer=32'; \
+    echo 'opcache.max_accelerated_files=20000'; \
+    echo 'opcache.revalidate_freq=0'; \
+    echo 'opcache.validate_timestamps=0'; \
+    echo 'opcache.fast_shutdown=1'; \
+} > /usr/local/etc/php/conf.d/opcache-recommended.ini
 
-# Enable Apache Mod_Rewrite for Laravel routing & disable DNS HostnameLookups
-RUN a2enmod rewrite \
+# Production PHP settings
+RUN { \
+    echo 'upload_max_filesize = 32M'; \
+    echo 'post_max_size = 32M'; \
+    echo 'memory_limit = 256M'; \
+    echo 'max_execution_time = 60'; \
+    echo 'expose_php = Off'; \
+} > /usr/local/etc/php/conf.d/custom-php.ini
+
+# Apache Configuration
+RUN a2enmod rewrite headers \
     && echo "ServerName localhost" >> /etc/apache2/apache2.conf \
     && echo "HostnameLookups Off" >> /etc/apache2/apache2.conf
 
-# Set Apache DocumentRoot to Laravel /public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+    && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/conf-available/*.conf
 
-# Set working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Composer install
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Copy composer files first for layer caching
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --optimize-autoloader
+
+# Copy application source
 COPY . /var/www/html
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copy compiled frontend assets from Stage 1
+COPY --from=frontend /app/public/build /var/www/html/public/build
 
-# Run optimized autoloader inside image
-RUN composer dump-autoload --optimize --no-interaction
+# Finish composer autoload
+RUN composer dump-autoload --optimize --classmap-authoritative --no-dev --no-scripts
 
-# Set permissions for storage & bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Setup entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]

@@ -123,4 +123,16 @@ class AdminRfqTest extends TestCase
         $response->assertOk();
         $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
+
+    public function test_admin_can_filter_and_export_rfqs_by_date_and_product(): void
+    {
+        $response = $this->actingAs($this->adminUser)->get(route('admin.rfqs.export', [
+            'start_date' => now()->subDays(7)->format('Y-m-d'),
+            'end_date' => now()->format('Y-m-d'),
+            'product_name' => 'Mikroskop',
+        ]));
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }
 }

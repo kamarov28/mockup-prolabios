@@ -33,28 +33,6 @@
 
   <!-- Custom CSS via Vite -->
   @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
-  <link rel="stylesheet" href="{{ asset('css/sticky-sidebar.css') }}?v=2">
-  {{-- Critical sticky fallback (in case public CSS is cached/missing) --}}
-  <style>
-    html, body { overflow-x: clip; }
-    @media (min-width: 768px) {
-      #catalog-section > .container > .row,
-      #sektor-nav > .container > .row { align-items: flex-start !important; }
-      #catalog-section > .container > .row > .col-lg-3,
-      #catalog-section > .container > .row > .col-md-4,
-      #sektor-nav > .container > .row > .col-lg-3,
-      #sektor-nav > .container > .row > .col-md-4,
-      #sektor-sidebar,
-      .page-sidebar-sticky {
-        position: sticky !important;
-        top: 96px !important;
-        align-self: flex-start !important;
-        max-height: calc(100vh - 112px);
-        overflow-y: auto;
-        z-index: 20;
-      }
-    }
-  </style>
 
   @stack('styles')
 
