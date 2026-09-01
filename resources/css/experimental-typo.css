@@ -1,5 +1,6 @@
-/* experimental-typo.css — Vite entry barrel. Rules live in resources/css/site/*.css */
+/* experimental-typo.css — Vite entry barrel */
 @import './site/01-base.css';
+@import './site/00-tokens.css'; /* after 01-base so light tokens win */
 @import './site/02-motion.css';
 @import './site/03-theme.css';
 @import './site/04-pages-core.css';
@@ -8,5 +9,4 @@
 @import './site/07-admin-login.css';
 @import './site/08-b2b-hitech.css';
 @import './site/09-cart-rfq.css';
-/* Light overrides last — wins residual dark hardcodes */
-@import './site/light-mode.css';
+@import './site/light-mode.css'; /* last — component polish */
