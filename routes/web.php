@@ -105,6 +105,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
 
     Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
+    Route::get('/rfqs/export', [AdminRfqController::class, 'export'])->name('admin.rfqs.export');
     Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
     Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
     Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');

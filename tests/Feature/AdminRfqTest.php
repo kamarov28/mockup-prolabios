@@ -115,4 +115,12 @@ class AdminRfqTest extends TestCase
         $response->assertRedirect(route('admin.rfqs.index'));
         $this->assertSoftDeleted('rfqs', ['id' => $this->rfq->id]);
     }
+
+    public function test_admin_can_export_rfqs(): void
+    {
+        $response = $this->actingAs($this->adminUser)->get(route('admin.rfqs.export'));
+
+        $response->assertOk();
+        $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    }
 }

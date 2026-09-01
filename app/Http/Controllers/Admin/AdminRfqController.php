@@ -7,10 +7,207 @@ use App\Http\Requests\UpdateRfqRequest;
 use App\Models\Rfq;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminRfqController extends Controller
 {
     public function index(Request $request)
+    {
+        $query = $this->buildFilteredQuery($request);
+        $rfqs = $query->paginate(15)->withQueryString();
+
+        return view('admin.rfqs.index', compact('rfqs'));
+    }
+
+    public function export(Request $request)
+    {
+        $rfqs = $this->buildFilteredQuery($request)->with('items.product')->get();
+        $filename = 'rekap-rfq-prolabios-' . now()->format('Ymd-His') . '.xlsx';
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Rekap RFQ');
+
+        // Freeze pane di baris ke-4 agar header kolom tabel selalu terlihat saat scroll
+        $sheet->freezePane('A4');
+
+        // Document Meta Title
+        $sheet->setCellValue('A1', 'PT. PROLABIOS MITRA ANALITIKA — REKAPITULASI PENGAJUAN RFQ');
+        $sheet->mergeCells('A1:L1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(12)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0F172A'));
+
+        $sheet->setCellValue('A2', 'Diekspor: ' . now()->translatedFormat('d F Y, H:i') . ' WIB | Total RFQ: ' . $rfqs->count() . ' Pengajuan');
+        $sheet->mergeCells('A2:L2');
+        $sheet->getStyle('A2')->getFont()->setSize(9)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('64748B'));
+
+        // Table Headers (Baris 3)
+        $headers = [
+            'A3' => 'NO. RFQ',
+            'B3' => 'TANGGAL',
+            'C3' => 'STATUS',
+            'D3' => 'INSTANSI / PERUSAHAAN',
+            'E3' => 'PIC & KONTAK',
+            'F3' => 'SKU / KATALOG',
+            'G3' => 'NAMA BARANG / ITEM SPESIFIKASI',
+            'H3' => 'QTY',
+            'I3' => 'EST. HARGA (RP)',
+            'J3' => 'SUBTOTAL (RP)',
+            'K3' => 'CATATAN KLIEN',
+            'L3' => 'CATATAN ADMIN',
+        ];
+
+        foreach ($headers as $cell => $text) {
+            $sheet->setCellValue($cell, $text);
+        }
+
+        $sheet->getStyle('A3:L3')->applyFromArray([
+            'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'size' => 9],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '1E293B']], // Slate 800 profesional
+            'alignment' => [
+                'vertical' => Alignment::VERTICAL_CENTER,
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'wrapText' => true,
+            ],
+            'borders' => [
+                'bottom' => ['borderStyle' => Border::BORDER_MEDIUM, 'color' => ['rgb' => '0F172A']],
+            ],
+        ]);
+
+        $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('B3:C3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('H3:J3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getRowDimension(3)->setRowHeight(26);
+
+        $row = 4;
+        $rfqIndex = 0;
+
+        foreach ($rfqs as $rfq) {
+            $rfqIndex++;
+            $items = $rfq->items;
+            $itemCount = $items->count() > 0 ? $items->count() : 1;
+            $startRow = $row;
+            $endRow = $row + $itemCount - 1;
+
+            // Palet selang-seling antar RFQ agar batas awal & akhir tiap pengajuan jelas terbaca
+            $blockBg = ($rfqIndex % 2 === 1) ? 'FFFFFF' : 'F8FAFC'; // Putih murni vs Soft Slate
+
+            $statusColor = match ($rfq->status) {
+                Rfq::STATUS_QUOTED => '0369A1',     // Biru
+                Rfq::STATUS_CONTACTED => 'D97706',  // Amber
+                Rfq::STATUS_CLOSED => '475569',     // Muted Slate
+                default => '15803D',                // Emerald (Baru)
+            };
+
+            // 1. Data Level RFQ (A - E, K, L)
+            $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue("B{$startRow}", $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : '-');
+            $sheet->setCellValue("C{$startRow}", $rfq->status_label);
+            $sheet->setCellValue("D{$startRow}", $rfq->company_name);
+            $sheet->setCellValue("E{$startRow}", $rfq->name . "\n" . $rfq->phone_wa . "\n" . $rfq->email);
+            $sheet->setCellValue("K{$startRow}", $rfq->notes ?: '-');
+            $sheet->setCellValue("L{$startRow}", $rfq->admin_notes ?: '-');
+
+            // Merge kolom induk jika RFQ punya banyak item barang
+            if ($itemCount > 1) {
+                $sheet->mergeCells("A{$startRow}:A{$endRow}");
+                $sheet->mergeCells("B{$startRow}:B{$endRow}");
+                $sheet->mergeCells("C{$startRow}:C{$endRow}");
+                $sheet->mergeCells("D{$startRow}:D{$endRow}");
+                $sheet->mergeCells("E{$startRow}:E{$endRow}");
+                $sheet->mergeCells("K{$startRow}:K{$endRow}");
+                $sheet->mergeCells("L{$startRow}:L{$endRow}");
+            }
+
+            // 2. Data Level Items (F - J)
+            $rfqTotal = 0;
+            if ($items->isEmpty()) {
+                $sheet->setCellValue("F{$startRow}", '-');
+                $sheet->setCellValue("G{$startRow}", '(Tidak ada item terlampir)');
+                $sheet->setCellValue("H{$startRow}", 0);
+                $sheet->setCellValue("I{$startRow}", '-');
+                $sheet->setCellValue("J{$startRow}", '-');
+                $currentRow = $startRow;
+            } else {
+                foreach ($items as $idx => $item) {
+                    $currentRow = $startRow + $idx;
+                    $price = (float) ($item->original_price ?? 0);
+                    $qty = (int) ($item->quantity ?? 1);
+                    $subtotal = $price * $qty;
+                    $rfqTotal += $subtotal;
+
+                    $catalogNo = $item->catalog_no ?: ($item->product?->sku ?? '-');
+                    $productName = $item->product_title ?: ($item->product?->name ?? '-');
+
+                    $sheet->setCellValueExplicit("F{$currentRow}", $catalogNo, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue("G{$currentRow}", $productName);
+                    $sheet->setCellValue("H{$currentRow}", $qty);
+                    $sheet->setCellValue("I{$currentRow}", $price > 0 ? $price : '-');
+                    $sheet->setCellValue("J{$currentRow}", $subtotal > 0 ? $subtotal : '-');
+
+                    // Format angka
+                    if ($price > 0) {
+                        $sheet->getStyle("I{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                    }
+                    if ($subtotal > 0) {
+                        $sheet->getStyle("J{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                    }
+                }
+            }
+
+            // 3. Styling Blok RFQ
+            // Fill background grup
+            $sheet->getStyle("A{$startRow}:L{$endRow}")->applyFromArray([
+                'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $blockBg]],
+                'alignment' => [
+                    'vertical' => Alignment::VERTICAL_TOP,
+                    'wrapText' => true,
+                ],
+                'font' => ['size' => 9.5],
+            ]);
+
+            // Alignment spesifik
+            $sheet->getStyle("A{$startRow}:C{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("A{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0369A1'));
+            $sheet->getStyle("C{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color($statusColor));
+            $sheet->getStyle("H{$startRow}:J{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+            $sheet->getStyle("F{$startRow}:F{$endRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('475569'));
+
+            // Border dalam (halus) dan border bawah penutup RFQ (tegas)
+            $sheet->getStyle("A{$startRow}:L{$endRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');
+            $sheet->getStyle("A{$endRow}:L{$endRow}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB('94A3B8');
+
+            $row = $endRow + 1;
+        }
+
+        // Auto/Optimized Widths
+        $sheet->getColumnDimension('A')->setWidth(18); // No RFQ
+        $sheet->getColumnDimension('B')->setWidth(16); // Tanggal
+        $sheet->getColumnDimension('C')->setWidth(14); // Status
+        $sheet->getColumnDimension('D')->setWidth(26); // Perusahaan
+        $sheet->getColumnDimension('E')->setWidth(26); // PIC & Kontak
+        $sheet->getColumnDimension('F')->setWidth(16); // SKU / Katalog
+        $sheet->getColumnDimension('G')->setWidth(34); // Nama Barang
+        $sheet->getColumnDimension('H')->setWidth(8);  // Qty
+        $sheet->getColumnDimension('I')->setWidth(18); // Harga Satuan
+        $sheet->getColumnDimension('J')->setWidth(20); // Subtotal
+        $sheet->getColumnDimension('K')->setWidth(26); // Catatan Klien
+        $sheet->getColumnDimension('L')->setWidth(26); // Catatan Admin
+
+        return response()->streamDownload(function () use ($spreadsheet) {
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        }, $filename, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+
+    private function buildFilteredQuery(Request $request)
     {
         $query = Rfq::with('items')->latest();
 
@@ -39,9 +236,7 @@ class AdminRfqController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
-        $rfqs = $query->paginate(15)->withQueryString();
-
-        return view('admin.rfqs.index', compact('rfqs'));
+        return $query;
     }
 
     public function show(int $id)

@@ -13,6 +13,9 @@
       <h2 class="admin-card-header-title">Daftar Pengajuan Masuk</h2>
     </div>
     <div class="d-inline-flex gap-2">
+      <a href="{{ route('admin.rfqs.export', request()->query()) }}" class="admin-btn admin-btn-ghost text-success" title="Download Excel/CSV sesuai filter saat ini">
+        <i class="bi bi-file-earmark-spreadsheet me-1"></i> Ekspor Excel
+      </a>
       <span class="badge bg-secondary bg-opacity-20 text-white px-3 py-2 border border-secondary border-opacity-30">
         Total: {{ $rfqs->total() }} Pengajuan
       </span>
