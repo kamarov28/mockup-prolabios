@@ -1,0 +1,89 @@
+{
+  "title": "Pilih Dunia Visual Prolabios Light",
+  "question": "The roll assigned Trade Show Booth (kandidat #3). Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Trade Show Booth",
+      "kicker": "THE ROLL",
+      "lineage": "Indonesian industrial trade show display systems (Labex, Indo Lab, Medlab)",
+      "thesis": "The catalog as a trade show floor: modular, high-energy, scan-first—where every product panel is a booth stop and the Ruby–Sunny brand colors function as exhibitor signage.",
+      "palette": ["#D6D0C5", "#A6171C", "#F1C045", "#1A1A1A"],
+      "materials": ["bold modular display panels", "large-format product photography", "warm natural ground", "Ruby red header bands", "Sunny yellow CTAs"],
+      "viewport": "Full-width hero with strong horizontal scan: Prolabios logo left, headline mid, RFQ CTA Sunny-yellow right. Below: Ruby category navigation tabs. Grid of product cards on Natural ground.",
+      "risk": "Can read as generic exhibition if module rhythm loses its energy—requires committed density and bold type scale.",
+      "raised": [
+        { "from": "silkscreen-loft", "raise": "Module grid carries consistent rhythmic repetition—every product card is an equal edition in the floor plan." },
+        { "from": "rubber-hose-cel", "raise": "Buttons and CTAs own confident thick outlines with enough rounding to feel approachable, never corporate." },
+        { "from": "ansi-bbs", "raise": "Catalog codes (CAT. XXXX) and spec numbers render in monospace with high contrast—typographic authority at small scale." },
+        { "from": "museum-curation", "raise": "Product tags and category labels follow a structured provenance-label system: code first, name second, always legible." },
+        { "from": "akari-paper", "raise": "Hero and section surfaces carry a subtle paper grain texture warming the Natural ground." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "Kemasan Reagen Eropa",
+      "kicker": "IMPECCABLE'S PICK",
+      "lineage": "European lab reagent label systems (Merck, Sigma-Aldrich, VWR catalog design)",
+      "thesis": "The platform as a reagent label: every surface is a precision-printed label system where Ruby bands denote hazard/category, Sunny marks safe CTA zones, and Natural is the substrate.",
+      "palette": ["#D6D0C5", "#A6171C", "#F1C045", "#2C2C2C"],
+      "materials": ["label typography", "color-coded category bands", "strict taxonomy grid", "monospace catalog codes"],
+      "viewport": "Full-width category band header in Ruby, product grid with white cards on Natural ground, category color dots as the only decoration.",
+      "risk": "Also where most lab-sector design runs land—familiar, effective, but the most conventional direction in this category."
+    },
+    {
+      "id": "challenger-tradshow-fmcg",
+      "label": "FMCG Indonesia Packaging",
+      "verdict": "competitive",
+      "lineage": "Indonesian consumer FMCG packaging energy (Indomie, Kopiko, Antangin era)",
+      "thesis": "Fused: warm bold consumer energy applied to B2B product grid. High identification with Indonesian visual culture.",
+      "palette": ["#D6D0C5", "#A6171C", "#F1C045", "#FFFFFF"],
+      "materials": ["bold rounded type", "high-contrast color blocks", "warm paper ground", "energetic layout"],
+      "viewport": "Bold Ruby header block, grid of product cards with strong color-coded edges, Sunny badge CTAs.",
+      "case": "Strong audience identification—Indonesian buyers recognize this warmth. Loses narrowly on professional credibility vs. trade show world.",
+      "risk": "Slides into consumer-retail if Ruby and Sunny are not handled with enough restraint at B2B scale.",
+      "verdict_explanation": "competitive — strong identification, narrow product clarity loss"
+    },
+    {
+      "id": "challenger-silkscreen",
+      "label": "Silkscreen Factory Loft",
+      "verdict": "declined",
+      "lineage": "design-canon-factory-silkscreen-loft",
+      "palette": ["#C0C0C0", "#FF1493", "#FFCC00", "#000000"],
+      "materials": ["silver foil ground", "fluorescent ink passes", "halftone repeats"],
+      "viewport": "Off-register portrait grid of product repeats.",
+      "case": "Audience identification: lab procurement officers read this as an art studio. Product clarity: lost in the aesthetic. Declined.",
+      "verdict_explanation": "declined — donated: module rhythm → assigned direction's grid consistency raise",
+      "raised_kept": "Module rhythm and grid repetition"
+    },
+    {
+      "id": "challenger-rubberhose",
+      "label": "Rubber-Hose Cel",
+      "verdict": "declined",
+      "lineage": "pop-culture-shelf-rubber-hose-cel",
+      "palette": ["#F5F0E8", "#000000", "#888888"],
+      "materials": ["cel black", "gray wash", "boneless curves"],
+      "viewport": "Iris-framed centered product card with bouncy controls.",
+      "case": "Zero audience identification for B2B lab procurement. Declined.",
+      "verdict_explanation": "declined — donated: button confidence and thick outlines → assigned direction's CTA style raise",
+      "raised_kept": "Confident button outlines"
+    },
+    {
+      "id": "canon",
+      "label": "Standar Kategori",
+      "kicker": "THE CANON",
+      "lineage": "Standard B2B e-procurement light mode",
+      "thesis": "Clean white ground, blue primary links, table-driven catalog—the safe enterprise web look.",
+      "palette": ["#FFFFFF", "#1565C0", "#E53935", "#F5F5F5"],
+      "materials": ["white ground", "blue primary", "Bootstrap grid"],
+      "viewport": "Standard navbar, hero banner, card grid, footer.",
+      "risk": "Exactly what every competitor in this category ships."
+    }
+  ],
+  "reroll": {
+    "safer": "Indonesian lab equipment catalog in Merck/VWR style—competitor-comparable, credential-first.",
+    "bolder": "Batik motif reinterpreted as information grid—indigenous Indonesian pattern as navigation system."
+  },
+  "buildPath": { "value": "code", "toggle": true },
+  "seedKey": "2dfab6b8"
+}

@@ -96,7 +96,7 @@
                     <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #ffffff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px;">
                       <i class="bi bi-building" style="color: var(--color-accent);"></i> {{ $product->principal->name }}
                       @if(!empty($product->principal->address))
-                        <span class="text-white-50 ms-1">({{ $product->principal->address }})</span>
+                        <span class="text-muted ms-1">({{ $product->principal->address }})</span>
                       @endif
                     </span>
                   @endif
@@ -233,12 +233,12 @@
       right: 16px;
       width: 36px;
       height: 36px;
-      background: rgba(7, 7, 8, 0.9);
-      border: 1px solid var(--color-border);
+      background: rgba(166, 23, 28, 0.85);
+      border: 1px solid rgba(166,23,28,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(255,255,255,0.7);
+      color: #fff;
       font-size: 0.95rem;
       opacity: 0;
       transform: scale(0.8);

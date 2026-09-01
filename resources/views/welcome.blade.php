@@ -56,7 +56,7 @@
                       </div>
                     @endif
                     @if(!empty($prod->principal))
-                      <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
+                      <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
                         <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
                       </span>
                     @endif
@@ -66,7 +66,7 @@
                     <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
 
-                  <p class="product-card-desc mb-3 flex-grow-1 text-white-50" style="font-size: 0.82rem; line-height: 1.5;">
+                  <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.82rem; line-height: 1.5;">
                     {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
                   </p>
 
@@ -74,7 +74,7 @@
                     <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none fw-medium" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
                       Detail & Spek <i class="bi bi-arrow-right ms-1"></i>
                     </a>
-                    <span class="text-white-50 small font-monospace"><i class="bi bi-file-earmark-check text-accent"></i> COA</span>
+                    <span class="text-muted small font-monospace"><i class="bi bi-file-earmark-check text-accent"></i> COA</span>
                   </div>
                 </div>
               </div>
@@ -105,7 +105,7 @@
         <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="typo-btn-link">
           {{ $homeData['cta_banner_btn_text'] ?? 'Hubungi Sales / Minta Penawaran' }} <i class="bi bi-arrow-right ms-2"></i>
         </a>
-        <div class="d-flex align-items-center gap-2 text-white-50 mt-1" style="font-size: 0.8rem;">
+        <div class="d-flex align-items-center gap-2 text-muted mt-1" style="font-size: 0.8rem;">
           <span>Sudah memilih produk?</span>
           <a href="{{ url('/cart') }}" class="text-accent text-decoration-none fw-medium">
             <i class="bi bi-cart3 me-1"></i> Buka Keranjang RFQ

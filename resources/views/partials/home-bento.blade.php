@@ -12,13 +12,13 @@
     <div class="row g-4">
       <!-- 1. Lead Anchor Card (Full Width Highlight - Compliance & COA Engine) -->
       <div class="col-lg-7">
-        <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5" style="border: 1px solid var(--color-border); background: linear-gradient(145deg, rgba(255, 73, 80, 0.04) 0%, rgba(18, 18, 20, 0.95) 100%);">
+        <div class="hitech-bento-card hitech-bento-card--lead h-100 d-flex flex-column justify-content-between p-4 p-md-5">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-4">
               <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 rounded-pill font-monospace" style="font-size: 0.75rem;">
                 <i class="bi bi-shield-check me-1"></i> VALIDASI &amp; COMPLIANCE
               </span>
-              <span class="text-white-50 small font-monospace">ISO 17025 • BPOM • AKL</span>
+              <span class="text-muted small font-monospace">ISO 17025 • BPOM • AKL</span>
             </div>
 
             <h3 class="hitech-bento-title fs-4 mb-3">Dokumentasi COA, MSDS &amp; Sertifikasi Resmi Siap Audit</h3>
@@ -28,12 +28,12 @@
           </div>
 
           <!-- Micro Visual Widget: Live Batch Certificate Mock -->
-          <div class="p-3 rounded-3 mt-3" style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.07);">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 border-bottom border-white border-opacity-10 text-white-50" style="font-size: 0.75rem;">
+          <div class="hitech-bento-widget p-3 rounded-3 mt-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 hitech-bento-widget-row text-muted" style="font-size: 0.75rem;">
               <span class="font-monospace"><i class="bi bi-file-earmark-text text-accent me-1"></i> BATCH-2026-TERRA09</span>
               <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i> Verified &amp; Passed</span>
             </div>
-            <div class="d-flex justify-content-between align-items-center text-white-50" style="font-size: 0.8rem;">
+            <div class="d-flex justify-content-between align-items-center text-muted" style="font-size: 0.8rem;">
               <span>Terragene SCBI Biological Indicator</span>
               <a href="{{ url('/kontak?subjek=request_coa') }}" class="text-accent text-decoration-none fw-medium">
                 Minta Dokumen <i class="bi bi-arrow-right"></i>
@@ -53,7 +53,7 @@
               Reagen sensitif suhu, enzim, dan media siap pakai dikemas dengan insulasi termal khusus dan pemantauan suhu berkala hingga tiba di laboratorium.
             </p>
           </div>
-          <div class="pt-3 border-top border-white border-opacity-10 text-white-50 font-monospace" style="font-size: 0.75rem;">
+          <div class="pt-3 border-top hitech-bento-footer text-muted font-monospace" style="font-size: 0.75rem;">
             <i class="bi bi-thermometer-snow text-info me-1"></i> Temperatur Terjaga • Packing Farmasi
           </div>
         </div>
@@ -83,7 +83,7 @@
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div class="hitech-bento-icon m-0"><i class="bi bi-box-seam text-accent"></i></div>
-              <span class="font-monospace text-white-50 small">1,000+ SKU READY STOCK</span>
+              <span class="font-monospace text-muted small">1,000+ SKU READY STOCK</span>
             </div>
             <h3 class="hitech-bento-title fs-5 mb-2">Akses Cepat 1.000+ Produk &amp; Reagen Multi-Brand</h3>
             <p class="hitech-bento-desc mb-3">
@@ -91,11 +91,11 @@
             </p>
           </div>
           <div class="d-flex flex-wrap gap-2 pt-2">
-            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Endotoxin LAL</span>
-            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Culture Media</span>
-            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Biological Indicator</span>
-            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Air Sampler</span>
-            <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Liquid Handling</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Endotoxin LAL</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Culture Media</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Biological Indicator</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Air Sampler</span>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1" style="font-size: 0.75rem;">Liquid Handling</span>
           </div>
         </div>
       </div>

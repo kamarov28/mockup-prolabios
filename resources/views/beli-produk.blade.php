@@ -80,11 +80,11 @@
                 <div>
                   <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
                   <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
-                    <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
+                    <button type="button" class="btn border-0 px-3 h-100 text-muted d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
                       <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
                     </button>
-                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center text-white bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;" data-stock="{{ $stock }}">
-                    <button type="button" class="btn border-0 px-3 h-100 text-white-50 hover-white d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
+                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;" data-stock="{{ $stock }}">
+                    <button type="button" class="btn border-0 px-3 h-100 text-muted d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
                       <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
                     </button>
                   </div>

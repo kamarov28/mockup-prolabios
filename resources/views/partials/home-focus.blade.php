@@ -40,51 +40,51 @@
               <h3 class="hitech-panel-title">{!! $ph['title'] ?? 'Endotoxin Testing & <span class="text-accent">Sterilization Validation</span>' !!}</h3>
               <p class="hitech-panel-desc">{{ $ph['desc'] ?? 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.' }}</p>
             </div>
-            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top border-white border-opacity-10 align-items-center">
+            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($ph['link'] ?? '/sektor?s=pharmaceutical#sektor-nav') }}" class="typo-btn-link">
                 Jelajahi Solusi Farmasi <i class="bi bi-arrow-right ms-1"></i>
               </a>
-              <span class="text-white-50 small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> USP / EP / BP Compliant</span>
+              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> USP / EP / BP Compliant</span>
             </div>
           </div>
 
           <!-- Interactive Spec Card Preview -->
           <div class="col-lg-6">
-            <div class="p-4 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: rgba(18, 18, 20, 0.95); border: 1px solid var(--color-border);">
+            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
               <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-white border-opacity-10">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. BIO-TAL01</span>
-                    <span class="text-white-50 small">Bioendo Reagents</span>
+                    <span class="text-muted small">Bioendo Reagents</span>
                   </div>
                   <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
                     <i class="bi bi-check2 me-1"></i> Ready Stock
                   </span>
                 </div>
 
-                <h4 class="fs-6 fw-semibold text-white mb-2">Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)</h4>
-                <p class="text-white-50 mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                <h4 class="fs-6 fw-semibold mb-2">Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)</h4>
+                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
                   Reagen sensitivitas tinggi (0.03 – 0.25 EU/ml) untuk deteksi cepat endotoksin bakteri pada sediaan farmasi injeksi, air WFI, dan alat kesehatan steril.
                 </p>
 
                 <div class="row g-2 mb-3">
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Sensitivitas</div>
-                      <div class="text-white fw-medium small">0.03 EU/mL</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Sensitivitas</div>
+                      <div class="fw-medium small">0.03 EU/mL</div>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Kemasan</div>
-                      <div class="text-white fw-medium small">5.2 mL / Vial</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Kemasan</div>
+                      <div class="fw-medium small">5.2 mL / Vial</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10">
-                <span class="text-white-50 font-monospace" style="font-size: 0.75rem;">Sertifikat COA per batch</span>
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
+                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Sertifikat COA per batch</span>
                 <a href="{{ url('/produk?q=endotoxin') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
                   <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
                 </a>
@@ -104,51 +104,51 @@
               <h3 class="hitech-panel-title">{!! $fn['title'] ?? 'Rapid Pathogen Detection & <span class="text-accent">Hygiene Monitoring</span>' !!}</h3>
               <p class="hitech-panel-desc">{{ $fn['desc'] ?? 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.' }}</p>
             </div>
-            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top border-white border-opacity-10 align-items-center">
+            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($fn['link'] ?? '/sektor?s=food#sektor-nav') }}" class="typo-btn-link">
                 Jelajahi Solusi F&amp;B <i class="bi bi-arrow-right ms-1"></i>
               </a>
-              <span class="text-white-50 small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> HACCP &amp; ISO 22000</span>
+              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> HACCP &amp; ISO 22000</span>
             </div>
           </div>
 
           <!-- Interactive Spec Card Preview -->
           <div class="col-lg-6">
-            <div class="p-4 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: rgba(18, 18, 20, 0.95); border: 1px solid var(--color-border);">
+            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
               <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-white border-opacity-10">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. SCH-MEDIA02</span>
-                    <span class="text-white-50 small">Scharlau Microbiology</span>
+                    <span class="text-muted small">Scharlau Microbiology</span>
                   </div>
                   <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
                     <i class="bi bi-check2 me-1"></i> Ready Stock
                   </span>
                 </div>
 
-                <h4 class="fs-6 fw-semibold text-white mb-2">Chromogenic Media for Salmonella &amp; E. coli</h4>
-                <p class="text-white-50 mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                <h4 class="fs-6 fw-semibold mb-2">Chromogenic Media for Salmonella &amp; E. coli</h4>
+                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
                   Media kultur selektif diferensiasi warna spesifik untuk identifikasi koloni patogen makanan dalam 24 jam dengan akurasi isolasi tinggi.
                 </p>
 
                 <div class="row g-2 mb-3">
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Inkubasi</div>
-                      <div class="text-white fw-medium small">24 Jam (37°C)</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Inkubasi</div>
+                      <div class="fw-medium small">24 Jam (37°C)</div>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Bentuk</div>
-                      <div class="text-white fw-medium small">Dehydrated / Ready Plate</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Bentuk</div>
+                      <div class="fw-medium small">Dehydrated / Ready Plate</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10">
-                <span class="text-white-50 font-monospace" style="font-size: 0.75rem;">BPOM Food Standard</span>
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
+                <span class="text-muted font-monospace" style="font-size: 0.75rem;">BPOM Food Standard</span>
                 <a href="{{ url('/produk?q=salmonella') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
                   <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
                 </a>
@@ -168,51 +168,51 @@
               <h3 class="hitech-panel-title">{!! $hc['title'] ?? 'Diagnostics & <span class="text-accent">Sterilization Indicators</span>' !!}</h3>
               <p class="hitech-panel-desc">{{ $hc['desc'] ?? 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.' }}</p>
             </div>
-            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top border-white border-opacity-10 align-items-center">
+            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($hc['link'] ?? '/sektor?s=hospital-clinic#sektor-nav') }}" class="typo-btn-link">
                 Jelajahi Solusi Kesehatan <i class="bi bi-arrow-right ms-1"></i>
               </a>
-              <span class="text-white-50 small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> AKL Kemenkes RI</span>
+              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> AKL Kemenkes RI</span>
             </div>
           </div>
 
           <!-- Interactive Spec Card Preview -->
           <div class="col-lg-6">
-            <div class="p-4 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: rgba(18, 18, 20, 0.95); border: 1px solid var(--color-border);">
+            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
               <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-white border-opacity-10">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. TER-BT20</span>
-                    <span class="text-white-50 small">Terragene Bionova</span>
+                    <span class="text-muted small">Terragene Bionova</span>
                   </div>
                   <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
                     <i class="bi bi-check2 me-1"></i> AKL Certified
                   </span>
                 </div>
 
-                <h4 class="fs-6 fw-semibold text-white mb-2">Self-Contained Biological Indicator (SCBI) Steam</h4>
-                <p class="text-white-50 mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                <h4 class="fs-6 fw-semibold mb-2">Self-Contained Biological Indicator (SCBI) Steam</h4>
+                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
                   Indikator biologi Geobacillus stearothermophilus untuk monitoring sterilisasi uap CSSD rumah sakit dengan pembacaan cepat 24 jam.
                 </p>
 
                 <div class="row g-2 mb-3">
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Organisme</div>
-                      <div class="text-white fw-medium small">G. stearothermophilus</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Organisme</div>
+                      <div class="fw-medium small">G. stearothermophilus</div>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Populasi Spora</div>
-                      <div class="text-white fw-medium small">&gt; 10^6 CFU</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Populasi Spora</div>
+                      <div class="fw-medium small">&gt; 10^6 CFU</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10">
-                <span class="text-white-50 font-monospace" style="font-size: 0.75rem;">Kemenkes AKL Resmi</span>
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
+                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Kemenkes AKL Resmi</span>
                 <a href="{{ url('/produk?q=indicator') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
                   <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
                 </a>
@@ -232,51 +232,51 @@
               <h3 class="hitech-panel-title">{!! $br['title'] ?? 'Spoilage Control & <span class="text-accent">Fermentation Quality</span>' !!}</h3>
               <p class="hitech-panel-desc">{{ $br['desc'] ?? 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.' }}</p>
             </div>
-            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top border-white border-opacity-10 align-items-center">
+            <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($br['link'] ?? '/sektor?s=brewing#sektor-nav') }}" class="typo-btn-link">
                 Jelajahi Solusi Brewing <i class="bi bi-arrow-right ms-1"></i>
               </a>
-              <span class="text-white-50 small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> R&amp;D Quality Control</span>
+              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> R&amp;D Quality Control</span>
             </div>
           </div>
 
           <!-- Interactive Spec Card Preview -->
           <div class="col-lg-6">
-            <div class="p-4 rounded-3 h-100 d-flex flex-column justify-content-between" style="background: rgba(18, 18, 20, 0.95); border: 1px solid var(--color-border);">
+            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
               <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-white border-opacity-10">
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. DOH-NBB01</span>
-                    <span class="text-white-50 small">Döhler NBB Diagnostics</span>
+                    <span class="text-muted small">Döhler NBB Diagnostics</span>
                   </div>
                   <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
                     <i class="bi bi-check2 me-1"></i> Ready Stock
                   </span>
                 </div>
 
-                <h4 class="fs-6 fw-semibold text-white mb-2">NBB®-A Agar for Spoilage Microorganisms</h4>
-                <p class="text-white-50 mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                <h4 class="fs-6 fw-semibold mb-2">NBB®-A Agar for Spoilage Microorganisms</h4>
+                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
                   Media deteksi selektif spesifik untuk isolasi bakteri pembusuk bir dan fermentasi (Lactobacillus &amp; Pediococcus) tanpa gangguan ragi kultur.
                 </p>
 
                 <div class="row g-2 mb-3">
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Deteksi Target</div>
-                      <div class="text-white fw-medium small">Lactobacillus / Pediococcus</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Deteksi Target</div>
+                      <div class="fw-medium small">Lactobacillus / Pediococcus</div>
                     </div>
                   </div>
                   <div class="col-6">
-                    <div class="p-2 rounded" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                      <div class="text-white-50 font-monospace" style="font-size: 0.7rem;">Format</div>
-                      <div class="text-white fw-medium small">Solid Ready Agar</div>
+                    <div class="hitech-spec-stat p-2 rounded">
+                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Format</div>
+                      <div class="fw-medium small">Solid Ready Agar</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top border-white border-opacity-10">
-                <span class="text-white-50 font-monospace" style="font-size: 0.75rem;">Brewing Lab Protocol</span>
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
+                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Brewing Lab Protocol</span>
                 <a href="{{ url('/produk?q=nbb') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
                   <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
                 </a>

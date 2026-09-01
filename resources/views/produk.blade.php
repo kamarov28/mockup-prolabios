@@ -81,7 +81,7 @@
                         </div>
                       @endif
                       @if(!empty($prod->principal))
-                        <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
                           <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
                         </span>
                       @endif

@@ -28,28 +28,27 @@
             $lMonth = $leadDate[1] ?? '';
           @endphp
           <div class="col-lg-7">
-            <div class="card typo-blog-card h-100 p-4 p-md-5 d-flex flex-column justify-content-between position-relative"
-                 style="background: linear-gradient(145deg, rgba(255, 73, 80, 0.04) 0%, rgba(18, 18, 20, 0.98) 100%); border: 1px solid var(--color-border);">
+            <div class="card typo-blog-card typo-blog-card--lead h-100 p-4 p-md-5 d-flex flex-column justify-content-between position-relative">
               <div>
                 <div class="d-flex align-items-center gap-2 mb-3">
                   <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">
                     {{ $leadPost['category'] }}
                   </span>
-                  <span class="text-white-50 small font-monospace">&bull; {{ $lDay }} {{ $lMonth }}</span>
+                  <span class="text-muted small font-monospace">&bull; {{ $lDay }} {{ $lMonth }}</span>
                 </div>
 
-                <h3 class="fs-4 fw-bold text-white mb-3" style="line-height: 1.35;">
-                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="stretched-link text-white text-decoration-none">
+                <h3 class="fs-4 fw-bold mb-3" style="line-height: 1.35;">
+                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="stretched-link text-dark text-decoration-none">
                     {{ $leadPost['title'] }}
                   </a>
                 </h3>
 
-                <p class="text-white-50 mb-4" style="font-size: 0.92rem; line-height: 1.6;">
+                <p class="text-muted mb-4" style="font-size: 0.92rem; line-height: 1.6;">
                   {{ Str::limit(strip_tags(html_entity_decode($leadPost['content'])), 220) }}
                 </p>
               </div>
 
-              <div class="pt-3 border-top border-white border-opacity-10 d-flex align-items-center justify-content-between text-white-50" style="font-size: 0.82rem;">
+              <div class="pt-3 border-top d-flex align-items-center justify-content-between text-muted" style="font-size: 0.82rem;">
                 <span class="text-accent fw-medium">Baca Pembahasan Lengkap <i class="bi bi-arrow-right ms-1"></i></span>
                 <span class="font-monospace">QC &amp; Regulatory Guide</span>
               </div>
@@ -64,29 +63,29 @@
               @php
                 $pDate = explode(' ', $post['date']);
                 $day = $pDate[0] ?? '';
-                $month = $pDate[1] ?? '';
+                $month = $pDate[1] ?? ''
               @endphp
-              <div class="card typo-blog-card flex-grow-1 p-4 position-relative" style="border: 1px solid var(--color-border);">
+              <div class="card typo-blog-card flex-grow-1 p-4 position-relative">
                 <div class="d-flex align-items-center gap-2 mb-2">
-                  <span class="badge bg-secondary bg-opacity-25 text-white-50 border border-secondary border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.65rem;">
+                  <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.65rem;">
                     {{ $post['category'] }}
                   </span>
-                  <span class="text-white-50 small font-monospace">&bull; {{ $day }} {{ $month }}</span>
+                  <span class="text-muted small font-monospace">&bull; {{ $day }} {{ $month }}</span>
                 </div>
 
-                <h4 class="fs-6 fw-semibold text-white mb-2" style="line-height: 1.4;">
-                  <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}" class="stretched-link text-white text-decoration-none">
+                <h4 class="fs-6 fw-semibold mb-2" style="line-height: 1.4;">
+                  <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}" class="stretched-link text-dark text-decoration-none">
                     {{ $post['title'] }}
                   </a>
                 </h4>
 
-                <p class="text-white-50 mb-0" style="font-size: 0.82rem; line-height: 1.5;">
+                <p class="text-muted mb-0" style="font-size: 0.82rem; line-height: 1.5;">
                   {{ Str::limit(strip_tags(html_entity_decode($post['content'])), 95) }}
                 </p>
               </div>
             @endforeach
           @else
-            <div class="card typo-blog-card flex-grow-1 p-4 d-flex align-items-center justify-content-center text-white-50">
+            <div class="card typo-blog-card flex-grow-1 p-4 d-flex align-items-center justify-content-center text-muted">
               <span class="small">Belum ada artikel pendukung lainnya.</span>
             </div>
           @endif

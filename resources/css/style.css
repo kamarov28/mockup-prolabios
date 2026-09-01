@@ -1,30 +1,39 @@
+/* Light Mode World — Trade Show Booth */
+@import './site/light-mode.css';
+
 /* ==========================================================================
    Base & Variables (Maintainability)
    ========================================================================== */
 :root {
-  /* Color Palette */
-  --color-primary: #D32F2F; /* Prolabios Red */
-  --color-secondary: #8B1A1A; /* Prolabios Dark Red */
-  --color-accent: #25D366; /* WhatsApp Green */
-  
-  --color-text-main: #F8FAFC;
-  --color-text-muted: rgba(255, 255, 255, 0.55);
-  --color-bg-body: #070708; /* Pure Authentic Dark */
-  --color-bg-dark: #070708; /* Pure Authentic Dark */
-  --color-bg-white: #0e0e10; /* Pure Neutral Surface */
-  --color-bg-gray: #141416; /* Pure Neutral Surface 2 */
-  --color-border: rgba(255, 255, 255, 0.08); /* Subtle border */
+  /* Color Palette — Trade Show Booth Light Theme */
+  --color-primary: #A6171C; /* Ruby */
+  --color-secondary: #7A1015; /* Ruby dark */
+  --color-accent: #F1C045; /* Sunny */
+
+  --color-ruby: #A6171C;
+  --color-sunny: #F1C045;
+  --color-natural: #D6D0C5;
+  --color-natural-dark: #C8C1B4;
+  --color-natural-light: #EDE8E0;
+
+  --color-text-main: #1A1A1A;
+  --color-text-muted: #6B6B6B;
+  --color-bg-body: #D6D0C5; /* Natural */
+  --color-bg-dark: #C8C1B4; /* Natural dark — section alternation */
+  --color-bg-white: #FFFFFF;
+  --color-bg-gray: #EDE8E0; /* Natural light — subtle section bg */
+  --color-border: rgba(0, 0, 0, 0.12); /* Subtle border */
 
   /* Typography Tokens */
   --font-family-headline: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-family-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  
+
   /* Shadows */
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
-  --shadow-hover: 0 12px 24px rgba(0,0,0,0.6);
-  
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-hover: 0 12px 24px rgba(0,0,0,0.15);
+
   /* Transitions */
   --transition-fast: 0.2s ease-in-out;
 }
@@ -119,29 +128,6 @@ h1, h2, h3, h4, h5, h6,
   border-color: var(--color-border) !important;
 }
 
-/* Dark Mode Pagination Overrides */
-[data-theme="dark"] .pagination .page-link {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-text-main) !important;
-  border-color: var(--color-border) !important;
-}
-[data-theme="dark"] .pagination .page-link:hover {
-  background-color: var(--color-bg-gray) !important;
-  color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-}
-[data-theme="dark"] .pagination .page-item.active .page-link {
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  color: #fff !important;
-}
-[data-theme="dark"] .pagination .page-item.disabled .page-link {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-text-muted) !important;
-  border-color: var(--color-border) !important;
-}
-
-
 /* Custom Social Media Brand Styles */
 .btn-outline-linkedin {
   color: #0077b5;
@@ -154,131 +140,10 @@ h1, h2, h3, h4, h5, h6,
 }
 
 /* ==========================================================================
-   Dark Theme (Maintainability & Design Aesthetics)
+   Light mode is the only theme on this branch
    ========================================================================== */
-[data-theme="dark"] {
-  --color-text-main: #F8FAFC;
-  --color-text-muted: rgba(255, 255, 255, 0.55);
-  --color-bg-body: #070708;
-  --color-bg-white: #0e0e10;
-  --color-bg-gray: #141416;
-  --color-border: rgba(255, 255, 255, 0.08);
-  
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.4);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
-  --shadow-hover: 0 12px 24px rgba(0,0,0,0.6);
-}
-
-[data-theme="dark"] body {
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3,
-[data-theme="dark"] h4,
-[data-theme="dark"] h5,
-[data-theme="dark"] h6 {
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .bg-white {
-  background-color: var(--color-bg-white) !important;
-}
-
-[data-theme="dark"] .bg-light {
-  background-color: var(--color-bg-gray) !important;
-}
-
-[data-theme="dark"] .text-dark {
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] .text-muted {
-  color: var(--color-text-muted) !important;
-}
-
-[data-theme="dark"] .text-secondary {
-  color: var(--color-text-muted) !important;
-}
-
-[data-theme="dark"] .border-bottom,
-[data-theme="dark"] .border-top,
-[data-theme="dark"] .border {
-  border-color: var(--color-border) !important;
-}
-
-[data-theme="dark"] .navbar {
-  background: rgba(5, 7, 9, 0.95) !important;
-  border: 1px solid rgba(255, 73, 80, 0.35) !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
-}
-[data-theme="dark"] .navbar-toggler {
-  border-color: rgba(255, 255, 255, 0.25) !important;
-}
-[data-theme="dark"] .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-}
-
-[data-theme="dark"] .navbar-light .navbar-nav .nav-link {
-  color: var(--color-text-muted) !important;
-}
-
-[data-theme="dark"] .navbar-light .navbar-nav .nav-link:hover,
-[data-theme="dark"] .navbar-light .navbar-nav .nav-link.active {
-  color: var(--color-primary) !important;
-}
-
-[data-theme="dark"] a:not(.btn) {
-  color: var(--color-primary);
-}
-
-[data-theme="dark"] a:not(.btn):hover {
-  color: var(--color-secondary);
-}
-
-[data-theme="dark"] .card {
-  background-color: var(--color-bg-white) !important;
-  border: 1px solid var(--color-border) !important;
-}
-
-[data-theme="dark"] .card-body {
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] input.form-control,
-[data-theme="dark"] textarea.form-control,
-[data-theme="dark"] select.form-select {
-  background-color: var(--color-bg-gray) !important;
-  border-color: var(--color-border) !important;
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] .form-control::placeholder {
-  color: var(--color-text-muted) !important;
-}
-
-[data-theme="dark"] .list-group-item {
-  background-color: var(--color-bg-white) !important;
-  border-color: var(--color-border) !important;
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] .list-group-item.active {
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  color: #fff !important;
-}
-
-[data-theme="dark"] .modal-content {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-text-main) !important;
-  border-color: var(--color-border) !important;
-}
-
-[data-theme="dark"] .modal-header,
-[data-theme="dark"] .modal-footer {
-  border-color: var(--color-border) !important;
+[data-theme="light"] {
+  /* inherits :root — no overrides needed */
 }
 
 /* ==========================================================================
@@ -295,18 +160,6 @@ h1, h2, h3, h4, h5, h6,
   transition: all 0.3s ease;
 }
 
-[data-theme="dark"] .navbar.sticky-top {
-  background: rgba(5, 7, 9, 0.95) !important;
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 73, 80, 0.35) !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75) !important;
-}
-
-[data-theme="dark"] .navbar-brand img {
-  filter: brightness(0) invert(1);
-}
-
 /* Card Hover Lift Effect (Smoother with cubic-bezier) */
 .card {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color var(--transition-fast, 0.2s ease-in-out), border-color var(--transition-fast, 0.2s ease-in-out);
@@ -314,11 +167,7 @@ h1, h2, h3, h4, h5, h6,
 
 .card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
-}
-
-[data-theme="dark"] .card:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Navbar links disable old sliding underlines */
@@ -384,13 +233,13 @@ h1, h2, h3, h4, h5, h6,
 .marquee-container::before {
   left: 0;
   top: 0;
-  background: linear-gradient(to right, #070708 0%, transparent 100%) !important;
+  background: linear-gradient(to right, #D6D0C5 0%, transparent 100%) !important;
 }
 
 .marquee-container::after {
   right: 0;
   top: 0;
-  background: linear-gradient(to left, #070708 0%, transparent 100%) !important;
+  background: linear-gradient(to left, #D6D0C5 0%, transparent 100%) !important;
 }
 
 .marquee-content {
@@ -452,45 +301,6 @@ h1, h2, h3, h4, h5, h6,
   animation-play-state: paused;
 }
 
-/* Dark Mode Marquee Gradient Fade Overrides to match Slate background */
-[data-theme="dark"] .marquee-container::before {
-  background: linear-gradient(to right, #070708 0%, transparent 100%) !important;
-}
-[data-theme="dark"] .marquee-container::after {
-  background: linear-gradient(to left, #070708 0%, transparent 100%) !important;
-}
-
-/* Dark Mode overrides for marquee logo boxes - Option 1: Frosted Substrate Cards */
-[data-theme="dark"] .marquee-logo-box {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 0px !important;
-  padding: 12px 20px;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-[data-theme="dark"] .marquee-logo-box img {
-  filter: brightness(0.9) contrast(110%);
-  opacity: 0.85;
-  transition: all 0.35s ease;
-}
-
-[data-theme="dark"] .marquee-logo-box:hover {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(255, 255, 255, 1) !important;
-  transform: translateY(-4px) scale(1.04);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.15) !important;
-}
-
-[data-theme="dark"] .marquee-logo-box:hover img {
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-
 /* Scroll to Top Button styling moved to experimental-typo.css */
 
 /* Subtle Motion-based Animations for Premium Cards & Layouts */
@@ -514,15 +324,7 @@ h1, h2, h3, h4, h5, h6,
 #visi-misi .card:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06) !important;
-  border-color: rgba(255, 73, 80, 0.3) !important;
-}
-
-[data-theme="dark"] .blog-card:hover, 
-[data-theme="dark"] .col .card:hover, 
-[data-theme="dark"] .product-card:hover, 
-[data-theme="dark"] #visi-misi .card:hover, 
-[data-theme="dark"] .sidebar-cta-box:hover {
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35) !important;
+  border-color: rgba(166, 23, 28, 0.3) !important;
 }
 
 .card-img-wrap {
@@ -595,12 +397,6 @@ h1, h2, h3, h4, h5, h6,
   background-color: var(--color-bg-white) !important;
 }
 
-[data-theme="dark"] .blog-card {
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
-}
-
 .blog-card-img-wrap {
   position: relative;
   overflow: hidden;
@@ -663,11 +459,6 @@ h1, h2, h3, h4, h5, h6,
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-[data-theme="dark"] .blog-card-category {
-  background-color: rgba(211, 47, 47, 0.2);
-  color: #ff8a80;
-}
-
 /* Card Body padding and title */
 .blog-card-body {
   padding: 24px;
@@ -711,18 +502,9 @@ h1, h2, h3, h4, h5, h6,
   height: 100%;
 }
 
-[data-theme="dark"] .product-card {
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0px !important;
-}
-
 .product-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
-}
-
-[data-theme="dark"] .product-card:hover {
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
 .product-card .img-wrap {
@@ -736,11 +518,6 @@ h1, h2, h3, h4, h5, h6,
   justify-content: center;
   padding: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-[data-theme="dark"] .product-card .img-wrap {
-  background-color: var(--color-bg-gray);
-  border-bottom: 1px solid var(--color-border);
 }
 
 .product-card .img-wrap img {
@@ -807,30 +584,9 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 700;
 }
 
-[data-theme="dark"] .sector-sidebar-link.active {
-  background-color: rgba(211, 47, 47, 0.2) !important;
-  color: #ff8a80 !important;
-}
-
 /* ==========================================================================
-   Dark Theme Input Group & Scrollbar Overrides
+   Dark Theme Input Group &amp; Scrollbar Overrides — removed, light-only branch
    ========================================================================== */
-[data-theme="dark"] .input-group-text.bg-white {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-text-muted) !important;
-  border-color: var(--color-border) !important;
-}
-
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .form-select {
-  background-color: var(--color-bg-white) !important;
-  color: var(--color-text-main) !important;
-  border-color: var(--color-border) !important;
-}
-
-[data-theme="dark"] .form-control::placeholder {
-  color: var(--color-text-muted) !important;
-}
 
 /* Universal Custom Scrollbars using CSS variables */
 ::-webkit-scrollbar {
@@ -906,29 +662,6 @@ h1, h2, h3, h4, h5, h6,
 .sidebar-cta-box .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-[data-theme="dark"] .sidebar-cta-box {
-  background: var(--color-bg-white) !important;
-  color: var(--color-text-main) !important;
-  border: 1px solid var(--color-border) !important;
-}
-
-[data-theme="dark"] .sidebar-cta-box h2 {
-  color: var(--color-text-main) !important;
-}
-
-[data-theme="dark"] .sidebar-cta-box p {
-  color: var(--color-text-muted) !important;
-}
-
-[data-theme="dark"] .sidebar-cta-box .btn {
-  background-color: var(--color-primary) !important;
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .sidebar-cta-box .btn:hover {
-  background-color: var(--color-secondary) !important;
 }
 
 /* ==========================================================================
@@ -1008,9 +741,9 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .footer-social-icon:hover {
-  background-color: rgba(255, 73, 80, 0.1) !important;
+  background-color: rgba(166, 23, 28, 0.1) !important;
   color: var(--color-accent) !important;
-  border-color: rgba(255, 73, 80, 0.4) !important;
+  border-color: rgba(166, 23, 28, 0.4) !important;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
@@ -1126,16 +859,6 @@ h1, h2, h3, h4, h5, h6,
   transform: translateY(-3px);
   box-shadow: 0 12px 24px rgba(211, 47, 47, 0.15) !important;
 }
-[data-theme="dark"] .btn-hero-outline {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: #ffffff !important;
-}
-[data-theme="dark"] .btn-hero-outline:hover {
-  background-color: #ffffff !important;
-  color: #0b0f19 !important;
-  border-color: #ffffff !important;
-}
-
 /* Custom Card Swap Slide Transition */
 .carousel-card-swap .carousel-item {
   position: absolute;
@@ -1193,13 +916,6 @@ h1, h2, h3, h4, h5, h6,
 #motion-toggle-icon.bi-pause-circle-fill {
   color: #94a3b8;
 }
-[data-theme="dark"] #motion-toggle-icon {
-  color: #ffffff;
-}
-[data-theme="dark"] #motion-toggle-icon.bi-pause-circle-fill {
-  color: rgba(255, 255, 255, 0.4);
-}
-
 /* Reduce Motion / No Animation Override */
 .no-motion *:not(.marquee-content):not(.marquee-content *),
 .no-motion *::before,
@@ -1249,9 +965,6 @@ h1, h2, h3, h4, h5, h6,
     padding-bottom: 0.75rem !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
-  [data-theme="dark"] .navbar-nav .nav-link {
-    border-bottom-color: rgba(255, 255, 255, 0.05);
-  }
 }
 
 /* Catalog Sidebar collapse indicator & mobile grids */
@@ -1278,11 +991,7 @@ h1, h2, h3, h4, h5, h6,
     box-shadow: var(--shadow-sm);
     margin-bottom: 20px;
   }
-  [data-theme="dark"] #sidebarCollapse {
-    background-color: #0e0e10;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-  
+
   /* Adjust hero typography size on mobile for CLS/readability */
   .hero-headline {
     font-size: 2.2rem !important;
@@ -1387,13 +1096,6 @@ input.b2b-qty-input::-webkit-inner-spin-button {
   display: none !important;
   margin: 0 !important;
 }
-
-
-
-
-
-
-
 
 
 

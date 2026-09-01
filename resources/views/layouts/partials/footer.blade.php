@@ -61,7 +61,7 @@
       <div class="col-lg-3 col-md-6 col-6">
         <h3>Jam Operasional</h3>
         <ul class="list-unstyled footer-links lh-lg">
-          <li class="d-flex align-items-start mb-3 text-light">
+          <li class="d-flex align-items-start mb-2">
             <i class="bi bi-clock-fill me-2 mt-1" style="color: var(--color-primary);"></i>
             <span>{{ $siteSettings['operational_hours'] ?? 'Senin – Jumat : 09.00 – 18.00 WIB' }}</span>
           </li>
@@ -76,12 +76,12 @@
     
     <hr class="border-secondary mt-4 mb-3" style="opacity: 0.25;">
     
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small fw-medium gap-2" style="color: #cbd5e1 !important; opacity: 1 !important;">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center text-light small fw-medium gap-2">
       <p class="mb-0">&copy; {{ date('Y') }} PT Prolabios Mitra Analitika. Hak cipta dilindungi.</p>
       <div class="d-flex gap-3">
-        <a href="{{ route('privacy') }}" class="footer-legal-link" style="color: #94a3b8; text-decoration: none; font-size: 0.8rem; transition: color 0.2s;">Kebijakan Privasi</a>
+        <a href="{{ route('privacy') }}" class="footer-legal-link">Kebijakan Privasi</a>
         <span style="color: rgba(255,255,255,0.2);">&bull;</span>
-        <a href="{{ route('terms') }}" class="footer-legal-link" style="color: #94a3b8; text-decoration: none; font-size: 0.8rem; transition: color 0.2s;">Syarat &amp; Ketentuan</a>
+        <a href="{{ route('terms') }}" class="footer-legal-link">Syarat &amp; Ketentuan</a>
       </div>
     </div>
   </div>
