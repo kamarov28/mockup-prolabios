@@ -1,27 +1,39 @@
 /* ==========================================================================
-   Soft Neo-Brutalism — STRUCTURAL LAYOUT (boxes, grid, section rules)
+   Soft Neo-Brutalism — STRUCTURAL LAYOUT
    ========================================================================== */
 
-/* Prevent horizontal scroll from hard shadows */
-html, body {
+html {
   overflow-x: hidden;
 }
-
-/* Page top clearance for sticky navbar */
 body {
-  padding-top: 5rem;
+  overflow-x: hidden;
+  /* room for fixed navbar */
+  padding-top: 5rem !important;
 }
 
-/* Sticky navbar — simple full width */
+/* Fixed full-bleed navbar — cannot shift horizontally */
 .navbar {
-  position: sticky !important;
+  position: fixed !important;
   top: 0 !important;
-  z-index: 1030 !important;
+  left: 0 !important;
+  right: 0 !important;
   width: 100% !important;
-  max-width: none !important;
+  max-width: 100vw !important;
   margin: 0 !important;
-  left: auto !important;
-  right: auto !important;
+  z-index: 1030 !important;
+  transform: none !important;
+}
+
+.navbar > .container-fluid {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 991.98px) {
+  body {
+    padding-top: 4.25rem !important;
+  }
 }
 
 /* Section rhythm */
@@ -47,9 +59,6 @@ body {
   .navbar .navbar-nav > .nav-item:not(:last-child) > .nav-link {
     border-right: none;
     border-bottom: 1.5px solid rgba(30, 30, 30, 0.12);
-  }
-  body {
-    padding-top: 4.25rem;
   }
 }
 
@@ -307,6 +316,7 @@ body {
 }
 .nb-principals-track {
   padding: 1rem 0 !important;
+  overflow: hidden !important;
 }
 .nb-logo-cell {
   border: 2px solid #1E1E1E !important;
@@ -400,7 +410,6 @@ body {
   padding-top: 0.85rem !important;
 }
 
-/* Bento widget */
 .hitech-bento-widget {
   background: #EDE8E0 !important;
   border: 1.5px solid #1E1E1E !important;
@@ -410,7 +419,7 @@ body {
   border-bottom: 1.5px solid rgba(30, 30, 30, 0.15) !important;
 }
 
-/* Footer readability */
+/* Footer */
 .site-footer .footer-heading {
   color: #FFFFFF !important;
   font-family: 'Space Grotesk', system-ui, sans-serif !important;
