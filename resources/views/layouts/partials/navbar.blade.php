@@ -1,24 +1,3 @@
-<!-- Top Bar (Search & Contact) -->
-<div class="site-utility-bar py-2">
-  <div class="container d-flex flex-wrap justify-content-between align-items-center small">
-    <div>
-      <span><i class="bi bi-telephone-fill text-primary me-1"></i> Hubungi Kami: <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="text-decoration-none fw-medium">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }} (Marketing)</a></span>
-      <span class="mx-2 text-muted opacity-50">|</span>
-      <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="text-decoration-none fw-medium"><i class="bi bi-envelope-fill text-primary me-1"></i> {{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
-    </div>
-    <div class="mt-2 mt-md-0">
-      <form class="d-flex search-form" action="{{ url('/produk') }}" method="GET">
-        <div class="input-group input-group-sm">
-          <input type="text" name="q" class="form-control utility-search-input" placeholder="Cari produk..." aria-label="Cari produk laboratorium dan reagen" value="{{ request()->query('q') ?? request()->query('s') }}">
-          <button class="btn utility-search-btn" type="submit" aria-label="Cari">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Header / Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
   <div class="container-fluid px-3 px-lg-4">
