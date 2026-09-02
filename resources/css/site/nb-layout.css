@@ -130,7 +130,6 @@
   background: #D6D0C5 !important;
   padding: 2.5rem 0 3rem !important;
   position: relative;
-  /* kill old full-bleed hero bg */
 }
 .nb-hero .typo-hero-bg,
 .nb-hero .typo-hero-overlay {
@@ -265,28 +264,31 @@
   gap: 0.35rem;
 }
 
-/* ── PRINCIPALS boxed ticker ────────────────────────────────────────────── */
+/* ── PRINCIPALS boxed ticker (slim header strip) ────────────────────────── */
 .nb-principals {
   background: #D6D0C5 !important;
-  padding: 1.75rem 0 !important;
+  padding: 1.5rem 0 !important;
 }
 .nb-principals-shell {
-  border: 2.5px solid #1E1E1E;
+  border: 2px solid #1E1E1E;
   border-radius: 8px;
-  box-shadow: 5px 5px 0 #1E1E1E;
+  box-shadow: 4px 4px 0 #1E1E1E;
   background: #FFFFFF;
   overflow: hidden;
 }
+/* Thin label — was too heavy as a full black bar */
 .nb-principals-label {
   background: #1E1E1E;
   color: #F1C045;
-  padding: 0.55rem 1rem;
-  border-bottom: 2px solid #1E1E1E;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  padding: 0.28rem 0.85rem;
+  border-bottom: 1.5px solid #1E1E1E;
+  font-size: 0.68rem;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  font-weight: 500;
 }
 .nb-principals-track {
-  padding: 1rem 0 !important;
+  padding: 0.85rem 0 !important;
 }
 .nb-logo-cell {
   border: 2px solid #1E1E1E !important;
@@ -376,14 +378,8 @@
   gap: 0.75rem;
 }
 
-/* Product card foot divider */
 .nb-card-foot {
   border-top: 2px solid #1E1E1E !important;
   margin-top: auto;
   padding-top: 0.85rem !important;
-}
-
-/* Kill legacy full-bleed hero if any leftover markup */
-.typo-hero:not(.nb-hero) {
-  /* leave legacy pages alone */
 }
