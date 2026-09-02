@@ -21,8 +21,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Scientific Editorial Typography: Space Grotesk (Headlines) & Instrument Sans (Body) -->
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Soft Neo-Brutalism Typography:
+       Space Grotesk (display) · JetBrains Mono (SKU/specs) · Plus Jakarta Sans (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Bootstrap Icons (non-blocking) -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
