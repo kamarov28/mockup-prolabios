@@ -2,13 +2,13 @@
 <section class="section-spacious typo-news-section">
   <div class="container">
     <!-- Section Header -->
-    <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head gap-3">
       <div>
         <h2 class="typo-section-title">Wawasan &amp; Edukasi Laboratorium</h2>
-        <p class="typo-section-sub">Panduan aplikasi pengujian, update regulasi ISO/BPOM, dan wawasan teknis analis lab.</p>
+        <p class="typo-section-sub mb-0">Panduan aplikasi pengujian, update regulasi ISO/BPOM, dan wawasan teknis analis lab.</p>
       </div>
-      <div class="mt-3 mt-md-0">
-        <a href="{{ url('/informasi') }}" class="typo-btn-link" style="font-size: 0.85rem;" aria-label="Lihat semua artikel dan informasi">
+      <div class="flex-shrink-0">
+        <a href="{{ url('/informasi') }}" class="editorial-all-btn" aria-label="Lihat semua artikel dan informasi">
           Lihat Semua Artikel <i class="bi bi-arrow-right"></i>
         </a>
       </div>
@@ -17,11 +17,11 @@
     @if(count($recentPosts) > 0)
       @php
         $leadPost = $recentPosts[0] ?? null;
-        $secondaryPosts = array_slice($recentPosts, 1, 3); // up to 3 items on the right
+        $secondaryPosts = array_slice($recentPosts, 1, 3);
       @endphp
 
       <div class="row g-4 align-items-stretch editorial-bento">
-        {{-- ===== LEFT: Featured Article (≈60%) ===== --}}
+        {{-- ===== LEFT: Featured Article (~60%) ===== --}}
         @if($leadPost)
           @php
             $leadDateRaw = is_object($leadPost['date'] ?? null) ? $leadPost['date']->format('Y-m-d') : ($leadPost['date'] ?? '');
@@ -29,7 +29,7 @@
             if (empty($leadImage)) {
               $leadImage = 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=80';
             } elseif (!str_starts_with($leadImage, 'http')) {
-              $leadImage = asset($leadImage);
+              $leadImage = asset(ltrim($leadImage, '/'));
             }
           @endphp
 
@@ -57,7 +57,7 @@
                 </div>
 
                 <h3 class="editorial-featured-title">
-                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="stretched-link">
+                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}">
                     {{ $leadPost['title'] }}
                   </a>
                 </h3>
@@ -66,47 +66,45 @@
                   {{ Str::limit(strip_tags(html_entity_decode($leadPost['content'] ?? '')), 160) }}
                 </p>
 
-                <div class="mt-auto pt-3 d-flex align-items-center justify-content-between">
+                <div class="mt-auto pt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                   <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="editorial-read-link">
                     Baca Pembahasan Lengkap <i class="bi bi-arrow-right ms-1"></i>
                   </a>
-                  <span class="editorial-meta font-monospace d-none d-sm-inline">QC &amp; Regulatory Guide</span>
+                  <span class="editorial-meta font-monospace">QC &amp; Regulatory Guide</span>
                 </div>
               </div>
             </article>
           </div>
         @endif
 
-        {{-- ===== RIGHT: Compact Article List (≈40%) ===== --}}
-        <div class="col-lg-5">
-          <div class="editorial-list-card h-100 d-flex flex-column">
-            @forelse($secondaryPosts as $index => $post)
-              @php
-                $pDateRaw = is_object($post['date'] ?? null) ? $post['date']->format('Y-m-d') : ($post['date'] ?? '');
-              @endphp
+        {{-- ===== RIGHT: Stacked compact cards (~40%) ===== --}}
+        <div class="col-lg-5 d-flex flex-column gap-3">
+          @forelse($secondaryPosts as $post)
+            @php
+              $pDateRaw = is_object($post['date'] ?? null) ? $post['date']->format('Y-m-d') : ($post['date'] ?? '');
+            @endphp
 
-              <article class="editorial-list-item {{ $index > 0 ? 'has-border' : '' }}">
-                <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                  <span class="editorial-badge editorial-badge-dark">
-                    {{ $post['category'] ?? 'BERITA' }}
-                  </span>
-                  <span class="editorial-meta font-monospace">
-                    {{ $pDateRaw }}
-                  </span>
-                </div>
-
-                <h4 class="editorial-list-title">
-                  <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}">
-                    {{ $post['title'] }}
-                  </a>
-                </h4>
-              </article>
-            @empty
-              <div class="p-4 text-center text-muted small">
-                Belum ada artikel pendukung.
+            <article class="editorial-side-card">
+              <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                <span class="editorial-badge editorial-badge-ruby">
+                  {{ $post['category'] ?? 'BERITA' }}
+                </span>
+                <span class="editorial-meta font-monospace">
+                  {{ $pDateRaw }}
+                </span>
               </div>
-            @endforelse
-          </div>
+
+              <h4 class="editorial-list-title mb-0">
+                <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}">
+                  {{ $post['title'] }}
+                </a>
+              </h4>
+            </article>
+          @empty
+            <div class="editorial-side-card text-center text-muted small py-4">
+              Belum ada artikel pendukung.
+            </div>
+          @endforelse
         </div>
       </div>
     @else

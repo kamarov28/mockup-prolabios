@@ -321,38 +321,35 @@ section hr {
 }
 
 /* ==========================================================================
-   Editorial Bento Grid — Wawasan & Edukasi (Kristi-inspired)
+   Editorial Bento Grid — Wawasan & Edukasi (Kristi + Soft Neo-Brutalism)
    ========================================================================== */
-.editorial-bento {
-  --editorial-white: #FFFFFF;
-  --editorial-black: #0A0A0A;
-  --editorial-charcoal: #1E1E1E;
-  --editorial-ruby: #A6171C;
-  --editorial-sunny: #F1C045;
-  --editorial-border: 2px solid #0A0A0A;
-}
 
-/* Featured Card (Left) */
-.editorial-featured-card {
-  background: var(--editorial-white);
-  border: var(--editorial-border);
-  border-radius: 0; /* neo-brutal clean edges */
+/* Force white neo-brutal cards regardless of theme */
+.editorial-featured-card,
+.editorial-side-card {
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 0 !important;
+  box-shadow: 4px 4px 0 #1E1E1E !important;
   overflow: hidden;
-  position: relative;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.editorial-featured-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 6px 6px 0 var(--editorial-black);
+.editorial-featured-card:hover,
+.editorial-side-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #1E1E1E !important;
 }
 
+/* Featured thumbnail */
 .editorial-featured-thumb {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 220px;
+  min-height: 220px;
   overflow: hidden;
-  background: #111;
+  background: #e8e4db;
+  border-bottom: 2px solid #1E1E1E !important;
 }
 
 .editorial-featured-thumb img {
@@ -360,37 +357,37 @@ section hr {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.45s ease;
 }
 
 .editorial-featured-card:hover .editorial-featured-thumb img {
-  transform: scale(1.04);
+  transform: scale(1.03);
 }
 
 .editorial-featured-body {
-  padding: 1.5rem 1.75rem 1.75rem;
-  color: var(--editorial-charcoal);
+  padding: 1.4rem 1.6rem 1.5rem;
+  color: #1E1E1E;
 }
 
 .editorial-featured-title {
-  font-family: var(--font-family-headline);
-  font-size: 1.45rem;
+  font-family: var(--font-family-headline, 'Space Grotesk', sans-serif);
+  font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
-  color: var(--editorial-charcoal);
+  margin-bottom: 0.65rem;
+  color: #1E1E1E !important;
 }
 
 .editorial-featured-title a {
-  color: inherit;
+  color: #1E1E1E !important;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .editorial-featured-title a:hover,
 .editorial-featured-card:hover .editorial-featured-title a {
-  color: var(--editorial-ruby);
+  color: #A6171C !important;
 }
 
 .editorial-featured-excerpt {
@@ -403,100 +400,127 @@ section hr {
 .editorial-read-link {
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--editorial-charcoal);
+  color: #1E1E1E !important;
   text-decoration: none;
   letter-spacing: 0.02em;
   transition: color 0.2s ease;
 }
 
 .editorial-read-link:hover {
-  color: var(--editorial-ruby);
+  color: #A6171C !important;
 }
 
-/* Right List Card */
-.editorial-list-card {
-  background: var(--editorial-white);
-  border: var(--editorial-border);
-  border-radius: 0;
-  padding: 0.5rem 0;
-  overflow: hidden;
-}
-
-.editorial-list-item {
-  padding: 1.35rem 1.5rem;
-  position: relative;
-}
-
-.editorial-list-item.has-border {
-  border-top: 1.5px solid rgba(10, 10, 10, 0.12);
+/* Right side individual cards */
+.editorial-side-card {
+  padding: 1.25rem 1.4rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .editorial-list-title {
-  font-family: var(--font-family-headline);
+  font-family: var(--font-family-headline, 'Space Grotesk', sans-serif);
   font-size: 1.05rem;
   font-weight: 650;
   line-height: 1.35;
   margin: 0;
-  color: var(--editorial-charcoal);
+  color: #1E1E1E !important;
 }
 
 .editorial-list-title a {
-  color: inherit;
+  color: #1E1E1E !important;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .editorial-list-title a:hover {
-  color: var(--editorial-ruby);
+  color: #A6171C !important;
 }
 
-/* Shared badges & meta */
+/* Badges */
 .editorial-badge {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-family-mono);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.68rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.28rem 0.6rem;
+  padding: 0.3rem 0.65rem;
   border-radius: 2px;
   line-height: 1;
+  border: 1.5px solid #1E1E1E;
 }
 
 .editorial-badge-sunny {
-  background: var(--editorial-sunny);
-  color: #1a1a1a;
-  border: 1.5px solid #0A0A0A;
+  background: #F1C045 !important;
+  color: #1a1a1a !important;
 }
 
-.editorial-badge-dark {
-  background: transparent;
-  color: var(--editorial-charcoal);
-  border: 1.5px solid rgba(10, 10, 10, 0.35);
+.editorial-badge-ruby {
+  background: #A6171C !important;
+  color: #ffffff !important;
+  border-color: #1E1E1E !important;
 }
 
 .editorial-meta {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.72rem;
   color: rgba(30, 30, 30, 0.55);
   letter-spacing: 0.02em;
 }
 
-/* Responsive tweaks */
+/* Neo-brutal "Lihat Semua Artikel" button */
+.editorial-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #FFFFFF;
+  color: #1E1E1E !important;
+  border: 1.5px solid #1E1E1E;
+  box-shadow: 2px 2px 0 #1E1E1E;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  letter-spacing: 0.02em;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.editorial-all-btn:hover {
+  background: #F1C045;
+  color: #1E1E1E !important;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #1E1E1E;
+}
+
+.editorial-all-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1E1E1E;
+}
+
+/* Responsive */
 @media (max-width: 991.98px) {
+  .editorial-featured-thumb {
+    height: 200px;
+    min-height: 200px;
+  }
   .editorial-featured-title {
     font-size: 1.25rem;
-  }
-  .editorial-list-card {
-    margin-top: 0.5rem;
   }
 }
 
 @media (max-width: 575.98px) {
   .editorial-featured-body {
-    padding: 1.25rem;
+    padding: 1.15rem;
   }
-  .editorial-list-item {
-    padding: 1.15rem 1.25rem;
+  .editorial-side-card {
+    padding: 1.1rem 1.2rem;
+  }
+  .editorial-featured-thumb {
+    height: 180px;
+    min-height: 180px;
   }
 }
