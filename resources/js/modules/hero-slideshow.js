@@ -1,5 +1,5 @@
 /**
- * Hero Background Slideshow, Kinetic Particle Canvas, and Marquee Controllers
+ * Hero Slideshow — supports legacy .hero-bg-slide and Soft Neo .nb-hero-slide
  */
 import { prefersReducedMotion } from './utils.js';
 
@@ -10,25 +10,28 @@ export function initHeroSlideshow() {
 }
 
 export function initHeroBgSlideshow() {
-  const slides = document.querySelectorAll('.hero-bg-slide');
+  const slides = document.querySelectorAll('.nb-hero-slide, .hero-bg-slide');
   if (slides.length <= 1) return;
 
-  const prevBtn      = document.getElementById('hero-prev');
-  const nextBtn      = document.getElementById('hero-next');
-  const heroSection  = document.querySelector('.typo-hero');
-  const slideNumEl   = document.getElementById('hero-slide-current');
+  const prevBtn = document.getElementById('hero-prev');
+  const nextBtn = document.getElementById('hero-next');
+  const heroSection = document.querySelector('.nb-hero, .typo-hero');
+  const slideNumEl = document.getElementById('hero-slide-current');
   const slideTotalEl = document.getElementById('hero-slide-total');
   const progressFill = document.getElementById('hero-progress-fill');
 
   const SLIDE_DURATION = 5;
+  const ACTIVE = slides[0].classList.contains('is-active') || slides[0].classList.contains('nb-hero-slide')
+    ? 'is-active'
+    : 'active';
 
   if (slideTotalEl) {
-    slideTotalEl.textContent = slides.length < 10 ? '0' + slides.length : slides.length;
+    slideTotalEl.textContent = slides.length < 10 ? '0' + slides.length : String(slides.length);
   }
 
   function updateCounter(idx) {
     if (slideNumEl) {
-      slideNumEl.textContent = (idx + 1) < 10 ? '0' + (idx + 1) : (idx + 1);
+      slideNumEl.textContent = idx + 1 < 10 ? '0' + (idx + 1) : String(idx + 1);
     }
   }
 
@@ -36,7 +39,7 @@ export function initHeroBgSlideshow() {
     if (!progressFill) return;
     progressFill.classList.remove('running');
     progressFill.style.transform = 'scaleX(0)';
-    void progressFill.offsetWidth; // force reflow
+    void progressFill.offsetWidth;
     progressFill.style.transform = '';
     progressFill.classList.add('running');
   }
@@ -49,13 +52,15 @@ export function initHeroBgSlideshow() {
   let isPaused = false;
 
   function getGsap() {
-    return (!prefersReduced && !motionOff && typeof window !== 'undefined' && window.gsap) ? window.gsap : null;
+    return !prefersReduced && !motionOff && typeof window !== 'undefined' && window.gsap
+      ? window.gsap
+      : null;
   }
 
   function goTo(next) {
     if (next === current) return;
     const outSlide = slides[current];
-    const inSlide  = slides[next];
+    const inSlide = slides[next];
     const g = getGsap();
 
     if (g) {
@@ -74,22 +79,22 @@ export function initHeroBgSlideshow() {
         scale: 1.0,
         duration: 0.9,
         ease: 'power2.inOut',
-        onComplete: function() {
+        onComplete: function () {
           g.set(outSlide, { zIndex: 1, xPercent: 0 });
-        }
+        },
       });
 
       g.to(inSlide, {
-        opacity: 0.7,
+        opacity: 1,
         xPercent: 0,
         scale: 1.0,
         duration: 0.9,
-        ease: 'power2.inOut'
+        ease: 'power2.inOut',
       });
     }
 
-    slides[current].classList.remove('active');
-    slides[next].classList.add('active');
+    slides[current].classList.remove('active', 'is-active');
+    slides[next].classList.add(ACTIVE);
 
     current = next;
     updateCounter(current);
@@ -99,8 +104,7 @@ export function initHeroBgSlideshow() {
 
   function advance() {
     if (!isPaused) {
-      const next = (current + 1) % slides.length;
-      goTo(next);
+      goTo((current + 1) % slides.length);
     }
   }
 
@@ -109,21 +113,30 @@ export function initHeroBgSlideshow() {
     autoTimer = setInterval(advance, SLIDE_DURATION * 1000);
   }
 
-  if (prevBtn) prevBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    goTo((current - 1 + slides.length) % slides.length);
-  });
-  if (nextBtn) nextBtn.addEventListener('click', function (e) {
-    e.preventDefault();
-    goTo((current + 1) % slides.length);
-  });
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      goTo((current - 1 + slides.length) % slides.length);
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      goTo((current + 1) % slides.length);
+    });
+  }
 
-  if (heroSection) {
-    const heroBg = document.querySelector('.typo-hero-bg');
-    if (heroBg) {
-      heroBg.addEventListener('mouseenter', function () { isPaused = true; });
-      heroBg.addEventListener('mouseleave', function () { isPaused = false; });
-    }
+  const pauseTarget =
+    document.querySelector('.nb-hero-frame') ||
+    document.querySelector('.typo-hero-bg') ||
+    heroSection;
+  if (pauseTarget) {
+    pauseTarget.addEventListener('mouseenter', function () {
+      isPaused = true;
+    });
+    pauseTarget.addEventListener('mouseleave', function () {
+      isPaused = false;
+    });
   }
 
   updateCounter(0);
@@ -162,7 +175,7 @@ export function initHeroKineticGrid() {
           x: c * spacing,
           y: r * spacing,
           vx: 0,
-          vy: 0
+          vy: 0,
         });
       }
     }
@@ -181,15 +194,16 @@ export function initHeroKineticGrid() {
     mouse.y = -1000;
   }
 
-  const heroContainer = document.querySelector('.typo-hero') || window;
+  const heroContainer = document.querySelector('.nb-hero, .typo-hero') || window;
   window.addEventListener('resize', resize);
-  heroContainer.addEventListener('mousemove', onMouseMove);
-  heroContainer.addEventListener('mouseleave', onMouseLeave);
+  if (heroContainer.addEventListener) {
+    heroContainer.addEventListener('mousemove', onMouseMove);
+    heroContainer.addEventListener('mouseleave', onMouseLeave);
+  }
   resize();
 
   function render() {
     ctx.clearRect(0, 0, width, height);
-
     for (let i = 0; i < particles.length; i++) {
       const p = particles[i];
       const dx = mouse.x - p.x;
@@ -207,26 +221,19 @@ export function initHeroKineticGrid() {
       p.vy += (p.baseY - p.y) * 0.05;
       p.vx *= 0.85;
       p.vy *= 0.85;
-
       p.x += p.vx;
       p.y += p.vy;
 
-      ctx.fillStyle = 'rgba(255, 73, 80, 0.4)';
+      ctx.fillStyle = 'rgba(166, 23, 28, 0.35)';
       ctx.beginPath();
       ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
-
     requestAnimationFrame(render);
   }
 
   render();
 }
 
-export function initPrincipalSlider() {
-  // Principal slider handling if needed
-}
-
-export function initMarqueeVisibility() {
-  // Marquee animation visibility handler
-}
+export function initPrincipalSlider() {}
+export function initMarqueeVisibility() {}
