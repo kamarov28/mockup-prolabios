@@ -70,13 +70,12 @@ section,
 }
 
 /* ── Navbar ─────────────────────────────────────────────────────────────── */
-/* Outer nav is transparent shell; framing lives on .container-fluid (nb-layout) */
 .navbar,
 .navbar.sticky-top,
 .navbar.header-scrolled {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: var(--nb-bg-soft) !important;
+  border-bottom: 3px solid var(--nb-ink) !important;
+  box-shadow: var(--nb-shadow-sm) !important;
   border-radius: 0 !important;
   backdrop-filter: none !important;
 }
@@ -137,7 +136,7 @@ section,
 
 .hamburger .line { stroke: var(--nb-ink); }
 
-/* Utility bar removed — navbar already covers nav + search */
+/* Utility bar removed */
 .site-utility-bar {
   display: none !important;
 }
@@ -250,7 +249,7 @@ section,
   box-shadow: 2px 2px 0 var(--nb-ink) !important;
 }
 
-/* ── Cards (bento blocks) ───────────────────────────────────────────────── */
+/* ── Cards ──────────────────────────────────────────────────────────────── */
 .card,
 .product-card,
 .blog-card,
@@ -295,7 +294,6 @@ section,
   color: var(--nb-muted) !important;
 }
 
-/* SKU / cat code — Sunny sticker */
 .product-cat-code,
 .catalogue-no {
   display: inline-block !important;
@@ -352,7 +350,7 @@ section,
   font-family: var(--font-display) !important;
 }
 
-/* ── Buttons global ─────────────────────────────────────────────────────── */
+/* ── Buttons ────────────────────────────────────────────────────────────── */
 .btn-primary,
 .btn-danger,
 .btn-submit {
