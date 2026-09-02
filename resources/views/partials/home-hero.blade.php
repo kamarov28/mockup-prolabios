@@ -1,5 +1,5 @@
-<!-- 1. Hero Section (Clean, Quiet & Focused) -->
-<section class="section-spacious typo-hero">
+<!-- 1. Hero — Soft Neo-Brutalism split 50/50 boxes -->
+<section class="nb-hero section-spacious">
   @php
     $heroImages = array_values(array_filter($homeData['hero_images'] ?? []));
     if (count($heroImages) === 0) {
@@ -12,69 +12,57 @@
     }
   @endphp
 
-  <div class="typo-hero-bg">
-    @foreach($heroImages as $index => $imgUrl)
-      <img
-        class="hero-bg-slide @if($index === 0) active @endif"
-        src="{{ $imgUrl }}"
-        alt="Peralatan laboratorium Prolabios"
-        decoding="async"
-        @if($index === 0)
-          fetchpriority="high"
-        @else
-          loading="lazy"
-        @endif
-      >
-    @endforeach
-    <div class="typo-hero-overlay"></div>
-  </div>
-
-  <noscript>
-    <style>.typo-hero-entrance { opacity: 1 !important; }</style>
-  </noscript>
-
-  <div class="container" style="position: relative; z-index: 2;">
-    <div class="typo-hero-entrance col-lg-8 ps-0">
-      <div class="mb-3">
-        <span class="typo-pill-outline">{{ $homeData['hero_badge'] ?? 'SOLUSI LABORATORIUM TERPERCAYA' }}</span>
+  <div class="container">
+    <div class="nb-hero-grid">
+      <!-- Left: copy box -->
+      <div class="nb-hero-copy">
+        <span class="nb-badge">{{ $homeData['hero_badge'] ?? 'B2B PROCUREMENT' }}</span>
+        <h1 class="nb-hero-title">
+          {!! $homeData['hero_title'] ?? 'Trusted Analytical & <span class="nb-accent">Microbiology</span> Solutions' !!}
+        </h1>
+        <p class="nb-hero-lead">
+          {{ $homeData['hero_subtitle'] ?? 'Penyedia instrumen analisis, media kultur, dan reagen laboratorium dengan standar kualitas internasional untuk industri Indonesia.' }}
+        </p>
+        <div class="nb-hero-actions">
+          <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
+            {{ $homeData['hero_cta_text'] ?? 'Explore Product Catalog' }}
+            <i class="bi bi-arrow-right"></i>
+          </a>
+          <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost">
+            Contact Sales
+          </a>
+        </div>
       </div>
-      <h1 class="typo-hero-title mb-3">
-        {!! $homeData['hero_title'] ?? 'Akurasi pengujian yang <span class="text-accent">terpercaya</span> untuk riset &amp; industri.' !!}
-      </h1>
-      <p class="typo-lead mb-4">
-        {{ $homeData['hero_subtitle'] ?? 'Penyedia instrumen analisis, media kultur, dan reagen laboratorium dengan standar kualitas internasional.' }}
-      </p>
-      
-      <!-- Focused Primary CTA -->
-      <div class="d-flex flex-wrap gap-3 typo-hero-ctas align-items-center mt-3">
-        <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="typo-btn-link">
-          {{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }} <i class="bi bi-arrow-right ms-2"></i>
-        </a>
+
+      <!-- Right: framed image card -->
+      <div class="nb-hero-visual">
+        <div class="nb-hero-frame">
+          @foreach($heroImages as $index => $imgUrl)
+            <img
+              class="nb-hero-slide @if($index === 0) is-active @endif"
+              src="{{ $imgUrl }}"
+              alt="Peralatan laboratorium Prolabios"
+              decoding="async"
+              @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
+            >
+          @endforeach
+
+          @if(count($heroImages) > 1)
+            <div class="nb-hero-controls">
+              <span class="nb-hero-counter">
+                <span id="hero-slide-current" class="nb-mono">01</span>
+                <span class="nb-muted">/</span>
+                <span id="hero-slide-total" class="nb-mono">{{ count($heroImages) < 10 ? '0'.count($heroImages) : count($heroImages) }}</span>
+              </span>
+              <div class="nb-hero-progress"><div id="hero-progress-fill" class="nb-hero-progress-fill"></div></div>
+              <div class="nb-hero-arrows">
+                <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i class="bi bi-arrow-left"></i></button>
+                <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i class="bi bi-arrow-right"></i></button>
+              </div>
+            </div>
+          @endif
+        </div>
       </div>
     </div>
-    
-    <!-- Sleek Hero Slider Counter & Progress Bar Controls -->
-    @if(count($heroImages) > 1)
-      <div class="typo-hero-controls">
-        <div class="hero-counter-box me-1">
-          <span id="hero-slide-current" class="hero-counter-num">01</span>
-          <span class="hero-counter-sep">/</span>
-          <span id="hero-slide-total" class="hero-counter-total">{{ count($heroImages) < 10 ? '0' . count($heroImages) : count($heroImages) }}</span>
-        </div>
-        
-        <div class="hero-progress-bar-wrap mx-2">
-          <div id="hero-progress-fill" class="hero-progress-fill"></div>
-        </div>
-
-        <div class="hero-arrow-btns d-flex align-items-center gap-2">
-          <button id="hero-prev" class="typo-hero-ctrl-btn" aria-label="Slide sebelumnya">
-            <i class="bi bi-arrow-left"></i>
-          </button>
-          <button id="hero-next" class="typo-hero-ctrl-btn" aria-label="Slide berikutnya">
-            <i class="bi bi-arrow-right"></i>
-          </button>
-        </div>
-      </div>
-    @endif
   </div>
 </section>
