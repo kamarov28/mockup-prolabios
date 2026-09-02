@@ -320,3 +320,183 @@ section hr {
   background: #ff4d5a;
 }
 
+/* ==========================================================================
+   Editorial Bento Grid — Wawasan & Edukasi (Kristi-inspired)
+   ========================================================================== */
+.editorial-bento {
+  --editorial-white: #FFFFFF;
+  --editorial-black: #0A0A0A;
+  --editorial-charcoal: #1E1E1E;
+  --editorial-ruby: #A6171C;
+  --editorial-sunny: #F1C045;
+  --editorial-border: 2px solid #0A0A0A;
+}
+
+/* Featured Card (Left) */
+.editorial-featured-card {
+  background: var(--editorial-white);
+  border: var(--editorial-border);
+  border-radius: 0; /* neo-brutal clean edges */
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.editorial-featured-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0 var(--editorial-black);
+}
+
+.editorial-featured-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #111;
+}
+
+.editorial-featured-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.editorial-featured-card:hover .editorial-featured-thumb img {
+  transform: scale(1.04);
+}
+
+.editorial-featured-body {
+  padding: 1.5rem 1.75rem 1.75rem;
+  color: var(--editorial-charcoal);
+}
+
+.editorial-featured-title {
+  font-family: var(--font-family-headline);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+  color: var(--editorial-charcoal);
+}
+
+.editorial-featured-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.editorial-featured-title a:hover,
+.editorial-featured-card:hover .editorial-featured-title a {
+  color: var(--editorial-ruby);
+}
+
+.editorial-featured-excerpt {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(30, 30, 30, 0.72);
+  margin-bottom: 0;
+}
+
+.editorial-read-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--editorial-charcoal);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+
+.editorial-read-link:hover {
+  color: var(--editorial-ruby);
+}
+
+/* Right List Card */
+.editorial-list-card {
+  background: var(--editorial-white);
+  border: var(--editorial-border);
+  border-radius: 0;
+  padding: 0.5rem 0;
+  overflow: hidden;
+}
+
+.editorial-list-item {
+  padding: 1.35rem 1.5rem;
+  position: relative;
+}
+
+.editorial-list-item.has-border {
+  border-top: 1.5px solid rgba(10, 10, 10, 0.12);
+}
+
+.editorial-list-title {
+  font-family: var(--font-family-headline);
+  font-size: 1.05rem;
+  font-weight: 650;
+  line-height: 1.35;
+  margin: 0;
+  color: var(--editorial-charcoal);
+}
+
+.editorial-list-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.editorial-list-title a:hover {
+  color: var(--editorial-ruby);
+}
+
+/* Shared badges & meta */
+.editorial-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-family-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.6rem;
+  border-radius: 2px;
+  line-height: 1;
+}
+
+.editorial-badge-sunny {
+  background: var(--editorial-sunny);
+  color: #1a1a1a;
+  border: 1.5px solid #0A0A0A;
+}
+
+.editorial-badge-dark {
+  background: transparent;
+  color: var(--editorial-charcoal);
+  border: 1.5px solid rgba(10, 10, 10, 0.35);
+}
+
+.editorial-meta {
+  font-size: 0.72rem;
+  color: rgba(30, 30, 30, 0.55);
+  letter-spacing: 0.02em;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991.98px) {
+  .editorial-featured-title {
+    font-size: 1.25rem;
+  }
+  .editorial-list-card {
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .editorial-featured-body {
+    padding: 1.25rem;
+  }
+  .editorial-list-item {
+    padding: 1.15rem 1.25rem;
+  }
+}
