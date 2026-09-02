@@ -137,14 +137,10 @@ section,
 
 .hamburger .line { stroke: var(--nb-ink); }
 
+/* Utility bar removed — navbar already covers nav + search */
 .site-utility-bar {
-  display: block !important;
-  background: var(--nb-primary) !important;
-  border-bottom: 2px solid var(--nb-ink) !important;
+  display: none !important;
 }
-.site-utility-bar a,
-.site-utility-bar span { color: rgba(255,255,255,0.95) !important; }
-.site-utility-bar a:hover { color: var(--nb-accent) !important; }
 
 /* ── Hero ───────────────────────────────────────────────────────────────── */
 .typo-hero-overlay {
