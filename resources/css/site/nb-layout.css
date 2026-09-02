@@ -2,24 +2,34 @@
    Soft Neo-Brutalism — STRUCTURAL LAYOUT (boxes, grid, section rules)
    ========================================================================== */
 
-/* Page top clearance for sticky navbar */
+/* Page top clearance for sticky navbar (~72px + gap) */
 body {
-  padding-top: 5.5rem; /* room for navbar height + small gap */
+  padding-top: 5.25rem;
 }
 
-main {
-  padding-top: 0.75rem;
-}
-
-/* Sticky navbar */
+/* Sticky navbar — full width, no clipping */
 .navbar {
   position: sticky !important;
-  top: 0.75rem !important;
+  top: 0 !important;
   z-index: 1030 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/* Soft inset look without breaking width */
+.navbar > .container-fluid {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
-  width: auto !important;
+  width: auto;
   max-width: calc(100% - 1.5rem);
+  border: 2px solid #1E1E1E;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 3px 3px 0 #1E1E1E;
+  background: #EDE8E0;
 }
 
 /* Section rhythm */
@@ -47,7 +57,7 @@ main {
     border-bottom: 1.5px solid rgba(30, 30, 30, 0.12);
   }
   body {
-    padding-top: 4.75rem;
+    padding-top: 4.5rem;
   }
 }
 
@@ -150,7 +160,7 @@ main {
 /* Split hero */
 .nb-hero {
   background: #D6D0C5 !important;
-  padding: 1.5rem 0 3rem !important;
+  padding: 1.25rem 0 3rem !important;
   position: relative;
 }
 .nb-hero .typo-hero-bg,
