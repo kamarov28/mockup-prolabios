@@ -2,6 +2,26 @@
    Soft Neo-Brutalism — STRUCTURAL LAYOUT (boxes, grid, section rules)
    ========================================================================== */
 
+/* Page top clearance for sticky navbar */
+body {
+  padding-top: 5.5rem; /* room for navbar height + small gap */
+}
+
+main {
+  padding-top: 0.75rem;
+}
+
+/* Sticky navbar */
+.navbar {
+  position: sticky !important;
+  top: 0.75rem !important;
+  z-index: 1030 !important;
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+  width: auto !important;
+  max-width: calc(100% - 1.5rem);
+}
+
 /* Section rhythm */
 .nb-section,
 .nb-hero,
@@ -25,6 +45,9 @@
   .navbar .navbar-nav > .nav-item:not(:last-child) > .nav-link {
     border-right: none;
     border-bottom: 1.5px solid rgba(30, 30, 30, 0.12);
+  }
+  body {
+    padding-top: 4.75rem;
   }
 }
 
@@ -127,7 +150,7 @@
 /* Split hero */
 .nb-hero {
   background: #D6D0C5 !important;
-  padding: 2.5rem 0 3rem !important;
+  padding: 1.5rem 0 3rem !important;
   position: relative;
 }
 .nb-hero .typo-hero-bg,
