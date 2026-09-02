@@ -70,14 +70,14 @@ section,
 }
 
 /* ── Navbar ─────────────────────────────────────────────────────────────── */
+/* Outer nav is transparent shell; framing lives on .container-fluid (nb-layout) */
 .navbar,
 .navbar.sticky-top,
 .navbar.header-scrolled {
-  background: var(--nb-bg-soft) !important;
-  border: var(--nb-border) !important;
-  border-bottom: 3px solid var(--nb-ink) !important;
-  box-shadow: var(--nb-shadow-sm) !important;
-  border-radius: 0 0 var(--nb-radius) var(--nb-radius) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
   backdrop-filter: none !important;
 }
 
