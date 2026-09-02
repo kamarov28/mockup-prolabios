@@ -105,10 +105,22 @@
           </thead>
           <tbody>
             @foreach($posts as $post)
+              @php
+                $thumb = $post['image'] ?? null;
+                if ($thumb && !str_starts_with($thumb, 'http') && !str_starts_with($thumb, 'data:')) {
+                  $thumbSrc = asset(ltrim($thumb, '/'));
+                } else {
+                  $thumbSrc = $thumb;
+                }
+              @endphp
               <tr>
                 <td>
-                  <div style="width: 60px; height: 42px; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; background: rgba(255,255,255,0.02);">
-                    <img src="{{ $post['image'] }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;">
+                  <div style="width: 60px; height: 42px; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center;">
+                    @if($thumbSrc)
+                      <img src="{{ $thumbSrc }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-image\' style=\'opacity:0.35;font-size:1.1rem\'></i>';">
+                    @else
+                      <i class="bi bi-image" style="opacity: 0.35; font-size: 1.1rem;"></i>
+                    @endif
                   </div>
                 </td>
                 <td>

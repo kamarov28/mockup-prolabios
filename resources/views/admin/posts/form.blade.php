@@ -4,6 +4,16 @@
   $isEdit = isset($post);
   $titleText = $isEdit ? 'Edit Artikel' : 'Tulis Artikel';
   $actionUrl = $isEdit ? route('admin.posts.update', ['slug' => $post['slug']]) : route('admin.posts.store');
+
+  // Normalize cover preview URL (support /storage/..., /uploads/..., full http)
+  $rawImage = old('image_url', $post['image'] ?? '');
+  if ($rawImage && !str_starts_with($rawImage, 'http') && !str_starts_with($rawImage, 'data:')) {
+    $previewSrc = asset(ltrim($rawImage, '/'));
+  } elseif ($rawImage) {
+    $previewSrc = $rawImage;
+  } else {
+    $previewSrc = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80';
+  }
 @endphp
 
 @section('title', $isEdit ? 'Edit Artikel: ' . $post['title'] : 'Tulis Artikel Baru')
@@ -132,17 +142,18 @@
         <div class="row g-3 align-items-center">
           <div class="col-sm-4">
             <div style="width: 100%; aspect-ratio: 16/9; max-height: 140px; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.03);">
-              <img id="image-preview" src="{{ $post['image'] ?? 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80' }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
+              <img id="image-preview" src="{{ $previewSrc }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
           </div>
           <div class="col-sm-8">
             <div class="mb-3">
               <label for="image_file" class="admin-form-label">Upload Cover</label>
-              <input class="form-control" type="file" id="image_file" name="image_file" accept="image/*" onchange="previewLocalImage(this)">
+              <input class="form-control" type="file" id="image_file" name="image_file" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewLocalImage(this)">
+              <p class="form-text mb-0 mt-1" style="font-size: 0.75rem; color: var(--color-text-muted);">JPG, PNG, WebP, GIF — maks 5MB. Disarankan rasio 16:9.</p>
             </div>
             <div>
               <label for="image_url" class="admin-form-label">Atau URL Cover</label>
-              <input type="text" class="form-control" id="image_url" name="image_url" value="{{ old('image_url', $post['image'] ?? '') }}" placeholder="https://example.com/image.jpg" oninput="previewUrlImage(this.value)">
+              <input type="text" class="form-control" id="image_url" name="image_url" value="{{ old('image_url', $post['image'] ?? '') }}" placeholder="https://example.com/image.jpg atau /storage/uploads/..." oninput="previewUrlImage(this.value)">
             </div>
           </div>
         </div>
