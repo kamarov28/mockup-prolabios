@@ -10,20 +10,13 @@
 @endsection
 
 @section('content')
-  <!-- 1. Hero Section -->
   @include('partials.home-hero')
-
-  <!-- 2. Trusted Principals Marquee -->
   @include('partials.home-principals')
-
-  <!-- 3. Value Pillars Grid (Bento) -->
   @include('partials.home-bento')
-
-  <!-- 4. Interactive Sector Finder -->
   @include('partials.home-focus')
 
-  <!-- 5. Bestseller Showcase -->
-  <section class="section-spacious typo-products-section" style="border-bottom: 1px solid var(--color-border);">
+  <!-- Products -->
+  <section class="section-spacious typo-products-section nb-section">
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
@@ -41,40 +34,31 @@
         @if(isset($featuredProducts) && count($featuredProducts) > 0)
           @foreach($featuredProducts as $idx => $prod)
             <div class="col">
-              <div class="card h-100 product-card border-0"
+              <div class="card h-100 product-card"
                    style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }};">
-
                 <div class="img-wrap">
                   <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk laboratorium" loading="lazy" decoding="async">
                 </div>
-
                 <div class="card-body p-4 d-flex flex-column">
                   <div class="d-flex flex-wrap gap-1 align-items-center mb-2">
                     @if(!empty($prod['catalog']))
-                      <div class="product-cat-code">
-                        CAT. {{ $prod['catalog'] }}
-                      </div>
+                      <div class="product-cat-code">CAT. {{ $prod['catalog'] }}</div>
                     @endif
                     @if(!empty($prod->principal))
-                      <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
-                        <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
-                      </span>
+                      <span class="nb-badge-sm">{{ $prod->principal->name }}</span>
                     @endif
                   </div>
-
                   <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
                     <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
                   </h3>
-
                   <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.82rem; line-height: 1.5;">
                     {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
                   </p>
-
-                  <div class="mt-auto pt-3 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between">
+                  <div class="mt-auto pt-3 d-flex align-items-center justify-content-between nb-card-foot">
                     <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none fw-medium" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
                       Detail & Spek <i class="bi bi-arrow-right ms-1"></i>
                     </a>
-                    <span class="text-muted small font-monospace"><i class="bi bi-file-earmark-check text-accent"></i> COA</span>
+                    <span class="nb-mono small"><i class="bi bi-file-earmark-check"></i> COA</span>
                   </div>
                 </div>
               </div>
@@ -89,26 +73,22 @@
     </div>
   </section>
 
-  <!-- 6. Technical Insights & Articles -->
   @include('partials.home-news')
 
-  <!-- 7. Bottom Conversion Banner -->
-  <section class="hitech-final-banner">
-    <div class="container text-center py-2">
-      <div class="mb-3">
-        <span class="typo-pill-outline">{{ $homeData['cta_banner_badge'] ?? 'DUKUNGAN PENGADAAN' }}</span>
-      </div>
-      <h2 class="hitech-final-title">{{ $homeData['cta_banner_title'] ?? 'Butuh penawaran khusus atau proyek pengadaan?' }}</h2>
-      <p class="hitech-final-sub">{{ $homeData['cta_banner_sub'] ?? 'Tim sales kami siap membantu spesifikasi alat, ketersediaan stok, dan dokumen pendukung.' }}</p>
-      
-      <div class="d-flex flex-column align-items-center gap-3 mt-4">
-        <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="typo-btn-link">
-          {{ $homeData['cta_banner_btn_text'] ?? 'Hubungi Sales / Minta Penawaran' }} <i class="bi bi-arrow-right ms-2"></i>
-        </a>
-        <div class="d-flex align-items-center gap-2 text-muted mt-1" style="font-size: 0.8rem;">
-          <span>Sudah memilih produk?</span>
-          <a href="{{ url('/cart') }}" class="text-accent text-decoration-none fw-medium">
-            <i class="bi bi-cart3 me-1"></i> Buka Keranjang RFQ
+  <!-- RFQ giant callout -->
+  <section class="nb-rfq-section">
+    <div class="container">
+      <div class="nb-rfq-box">
+        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'B2B PROCUREMENT' }}</span>
+        <h2 class="nb-rfq-title">{{ $homeData['cta_banner_title'] ?? 'Need a formal quotation for your laboratory?' }}</h2>
+        <p class="nb-rfq-sub">{{ $homeData['cta_banner_sub'] ?? 'Submit an RFQ with your product list — our sales team will follow up with pricing, bulk availability, and compliance documentation.' }}</p>
+        <div class="nb-rfq-actions">
+          <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="nb-btn nb-btn-primary">
+            {{ $homeData['cta_banner_btn_text'] ?? 'Contact Sales / Request Quote' }}
+            <i class="bi bi-arrow-right"></i>
+          </a>
+          <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
+            <i class="bi bi-cart3"></i> Open RFQ Cart
           </a>
         </div>
       </div>
@@ -126,15 +106,11 @@
       tabBtns.forEach(btn => {
         btn.addEventListener('click', function() {
           const target = this.getAttribute('data-target');
-
           tabBtns.forEach(b => b.classList.remove('active'));
           tabPanels.forEach(p => p.classList.remove('active'));
-
           this.classList.add('active');
           const activePanel = document.getElementById('panel-' + target);
-          if (activePanel) {
-            activePanel.classList.add('active');
-          }
+          if (activePanel) activePanel.classList.add('active');
         });
       });
     });
