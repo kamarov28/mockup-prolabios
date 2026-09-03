@@ -8,6 +8,15 @@
         "value": "instrument sans",
         "createdAt": "2026-08-18T06:31:14.524Z",
         "reason": "user confirmed: chosen editorial body typography"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "transition: width",
+        "files": [
+          "resources/css/site/02-motion.css"
+        ],
+        "createdAt": "2026-09-03T01:48:37.113Z",
+        "reason": "::after pseudo-element underline slide — width animates from 0 to 100% on a decorative 1px line, no layout thrash; pre-existing pattern confirmed as intentional nav hover"
       }
     ]
   }

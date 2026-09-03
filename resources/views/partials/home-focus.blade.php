@@ -54,12 +54,10 @@
               <div>
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. BIO-TAL01</span>
+                    <span class="product-cat-code">CAT. BIO-TAL01</span>
                     <span class="text-muted small">Bioendo Reagents</span>
                   </div>
-                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
-                    <i class="bi bi-check2 me-1"></i> Ready Stock
-                  </span>
+                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
                 </div>
 
                 <h4 class="fs-6 fw-semibold mb-2">Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)</h4>
@@ -85,8 +83,8 @@
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
                 <span class="text-muted font-monospace" style="font-size: 0.75rem;">Sertifikat COA per batch</span>
-                <a href="{{ url('/produk?q=endotoxin') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
-                  <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
+                <a href="{{ url('/produk?q=endotoxin') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                  <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
             </div>
@@ -118,12 +116,10 @@
               <div>
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. SCH-MEDIA02</span>
+                    <span class="product-cat-code">CAT. SCH-MEDIA02</span>
                     <span class="text-muted small">Scharlau Microbiology</span>
                   </div>
-                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
-                    <i class="bi bi-check2 me-1"></i> Ready Stock
-                  </span>
+                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
                 </div>
 
                 <h4 class="fs-6 fw-semibold mb-2">Chromogenic Media for Salmonella &amp; E. coli</h4>
@@ -149,8 +145,8 @@
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
                 <span class="text-muted font-monospace" style="font-size: 0.75rem;">BPOM Food Standard</span>
-                <a href="{{ url('/produk?q=salmonella') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
-                  <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
+                <a href="{{ url('/produk?q=salmonella') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                  <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
             </div>
@@ -182,12 +178,10 @@
               <div>
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. TER-BT20</span>
+                    <span class="product-cat-code">CAT. TER-BT20</span>
                     <span class="text-muted small">Terragene Bionova</span>
                   </div>
-                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
-                    <i class="bi bi-check2 me-1"></i> AKL Certified
-                  </span>
+                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-patch-check me-1" style="color:#A6171C;"></i> AKL Certified</span>
                 </div>
 
                 <h4 class="fs-6 fw-semibold mb-2">Self-Contained Biological Indicator (SCBI) Steam</h4>
@@ -213,8 +207,8 @@
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
                 <span class="text-muted font-monospace" style="font-size: 0.75rem;">Kemenkes AKL Resmi</span>
-                <a href="{{ url('/produk?q=indicator') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
-                  <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
+                <a href="{{ url('/produk?q=indicator') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                  <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
             </div>
@@ -246,12 +240,10 @@
               <div>
                 <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                   <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 font-monospace" style="font-size: 0.7rem;">CAT. DOH-NBB01</span>
+                    <span class="product-cat-code">CAT. DOH-NBB01</span>
                     <span class="text-muted small">Döhler NBB Diagnostics</span>
                   </div>
-                  <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1" style="font-size: 0.7rem;">
-                    <i class="bi bi-check2 me-1"></i> Ready Stock
-                  </span>
+                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
                 </div>
 
                 <h4 class="fs-6 fw-semibold mb-2">NBB®-A Agar for Spoilage Microorganisms</h4>
@@ -277,8 +269,8 @@
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
                 <span class="text-muted font-monospace" style="font-size: 0.75rem;">Brewing Lab Protocol</span>
-                <a href="{{ url('/produk?q=nbb') }}" class="btn btn-sm btn-outline-danger px-3 py-1 fw-medium" style="font-size: 0.8rem;">
-                  <i class="bi bi-cart-plus me-1"></i> Tambah RFQ
+                <a href="{{ url('/produk?q=nbb') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                  <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
             </div>

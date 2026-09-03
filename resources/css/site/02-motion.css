@@ -3,12 +3,15 @@
    Micro-interactions & QOL Animations
    ========================================================================== */
 
-/* Navbar Brand Logo Pulse */
+/* Navbar Brand Logo */
+.navbar-brand img {
+  transition: opacity 0.15s ease;
+}
 .navbar-brand:hover img {
   opacity: 0.85;
 }
 
-/* Navbar Download Button Icon Slide-Down */
+/* Navbar Download Button Icon Slide */
 .navbar .btn-outline-danger {
   display: inline-flex;
   align-items: center;
@@ -16,103 +19,89 @@
 }
 .navbar .btn-outline-danger i {
   display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.15s ease;
 }
 .navbar .btn-outline-danger:hover i {
-  transform: translateY(2px);
+  transform: translateX(2px);
 }
 
 /* Hero CTA Button Micro-animations */
 .typo-btn-link i {
   display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.15s ease;
 }
 .typo-btn-link:hover i {
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
-/* Sektor Fokus Diagonal Arrow Translation */
+/* Sektor Fokus Arrow Translation */
 .typo-index-link i {
   display: inline-block;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.15s ease;
 }
 .typo-index-link:hover i {
-  transform: translate(3px, -3px);
+  transform: translateX(4px);
 }
 
-/* Back to Top Hover Bounce & High-Visibility Tactical Styling */
+/* Back to Top — Neo-Brutalist press button (Natural bg, charcoal border, hard shadow) */
 .btn-scroll-to-top {
   position: fixed;
   bottom: 35px;
   right: 35px;
-  width: 52px;
-  height: 52px;
-  border-radius: 50% !important;
-  background: rgba(12, 16, 24, 0.92) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 2px solid var(--color-accent, #FF3B42) !important;
-  color: #FFFFFF !important;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px !important;
+  background: #F1C045 !important;
+  border: 2px solid #1E1E1E !important;
+  color: #1E1E1E !important;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
   cursor: pointer;
 }
 .btn-scroll-to-top i {
-  font-size: 2rem;
+  font-size: 1.25rem;
   line-height: 1;
   color: #FFFFFF !important;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: none;
   display: inline-block;
 }
 .btn-scroll-to-top:hover {
-  background: var(--color-accent, #FF3B42) !important;
-  border-color: #FFFFFF !important;
-  color: #ffffff !important;
-  transform: translateY(-6px) scale(1.1) !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5) !important;
+  background: #7A1015 !important;
+  border-color: #1E1E1E !important;
+  color: #FFFFFF !important;
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
 }
 .btn-scroll-to-top:hover i {
-  transform: translateY(-4px);
-  color: #ffffff !important;
+  color: #FFFFFF !important;
 }
 .btn-scroll-to-top:active {
-  transform: translateY(-2px) scale(0.96) !important;
+  transform: translate(3px, 3px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 
-/* Nav-link Hover Underline Effect */
+/* Nav-link Hover */
 .navbar-nav .nav-link {
   position: relative;
 }
 .navbar-nav .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0 !important;
-  width: 0 !important;
-  height: 1px !important;
-  background-color: var(--color-accent) !important;
-  transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1), left 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
-}
-.navbar-nav .nav-link:hover::after,
-.navbar-nav .nav-link.active::after {
-  width: 100% !important;
-  left: 0 !important;
+  display: none !important;
 }
 
-/* Navbar Utilities Styling */
+/* Navbar Utilities Styling — Neo-Brutal press micro-interaction */
 .navbar-utilities a.nav-link,
 .navbar-utilities button.nav-link {
-  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-  color: rgba(255, 255, 255, 0.5) !important;
+  transition: transform 0.12s ease, color 0.12s ease;
+  color: #1E1E1E !important;
 }
 .navbar-utilities a.nav-link:hover,
 .navbar-utilities button.nav-link:hover {
-  color: var(--color-accent) !important;
-  transform: scale(1.1);
+  color: #A6171C !important;
+  transform: translate(1px, 1px);
 }
 .navbar-utilities span {
   font-family: var(--font-body);
@@ -125,8 +114,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(7, 7, 8, 0.97);
-  /* Solid overlay is enough; skip heavy full-viewport blur until open if needed */
+  background: rgba(214, 208, 197, 0.98);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   z-index: 9999;
@@ -135,7 +123,7 @@
   align-items: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+  transition: opacity 0.25s ease, visibility 0.25s;
 }
 .search-overlay.active {
   opacity: 1;
@@ -147,33 +135,39 @@
   right: 28px !important;
   width: 44px !important;
   height: 44px !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 50% !important;
-  color: #ffffff !important;
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  color: #1E1E1E !important;
   font-size: 1.1rem !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   z-index: 10001 !important;
-  transition: all 0.25s ease !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
 }
 .search-close-btn:hover {
-  background: rgba(255, 73, 80, 0.2) !important;
-  border-color: var(--color-accent) !important;
-  color: #ffffff !important;
-  transform: rotate(90deg) scale(1.05) !important;
+  background: #F1C045 !important;
+  color: #1E1E1E !important;
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
 }
+.search-close-btn:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
+
 /* Search Modal Card & Components */
 .search-modal-card {
   width: 90%;
   max-width: 680px;
-  background: #0f1015 !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  border-radius: 0px !important;
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 8px !important;
   padding: 30px !important;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 6px 6px 0 #1E1E1E !important;
   position: relative;
   z-index: 10;
   text-align: left;
@@ -190,37 +184,37 @@
   position: absolute;
   left: 16px;
   font-size: 1.25rem;
-  color: var(--color-accent) !important;
+  color: #1E1E1E !important;
   pointer-events: none;
   z-index: 2;
 }
 
 .search-input-box input#search-overlay-input {
   width: 100% !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 0px !important;
+  background: #EDE8E0 !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
   padding: 14px 18px 14px 48px !important;
-  color: #ffffff !important;
+  color: #1E1E1E !important;
   font-size: 1.05rem !important;
   outline: none !important;
-  box-shadow: none !important;
-  transition: all 0.3s ease !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease !important;
 }
 
 .search-input-box input#search-overlay-input:focus {
-  border-color: var(--color-accent) !important;
-  background: rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.2) !important;
+  border-color: #A6171C !important;
+  background: #FFFFFF !important;
+  box-shadow: 4px 4px 0 #A6171C !important;
 }
 
 .search-section-label {
-  font-family: var(--font-headline);
-  font-size: 0.72rem;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--color-text-muted) !important;
+  color: #5A5A5A !important;
   margin-bottom: 12px;
 }
 
@@ -232,23 +226,29 @@
 }
 
 .suggestion-tag {
-  font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.8) !important;
-  background: rgba(255, 255, 255, 0.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  padding: 6px 14px !important;
-  border-radius: 0px !important;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1E1E1E !important;
+  background: #EDE8E0 !important;
+  border: 1.5px solid #1E1E1E !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
   text-decoration: none !important;
-  transition: all 0.25s ease !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
 }
 
 .suggestion-tag:hover {
-  color: #ffffff !important;
-  background: rgba(255, 73, 80, 0.15) !important;
-  border-color: var(--color-accent) !important;
-  transform: translateY(-1px);
+  color: #1E1E1E !important;
+  background: #F1C045 !important;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+
+.suggestion-tag:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 
 .search-quick-links {
@@ -261,19 +261,26 @@
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
-  border-radius: 0px !important;
-  color: rgba(255, 255, 255, 0.9) !important;
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
+  color: #1E1E1E !important;
   text-decoration: none !important;
   font-size: 0.9rem;
-  transition: all 0.25s ease !important;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
 }
 
 .search-quick-item:hover {
-  background: rgba(255, 255, 255, 0.07) !important;
-  border-color: rgba(255, 73, 80, 0.3) !important;
-  color: #ffffff !important;
-  transform: translateX(4px);
+  background: #EDE8E0 !important;
+  color: #A6171C !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+
+.search-quick-item:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 

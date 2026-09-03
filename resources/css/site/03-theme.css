@@ -106,20 +106,34 @@ a:hover {
 .btn-danger:hover,
 .btn-primary:hover,
 .btn-submit:hover {
-  background-color: #ddb03a !important;
-  border-color: #ddb03a !important;
-  color: #1A1A1A !important;
-  transform: translateY(-2px);
+  background-color: var(--nb-primary-dark, #7A1015) !important;
+  border-color: #1E1E1E !important;
+  color: #ffffff !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+.btn-danger:active,
+.btn-primary:active,
+.btn-submit:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 .btn-outline-danger {
-  border-color: #A6171C !important;
-  color: #A6171C !important;
-  background: transparent !important;
+  border: 2px solid #1E1E1E !important;
+  color: #FFFFFF !important;
+  background: #A6171C !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
 }
 .btn-outline-danger:hover {
-  background: #A6171C !important;
-  border-color: #A6171C !important;
+  background: #7A1015 !important;
+  border-color: #1E1E1E !important;
   color: #fff !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+.btn-outline-danger:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 
 /* 7. Tables */

@@ -183,13 +183,14 @@ section hr {
 }
 .typo-hero-ctrl-btn:hover {
   background: var(--color-primary);
-  border-color: var(--color-primary);
+  border-color: #1E1E1E;
   color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1E1E1E;
 }
 .typo-hero-ctrl-btn:active {
-  transform: translateY(0);
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1E1E1E;
 }
 @media (max-width: 768px) {
   .typo-hero {
@@ -337,8 +338,9 @@ section hr {
 
 .editorial-featured-card:hover,
 .editorial-side-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0 #1E1E1E !important;
+  /* press grammar — shadow shrinks as card presses into canvas */
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #1E1E1E !important;
 }
 
 /* Featured thumbnail */
@@ -357,11 +359,6 @@ section hr {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.45s ease;
-}
-
-.editorial-featured-card:hover .editorial-featured-thumb img {
-  transform: scale(1.03);
 }
 
 .editorial-featured-body {
@@ -492,13 +489,13 @@ section hr {
 .editorial-all-btn:hover {
   background: #F1C045;
   color: #1E1E1E !important;
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 #1E1E1E;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1E1E1E;
 }
 
 .editorial-all-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 #1E1E1E;
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1E1E1E;
 }
 
 /* Responsive */

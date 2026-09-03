@@ -118,13 +118,14 @@
   transition: all 0.3s ease !important;
 }
 .login-body .btn-primary:hover, .login-body .btn-primary:focus {
-  background-color: #e03e45 !important;
-  border-color: #e03e45 !important;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 73, 80, 0.25) !important;
+  background-color: var(--nb-primary-dark, #7A1015) !important;
+  border-color: #1E1E1E !important;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1E1E1E !important;
 }
 .login-body .btn-primary:active {
-  transform: translateY(0);
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 .btn-back-home {
   color: rgba(255, 255, 255, 0.4) !important;

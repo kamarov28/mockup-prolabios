@@ -39,9 +39,11 @@
   transition: all 0.3s ease;
 }
 .b2b-usecase-card:hover {
-  border-color: rgba(166, 23, 28, 0.35);
-  transform: translateY(-4px);
-  background: rgba(166, 23, 28, 0.03);
+  /* press grammar — consistent with nb-btn / bento card physics */
+  border-color: #1E1E1E;
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 transparent;
+  background: #FFFFFF;
 }
 .b2b-usecase-card.highlight-card {
   background: linear-gradient(180deg, rgba(166, 23, 28, 0.06) 0%, #FFFFFF 100%);
@@ -152,13 +154,15 @@
   height: 100%;
   position: relative;
   overflow: hidden;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  /* ponytail: transition on specific props — avoids animating layout properties */
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
 }
 .hitech-bento-card:hover {
-  border-color: rgba(166, 23, 28, 0.3);
-  background: rgba(166, 23, 28, 0.02);
-  transform: translateY(-4px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+  /* press grammar — matches nb-btn / product-card physics */
+  border-color: #1E1E1E;
+  background: #FFFFFF;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #1E1E1E;
 }
 .hitech-bento-number {
   font-family: var(--font-headline);
@@ -215,23 +219,13 @@
   gap: 8px;
 }
 .hitech-tab-btn::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none !important;
 }
-.hitech-tab-btn:hover { color: rgba(0, 0, 0, 0.8); background: transparent; }
+.hitech-tab-btn:hover { color: rgba(0, 0, 0, 0.8); }
 .hitech-tab-btn.active {
   color: #1A1A1A !important;
   font-weight: 600 !important;
-  background: transparent !important;
 }
-.hitech-tab-btn.active::after { transform: scaleX(1); }
 
 @media (max-width: 991.98px) {
   .hitech-tab-bar {
@@ -386,4 +380,18 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none !important;
   display: none !important;
   margin: 0 !important;
+}
+
+/* Reduced-motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .hitech-bento-card,
+  .b2b-usecase-card,
+  .hitech-tab-panel {
+    transition: none !important;
+    animation: none !important;
+  }
+  .hitech-bento-card:hover,
+  .b2b-usecase-card:hover {
+    transform: none !important;
+  }
 }

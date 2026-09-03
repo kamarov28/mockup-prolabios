@@ -88,7 +88,7 @@
             <i class="bi bi-arrow-right"></i>
           </a>
           <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
-            <i class="bi bi-cart3"></i> Open RFQ Cart
+            <i class="bi bi-cart3"></i> Buka Keranjang RFQ
           </a>
         </div>
       </div>

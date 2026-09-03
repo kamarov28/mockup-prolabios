@@ -135,6 +135,14 @@ h1, h2, h3, h4, h5, h6,
 .card {
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
+.card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+}
+.card:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
 
 .navbar-nav .nav-link {
   position: relative;
@@ -174,11 +182,11 @@ h1, h2, h3, h4, h5, h6,
 }
 .marquee-container::before {
   left: 0; top: 0;
-  background: linear-gradient(to right, #D6D0C5 0%, transparent 100%) !important;
+  background: linear-gradient(to right, #FFFFFF 0%, transparent 100%) !important;
 }
 .marquee-container::after {
   right: 0; top: 0;
-  background: linear-gradient(to left, #D6D0C5 0%, transparent 100%) !important;
+  background: linear-gradient(to left, #FFFFFF 0%, transparent 100%) !important;
 }
 .marquee-content {
   display: flex;
@@ -330,8 +338,12 @@ h1, h2, h3, h4, h5, h6,
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .product-card:hover {
-  transform: translate(3px, 3px);
+  transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 #1E1E1E !important;
+}
+.product-card:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 .product-card .img-wrap {
   position: relative;

@@ -108,20 +108,24 @@
    Editorial Product Card Overrides
    ========================================================================== */
 .product-card {
-  background: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0px !important;
-  transition: all 0.3s ease !important;
+  background: var(--nb-card, #FFFFFF) !important;
+  border: var(--nb-border, 2px solid #1E1E1E) !important;
+  border-radius: var(--nb-radius-lg, 8px) !important;
+  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
 }
 .product-card:hover {
-  border-color: rgba(166, 23, 28, 0.4) !important;
-  transform: translateY(-4px) !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1) !important;
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  border-color: #1E1E1E !important;
+}
+.product-card:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 .product-card .img-wrap {
-  background-color: #FFFFFF !important; /* white container for product images */
-  border-bottom: 1px solid var(--color-border) !important;
+  background-color: var(--nb-bg-soft, #EDE8E0) !important;
+  border-bottom: 2px solid #1E1E1E !important;
   border-radius: 0px !important;
   padding: 0 !important;
   height: 200px !important;
@@ -135,10 +139,10 @@
   object-fit: cover !important;
   border-radius: 0px !important;
   filter: grayscale(40%);
-  transition: all 0.4s ease !important;
+  transition: filter 0.2s ease !important;
 }
 .product-card:hover .img-wrap img {
-  filter: grayscale(0%) scale(1.03) !important;
+  filter: grayscale(0%) !important;
 }
 .product-card .card-body {
   background-color: transparent !important;
@@ -146,31 +150,39 @@
   border-radius: 0px !important;
 }
 .product-card .card-title a {
-  font-family: var(--font-headline) !important;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif) !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
-  color: #fff !important;
-  transition: color 0.3s ease;
+  color: var(--nb-ink, #1E1E1E) !important;
+  transition: color 0.15s ease;
 }
 .product-card:hover .card-title a {
-  color: var(--color-accent) !important;
+  color: var(--nb-primary, #A6171C) !important;
 }
 .product-card .card-text {
-  font-family: var(--font-body) !important;
-  color: var(--color-text-muted) !important;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif) !important;
+  color: var(--nb-muted, #5A5A5A) !important;
   font-size: 0.82rem !important;
   line-height: 1.6 !important;
 }
 .product-card .btn {
-  border-radius: 0px !important;
-  border: 1px solid var(--color-border) !important;
-  background: transparent !important;
+  border-radius: var(--nb-radius, 6px) !important;
+  border: 2px solid #1E1E1E !important;
+  background: var(--nb-primary, #A6171C) !important;
   color: #fff !important;
-  transition: all 0.3s ease;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
 }
-.product-card:hover .btn {
-  border-color: var(--color-accent) !important;
-  color: var(--color-accent) !important;
+.product-card .btn:hover {
+  background: var(--nb-primary-dark, #7A1015) !important;
+  border-color: #1E1E1E !important;
+  color: #fff !important;
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+.product-card .btn:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
 }
 
 /* ==========================================================================
