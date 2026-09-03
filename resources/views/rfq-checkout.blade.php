@@ -3,14 +3,14 @@
 @section('title', 'Pengajuan Penawaran | PT. Prolabios Mitra Analitika')
 
 @section('content')
-<section class="py-5" style="background-color: var(--color-bg-body, #050709); min-height: 85vh; padding-top: 140px !important; padding-bottom: 80px !important;">
+<section class="py-5" style="background-color: var(--nb-bg); min-height: 85vh; padding-top: 140px !important; padding-bottom: 80px !important;">
   <div class="container py-4">
 
     <div class="max-w-4xl mx-auto" style="max-width: 960px;">
       <div class="mb-5 text-center">
-        <span class="editorial-page-label mb-3">Formulir Pengajuan Penawaran</span>
+        <span class="nb-badge mb-3">FORMULIR PENAWARAN</span>
         <h1 class="profil-section-title mb-2">Lengkapi Data Pengajuan Penawaran</h1>
-        <p class="profil-body-text" style="max-width: 600px; margin: auto;">Data ini digunakan oleh Tim Sales Prolabios untuk menghubungi Anda &amp; memberikan penawaran resmi.</p>
+        <p class="profil-body-text" style="max-width: 600px; margin: auto; color: var(--nb-muted);">Data ini digunakan oleh Tim Sales Prolabios untuk menghubungi Anda &amp; memberikan penawaran resmi.</p>
       </div>
 
       @if($errors->any())
@@ -162,22 +162,36 @@
 
 <style>
   .rfq-input {
-    background-color: #070708 !important;
-    border: 1px solid var(--color-border) !important;
-    color: #ffffff !important;
+    background-color: #FFFFFF !important;
+    border: var(--nb-border) !important;
+    color: var(--nb-ink) !important;
     font-size: 0.9rem !important;
     padding: 10px 14px !important;
-    border-radius: 6px !important;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+    border-radius: var(--nb-radius-sm) !important;
+    box-shadow: 2px 2px 0 rgba(30,30,30,0.12) !important;
+    transition: box-shadow 0.12s ease !important;
   }
   .rfq-input::placeholder {
-    color: rgba(255, 255, 255, 0.25) !important;
+    color: var(--nb-muted) !important;
+    opacity: 0.6;
   }
   .rfq-input:focus {
-    background-color: #0e0e10 !important;
-    border-color: var(--color-accent) !important;
-    box-shadow: 0 0 0 3px rgba(255, 73, 80, 0.12) !important;
-    color: #ffffff !important;
+    border-color: var(--nb-primary) !important;
+    box-shadow: 3px 3px 0 var(--nb-ink) !important;
+    outline: none !important;
+    color: var(--nb-ink) !important;
+  }
+  .kontak-form-label {
+    color: var(--nb-ink) !important;
+    font-weight: 700 !important;
+    font-family: var(--font-display) !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 6px !important;
+  }
+  .cart-sidebar-title {
+    color: var(--nb-ink) !important;
+    font-family: var(--font-display) !important;
+    font-weight: 700 !important;
   }
 </style>
 @endsection

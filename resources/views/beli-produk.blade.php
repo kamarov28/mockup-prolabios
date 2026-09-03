@@ -30,42 +30,42 @@
 
             <!-- Back to description link -->
             <div class="mb-4">
-              <a href="{{ product_url($product) }}" class="text-decoration-none" style="color: var(--color-text-muted); font-size: 0.82rem;">
+              <a href="{{ product_url($product) }}" class="nb-btn nb-btn-ghost text-decoration-none" style="font-size: 0.82rem; padding: 6px 14px;">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Deskripsi &amp; Spesifikasi Produk
               </a>
             </div>
 
             <!-- Compact Product Header -->
-            <div class="d-flex align-items-center gap-4 mb-4 pb-4" style="border-bottom: 1px solid var(--color-border);">
-              <div style="width: 90px; height: 90px; flex-shrink: 0; border: 1px solid var(--color-border); background-color: #070708; padding: 8px;">
+            <div class="card p-4 d-flex flex-row align-items-center gap-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+              <div style="width: 100px; height: 100px; flex-shrink: 0; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); background-color: var(--nb-bg-soft); padding: 8px;">
                 <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100 h-100" style="object-fit: contain;" loading="lazy" decoding="async">
               </div>
               <div>
                 @if(!empty($product['catalog']))
-                  <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: var(--color-accent);">Cat. No: {{ $product['catalog'] }}</span>
+                  <div class="product-cat-code mb-1">Cat. No: {{ $product['catalog'] }}</div>
                 @endif
-                <h1 class="profil-section-title" style="font-size: 1.4rem !important; margin: 4px 0 0 !important;">{{ $product['title'] }}</h1>
+                <h1 class="profil-section-title" style="font-size: 1.5rem !important; margin: 4px 0 0 !important; color: var(--nb-ink);">{{ $product['title'] }}</h1>
               </div>
             </div>
 
             <!-- Price Box -->
-            <div class="p-4 mb-4 rounded border border-secondary border-opacity-20" style="background: rgba(255,255,255,0.02);">
-              <span class="text-muted small d-block mb-1">Harga Estimasi / Penawaran per Unit:</span>
-              <strong class="fs-2 d-block mb-3" style="color: var(--color-accent);">
+            <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+              <span class="text-muted small d-block mb-1 fw-medium">Harga Estimasi / Penawaran per Unit:</span>
+              <strong class="fs-2 d-block mb-3" style="color: var(--nb-primary); font-family: var(--font-display); font-weight: 700;">
                 {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
               </strong>
 
               @if($stock > 0)
-                <span class="badge bg-success bg-opacity-20 text-success px-3 py-2">
+                <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="background: #e6f4ea; color: #137333; border-color: #137333;">
                   <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
                 </span>
               @else
-                <span class="badge bg-warning bg-opacity-20 text-warning px-3 py-2">
+                <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="background: var(--nb-accent); color: var(--nb-ink);">
                   <i class="bi bi-clock-history me-1"></i> Stok kosong — tersedia sebagai pesanan khusus
                 </span>
               @endif
 
-              <p class="profil-body-text small mt-3 mb-0" style="opacity: 0.75;">
+              <p class="small mt-3 mb-0" style="color: var(--nb-muted); line-height: 1.6;">
                 Harga di atas bersifat estimasi awal. Harga &amp; diskon final akan dikonfirmasi oleh Tim Sales kami melalui Surat Penawaran Resmi (PDF) setelah pengajuan Anda ditinjau.
               </p>
             </div>
@@ -76,38 +76,38 @@
               <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
               <input type="hidden" name="title" value="{{ $product['title'] }}">
 
-              <div class="d-flex flex-wrap align-items-end gap-4 mb-4">
+              <div class="d-flex flex-wrap align-items-end gap-3 mb-4">
                 <div>
-                  <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 1.5px; color: var(--color-text-muted); font-family: var(--font-headline);">Jumlah Unit</label>
-                  <div class="d-inline-flex align-items-center" style="border: 1px solid var(--color-border); background: var(--color-surface); height: 46px; border-radius: 4px;">
-                    <button type="button" class="btn border-0 px-3 h-100 text-muted d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
-                      <i class="bi bi-dash-lg" style="font-size: 0.85rem;"></i>
+                  <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.72rem; letter-spacing: 1px; color: var(--nb-ink); font-family: var(--font-mono);">Jumlah Unit</label>
+                  <div class="d-inline-flex align-items-center" style="border: 2px solid var(--nb-ink); background: #FFFFFF; height: 48px; border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                    <button type="button" class="btn border-0 px-3 h-100 text-dark d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
+                      <i class="bi bi-dash-lg fw-bold"></i>
                     </button>
-                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 0.95rem; font-family: var(--font-headline); outline: none; box-shadow: none;" data-stock="{{ $stock }}">
-                    <button type="button" class="btn border-0 px-3 h-100 text-muted d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
-                      <i class="bi bi-plus-lg" style="font-size: 0.85rem;"></i>
+                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 1.05rem; font-family: var(--font-mono); outline: none; box-shadow: none; color: var(--nb-ink);" data-stock="{{ $stock }}">
+                    <button type="button" class="btn border-0 px-3 h-100 text-dark d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
+                      <i class="bi bi-plus-lg fw-bold"></i>
                     </button>
                   </div>
                 </div>
 
-                <button type="submit" class="kontak-submit-btn border-0 cursor-pointer flex-grow-1" style="height: 46px; margin: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; letter-spacing: 1px;">
-                  <i class="bi bi-cart-plus me-2" style="font-size: 1.1rem;"></i> Tambah ke Keranjang Penawaran
+                <button type="submit" class="nb-btn nb-btn-primary flex-grow-1" style="height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                  <i class="bi bi-cart-plus me-2" style="font-size: 1.15rem;"></i> Tambah ke Keranjang Penawaran
                 </button>
               </div>
 
               <!-- Live Indent Notice -->
-              <div id="indent-notice" class="p-3 rounded border border-warning border-opacity-30 bg-warning bg-opacity-10 text-warning small" style="display: none;">
-                <i class="bi bi-info-circle me-1"></i>
+              <div id="indent-notice" class="p-3 mb-3" style="display: none; background: var(--nb-accent); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink); color: var(--nb-ink); font-size: 0.85rem;">
+                <i class="bi bi-info-circle-fill me-1"></i>
                 Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
               </div>
             </form>
 
-            <div class="mt-4">
-              <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
-                Kembali ke Katalog <i class="bi bi-arrow-right ms-2"></i>
+            <div class="mt-4 pt-2 d-flex flex-wrap gap-2">
+              <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost text-decoration-none" style="font-size: 0.82rem; padding: 8px 16px;">
+                <i class="bi bi-arrow-left me-1"></i> Katalog Produk
               </a>
-              <a href="{{ route('cart.index') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none ms-2" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
-                <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
+              <a href="{{ route('cart.index') }}" class="nb-btn nb-btn-ghost text-decoration-none" style="font-size: 0.82rem; padding: 8px 16px; background: var(--nb-accent); color: var(--nb-ink) !important;">
+                <i class="bi bi-cart me-1"></i> Lihat Keranjang Penawaran
               </a>
             </div>
 

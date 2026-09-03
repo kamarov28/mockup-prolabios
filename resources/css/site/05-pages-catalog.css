@@ -6,102 +6,120 @@
   position: relative;
 }
 .produk-search-wrap input {
-  background-color: rgba(255,255,255,0.03) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0 !important;
-  color: rgba(255,255,255,0.85) !important;
+  background-color: var(--nb-card, #FFFFFF) !important;
+  border: var(--nb-border, 2px solid #1E1E1E) !important;
+  border-radius: var(--nb-radius, 6px) !important;
+  color: var(--nb-ink, #1E1E1E) !important;
   font-family: var(--font-body) !important;
-  font-size: 0.88rem !important;
-  padding: 10px 16px 10px 42px !important;
-  transition: border-color 0.3s ease !important;
-  box-shadow: none !important;
+  font-size: 0.92rem !important;
+  padding: 12px 18px 12px 46px !important;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease !important;
+  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E) !important;
   width: 100%;
 }
 .produk-search-wrap input:focus {
-  border-color: rgba(255,255,255,0.25) !important;
+  border-color: var(--nb-primary, #A6171C) !important;
   outline: none !important;
-  box-shadow: none !important;
+  box-shadow: 4px 4px 0 var(--nb-ink, #1E1E1E) !important;
 }
 .produk-search-wrap i {
   position: absolute;
-  left: 14px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255,255,255,0.3);
-  font-size: 0.9rem;
+  color: var(--nb-ink, #1E1E1E) !important;
+  font-size: 1rem;
 }
 .produk-category-title {
-  font-family: var(--font-headline) !important;
-  font-size: 1.5rem !important;
+  font-family: var(--font-display, var(--font-headline)) !important;
+  font-size: 1.75rem !important;
   font-weight: 700 !important;
-  letter-spacing: -0.5px;
-  color: #fff !important;
+  letter-spacing: -0.03em;
+  color: var(--nb-ink, #1E1E1E) !important;
   margin-bottom: 4px;
 }
 .produk-category-subtitle {
   font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  color: var(--nb-muted, #5A5A5A) !important;
 }
 
 /* ==========================================================================
-   Editorial Blog Card Overrides (Informasi Page)
+   Editorial Blog Card Overrides (Informasi Page - Soft Neo-Brutalism)
    ========================================================================== */
 .blog-card {
-  background-color: rgba(255, 255, 255, 0.02) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0px !important; /* Sharp corners */
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  background: var(--nb-card, #FFFFFF) !important;
+  border: var(--nb-border, 2px solid #1E1E1E) !important;
+  border-radius: var(--nb-radius-lg, 8px) !important;
+  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  overflow: hidden;
 }
-[data-theme="light"] .blog-card,
-[data-theme="light"] .blog-card:hover {
-  /* inherits base rules */
+.blog-card:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+}
+.blog-card:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
+.blog-card-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 2px solid #1E1E1E;
+  background: var(--nb-bg-soft, #FEFEFE);
+  height: 220px;
 }
 .blog-card-img-wrap img {
-  filter: grayscale(80%);
-  transition: filter 0.4s ease;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  filter: grayscale(30%);
+  transition: filter 0.2s ease !important;
 }
 .blog-card:hover .blog-card-img-wrap img {
   filter: grayscale(0%);
 }
 .blog-card-body {
   background-color: transparent !important;
-  padding: 24px !important;
+  padding: 20px !important;
 }
 .blog-card-title a {
-  font-family: var(--font-headline) !important;
-  color: #fff !important;
+  font-family: var(--font-display, 'Space Grotesk', sans-serif) !important;
+  color: var(--nb-ink, #1E1E1E) !important;
   font-weight: 700 !important;
-  transition: color 0.3s ease;
+  font-size: 1.05rem !important;
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 .blog-card:hover .blog-card-title a {
-  color: var(--color-accent) !important;
+  color: var(--nb-primary, #A6171C) !important;
 }
 .blog-card-text {
-  font-family: var(--font-body) !important;
-  color: var(--color-text-muted) !important;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif) !important;
+  color: var(--nb-muted, #5A5A5A) !important;
   font-size: 0.85rem !important;
   line-height: 1.6 !important;
 }
 .blog-card-category {
-  font-family: var(--font-headline) !important;
-  background-color: transparent !important;
-  border: 1px solid var(--color-accent) !important;
-  color: var(--color-accent) !important;
-  border-radius: 0px !important;
-  font-size: 0.65rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 1.5px !important;
-  padding: 4px 10px !important;
+  display: inline-block;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  background-color: var(--nb-bg-soft, #FEFEFE) !important;
+  border: 1.5px solid #1E1E1E !important;
+  color: var(--nb-ink, #1E1E1E) !important;
+  border-radius: var(--nb-radius-sm, 4px) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px !important;
+  padding: 2px 8px !important;
 }
-.blog-card-date {
-  border-radius: 0px !important;
-  background-color: var(--color-accent) !important;
-  box-shadow: none !important;
-  font-family: var(--font-headline) !important;
+.blog-card-date-inline {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
   font-size: 0.72rem !important;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600 !important;
+  color: var(--nb-muted, #5A5A5A) !important;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ==========================================================================
@@ -124,7 +142,7 @@
   box-shadow: 0 0 0 #1E1E1E !important;
 }
 .product-card .img-wrap {
-  background-color: var(--nb-bg-soft, #EDE8E0) !important;
+  background-color: var(--nb-bg-soft, #FEFEFE) !important;
   border-bottom: 2px solid #1E1E1E !important;
   border-radius: 0px !important;
   padding: 0 !important;
@@ -189,23 +207,35 @@
    Editorial Table Overrides (Sektor Page)
    ========================================================================== */
 .custom-table {
-  background-color: transparent !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0px !important; /* Sharp corners */
+  background-color: var(--nb-card, #FFFFFF) !important;
+  border: var(--nb-border, 2px solid #1E1E1E) !important;
+  border-radius: var(--nb-radius-lg, 8px) !important;
+  overflow: hidden;
+  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E) !important;
 }
 .custom-table th {
-  background-color: var(--color-bg-gray) !important;
-  color: var(--color-text-muted) !important;
-  border-bottom: 1px solid var(--color-border) !important;
+  background-color: var(--nb-bg-soft, #FEFEFE) !important;
+  color: var(--nb-ink, #1E1E1E) !important;
+  font-family: var(--font-display, var(--font-headline)) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #1E1E1E !important;
+  padding: 14px 18px !important;
 }
 .custom-table td {
-  background-color: transparent !important;
-  color: var(--color-text-main) !important;
-  border-bottom: 1px solid var(--color-border) !important;
+  background-color: var(--nb-card, #FFFFFF) !important;
+  color: var(--nb-ink, #1E1E1E) !important;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.12) !important;
+  padding: 14px 18px !important;
+  vertical-align: middle;
+}
+.custom-table tr:last-child td {
+  border-bottom: none !important;
 }
 .custom-table tr:hover td {
-  background-color: var(--color-bg-gray) !important;
-  color: var(--color-text-main) !important;
+  background-color: rgba(241, 192, 69, 0.08) !important;
 }
 
 /* 9. Pagination Styling */

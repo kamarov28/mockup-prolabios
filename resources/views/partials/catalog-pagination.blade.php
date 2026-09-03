@@ -6,17 +6,17 @@
     </div>
 
     {{-- Pagination Buttons --}}
-    <ul class="pagination pagination-sm mb-0 gap-1">
+    <ul class="pagination pagination-sm mb-0">
       {{-- Previous Page Link --}}
       @if ($paginator->onFirstPage())
         <li class="page-item disabled" aria-disabled="true" aria-label="Halaman Sebelumnya">
-          <span class="page-link px-3 py-2 rounded-0">
+          <span class="page-link">
             <i class="bi bi-chevron-left me-1"></i> Prev
           </span>
         </li>
       @else
         <li class="page-item">
-          <a class="page-link px-3 py-2 rounded-0" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Halaman Sebelumnya">
+          <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Halaman Sebelumnya">
             <i class="bi bi-chevron-left me-1"></i> Prev
           </a>
         </li>
@@ -26,7 +26,7 @@
       @foreach ($elements as $element)
         {{-- "Three Dots" Separator --}}
         @if (is_string($element))
-          <li class="page-item disabled" aria-disabled="true"><span class="page-link bg-transparent text-muted border-0 px-2 py-2">{{ $element }}</span></li>
+          <li class="page-item disabled" aria-disabled="true"><span class="page-link bg-transparent text-muted border-0">{{ $element }}</span></li>
         @endif
 
         {{-- Array Of Links --}}
@@ -34,11 +34,11 @@
           @foreach ($element as $page => $url)
             @if ($page == $paginator->currentPage())
               <li class="page-item active" aria-current="page">
-                <span class="page-link bg-danger text-white border-danger px-3 py-2 fw-bold rounded-0">{{ $page }}</span>
+                <span class="page-link">{{ $page }}</span>
               </li>
             @else
               <li class="page-item">
-                <a class="page-link px-3 py-2 rounded-0" href="{{ $url }}">{{ $page }}</a>
+                <a class="page-link" href="{{ $url }}">{{ $page }}</a>
               </li>
             @endif
           @endforeach
@@ -48,13 +48,13 @@
       {{-- Next Page Link --}}
       @if ($paginator->hasMorePages())
         <li class="page-item">
-          <a class="page-link px-3 py-2 rounded-0" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Halaman Berikutnya">
+          <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Halaman Berikutnya">
             Next <i class="bi bi-chevron-right ms-1"></i>
           </a>
         </li>
       @else
         <li class="page-item disabled" aria-disabled="true" aria-label="Halaman Berikutnya">
-          <span class="page-link px-3 py-2 rounded-0">
+          <span class="page-link">
             Next <i class="bi bi-chevron-right ms-1"></i>
           </span>
         </li>

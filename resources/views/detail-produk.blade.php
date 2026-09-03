@@ -59,11 +59,12 @@
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
             @endphp
 
-            <div style="border-bottom: 1px solid var(--color-border); padding-bottom: 24px; margin-bottom: 40px;">
-              <h1 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
+            <div style="border-bottom: 2px solid var(--nb-ink); padding-bottom: 24px; margin-bottom: 40px;">
+              <h1 class="profil-section-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
               @if(!empty($product['category']))
                 <p class="profil-body-text mb-0 text-capitalize">
-                  <span style="color: var(--color-accent); font-family: var(--font-headline); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; margin-right: 8px;">Kategori:</span> {{ str_replace('-', ' ', $product['category']) }}
+                  <span class="nb-badge-sm me-2">Kategori</span>
+                  <span class="fw-semibold text-dark">{{ str_replace('-', ' ', $product['category']) }}</span>
                 </p>
               @endif
             </div>
@@ -87,14 +88,14 @@
               <div class="col-md-7">
                 <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
                   @if(!empty($product['catalog']))
-                    <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--color-accent); border: 1px solid var(--color-accent); padding: 6px 14px; display: inline-block;">
-                      No. Katalog: {{ $product['catalog'] }}
-                    </span>
+                    <div class="product-cat-code" style="font-size: 0.8rem !important; padding: 6px 12px !important;">
+                      CAT. {{ $product['catalog'] }}
+                    </div>
                   @endif
 
                   @if(!empty($product->principal))
-                    <span style="font-family: var(--font-headline); font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #ffffff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px;">
-                      <i class="bi bi-building" style="color: var(--color-accent);"></i> {{ $product->principal->name }}
+                    <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="font-size: 0.75rem; padding: 5px 10px;">
+                      <i class="bi bi-building text-primary"></i> {{ $product->principal->name }}
                       @if(!empty($product->principal->address))
                         <span class="text-muted ms-1">({{ $product->principal->address }})</span>
                       @endif
@@ -102,19 +103,21 @@
                   @endif
                 </div>
 
-                <div class="mt-4">
-                  <h3 class="layanan-feature-title" style="font-size: 1rem !important; margin-bottom: 16px;">Deskripsi / Aplikasi</h3>
-                  <div class="profil-body-text" style="line-height: 1.9;">
+                <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+                  <h3 class="layanan-feature-title mb-3" style="font-size: 1.1rem !important; font-family: var(--font-display); font-weight: 700; color: var(--nb-ink); border-bottom: 2px solid rgba(30,30,30,0.1); padding-bottom: 8px;">
+                    <i class="bi bi-file-earmark-text text-primary me-2"></i>Deskripsi & Spesifikasi Produk
+                  </h3>
+                  <div class="profil-body-text" style="line-height: 1.8; color: var(--nb-ink);">
                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                   </div>
                 </div>
 
-                <div class="mt-5 pt-4 d-flex flex-wrap gap-3" style="border-top: 1px solid var(--color-border);">
-                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="kontak-submit-btn border-0 cursor-pointer text-decoration-none d-inline-flex align-items-center justify-content-center" style="height: 46px; margin: 0; padding: 0 28px; font-size: 0.85rem; letter-spacing: 1px;">
-                    <i class="bi bi-cart-check me-2" style="font-size: 1.1rem;"></i> Lihat Harga & Beli Produk Ini
+                <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
+                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 24px; font-size: 0.88rem;">
+                    <i class="bi bi-cart-check me-2" style="font-size: 1.15rem;"></i> Permintaan Penawaran & Harga
                   </a>
-                  <a href="{{ url('/produk') }}" class="profil-cta-btn border-0 d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 46px; padding: 0 24px; font-size: 0.78rem;">
-                    Kembali <i class="bi bi-arrow-right ms-2"></i>
+                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem;">
+                    <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
                   </a>
                 </div>
               </div>

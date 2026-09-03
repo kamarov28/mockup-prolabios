@@ -63,34 +63,55 @@ export function initHeroBgSlideshow() {
     const inSlide = slides[next];
     const g = getGsap();
 
+    let dir = next > current ? 1 : -1;
+    if (current === slides.length - 1 && next === 0) dir = 1;
+    if (current === 0 && next === slides.length - 1) dir = -1;
+
     if (g) {
       g.killTweensOf([outSlide, inSlide]);
 
-      let dir = next > current ? 1 : -1;
-      if (current === slides.length - 1 && next === 0) dir = 1;
-      if (current === 0 && next === slides.length - 1) dir = -1;
-
-      g.set(inSlide, { opacity: 0, scale: 1.04, xPercent: dir * 5, zIndex: 3 });
+      g.set(inSlide, { opacity: 1, xPercent: dir * 100, zIndex: 3 });
       g.set(outSlide, { zIndex: 2 });
 
+      // Hard mechanical push (Neo-Brutalist snappy horizontal slide)
       g.to(outSlide, {
-        opacity: 0,
-        xPercent: -dir * 5,
-        scale: 1.0,
-        duration: 0.9,
-        ease: 'power2.inOut',
+        xPercent: -dir * 30,
+        opacity: 0.4,
+        duration: 0.55,
+        ease: 'power3.inOut',
         onComplete: function () {
-          g.set(outSlide, { zIndex: 1, xPercent: 0 });
+          g.set(outSlide, { zIndex: 1, opacity: 0, xPercent: 0 });
         },
       });
 
       g.to(inSlide, {
-        opacity: 1,
         xPercent: 0,
-        scale: 1.0,
-        duration: 0.9,
-        ease: 'power2.inOut',
+        opacity: 1,
+        duration: 0.55,
+        ease: 'power3.inOut',
       });
+    } else {
+      // Native CSS fallback: Mechanical sliding classes
+      outSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
+      inSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
+
+      inSlide.style.zIndex = '3';
+      outSlide.style.zIndex = '2';
+
+      inSlide.style.transform = `translateX(${dir * 100}%)`;
+      inSlide.style.opacity = '1';
+      void inSlide.offsetWidth; // force reflow
+
+      inSlide.style.transform = 'translateX(0%)';
+      outSlide.style.transform = `translateX(${-dir * 30}%)`;
+      outSlide.style.opacity = '0';
+
+      setTimeout(() => {
+        outSlide.style.zIndex = '1';
+        outSlide.style.transform = '';
+        outSlide.style.transition = '';
+        inSlide.style.transition = '';
+      }, 550);
     }
 
     slides[current].classList.remove('active', 'is-active');

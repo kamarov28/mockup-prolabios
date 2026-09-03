@@ -6,50 +6,94 @@
 @section('canonical_url', url('/sektor'))
 
 @section('content')
-  <!-- Editorial Page Header -->
-  <div class="editorial-page-header">
+  <!-- Page Header (Soft Neo-Brutalism Hero Banner, follows Profil & Katalog) -->
+  <section class="profil-hero-banner">
     <div class="container">
-      <span class="editorial-page-label">Sektor Industri</span>
-      <h1 class="editorial-page-title">Sektor Fokus</h1>
-      <p class="editorial-page-subtitle">Melayani berbagai sektor industri dengan solusi analisis yang andal</p>
+      <div class="row align-items-center">
+        <div class="col-lg-9">
+          <span class="nb-badge">
+            <i class="bi bi-diagram-3 me-1"></i> SEKTOR INDUSTRI
+          </span>
+          <h1 class="profil-main-title">
+            Solusi Pengujian &amp; Analisis Lintas Sektor
+          </h1>
+          <p class="profil-main-subtitle">
+            Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Fast Stats Strip -->
+      <div class="profil-stats-strip">
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Multi-Sektor</div>
+          <div class="profil-stat-label">Farmasi, F&amp;B, Lingkungan &amp; Riset</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Standar ISO/USP</div>
+          <div class="profil-stat-label">Kepatuhan Farmakope &amp; Regulasi Mutu</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Aplikasi Khusus</div>
+          <div class="profil-stat-label">Rekomendasi Reagen &amp; Instrumen Terarah</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Dukungan Teknis</div>
+          <div class="profil-stat-label">Konsultasi Spesifikasi &amp; RFQ Institusi</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- Sektor Content -->
-  <section class="section-main" id="sektor-nav">
+  <section class="section-spacious nb-section" id="sektor-nav">
     <div class="container">
-      <div class="row g-5">
+      <div class="row g-4 g-lg-5 align-items-start">
 
-        <!-- Sidebar -->
-        <div class="col-lg-3 col-md-4" id="sektor-sidebar">
+        <!-- Sidebar (Left, Order 1 on Desktop to browse sectors easily) -->
+        <div class="col-lg-4 col-md-5 order-2 order-md-1" id="sektor-sidebar">
           {{-- $activeSector is passed from PageController::sektor() --}}
 
-          <div class="mb-5">
-            <h3 class="profil-sidebar-title">Pilih Sektor</h3>
+          <!-- Sector Selector Card -->
+          <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <h3 class="profil-sidebar-title mb-3">
+              <i class="bi bi-grid-fill me-2 text-primary"></i> Pilih Sektor Industri
+            </h3>
             <nav class="layanan-sidebar-nav">
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
                   <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav"
                      class="layanan-sidebar-link {{ $activeSector == $sec['id'] ? 'is-active' : '' }}"
                      data-sector-id="{{ $sec['id'] }}">
-                    {{ $sec['name'] }}
+                    <span>{{ $sec['name'] }}</span>
+                    <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
                   </a>
                 @endforeach
               @else
-                <a href="#" class="layanan-sidebar-link is-active">Brewing</a>
+                <a href="#" class="layanan-sidebar-link is-active">
+                  <span>Brewing</span>
+                  <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                </a>
               @endif
             </nav>
           </div>
 
-          <div class="profil-cta-box d-none d-md-block">
-            <h3 class="profil-sidebar-title">Mencari solusi yang sesuai kebutuhan?</h3>
-            <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan industri Anda dengan tim teknis kami.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
+          <!-- Sidebar Card 2: B2B Consultation CTA Box -->
+          <div class="profil-cta-box p-4" style="background: var(--nb-primary, #A6171C); color: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 8px; box-shadow: 4px 4px 0 #1E1E1E;">
+            <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">B2B CONSULTATION</span>
+            <h3 class="profil-sidebar-title" style="color: #FFFFFF !important; border-bottom-color: rgba(255,255,255,0.3) !important;">Butuh Solusi Spesifik?</h3>
+            <p style="font-size: 0.88rem; color: #FFFFFF !important; margin-bottom: 20px; line-height: 1.6;">Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
+            <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-ghost w-100 justify-content-center mb-2" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
+              Konsultasi Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+            <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="background: #FFFFFF; color: #1E1E1E !important; font-size: 0.82rem;">
+              <i class="bi bi-box-seam me-1"></i> Jelajahi Seluruh Katalog
+            </a>
           </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-9 col-md-8" id="sektor-main">
+        <!-- Main Content (Right, Order 2 on Desktop) -->
+        <div class="col-lg-8 col-md-7 order-1 order-md-2" id="sektor-main">
           @php
             $currentData = null;
             if (isset($sectors) && count($sectors) > 0) {
@@ -81,108 +125,157 @@
           @endphp
 
           @if($currentData)
-            <!-- Sector Hero Image -->
-            <div class="profil-hero-img mb-5">
-              <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 480px;" loading="lazy" decoding="async">
+            <!-- Sector Detail Card -->
+            <div class="card p-4 p-md-5 mb-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+              <!-- Sector Hero Image -->
+              <div class="profil-hero-img mb-4">
+                <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 440px;" loading="lazy" decoding="async">
+              </div>
+
+              <!-- Sector Title & Description -->
+              <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <span class="nb-badge-sm">
+                  <i class="bi bi-tag-fill me-1 text-primary"></i> Sektor Terpilih
+                </span>
+                <span class="nb-mono text-muted small">AKREDITASI &amp; REGULASI INDUSTRI</span>
+              </div>
+
+              <h2 class="profil-section-title mb-3">{{ $currentData['name'] }}</h2>
+              @foreach($descriptionParagraphs as $desc)
+                <p class="profil-body-text mb-3" style="color: var(--nb-ink); line-height: 1.7;">{!! \App\Services\DataService::sanitizeHtml($desc) !!}</p>
+              @endforeach
+
+              <div class="pt-3 border-top d-flex flex-wrap gap-2 mt-4" style="border-color: rgba(30,30,30,0.12) !important;">
+                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Instrumen Terkalibrasi</span>
+                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Jaminan COA &amp; MSDS</span>
+                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Penanganan Rantai Dingin</span>
+              </div>
             </div>
 
-            <!-- Sector Title & Description -->
-            <h2 class="profil-section-title">{{ $currentData['name'] }}</h2>
-            @foreach($descriptionParagraphs as $desc)
-              <p class="profil-body-text mb-4">{!! \App\Services\DataService::sanitizeHtml($desc) !!}</p>
-            @endforeach
+            <!-- Product Table Card -->
+            <div class="mb-5">
+              <div class="mb-4 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
+                <h3 class="profil-section-title mb-1" style="font-size: 1.45rem !important;">
+                  Daftar Produk &amp; Instrumen Sektor {{ $currentData['name'] }}
+                </h3>
+                <span class="text-muted d-block" style="font-family: var(--font-body); font-size: 0.9rem;">
+                  Rangkaian instrumen, reagen, dan perlengkapan khusus untuk operasional sektor ini.
+                </span>
+              </div>
 
-            <hr style="border-color: var(--color-border); margin: 48px 0;">
+              <!-- Mobile Swipe Indicator -->
+              <div class="d-md-none text-end mb-2">
+                <span class="nb-badge-sm" style="background: var(--nb-accent); color: var(--nb-ink);">
+                  <i class="bi bi-arrow-left-right me-1"></i> Geser Tabel
+                </span>
+              </div>
 
-            <!-- Product Table -->
-            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Jelajahi Produk Kami</h3>
-            <p class="profil-body-text mb-4">Kami menawarkan berbagai produk khusus untuk mendukung operasional, riset, dan analisis di sektor <strong style="color: rgba(255,255,255,0.85);">{{ $currentData['name'] }}</strong>.</p>
+              <div class="table-responsive" id="sektor-product-table-wrap">
+                <table class="table custom-table align-middle mb-0" style="min-width: 650px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 22%;">Katalog</th>
+                      <th style="width: 38%;">Produk</th>
+                      <th style="width: 40%;">Aplikasi &amp; Fungsi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @php $hasProducts = false; @endphp
+                    @if(isset($products) && count($products) > 0)
+                      @foreach($products as $prod)
+                        @php $hasProducts = true; @endphp
+                        <tr>
+                          <td>
+                            @if(!empty($prod['catalog']))
+                              <span class="product-cat-code" style="font-size: 0.72rem;">CAT. {{ $prod['catalog'] }}</span>
+                            @else
+                              <span class="text-muted small">-</span>
+                            @endif
+                          </td>
+                          <td>
+                            <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">
+                              {{ $prod['title'] }}
+                            </a>
+                          </td>
+                          <td style="color: var(--nb-muted); font-size: 0.88rem; line-height: 1.5;">
+                            {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 140) }}
+                          </td>
+                        </tr>
+                      @endforeach
+                    @endif
+                  </tbody>
+                </table>
+              </div>
 
-            <!-- Mobile Swipe Indicator -->
-            <div class="d-md-none text-end mb-2">
-              <span class="badge" style="background: rgba(255, 73, 80, 0.08); color: var(--color-accent); border: 1px solid rgba(255, 73, 80, 0.2); font-size: 0.68rem; font-family: var(--font-headline); letter-spacing: 0.5px; padding: 6px 12px; border-radius: 100px;">
-                <i class="bi bi-arrow-left-right me-1"></i> Geser Tabel
-              </span>
-            </div>
-
-            <div class="table-responsive mt-2" id="sektor-product-table-wrap">
-              <table class="table custom-table align-middle" style="min-width: 650px;">
-                <thead>
-                  <tr>
-                    <th>Katalog</th>
-                    <th>Produk</th>
-                    <th>Aplikasi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @php $hasProducts = false; @endphp
-                  @if(isset($products) && count($products) > 0)
-                    @foreach($products as $prod)
-                      @php $hasProducts = true; @endphp
-                      <tr>
-                        <td style="color: var(--color-text-muted); font-size: 0.82rem;">{{ $prod['catalog'] ?? '-' }}</td>
-                        <td>
-                          <a href="{{ product_url($prod) }}" class="text-decoration-none fw-semibold" style="color: var(--color-accent);">
-                            {{ $prod['title'] }}
-                          </a>
-                        </td>
-                        <td style="color: var(--color-text-muted); font-size: 0.88rem;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 150) }}</td>
-                      </tr>
-                    @endforeach
-                  @endif
-                </tbody>
-              </table>
-            </div>
-
-            <div id="sektor-pagination-or-empty">
-              @if(!$hasProducts)
-                <p style="color: var(--color-text-muted); font-size: 0.9rem; padding: 16px 0; border-top: 1px solid var(--color-border);">
-                  Belum ada produk spesifik untuk sektor ini. <a href="{{ url('/produk') }}" style="color: var(--color-accent);">Lihat semua produk kami</a>.
-                </p>
-              @else
-                <div class="d-flex justify-content-center mt-4">
-                  {{ $products->appends(request()->except('page'))->fragment('sektor-nav')->links('pagination::bootstrap-5') }}
-                </div>
-              @endif
-            </div>
-
-            <hr style="border-color: var(--color-border); margin: 48px 0;">
-
-            <!-- Related Products -->
-            <h3 class="profil-section-title" style="font-size: 1.4rem !important;">Produk Terkait</h3>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-2" id="sektor-related">
-              @php
-                $related = $relatedProducts ?? collect();
-                if ($related->isEmpty() && isset($products) && count($products) > 0) {
-                    $related = collect($products)->take(3);
-                }
-              @endphp
-              @foreach($related as $prod)
-                <div class="col">
-                  <div class="card h-100 product-card border-0">
-                    <div class="img-wrap">
-                      <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Sektor" loading="lazy" decoding="async">
-                    </div>
-                    <div class="card-body p-3">
-                      @if(!empty($prod['catalog']))
-                        <div style="font-size: 0.72rem; color: var(--color-text-muted); margin-bottom: 6px; font-family: var(--font-headline); text-transform: uppercase; letter-spacing: 1px;">Cat. {{ $prod['catalog'] }}</div>
-                      @endif
-                      <h4 class="card-title fs-6 fw-bold">
-                        <a href="{{ product_url($prod) }}" class="text-decoration-none" style="color: #fff;">{{ $prod['title'] }}</a>
-                      </h4>
-                      <p style="font-size: 0.78rem; color: var(--color-text-muted); margin-top: 8px; margin-bottom: 16px;">{{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 80) }}</p>
-                      <a href="{{ product_url($prod) }}" class="profil-cta-btn" style="font-size: 0.72rem;">Lihat Detail <i class="bi bi-arrow-right"></i></a>
+              <div id="sektor-pagination-or-empty">
+                @if(!$hasProducts)
+                  <div class="text-center p-5 card mt-3" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-sm);">
+                    <i class="bi bi-inbox fs-1 text-muted mb-2"></i>
+                    <p class="mb-2 fw-semibold" style="color: var(--nb-ink);">Belum ada produk terdaftar untuk sektor ini.</p>
+                    <p class="text-muted small mb-3">Silakan hubungi tim kami untuk ketersediaan katalog indent atau jelajahi katalog utama.</p>
+                    <div>
+                      <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost" style="font-size: 0.82rem;">
+                        <i class="bi bi-box-seam me-1"></i> Buka Katalog Utama
+                      </a>
                     </div>
                   </div>
-                </div>
-              @endforeach
+                @else
+                  <div class="d-flex justify-content-center mt-4">
+                    {{ $products->appends(request()->except('page'))->fragment('sektor-nav')->links('partials.catalog-pagination') }}
+                  </div>
+                @endif
+              </div>
             </div>
 
-            <!-- Mobile-only CTA Box -->
-            <div class="profil-cta-box d-md-none mt-5">
-              <h3 class="profil-sidebar-title">Mencari solusi yang sesuai kebutuhan?</h3>
-              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan industri Anda dengan tim teknis kami.</p>
-              <a href="{{ url('/kontak') }}?subjek=consultation" class="profil-cta-btn">Konsultasi Gratis <i class="bi bi-arrow-right"></i></a>
+            <!-- Related Products Section -->
+            <div class="mt-5 pt-3">
+              <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
+                <div>
+                  <h3 class="profil-section-title mb-1" style="font-size: 1.45rem !important;">
+                    Rekomendasi Produk Pilihan
+                  </h3>
+                  <span class="text-muted d-block" style="font-family: var(--font-body); font-size: 0.88rem;">
+                    Instrumen dan reagen yang sering digunakan untuk kebutuhan industri ini.
+                  </span>
+                </div>
+                <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost" style="font-size: 0.82rem; padding: 6px 14px;">
+                  Semua Produk <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+              </div>
+
+              <div class="row row-cols-1 row-cols-md-3 g-4" id="sektor-related">
+                @php
+                  $related = $relatedProducts ?? collect();
+                  if ($related->isEmpty() && isset($products) && count($products) > 0) {
+                      $related = collect($products)->take(3);
+                  }
+                @endphp
+                @foreach($related as $prod)
+                  <div class="col">
+                    <div class="card h-100 product-card border-0">
+                      <div class="img-wrap">
+                        <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Sektor" loading="lazy" decoding="async">
+                      </div>
+                      <div class="card-body p-3 d-flex flex-column">
+                        @if(!empty($prod['catalog']))
+                          <div class="product-cat-code mb-2" style="font-size: 0.65rem;">CAT. {{ $prod['catalog'] }}</div>
+                        @endif
+                        <h4 class="card-title fs-6 fw-bold mb-2">
+                          <a href="{{ product_url($prod) }}" class="text-decoration-none" style="color: var(--nb-ink);">{{ $prod['title'] }}</a>
+                        </h4>
+                        <p class="mb-3 flex-grow-1" style="font-size: 0.8rem; color: var(--nb-muted); line-height: 1.5;">
+                          {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) ?: 'Instrumen dan solusi laboratorium resmi.' }}
+                        </p>
+                        <div class="mt-auto pt-2 border-top" style="border-color: rgba(30,30,30,0.12) !important;">
+                          <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.78rem; padding: 6px 10px;">
+                            Lihat Detail <i class="bi bi-arrow-right ms-1"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
             </div>
           @endif
         </div>
@@ -198,16 +291,15 @@
       position: absolute; inset: 0; z-index: 6;
       display: none; align-items: flex-start; justify-content: center;
       padding-top: 80px;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(1px);
-      border-radius: 8px;
+      background: rgba(214, 208, 197, 0.65);
+      border-radius: var(--nb-radius-lg, 8px);
     }
     #sektor-main.is-loading .ajax-loading-overlay { display: flex; }
-    #sektor-main.is-loading > *:not(.ajax-loading-overlay) { opacity: 0.3; transition: opacity 0.15s; }
+    #sektor-main.is-loading > *:not(.ajax-loading-overlay) { opacity: 0.35; transition: opacity 0.15s; }
     .ajax-spinner {
-      width: 36px; height: 36px;
-      border: 2px solid rgba(255,73,80,0.25);
-      border-top-color: var(--color-accent, #ff4950);
+      width: 40px; height: 40px;
+      border: 3px solid rgba(30, 30, 30, 0.15);
+      border-top-color: var(--nb-primary, #A6171C);
       border-radius: 50%;
       animation: ajax-spin 0.7s linear infinite;
     }

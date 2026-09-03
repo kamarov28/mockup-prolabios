@@ -17,6 +17,25 @@
         ],
         "createdAt": "2026-09-03T01:48:37.113Z",
         "reason": "::after pseudo-element underline slide — width animates from 0 to 100% on a decorative 1px line, no layout thrash; pre-existing pattern confirmed as intentional nav hover"
+      },
+      {
+        "rule": "border-accent-on-rounded",
+        "value": "*",
+        "files": [
+          "resources/css/site/light-mode.css"
+        ],
+        "createdAt": "2026-09-03T06:33:34.242Z",
+        "reason": "L77 has border-radius: 0; false positive on navbar bottom border"
+      },
+      {
+        "rule": "overused-font",
+        "value": "space grotesk",
+        "createdAt": "2026-09-03T09:02:50.812Z"
+      },
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-09-03T09:04:05.464Z"
       }
     ]
   }

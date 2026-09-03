@@ -250,18 +250,18 @@ export function initGSAPAnimations() {
   // 4. Generic Section Heads Across All Pages
   // --------------------------------------------------------------------------
   if (typeof ScrollTrigger !== 'undefined') {
-    document.querySelectorAll('.typo-section-head, .profil-section-title, .layanan-feature-title, .sektor-card-title').forEach(function (head) {
+    document.querySelectorAll('.typo-section-head').forEach(function (head) {
       if (head.dataset.gsapAnimated) return;
       head.dataset.gsapAnimated = '1';
 
       gsap.fromTo(head,
-        { y: 30, opacity: 0 },
+        { y: 20, opacity: 0.2 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.9,
+          duration: 0.6,
           ease: EASE_EXPO,
-          scrollTrigger: { trigger: head, start: 'top 88%', once: true }
+          scrollTrigger: { trigger: head, start: 'top 92%', once: true }
         }
       );
     });
@@ -295,31 +295,9 @@ export function initGSAPAnimations() {
   }
 
   // --------------------------------------------------------------------------
-  // 6. Subpage Content Elements (Profil, Product Cards, Sector Cards, Blog Cards)
+  // 6. Subpage Content Elements (Product Cards, Sector Cards, Blog Cards)
   // --------------------------------------------------------------------------
   if (typeof ScrollTrigger !== 'undefined') {
-    // Profil Hero Image & Sidebar Cards
-    const profilHero = document.querySelector('.profil-hero-img');
-    if (profilHero) {
-      gsap.fromTo(profilHero,
-        { scale: 1.05, opacity: 0, y: 35 },
-        {
-          scale: 1, opacity: 1, y: 0, duration: 1.2, ease: EASE_EXPO,
-          scrollTrigger: { trigger: profilHero, start: 'top 85%', once: true }
-        }
-      );
-    }
-
-    const profilSidebarItems = document.querySelectorAll('.profil-cta-box, .profil-social-link');
-    if (profilSidebarItems.length) {
-      gsap.fromTo(profilSidebarItems,
-        { y: 25, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8, stagger: 0.08, ease: EASE_POWER,
-          scrollTrigger: { trigger: profilSidebarItems[0], start: 'top 90%', once: true }
-        }
-      );
-    }
 
     // Catalog & Product Cards Stagger Reveal
     const productCards = document.querySelectorAll('.typo-product-card, .product-card, .catalog-item');

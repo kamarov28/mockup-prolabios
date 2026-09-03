@@ -7,28 +7,53 @@
 @endsection
 
 @section('content')
-  <!-- Page Header -->
-  <div class="editorial-page-header">
+  <!-- Page Header (Soft Neo-Brutalism Hero Banner, follows Profil page) -->
+  <section class="profil-hero-banner">
     <div class="container">
-      <span class="editorial-page-label">katalog</span>
-      <h1 class="editorial-page-title">Produk & Instrumen</h1>
-      <p class="editorial-page-subtitle">{{ $siteSettings['products_subtitle'] ?? 'Katalog lengkap produk laboratorium Prolabios' }}</p>
+      <div class="row align-items-center">
+        <div class="col-lg-9">
+          <span class="nb-badge">
+            <i class="bi bi-box-seam me-1"></i> KATALOG PRODUK
+          </span>
+          <h1 class="profil-main-title">
+            Produk &amp; Instrumen Laboratorium
+          </h1>
+          <p class="profil-main-subtitle">
+            {{ $siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi Prolabios.' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Fast Stats Strip -->
+      <div class="profil-stats-strip">
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">100%</div>
+          <div class="profil-stat-label">Produk Original &amp; Bersertifikat COA</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Ready &amp; Indent</div>
+          <div class="profil-stat-label">Jaminan Ketersediaan &amp; Pasokan</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">Resmi &amp; Legal</div>
+          <div class="profil-stat-label">Kepatuhan Regulasi &amp; AKL/AKD</div>
+        </div>
+        <div class="profil-stat-box">
+          <div class="profil-stat-num">B2B RFQ</div>
+          <div class="profil-stat-label">Dukungan Penawaran Harga Institusi</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- Product Content -->
-  <section class="section-main" id="catalog-section">
+  <section class="section-spacious nb-section" id="catalog-section">
     <div class="container">
-      <div class="row g-5">
-        <!-- Sidebar -->
-        <div class="col-lg-3 col-md-4">
-          @include('partials.catalog-sidebar')
-        </div>
-
-        <!-- Main Content -->
-        <div class="col-lg-9 col-md-8">
+      <div class="row g-4 g-lg-5 align-items-start">
+        <!-- Main Content (Left, follows Profil page order-1) -->
+        <div class="col-lg-8 col-md-7 order-1">
           <!-- Category Title Header -->
-          <div class="mb-4">
+          <div class="mb-4 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
             <h2 class="produk-category-title mb-1" id="category-title">
               @if($activeCategory === 'all')
                 Semua Produk
@@ -51,21 +76,9 @@
             </span>
           </div>
 
-          <!-- Search Input Box Below Title -->
-          <form action="{{ url('/produk') }}" method="GET" id="catalog-search-form" class="produk-search-wrap w-100 mb-5" style="max-width: 480px;">
-            @if(request()->query('category'))
-              <input type="hidden" name="category" value="{{ request()->query('category') }}">
-            @endif
-            @if(request()->query('subcategory'))
-              <input type="hidden" name="subcategory" value="{{ request()->query('subcategory') }}">
-            @endif
-            <i class="bi bi-search" style="cursor: pointer;" onclick="document.getElementById('catalog-search-form').submit();"></i>
-            <input type="text" id="local-search-input" name="s" placeholder="Cari produk, reagen, atau kode katalog..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
-          </form>
-
           <div class="ajax-loading-wrap" id="product-ajax-wrap" aria-busy="false">
             <div class="ajax-loading-overlay" aria-hidden="true"><div class="ajax-spinner" role="status" aria-label="Memuat"></div></div>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="product-container">
+            <div class="row row-cols-1 row-cols-md-2 g-4" id="product-container">
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
@@ -93,8 +106,8 @@
                       {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 75) ?: 'Produk laboratorium' }}
                     </p>
 
-                    <div class="mt-auto pt-3 border-top border-secondary border-opacity-10">
-                      <a href="{{ product_url($prod) }}" class="btn btn-outline-danger btn-sm w-100 fw-semibold text-decoration-none">
+                    <div class="mt-auto pt-3 border-top" style="border-color: rgba(30,30,30,0.12) !important;">
+                      <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.8rem; padding: 6px 12px;">
                         <i class="bi bi-eye me-1"></i> Lihat Detail Produk
                       </a>
                     </div>
@@ -103,9 +116,10 @@
               </div>
               @endforeach
             @else
-              <div class="col-12" style="padding: 60px 0; border: 1px solid var(--color-border); text-align: center;">
-                <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--color-text-muted); display: block; margin-bottom: 16px;"></i>
-                <p style="color: var(--color-text-muted);">Belum ada produk spesifik di kategori ini.</p>
+              <div class="col-12 text-center p-5 card" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+                <i class="bi bi-box-seam" style="font-size: 2.5rem; color: var(--nb-muted); display: block; margin-bottom: 16px;"></i>
+                <h3 class="fs-5 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Produk Tidak Ditemukan</h3>
+                <p style="color: var(--nb-muted); margin-bottom: 0;">Belum ada produk spesifik di kategori atau kata kunci pencarian ini.</p>
               </div>
             @endif
           </div>
@@ -114,6 +128,11 @@
           <div class="mt-4" id="dynamic-pagination">
             {{ $products->links('partials.catalog-pagination') }}
           </div>
+        </div>
+
+        <!-- Sidebar / Right Column (follows Profil page layout order-2) -->
+        <div class="col-lg-4 col-md-5 order-2">
+          @include('partials.catalog-sidebar')
         </div>
       </div>
     </div>
@@ -129,15 +148,14 @@
       position: absolute; inset: 0; z-index: 5;
       display: none; align-items: flex-start; justify-content: center;
       padding-top: 48px;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(1px);
-      border-radius: 8px;
+      background: rgba(214, 208, 197, 0.65);
+      border-radius: var(--nb-radius-lg, 8px);
     }
     .ajax-loading-wrap.is-loading .ajax-loading-overlay { display: flex; }
     .ajax-spinner {
-      width: 36px; height: 36px;
-      border: 2px solid rgba(255,73,80,0.25);
-      border-top-color: var(--color-accent, #ff4950);
+      width: 40px; height: 40px;
+      border: 3px solid rgba(30, 30, 30, 0.15);
+      border-top-color: var(--nb-primary, #A6171C);
       border-radius: 50%;
       animation: ajax-spin 0.7s linear infinite;
     }
@@ -145,21 +163,23 @@
     .ajax-loading-wrap.is-loading #product-container > .col.product-card,
     .ajax-loading-wrap.is-loading #product-container > .col-12 { visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0; }
     .ajax-skel-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--color-border, rgba(255,255,255,0.08));
-      border-radius: 8px;
+      background: var(--nb-card, #FFFFFF);
+      border: var(--nb-border, 2px solid #1E1E1E);
+      border-radius: var(--nb-radius-lg, 8px);
+      box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
       overflow: hidden;
       height: 100%;
     }
     .ajax-skel-img {
       aspect-ratio: 16/10;
-      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+      background: linear-gradient(90deg, #FEFEFE 25%, #E2DDD5 50%, #FEFEFE 75%);
       background-size: 200% 100%;
       animation: ajax-shimmer 1.2s ease-in-out infinite;
+      border-bottom: 2px solid #1E1E1E;
     }
     .ajax-skel-line {
-      height: 10px; border-radius: 4px; margin: 10px 16px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+      height: 12px; border-radius: 4px; margin: 12px 16px;
+      background: linear-gradient(90deg, #FEFEFE 25%, #E2DDD5 50%, #FEFEFE 75%);
       background-size: 200% 100%;
       animation: ajax-shimmer 1.2s ease-in-out infinite;
     }
@@ -224,8 +244,8 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        const currentSidebar = document.querySelector('#catalog-section .col-lg-3');
-        const newSidebar = doc.querySelector('#catalog-section .col-lg-3');
+        const currentSidebar = document.querySelector('#catalog-section .col-lg-4');
+        const newSidebar = doc.querySelector('#catalog-section .col-lg-4');
         if (currentSidebar && newSidebar && !isLiveSearch) {
           const collapseEl = document.getElementById('sidebarCollapse');
           const isCollapseOpen = collapseEl ? collapseEl.classList.contains('show') : false;

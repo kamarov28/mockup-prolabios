@@ -5,7 +5,7 @@
 html {
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: #A6171C #EDE8E0;
+  scrollbar-color: #A6171C #FEFEFE;
 }
 body {
   overflow-x: hidden;
@@ -19,7 +19,7 @@ body {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #EDE8E0;
+  background: #FEFEFE;
   border-left: 2px solid #1E1E1E;
 }
 ::-webkit-scrollbar-thumb {
@@ -35,7 +35,7 @@ body {
   background: #F1C045;
 }
 ::-webkit-scrollbar-corner {
-  background: #EDE8E0;
+  background: #FEFEFE;
   border-left: 2px solid #1E1E1E;
   border-top: 2px solid #1E1E1E;
 }
@@ -77,7 +77,8 @@ body {
   }
 }
 
-/* Section rhythm */
+/* Section rhythm — seamless flow without harsh dividing lines */
+.section-spacious,
 .nb-section,
 .nb-hero,
 .nb-principals,
@@ -85,7 +86,8 @@ body {
 .typo-products-section,
 .typo-news-section,
 .hitech-marquee-section {
-  border-bottom: 2px solid #1E1E1E !important;
+  border-top: none !important;
+  border-bottom: none !important;
 }
 
 /* Navbar separators */
@@ -131,7 +133,7 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.65rem;
   font-weight: 600;
-  background: #EDE8E0;
+  background: #FEFEFE;
   color: #1E1E1E;
   border: 1.5px solid #1E1E1E;
   border-radius: 4px;
@@ -228,8 +230,7 @@ body {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 0.8s ease-in-out;
-  transform: scale(1.02);
+  will-change: transform, opacity;
 }
 
 .nb-hero-backdrop .nb-hero-slide.is-active {
@@ -256,16 +257,40 @@ body {
 }
 
 .nb-hero--immersive .nb-hero-copy {
-  background: rgba(237, 232, 224, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 3px solid #1E1E1E;
-  border-radius: 12px;
-  box-shadow: 8px 8px 0 #1E1E1E;
-  padding: clamp(1.75rem, 3.5vw, 3rem);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.nb-hero--immersive .nb-badge {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.08em !important;
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  margin-bottom: 0.85rem !important;
+}
+
+.nb-hero--immersive .nb-hero-title {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.nb-hero--immersive .nb-hero-lead {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
 }
 
 .nb-hero-title {
@@ -331,7 +356,7 @@ body {
 .nb-hero-progress {
   flex: 1;
   height: 6px;
-  background: #EDE8E0;
+  background: #FEFEFE;
   border: 1.5px solid #1E1E1E;
   border-radius: 2px;
   overflow: hidden;
@@ -354,7 +379,7 @@ body {
 
 /* Principals */
 .nb-principals {
-  background: #D6D0C5 !important;
+  background: transparent !important;
   padding: 1.75rem 0 !important;
 }
 .nb-principals-shell {
@@ -390,7 +415,7 @@ body {
 }
 
 /* Sector finder */
-.focus-section-pin { background: #D6D0C5 !important; }
+.focus-section-pin { background: transparent !important; }
 .focus-section-pin .hitech-tab-bar {
   border: 2px solid #1E1E1E !important;
   border-radius: 8px;
@@ -414,7 +439,7 @@ body {
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
 }
 .focus-section-pin .hitech-tab-btn:hover {
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
   transform: translate(1px, 1px) !important;
   box-shadow: 1px 1px 0 #1E1E1E !important;
 }
@@ -435,7 +460,7 @@ body {
   box-shadow: 0 0 0 #1E1E1E !important;
 }
 .focus-section-pin .hitech-tab-panel.active > .row > .col-lg-6:first-child {
-  background: #EDE8E0;
+  background: #FEFEFE;
   border: 2.5px solid #1E1E1E;
   border-radius: 8px;
   box-shadow: 5px 5px 0 #1E1E1E;
@@ -450,14 +475,15 @@ body {
 .focus-section-pin .hitech-spec-stat {
   border: 1.5px solid #1E1E1E !important;
   border-radius: 4px !important;
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
 }
 
 /* RFQ callout */
 .nb-rfq-section {
-  background: #D6D0C5 !important;
+  background: transparent !important;
   padding: 3rem 0 4rem !important;
-  border-bottom: 2px solid #1E1E1E;
+  border-top: none !important;
+  border-bottom: none !important;
 }
 .nb-rfq-box {
   max-width: 820px;
@@ -498,7 +524,7 @@ body {
 }
 
 .hitech-bento-widget {
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
   border: 1.5px solid #1E1E1E !important;
   border-radius: 6px !important;
 }
@@ -546,3 +572,251 @@ body {
 .site-footer .footer-sep {
   color: rgba(255, 255, 255, 0.25);
 }
+
+/* ── Profil Page (Soft Neo-Brutalism) ───────────────────────────────────── */
+.profil-hero-banner {
+  padding: 120px 0 35px !important;
+  background: #FEFEFE !important;
+  border-bottom: 2px solid #1E1E1E !important;
+}
+
+.profil-main-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  font-size: clamp(2rem, 4vw, 3rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+  color: #1E1E1E !important;
+  margin-bottom: 1rem !important;
+}
+
+.profil-main-subtitle {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+  color: #4A4A4A !important;
+  max-width: 720px !important;
+}
+
+.profil-stats-strip {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 1rem !important;
+  margin-top: 1.75rem !important;
+}
+
+.profil-stat-box {
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  padding: 1rem 1.25rem !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+.profil-stat-box:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+
+.profil-stat-num {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 700 !important;
+  font-size: 1.35rem !important;
+  color: #A6171C !important;
+  line-height: 1.2 !important;
+}
+
+.profil-stat-label {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.82rem !important;
+  color: #1E1E1E !important;
+  font-weight: 600 !important;
+  margin-top: 0.25rem !important;
+}
+
+.profil-section-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  font-size: clamp(1.4rem, 2.5vw, 1.95rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  color: #1E1E1E !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.profil-section-label {
+  display: inline-block !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #1E1E1E !important;
+  background: #F1C045 !important;
+  border: 1.5px solid #1E1E1E !important;
+  border-radius: 4px !important;
+  padding: 2px 8px !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  margin-bottom: 0.65rem !important;
+}
+
+.profil-body-text {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  font-size: 0.95rem !important;
+  line-height: 1.75 !important;
+  color: #1E1E1E !important;
+}
+
+.profil-sidebar-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+  color: #1E1E1E !important;
+  border-bottom: 2px solid #1E1E1E !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 14px !important;
+}
+
+.profil-social-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  color: #1E1E1E !important;
+  text-decoration: none !important;
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  padding: 10px 14px !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
+}
+.profil-social-link:hover {
+  background: #F1C045 !important;
+  color: #1E1E1E !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+.profil-social-link:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
+
+.profil-info-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 0.85rem !important;
+}
+.profil-info-table tr {
+  border-bottom: 1.5px solid rgba(30, 30, 30, 0.15) !important;
+}
+.profil-info-table tr:last-child {
+  border-bottom: none !important;
+}
+.profil-info-table th {
+  font-family: 'JetBrains Mono', monospace !important;
+  color: #5A5A5A !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  padding: 8px 0 !important;
+  width: 38% !important;
+  vertical-align: top !important;
+}
+.profil-info-table td {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  color: #1E1E1E !important;
+  font-weight: 600 !important;
+  padding: 8px 0 !important;
+  vertical-align: top !important;
+}
+
+.profil-mission-card {
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
+  box-shadow: 3px 3px 0 #1E1E1E !important;
+  padding: 1.25rem !important;
+  height: 100% !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+.profil-mission-card:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 #1E1E1E !important;
+}
+.profil-mission-title {
+  font-family: 'Space Grotesk', sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #1E1E1E !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.profil-value-card {
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0 #1E1E1E !important;
+  padding: 1.5rem !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+.profil-value-card:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+}
+.profil-value-card:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
+
+.profil-value-letter-wrap {
+  width: 48px !important;
+  height: 48px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 1rem !important;
+}
+.profil-value-letter-wrap.letter-p {
+  background: #F1C045 !important;
+  color: #1E1E1E !important;
+}
+.profil-value-letter-wrap.letter-r {
+  background: #A6171C !important;
+  color: #FFFFFF !important;
+}
+.profil-value-letter-wrap.letter-o {
+  background: #FEFEFE !important;
+  color: #1E1E1E !important;
+}
+
+.profil-value-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: #1E1E1E !important;
+  margin-bottom: 0.5rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+.profil-trust-box {
+  background: #FEFEFE !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0 #1E1E1E !important;
+  padding: 1.75rem !important;
+}
+
+.text-ink { color: #1E1E1E !important; }
+.text-ruby { color: #A6171C !important; }

@@ -191,7 +191,7 @@
 
 .search-input-box input#search-overlay-input {
   width: 100% !important;
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
   border: 2px solid #1E1E1E !important;
   border-radius: 6px !important;
   padding: 14px 18px 14px 48px !important;
@@ -230,7 +230,7 @@
   font-size: 0.78rem;
   font-weight: 600;
   color: #1E1E1E !important;
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
   border: 1.5px solid #1E1E1E !important;
   padding: 6px 12px !important;
   border-radius: 4px !important;
@@ -273,7 +273,7 @@
 }
 
 .search-quick-item:hover {
-  background: #EDE8E0 !important;
+  background: #FEFEFE !important;
   color: #A6171C !important;
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 #1E1E1E !important;

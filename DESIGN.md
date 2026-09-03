@@ -254,6 +254,21 @@ Pill-style tabs (`.focus-section-pin .hitech-tab-btn`): Sunny fill + charcoal bo
 ### RFQ callout (`.nb-rfq-box`)
 Centered, `max-width: 820px`. Deepest shadow on the page: `8px 8px 0 #1E1E1E`. White fill. Sunny badge. Two CTAs: Ruby primary + Ghost secondary.
 
+### Inner Page Hero Banner (`.profil-hero-banner`)
+Standard header for inner content pages (Profil, Katalog Produk, dll):
+- Container background: `--nb-bg` (`#D6D0C5`), with border-bottom `2px solid #1E1E1E`
+- Eyebrow badge: `.nb-badge` (Sunny `#F1C045` with black text & hard shadow)
+- Title: `.profil-main-title` (Space Grotesk, bold, -0.03em letter spacing)
+- Subtitle: `.profil-main-subtitle` (Plus Jakarta Sans, muted ink, max-width 720px)
+- Fast stats strip: `.profil-stats-strip` (CSS grid with `.profil-stat-box` cards, white surface, 2px border, 3px hard shadow)
+
+### Catalog & Filter Grid Layout
+- Category Title & Search Bar: Full-width container header row (`d-flex align-items-end justify-content-between`), clean separator border.
+- 2-Column Grid (`align-items-start`):
+  - Left / Main (`col-lg-8 col-md-7 order-1`): Product cards grid (2 columns) + pagination.
+  - Right / Sidebar (`col-lg-4 col-md-5 order-2`): `.card` containing `.layanan-sidebar-nav` and `.profil-cta-box`.
+  - The tops of both columns align flush at the top of the grid row.
+
 ---
 
 ## 10. ARIA & accessibility baseline

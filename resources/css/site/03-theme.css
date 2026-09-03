@@ -1,30 +1,30 @@
 /* site/03-theme.css */
 /* ==========================================================================
    Global Light Editorial Theme — Trade Show Booth
-   Natural #D6D0C5 · Ruby #A6171C · Sunny #F1C045
+   Natural #FEFEFE · Ruby #A6171C · Sunny #F1C045
    ========================================================================== */
 
 /* 1. Global Section Backgrounds */
-section, .bg-light, .bg-white {
-  background-color: var(--color-bg, #D6D0C5) !important;
+section, .bg-light {
+  background-color: transparent !important;
 }
 
 /* 2. Text Colors Unification */
 .text-muted, .text-black-50, .text-secondary {
-  color: var(--color-text-muted, #6B6B6B) !important;
+  color: var(--nb-muted, #5A5A5A) !important;
 }
 h1, h2, h3, h4, h5, h6, .fw-bold, .card-title, .modal-title {
-  color: var(--color-text-main, #1A1A1A) !important;
+  color: var(--nb-ink, #1E1E1E) !important;
 }
 p, span, li, td, th, label {
-  color: rgba(26, 26, 26, 0.85) !important;
+  color: var(--nb-ink, #1E1E1E);
 }
 a {
-  color: var(--color-text-main, #1A1A1A);
-  transition: color 0.3s ease;
+  color: var(--nb-ink, #1E1E1E);
+  transition: color 0.15s ease;
 }
 a:hover {
-  color: var(--color-accent, #A6171C);
+  color: var(--nb-primary, #A6171C);
 }
 
 /* 3. Global Cards & Box Containers */
@@ -169,7 +169,7 @@ a:hover {
 .editorial-page-header {
   padding: 140px 0 40px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: var(--color-bg, #D6D0C5) !important;
+  background-color: var(--color-bg, #FEFEFE) !important;
 }
 .editorial-page-header + section {
   padding-top: 48px !important;

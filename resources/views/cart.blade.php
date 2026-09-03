@@ -13,19 +13,19 @@
     <div class="cart-stepper-wrap">
       <div class="d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-row align-items-center gap-3 flex-wrap">
-          <div class="d-inline-flex align-items-center gap-2 text-white">
-            <span class="step-num-badge step-num-active">1</span>
+          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-ink); font-weight: 700;">
+            <span class="step-num-badge step-num-active" style="background: var(--nb-primary); color: #FFFFFF; border: 1.5px solid var(--nb-ink); box-shadow: 1px 1px 0 var(--nb-ink);">1</span>
             <span class="step-label">Keranjang Pengajuan</span>
           </div>
-          <span style="color: rgba(255, 255, 255, 0.2); font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2" style="color: var(--color-text-muted);">
-            <span class="step-num-badge step-num-inactive">2</span>
-            <span class="step-label" style="opacity: 0.6;">Data Kontak &amp; Instansi</span>
+          <span style="color: var(--nb-ink); font-weight: bold; font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-muted);">
+            <span class="step-num-badge step-num-inactive" style="background: var(--nb-bg-soft); color: var(--nb-ink); border: 1.5px solid var(--nb-ink);">2</span>
+            <span class="step-label">Data Kontak &amp; Instansi</span>
           </div>
-          <span style="color: rgba(255, 255, 255, 0.2); font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2" style="color: var(--color-text-muted);">
-            <span class="step-num-badge step-num-inactive">3</span>
-            <span class="step-label" style="opacity: 0.6;">Konfirmasi Selesai</span>
+          <span style="color: var(--nb-ink); font-weight: bold; font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-muted);">
+            <span class="step-num-badge step-num-inactive" style="background: var(--nb-bg-soft); color: var(--nb-ink); border: 1.5px solid var(--nb-ink);">3</span>
+            <span class="step-label">Konfirmasi Selesai</span>
           </div>
         </div>
 
@@ -160,9 +160,9 @@
               <i class="bi bi-receipt" style="color: var(--color-accent);"></i> Ringkasan Pengajuan
             </h3>
 
-            <div class="d-flex justify-content-between mb-2 text-secondary small">
-              <span style="color: var(--color-text-muted);">Total Volume Barang:</span>
-              <strong class="text-white" style="font-family: var(--font-headline);" id="sidebar-total-units">
+            <div class="d-flex justify-content-between mb-2 small">
+              <span style="color: var(--nb-muted);">Total Volume Barang:</span>
+              <strong style="font-family: var(--font-mono); color: var(--nb-ink);" id="sidebar-total-units">
                 {{ array_sum(array_column($cart, 'quantity')) }} Unit
               </strong>
             </div>
@@ -174,20 +174,20 @@
               }
             @endphp
 
-            <div class="d-flex justify-content-between mb-3 text-secondary small">
-              <span style="color: var(--color-text-muted);">Estimasi Subtotal Katalog:</span>
-              <strong style="font-family: var(--font-headline); font-size: 1.25rem; color: var(--color-accent);" id="sidebar-total-estimate">
+            <div class="d-flex justify-content-between mb-3 small">
+              <span style="color: var(--nb-muted);">Estimasi Subtotal Katalog:</span>
+              <strong style="font-family: var(--font-display); font-size: 1.25rem; color: var(--nb-primary);" id="sidebar-total-estimate">
                 {{ $totalEstimate > 0 ? 'Rp ' . number_format($totalEstimate, 0, ',', '.') : 'Rp 0' }}
               </strong>
             </div>
 
-            <hr style="border-color: var(--color-border); margin: 1.25rem 0;">
+            <hr style="border-color: rgba(30,30,30,0.15); margin: 1.25rem 0;">
 
-            <div class="rfq-info-box mb-4">
+            <div class="rfq-info-box mb-4" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); padding: 12px; box-shadow: 2px 2px 0 var(--nb-ink);">
               <div class="d-flex gap-2">
-                <i class="bi bi-shield-check fs-5 flex-shrink-0" style="color: #4ade80;"></i>
-                <div>
-                  <strong class="text-white d-block mb-1" style="font-family: var(--font-headline); font-size: 0.82rem; letter-spacing: 0.5px;">Informasi Penawaran</strong>
+                <i class="bi bi-shield-check fs-5 flex-shrink-0 text-primary"></i>
+                <div style="font-size: 0.82rem; color: var(--nb-ink);">
+                  <strong class="d-block mb-1" style="font-family: var(--font-display); font-weight: 700;">Informasi Penawaran</strong>
                   Harga final, diskon khusus kuantitas, dan estimasi waktu pengadaan akan diinformasikan langsung oleh Tim Sales via Email/WhatsApp.
                 </div>
               </div>
@@ -205,11 +205,13 @@
 
       </div>
     @else
-      <div class="empty-state-card" style="border: 1px solid var(--color-border); background: #0c0d12; padding: 80px 20px;">
-        <i class="bi bi-cart-x" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
-        <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Keranjang Belanja Masih Kosong</h2>
-        <p class="profil-body-text mb-4">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
-        <a href="{{ url('/produk') }}" class="profil-cta-btn">Jelajahi Katalog Produk <i class="bi bi-arrow-right"></i></a>
+      <div class="card text-center p-5 mx-auto" style="max-width: 640px; background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+        <i class="bi bi-cart-x" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
+        <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Keranjang Belanja Masih Kosong</h2>
+        <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
+        <div>
+          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary">Jelajahi Katalog Produk <i class="bi bi-arrow-right ms-1"></i></a>
+        </div>
       </div>
     @endif
 
