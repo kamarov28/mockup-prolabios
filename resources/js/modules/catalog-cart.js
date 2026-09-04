@@ -274,6 +274,25 @@ export function initAjaxAddToCart() {
 }
 
 export function showToast(message, type = 'success') {
+  if (typeof window.Swal !== 'undefined') {
+    const Toast = window.Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3500,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', window.Swal.stopTimer);
+        toast.addEventListener('mouseleave', window.Swal.resumeTimer);
+      }
+    });
+    Toast.fire({
+      icon: type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'info'),
+      title: message
+    });
+    return;
+  }
+
   let container = document.getElementById('prolabios-toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -284,13 +303,13 @@ export function showToast(message, type = 'success') {
 
   const toast = document.createElement('div');
   toast.className = 'prolabios-toast-item';
-  toast.style.cssText = 'background:#0f1015;color:#ffffff;border:1px solid rgba(255,73,80,0.35);border-radius:12px;padding:12px 20px;font-family:var(--font-body);font-size:0.88rem;box-shadow:0 14px 35px rgba(0,0,0,0.85);display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(15px);transition:all 0.3s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;';
+  toast.style.cssText = 'background:#FFFFFF;color:#1E1E1E;border:2px solid #1E1E1E;border-radius:4px;padding:12px 18px;font-family:var(--font-body);font-size:0.88rem;box-shadow:3px 3px 0 #1E1E1E;display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(15px);transition:all 0.2s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;';
 
-  const iconHtml = type === 'success' 
-    ? '<i class="bi bi-check-circle-fill" style="color: #2e7d32; font-size: 1.15rem;"></i>' 
-    : '<i class="bi bi-exclamation-triangle-fill" style="color: #ed6c02; font-size: 1.15rem;"></i>';
+  const iconHtml = type === 'success'
+    ? '<i class="bi bi-check-circle-fill" style="color: #137333; font-size: 1.15rem;"></i>'
+    : '<i class="bi bi-exclamation-triangle-fill" style="color: #A6171C; font-size: 1.15rem;"></i>';
 
-  toast.innerHTML = iconHtml + '<span style="font-weight: 500;">' + message + '</span>';
+  toast.innerHTML = iconHtml + '<span style="font-weight: 600;">' + message + '</span>';
   container.appendChild(toast);
 
   requestAnimationFrame(function () {
@@ -303,6 +322,6 @@ export function showToast(message, type = 'success') {
     toast.style.transform = 'translateY(-10px)';
     setTimeout(function () {
       if (toast.parentElement) toast.parentElement.removeChild(toast);
-    }, 300);
+    }, 200);
   }, 3200);
 }

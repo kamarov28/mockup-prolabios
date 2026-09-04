@@ -123,15 +123,15 @@
               </div>
             </div>
 
-            {{-- Lightbox --}}
-            <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered modal-lg">
+            {{-- Lightbox Modal --}}
+            <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true" data-bs-backdrop="true">
+              <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 95vw; margin: 1.5rem auto;">
                 <div class="modal-content bg-transparent border-0 shadow-none position-relative">
                   <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Tutup">
                     <i class="bi bi-x-lg"></i>
                   </button>
-                  <div class="modal-body text-center p-0">
-                    <div class="lightbox-image-wrapper">
+                  <div class="modal-body text-center p-0" data-bs-dismiss="modal">
+                    <div class="lightbox-image-wrapper" onclick="event.stopPropagation();">
                       <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
                     </div>
                   </div>
@@ -214,97 +214,118 @@
 
   <style>
     .detail-product-img-wrap {
-      border: 1px solid var(--color-border);
-      background-color: #070708;
-      padding: 30px;
+      border: 1.5px solid var(--nb-ink, #1E1E1E);
+      background-color: #FFFFFF;
+      border-radius: var(--nb-radius, 6px);
+      box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+      padding: 10px;
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .detail-product-img-wrap img {
-      filter: grayscale(30%);
-      transition: all 0.4s ease;
+      transition: transform 0.2s ease;
     }
     .detail-product-img-wrap:hover img {
-      filter: grayscale(0%) scale(1.02);
+      transform: scale(1.02);
     }
     .detail-product-img-wrap::after {
       content: '\F52A';
       font-family: 'bootstrap-icons';
       position: absolute;
-      bottom: 16px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
-      background: rgba(166, 23, 28, 0.85);
-      border: 1px solid rgba(166,23,28,0.3);
+      bottom: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: var(--nb-primary, #A6171C);
+      border: 1.5px solid #1E1E1E;
+      border-radius: 4px;
+      box-shadow: 2px 2px 0 #1E1E1E;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       opacity: 0;
-      transform: scale(0.8);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.85);
+      transition: all 0.2s ease;
     }
     .detail-product-img-wrap:hover::after {
       opacity: 1;
       transform: scale(1);
     }
     .lightbox-image-wrapper {
-      padding: 12px;
-      background: #070708;
-      border: 1px solid var(--color-border);
-      display: inline-block;
-      max-width: 100%;
-    }
-    .lightbox-img {
-      max-width: 100%;
-      max-height: 75vh;
-      object-fit: contain;
-      display: block;
-    }
-    .btn-close-lightbox {
-      position: absolute;
-      top: -30px;
-      right: 0px;
-      width: 40px;
-      height: 40px;
-      background: #070708;
-      border: 1px solid var(--color-border);
+      padding: 16px;
+      background: #FFFFFF;
+      border: 2px solid var(--nb-ink, #1E1E1E);
+      border-radius: var(--nb-radius-lg, 8px);
+      box-shadow: 6px 6px 0 var(--nb-ink, #1E1E1E);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      width: min(92vw, 1100px);
+      height: 85vh;
+      margin: auto;
+    }
+    .lightbox-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 4px;
+    }
+    .btn-close-lightbox {
+      position: absolute;
+      top: -16px;
+      right: -16px;
+      width: 38px;
+      height: 38px;
+      background: var(--nb-primary, #A6171C);
+      border: 2px solid var(--nb-ink, #1E1E1E);
+      border-radius: 4px;
+      box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
       font-size: 1.1rem;
       cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 1060;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      z-index: 1090;
     }
     .btn-close-lightbox:hover {
-      transform: scale(1.05) rotate(90deg);
-      border-color: var(--color-accent);
-      color: var(--color-accent);
+      background: var(--nb-primary-dark, #7A1015);
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+    }
+    .btn-close-lightbox:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 var(--nb-ink, #1E1E1E);
     }
     .modal.fade .modal-dialog {
-      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 0.25s ease-out;
       transform: scale(0.95);
     }
     .modal.show .modal-dialog {
       transform: scale(1);
     }
     .product-gallery-thumbs {
-      justify-content: center;
+      justify-content: flex-start;
     }
     .gallery-thumb {
-      width: 64px;
-      height: 64px;
-      border: 1px solid var(--color-border);
-      background-color: #070708;
+      width: 60px;
+      height: 60px;
+      border: 1.5px solid var(--nb-ink, #1E1E1E);
+      border-radius: var(--nb-radius-sm, 4px);
+      background-color: #FFFFFF;
+      box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
       padding: 4px;
       cursor: pointer;
-      opacity: 0.55;
-      transition: all 0.2s ease;
+      opacity: 0.7;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
     }
     .gallery-thumb img {
       width: 100%;
@@ -312,11 +333,16 @@
       object-fit: contain;
     }
     .gallery-thumb:hover {
-      opacity: 0.85;
+      opacity: 1;
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
     }
     .gallery-thumb.active {
       opacity: 1;
-      border-color: var(--color-accent);
+      border-color: var(--nb-primary, #A6171C) !important;
+      outline: 2px solid var(--nb-primary, #A6171C);
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
     }
   </style>
   <script>
@@ -330,5 +356,12 @@
       });
       if (thumbEl) thumbEl.classList.add('active');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const lightboxModal = document.getElementById('imageLightboxModal');
+      if (lightboxModal && lightboxModal.parentElement !== document.body) {
+        document.body.appendChild(lightboxModal);
+      }
+    });
   </script>
 @endsection

@@ -6,17 +6,17 @@
       </a>
     
     <!-- Mobile Actions (Cart & Search) -->
-    <div class="d-flex align-items-center gap-3 ms-auto me-3 d-lg-none">
+    <div class="d-flex align-items-center gap-2 ms-auto me-3 d-lg-none">
       @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
-      <a href="{{ route('cart.index') }}" class="text-white position-relative d-inline-flex align-items-center p-1" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
-        <i class="bi bi-cart3" style="font-size: 1.25rem;"></i>
+      <a href="{{ route('cart.index') }}" class="nb-icon-btn position-relative text-decoration-none" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
+        <i class="bi bi-cart3" style="font-size: 1.1rem;"></i>
         <span class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
           {{ $cartCount }}
         </span>
       </a>
 
-      <button type="button" id="mobile-search-open" class="btn p-1 border-0 bg-transparent text-white d-inline-flex align-items-center" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
-        <i class="bi bi-search" style="font-size: 1.15rem;"></i>
+      <button type="button" id="mobile-search-open" class="nb-icon-btn" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
+        <i class="bi bi-search" style="font-size: 1rem;"></i>
       </button>
     </div>
 
@@ -53,20 +53,20 @@
             <a class="nav-link {{ request()->is('kontak*') ? 'active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
           </li>
           <li class="nav-item ms-lg-2">
-            <a class="btn btn-sm btn-outline-danger px-3 py-2 mt-1 mt-lg-0 d-inline-flex align-items-center gap-2" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
+            <a class="btn btn-sm btn-outline-danger px-3 py-2 d-inline-flex align-items-center gap-2" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.9rem;">
               <i class="bi bi-download"></i> Unduh Katalog
             </a>
           </li>
-          <li class="nav-item d-none d-lg-flex align-items-center gap-3 ms-lg-2 mt-3 mt-lg-0 navbar-utilities">
-            <a href="{{ route('cart.index') }}" class="nav-link p-0 text-white position-relative" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
-              <i class="bi bi-cart3" style="font-size: 1.25rem; vertical-align: middle;"></i>
+          <li class="nav-item d-none d-lg-flex align-items-center gap-2 ms-lg-2 navbar-utilities">
+            <a href="{{ route('cart.index') }}" class="nb-icon-btn position-relative text-decoration-none" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
+              <i class="bi bi-cart3" style="font-size: 1.1rem;"></i>
               @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
               <span id="cart-badge-count" class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
                 {{ $cartCount }}
               </span>
             </a>
-            <button type="button" id="nav-search-open" class="nav-link p-0 text-white border-0 bg-transparent ms-2" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
-              <i class="bi bi-search" style="font-size: 1.05rem; vertical-align: middle;"></i>
+            <button type="button" id="nav-search-open" class="nb-icon-btn ms-1" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
+              <i class="bi bi-search" style="font-size: 1rem;"></i>
             </button>
           </li>
         </ul>

@@ -33,7 +33,7 @@
       <div class="nb-hero-copy">
         <span class="nb-badge">{{ $homeData['hero_badge'] ?? 'PRECISION LABORATORY SOLUTIONS' }}</span>
         <h1 class="nb-hero-title">
-          {!! $homeData['hero_title'] ?? 'Trusted Analytical & <span class="nb-accent">Microbiology</span> Solutions' !!}
+          {!! $homeData['hero_title'] ?? '<span class="nb-accent text-accent">Trusted</span> Analytical & Microbiology Solutions' !!}
         </h1>
         <p class="nb-hero-lead">
           {{ $homeData['hero_subtitle'] ?? 'We provide the highest-quality culture media, laboratory instruments, and testing equipment to support a wide range of industrial needs in Indonesia.' }}

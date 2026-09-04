@@ -67,6 +67,16 @@ class AdminRfqTest extends TestCase
         $response->assertSee('Fakultas Farmasi Universitas X');
     }
 
+    public function test_admin_can_view_rfqs_kanban(): void
+    {
+        $response = $this->actingAs($this->adminUser)->get(route('admin.rfqs.index', ['view' => 'kanban']));
+
+        $response->assertStatus(200);
+        $response->assertSee('RFQ-202608-ADMINTEST');
+        $response->assertSee('Prof. Bambang');
+        $response->assertSee('Baru');
+    }
+
     public function test_admin_can_view_rfq_detail(): void
     {
         $response = $this->actingAs($this->adminUser)->get(route('admin.rfqs.show', $this->rfq->id));

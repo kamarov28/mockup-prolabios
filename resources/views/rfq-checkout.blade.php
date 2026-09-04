@@ -85,29 +85,29 @@
 
                 <div class="list-group list-group-flush bg-transparent mb-3">
                   @foreach($cart as $item)
-                    <div class="list-group-item bg-transparent text-white px-0 py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1px solid var(--color-border) !important;">
+                    <div class="list-group-item bg-transparent px-0 py-3 d-flex justify-content-between align-items-center" style="border-bottom: 1.5px solid rgba(30,30,30,0.12) !important;">
                       <div>
-                        <div class="fw-semibold small" style="font-family: var(--font-headline); font-size: 0.95rem; max-width: 220px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">
+                        <div class="fw-semibold small" style="font-family: var(--font-display); font-size: 0.95rem; max-width: 220px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; color: var(--nb-ink);">
                           {{ $item['title'] }}
                         </div>
-                        <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 4px;">
+                        <div style="font-size: 0.75rem; color: var(--nb-muted); margin-top: 4px;">
                           {{ !empty($item['catalog']) ? 'Cat. ' . $item['catalog'] . ' • ' : '' }} {{ $item['quantity'] }} Unit
                         </div>
                       </div>
-                      <div class="text-end fw-bold" style="font-family: var(--font-headline); font-size: 0.95rem; color: var(--color-accent);">
+                      <div class="text-end fw-bold" style="font-family: var(--font-display); font-size: 0.95rem; color: var(--nb-primary);">
                         {{ $item['price'] > 0 ? 'Rp ' . number_format($item['price'] * $item['quantity'], 0, ',', '.') : 'Est. Penawaran' }}
                       </div>
                     </div>
                   @endforeach
                 </div>
 
-                <div class="d-flex justify-content-between py-3 text-white fw-bold mb-3" style="border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
-                  <span style="font-family: var(--font-headline); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Estimasi Total:</span>
-                  <span style="font-family: var(--font-headline); font-size: 1.15rem; color: var(--color-accent);">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                <div class="d-flex justify-content-between py-3 fw-bold mb-3" style="border-top: 2px solid var(--nb-ink); border-bottom: 2px solid var(--nb-ink); color: var(--nb-ink);">
+                  <span style="font-family: var(--font-mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Estimasi Total:</span>
+                  <span style="font-family: var(--font-display); font-size: 1.2rem; color: var(--nb-primary);">Rp {{ number_format($total, 0, ',', '.') }}</span>
                 </div>
 
-                <div class="rfq-info-box mb-4">
-                  <i class="bi bi-info-circle me-1" style="color: var(--color-accent);"></i>
+                <div class="rfq-info-box mb-4" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); padding: 12px; box-shadow: 2px 2px 0 var(--nb-ink); color: var(--nb-ink);">
+                  <i class="bi bi-info-circle-fill me-1" style="color: var(--nb-primary);"></i>
                   Harga di atas adalah estimasi katalog. Tim sales kami akan memberikan diskon khusus &amp; harga final via WhatsApp/Email.
                 </div>
               </div>

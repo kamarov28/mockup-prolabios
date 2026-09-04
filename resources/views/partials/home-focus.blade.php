@@ -41,8 +41,8 @@
               <p class="hitech-panel-desc">{{ $ph['desc'] ?? 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-              <a href="{{ url($ph['link'] ?? '/sektor?s=pharmaceutical#sektor-nav') }}" class="typo-btn-link">
-                Jelajahi Solusi Farmasi <i class="bi bi-arrow-right ms-1"></i>
+              <a href="{{ url($ph['link'] ?? '/sektor?s=pharmaceutical#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
+                Jelajahi Solusi Farmasi <i class="bi bi-arrow-right"></i>
               </a>
               <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> USP / EP / BP Compliant</span>
             </div>
@@ -103,8 +103,8 @@
               <p class="hitech-panel-desc">{{ $fn['desc'] ?? 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-              <a href="{{ url($fn['link'] ?? '/sektor?s=food#sektor-nav') }}" class="typo-btn-link">
-                Jelajahi Solusi F&amp;B <i class="bi bi-arrow-right ms-1"></i>
+              <a href="{{ url($fn['link'] ?? '/sektor?s=food#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
+                Jelajahi Solusi F&amp;B <i class="bi bi-arrow-right"></i>
               </a>
               <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> HACCP &amp; ISO 22000</span>
             </div>
@@ -165,8 +165,8 @@
               <p class="hitech-panel-desc">{{ $hc['desc'] ?? 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-              <a href="{{ url($hc['link'] ?? '/sektor?s=hospital-clinic#sektor-nav') }}" class="typo-btn-link">
-                Jelajahi Solusi Kesehatan <i class="bi bi-arrow-right ms-1"></i>
+              <a href="{{ url($hc['link'] ?? '/sektor?s=hospital-clinic#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
+                Jelajahi Solusi Kesehatan <i class="bi bi-arrow-right"></i>
               </a>
               <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> AKL Kemenkes RI</span>
             </div>
@@ -227,8 +227,8 @@
               <p class="hitech-panel-desc">{{ $br['desc'] ?? 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-              <a href="{{ url($br['link'] ?? '/sektor?s=brewing#sektor-nav') }}" class="typo-btn-link">
-                Jelajahi Solusi Brewing <i class="bi bi-arrow-right ms-1"></i>
+              <a href="{{ url($br['link'] ?? '/sektor?s=brewing#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
+                Jelajahi Solusi Brewing <i class="bi bi-arrow-right"></i>
               </a>
               <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> R&amp;D Quality Control</span>
             </div>

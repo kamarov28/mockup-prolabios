@@ -115,12 +115,12 @@
                     @csrf
                     <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                     <input type="hidden" name="title" value="{{ $item['title'] }}">
-                    <div class="b2b-qty-pill">
-                      <button type="button" class="b2b-qty-btn" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
+                    <div class="nb-stepper-wrap" style="height: 38px;">
+                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
                         <i class="bi bi-dash-lg"></i>
                       </button>
-                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="b2b-qty-input cart-qty-input hide-spinner" onchange="updateCartItemAjax(this.form)">
-                      <button type="button" class="b2b-qty-btn" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="nb-stepper-input cart-qty-input hide-spinner" style="width: 46px; font-size: 0.95rem;" onchange="updateCartItemAjax(this.form)">
+                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
                         <i class="bi bi-plus-lg"></i>
                       </button>
                     </div>
@@ -140,8 +140,8 @@
                       @csrf
                       <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                       <input type="hidden" name="title" value="{{ $item['title'] }}">
-                      <button type="submit" class="btn btn-sm p-0 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; border: 1px solid var(--color-border); border-radius: 0; background: transparent; color: var(--color-text-muted);" title="Hapus Item" aria-label="Hapus item">
-                        <i class="bi bi-x-lg" style="font-size: 0.85rem;"></i>
+                      <button type="submit" class="cart-remove-btn" title="Hapus Item" aria-label="Hapus item">
+                        <i class="bi bi-trash3" style="font-size: 0.88rem;"></i>
                       </button>
                     </form>
                   </div>
@@ -285,12 +285,8 @@
       text: 'Seluruh item produk di dalam keranjang akan dihapus.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ff4950',
-      cancelButtonColor: 'rgba(255, 255, 255, 0.15)',
       confirmButtonText: 'Ya, Kosongkan!',
-      cancelButtonText: 'Batal',
-      background: '#0f172a',
-      color: '#ffffff'
+      cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
         form.submit();
@@ -310,12 +306,8 @@
       text: 'Item produk ini akan dihapus dari pengajuan penawaran.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#ff4950',
-      cancelButtonColor: 'rgba(255, 255, 255, 0.15)',
       confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal',
-      background: '#0f172a',
-      color: '#ffffff'
+      cancelButtonText: 'Batal'
     }).then((result) => {
       if (result.isConfirmed) {
         executeRemoveAjax(form);

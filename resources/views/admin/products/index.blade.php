@@ -28,12 +28,12 @@
     <form action="{{ route('admin.products') }}" method="GET">
       <div class="row g-3 align-items-center">
         <div class="col-md-4">
-          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; transition: border-color 0.25s ease;" id="search-group">
-            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: transparent; border-right: 1px solid var(--color-border);">
-              <i class="bi bi-search" style="font-size: 0.8rem;"></i>
+          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; transition: border-color 0.25s ease; background: #FFFFFF;" id="search-group">
+            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: #F8FAFC; border-right: 1px solid var(--color-border);">
+              <i class="bi bi-search" style="font-size: 0.85rem;"></i>
             </span>
             <input type="text" name="s" id="local-search-input"
-                   style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem;"
+                   style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.92rem;"
                    placeholder="Cari nama atau nomor katalog..." value="{{ $search }}" aria-label="Kata kunci pencarian">
           </div>
         </div>
@@ -120,7 +120,7 @@
               <tr>
                 {{-- Icon only: no <img> network requests (was blocking navigate-away) --}}
                 <td>
-                  <div style="width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
+                  <div style="width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px; background: #F8FAFC; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
                     <i class="bi bi-box-seam" style="font-size: 0.95rem;"></i>
                   </div>
                 </td>

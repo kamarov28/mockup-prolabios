@@ -288,6 +288,13 @@ body {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+.nb-hero--immersive .nb-hero-title .nb-accent,
+.nb-hero--immersive .nb-hero-title .text-accent {
+  color: #A6171C !important;
+  -webkit-text-fill-color: #A6171C !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
 .nb-hero--immersive .nb-hero-lead {
   color: rgba(255, 255, 255, 0.9) !important;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);

@@ -17,10 +17,32 @@ class AdminRfqController extends Controller
 {
     public function index(Request $request)
     {
+        $viewMode = $request->input('view', 'table');
         $query = $this->buildFilteredQuery($request);
+
+        if ($viewMode === 'kanban') {
+            $allRfqs = $query->with('items')->get();
+            $kanbanColumns = [];
+            foreach (Rfq::statusOptions() as $key => $label) {
+                $kanbanColumns[$key] = [
+                    'label' => $label,
+                    'rfqs' => $allRfqs->where('status', $key),
+                ];
+            }
+
+            return view('admin.rfqs.index', [
+                'viewMode' => 'kanban',
+                'kanbanColumns' => $kanbanColumns,
+                'totalRfqs' => $allRfqs->count(),
+            ]);
+        }
+
         $rfqs = $query->paginate(15)->withQueryString();
 
-        return view('admin.rfqs.index', compact('rfqs'));
+        return view('admin.rfqs.index', [
+            'viewMode' => 'table',
+            'rfqs' => $rfqs,
+        ]);
     }
 
     public function export(Request $request)
@@ -37,11 +59,11 @@ class AdminRfqController extends Controller
 
         // Document Meta Title
         $sheet->setCellValue('A1', 'PT. PROLABIOS MITRA ANALITIKA — REKAPITULASI PENGAJUAN RFQ');
-        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A1:N1');
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(12)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0F172A'));
 
         $sheet->setCellValue('A2', 'Diekspor: ' . now()->translatedFormat('d F Y, H:i') . ' WIB | Total RFQ: ' . $rfqs->count() . ' Pengajuan');
-        $sheet->mergeCells('A2:L2');
+        $sheet->mergeCells('A2:N2');
         $sheet->getStyle('A2')->getFont()->setSize(9)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('64748B'));
 
         // Table Headers (Baris 3)
@@ -50,21 +72,23 @@ class AdminRfqController extends Controller
             'B3' => 'TANGGAL',
             'C3' => 'STATUS',
             'D3' => 'INSTANSI / PERUSAHAAN',
-            'E3' => 'PIC & KONTAK',
-            'F3' => 'SKU / KATALOG',
-            'G3' => 'NAMA BARANG / ITEM SPESIFIKASI',
-            'H3' => 'QTY',
-            'I3' => 'EST. HARGA (RP)',
-            'J3' => 'SUBTOTAL (RP)',
-            'K3' => 'CATATAN KLIEN',
-            'L3' => 'CATATAN ADMIN',
+            'E3' => 'NAMA PIC',
+            'F3' => 'EMAIL',
+            'G3' => 'NO. WHATSAPP',
+            'H3' => 'SKU / KATALOG',
+            'I3' => 'NAMA BARANG / ITEM SPESIFIKASI',
+            'J3' => 'QTY',
+            'K3' => 'EST. HARGA (RP)',
+            'L3' => 'SUBTOTAL (RP)',
+            'M3' => 'CATATAN KLIEN',
+            'N3' => 'CATATAN ADMIN',
         ];
 
         foreach ($headers as $cell => $text) {
             $sheet->setCellValue($cell, $text);
         }
 
-        $sheet->getStyle('A3:L3')->applyFromArray([
+        $sheet->getStyle('A3:N3')->applyFromArray([
             'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF'], 'size' => 9],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '1E293B']], // Slate 800 profesional
             'alignment' => [
@@ -79,7 +103,7 @@ class AdminRfqController extends Controller
 
         $sheet->getStyle('A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('B3:C3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('H3:J3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+        $sheet->getStyle('J3:L3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getRowDimension(3)->setRowHeight(26);
 
         $row = 4;
@@ -102,14 +126,16 @@ class AdminRfqController extends Controller
                 default => '15803D',                // Emerald (Baru)
             };
 
-            // 1. Data Level RFQ (A - E, K, L)
+            // 1. Data Level RFQ (A - G, M, N)
             $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
             $sheet->setCellValue("B{$startRow}", $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : '-');
             $sheet->setCellValue("C{$startRow}", $rfq->status_label);
             $sheet->setCellValue("D{$startRow}", $rfq->company_name);
-            $sheet->setCellValue("E{$startRow}", $rfq->name . "\n" . $rfq->phone_wa . "\n" . $rfq->email);
-            $sheet->setCellValue("K{$startRow}", $rfq->notes ?: '-');
-            $sheet->setCellValue("L{$startRow}", $rfq->admin_notes ?: '-');
+            $sheet->setCellValue("E{$startRow}", $rfq->name);
+            $sheet->setCellValue("F{$startRow}", $rfq->email);
+            $sheet->setCellValueExplicit("G{$startRow}", (string) $rfq->phone_wa, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValue("M{$startRow}", $rfq->notes ?: '-');
+            $sheet->setCellValue("N{$startRow}", $rfq->admin_notes ?: '-');
 
             // Merge kolom induk jika RFQ punya banyak item barang
             if ($itemCount > 1) {
@@ -118,18 +144,20 @@ class AdminRfqController extends Controller
                 $sheet->mergeCells("C{$startRow}:C{$endRow}");
                 $sheet->mergeCells("D{$startRow}:D{$endRow}");
                 $sheet->mergeCells("E{$startRow}:E{$endRow}");
-                $sheet->mergeCells("K{$startRow}:K{$endRow}");
-                $sheet->mergeCells("L{$startRow}:L{$endRow}");
+                $sheet->mergeCells("F{$startRow}:F{$endRow}");
+                $sheet->mergeCells("G{$startRow}:G{$endRow}");
+                $sheet->mergeCells("M{$startRow}:M{$endRow}");
+                $sheet->mergeCells("N{$startRow}:N{$endRow}");
             }
 
-            // 2. Data Level Items (F - J)
+            // 2. Data Level Items (H - L)
             $rfqTotal = 0;
             if ($items->isEmpty()) {
-                $sheet->setCellValue("F{$startRow}", '-');
-                $sheet->setCellValue("G{$startRow}", '(Tidak ada item terlampir)');
-                $sheet->setCellValue("H{$startRow}", 0);
-                $sheet->setCellValue("I{$startRow}", '-');
-                $sheet->setCellValue("J{$startRow}", '-');
+                $sheet->setCellValue("H{$startRow}", '-');
+                $sheet->setCellValue("I{$startRow}", '(Tidak ada item terlampir)');
+                $sheet->setCellValue("J{$startRow}", 0);
+                $sheet->setCellValue("K{$startRow}", '-');
+                $sheet->setCellValue("L{$startRow}", '-');
                 $currentRow = $startRow;
             } else {
                 foreach ($items as $idx => $item) {
@@ -142,25 +170,25 @@ class AdminRfqController extends Controller
                     $catalogNo = $item->catalog_no ?: ($item->product?->sku ?? '-');
                     $productName = $item->product_title ?: ($item->product?->name ?? '-');
 
-                    $sheet->setCellValueExplicit("F{$currentRow}", $catalogNo, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-                    $sheet->setCellValue("G{$currentRow}", $productName);
-                    $sheet->setCellValue("H{$currentRow}", $qty);
-                    $sheet->setCellValue("I{$currentRow}", $price > 0 ? $price : '-');
-                    $sheet->setCellValue("J{$currentRow}", $subtotal > 0 ? $subtotal : '-');
+                    $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValue("I{$currentRow}", $productName);
+                    $sheet->setCellValue("J{$currentRow}", $qty);
+                    $sheet->setCellValue("K{$currentRow}", $price > 0 ? $price : '-');
+                    $sheet->setCellValue("L{$currentRow}", $subtotal > 0 ? $subtotal : '-');
 
                     // Format angka
                     if ($price > 0) {
-                        $sheet->getStyle("I{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                        $sheet->getStyle("K{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
                     }
                     if ($subtotal > 0) {
-                        $sheet->getStyle("J{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
+                        $sheet->getStyle("L{$currentRow}")->getNumberFormat()->setFormatCode('"Rp" #,##0');
                     }
                 }
             }
 
             // 3. Styling Blok RFQ
             // Fill background grup
-            $sheet->getStyle("A{$startRow}:L{$endRow}")->applyFromArray([
+            $sheet->getStyle("A{$startRow}:N{$endRow}")->applyFromArray([
                 'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => $blockBg]],
                 'alignment' => [
                     'vertical' => Alignment::VERTICAL_TOP,
@@ -173,12 +201,12 @@ class AdminRfqController extends Controller
             $sheet->getStyle("A{$startRow}:C{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle("A{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0369A1'));
             $sheet->getStyle("C{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color($statusColor));
-            $sheet->getStyle("H{$startRow}:J{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-            $sheet->getStyle("F{$startRow}:F{$endRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('475569'));
+            $sheet->getStyle("J{$startRow}:L{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
+            $sheet->getStyle("H{$startRow}:H{$endRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('475569'));
 
             // Border dalam (halus) dan border bawah penutup RFQ (tegas)
-            $sheet->getStyle("A{$startRow}:L{$endRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');
-            $sheet->getStyle("A{$endRow}:L{$endRow}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB('94A3B8');
+            $sheet->getStyle("A{$startRow}:N{$endRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');
+            $sheet->getStyle("A{$endRow}:N{$endRow}")->getBorders()->getBottom()->setBorderStyle(Border::BORDER_MEDIUM)->getColor()->setRGB('94A3B8');
 
             $row = $endRow + 1;
         }
@@ -188,14 +216,16 @@ class AdminRfqController extends Controller
         $sheet->getColumnDimension('B')->setWidth(16); // Tanggal
         $sheet->getColumnDimension('C')->setWidth(14); // Status
         $sheet->getColumnDimension('D')->setWidth(26); // Perusahaan
-        $sheet->getColumnDimension('E')->setWidth(26); // PIC & Kontak
-        $sheet->getColumnDimension('F')->setWidth(16); // SKU / Katalog
-        $sheet->getColumnDimension('G')->setWidth(34); // Nama Barang
-        $sheet->getColumnDimension('H')->setWidth(8);  // Qty
-        $sheet->getColumnDimension('I')->setWidth(18); // Harga Satuan
-        $sheet->getColumnDimension('J')->setWidth(20); // Subtotal
-        $sheet->getColumnDimension('K')->setWidth(26); // Catatan Klien
-        $sheet->getColumnDimension('L')->setWidth(26); // Catatan Admin
+        $sheet->getColumnDimension('E')->setWidth(22); // Nama PIC
+        $sheet->getColumnDimension('F')->setWidth(26); // Email
+        $sheet->getColumnDimension('G')->setWidth(18); // No WA
+        $sheet->getColumnDimension('H')->setWidth(16); // SKU / Katalog
+        $sheet->getColumnDimension('I')->setWidth(34); // Nama Barang
+        $sheet->getColumnDimension('J')->setWidth(8);  // Qty
+        $sheet->getColumnDimension('K')->setWidth(18); // Harga Satuan
+        $sheet->getColumnDimension('L')->setWidth(20); // Subtotal
+        $sheet->getColumnDimension('M')->setWidth(26); // Catatan Klien
+        $sheet->getColumnDimension('N')->setWidth(26); // Catatan Admin
 
         return response()->streamDownload(function () use ($spreadsheet) {
             $writer = new Xlsx($spreadsheet);

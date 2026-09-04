@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Admin Panel') | PROLABIOS</title>
-  {{-- Critical: prevent white flash before admin.css (Vite) loads --}}
+  {{-- Critical: prevent dark flash before admin.css (Vite) loads --}}
   <style>
-    html { color-scheme: dark; background-color: #070708; }
-    html, body { margin: 0; padding: 0; background-color: #070708 !important; color: #ffffff; }
-    body.admin-panel { background-color: #070708 !important; }
+    html { color-scheme: light; background-color: #D6D0C5; }
+    html, body { margin: 0; padding: 0; background-color: #D6D0C5 !important; color: #1E1E1E; }
+    body.admin-panel { background-color: #D6D0C5 !important; }
   </style>
   <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
   <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
 
-  <!-- Font: Space Grotesk — same as main website -->
+  <!-- Fonts: Space Grotesk & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -32,7 +32,7 @@
 </head>
 <body class="admin-panel">
   <!-- Progress Loading Bar -->
-  <div id="page-loading-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--color-accent, #FF4950); z-index: 9999; transition: width 0.4s ease, opacity 0.4s ease; opacity: 0; pointer-events: none;"></div>
+  <div id="page-loading-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--color-accent, #A6171C); z-index: 9999; transition: width 0.4s ease, opacity 0.4s ease; opacity: 0; pointer-events: none;"></div>
 
   <div id="admin-wrapper">
     <aside id="admin-sidebar">
@@ -109,8 +109,8 @@
         <div class="sidebar-item">
           <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
             @csrf
-            <button type="submit" class="sidebar-link" style="color: rgba(255,73,80,0.7) !important;">
-              <i class="bi bi-arrow-bar-left"></i> Keluar
+            <button type="submit" class="sidebar-link" style="color: #F87171 !important;">
+              <i class="bi bi-arrow-bar-left" style="color: #F87171;"></i> Keluar
             </button>
           </form>
         </div>
@@ -141,8 +141,8 @@
     </div>
   </div>
 
-  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-text-muted); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 1050;">
-    <i class="bi bi-arrow-up" style="font-size: 1rem;"></i>
+  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface, #FFFFFF); border: 2px solid var(--color-border, #1E1E1E); border-radius: 6px; box-shadow: 3px 3px 0 var(--color-border, #1E1E1E); color: var(--color-text-main, #1E1E1E); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1050;">
+    <i class="bi bi-arrow-up" style="font-size: 1rem; font-weight: 700;"></i>
   </button>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -330,26 +330,28 @@
       let scrollLeft;
 
       slider.addEventListener('mousedown', (e) => {
-        if (e.target.closest('a, button, input, select')) return;
+        if (e.target.closest('a, button, input, select, textarea, label')) return;
         isDown = true;
-        slider.style.cursor = 'grabbing';
+        slider.classList.add('is-grabbing');
+        window.getSelection()?.removeAllRanges();
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
       });
 
-      slider.addEventListener('mouseleave', () => {
+      const stopDrag = () => {
+        if (!isDown) return;
         isDown = false;
-        slider.style.cursor = 'grab';
-      });
+        slider.classList.remove('is-grabbing');
+      };
 
-      slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.style.cursor = 'grab';
-      });
+      slider.addEventListener('mouseleave', stopDrag);
+      slider.addEventListener('mouseup', stopDrag);
+      window.addEventListener('mouseup', stopDrag);
 
       slider.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
+        window.getSelection()?.removeAllRanges();
         const x = e.pageX - slider.offsetLeft;
         const walk = (x - startX) * 1.8;
         slider.scrollLeft = scrollLeft - walk;

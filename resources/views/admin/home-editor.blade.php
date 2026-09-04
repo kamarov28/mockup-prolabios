@@ -53,17 +53,17 @@
   @endif
 
   @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show mb-4 border border-danger-subtle" style="background: rgba(239, 68, 68, 0.12); border-radius: 8px;" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show mb-4 border border-danger-subtle" style="border-radius: 8px;" role="alert">
       <div class="d-flex align-items-center mb-1">
         <i class="bi bi-exclamation-triangle-fill text-danger fs-5 me-2"></i>
         <strong class="text-danger">Terdapat beberapa data yang belum sesuai:</strong>
       </div>
-      <ul class="mb-0 small text-white-50 ps-4">
+      <ul class="mb-0 small ps-4" style="color: #991B1B;">
         @foreach ($errors->all() as $error)
           <li>{{ $error }}</li>
         @endforeach
       </ul>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   @endif
 
@@ -78,15 +78,15 @@
 
     <div class="row g-4">
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all" style="background: #0e0e10; border: 1px solid var(--color-border); border-radius: 12px;">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(255, 73, 80, 0.1); color: var(--color-accent);">
+              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(166, 23, 28, 0.08); color: var(--color-accent);">
                 <i class="bi bi-house-gear fs-4"></i>
               </div>
               <span class="admin-badge admin-badge-accent">Halaman Utama</span>
             </div>
-            <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Halaman Beranda</h3>
+            <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Halaman Beranda</h3>
             <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
               Atur slideshow hero, slogan, kartu bento, sector finder, dan CTA di beranda.
             </p>
@@ -98,15 +98,15 @@
       </div>
 
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all" style="background: #0e0e10; border: 1px solid var(--color-border); border-radius: 12px;">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(46, 204, 113, 0.1); color: #2ecc71;">
+              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); color: #10B981;">
                 <i class="bi bi-telephone-outbound fs-4"></i>
               </div>
               <span class="admin-badge admin-badge-success">Informasi Kontak</span>
             </div>
-            <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Kontak &amp; Alamat</h3>
+            <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Kontak &amp; Alamat</h3>
             <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
               Kelola nomor WhatsApp, email, alamat kantor, dan Google Maps.
             </p>
@@ -118,7 +118,7 @@
       </div>
 
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all" style="background: #0e0e10; border: 1px solid var(--color-border); border-radius: 12px;">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
@@ -126,7 +126,7 @@
               </div>
               <span class="admin-badge admin-badge-warning">Setelan Situs</span>
             </div>
-            <h3 class="h5 fw-bold text-white mb-2" style="font-family: var(--font-headline);">Umum &amp; SEO</h3>
+            <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Umum &amp; SEO</h3>
             <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
               Nama PT, logo &amp; favicon, jam kerja, media sosial, dan meta SEO.
             </p>

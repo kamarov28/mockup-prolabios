@@ -181,32 +181,6 @@
 
 @section('admin_styles')
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
-  @vite(['resources/css/summernote-dark.css'])
-  <style>
-    input[type="file"].form-control {
-      color: rgba(255,255,255,0.75) !important;
-      background-color: var(--color-surface) !important;
-      border: 1px solid var(--color-border) !important;
-      padding: 0 !important;
-      overflow: hidden;
-    }
-    input[type="file"].form-control::file-selector-button {
-      background-color: #2a2a2e !important;
-      color: rgba(255,255,255,0.85) !important;
-      border: none !important;
-      border-right: 1px solid var(--color-border) !important;
-      padding: 0.375rem 0.85rem !important;
-      margin-right: 0.75rem !important;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-    }
-    input[type="file"].form-control::file-selector-button:hover {
-      background-color: rgba(255,73,80,0.15) !important;
-      color: var(--color-accent) !important;
-    }
-  </style>
 @endsection
 
 @section('admin_scripts')

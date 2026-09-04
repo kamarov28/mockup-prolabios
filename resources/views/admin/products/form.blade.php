@@ -132,7 +132,7 @@
       </div>
 
       <div id="sub-category-block" style="display: none;">
-        <div class="admin-form-group mb-0 p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: rgba(255,255,255,0.02);">
+        <div class="admin-form-group mb-0 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
           <label for="admin-subcategory-select" class="admin-form-label">
             <i class="bi bi-diagram-3 me-1" style="color: var(--color-accent);"></i>Subkategori <span style="color: var(--color-accent);">*</span>
           </label>
@@ -149,7 +149,7 @@
         <p class="form-text mb-3">Thumbnail katalog, kartu, dan PDF penawaran.</p>
         <div class="row g-3 align-items-center">
           <div class="col-sm-3 text-center">
-            <div style="width: 120px; height: 120px; margin: 0 auto; border: 1px solid var(--color-border); border-radius: 8px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="width: 120px; height: 120px; margin: 0 auto; border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0); display: flex; align-items: center; justify-content: center; overflow: hidden;">
               <img id="image-preview" src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
           </div>
@@ -174,17 +174,17 @@
           <div class="row g-2 mb-3">
             @foreach($product['gallery_images'] as $galleryPath)
               <div class="col-4 col-sm-2">
-                <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 1px solid var(--color-border); border-radius: 6px; background: rgba(255,255,255,0.03);">
+                <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
                   <img src="{{ $galleryPath }}" alt="Galeri" style="width: 100%; height: 100%; object-fit: cover;">
-                  <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: rgba(0,0,0,0.65); border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
+                  <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: var(--color-border, #1E1E1E); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
                     <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
-                    <i class="bi bi-trash" style="color: #f87171;"></i>
+                    <i class="bi bi-trash" style="color: #FFFFFF;"></i>
                   </label>
                 </div>
               </div>
             @endforeach
           </div>
-          <p class="form-text mb-2" style="color: #f87171;">Centang foto yang ingin dihapus, lalu simpan.</p>
+          <p class="form-text mb-2" style="color: var(--color-accent, #A6171C); font-weight: 600;">Centang foto yang ingin dihapus, lalu simpan.</p>
         @endif
 
         <input class="form-control" type="file" id="gallery_files" name="gallery_files[]" accept="image/*" multiple>
@@ -212,32 +212,6 @@
 
 @section('admin_styles')
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.css" rel="stylesheet">
-  @vite(['resources/css/summernote-dark.css'])
-  <style>
-    input[type="file"].form-control {
-      color: rgba(255,255,255,0.75) !important;
-      background-color: var(--color-surface) !important;
-      border: 1px solid var(--color-border) !important;
-      padding: 0 !important;
-      overflow: hidden;
-    }
-    input[type="file"].form-control::file-selector-button {
-      background-color: #2a2a2e !important;
-      color: rgba(255,255,255,0.85) !important;
-      border: none !important;
-      border-right: 1px solid var(--color-border) !important;
-      padding: 0.375rem 0.85rem !important;
-      margin-right: 0.75rem !important;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-    }
-    input[type="file"].form-control::file-selector-button:hover {
-      background-color: rgba(255,73,80,0.15) !important;
-      color: var(--color-accent) !important;
-    }
-  </style>
 @endsection
 
 @section('admin_scripts')

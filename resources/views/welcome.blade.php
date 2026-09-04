@@ -24,7 +24,7 @@
           <p class="typo-section-sub">Instrumen teruji dan media kultur standar farmakope siap pakai untuk kebutuhan pengujian lab.</p>
         </div>
         <div class="mt-3 mt-md-0">
-          <a href="{{ url('/produk') }}" class="typo-btn-link" style="font-size: 0.85rem;">
+          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
             Lihat Semua Produk <i class="bi bi-arrow-right"></i>
           </a>
         </div>

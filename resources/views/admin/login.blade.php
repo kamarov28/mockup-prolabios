@@ -18,119 +18,80 @@
   <!-- Vite Asset Loading -->
   @vite(['resources/css/admin.css'])
 </head>
-<body class="login-split-page">
+<body class="login-nb-page">
 
-  <div class="login-split-container">
+  <div class="login-nb-container">
 
-    <!-- Kolom Kiri: Form Login -->
-    <div class="login-split-form-col">
-      <div class="login-form-wrapper">
+    <div class="login-nb-card">
 
-        <!-- Brand Header -->
-        <div class="login-brand-head mb-4">
-          <a href="{{ url('/') }}" class="d-inline-block mb-3">
-            <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios Logo" class="login-brand-logo">
-          </a>
-          <div class="d-flex align-items-center gap-2 mb-2">
-            <span class="login-badge-pill">ADMIN CONSOLE</span>
-            <span class="text-white-50" style="font-size: 0.7rem;">&bull; v2.5</span>
+      <!-- Brand Header -->
+      <div class="login-nb-header text-center mb-4">
+        <a href="{{ url('/') }}" class="d-inline-block mb-3" title="Kembali ke Beranda">
+          <img src="{{ asset('images/logo-prolabios.png') }}" alt="Prolabios Logo" class="login-nb-logo">
+        </a>
+        <div class="d-flex align-items-center justify-content-center mb-2">
+          <span class="login-nb-badge">ADMIN CONSOLE</span>
+        </div>
+        <h1 class="login-nb-title">Masuk ke Panel</h1>
+        <p class="login-nb-subtitle">Kelola katalog, permintaan RFQ, artikel, dan portal.</p>
+      </div>
+
+      <!-- Flash Messages -->
+      @if(session('success'))
+        <div class="login-nb-alert login-nb-alert-success mb-3" role="alert">
+          <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        </div>
+      @endif
+
+      @if(session('error'))
+        <div class="login-nb-alert login-nb-alert-error mb-3" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+        </div>
+      @endif
+
+      <!-- Form -->
+      <form action="{{ url('/admin/login') }}" method="POST" class="login-nb-form">
+        @csrf
+
+        <div class="mb-3">
+          <label for="username" class="login-nb-label">Username</label>
+          <div class="login-nb-input-group">
+            <span class="login-nb-input-icon"><i class="bi bi-person-fill"></i></span>
+            <input type="text" class="login-nb-input" id="username" name="username" required value="{{ old('username') }}" placeholder="Masukkan username" autofocus autocomplete="username">
           </div>
-          <h1 class="login-heading">Masuk ke Panel</h1>
-          <p class="login-subheading">Kelola katalog, permintaan RFQ, artikel, dan pengaturan portal.</p>
         </div>
 
-        <!-- Flash Messages -->
-        @if(session('success'))
-          <div class="alert alert-success border-0 shadow-sm mb-4 small" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        <div class="mb-4">
+          <label for="password" class="login-nb-label">Kata Sandi</label>
+          <div class="login-nb-input-group">
+            <span class="login-nb-input-icon"><i class="bi bi-shield-lock-fill"></i></span>
+            <input type="password" class="login-nb-input" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
+            <button type="button" class="login-nb-toggle-btn" id="toggle-password" title="Lihat password" aria-label="Lihat password">
+              <i id="toggle-password-icon" class="bi bi-eye-slash"></i>
+            </button>
           </div>
-        @endif
+        </div>
 
-        @if(session('error'))
-          <div class="alert alert-danger border-0 shadow-sm mb-4 small" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-          </div>
-        @endif
+        <button type="submit" class="login-nb-btn-submit w-100 mb-3">
+          <span>Masuk Workspace</span>
+          <i class="bi bi-arrow-right"></i>
+        </button>
 
-        <!-- Form -->
-        <form action="{{ url('/admin/login') }}" method="POST" class="login-form-fields">
-          @csrf
+        <div class="login-nb-footer d-flex justify-content-between align-items-center pt-3 border-top">
+          <a href="{{ url('/') }}" class="login-nb-back-link">
+            <i class="bi bi-arrow-left me-1"></i> Ke Beranda Publik
+          </a>
+          <span class="login-nb-secure-pill">
+            <i class="bi bi-lock-fill text-success me-1"></i> SSL Protected
+          </span>
+        </div>
+      </form>
 
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-person"></i></span>
-              <input type="text" class="form-control" id="username" name="username" required value="{{ old('username') }}" placeholder="Masukkan username" autofocus autocomplete="username">
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <div class="d-flex justify-content-between align-items-center mb-1">
-              <label for="password" class="form-label mb-0">Kata Sandi</label>
-            </div>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
-              <input type="password" class="form-control" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
-              <button type="button" class="input-group-text" id="toggle-password" title="Lihat password" aria-label="Lihat password">
-                <i id="toggle-password-icon" class="bi bi-eye-slash"></i>
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100 py-2 mb-4 d-flex align-items-center justify-content-center gap-2">
-            <span>Masuk Workspace</span>
-            <i class="bi bi-arrow-right"></i>
-          </button>
-
-          <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-10">
-            <a href="{{ url('/') }}" class="btn-back-home text-decoration-none">
-              <i class="bi bi-arrow-left me-1"></i> Ke Beranda Publik
-            </a>
-            <span class="text-white-50" style="font-size: 0.7rem;">
-              <i class="bi bi-lock-fill text-success me-1"></i> SSL Protected
-            </span>
-          </div>
-        </form>
-
-      </div>
     </div>
 
-    <!-- Kolom Kanan: Cinematic Visual Lab -->
-    <div class="login-split-visual-col">
-      @php
-        $loginBg = !empty($homeData['admin_login_bg'])
-          ? $homeData['admin_login_bg']
-          : 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=85';
-      @endphp
-      <div class="login-visual-bg" style="background-image: url('{{ $loginBg }}');"></div>
-      <div class="login-visual-overlay"></div>
-
-      <div class="login-visual-content">
-        <div class="mb-4">
-          <span class="typo-pill-outline" style="border-color: rgba(255,255,255,0.25); color: #fff; background: rgba(0,0,0,0.4);">{{ $homeData['company_name'] ?? 'PT PROLABIOS MITRA ANALITIKA' }}</span>
-        </div>
-        <h2 class="login-visual-title">Precision Instruments &amp; Lab Solutions</h2>
-        <p class="login-visual-desc">
-          Platform terpadu untuk penyediaan instrumen analisis, reagen mikrobiologi, serta pengelolaan permintaan penawaran (RFQ) B2B berstandar internasional.
-        </p>
-
-        <div class="login-visual-metrics mt-4 pt-3">
-          <div class="row g-3">
-            <div class="col-6">
-              <div class="metric-card">
-                <span class="metric-val">15+</span>
-                <span class="metric-lbl">Global Principals</span>
-              </div>
-            </div>
-            <div class="col-6">
-              <div class="metric-card">
-                <span class="metric-val">ISO &amp; AKL</span>
-                <span class="metric-lbl">Compliance Standard</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <!-- Attribution Footer Note -->
+    <div class="text-center mt-3 login-nb-copyright">
+      &copy; {{ date('Y') }} PT Prolabios Mitra Analitika &bull; Internal System
     </div>
 
   </div>

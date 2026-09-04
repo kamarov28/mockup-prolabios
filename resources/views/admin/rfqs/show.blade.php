@@ -16,14 +16,14 @@
     <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost mb-2">
       <i class="bi bi-arrow-left"></i> Kembali ke Daftar RFQ
     </a>
-    <h1 class="h3 fw-bold text-white mb-2" style="font-family: var(--font-headline);">
+    <h1 class="h3 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">
       {{ $rfq->rfq_number }}
       <span class="admin-badge {{ $rfq->status_badge_class }} ms-2" style="font-size: 0.75rem; vertical-align: middle;">{{ $rfq->status_label }}</span>
     </h1>
   </div>
   <div class="d-inline-flex gap-2 flex-wrap">
     <a href="{{ $rfq->whatsapp_url }}"
-       target="_blank" rel="noopener" class="admin-btn admin-btn-primary" style="background: #25D366; border-color: #25D366;">
+       target="_blank" rel="noopener" class="admin-btn admin-btn-primary" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
       <i class="bi bi-whatsapp"></i> Hubungi Customer via WA
     </a>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-ghost">
@@ -41,7 +41,7 @@
           <span class="admin-card-header-label">Daftar Kebutuhan</span>
           <h2 class="admin-card-header-title">Item Produk yang Diajukan</h2>
         </div>
-        <span class="badge bg-secondary bg-opacity-20 text-white px-3 py-2 border border-secondary border-opacity-30">
+        <span class="admin-badge admin-badge-muted px-3 py-2">
           {{ $rfq->items->count() }} Macam Produk
         </span>
       </div>
@@ -69,31 +69,31 @@
                 @endphp
                 <tr>
                   <td>
-                    <span class="badge bg-dark border border-secondary border-opacity-30 text-light">
+                    <span class="badge bg-light border text-secondary">
                       {{ $item->catalog_no ?: '-' }}
                     </span>
                   </td>
                   <td>
-                    <strong class="d-block text-white">{{ $item->product_title }}</strong>
+                    <strong class="d-block" style="color: var(--color-text-main);">{{ $item->product_title }}</strong>
                     @if($item->product)
                       <span class="text-secondary small">Kategori: {{ $item->product->category }}</span>
                     @endif
                   </td>
                   <td>
-                    <span class="text-white">
+                    <span style="color: var(--color-text-main);">
                       {{ $item->original_price > 0 ? 'Rp ' . number_format($item->original_price, 0, ',', '.') : 'Harga Katalog' }}
                     </span>
                   </td>
                   <td style="text-align: center;">
-                    <strong class="text-white fs-6">{{ $item->quantity }}</strong> Unit
+                    <strong class="fs-6" style="color: var(--color-text-main);">{{ $item->quantity }}</strong> Unit
                   </td>
                   <td>
                     @if(!$isIndent)
-                      <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-30 px-2 py-1 small">
+                      <span class="admin-badge admin-badge-success">
                         <i class="bi bi-box-seam me-1"></i> Ready Stock
                       </span>
                     @else
-                      <span class="badge bg-warning bg-opacity-20 text-warning border border-warning border-opacity-30 px-2 py-1 small" title="Stok ready {{ $stockVal }} unit">
+                      <span class="admin-badge admin-badge-warning" title="Stok ready {{ $stockVal }} unit">
                         <i class="bi bi-clock-history me-1"></i> Indent (Ready: {{ $stockVal }})
                       </span>
                     @endif
@@ -104,9 +104,9 @@
           </table>
         </div>
 
-        <div class="p-3 border-top border-secondary border-opacity-10 d-flex justify-content-between align-items-center bg-black bg-opacity-20">
+        <div class="p-3 border-top d-flex justify-content-between align-items-center" style="background-color: var(--color-surface-2); border-color: var(--color-border) !important;">
           <span class="text-secondary small">Estimasi Subtotal Katalog:</span>
-          <strong class="fs-5" style="color: var(--color-accent, #FF4950);">
+          <strong class="fs-5" style="color: var(--color-accent, #A6171C);">
             {{ $totalEst > 0 ? 'Rp ' . number_format($totalEst, 0, ',', '.') : 'Est. Penawaran' }}
           </strong>
         </div>
@@ -128,7 +128,7 @@
           @method('PUT')
           <div class="mb-3">
             <label class="form-label text-secondary small">Status pengajuan</label>
-            <select name="status" class="form-select" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);">
+            <select name="status" class="form-select">
               @foreach(\App\Models\Rfq::statusOptions() as $value => $label)
                 <option value="{{ $value }}" @selected(old('status', $rfq->status ?: 'new') === $value)>{{ $label }}</option>
               @endforeach
@@ -139,7 +139,7 @@
           </div>
           <div class="mb-3">
             <label class="form-label text-secondary small">Catatan internal (tidak terlihat customer)</label>
-            <textarea name="admin_notes" rows="4" class="form-control" style="background: transparent; color: var(--color-text-main); border: 1px solid var(--color-border);" placeholder="Mis. sudah telepon 24/08, tunggu PO, dll.">{{ old('admin_notes', $rfq->admin_notes) }}</textarea>
+            <textarea name="admin_notes" rows="4" class="form-control" placeholder="Mis. sudah telepon 24/08, tunggu PO, dll.">{{ old('admin_notes', $rfq->admin_notes) }}</textarea>
             @error('admin_notes')
               <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -160,19 +160,19 @@
       </div>
 
       <div class="admin-card-body">
-        <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
+        <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Nama Pemohon:</span>
-          <strong class="text-white fs-6">{{ $rfq->name }}</strong>
+          <strong class="fs-6" style="color: var(--color-text-main);">{{ $rfq->name }}</strong>
         </div>
 
-        <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
+        <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Nama Instansi / Perusahaan:</span>
-          <span class="text-light fw-medium">{{ $rfq->company_name }}</span>
+          <span class="fw-medium" style="color: var(--color-text-main);">{{ $rfq->company_name }}</span>
         </div>
 
-        <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
+        <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Email:</span>
-          <a href="mailto:{{ $rfq->email }}" class="text-light text-decoration-none d-inline-flex align-items-center gap-1">
+          <a href="mailto:{{ $rfq->email }}" class="text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-text-main);">
             <i class="bi bi-envelope text-secondary"></i> {{ $rfq->email }}
           </a>
         </div>
@@ -186,12 +186,12 @@
 
         <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
           <span class="text-secondary small d-block mb-1">Tanggal Masuk:</span>
-          <span class="text-light">{{ $rfq->created_at ? $rfq->created_at->format('d F Y, H:i') : '-' }} WIB</span>
+          <span class="fw-medium text-dark">{{ $rfq->created_at ? $rfq->created_at->format('d F Y, H:i') : '-' }} WIB</span>
         </div>
 
         <div>
           <span class="text-secondary small d-block mb-1">Catatan Khusus dari Pemohon:</span>
-          <div class="p-3 rounded bg-black bg-opacity-40 border border-secondary border-opacity-20 text-light small" style="min-height: 70px;">
+          <div class="p-3 rounded border small" style="background-color: var(--color-surface-2); border-color: var(--color-border) !important; color: var(--color-text-main); min-height: 70px;">
             {{ $rfq->notes ?: 'Tidak ada catatan tambahan.' }}
           </div>
         </div>
@@ -200,7 +200,7 @@
 
     <div class="admin-card">
       <div class="admin-card-body">
-        <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pengajuan ini?');">
+        <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="form-delete">
           @csrf
           @method('DELETE')
           <button type="submit" class="admin-btn admin-btn-danger w-100 justify-content-center">

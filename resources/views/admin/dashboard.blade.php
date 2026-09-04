@@ -11,7 +11,7 @@
   <div class="col-md-3">
     <div class="admin-stat-card">
       <span class="admin-stat-label">Pengajuan RFQ</span>
-      <div class="admin-stat-value" style="color: var(--color-accent, #FF4950);">{{ $rfqsCount }}</div>
+      <div class="admin-stat-value" style="color: var(--color-accent, #A6171C);">{{ $rfqsCount }}</div>
       <a href="{{ route('admin.rfqs.index') }}" class="admin-stat-link">Lihat Semua <i class="bi bi-arrow-right"></i></a>
     </div>
   </div>
@@ -76,7 +76,7 @@
                 @foreach($recentRfqs as $rfq)
                   <tr>
                     <td>
-                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #FF4950);">
+                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C);">
                         {{ $rfq->rfq_number }}
                       </a>
                     </td>
@@ -84,7 +84,7 @@
                       <span class="admin-badge {{ $rfq->status_badge_class }}">{{ $rfq->status_label }}</span>
                     </td>
                     <td>
-                      <strong class="d-block text-white" style="font-size: 0.85rem;">{{ $rfq->name }}</strong>
+                      <strong class="d-block" style="font-size: 0.88rem; color: var(--color-text-main);">{{ $rfq->name }}</strong>
                       <span class="text-secondary small">{{ $rfq->company_name }}</span>
                     </td>
                     <td>
@@ -211,14 +211,14 @@
         </div>
         <div class="w-100">
           @php
-            $colors = ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8', '#4ade80'];
+            $colors = ['#A6171C', '#1E1E1E', '#F1C045', '#7A1015', '#8C8275', '#B8AF9F', '#D6D0C5', '#3D3835'];
             $ci = 0; $cc = count($colors);
           @endphp
           @foreach($categoryDist as $catName => $count)
             @php $col = $colors[$ci % $cc]; $ci++; @endphp
             <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--color-border);">
               <span style="font-size: 0.8rem; display: flex; align-items: center; gap: 8px; color: var(--color-text-muted);">
-                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ $col }}; flex-shrink: 0;"></span>
+                <span style="width: 10px; height: 10px; border-radius: 2px; border: 1px solid #1E1E1E; background: {{ $col }}; flex-shrink: 0;"></span>
                 {{ $catName }}
               </span>
               <span style="font-size: 0.85rem; font-weight: 700; color: var(--color-text-main);">{{ $count }}</span>
@@ -246,10 +246,10 @@
         labels: {!! json_encode(array_keys($categoryDist)) !!},
         datasets: [{
           data: {!! json_encode(array_values($categoryDist)) !!},
-          backgroundColor: ['#FF4950', '#60a5fa', '#34d399', '#f59e0b', '#a78bfa', '#f472b6', '#38bdf8'],
+          backgroundColor: ['#A6171C', '#1E1E1E', '#F1C045', '#7A1015', '#8C8275', '#B8AF9F', '#D6D0C5', '#3D3835'],
           hoverOffset: 6,
           borderWidth: 2,
-          borderColor: '#0e0e10'
+          borderColor: '#FFFFFF'
         }]
       },
       options: {

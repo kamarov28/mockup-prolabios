@@ -79,13 +79,13 @@
               <div class="d-flex flex-wrap align-items-end gap-3 mb-4">
                 <div>
                   <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.72rem; letter-spacing: 1px; color: var(--nb-ink); font-family: var(--font-mono);">Jumlah Unit</label>
-                  <div class="d-inline-flex align-items-center" style="border: 2px solid var(--nb-ink); background: #FFFFFF; height: 48px; border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
-                    <button type="button" class="btn border-0 px-3 h-100 text-dark d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(-1)">
-                      <i class="bi bi-dash-lg fw-bold"></i>
+                  <div class="nb-stepper-wrap">
+                    <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
+                      <i class="bi bi-dash-lg"></i>
                     </button>
-                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="form-control text-center bg-transparent border-0 fw-bold h-100 hide-spinner" style="width: 60px; font-size: 1.05rem; font-family: var(--font-mono); outline: none; box-shadow: none; color: var(--nb-ink);" data-stock="{{ $stock }}">
-                    <button type="button" class="btn border-0 px-3 h-100 text-dark d-flex align-items-center justify-content-center" style="background: transparent;" onclick="stepQty(1)">
-                      <i class="bi bi-plus-lg fw-bold"></i>
+                    <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
+                    <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
+                      <i class="bi bi-plus-lg"></i>
                     </button>
                   </div>
                 </div>
