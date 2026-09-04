@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateSectorRequest;
 use App\Services\AuditLogger;
 use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
+use Illuminate\Support\Facades\DB;
 
 class AdminSectorController extends Controller
 {
@@ -107,8 +108,16 @@ class AdminSectorController extends Controller
     public function sectorsDestroy(string $id)
     {
         $sector = $this->sectors->getSectorById($id);
-        $name = $sector['name'] ?? null;
+        if (! $sector) {
+            return redirect()->route('admin.sectors')->with('error', 'Sektor tidak ditemukan.');
+        }
 
+        $usedCount = DB::table('product_sector')->where('sector_id', $id)->count();
+        if ($usedCount > 0) {
+            return redirect()->route('admin.sectors')->with('error', "Sektor \"{$sector['name']}\" masih terhubung dengan {$usedCount} produk katalog. Silakan hapus atau ubah pemetaan sektor pada produk terkait terlebih dahulu.");
+        }
+
+        $name = $sector['name'] ?? null;
         $this->sectors->deleteSector($id);
 
         AuditLogger::log('sector.delete', 'Sector', $id, [

@@ -131,6 +131,20 @@ trait HandlesImageUploads
             $sanitized = filter_var($url, FILTER_SANITIZE_URL);
             $valid = filter_var($sanitized, FILTER_VALIDATE_URL);
             if ($valid && in_array(strtolower((string) parse_url($valid, PHP_URL_SCHEME)), ['http', 'https'], true)) {
+                $host = strtolower((string) parse_url($valid, PHP_URL_HOST));
+
+                // SSRF Guard: reject localhost, loopback, private & link-local ranges
+                if (
+                    $host === 'localhost' ||
+                    $host === '127.0.0.1' ||
+                    $host === '::1' ||
+                    str_ends_with($host, '.local') ||
+                    str_ends_with($host, '.internal') ||
+                    filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false && filter_var($host, FILTER_VALIDATE_IP)
+                ) {
+                    return $fallback;
+                }
+
                 return $valid;
             }
 

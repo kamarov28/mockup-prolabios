@@ -116,8 +116,9 @@ class RfqController extends Controller
             return $rfq;
         });
 
-        // Clear Cart & Store Session Token for Success Page Protection
+        // Clear Cart, Regenerate Session for Fixation Protection & Store Token for Success Page
         session()->forget('cart');
+        $request->session()->regenerate();
         session()->put('submitted_rfq_number', $rfq->rfq_number);
 
         AuditLogger::log('rfq.submit', 'Rfq', $rfq->id, [

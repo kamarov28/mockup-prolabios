@@ -13,6 +13,7 @@ use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AdminProductController extends Controller
@@ -196,7 +197,7 @@ class AdminProductController extends Controller
         $newTitle = $request->input('title');
         $existing = $this->products->getProductByTitle($newTitle);
 
-        $existingId = is_object($existing) ? (int) ($existing->id ?? 0) : (int) ($existing['id'] ?? 0);
+        $existingId = is_object($existing) ? (int) ($existing->id ?? 0) : ($existing ? (int) ($existing['id'] ?? 0) : 0);
         if ($existing && $existingId !== $id) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
@@ -244,11 +245,14 @@ class AdminProductController extends Controller
     public function productsDestroy(int $id)
     {
         $product = $this->products->getProductById($id);
+        $title = is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null);
+        $catalog = is_object($product) ? ($product->catalog ?? null) : ($product['catalog'] ?? null);
+
         $this->products->deleteProductById($id);
 
         AuditLogger::log('product.delete', 'Product', $id, [
-            'title' => is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null),
-            'catalog' => is_object($product) ? ($product->catalog ?? null) : ($product['catalog'] ?? null),
+            'title' => $title,
+            'catalog' => $catalog,
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
@@ -327,7 +331,9 @@ class AdminProductController extends Controller
 
         $savedCount = count($productsToStore);
         if ($savedCount > 0) {
-            $this->products->upsertProducts($productsToStore);
+            DB::transaction(function () use ($productsToStore) {
+                $this->products->upsertProducts($productsToStore);
+            });
 
             AuditLogger::log('product.bulk_create', 'Product', null, [
                 'saved' => $savedCount,

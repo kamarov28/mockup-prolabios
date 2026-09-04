@@ -40,7 +40,7 @@ class CartController extends Controller
         return null;
     }
 
-    private function productToCartRow(Product $product, int $quantity, float $priceOverride = 0.0): array
+    private function productToCartRow(Product $product, int $quantity): array
     {
         return [
             'id' => $product->id,
@@ -48,7 +48,7 @@ class CartController extends Controller
             'title' => $product->title,
             'catalog' => $product->catalog ?? '',
             'image' => $product->image ?? '',
-            'price' => (float) $product->price > 0 ? (float) $product->price : $priceOverride,
+            'price' => max(0.0, (float) ($product->price ?? 0)),
             'stock' => (int) ($product->stock ?? 0),
             'quantity' => $quantity,
         ];
@@ -73,7 +73,7 @@ class CartController extends Controller
 
             if ($product) {
                 $cartKey = (string) $product->id;
-                $row = $this->productToCartRow($product, (int) ($item['quantity'] ?? 1), (float) ($item['price'] ?? 0));
+                $row = $this->productToCartRow($product, (int) ($item['quantity'] ?? 1));
                 $migratedCart[$cartKey] = $row;
                 $total += $row['price'] * $row['quantity'];
             } else {

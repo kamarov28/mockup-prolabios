@@ -14,9 +14,9 @@ return new class extends Migration
     public function up(): void
     {
         if (Schema::hasTable('users')) {
-            $adminEmail = env('ADMIN_EMAIL', 'admin@prolabios.com');
-            $adminUsername = env('ADMIN_USERNAME', 'admin');
-            $adminPassword = env('ADMIN_PASSWORD');
+            $adminEmail = config('app.admin_seed.email', 'admin@prolabios.com');
+            $adminUsername = config('app.admin_seed.username', 'admin');
+            $adminPassword = config('app.admin_seed.password');
 
             if (empty($adminPassword)) {
                 $adminPassword = Str::random(16);
@@ -41,7 +41,7 @@ return new class extends Migration
     public function down(): void
     {
         if (Schema::hasTable('users')) {
-            User::where('email', env('ADMIN_EMAIL', 'admin@prolabios.com'))->delete();
+            User::where('email', config('app.admin_seed.email', 'admin@prolabios.com'))->delete();
         }
     }
 };

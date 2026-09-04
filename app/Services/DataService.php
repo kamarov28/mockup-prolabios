@@ -83,7 +83,7 @@ class DataService
         return $this->products->deleteProductById($id);
     }
 
-    public function upsertProducts(array $rows): array
+    public function upsertProducts(array $rows): bool
     {
         return $this->products->upsertProducts($rows);
     }

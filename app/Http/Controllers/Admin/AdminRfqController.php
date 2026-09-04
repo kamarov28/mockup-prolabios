@@ -21,7 +21,7 @@ class AdminRfqController extends Controller
         $query = $this->buildFilteredQuery($request);
 
         if ($viewMode === 'kanban') {
-            $allRfqs = $query->with('items')->get();
+            $allRfqs = $query->with('items')->limit(300)->get();
             $kanbanColumns = [];
             foreach (Rfq::statusOptions() as $key => $label) {
                 $kanbanColumns[$key] = [
@@ -167,8 +167,8 @@ class AdminRfqController extends Controller
                     $subtotal = $price * $qty;
                     $rfqTotal += $subtotal;
 
-                    $catalogNo = $item->catalog_no ?: ($item->product?->sku ?? '-');
-                    $productName = $item->product_title ?: ($item->product?->name ?? '-');
+                    $catalogNo = $item->catalog_no ?: ($item->product?->catalog ?? '-');
+                    $productName = $item->product_title ?: ($item->product?->title ?? '-');
 
                     $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
                     $sheet->setCellValue("I{$currentRow}", $productName);

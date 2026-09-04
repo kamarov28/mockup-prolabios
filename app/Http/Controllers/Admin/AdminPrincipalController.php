@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePrincipalRequest;
 use App\Http\Requests\UpdatePrincipalRequest;
 use App\Models\Principal;
+use App\Models\Product;
 use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -103,11 +104,17 @@ class AdminPrincipalController extends Controller
     public function destroy(int $id)
     {
         $principal = Principal::find($id);
-        $name = $principal?->name;
-
-        if ($principal) {
-            $principal->delete();
+        if (! $principal) {
+            return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
+
+        $usedCount = Product::where('principal_id', $id)->count();
+        if ($usedCount > 0) {
+            return redirect()->route('admin.principals')->with('error', "Prinsipal \"{$principal->name}\" masih terhubung dengan {$usedCount} produk katalog. Silakan pindahkan atau ubah prinsipal pada produk terkait terlebih dahulu.");
+        }
+
+        $name = $principal->name;
+        $principal->delete();
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
 

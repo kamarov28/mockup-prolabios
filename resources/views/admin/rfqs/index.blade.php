@@ -25,7 +25,7 @@
         <i class="bi bi-file-earmark-spreadsheet me-1"></i> Ekspor Excel
       </a>
       <span class="admin-badge admin-badge-muted px-3 py-2">
-        Total: {{ ($viewMode ?? 'table') === 'kanban' ? $totalRfqs : $rfqs->total() }} Pengajuan
+        Total: {{ ($viewMode ?? 'table') === 'kanban' ? ($totalRfqs ?? 0) : ($rfqs->total() ?? 0) }} Pengajuan
       </span>
     </div>
   </div>
@@ -65,7 +65,7 @@
             <i class="bi bi-funnel me-1"></i> Filter
           </button>
           @if(request('s') || request('product_name') || request('status') || request('start_date') || request('end_date'))
-            <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter">
+            <a href="{{ route('admin.rfqs.index', request('view') === 'kanban' ? ['view' => 'kanban'] : []) }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter">
               <i class="bi bi-x-lg"></i>
             </a>
           @endif

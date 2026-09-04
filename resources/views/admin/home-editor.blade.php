@@ -27,25 +27,27 @@
 <div class="container-fluid px-0">
 
   @if($section)
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 rounded-3" style="background: var(--color-surface); border: 1px solid var(--color-border);">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3" style="background: var(--color-surface); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 3px 3px 0 #1E1E1E;">
       <div class="d-flex flex-wrap align-items-center gap-2">
-        <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline me-2" style="padding: 6px 14px; font-size: 0.75rem;">
-          <i class="bi bi-grid-fill me-1"></i> <span>Semua Menu</span>
+        <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline me-1" style="padding: 6px 14px; font-size: 0.78rem;">
+          <i class="bi bi-grid-fill me-1"></i> <span>Semua Modul</span>
         </a>
-        <div class="vr bg-secondary opacity-25 d-none d-md-block mx-1"></div>
-        <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-btn {{ $section === 'homepage' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
-          <i class="bi bi-house-door me-1"></i> <span>Beranda</span>
-        </a>
-        <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn {{ $section === 'contacts' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
-          <i class="bi bi-telephone-outbound me-1"></i> <span>Kontak & Alamat</span>
-        </a>
-        <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn {{ $section === 'general' ? 'admin-btn-accent' : 'admin-btn-outline' }}" style="padding: 6px 12px; font-size: 0.72rem;">
-          <i class="bi bi-gear-wide-connected me-1"></i> <span>Umum & SEO</span>
-        </a>
+        <div class="vr bg-dark opacity-50 d-none d-md-block mx-1" style="width: 2px; height: 24px;"></div>
+        <div class="admin-view-switcher">
+          <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-view-switcher-btn {{ $section === 'homepage' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
+            <i class="bi bi-house-door me-1"></i> <span>Beranda</span>
+          </a>
+          <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-view-switcher-btn {{ $section === 'contacts' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
+            <i class="bi bi-telephone-outbound me-1"></i> <span>Kontak & Alamat</span>
+          </a>
+          <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-view-switcher-btn {{ $section === 'general' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
+            <i class="bi bi-gear-wide-connected me-1"></i> <span>Umum & SEO</span>
+          </a>
+        </div>
       </div>
 
       <div class="d-flex align-items-center gap-2">
-        <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-outline text-secondary" style="padding: 6px 12px; font-size: 0.72rem;" title="Lihat Website Publik">
+        <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-ghost" style="padding: 6px 14px; font-size: 0.78rem;" title="Lihat Website Publik">
           <i class="bi bi-box-arrow-up-right me-1"></i> <span>Live Preview</span>
         </a>
       </div>
@@ -53,12 +55,12 @@
   @endif
 
   @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show mb-4 border border-danger-subtle" style="border-radius: 8px;" role="alert">
+    <div class="alert alert-dismissible fade show mb-4" style="background: #FEE2E2; border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 3px 3px 0 #1E1E1E; color: #1E1E1E;" role="alert">
       <div class="d-flex align-items-center mb-1">
         <i class="bi bi-exclamation-triangle-fill text-danger fs-5 me-2"></i>
-        <strong class="text-danger">Terdapat beberapa data yang belum sesuai:</strong>
+        <strong style="color: #991B1B;">Terdapat beberapa data yang belum sesuai:</strong>
       </div>
-      <ul class="mb-0 small ps-4" style="color: #991B1B;">
+      <ul class="mb-0 small ps-4" style="color: #991B1B; font-weight: 500;">
         @foreach ($errors->all() as $error)
           <li>{{ $error }}</li>
         @endforeach
@@ -71,24 +73,24 @@
     <div class="mb-5">
       <span class="admin-page-label">PENGATURAN KONTEN WEBSITE</span>
       <h1 class="admin-page-title mb-2">Pilih Bagian yang Ingin Diatur</h1>
-      <p class="text-secondary small mb-0" style="max-width: 600px; line-height: 1.6;">
+      <p style="color: var(--color-text-muted); font-size: 0.88rem; max-width: 600px; line-height: 1.6; margin-bottom: 0;">
         Silakan pilih modul di bawah untuk memperbarui teks beranda, nomor kontak, logo, atau pengaturan media sosial.
       </p>
     </div>
 
     <div class="row g-4">
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(166, 23, 28, 0.08); color: var(--color-accent);">
+              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #FFD4D6; color: var(--color-accent); box-shadow: 2px 2px 0 #1E1E1E;">
                 <i class="bi bi-house-gear fs-4"></i>
               </div>
               <span class="admin-badge admin-badge-accent">Halaman Utama</span>
             </div>
             <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Halaman Beranda</h3>
-            <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
-              Atur slideshow hero, slogan, kartu bento, sector finder, dan CTA di beranda.
+            <p style="color: var(--color-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;">
+              Atur slideshow hero, slogan, kartu bento standar, alur sector finder, dan banner konversi RFQ.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
@@ -98,17 +100,17 @@
       </div>
 
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); color: #10B981;">
+              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #B9F5D0; color: #166534; box-shadow: 2px 2px 0 #1E1E1E;">
                 <i class="bi bi-telephone-outbound fs-4"></i>
               </div>
               <span class="admin-badge admin-badge-success">Informasi Kontak</span>
             </div>
             <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Kontak &amp; Alamat</h3>
-            <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
-              Kelola nomor WhatsApp, email, alamat kantor, dan Google Maps.
+            <p style="color: var(--color-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;">
+              Kelola nomor WhatsApp utama &amp; teknisi, telepon kantor marketing/finance, email resmi, dan peta.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
@@ -118,20 +120,26 @@
       </div>
 
       <div class="col-md-6 col-lg-4">
-        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4 transition-all">
+        <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center rounded-3" style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #FDE68A; color: #92400E; box-shadow: 2px 2px 0 #1E1E1E;">
                 <i class="bi bi-gear-wide-connected fs-4"></i>
               </div>
               <span class="admin-badge admin-badge-warning">Setelan Situs</span>
             </div>
             <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Umum &amp; SEO</h3>
-            <p class="text-secondary small mb-4" style="line-height: 1.6; font-size: 0.85rem;">
-              Nama PT, logo &amp; favicon, jam kerja, media sosial, dan meta SEO.
+            <p style="color: var(--color-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;">
+              Nama PT resmi, jam operasional, logo &amp; favicon, banner login, meta deskripsi SEO, dan media sosial.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
+            <span>Edit Setelan</span> <i class="bi bi-arrow-right ms-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  @endif
             <span>Edit Setelan</span> <i class="bi bi-arrow-right ms-1"></i>
           </a>
         </div>

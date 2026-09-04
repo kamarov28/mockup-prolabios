@@ -44,8 +44,8 @@ class AdminDashboardController extends Controller
 
         $categoryDist = [];
         foreach ($categoryRows as $row) {
-            $catName = ucwords(str_replace('-', ' ', $row->category));
-            $categoryDist[$catName] = $row->total;
+            $catName = ucwords(str_replace('-', ' ', (string) $row->category));
+            $categoryDist[$catName] = (int) ($row->getAttribute('total') ?? 0);
         }
 
         if (empty($categoryDist)) {

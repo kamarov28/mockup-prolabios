@@ -70,7 +70,10 @@
         <div class="col-md-6">
           <div class="admin-form-group mb-0">
             <label for="price" class="admin-form-label">Harga Produk (Rp)</label>
-            <input type="number" step="0.01" min="0" class="form-control" id="price" name="price" value="{{ old('price', $product['price'] ?? 0) }}" placeholder="Contoh: 1500000">
+            <div class="input-group">
+              <span class="input-group-text" style="background: var(--color-surface-2, #EDE8E0); border: 2px solid var(--color-border); border-right: none; font-weight: 700; font-size: 0.85rem;">Rp</span>
+              <input type="text" inputmode="numeric" class="form-control" id="price" name="price" value="{{ old('price') !== null ? number_format((float) str_replace(['.', ' '], '', old('price')), 0, ',', '.') : (!empty($product['price']) ? number_format((float) $product['price'], 0, ',', '.') : '') }}" placeholder="Contoh: 1.500.000">
+            </div>
           </div>
         </div>
         <div class="col-md-6">
@@ -295,6 +298,23 @@
       if (categorySelect.value) {
         updateSubCategories(categorySelect.options[categorySelect.selectedIndex]);
       }
+    }
+
+    // Format ribuan otomatis (titik) untuk input harga
+    var priceInput = document.getElementById('price');
+    if (priceInput) {
+      function formatRupiahInput(val) {
+        var clean = val.replace(/\D/g, '');
+        return clean ? new Intl.NumberFormat('id-ID').format(clean) : '';
+      }
+
+      priceInput.addEventListener('input', function() {
+        var cursor = this.selectionStart;
+        var prevLen = this.value.length;
+        this.value = formatRupiahInput(this.value);
+        var diff = this.value.length - prevLen;
+        this.setSelectionRange(cursor + diff, cursor + diff);
+      });
     }
 
     $(document).ready(function() {

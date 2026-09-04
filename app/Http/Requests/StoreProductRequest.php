@@ -12,6 +12,15 @@ class StoreProductRequest extends FormRequest
         return Auth::check();
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('price') && is_string($this->price)) {
+            $this->merge([
+                'price' => str_replace(['.', ' '], '', $this->price),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [

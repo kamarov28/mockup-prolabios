@@ -15,6 +15,11 @@ export function initBacteriaSwarm() {
     '/images/bactery-icon/bacteria@1x-33.3s-200px-200px.svg',
   ];
 
+  // Teardown existing instance if already running (prevents duplicate listeners & containers on HMR / reinit)
+  if (window.__bacteriaSwarmInstance) {
+    window.__bacteriaSwarmInstance.destroy();
+  }
+
   // Organism pool settings - reduced count & subtle presence
   const COUNT = window.innerWidth < 768 ? 5 : 9;
   const container = document.createElement('div');
@@ -93,10 +98,11 @@ export function initBacteriaSwarm() {
   // Interactive mouse repulsion
   let mouseX = -9999;
   let mouseY = -9999;
-  window.addEventListener('mousemove', (e) => {
+  const onMouseMove = (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-  }, { passive: true });
+  };
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
 
   let rafId = null;
   let lastTime = performance.now();
@@ -161,8 +167,16 @@ export function initBacteriaSwarm() {
 
   rafId = requestAnimationFrame(update);
 
-  // Clean-up if page navigation changes
-  window.addEventListener('beforeunload', () => {
+  // Clean-up and lifecycle teardown
+  function destroy() {
     if (rafId) cancelAnimationFrame(rafId);
-  });
+    window.removeEventListener('mousemove', onMouseMove);
+    if (container && container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+    window.__bacteriaSwarmInstance = null;
+  }
+
+  window.__bacteriaSwarmInstance = { destroy };
+  window.addEventListener('beforeunload', destroy, { once: true });
 }

@@ -17,10 +17,10 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\AdminAuthenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('seo.sitemap');
-Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('seo.robots');
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->middleware('throttle:60,1')->name('seo.sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->middleware('throttle:120,1')->name('seo.robots');
 
-Route::get('/health', [HealthController::class, 'check'])->name('system.health');
+Route::get('/health', [HealthController::class, 'check'])->middleware('throttle:30,1')->name('system.health');
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/profil', [PageController::class, 'profil']);
@@ -97,7 +97,8 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'sectorsUpdate'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
 
-    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
+    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals.index');
+    Route::get('/principals/list', [AdminPrincipalController::class, 'index'])->name('admin.principals');
     Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
     Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
     Route::get('/principals/{id}/edit', [AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');

@@ -84,6 +84,12 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    'admin_seed' => [
+        'email' => env('ADMIN_EMAIL', 'admin@prolabios.com'),
+        'username' => env('ADMIN_USERNAME', 'admin'),
+        'password' => env('ADMIN_PASSWORD'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

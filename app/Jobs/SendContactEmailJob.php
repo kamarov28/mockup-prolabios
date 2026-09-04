@@ -47,12 +47,12 @@ class SendContactEmailJob implements ShouldQueue
             }
 
             $data = $inquiry->payload;
-            if (empty($data)) {
+            if (! is_array($data) || empty($data)) {
                 Log::channel('contact')->error('Data payload kontak terkorup atau kosong untuk ID: '.$this->inquiryId);
                 throw new \Exception('Payload terkorup atau kosong.');
             }
 
-            $correlationId = $data['correlation_id'] ?? 'unknown';
+            $correlationId = is_array($data) && isset($data['correlation_id']) ? (string) $data['correlation_id'] : 'unknown';
 
             Log::channel('contact')->info('Memulai pengiriman email kontak (SendContactEmailJob).', [
                 'correlation_id' => $correlationId,
