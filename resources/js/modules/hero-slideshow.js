@@ -147,19 +147,6 @@ export function initHeroBgSlideshow() {
     });
   }
 
-  const pauseTarget =
-    document.querySelector('.nb-hero-frame') ||
-    document.querySelector('.typo-hero-bg') ||
-    heroSection;
-  if (pauseTarget) {
-    pauseTarget.addEventListener('mouseenter', function () {
-      isPaused = true;
-    });
-    pauseTarget.addEventListener('mouseleave', function () {
-      isPaused = false;
-    });
-  }
-
   updateCounter(0);
   startProgressAnim();
   resetAutoTimer();
