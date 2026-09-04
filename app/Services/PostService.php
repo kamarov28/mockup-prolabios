@@ -10,7 +10,7 @@ class PostService
 {
     public function getPosts(?array $filters = [], int $limit = 0): array
     {
-        $query = Post::query()->orderByDesc('id');
+        $query = Post::query()->orderByDesc('date')->orderByDesc('id');
 
         if (empty($filters['include_all_status'])) {
             $query->online();
@@ -29,7 +29,7 @@ class PostService
 
     public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
     {
-        $query = Post::query()->orderByDesc('id');
+        $query = Post::query()->orderByDesc('date')->orderByDesc('id');
 
         if (empty($filters['include_all_status'])) {
             $query->online();

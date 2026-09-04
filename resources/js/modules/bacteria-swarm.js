@@ -20,8 +20,8 @@ export function initBacteriaSwarm() {
     window.__bacteriaSwarmInstance.destroy();
   }
 
-  // Organism pool settings - reduced count & subtle presence
-  const COUNT = window.innerWidth < 768 ? 5 : 9;
+  // Organism pool settings - boosted count & lively presence
+  const COUNT = window.innerWidth < 768 ? 9 : 16;
   const container = document.createElement('div');
   container.className = 'bacteria-swarm-container';
   container.setAttribute('aria-hidden', 'true');
@@ -141,6 +141,20 @@ export function initBacteriaSwarm() {
         b.angle = Math.atan2(dy, dx);
       }
 
+      // Soft boundary steering: boleh melipir keluar dikit (buffer), tapi steer balik ke tengah viewport
+      const buffer = b.size * 0.8;
+      const turnForce = 1.4;
+      if (b.x < buffer) {
+        targetVx += turnForce * (1 - b.x / buffer);
+      } else if (b.x > w - buffer) {
+        targetVx -= turnForce * (1 - (w - b.x) / buffer);
+      }
+      if (b.y < buffer) {
+        targetVy += turnForce * (1 - b.y / buffer);
+      } else if (b.y > h - buffer) {
+        targetVy -= turnForce * (1 - (h - b.y) / buffer);
+      }
+
       // Smooth velocity interpolation
       b.vx += (targetVx - b.vx) * 0.06 * dt;
       b.vy += (targetVy - b.vy) * 0.06 * dt;
@@ -148,12 +162,26 @@ export function initBacteriaSwarm() {
       b.x += b.vx * dt;
       b.y += b.vy * dt;
 
-      // Screen wrap-around with padding
-      const pad = b.size * 1.5;
-      if (b.x < -pad) b.x = w + pad;
-      if (b.x > w + pad) b.x = -pad;
-      if (b.y < -pad) b.y = h + pad;
-      if (b.y > h + pad) b.y = -pad;
+      // Hard clamp recovery: kalau terlempar jauh keluar viewport, putar balik arah angle & nudge kembali
+      const hardMargin = b.size * 1.8;
+      if (b.x < -hardMargin) {
+        b.x = -hardMargin;
+        b.vx = Math.abs(b.vx);
+        b.angle = 0;
+      } else if (b.x > w + hardMargin) {
+        b.x = w + hardMargin;
+        b.vx = -Math.abs(b.vx);
+        b.angle = Math.PI;
+      }
+      if (b.y < -hardMargin) {
+        b.y = -hardMargin;
+        b.vy = Math.abs(b.vy);
+        b.angle = Math.PI / 2;
+      } else if (b.y > h + hardMargin) {
+        b.y = h + hardMargin;
+        b.vy = -Math.abs(b.vy);
+        b.angle = -Math.PI / 2;
+      }
 
       // Calculate swimming orientation angle (pointing forward like kecebong)
       const swimAngle = Math.atan2(b.vy, b.vx) * (180 / Math.PI) + 90;

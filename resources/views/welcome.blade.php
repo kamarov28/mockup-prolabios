@@ -54,11 +54,10 @@
                   <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.82rem; line-height: 1.5;">
                     {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
                   </p>
-                  <div class="mt-auto pt-3 d-flex align-items-center justify-content-between nb-card-foot">
-                    <a href="{{ product_url($prod) }}" class="product-card-action text-decoration-none fw-medium" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
-                      Detail & Spek <i class="bi bi-arrow-right ms-1"></i>
+                  <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
+                    <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
+                      Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
                     </a>
-                    <span class="nb-mono small"><i class="bi bi-file-earmark-check"></i> COA</span>
                   </div>
                 </div>
               </div>
