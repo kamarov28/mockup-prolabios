@@ -52,7 +52,9 @@ class AdminController extends Controller
             'attempted_username' => $loginInput,
         ]);
 
-        return redirect()->back()->withInput()->with('error', 'Username atau password yang Anda masukkan salah.');
+        return redirect()->back()
+            ->withInput($request->only('username'))
+            ->with('error', 'Username atau kata sandi yang Anda masukkan salah. Silakan periksa kembali.');
     }
 
     public function logout(Request $request)

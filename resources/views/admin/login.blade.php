@@ -17,6 +17,33 @@
 
   <!-- Vite Asset Loading -->
   @vite(['resources/css/admin.css'])
+
+  <style>
+    .login-nb-input-group.has-error {
+      border-color: #A6171C !important;
+      box-shadow: 3px 3px 0 #A6171C !important;
+    }
+    .login-nb-input-group.has-error .login-nb-input-icon {
+      background: #FEE2E2 !important;
+      color: #A6171C !important;
+      border-right-color: #A6171C !important;
+    }
+    .login-nb-alert-error {
+      border: 2px solid #1E1E1E !important;
+      background: #FEE2E2 !important;
+      color: #7F1D1D !important;
+      box-shadow: 3px 3px 0 #1E1E1E !important;
+      border-radius: 6px !important;
+      padding: 12px 14px !important;
+      font-size: 0.85rem !important;
+      font-weight: 600 !important;
+    }
+    .login-nb-field-error {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #A6171C;
+    }
+  </style>
 </head>
 <body class="login-nb-page">
 
@@ -36,16 +63,19 @@
         <p class="login-nb-subtitle">Kelola katalog, permintaan RFQ, artikel, dan portal.</p>
       </div>
 
-      <!-- Flash Messages -->
+      <!-- Flash Messages / Warning Alert -->
       @if(session('success'))
         <div class="login-nb-alert login-nb-alert-success mb-3" role="alert">
           <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
         </div>
       @endif
 
-      @if(session('error'))
-        <div class="login-nb-alert login-nb-alert-error mb-3" role="alert">
-          <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+      @if(session('error') || $errors->any())
+        <div class="login-nb-alert login-nb-alert-error mb-3 d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill fs-5 text-danger me-2 flex-shrink-0"></i>
+          <div>
+            <strong>Peringatan:</strong> {{ session('error') ?? $errors->first() }}
+          </div>
         </div>
       @endif
 
@@ -55,21 +85,27 @@
 
         <div class="mb-3">
           <label for="username" class="login-nb-label">Username</label>
-          <div class="login-nb-input-group">
+          <div class="login-nb-input-group @if(session('error') || $errors->any()) has-error @endif">
             <span class="login-nb-input-icon"><i class="bi bi-person-fill"></i></span>
-            <input type="text" class="login-nb-input" id="username" name="username" required value="{{ old('username') }}" placeholder="Masukkan username" autofocus autocomplete="username">
+            <input type="text" class="login-nb-input" id="username" name="username" required value="{{ old('username') }}" placeholder="Masukkan username" @if(!old('username')) autofocus @endif autocomplete="username">
           </div>
         </div>
 
         <div class="mb-4">
           <label for="password" class="login-nb-label">Kata Sandi</label>
-          <div class="login-nb-input-group">
+          <div class="login-nb-input-group @if(session('error') || $errors->any()) has-error @endif">
             <span class="login-nb-input-icon"><i class="bi bi-shield-lock-fill"></i></span>
-            <input type="password" class="login-nb-input" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
+            <input type="password" class="login-nb-input" id="password" name="password" required placeholder="••••••••" autocomplete="current-password" @if(old('username')) autofocus @endif>
             <button type="button" class="login-nb-toggle-btn" id="toggle-password" title="Lihat password" aria-label="Lihat password">
               <i id="toggle-password-icon" class="bi bi-eye-slash"></i>
             </button>
           </div>
+          @if(session('error') || $errors->any())
+            <div class="login-nb-field-error mt-2 d-flex align-items-center gap-1">
+              <i class="bi bi-x-circle-fill"></i>
+              <span>Kata sandi salah. Silakan periksa kembali.</span>
+            </div>
+          @endif
         </div>
 
         <button type="submit" class="login-nb-btn-submit w-100 mb-3">
