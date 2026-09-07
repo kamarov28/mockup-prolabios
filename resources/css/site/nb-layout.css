@@ -5,7 +5,7 @@
 html {
   overflow-x: hidden;
   scrollbar-width: thin;
-  scrollbar-color: #A6171C #FEFEFE;
+  scrollbar-color: #A6171C #f9f5f2;
 }
 body {
   overflow-x: hidden;
@@ -19,7 +19,7 @@ body {
   height: 12px;
 }
 ::-webkit-scrollbar-track {
-  background: #FEFEFE;
+  background: #f9f5f2;
   border-left: 2px solid #1E1E1E;
 }
 ::-webkit-scrollbar-thumb {
@@ -35,7 +35,7 @@ body {
   background: #F1C045;
 }
 ::-webkit-scrollbar-corner {
-  background: #FEFEFE;
+  background: #f9f5f2;
   border-left: 2px solid #1E1E1E;
   border-top: 2px solid #1E1E1E;
 }
@@ -114,16 +114,48 @@ body {
   margin-bottom: 1rem;
 }
 .nb-badge-sm {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.65rem;
-  font-weight: 600;
-  background: #FEFEFE;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: #FFFFFF;
   color: #1E1E1E;
   border: 1.5px solid #1E1E1E;
   border-radius: 4px;
+  box-shadow: 1.5px 1.5px 0 #1E1E1E;
   padding: 2px 8px;
   margin-bottom: 0;
+}
+
+.nb-badge-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: #A7F3D0; /* Neo-Brutal Mint Green */
+  color: #1E1E1E;
+  border: 1.5px solid #1E1E1E;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 #1E1E1E;
+  padding: 4px 12px;
+  margin-bottom: 0;
+}
+.nb-badge-stock i {
+  color: #065F46;
+  font-size: 0.88rem;
+}
+.nb-badge-stock--empty {
+  background: var(--nb-accent, #F1C045);
+  color: #1E1E1E;
+}
+.nb-badge-stock--empty i {
+  color: #1E1E1E;
 }
 
 .nb-btn {

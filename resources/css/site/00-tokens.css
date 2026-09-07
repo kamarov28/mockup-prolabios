@@ -6,21 +6,21 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Brand Palette */
-  --color-natural: #FEFEFE;
-  --color-natural-dark: #FEFEFE;
-  --color-natural-light: #FEFEFE;
+  --color-natural: #f9f5f2;
+  --color-natural-dark: #f9f5f2;
+  --color-natural-light: #f9f5f2;
   --color-ruby: #A6171C;
   --color-sunny: #F1C045;
 
   /* Theme mappings */
-  --color-bg: #FEFEFE;
+  --color-bg: #f9f5f2;
   --color-text-main: #1E1E1E;
   --color-text-muted: #5A5A5A;
   --color-accent: #A6171C;
   --color-border: #1E1E1E;
   --color-primary: #A6171C;
   --color-secondary: #7A1015;
-  --color-bg-body: #FEFEFE;
+  --color-bg-body: #f9f5f2;
   --color-bg-white: #FFFFFF;
-  --color-bg-gray: #FEFEFE;
+  --color-bg-gray: #f9f5f2;
 }

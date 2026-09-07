@@ -300,8 +300,10 @@ section hr {
   }
 }
 
-.marquee-container:hover .marquee-content-single {
-  animation-play-state: paused;
+.marquee-container:hover .marquee-content,
+.marquee-container:hover .marquee-content-single,
+.marquee-content:hover {
+  animation-play-state: paused !important;
 }
 
 /* Custom Catalog Filter Button on Mobile */

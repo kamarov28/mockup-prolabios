@@ -48,8 +48,8 @@
               <!-- Body -->
               <div class="editorial-featured-body d-flex flex-column flex-grow-1">
                 <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-                  <span class="editorial-badge editorial-badge-sunny">
-                    {{ $leadPost['category'] ?? 'INFO TERKAIT' }}
+                  <span class="editorial-badge editorial-badge-ruby">
+                    {{ $leadPost['category'] ?? 'BERITA' }}
                   </span>
                   <span class="editorial-meta">
                     • {{ $leadDateRaw }}

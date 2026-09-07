@@ -252,9 +252,12 @@ export function initMarqueeVisibility() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         const contents = entry.target.querySelectorAll('.marquee-content, .marquee-content-single');
-        const state = entry.isIntersecting ? 'running' : 'paused';
         contents.forEach(el => {
-          el.style.animationPlayState = state;
+          if (!entry.isIntersecting) {
+            el.style.animationPlayState = 'paused';
+          } else {
+            el.style.removeProperty('animation-play-state');
+          }
         });
       });
     }, { rootMargin: '80px 0px' });
@@ -266,7 +269,11 @@ export function initMarqueeVisibility() {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        if (!entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'paused';
+        } else {
+          entry.target.style.removeProperty('animation-play-state');
+        }
       });
     }, { rootMargin: '80px 0px' });
 

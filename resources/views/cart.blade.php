@@ -98,12 +98,12 @@
                     @endphp
 
                     @if(!$isIndent)
-                      <span class="nb-badge-sm" style="color: #1E1E1E;">
-                        <i class="bi bi-box-seam me-1" style="color: #A6171C;"></i> Stok Siap
+                      <span class="nb-badge-stock">
+                        <i class="bi bi-box-seam me-1"></i> Stok Siap
                       </span>
                     @else
-                      <span class="nb-badge-sm" style="color: #1E1E1E;" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
-                        <i class="bi bi-clock-history me-1" style="color: #A6171C;"></i> Pesanan khusus (siap: {{ $stockVal }})
+                      <span class="nb-badge-stock nb-badge-stock--empty" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
+                        <i class="bi bi-clock-history me-1"></i> Pesanan khusus (siap: {{ $stockVal }})
                       </span>
                     @endif
                   </div>

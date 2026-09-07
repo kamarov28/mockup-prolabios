@@ -291,7 +291,8 @@
       position: absolute; inset: 0; z-index: 6;
       display: none; align-items: flex-start; justify-content: center;
       padding-top: 80px;
-      background: rgba(214, 208, 197, 0.65);
+      background: rgba(249, 245, 242, 0.45);
+      backdrop-filter: blur(2px);
       border-radius: var(--nb-radius-lg, 8px);
     }
     #sektor-main.is-loading .ajax-loading-overlay { display: flex; }

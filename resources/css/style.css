@@ -17,14 +17,14 @@
   --color-sunny: #F1C045;
   --color-natural: #FEFEFE;
   --color-natural-dark: #C8C1B4;
-  --color-natural-light: #FEFEFE;
+  --color-natural-light: #f9f5f2;
 
   --color-text-main: #1E1E1E;
   --color-text-muted: #5A5A5A;
-  --color-bg-body: #FEFEFE;
+  --color-bg-body: #f9f5f2;
   --color-bg-dark: #C8C1B4;
   --color-bg-white: #FFFFFF;
-  --color-bg-gray: #FEFEFE;
+  --color-bg-gray: #f9f5f2;
   --color-border: #1E1E1E;
 
   /* Soft Neo-Brutalism type */
@@ -167,20 +167,7 @@ h1, h2, h3, h4, h5, h6,
 }
 .marquee-container::before,
 .marquee-container::after {
-  content: "";
-  height: 100%;
-  width: 100px;
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-}
-.marquee-container::before {
-  left: 0; top: 0;
-  background: linear-gradient(to right, #FFFFFF 0%, transparent 100%) !important;
-}
-.marquee-container::after {
-  right: 0; top: 0;
-  background: linear-gradient(to left, #FFFFFF 0%, transparent 100%) !important;
+  display: none !important;
 }
 .marquee-content {
   display: flex;
@@ -221,8 +208,10 @@ h1, h2, h3, h4, h5, h6,
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
-.marquee-container:hover .marquee-content {
-  animation-play-state: paused;
+.marquee-container:hover .marquee-content,
+.marquee-container:hover .marquee-content-single,
+.marquee-content:hover {
+  animation-play-state: paused !important;
 }
 
 .animate-on-scroll {

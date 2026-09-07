@@ -146,9 +146,9 @@
     .ajax-loading-wrap.is-loading { pointer-events: none; }
     .ajax-loading-overlay {
       position: absolute; inset: 0; z-index: 5;
-      display: none; align-items: flex-start; justify-content: center;
-      padding-top: 48px;
-      background: rgba(214, 208, 197, 0.65);
+      display: none; align-items: center; justify-content: center;
+      background: rgba(249, 245, 242, 0.45);
+      backdrop-filter: blur(2px);
       border-radius: var(--nb-radius-lg, 8px);
     }
     .ajax-loading-wrap.is-loading .ajax-loading-overlay { display: flex; }
@@ -160,34 +160,9 @@
       animation: ajax-spin 0.7s linear infinite;
     }
     @keyframes ajax-spin { to { transform: rotate(360deg); } }
-    .ajax-loading-wrap.is-loading #product-container > .col.product-card,
-    .ajax-loading-wrap.is-loading #product-container > .col-12 { visibility: hidden; height: 0; overflow: hidden; margin: 0; padding: 0; }
-    .ajax-skel-card {
-      background: var(--nb-card, #FFFFFF);
-      border: var(--nb-border, 2px solid #1E1E1E);
-      border-radius: var(--nb-radius-lg, 8px);
-      box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
-      overflow: hidden;
-      height: 100%;
-    }
-    .ajax-skel-img {
-      aspect-ratio: 16/10;
-      background: linear-gradient(90deg, #FEFEFE 25%, #E2DDD5 50%, #FEFEFE 75%);
-      background-size: 200% 100%;
-      animation: ajax-shimmer 1.2s ease-in-out infinite;
-      border-bottom: 2px solid #1E1E1E;
-    }
-    .ajax-skel-line {
-      height: 12px; border-radius: 4px; margin: 12px 16px;
-      background: linear-gradient(90deg, #FEFEFE 25%, #E2DDD5 50%, #FEFEFE 75%);
-      background-size: 200% 100%;
-      animation: ajax-shimmer 1.2s ease-in-out infinite;
-    }
-    .ajax-skel-line.short { width: 40%; }
-    .ajax-skel-line.med { width: 70%; }
-    @keyframes ajax-shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    .ajax-loading-wrap.is-loading #product-container {
+      opacity: 0.35;
+      transition: opacity 0.15s ease;
     }
   </style>
   @endpush
@@ -204,22 +179,6 @@
       wrap.setAttribute('aria-busy', on ? 'true' : 'false');
       const overlay = wrap.querySelector('.ajax-loading-overlay');
       if (overlay) overlay.setAttribute('aria-hidden', on ? 'false' : 'true');
-      if (on && !isLiveSearch) {
-        const grid = document.getElementById('product-container');
-        if (grid && !grid.querySelector('.ajax-skel-col')) {
-          const skel = document.createDocumentFragment();
-          for (let i = 0; i < 6; i++) {
-            const col = document.createElement('div');
-            col.className = 'col ajax-skel-col';
-            col.innerHTML = '<div class="ajax-skel-card"><div class="ajax-skel-img"></div><div class="ajax-skel-line short"></div><div class="ajax-skel-line med"></div><div class="ajax-skel-line"></div></div>';
-            skel.appendChild(col);
-          }
-          grid.appendChild(skel);
-        }
-      }
-      if (!on) {
-        document.querySelectorAll('#product-container .ajax-skel-col').forEach(function (el) { el.remove(); });
-      }
     }
 
     function loadProductsAjax(url, updateHistory = true, isLiveSearch = false) {

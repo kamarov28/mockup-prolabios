@@ -56,11 +56,11 @@
               </strong>
 
               @if($stock > 0)
-                <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="background: #e6f4ea; color: #137333; border-color: #137333;">
+                <span class="nb-badge-stock">
                   <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
                 </span>
               @else
-                <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="background: var(--nb-accent); color: var(--nb-ink);">
+                <span class="nb-badge-stock nb-badge-stock--empty">
                   <i class="bi bi-clock-history me-1"></i> Stok kosong — tersedia sebagai pesanan khusus
                 </span>
               @endif

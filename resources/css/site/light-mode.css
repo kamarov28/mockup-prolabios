@@ -4,8 +4,8 @@
    ========================================================================== */
 
 :root {
-  --nb-bg: #FEFEFE;
-  --nb-bg-soft: #FEFEFE;
+  --nb-bg: #f9f5f2;
+  --nb-bg-soft: #f9f5f2;
   --nb-primary: #A6171C;
   --nb-primary-dark: #7A1015;
   --nb-accent: #F1C045;
@@ -593,11 +593,9 @@ body {
 }
 
 /* ── Marquee ────────────────────────────────────────────────────────────── */
-.marquee-container::before {
-  background: linear-gradient(to right, var(--nb-card) 0%, transparent 100%) !important;
-}
+.marquee-container::before,
 .marquee-container::after {
-  background: linear-gradient(to left, var(--nb-card) 0%, transparent 100%) !important;
+  display: none !important;
 }
 .marquee-logo-box {
   background: var(--nb-card) !important;
