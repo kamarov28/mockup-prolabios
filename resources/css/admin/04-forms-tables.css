@@ -1,0 +1,180 @@
+/* ==========================================================================
+   04-forms-tables.css — Data Tables, Form Inputs & Bootstrap Card Overrides
+   ========================================================================== */
+
+/* ── 9. Tables ────────────────────────────────────────────────────────── */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.admin-table thead tr {
+  background-color: var(--color-surface-2);
+  border-bottom: 2px solid #1E1E1E;
+}
+.admin-table thead th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #1E1E1E;
+  padding: 14px 20px;
+  background: var(--color-surface-2);
+  border-bottom: 2px solid #1E1E1E;
+  white-space: nowrap;
+}
+.admin-table tbody tr {
+  border-bottom: 1px solid #1E1E1E;
+  transition: background-color 0.12s ease;
+}
+.admin-table tbody tr:hover {
+  background-color: #F7F5F0;
+}
+.admin-table tbody td {
+  padding: 15px 20px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+  font-size: 0.92rem;
+  border-bottom: 1px solid rgba(30, 30, 30, 0.12);
+}
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table .cell-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-size: 0.94rem;
+}
+.admin-table .cell-muted {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+.admin-table .cell-code,
+.admin-table code {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1E1E1E;
+  background: #EDE8E0;
+  border: 1.5px solid #1E1E1E;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.table-responsive {
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #1E1E1E #EDE8E0;
+  cursor: grab;
+}
+.table-responsive.is-grabbing,
+.table-responsive.is-grabbing * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  cursor: grabbing !important;
+}
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+.table-responsive::-webkit-scrollbar-track {
+  background: #EDE8E0;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #1E1E1E;
+  border-radius: 0;
+}
+
+/* ── 12. Forms & Inputs ───────────────────────────────────────────────── */
+.admin-form-group { margin-bottom: 22px; }
+.admin-form-label {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: block;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.admin-form-control,
+.form-control:not(.note-editor *):not(.note-popover *),
+.form-select:not(.note-editor *):not(.note-popover *) {
+  width: 100%;
+  background: #FFFFFF !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 4px !important;
+  padding: 10px 14px !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  font-weight: 500;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  transition: all 0.15s ease !important;
+  outline: none;
+}
+.admin-form-control::placeholder,
+.form-control::placeholder {
+  color: #888888;
+}
+.admin-form-control:focus,
+.form-control:focus:not(.note-editor *):not(.note-popover *),
+.form-select:focus:not(.note-editor *):not(.note-popover *) {
+  border-color: var(--color-accent) !important;
+  box-shadow: 3px 3px 0 var(--color-accent) !important;
+  background: #FFFFFF !important;
+  color: var(--color-text-main) !important;
+}
+
+.input-group-text {
+  background: #EDE8E0 !important;
+  border: 2px solid #1E1E1E !important;
+  color: var(--color-text-main) !important;
+  border-radius: 4px;
+  font-weight: 600;
+}
+select.form-select option {
+  background: #FFFFFF;
+  color: var(--color-text-main);
+}
+
+/* Bootstrap Card Compatibility */
+.card {
+  background-color: var(--color-surface) !important;
+  border: 2px solid #1E1E1E !important;
+  border-radius: 6px !important;
+  color: var(--color-text-main) !important;
+  box-shadow: 4px 4px 0 #1E1E1E !important;
+}
+.card-header {
+  background-color: #FFFFFF !important;
+  border-bottom: 2px solid #1E1E1E !important;
+  color: var(--color-text-main) !important;
+  font-weight: 700;
+  padding: 16px 20px !important;
+}
+.card-body {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-main) !important;
+  padding: 20px !important;
+}
+.card-footer {
+  background-color: var(--color-surface-2) !important;
+  border-top: 2px solid #1E1E1E !important;
+  color: var(--color-text-muted) !important;
+  padding: 14px 20px !important;
+}
+
+.form-label, label {
+  color: var(--color-text-main) !important;
+  font-weight: 700;
+  font-size: 0.84rem;
+}
+.form-text {
+  color: var(--color-text-muted) !important;
+  font-size: 0.78rem;
+}

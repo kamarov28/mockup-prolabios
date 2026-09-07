@@ -1,0 +1,33 @@
+/* ==========================================================================
+   01-base.css — Base Reset & Global Typography for Admin Panel
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg) !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  font-size: 14.5px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline) !important;
+  color: var(--color-text-main) !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+a:hover {
+  color: var(--color-accent-hover);
+}

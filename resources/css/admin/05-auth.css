@@ -1,0 +1,219 @@
+/* ==========================================================================
+   05-auth.css — Soft Neo-Brutalism Admin Login Page
+   ========================================================================== */
+
+/* ── 17. Soft Neo-Brutalism Admin Login ──────────────────────────────── */
+.login-nb-page {
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif) !important;
+  background-color: #D6D0C5 !important;
+  min-height: 100vh;
+  margin: 0;
+  padding: 24px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.login-nb-container {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.login-nb-card {
+  background: #FFFFFF;
+  border: 2px solid #1E1E1E;
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 #1E1E1E;
+  padding: 36px 32px;
+  box-sizing: border-box;
+}
+
+.login-nb-logo {
+  height: 42px;
+  width: auto;
+  display: inline-block;
+  object-fit: contain;
+}
+
+.login-nb-badge {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: #1E1E1E;
+  background: #F1C045;
+  border: 1.5px solid #1E1E1E;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.login-nb-title {
+  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #1E1E1E;
+  letter-spacing: -0.02em;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.login-nb-subtitle {
+  font-size: 0.85rem;
+  color: #5A5A5A;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.login-nb-alert {
+  border: 2px solid #1E1E1E;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 2px 2px 0 #1E1E1E;
+}
+
+.login-nb-alert-success {
+  background: #DCFCE7;
+  color: #14532D;
+}
+
+.login-nb-alert-error {
+  background: #FEE2E2;
+  color: #7F1D1D;
+}
+
+.login-nb-label {
+  display: block;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1E1E1E;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.login-nb-input-group {
+  display: flex;
+  align-items: stretch;
+  background: #FFFFFF;
+  border: 2px solid #1E1E1E;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 2px 2px 0 #1E1E1E;
+  transition: all 0.15s ease;
+}
+
+.login-nb-input-group:focus-within {
+  box-shadow: 3px 3px 0 #A6171C;
+  border-color: #A6171C;
+}
+
+.login-nb-input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  background: #EDE8E0;
+  border-right: 2px solid #1E1E1E;
+  color: #1E1E1E;
+  font-size: 1rem;
+}
+
+.login-nb-input {
+  flex: 1;
+  background: #FFFFFF;
+  border: none !important;
+  color: #1E1E1E !important;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  outline: none;
+  min-width: 0;
+}
+
+.login-nb-input::placeholder {
+  color: #9CA3AF;
+  font-weight: 400;
+}
+
+.login-nb-toggle-btn {
+  background: #EDE8E0;
+  border: none;
+  border-left: 2px solid #1E1E1E;
+  color: #1E1E1E;
+  padding: 0 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.login-nb-toggle-btn:hover {
+  background: #D6D0C5;
+}
+
+.login-nb-btn-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFFFFF !important;
+  background: #A6171C;
+  border: 2px solid #1E1E1E;
+  border-radius: 4px;
+  padding: 12px 20px;
+  box-shadow: 4px 4px 0 #1E1E1E;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
+}
+
+.login-nb-btn-submit:hover {
+  background: #7A1015;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #1E1E1E;
+}
+
+.login-nb-btn-submit:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #1E1E1E;
+}
+
+.login-nb-footer {
+  border-color: #EDE8E0 !important;
+}
+
+.login-nb-back-link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #5A5A5A;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s ease;
+}
+
+.login-nb-back-link:hover {
+  color: #A6171C;
+}
+
+.login-nb-secure-pill {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.68rem;
+  color: #5A5A5A;
+  font-weight: 600;
+}
+
+.login-nb-copyright {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: #5A5A5A;
+}

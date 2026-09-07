@@ -1,0 +1,278 @@
+/* ==========================================================================
+   02-layout.css — Layout Shell, Sidebar, Header, Body & Mobile Responsiveness
+   ========================================================================== */
+
+/* ── 3. Layout Shell ──────────────────────────────────────────────────── */
+#admin-wrapper {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  align-items: stretch;
+}
+
+/* ── 4. Sidebar ───────────────────────────────────────────────────────── */
+#admin-sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  background-color: var(--sidebar-bg);
+  border-right: 2px solid #1E1E1E;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 1020;
+}
+
+#admin-sidebar::-webkit-scrollbar { width: 5px; }
+#admin-sidebar::-webkit-scrollbar-track { background: #1E1E1E; }
+#admin-sidebar::-webkit-scrollbar-thumb { background: #5A5A5A; border-radius: 0; }
+
+.sidebar-brand {
+  padding: 20px 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+}
+.sidebar-brand a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+.sidebar-brand img {
+  height: 32px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+.sidebar-brand .admin-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #1E1E1E;
+  background: #F1C045;
+  border: 1.5px solid #1E1E1E;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.sidebar-menu {
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.sidebar-nav-label {
+  font-family: var(--font-headline);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #888888;
+  padding: 18px 12px 6px;
+  display: block;
+}
+
+.sidebar-item {
+  padding: 0;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  color: var(--sidebar-text) !important;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.12s ease;
+  cursor: pointer;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+.sidebar-link i {
+  font-size: 1.15rem;
+  color: #94A3B8;
+  transition: color 0.12s ease;
+}
+.sidebar-link:hover {
+  color: var(--sidebar-text-active) !important;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.sidebar-link:hover i {
+  color: #FFFFFF;
+}
+
+.sidebar-item.active .sidebar-link {
+  color: #FFFFFF !important;
+  background: var(--color-accent);
+  border: 1.5px solid #1E1E1E;
+  box-shadow: 2px 2px 0 #000000;
+  font-weight: 700;
+}
+.sidebar-item.active .sidebar-link i {
+  color: #FFFFFF;
+}
+
+.sidebar-sep {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin: 14px 4px;
+}
+
+/* ── 5. Main Content Shell ────────────────────────────────────────────── */
+#admin-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: var(--sidebar-width);
+  background-color: var(--color-bg);
+}
+
+/* ── 6. Header Bar ────────────────────────────────────────────────────── */
+.admin-header {
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 2px solid #1E1E1E;
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 0 rgba(30, 30, 30, 0.1);
+}
+.admin-header-title {
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.admin-header-user {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-surface-2);
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 2px solid #1E1E1E;
+  box-shadow: 2px 2px 0 #1E1E1E;
+}
+.admin-header-user i {
+  color: var(--color-accent);
+  font-size: 1.1rem;
+}
+
+.admin-header-web-link {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1E1E1E;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #F1C045;
+  border: 2px solid #1E1E1E;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 #1E1E1E;
+  transition: all 0.1s ease;
+}
+.admin-header-web-link:hover {
+  color: #1E1E1E;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1E1E1E;
+}
+
+/* ── 7. Page Body Container ───────────────────────────────────────────── */
+.admin-body {
+  padding: 32px 36px;
+  flex-grow: 1;
+}
+
+.admin-page-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 4px;
+}
+.admin-page-title {
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  letter-spacing: -0.02em;
+  margin: 0 0 24px;
+  line-height: 1.25;
+}
+
+/* ── 16. Mobile Responsiveness ────────────────────────────────────────── */
+@media (max-width: 991px) {
+  #admin-wrapper { flex-direction: column; }
+  #admin-sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 2px solid #1E1E1E;
+  }
+  #admin-content {
+    margin-left: 0;
+  }
+  .sidebar-menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  .sidebar-nav-label { display: none; }
+  .sidebar-item { padding: 0; }
+  .sidebar-link {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  .admin-body { padding: 20px 16px; }
+  .admin-header { padding: 0 16px; }
+}

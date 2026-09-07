@@ -1,0 +1,41 @@
+/* ==========================================================================
+   00-tokens.css — Design Tokens & CSS Variables for Admin Panel
+   ========================================================================== */
+
+:root {
+  --font-headline: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Soft Neo-Brutalism Canvas & Surfaces */
+  --color-bg: #D6D0C5;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #EDE8E0;
+  --color-surface-subtle: #F5F2EB;
+
+  --color-text-main: #1E1E1E;
+  --color-text-secondary: #333333;
+  --color-text-muted: #5A5A5A;
+
+  --color-accent: #A6171C;
+  --color-accent-hover: #7A1015;
+  --color-accent-light: rgba(166, 23, 28, 0.08);
+
+  --color-sunny: #F1C045;
+  --color-border: #1E1E1E;
+  --color-border-subtle: #A39D93;
+
+  --sidebar-width: 250px;
+  --sidebar-bg: #1E1E1E;
+  --sidebar-surface: #2D2D2D;
+  --sidebar-text: #BDBDBD;
+  --sidebar-text-active: #FFFFFF;
+
+  --header-height: 68px;
+
+  /* Neo-Brutal Hard Zero-Blur Shadows */
+  --shadow-xs: 2px 2px 0 #1E1E1E;
+  --shadow-sm: 3px 3px 0 #1E1E1E;
+  --shadow-md: 4px 4px 0 #1E1E1E;
+  --shadow-lg: 6px 6px 0 #1E1E1E;
+}
