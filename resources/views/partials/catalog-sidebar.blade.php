@@ -1,13 +1,13 @@
 {{-- resources/views/partials/catalog-sidebar.blade.php --}}
 <aside id="catalog-sidebar">
-  <!-- Mobile Filter Toggle Button -->
-  <button class="catalog-filter-toggle-btn w-100 d-md-none mb-4 d-flex align-items-center justify-content-between py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
+  <!-- Mobile & Tablet Filter Toggle Button -->
+  <button class="catalog-filter-toggle-btn w-100 d-lg-none mb-3 d-flex align-items-center justify-content-between py-3 px-4" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarCollapse" aria-expanded="false" aria-controls="sidebarCollapse">
     <span><i class="bi bi-funnel me-2"></i>Filter & Kategori</span>
     <i class="bi bi-chevron-down"></i>
   </button>
 
-  <!-- Collapsible Content for Mobile, always open on Medium+ screens -->
-  <div class="collapse d-md-block" id="sidebarCollapse">
+  <!-- Collapsible Content for Mobile & Tablet, always open on Desktop (lg+) screens -->
+  <div class="collapse d-lg-block" id="sidebarCollapse">
     <!-- Search Input Card (Full width of sidebar) -->
     <form action="{{ url('/produk') }}" method="GET" id="catalog-search-form" class="produk-search-wrap w-100 mb-4">
       @if(request()->query('category'))

@@ -19,26 +19,6 @@
           </p>
         </div>
       </div>
-
-      <!-- Quick Fast Stats Strip -->
-      <div class="profil-stats-strip">
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Teknisi Ahli</div>
-          <div class="profil-stat-label">Tersertifikasi Langsung oleh Prinsipal</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Spare Parts</div>
-          <div class="profil-stat-label">100% Suku Cadang Orisinal &amp; Bergaransi</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Standar K3/GLP</div>
-          <div class="profil-stat-label">Desain Sesuai Regulasi &amp; Ergonomi Lab</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Respon Cepat</div>
-          <div class="profil-stat-label">Dukungan Darurat &amp; Kontrak Perawatan Rutin</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -48,7 +28,7 @@
       <div class="row g-4 g-lg-5 align-items-start">
 
         <!-- Sidebar / Navigation -->
-        <div class="col-lg-4 col-md-5 order-2 order-md-1">
+        <div class="col-12 col-lg-4 order-2 order-lg-1">
           @php $activeService = request()->get('s') ?? 'maintenance'; @endphp
 
           <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
@@ -77,7 +57,7 @@
         </div>
 
         <!-- Main Content -->
-        <div class="col-lg-8 col-md-7 order-1 order-md-2">
+        <div class="col-12 col-lg-8 order-1 order-lg-2">
 
           <!-- Service Block: Maintenance & Repair -->
           <div id="service-content-maintenance" class="service-content-block {{ $activeService == 'maintenance' ? '' : 'd-none' }}">

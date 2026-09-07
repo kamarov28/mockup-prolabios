@@ -81,6 +81,50 @@ class SecurityHardeningTest extends TestCase
         Queue::assertNothingPushed();
     }
 
+    public function test_contact_form_submission_success_with_personal_credentials_and_institution(): void
+    {
+        Queue::fake();
+
+        $response = $this->postJson(route('contact.submit'), [
+            'nama' => 'Budi Santoso',
+            'email' => 'budi.santoso@gmail.com',
+            'telepon' => '081234567890',
+            'perusahaan' => 'Universitas Indonesia',
+            'subjek' => 'inquiry',
+            'pesan' => 'Mohon informasi spesifikasi mikroskop.',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true]);
+        Queue::assertPushed(\App\Jobs\SendContactEmailJob::class);
+    }
+
+    public function test_contact_form_rejects_quotation_and_missing_institution(): void
+    {
+        Queue::fake();
+
+        // Quotation is prohibited on general contact form
+        $responseQuot = $this->postJson(route('contact.submit'), [
+            'nama' => 'Budi Santoso',
+            'email' => 'budi@gmail.com',
+            'perusahaan' => 'PT Lab',
+            'subjek' => 'quotation',
+            'pesan' => 'Minta penawaran.',
+        ]);
+        $responseQuot->assertStatus(422);
+        $responseQuot->assertJsonValidationErrors(['subjek']);
+
+        // Missing company/institution is rejected
+        $responsePerusahaan = $this->postJson(route('contact.submit'), [
+            'nama' => 'Budi Santoso',
+            'email' => 'budi@gmail.com',
+            'subjek' => 'inquiry',
+            'pesan' => 'Tanya produk.',
+        ]);
+        $responsePerusahaan->assertStatus(422);
+        $responsePerusahaan->assertJsonValidationErrors(['perusahaan']);
+    }
+
     public function test_security_headers_include_csp_and_exclude_deprecated_headers(): void
     {
         $response = $this->get(route('home'));

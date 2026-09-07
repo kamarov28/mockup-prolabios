@@ -22,26 +22,6 @@
           </p>
         </div>
       </div>
-
-      <!-- Quick Fast Stats Strip -->
-      <div class="profil-stats-strip">
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Multi-Sektor</div>
-          <div class="profil-stat-label">Farmasi, F&amp;B, Lingkungan &amp; Riset</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Standar ISO/USP</div>
-          <div class="profil-stat-label">Kepatuhan Farmakope &amp; Regulasi Mutu</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Aplikasi Khusus</div>
-          <div class="profil-stat-label">Rekomendasi Reagen &amp; Instrumen Terarah</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Dukungan Teknis</div>
-          <div class="profil-stat-label">Konsultasi Spesifikasi &amp; RFQ Institusi</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -50,8 +30,8 @@
     <div class="container">
       <div class="row g-4 g-lg-5 align-items-start">
 
-        <!-- Sidebar (Left, Order 1 on Desktop to browse sectors easily) -->
-        <div class="col-lg-4 col-md-5 order-2 order-md-1" id="sektor-sidebar">
+        <!-- Sidebar (Left, Order 1 on Desktop to browse sectors easily, Order 2 on Mobile/Tablet) -->
+        <div class="col-12 col-lg-4 order-2 order-lg-1" id="sektor-sidebar">
           {{-- $activeSector is passed from PageController::sektor() --}}
 
           <!-- Sector Selector Card -->
@@ -92,8 +72,8 @@
           </div>
         </div>
 
-        <!-- Main Content (Right, Order 2 on Desktop) -->
-        <div class="col-lg-8 col-md-7 order-1 order-md-2" id="sektor-main">
+        <!-- Main Content (Right, Order 2 on Desktop, Order 1 on Mobile/Tablet) -->
+        <div class="col-12 col-lg-8 order-1 order-lg-2" id="sektor-main">
           @php
             $currentData = null;
             if (isset($sectors) && count($sectors) > 0) {

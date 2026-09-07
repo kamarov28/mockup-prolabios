@@ -20,26 +20,6 @@
           </p>
         </div>
       </div>
-
-      <!-- Quick Fast Stats Strip -->
-      <div class="profil-stats-strip">
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">100%</div>
-          <div class="profil-stat-label">Produk Original &amp; Bersertifikat COA</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">2°C – 8°C</div>
-          <div class="profil-stat-label">Logistik Rantai Dingin (Cold-Chain)</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">38+ Provinsi</div>
-          <div class="profil-stat-label">Cakupan Distribusi &amp; Logistik Nasional</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">AKL / AKD</div>
-          <div class="profil-stat-label">Kepatuhan Izin Edar Kemenkes RI</div>
-        </div>
-      </div>
     </div>
   </section>
 

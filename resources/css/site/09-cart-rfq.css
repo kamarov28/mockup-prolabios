@@ -262,4 +262,24 @@
     border-top: 1.5px dashed rgba(30, 30, 30, 0.2) !important;
     padding-top: 1.5rem !important;
   }
+  .cart-sidebar-panel {
+    position: static !important;
+    top: auto !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cart-item-card {
+    padding: 1rem !important;
+  }
+  .cart-img-box {
+    width: 60px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    min-height: 60px !important;
+  }
+  .cart-item-card .nb-stepper-wrap {
+    width: 100% !important;
+    justify-content: space-between;
+  }
 }

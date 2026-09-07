@@ -15,28 +15,8 @@
             Kontak &amp; Layanan Pelanggan
           </h1>
           <p class="profil-main-subtitle">
-            Konsultasikan kebutuhan pengadaan peralatan laboratorium, permintaan penawaran harga (RFQ institusi), atau jadwal servis instrumen bersama tim kami.
+            Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen.
           </p>
-        </div>
-      </div>
-
-      <!-- Quick Fast Stats Strip -->
-      <div class="profil-stats-strip">
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Respon Cepat</div>
-          <div class="profil-stat-label">Balasan RFQ Dalam 1×24 Jam Kerja</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Kantor Pusat</div>
-          <div class="profil-stat-label">Cibinong, Bogor, Jawa Barat</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Kanal Resmi</div>
-          <div class="profil-stat-label">Telepon Kantor, Email &amp; WhatsApp</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">B2B Support</div>
-          <div class="profil-stat-label">Faktur Pajak &amp; Legalitas Lengkap</div>
         </div>
       </div>
     </div>
@@ -48,7 +28,7 @@
       <div class="row g-4 g-lg-5 align-items-start">
 
         <!-- Contact Info Sidebar -->
-        <div class="col-lg-4 col-md-5 order-2 order-md-1">
+        <div class="col-12 col-lg-4 order-2 order-lg-1">
 
           <div class="kontak-info-block">
             <div class="kontak-info-icon"><i class="bi bi-geo-alt"></i></div>
@@ -81,10 +61,19 @@
         </div>
 
         <!-- Contact Form -->
-        <div class="col-lg-8 col-md-7 order-1 order-md-2">
+        <div class="col-12 col-lg-8 order-1 order-lg-2">
           <div class="card p-4 p-md-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
             <span class="nb-badge mb-2"><i class="bi bi-envelope-paper me-1"></i> TINGGALKAN PESAN</span>
-            <h2 class="profil-section-title mb-4">Kirim Pesan atau Permintaan RFQ</h2>
+            <h2 class="profil-section-title mb-3">Kirim Pesan &amp; Pertanyaan</h2>
+
+            {{-- RFQ Redirection Notice --}}
+            <div class="mb-4 p-3 d-flex align-items-start gap-3" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+              <i class="bi bi-info-circle-fill text-primary mt-1 flex-shrink-0" style="font-size: 1.25rem;"></i>
+              <div class="small" style="color: var(--nb-ink); line-height: 1.5;">
+                <strong class="d-block mb-1" style="font-family: var(--font-display); font-size: 0.88rem;">Informasi Permintaan Penawaran Harga (RFQ):</strong>
+                Formulir kontak ini khusus untuk pertanyaan umum, bantuan teknis, dan layanan servis. Pengajuan penawaran harga resmi (RFQ) institusi dilakukan melalui <a href="{{ url('/produk') }}" class="fw-bold text-decoration-underline" style="color: var(--nb-primary);">Katalog Produk</a> dengan menambahkan produk ke dalam Keranjang RFQ.
+              </div>
+            </div>
 
             <form id="contactForm" class="contact-form" onsubmit="return handleContactForm(event)">
               @csrf
@@ -103,23 +92,22 @@
                   <input type="text" class="form-control kontak-form-input" id="nama" name="nama" required placeholder="Contoh: Budi Santoso">
                 </div>
                 <div class="col-md-6">
-                  <label for="email" class="kontak-form-label">Email Perusahaan / Institusi <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control kontak-form-input" id="email" name="email" required placeholder="contoh@instansi.com" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
+                  <label for="email" class="kontak-form-label">Email Pribadi / Kontak <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control kontak-form-input" id="email" name="email" required placeholder="contoh: budi@gmail.com" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
                 </div>
                 <div class="col-md-6">
-                  <label for="telepon" class="kontak-form-label">Nomor WhatsApp / Telepon</label>
-                  <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="+62 xxx xxxx xxxx" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Hanya boleh berupa angka dan karakter nomor telepon">
+                  <label for="telepon" class="kontak-form-label">Nomor WhatsApp / Telepon Pribadi</label>
+                  <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Hanya boleh berupa angka dan karakter nomor telepon">
                 </div>
                 <div class="col-md-6">
-                  <label for="perusahaan" class="kontak-form-label">Perusahaan / Universitas / Instansi</label>
-                  <input type="text" class="form-control kontak-form-input" id="perusahaan" name="perusahaan" placeholder="Nama instansi pengadaan Anda">
+                  <label for="perusahaan" class="kontak-form-label">Asal Instansi / Perusahaan <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control kontak-form-input" id="perusahaan" name="perusahaan" required placeholder="Nama institusi, universitas, atau perusahaan">
                 </div>
                 <div class="col-12">
                   <label for="subjek" class="kontak-form-label">Keperluan / Subjek <span class="text-danger">*</span></label>
                   <select class="form-select kontak-form-input" id="subjek" name="subjek" required>
                     <option value="">-- Pilih Keperluan --</option>
-                    <option value="inquiry">Pertanyaan Spesifikasi Produk</option>
-                    <option value="quotation">Permintaan Penawaran Harga (RFQ)</option>
+                    <option value="inquiry">Pertanyaan Umum</option>
                     <option value="service">Permintaan Perbaikan / Kalibrasi</option>
                     <option value="consultation">Konsultasi Metode &amp; Teknis</option>
                     <option value="labdesign">Desain &amp; Pembangunan Lab</option>
@@ -127,8 +115,8 @@
                   </select>
                 </div>
                 <div class="col-12">
-                  <label for="pesan" class="kontak-form-label">Detail Pesan / Spesifikasi Kebutuhan <span class="text-danger">*</span></label>
-                  <textarea class="form-control kontak-form-input" id="pesan" name="pesan" rows="5" required placeholder="Tuliskan detail pertanyaan atau daftar produk yang ingin diajukan penawarannya..."></textarea>
+                  <label for="pesan" class="kontak-form-label">Detail Pesan <span class="text-danger">*</span></label>
+                  <textarea class="form-control kontak-form-input" id="pesan" name="pesan" rows="5" required placeholder="Tuliskan pertanyaan, konsultasi, atau pesan yang ingin disampaikan..."></textarea>
                 </div>
                 <div class="col-12 mt-4">
                   <button type="submit" class="kontak-submit-btn">
@@ -244,16 +232,9 @@
 
       const urlParams = new URLSearchParams(window.location.search);
       const subjekParam = urlParams.get('subjek');
-      const produkParam = urlParams.get('produk');
       if (subjekParam) {
         const subjekSelect = document.getElementById('subjek');
         if (subjekSelect) subjekSelect.value = subjekParam;
-      }
-      if (produkParam) {
-        const pesanTextarea = document.getElementById('pesan');
-        if (pesanTextarea) {
-          pesanTextarea.value = `Halo Prolabios,\n\nSaya tertarik dan ingin meminta informasi lebih lanjut / penawaran harga untuk produk: "${decodeURIComponent(produkParam)}".\n\nTerima kasih.`;
-        }
       }
     });
   </script>

@@ -553,10 +553,9 @@ html, body {
       margin-top: 10px;
       padding: 12px 0 6px 0 !important;
       box-shadow: none !important;
-      transition: opacity 0.2s ease;
     }
     .navbar-collapse.collapsing .navbar-collapse-inner {
-      opacity: 0.5;
+      opacity: 1 !important;
     }
   }
   .navbar-nav {

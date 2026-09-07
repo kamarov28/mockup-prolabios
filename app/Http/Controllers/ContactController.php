@@ -40,15 +40,14 @@ class ContactController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'telepon' => 'nullable|string|max:50',
-            'perusahaan' => 'nullable|string|max:255',
-            'subjek' => 'required|string|max:50',
+            'perusahaan' => 'required|string|max:255',
+            'subjek' => 'required|string|in:inquiry,service,consultation,labdesign,other',
             'pesan' => 'required|string|max:5000',
         ]);
 
         // Mapping Label Subjek agar terlihat rapi di email
         $subjekLabels = [
-            'inquiry' => 'Pertanyaan Produk',
-            'quotation' => 'Permintaan Penawaran Harga',
+            'inquiry' => 'Pertanyaan Umum',
             'service' => 'Service Request / Perbaikan',
             'consultation' => 'Konsultasi Teknis',
             'labdesign' => 'Desain Laboratorium',

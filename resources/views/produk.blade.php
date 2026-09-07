@@ -23,26 +23,6 @@
           </p>
         </div>
       </div>
-
-      <!-- Quick Fast Stats Strip -->
-      <div class="profil-stats-strip">
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">100%</div>
-          <div class="profil-stat-label">Produk Original &amp; Bersertifikat COA</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Ready &amp; Indent</div>
-          <div class="profil-stat-label">Jaminan Ketersediaan &amp; Pasokan</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">Resmi &amp; Legal</div>
-          <div class="profil-stat-label">Kepatuhan Regulasi &amp; AKL/AKD</div>
-        </div>
-        <div class="profil-stat-box">
-          <div class="profil-stat-num">B2B RFQ</div>
-          <div class="profil-stat-label">Dukungan Penawaran Harga Institusi</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -50,8 +30,13 @@
   <section class="section-spacious nb-section" id="catalog-section">
     <div class="container">
       <div class="row g-4 g-lg-5 align-items-start">
-        <!-- Main Content (Left, follows Profil page order-1) -->
-        <div class="col-lg-8 col-md-7 order-1">
+        <!-- Sidebar / Filter Column (Order 1 on mobile/tablet for easy filtering, Order 2 on desktop) -->
+        <div class="col-12 col-lg-4 order-1 order-lg-2">
+          @include('partials.catalog-sidebar')
+        </div>
+
+        <!-- Main Product Content Column (Order 2 on mobile/tablet, Order 1 on desktop) -->
+        <div class="col-12 col-lg-8 order-2 order-lg-1">
           <!-- Category Title Header -->
           <div class="mb-4 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
             <h2 class="produk-category-title mb-1" id="category-title">
@@ -78,7 +63,7 @@
 
           <div class="ajax-loading-wrap" id="product-ajax-wrap" aria-busy="false">
             <div class="ajax-loading-overlay" aria-hidden="true"><div class="ajax-spinner" role="status" aria-label="Memuat"></div></div>
-            <div class="row row-cols-1 row-cols-md-2 g-4" id="product-container">
+            <div class="row row-cols-1 row-cols-sm-2 g-3 g-md-4" id="product-container">
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
               <div class="col" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
@@ -128,11 +113,6 @@
           <div class="mt-4" id="dynamic-pagination">
             {{ $products->links('partials.catalog-pagination') }}
           </div>
-        </div>
-
-        <!-- Sidebar / Right Column (follows Profil page layout order-2) -->
-        <div class="col-lg-4 col-md-5 order-2">
-          @include('partials.catalog-sidebar')
         </div>
       </div>
     </div>

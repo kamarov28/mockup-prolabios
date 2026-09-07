@@ -25,6 +25,30 @@
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
 
+  <style>
+    @media (max-width: 991.98px) {
+      .navbar,
+      .navbar-collapse,
+      .navbar-collapse-inner {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+      }
+      .navbar-collapse.collapsing,
+      .navbar-collapse.collapsing *,
+      .navbar-collapse.collapsing .navbar-collapse-inner,
+      .navbar-collapse.show .navbar-collapse-inner,
+      .navbar-collapse .navbar-collapse-inner {
+        opacity: 1 !important;
+        transition: none !important;
+        filter: none !important;
+      }
+      .navbar-collapse.collapsing {
+        transition: height 0.3s ease !important;
+      }
+    }
+  </style>
+
   @stack('styles')
 
   <!-- Page Preloads -->

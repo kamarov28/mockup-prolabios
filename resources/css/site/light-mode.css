@@ -194,6 +194,11 @@ body {
 }
 
 @media (max-width: 991.98px) {
+  .navbar-collapse.collapsing .navbar-collapse-inner,
+  .navbar-collapse .navbar-collapse-inner {
+    opacity: 1 !important;
+    transition: none !important;
+  }
   .navbar-light .navbar-nav {
     gap: 8px !important;
     padding: 10px 0 !important;
@@ -721,7 +726,9 @@ body {
 
 /* ── Misc ───────────────────────────────────────────────────────────────── */
 #search-overlay {
-  background: rgba(214, 208, 197, 0.97) !important;
+  background: rgba(249, 245, 242, 0.88) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
 }
 #search-overlay input {
   background: var(--nb-card) !important;

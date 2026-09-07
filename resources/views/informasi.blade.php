@@ -26,26 +26,6 @@
             </p>
           </div>
         </div>
-
-        <!-- Quick Fast Stats Strip -->
-        <div class="profil-stats-strip">
-          <div class="profil-stat-box">
-            <div class="profil-stat-num">Teknologi Lab</div>
-            <div class="profil-stat-label">Inovasi Instrumen &amp; Reagensia</div>
-          </div>
-          <div class="profil-stat-box">
-            <div class="profil-stat-num">Regulasi &amp; Mutu</div>
-            <div class="profil-stat-label">Standar ISO 17025 &amp; Kepatuhan BPOM</div>
-          </div>
-          <div class="profil-stat-box">
-            <div class="profil-stat-num">Event &amp; Pameran</div>
-            <div class="profil-stat-label">Agenda Kegiatan &amp; Workshop Resmi</div>
-          </div>
-          <div class="profil-stat-box">
-            <div class="profil-stat-num">Knowledge Base</div>
-            <div class="profil-stat-label">Panduan Aplikasi Analitik Terkini</div>
-          </div>
-        </div>
       </div>
     </section>
   @endif
