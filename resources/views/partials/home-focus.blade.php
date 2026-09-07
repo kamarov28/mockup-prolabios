@@ -9,18 +9,18 @@
     </div>
 
     <!-- Sector Tabs Bar -->
-    <div class="hitech-tab-bar mb-5">
-      <button class="hitech-tab-btn active" data-target="pharma">
-        <i class="bi bi-capsule me-2"></i> Farmasi &amp; Biotech
+    <div class="hitech-tab-bar mb-5" role="tablist" aria-label="Pilihan Sektor Industri">
+      <button class="hitech-tab-btn active" role="tab" id="tab-pharma" aria-selected="true" aria-controls="panel-pharma" tabindex="0" data-target="pharma">
+        <i class="bi bi-capsule me-2" aria-hidden="true"></i> Farmasi &amp; Biotech
       </button>
-      <button class="hitech-tab-btn" data-target="fnb">
-        <i class="bi bi-cup-hot me-2"></i> Makanan &amp; Minuman
+      <button class="hitech-tab-btn" role="tab" id="tab-fnb" aria-selected="false" aria-controls="panel-fnb" tabindex="-1" data-target="fnb">
+        <i class="bi bi-cup-hot me-2" aria-hidden="true"></i> Makanan &amp; Minuman
       </button>
-      <button class="hitech-tab-btn" data-target="healthcare">
-        <i class="bi bi-hospital me-2"></i> Kesehatan &amp; Klinis
+      <button class="hitech-tab-btn" role="tab" id="tab-healthcare" aria-selected="false" aria-controls="panel-healthcare" tabindex="-1" data-target="healthcare">
+        <i class="bi bi-hospital me-2" aria-hidden="true"></i> Kesehatan &amp; Klinis
       </button>
-      <button class="hitech-tab-btn" data-target="brewing">
-        <i class="bi bi-bezier2 me-2"></i> Brewing &amp; Riset
+      <button class="hitech-tab-btn" role="tab" id="tab-brewing" aria-selected="false" aria-controls="panel-brewing" tabindex="-1" data-target="brewing">
+        <i class="bi bi-bezier2 me-2" aria-hidden="true"></i> Brewing &amp; Riset
       </button>
     </div>
 
@@ -32,19 +32,19 @@
     <div class="hitech-tab-panels">
       <!-- Panel 1: Pharma -->
       @php $ph = $sp['pharma'] ?? []; @endphp
-      <div class="hitech-tab-panel active" id="panel-pharma">
+      <div class="hitech-tab-panel active" id="panel-pharma" role="tabpanel" aria-labelledby="tab-pharma" tabindex="0">
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-6 d-flex flex-column justify-content-between">
             <div>
-              <span class="hitech-panel-tag">{{ $ph['tag'] ?? 'PHARMACEUTICAL & COSMETICS' }}</span>
-              <h3 class="hitech-panel-title">{!! $ph['title'] ?? 'Endotoxin Testing & <span class="text-accent">Sterilization Validation</span>' !!}</h3>
-              <p class="hitech-panel-desc">{{ $ph['desc'] ?? 'LAL Endotoxin Test Kits (Bioendo), SCBI Biological Indicators (Terragene), and Pharmacopoeia-grade culture media for drug & cosmetic QC compliance.' }}</p>
+              <span class="hitech-panel-tag">{{ $ph['tag'] ?? 'FARMASI & KOSMETIK' }}</span>
+              <h3 class="hitech-panel-title">{!! $ph['title'] ?? 'Pengujian Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>' !!}</h3>
+              <p class="hitech-panel-desc">{{ $ph['desc'] ?? 'Kit Uji Endotoksin LAL (Bioendo), Indikator Biologi SCBI (Terragene), serta media kultur standar farmakope untuk kepatuhan QC obat & kosmetik.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($ph['link'] ?? '/sektor?s=pharmaceutical#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
                 Jelajahi Solusi Farmasi <i class="bi bi-arrow-right"></i>
               </a>
-              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> USP / EP / BP Compliant</span>
+              <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> USP / EP / BP Compliant</span>
             </div>
           </div>
 
@@ -68,22 +68,22 @@
                 <div class="row g-2 mb-3">
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Sensitivitas</div>
-                      <div class="fw-medium small">0.03 EU/mL</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Sensitivitas</div>
+                      <div class="fw-bold small nb-mono">0.03 EU/mL</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Kemasan</div>
-                      <div class="fw-medium small">5.2 mL / Vial</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Kemasan</div>
+                      <div class="fw-bold small nb-mono">5.2 mL / Vial</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Sertifikat COA per batch</span>
-                <a href="{{ url('/produk?q=endotoxin') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-file-earmark-check text-primary me-1"></i> Sertifikat COA per batch</span>
+                <a href="{{ url('/produk?q=endotoxin') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ produk reagen endotoksin">
                   <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
@@ -94,19 +94,19 @@
 
       <!-- Panel 2: FNB -->
       @php $fn = $sp['fnb'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-fnb">
+      <div class="hitech-tab-panel" id="panel-fnb" role="tabpanel" aria-labelledby="tab-fnb" tabindex="0">
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-6 d-flex flex-column justify-content-between">
             <div>
-              <span class="hitech-panel-tag">{{ $fn['tag'] ?? 'FOOD & BEVERAGE INDUSTRY' }}</span>
-              <h3 class="hitech-panel-title">{!! $fn['title'] ?? 'Rapid Pathogen Detection & <span class="text-accent">Hygiene Monitoring</span>' !!}</h3>
-              <p class="hitech-panel-desc">{{ $fn['desc'] ?? 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.' }}</p>
+              <span class="hitech-panel-tag">{{ $fn['tag'] ?? 'INDUSTRI MAKANAN & MINUMAN' }}</span>
+              <h3 class="hitech-panel-title">{!! $fn['title'] ?? 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>' !!}</h3>
+              <p class="hitech-panel-desc">{{ $fn['desc'] ?? 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk memastikan kepatuhan standar HACCP & BPOM.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($fn['link'] ?? '/sektor?s=food#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
                 Jelajahi Solusi F&amp;B <i class="bi bi-arrow-right"></i>
               </a>
-              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> HACCP &amp; ISO 22000</span>
+              <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> HACCP &amp; ISO 22000</span>
             </div>
           </div>
 
@@ -130,22 +130,22 @@
                 <div class="row g-2 mb-3">
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Inkubasi</div>
-                      <div class="fw-medium small">24 Jam (37°C)</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Inkubasi</div>
+                      <div class="fw-bold small nb-mono">24 Jam (37°C)</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Bentuk</div>
-                      <div class="fw-medium small">Dehydrated / Ready Plate</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Bentuk</div>
+                      <div class="fw-bold small">Dehydrated / Ready Plate</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted font-monospace" style="font-size: 0.75rem;">BPOM Food Standard</span>
-                <a href="{{ url('/produk?q=salmonella') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-shield-check text-primary me-1"></i> BPOM Food Standard</span>
+                <a href="{{ url('/produk?q=salmonella') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ media kromogenik salmonella">
                   <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
@@ -156,19 +156,19 @@
 
       <!-- Panel 3: Healthcare -->
       @php $hc = $sp['healthcare'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-healthcare">
+      <div class="hitech-tab-panel" id="panel-healthcare" role="tabpanel" aria-labelledby="tab-healthcare" tabindex="0">
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-6 d-flex flex-column justify-content-between">
             <div>
-              <span class="hitech-panel-tag">{{ $hc['tag'] ?? 'HEALTHCARE & HOSPITAL CSSD' }}</span>
-              <h3 class="hitech-panel-title">{!! $hc['title'] ?? 'Diagnostics & <span class="text-accent">Sterilization Indicators</span>' !!}</h3>
-              <p class="hitech-panel-desc">{{ $hc['desc'] ?? 'Microbial identification, MIC antibiotic susceptibility testing, and chemical/biological indicators for hospital CSSD sterilizers.' }}</p>
+              <span class="hitech-panel-tag">{{ $hc['tag'] ?? 'KESEHATAN & CSSD RUMAH SAKIT' }}</span>
+              <h3 class="hitech-panel-title">{!! $hc['title'] ?? 'Diagnostik & <span class="text-accent">Indikator Sterilisasi</span>' !!}</h3>
+              <p class="hitech-panel-desc">{{ $hc['desc'] ?? 'Identifikasi mikroba, uji sensitivitas antibiotik MIC, serta indikator kimia & biologi untuk sterilisator CSSD rumah sakit.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($hc['link'] ?? '/sektor?s=hospital-clinic#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
                 Jelajahi Solusi Kesehatan <i class="bi bi-arrow-right"></i>
               </a>
-              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> AKL Kemenkes RI</span>
+              <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> AKL Kemenkes RI</span>
             </div>
           </div>
 
@@ -192,22 +192,22 @@
                 <div class="row g-2 mb-3">
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Organisme</div>
-                      <div class="fw-medium small">G. stearothermophilus</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Organisme</div>
+                      <div class="fw-bold small fst-italic">G. stearothermophilus</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Populasi Spora</div>
-                      <div class="fw-medium small">&gt; 10^6 CFU</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Populasi Spora</div>
+                      <div class="fw-bold small nb-mono">&gt; 10^6 CFU</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Kemenkes AKL Resmi</span>
-                <a href="{{ url('/produk?q=indicator') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-patch-check text-primary me-1"></i> Kemenkes AKL Resmi</span>
+                <a href="{{ url('/produk?q=indicator') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ indikator biologi SCBI">
                   <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>
@@ -218,19 +218,19 @@
 
       <!-- Panel 4: Brewing -->
       @php $br = $sp['brewing'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-brewing">
+      <div class="hitech-tab-panel" id="panel-brewing" role="tabpanel" aria-labelledby="tab-brewing" tabindex="0">
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-6 d-flex flex-column justify-content-between">
             <div>
-              <span class="hitech-panel-tag">{{ $br['tag'] ?? 'BREWING & RESEARCH LABS' }}</span>
-              <h3 class="hitech-panel-title">{!! $br['title'] ?? 'Spoilage Control & <span class="text-accent">Fermentation Quality</span>' !!}</h3>
-              <p class="hitech-panel-desc">{{ $br['desc'] ?? 'Specific media for beer spoilage bacteria (Lactobacillus, Pediococcus) and precision liquid handling for R&D molecular biology.' }}</p>
+              <span class="hitech-panel-tag">{{ $br['tag'] ?? 'INDUSTRI BREWING & RISET' }}</span>
+              <h3 class="hitech-panel-title">{!! $br['title'] ?? 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>' !!}</h3>
+              <p class="hitech-panel-desc">{{ $br['desc'] ?? 'Media spesifik bakteri pembusuk bir (Lactobacillus, Pediococcus) dan penanganan cairan presisi untuk riset biologi molekuler.' }}</p>
             </div>
             <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
               <a href="{{ url($br['link'] ?? '/sektor?s=brewing#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
                 Jelajahi Solusi Brewing <i class="bi bi-arrow-right"></i>
               </a>
-              <span class="text-muted small font-monospace"><i class="bi bi-patch-check text-accent me-1"></i> R&amp;D Quality Control</span>
+              <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> R&amp;D Quality Control</span>
             </div>
           </div>
 
@@ -254,22 +254,22 @@
                 <div class="row g-2 mb-3">
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Deteksi Target</div>
-                      <div class="fw-medium small">Lactobacillus / Pediococcus</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Deteksi Target</div>
+                      <div class="fw-bold small">Lactobacillus / Pediococcus</div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted font-monospace" style="font-size: 0.7rem;">Format</div>
-                      <div class="fw-medium small">Solid Ready Agar</div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Format</div>
+                      <div class="fw-bold small">Solid Ready Agar</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted font-monospace" style="font-size: 0.75rem;">Brewing Lab Protocol</span>
-                <a href="{{ url('/produk?q=nbb') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">
+                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-journal-check text-primary me-1"></i> Brewing Lab Protocol</span>
+                <a href="{{ url('/produk?q=nbb') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ media NBB agar brewing">
                   <i class="bi bi-cart-plus"></i> Tambah RFQ
                 </a>
               </div>

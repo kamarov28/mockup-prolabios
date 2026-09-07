@@ -38,31 +38,31 @@
           <div class="col-lg-7">
             <div class="cart-sidebar-panel rfq-card-form h-100">
               <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-                <i class="bi bi-person-lines-fill" style="color: var(--color-accent);"></i> 1. Informasi Pemohon
+                <i class="bi bi-person-lines-fill" style="color: var(--nb-primary);"></i> 1. Informasi Pemohon
               </h3>
 
               <!-- Nama Lengkap -->
               <div class="mb-3">
-                <label for="name" class="kontak-form-label">Nama Lengkap <span style="color: var(--color-accent);">*</span></label>
+                <label for="name" class="kontak-form-label">Nama Lengkap <span style="color: var(--nb-primary);">*</span></label>
                 <input type="text" class="form-control rfq-input" id="name" name="name" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso">
               </div>
 
               <!-- Email Pribadi -->
               <div class="mb-3">
-                <label for="email" class="kontak-form-label">Email Pribadi <span style="color: var(--color-accent);">*</span></label>
+                <label for="email" class="kontak-form-label">Email Pribadi <span style="color: var(--nb-primary);">*</span></label>
                 <input type="email" class="form-control rfq-input" id="email" name="email" value="{{ old('email') }}" required placeholder="budi@gmail.com" autocomplete="email" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
                 <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Konfirmasi pengajuan penawaran akan dikirimkan ke email ini.</div>
               </div>
 
               <!-- Nama Perusahaan / Instansi -->
               <div class="mb-3">
-                <label for="company_name" class="kontak-form-label">Nama Instansi / Perusahaan <span style="color: var(--color-accent);">*</span></label>
+                <label for="company_name" class="kontak-form-label">Nama Instansi / Perusahaan <span style="color: var(--nb-primary);">*</span></label>
                 <input type="text" class="form-control rfq-input" id="company_name" name="company_name" value="{{ old('company_name') }}" required placeholder="Contoh: PT. Indofood Sukses Makmur Tbk / Lab Farmasi Univ. X">
               </div>
 
               <!-- Nomor WhatsApp -->
               <div class="mb-3">
-                <label for="phone_wa" class="kontak-form-label">Nomor WhatsApp <span style="color: var(--color-accent);">*</span></label>
+                <label for="phone_wa" class="kontak-form-label">Nomor WhatsApp <span style="color: var(--nb-primary);">*</span></label>
                 <input type="tel" class="form-control rfq-input" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
                 <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Hanya menerima angka / nomor telepon aktif WhatsApp.</div>
               </div>
@@ -80,7 +80,7 @@
             <div class="cart-sidebar-panel rfq-card-summary h-100 d-flex flex-column justify-content-between">
               <div>
                 <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-                  <i class="bi bi-cart-check" style="color: var(--color-accent);"></i> 2. Ringkasan Produk
+                  <i class="bi bi-cart-check" style="color: var(--nb-primary);"></i> 2. Ringkasan Produk
                 </h3>
 
                 <div class="list-group list-group-flush bg-transparent mb-3">

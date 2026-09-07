@@ -31,7 +31,7 @@
 .b2b-usecase-card {
   background: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-lg, 8px);
   padding: 30px 24px;
   height: 100%;
   display: flex;
@@ -70,7 +70,7 @@
   color: #6B6B6B;
   background: rgba(0, 0, 0, 0.05);
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: var(--nb-radius-sm, 4px);
   margin-bottom: 20px;
   display: inline-block;
 }
@@ -91,7 +91,7 @@
   background: rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--nb-radius-sm, 4px);
 }
 .text-accent { color: var(--color-accent); }
 
@@ -132,7 +132,7 @@
 }
 .marquee-logo-box,
 .hitech-marquee-section .marquee-logo-box {
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-sm, 4px);
   background: #FFFFFF !important;
 }
 .hitech-marquee-section .marquee-logo-box img {
@@ -149,7 +149,7 @@
 .hitech-bento-card {
   background: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-lg, 8px);
   padding: 36px 30px;
   height: 100%;
   position: relative;
@@ -197,7 +197,6 @@
   background: transparent;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 0 !important;
   padding: 0;
   gap: 0;
 }
@@ -210,7 +209,7 @@
   font-size: 0.78rem;
   font-weight: 500;
   padding: 12px 24px;
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-sm, 4px) var(--nb-radius-sm, 4px) 0 0;
   letter-spacing: 0.6px;
   transition: color 0.25s ease;
   cursor: pointer;
@@ -277,7 +276,7 @@
 .hitech-panel-box {
   background: #F8F6F3;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-lg, 8px);
   padding: 28px;
 }
 .hitech-box-header {

@@ -107,7 +107,7 @@
                     </p>
 
                     <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
-                      <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;">
+                      <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
                         Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
                       </a>
                     </div>

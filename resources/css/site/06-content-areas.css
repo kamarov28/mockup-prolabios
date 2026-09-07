@@ -214,28 +214,53 @@ section hr {
   }
 }
 
-/* Animated Hamburger Menu (from Uiverse.io by JulanDeAlb) */
+/* Animated Hamburger Menu (from Uiverse.io by JulanDeAlb, Neo-Brutalist harmonized) */
 .hamburger {
   cursor: pointer;
   display: none;
 }
 @media (max-width: 991.98px) {
   .hamburger {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    margin: 0;
+    background: var(--nb-card, #FFFFFF);
+    border: var(--nb-border, 2px solid #1E1E1E);
+    border-radius: var(--nb-radius-sm, 4px);
+    box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+  }
+  .hamburger:hover {
+    background: var(--nb-accent, #F1C045);
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+  }
+  .hamburger:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--nb-ink, #1E1E1E);
+  }
+  .hamburger:has(input:checked) {
+    background: var(--nb-accent, #F1C045);
   }
 }
 .hamburger input {
   display: none;
 }
 .hamburger svg {
-  height: 2.2rem;
-  width: 2.2rem;
+  height: 1.5rem;
+  width: 1.5rem;
   transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
   display: block;
 }
 .hamburger .line {
   fill: none;
-  stroke: #ffffff;
+  stroke: var(--nb-ink, #1E1E1E);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 3;
@@ -322,7 +347,7 @@ section hr {
 }
 
 /* ==========================================================================
-   Editorial Bento Grid — Wawasan & Edukasi (Kristi + Soft Neo-Brutalism)
+   Editorial Bento Grid — Wawasan & Edukasi (Soft Neo-Brutalism)
    ========================================================================== */
 
 /* Force white neo-brutal cards regardless of theme */
@@ -330,10 +355,10 @@ section hr {
 .editorial-side-card {
   background: #FFFFFF !important;
   border: 2px solid #1E1E1E !important;
-  border-radius: 0 !important;
+  border-radius: var(--nb-radius-lg, 8px) !important;
   box-shadow: 4px 4px 0 #1E1E1E !important;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .editorial-featured-card:hover,
@@ -343,6 +368,12 @@ section hr {
   box-shadow: 2px 2px 0 #1E1E1E !important;
 }
 
+.editorial-featured-card:active,
+.editorial-side-card:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #1E1E1E !important;
+}
+
 /* Featured thumbnail */
 .editorial-featured-thumb {
   position: relative;
@@ -350,7 +381,7 @@ section hr {
   height: 220px;
   min-height: 220px;
   overflow: hidden;
-  background: #e8e4db;
+  background: var(--nb-bg-soft, #FEFEFE);
   border-bottom: 2px solid #1E1E1E !important;
 }
 
@@ -367,7 +398,7 @@ section hr {
 }
 
 .editorial-featured-title {
-  font-family: var(--font-family-headline, 'Space Grotesk', sans-serif);
+  font-family: var(--font-family-headline, 'Bricolage Grotesque', sans-serif);
   font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.3;
@@ -379,32 +410,35 @@ section hr {
 .editorial-featured-title a {
   color: #1E1E1E !important;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
 }
 
 .editorial-featured-title a:hover,
 .editorial-featured-card:hover .editorial-featured-title a {
-  color: #A6171C !important;
+  color: var(--nb-primary, #A6171C) !important;
 }
 
 .editorial-featured-excerpt {
   font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgba(30, 30, 30, 0.72);
+  line-height: 1.6;
+  color: var(--nb-muted, #5A5A5A);
   margin-bottom: 0;
 }
 
 .editorial-read-link {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #1E1E1E !important;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--nb-primary, #A6171C) !important;
   text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color 0.2s ease;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.15s ease, color 0.15s ease;
 }
 
 .editorial-read-link:hover {
-  color: #A6171C !important;
+  color: var(--nb-primary-dark, #7A1015) !important;
+  transform: translateX(2px);
 }
 
 /* Right side individual cards */
@@ -417,10 +451,11 @@ section hr {
 }
 
 .editorial-list-title {
-  font-family: var(--font-family-headline, 'Space Grotesk', sans-serif);
+  font-family: var(--font-family-headline, 'Bricolage Grotesque', sans-serif);
   font-size: 1.05rem;
-  font-weight: 650;
+  font-weight: 700;
   line-height: 1.35;
+  letter-spacing: -0.01em;
   margin: 0;
   color: #1E1E1E !important;
 }
@@ -428,44 +463,55 @@ section hr {
 .editorial-list-title a {
   color: #1E1E1E !important;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.15s ease;
 }
 
 .editorial-list-title a:hover {
-  color: #A6171C !important;
+  color: var(--nb-primary, #A6171C) !important;
+}
+
+.editorial-card-arrow {
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.editorial-side-card:hover .editorial-card-arrow {
+  transform: translateX(3px);
+  color: var(--nb-primary, #A6171C) !important;
 }
 
 /* Badges */
 .editorial-badge {
   display: inline-flex;
   align-items: center;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.68rem;
+  font-family: var(--font-headline, 'Bricolage Grotesque', sans-serif);
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.3rem 0.65rem;
-  border-radius: 2px;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--nb-radius-sm, 4px);
   line-height: 1;
   border: 1.5px solid #1E1E1E;
+  box-shadow: 1px 1px 0 #1E1E1E;
 }
 
 .editorial-badge-sunny {
-  background: #F1C045 !important;
-  color: #1a1a1a !important;
+  background: var(--nb-accent, #F1C045) !important;
+  color: #1E1E1E !important;
 }
 
 .editorial-badge-ruby {
-  background: #A6171C !important;
+  background: var(--nb-primary, #A6171C) !important;
   color: #ffffff !important;
   border-color: #1E1E1E !important;
 }
 
 .editorial-meta {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.72rem;
-  color: rgba(30, 30, 30, 0.55);
-  letter-spacing: 0.02em;
+  font-family: var(--font-family-sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--nb-muted, #5A5A5A);
+  letter-spacing: 0.01em;
 }
 
 /* Neo-brutal "Lihat Semua Artikel" button */

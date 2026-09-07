@@ -90,7 +90,7 @@
                   </div>
                 </div>
 
-                <button type="submit" class="nb-btn nb-btn-primary flex-grow-1" style="height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                <button type="submit" class="nb-btn nb-btn-primary flex-grow-1" style="height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
                   <i class="bi bi-cart-plus me-2" style="font-size: 1.15rem;"></i> Tambah ke Keranjang Penawaran
                 </button>
               </div>

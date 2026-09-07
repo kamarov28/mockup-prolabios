@@ -113,7 +113,7 @@
                 </div>
 
                 <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 24px; font-size: 0.88rem;">
+                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 24px; font-size: 0.88rem;" aria-label="Permintaan penawaran dan harga untuk {{ $product['title'] }}">
                     <i class="bi bi-cart-check me-2" style="font-size: 1.15rem;"></i> Permintaan Penawaran & Harga
                   </a>
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem;">

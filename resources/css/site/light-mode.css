@@ -20,9 +20,9 @@
   --nb-radius: 6px;
   --nb-radius-sm: 4px;
   --nb-radius-lg: 8px;
-  --font-display: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 }
 
 /* ── Foundation ─────────────────────────────────────────────────────────── */
@@ -143,26 +143,68 @@ body {
   color: var(--nb-ink) !important;
   font-weight: 600 !important;
   font-family: var(--font-display) !important;
-  letter-spacing: 0.02em;
-  padding: 8px 16px !important;
-  border-radius: var(--nb-radius-sm, 4px) !important;
-  transition: all 0.12s ease !important;
+  font-size: 0.88rem !important;
+  letter-spacing: 0.01em;
+  height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 14px !important;
+  margin: 0 2px !important;
+  background: transparent !important;
+  border: 1.5px solid transparent !important;
+  border-radius: var(--nb-radius, 6px) !important;
+  box-shadow: none !important;
+  position: relative;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
 }
 
 .navbar-light .navbar-nav .nav-link::after {
   display: none !important;
 }
 
+/* Hover: Lift + hard neo-brutal shadow (kristi.digital philosophy with subtle rounded rect) */
 .navbar-light .navbar-nav .nav-link:hover {
-  color: var(--nb-primary) !important;
-  background: rgba(166, 23, 28, 0.08) !important;
+  color: var(--nb-ink) !important;
+  background: #FFFFFF !important;
+  border-color: var(--nb-ink) !important;
+  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  transform: translate(-1px, -1px) !important;
 }
 
+.navbar-light .navbar-nav .nav-link:active {
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+}
+
+/* Active page: Solid ruby neo-brutal button */
 .navbar-light .navbar-nav .nav-link.active {
   color: #FFFFFF !important;
   background: var(--nb-primary) !important;
-  border: 1.5px solid var(--nb-ink) !important;
+  border-color: var(--nb-ink) !important;
   box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  transform: none !important;
+}
+
+.navbar-light .navbar-nav .nav-link.active:hover {
+  color: #FFFFFF !important;
+  background: var(--nb-primary-dark) !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 3px 3px 0 var(--nb-ink) !important;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-light .navbar-nav {
+    gap: 8px !important;
+    padding: 10px 0 !important;
+  }
+  .navbar-light .navbar-nav .nav-link {
+    width: 100% !important;
+    height: 42px !important;
+    justify-content: flex-start !important;
+    padding: 0 16px !important;
+    margin: 0 !important;
+  }
 }
 
 .navbar-utilities .nav-link,
@@ -203,6 +245,15 @@ body {
   box-shadow: 0 0 0 var(--nb-ink) !important;
 }
 
+@media (max-width: 991.98px) {
+  .navbar .nb-icon-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+
 .nav-cart-badge {
   position: absolute;
   top: -6px;
@@ -226,28 +277,39 @@ body {
 
 /* Catalog CTA — Ruby + hard shadow + press */
 .navbar .btn-outline-danger,
-.btn-outline-danger {
+.btn-outline-danger,
+.navbar-cta-btn {
   height: 38px !important;
   background: var(--nb-primary) !important;
   border: var(--nb-border) !important;
   color: #FFFFFF !important;
   font-family: var(--font-display) !important;
   font-weight: 700 !important;
-  border-radius: var(--nb-radius) !important;
-  box-shadow: var(--nb-shadow-sm) !important;
+  font-size: 0.88rem !important;
+  border-radius: var(--nb-radius-sm, 4px) !important;
+  box-shadow: 2px 2px 0 var(--nb-ink) !important;
   transition: transform 0.12s ease, box-shadow 0.12s ease !important;
 }
 .navbar .btn-outline-danger:hover,
-.btn-outline-danger:hover {
+.btn-outline-danger:hover,
+.navbar-cta-btn:hover {
   background: var(--nb-primary-dark) !important;
   color: #FFFFFF !important;
   transform: translate(2px, 2px) !important;
   box-shadow: 1px 1px 0 var(--nb-ink) !important;
 }
 .navbar .btn-outline-danger:active,
-.btn-outline-danger:active {
+.btn-outline-danger:active,
+.navbar-cta-btn:active {
   transform: translate(3px, 3px) !important;
   box-shadow: 0 0 0 var(--nb-ink) !important;
+}
+
+@media (max-width: 991.98px) {
+  .navbar-collapse .navbar-cta-btn {
+    width: 100% !important;
+    height: 44px !important;
+  }
 }
 
 .hamburger .line { stroke: var(--nb-ink); }

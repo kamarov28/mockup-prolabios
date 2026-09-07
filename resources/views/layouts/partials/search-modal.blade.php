@@ -30,17 +30,17 @@
       <div class="search-section-label mt-4">Navigasi Cepat</div>
       <div class="search-quick-links">
         <a href="{{ url('/produk') }}" class="search-quick-item">
-          <i class="bi bi-box-seam me-2 text-accent"></i>
+          <i class="bi bi-box-seam me-2 text-primary"></i>
           <span>Lihat Semua Produk</span>
           <i class="bi bi-chevron-right ms-auto opacity-40"></i>
         </a>
         <a href="{{ url('/layanan') }}" class="search-quick-item">
-          <i class="bi bi-tools me-2 text-accent"></i>
+          <i class="bi bi-tools me-2 text-primary"></i>
           <span>Layanan Kalibrasi &amp; Teknis</span>
           <i class="bi bi-chevron-right ms-auto opacity-40"></i>
         </a>
         <a href="{{ url('/kontak') }}" class="search-quick-item">
-          <i class="bi bi-envelope me-2 text-accent"></i>
+          <i class="bi bi-envelope me-2 text-primary"></i>
           <span>Ajukan Permintaan Penawaran</span>
           <i class="bi bi-chevron-right ms-auto opacity-40"></i>
         </a>

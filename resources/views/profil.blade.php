@@ -118,7 +118,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">01. PRODUK</span>
-                    <i class="bi bi-box-seam text-accent fs-5"></i>
+                    <i class="bi bi-box-seam text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Kualitas &amp; Ketersediaan</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -131,7 +131,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">02. PENGGUNA</span>
-                    <i class="bi bi-people text-accent fs-5"></i>
+                    <i class="bi bi-people text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Edukasi &amp; Solusi Teknis</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -144,7 +144,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">03. PENGADAAN</span>
-                    <i class="bi bi-file-earmark-check text-accent fs-5"></i>
+                    <i class="bi bi-file-earmark-check text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Keandalan Pengadaan B2B</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -157,7 +157,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">04. LAYANAN</span>
-                    <i class="bi bi-tools text-accent fs-5"></i>
+                    <i class="bi bi-tools text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Layanan Purna Jual &amp; Kalibrasi</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -187,8 +187,8 @@
                   <p class="profil-body-text flex-grow-1" style="font-size: 0.9rem;">
                     Menunjukkan tingkat keahlian teknis yang tinggi, integritas moral, serta standar operasional profesional dalam melayani setiap mitra industri maupun institusi pendidikan.
                   </p>
-                  <div class="pt-3 nb-card-foot nb-mono text-muted small">
-                    <i class="bi bi-check2-circle text-accent me-1"></i> Integritas &amp; Mutu
+                  <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
+                    <i class="bi bi-check2-circle text-primary me-1"></i> Integritas &amp; Mutu
                   </div>
                 </div>
               </div>
@@ -201,8 +201,8 @@
                   <p class="profil-body-text flex-grow-1" style="font-size: 0.9rem;">
                     Tangguh dan sigap menghadapi tantangan distribusi rantai pasok untuk memastikan ketersediaan barang dan stabilitas kualitas reagen yang kami kirimkan.
                   </p>
-                  <div class="pt-3 nb-card-foot nb-mono text-muted small">
-                    <i class="bi bi-check2-circle text-accent me-1"></i> Rantai Pasok Kuat
+                  <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
+                    <i class="bi bi-check2-circle text-primary me-1"></i> Rantai Pasok Kuat
                   </div>
                 </div>
               </div>
@@ -215,8 +215,8 @@
                   <p class="profil-body-text flex-grow-1" style="font-size: 0.9rem;">
                     Berkomitmen menghadirkan produk-produk terbaik dari prinsipal berkelas dunia serta solusi menyeluruh demi memajukan kemampuan riset lab Anda.
                   </p>
-                  <div class="pt-3 nb-card-foot nb-mono text-muted small">
-                    <i class="bi bi-check2-circle text-accent me-1"></i> Solusi Terdepan
+                  <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
+                    <i class="bi bi-check2-circle text-primary me-1"></i> Solusi Terdepan
                   </div>
                 </div>
               </div>
@@ -226,7 +226,7 @@
           <!-- 4. Komitmen Kepatuhan & Jaminan Mutu -->
           <div class="profil-trust-box">
             <div class="d-flex align-items-center gap-2 mb-3">
-              <i class="bi bi-shield-lock-fill text-accent fs-4"></i>
+              <i class="bi bi-shield-lock-fill text-primary fs-4"></i>
               <h3 class="profil-section-title m-0 fs-5">Standar Regulasi &amp; Jaminan Distribusi</h3>
             </div>
             <p class="profil-body-text mb-3" style="font-size: 0.92rem;">
@@ -235,7 +235,7 @@
             <div class="row g-3">
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-accent mt-1"></i>
+                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Sertifikat Keaslian &amp; COA</strong>
                     <span class="text-muted small">Dokumen batch certificate dan MSDS siap audit.</span>
@@ -244,7 +244,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-accent mt-1"></i>
+                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Izin Edar Kemenkes RI</strong>
                     <span class="text-muted small">Registrasi AKL/AKD untuk perlengkapan medis dan diagnostik.</span>
@@ -253,7 +253,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-accent mt-1"></i>
+                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Prinsipal Resmi Terakreditasi</strong>
                     <span class="text-muted small">Kemitraan resmi dengan produsen global teruji.</span>
@@ -262,7 +262,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-accent mt-1"></i>
+                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Penyimpanan Rantai Dingin</strong>
                     <span class="text-muted small">Fasilitas cold storage terkontrol 2°C – 8°C.</span>
@@ -280,7 +280,7 @@
           <!-- Sidebar Card 1: Data Perusahaan -->
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title">
-              <i class="bi bi-card-list me-1 text-accent"></i> DATA PERUSAHAAN
+              <i class="bi bi-card-list me-1 text-primary"></i> DATA PERUSAHAAN
             </h3>
             <table class="profil-info-table mb-3">
               <tbody>
@@ -307,14 +307,14 @@
               </tbody>
             </table>
             <div class="pt-2 nb-card-foot text-center">
-              <span class="nb-mono text-muted small">TERDAFTAR &amp; RESMI DI INDONESIA</span>
+              <span class="nb-badge-sm mb-0">TERDAFTAR &amp; RESMI DI INDONESIA</span>
             </div>
           </div>
 
           <!-- Sidebar Card 2: Saluran Resmi & Media Sosial -->
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title">
-              <i class="bi bi-share me-1 text-accent"></i> TETAP TERHUBUNG
+              <i class="bi bi-share me-1 text-primary"></i> TETAP TERHUBUNG
             </h3>
             <p class="profil-body-text text-muted mb-3" style="font-size: 0.85rem;">
               Ikuti publikasi resmi dan update produk melalui saluran media kami:

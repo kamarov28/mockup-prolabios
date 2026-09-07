@@ -2,6 +2,12 @@
  * PROLABIOS Mockup - Main JavaScript Entrypoint (Modular ES6)
  */
 
+import * as bootstrap from 'bootstrap';
+import Swal from 'sweetalert2';
+
+window.bootstrap = bootstrap;
+window.Swal = Swal;
+
 import { initNavigation } from './modules/navigation.js';
 import { initSearchModal } from './modules/search-modal.js';
 import { initHeroSlideshow } from './modules/hero-slideshow.js';

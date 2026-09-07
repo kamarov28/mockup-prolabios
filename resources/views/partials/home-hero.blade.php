@@ -4,10 +4,10 @@
     $heroImages = array_values(array_filter($homeData['hero_images'] ?? []));
     if (count($heroImages) === 0) {
         $heroImages = [
-            'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=85',
-            'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=85',
-            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=85',
-            'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=85'
+            'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80',
+            'https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80'
         ];
     }
   @endphp
@@ -31,16 +31,16 @@
     <div class="nb-hero-immersive-content">
       <!-- Floating Copy Card with Soft Neo-Brutalist Frame -->
       <div class="nb-hero-copy">
-        <span class="nb-badge">{{ $homeData['hero_badge'] ?? 'PRECISION LABORATORY SOLUTIONS' }}</span>
+        <span class="nb-badge">{{ $homeData['hero_badge'] ?? 'SOLUSI LABORATORIUM TERPERCAYA' }}</span>
         <h1 class="nb-hero-title">
-          {!! $homeData['hero_title'] ?? '<span class="nb-accent text-accent">Trusted</span> Analytical & Microbiology Solutions' !!}
+          {!! $homeData['hero_title'] ?? 'Solusi Analitika &amp; Mikrobiologi <span class="nb-accent text-accent">Terpercaya</span>' !!}
         </h1>
         <p class="nb-hero-lead">
-          {{ $homeData['hero_subtitle'] ?? 'We provide the highest-quality culture media, laboratory instruments, and testing equipment to support a wide range of industrial needs in Indonesia.' }}
+          {{ $homeData['hero_subtitle'] ?? 'Kami menyediakan media kultur berkualitas tinggi, instrumen laboratorium presisi, dan perlengkapan uji standar industri di Indonesia.' }}
         </p>
         <div class="nb-hero-actions">
           <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
-            {{ $homeData['hero_cta_text'] ?? 'Explore Product Catalog' }}
+            {{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }}
             <i class="bi bi-arrow-right"></i>
           </a>
           <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost">

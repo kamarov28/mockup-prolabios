@@ -4,7 +4,7 @@
 
 @section('preload')
   @php
-    $firstHero = $homeData['hero_images'][0] ?? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+    $firstHero = $homeData['hero_images'][0] ?? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80';
   @endphp
   <link rel="preload" as="image" href="{{ $firstHero }}" fetchpriority="high">
 @endsection
@@ -55,7 +55,7 @@
                     {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
                   </p>
                   <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
-                    <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">
+                    <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}" aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
                       Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                   </div>
@@ -78,12 +78,12 @@
   <section class="nb-rfq-section">
     <div class="container">
       <div class="nb-rfq-box">
-        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'B2B PROCUREMENT' }}</span>
-        <h2 class="nb-rfq-title">{{ $homeData['cta_banner_title'] ?? 'Need a formal quotation for your laboratory?' }}</h2>
-        <p class="nb-rfq-sub">{{ $homeData['cta_banner_sub'] ?? 'Submit an RFQ with your product list — our sales team will follow up with pricing, bulk availability, and compliance documentation.' }}</p>
+        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'PENGADAAN B2B' }}</span>
+        <h2 class="nb-rfq-title">{{ $homeData['cta_banner_title'] ?? 'Butuh penawaran resmi untuk laboratorium Anda?' }}</h2>
+        <p class="nb-rfq-sub">{{ $homeData['cta_banner_sub'] ?? 'Kirimkan daftar kebutuhan alat & reagen Anda. Tim kami akan segera menindaklanjuti dengan penawaran harga resmi, ketersediaan stok, dan dokumen sertifikasi.' }}</p>
         <div class="nb-rfq-actions">
           <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="nb-btn nb-btn-primary">
-            {{ $homeData['cta_banner_btn_text'] ?? 'Contact Sales / Request Quote' }}
+            {{ $homeData['cta_banner_btn_text'] ?? 'Hubungi Sales / Minta Penawaran' }}
             <i class="bi bi-arrow-right"></i>
           </a>
           <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
@@ -99,17 +99,48 @@
   @include('partials.gsap-loader')
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const tabBtns = document.querySelectorAll('.hitech-tab-btn');
+      const tabBtns = Array.from(document.querySelectorAll('.hitech-tab-btn'));
       const tabPanels = document.querySelectorAll('.hitech-tab-panel');
 
-      tabBtns.forEach(btn => {
+      function activateTab(tab, setFocus) {
+        if (!tab) return;
+        const target = tab.getAttribute('data-target');
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+          b.setAttribute('tabindex', '-1');
+        });
+        tabPanels.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        tab.setAttribute('tabindex', '0');
+        if (setFocus) tab.focus();
+
+        const activePanel = document.getElementById('panel-' + target);
+        if (activePanel) activePanel.classList.add('active');
+      }
+
+      tabBtns.forEach((btn, idx) => {
         btn.addEventListener('click', function() {
-          const target = this.getAttribute('data-target');
-          tabBtns.forEach(b => b.classList.remove('active'));
-          tabPanels.forEach(p => p.classList.remove('active'));
-          this.classList.add('active');
-          const activePanel = document.getElementById('panel-' + target);
-          if (activePanel) activePanel.classList.add('active');
+          activateTab(this, false);
+        });
+
+        btn.addEventListener('keydown', function(e) {
+          let targetIdx = null;
+          if (e.key === 'ArrowRight') {
+            targetIdx = (idx + 1) % tabBtns.length;
+          } else if (e.key === 'ArrowLeft') {
+            targetIdx = (idx - 1 + tabBtns.length) % tabBtns.length;
+          } else if (e.key === 'Home') {
+            targetIdx = 0;
+          } else if (e.key === 'End') {
+            targetIdx = tabBtns.length - 1;
+          }
+          if (targetIdx !== null) {
+            e.preventDefault();
+            activateTab(tabBtns[targetIdx], true);
+          }
         });
       });
     });

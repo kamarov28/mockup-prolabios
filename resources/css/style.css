@@ -1,3 +1,7 @@
+/* Vendor CSS (bundled locally for performance & 0 external render-blocking) */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
 /* Soft Neo-Brutalism — entry */
 @import './site/light-mode.css';
 
@@ -24,9 +28,9 @@
   --color-border: #1E1E1E;
 
   /* Soft Neo-Brutalism type */
-  --font-family-headline: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
+  --font-family-headline: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-family-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Hard offset shadows (no blur) */
   --shadow-sm: 3px 3px 0 #1E1E1E;
@@ -129,8 +133,6 @@ h1, h2, h3, h4, h5, h6,
   color: #fff;
 }
 
-[data-theme="light"] { }
-
 /* Soft Neo: hard press, not soft float */
 .card {
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -147,14 +149,6 @@ h1, h2, h3, h4, h5, h6,
 .navbar-nav .nav-link {
   position: relative;
   transition: color 0.2s ease;
-}
-
-#theme-toggle::after,
-#motion-toggle::after,
-.navbar-nav #theme-toggle::after,
-.navbar-nav #motion-toggle::after {
-  display: none !important;
-  content: none !important;
 }
 
 .principal-section {
@@ -654,13 +648,14 @@ input:focus-visible,
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html {
     scroll-behavior: auto !important;
+  }
+  .nb-hero-backdrop .nb-hero-slide,
+  .marquee-content,
+  .marquee-content-single,
+  .animate-on-scroll {
+    animation: none !important;
   }
 }
 

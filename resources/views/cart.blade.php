@@ -82,7 +82,7 @@
 
                 <!-- 2. Product Name & Catalog & Stock Status -->
                 <div class="col">
-                  <a href="{{ product_url($item) }}" class="text-white text-decoration-none fw-semibold d-block mb-1" style="font-family: var(--font-headline); font-size: 1.05rem; line-height: 1.35;">
+                  <a href="{{ product_url($item) }}" class="text-decoration-none fw-semibold d-block mb-1" style="color: var(--nb-ink) !important; font-family: var(--font-headline); font-size: 1.05rem; line-height: 1.35;">
                     {{ $item['title'] }}
                   </a>
                   <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
@@ -98,12 +98,12 @@
                     @endphp
 
                     @if(!$isIndent)
-                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.4); padding: 2px 8px; background: rgba(74, 222, 128, 0.06);">
-                        <i class="bi bi-box-seam me-1"></i> Stok Siap
+                      <span class="nb-badge-sm" style="color: #1E1E1E;">
+                        <i class="bi bi-box-seam me-1" style="color: #A6171C;"></i> Stok Siap
                       </span>
                     @else
-                      <span style="font-family: var(--font-headline); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4); padding: 2px 8px; background: rgba(251, 191, 36, 0.06);" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
-                        <i class="bi bi-clock-history me-1"></i> Pesanan khusus (siap: {{ $stockVal }})
+                      <span class="nb-badge-sm" style="color: #1E1E1E;" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
+                        <i class="bi bi-clock-history me-1" style="color: #A6171C;"></i> Pesanan khusus (siap: {{ $stockVal }})
                       </span>
                     @endif
                   </div>
@@ -131,7 +131,7 @@
                 <div class="col-auto text-end">
                   <div class="d-flex align-items-center gap-3">
                     <div>
-                      <span class="item-subtotal-val" style="font-family: var(--font-headline); font-weight: 700; color: var(--color-accent); font-size: 1.1rem;">
+                      <span class="item-subtotal-val" style="font-family: var(--font-headline); font-weight: 700; color: var(--nb-primary); font-size: 1.1rem;">
                         {{ $item['price'] > 0 ? 'Rp ' . number_format($item['price'] * $item['quantity'], 0, ',', '.') : 'Est. Penawaran' }}
                       </span>
                     </div>
@@ -157,7 +157,7 @@
         <div class="col-lg-4">
           <div class="cart-sidebar-panel sticky-top" style="top: 130px; z-index: 100;">
             <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-              <i class="bi bi-receipt" style="color: var(--color-accent);"></i> Ringkasan Pengajuan
+              <i class="bi bi-receipt" style="color: var(--nb-primary);"></i> Ringkasan Pengajuan
             </h3>
 
             <div class="d-flex justify-content-between mb-2 small">

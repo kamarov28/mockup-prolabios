@@ -1,9 +1,9 @@
 /* Soft Neo-Brutalism Design Tokens — unified system */
 :root {
-  --font-headline: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
-  --font-display: 'Bricolage Grotesque', 'Space Grotesk', system-ui, sans-serif;
+  --font-headline: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Brand Palette */
   --color-natural: #FEFEFE;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,30 +15,17 @@
   <link rel="apple-touch-icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
-  <!-- Preconnect to CDN & fonts (critical for LCP) -->
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Soft Neo-Brutalism Typography:
-       Bricolage Grotesque (display/headings) · Space Grotesk (alt display) · JetBrains Mono (SKU/specs) · Plus Jakarta Sans (body) -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Soft Neo-Brutalism Typography: 2 Core WebFonts (Bricolage Grotesque & Plus Jakarta Sans) + System Monospace -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-  <!-- Bootstrap Icons (non-blocking) -->
-  <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"></noscript>
-
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- Custom CSS via Vite -->
+  <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
 
   @stack('styles')
-
-  <!-- SweetAlert2 (defer non-blocking) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 
   <!-- Page Preloads -->
   @yield('preload')
@@ -100,8 +87,7 @@
   <!-- Cookie Consent Notice -->
   @include('layouts.partials.cookie-consent')
 
-  <!-- Bootstrap first (components), then app (site behavior). Defer keeps HTML parse unblocked. -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+  <!-- Core App Scripts (Bundled Bootstrap 5 + SweetAlert2 + Site Behaviors) -->
   @vite(['resources/js/app.js'])
 
   <script>
@@ -112,9 +98,12 @@
       if (mainNavbar && hamburgerInput) {
         var bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
         hamburgerInput.checked = false;
+        hamburgerInput.setAttribute('aria-expanded', 'false');
 
         hamburgerInput.addEventListener('change', function () {
-          if (hamburgerInput.checked) {
+          var isExpanded = hamburgerInput.checked;
+          hamburgerInput.setAttribute('aria-expanded', String(isExpanded));
+          if (isExpanded) {
             bsCollapse.show();
           } else {
             bsCollapse.hide();
@@ -123,9 +112,11 @@
 
         mainNavbar.addEventListener('show.bs.collapse', function () {
           hamburgerInput.checked = true;
+          hamburgerInput.setAttribute('aria-expanded', 'true');
         });
         mainNavbar.addEventListener('hide.bs.collapse', function () {
           hamburgerInput.checked = false;
+          hamburgerInput.setAttribute('aria-expanded', 'false');
         });
       }
 

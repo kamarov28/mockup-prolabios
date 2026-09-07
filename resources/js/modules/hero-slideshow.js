@@ -244,4 +244,32 @@ export function initHeroKineticGrid() {
 }
 
 export function initPrincipalSlider() {}
-export function initMarqueeVisibility() {}
+export function initMarqueeVisibility() {
+  if (typeof IntersectionObserver === 'undefined') return;
+
+  const containers = document.querySelectorAll('.marquee-container, .nb-principals-track, .nb-principals');
+  if (containers.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const contents = entry.target.querySelectorAll('.marquee-content, .marquee-content-single');
+        const state = entry.isIntersecting ? 'running' : 'paused';
+        contents.forEach(el => {
+          el.style.animationPlayState = state;
+        });
+      });
+    }, { rootMargin: '80px 0px' });
+
+    containers.forEach(el => observer.observe(el));
+  } else {
+    const marquees = document.querySelectorAll('.marquee-content, .marquee-content-single');
+    if (!marquees.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        entry.target.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+      });
+    }, { rootMargin: '80px 0px' });
+
+    marquees.forEach(el => observer.observe(el));
+  }
+}

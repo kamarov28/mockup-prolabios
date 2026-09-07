@@ -8,7 +8,7 @@
         <p class="typo-section-sub mb-0">Panduan aplikasi pengujian, update regulasi ISO/BPOM, dan wawasan teknis analis lab.</p>
       </div>
       <div class="flex-shrink-0">
-        <a href="{{ url('/informasi') }}" class="editorial-all-btn" aria-label="Lihat semua artikel dan informasi">
+        <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2" aria-label="Lihat semua artikel dan informasi">
           Lihat Semua Artikel <i class="bi bi-arrow-right"></i>
         </a>
       </div>
@@ -51,7 +51,7 @@
                   <span class="editorial-badge editorial-badge-sunny">
                     {{ $leadPost['category'] ?? 'INFO TERKAIT' }}
                   </span>
-                  <span class="editorial-meta font-monospace">
+                  <span class="editorial-meta">
                     • {{ $leadDateRaw }}
                   </span>
                 </div>
@@ -67,10 +67,10 @@
                 </p>
 
                 <div class="mt-auto pt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="editorial-read-link">
+                  <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="editorial-read-link" aria-label="Baca pembahasan lengkap: {{ $leadPost['title'] }}">
                     Baca Pembahasan Lengkap <i class="bi bi-arrow-right ms-1"></i>
                   </a>
-                  <span class="editorial-meta font-monospace">QC &amp; Regulatory Guide</span>
+                  <span class="editorial-meta">Panduan Mutu &amp; Regulasi</span>
                 </div>
               </div>
             </article>
@@ -85,13 +85,16 @@
             @endphp
 
             <article class="editorial-side-card">
-              <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
-                <span class="editorial-badge editorial-badge-ruby">
-                  {{ $post['category'] ?? 'BERITA' }}
-                </span>
-                <span class="editorial-meta font-monospace">
-                  {{ $pDateRaw }}
-                </span>
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <span class="editorial-badge editorial-badge-ruby">
+                    {{ $post['category'] ?? 'BERITA' }}
+                  </span>
+                  <span class="editorial-meta">
+                    {{ $pDateRaw }}
+                  </span>
+                </div>
+                <i class="bi bi-arrow-right text-muted editorial-card-arrow"></i>
               </div>
 
               <h4 class="editorial-list-title mb-0">
