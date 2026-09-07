@@ -27,7 +27,7 @@
       </h3>
       <nav class="layanan-sidebar-nav" id="produk-sidebar">
         <a href="{{ url('/produk') }}?category=all#catalog-section"
-           class="layanan-sidebar-link {{ ($activeCategory ?? 'all') === 'all' ? 'is-active' : '' }}">
+           class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ ($activeCategory ?? 'all') === 'all' ? 'is-active' : '' }}">
           <span>Semua Kategori</span>
           <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
         </a>
@@ -60,7 +60,7 @@
           @else
             <!-- Category without subcategories: direct filter link -->
             <a href="{{ url('/produk') }}?category={{ $catKey }}#catalog-section"
-               class="layanan-sidebar-link {{ ($activeCategory ?? '') === $catKey ? 'is-active' : '' }}">
+               class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ ($activeCategory ?? '') === $catKey ? 'is-active' : '' }}">
               <span>{{ $catData['name'] }}</span>
               <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
             </a>

@@ -277,7 +277,9 @@
   flex-direction: column;
 }
 .layanan-sidebar-link {
-  display: block;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   font-family: var(--font-display, 'Space Grotesk', sans-serif);
   font-size: 0.88rem;
   color: var(--nb-ink, #1E1E1E) !important;
