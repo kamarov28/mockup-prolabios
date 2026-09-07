@@ -53,6 +53,10 @@ php artisan db:backup
 
 **PT. Prolabios Mitra Analitika** is a B2B E-Procurement & Request for Quotation (RFQ) platform built on **Laravel 13.x**, PHP 8.3+, Tailwind CSS v4, and Vite.
 
+### Design System & UI Guidelines
+- The UI follows **Soft Neo-Brutalism** (warm natural canvas, 2px ink borders, 0-blur directional drop shadows, tactile button physics, and clear typography).
+- See [`DESIGN.md`](./DESIGN.md) for full design specifications, color tokens, typography scales, geometry, and component standards.
+
 ### Core Domain: B2B RFQ Workflow
 1. **Catalog Carting (Session)**: Buyers add products to RFQ cart (`/cart`, `CartController`).
 2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (company info, corporate email, PIC). Dispatches asynchronous jobs for receipt and admin notifications (`app/Jobs/SendRfq*Job.php`).

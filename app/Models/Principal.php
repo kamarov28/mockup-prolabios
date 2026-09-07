@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Principal extends Model
 {
@@ -25,5 +26,10 @@ class Principal extends Model
     public function isOnline(): bool
     {
         return $this->status === 'online';
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'principal_id');
     }
 }

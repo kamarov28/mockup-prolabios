@@ -243,8 +243,8 @@
 }
 
 .rfq-input:focus {
-  border-color: var(--nb-primary, #A6171C) !important;
-  box-shadow: 2px 2px 0 var(--nb-primary, #A6171C) !important;
+  border-color: var(--nb-ink, #1E1E1E) !important;
+  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E) !important;
   outline: none !important;
   background-color: #FFFFFF !important;
   color: var(--nb-ink, #1E1E1E) !important;

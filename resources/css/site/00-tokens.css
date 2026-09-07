@@ -1,26 +1,71 @@
-/* Soft Neo-Brutalism Design Tokens — unified system */
+/* ==========================================================================
+   00-tokens.css — Soft Neo-Brutalism Design Tokens (Single Source of Truth)
+   ========================================================================== */
 :root {
+  /* ── Typography Families ──────────────────────────────────────────────── */
   --font-headline: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
-  /* Brand Palette */
-  --color-natural: #f9f5f2;
-  --color-natural-dark: #f9f5f2;
-  --color-natural-light: #f9f5f2;
-  --color-ruby: #A6171C;
-  --color-sunny: #F1C045;
+  /* Legacy typography aliases */
+  --font-family-headline: var(--font-headline);
+  --font-family-sans: var(--font-body);
+  --font-family-mono: var(--font-mono);
 
-  /* Theme mappings */
-  --color-bg: #f9f5f2;
-  --color-text-main: #1E1E1E;
-  --color-text-muted: #5A5A5A;
-  --color-accent: #A6171C;
-  --color-border: #1E1E1E;
-  --color-primary: #A6171C;
-  --color-secondary: #7A1015;
-  --color-bg-body: #f9f5f2;
-  --color-bg-white: #FFFFFF;
-  --color-bg-gray: #f9f5f2;
+  /* ── Neo-Brutal Brand Palette ─────────────────────────────────────────── */
+  --nb-bg: #f9f5f2;            /* Warm Natural paper canvas */
+  --nb-bg-soft: #f9f5f2;       /* Soft section backgrounds */
+  --nb-card: #FFFFFF;          /* Pure white card interiors */
+  --nb-ink: #1E1E1E;           /* Solid charcoal text, borders, hard shadows */
+  --nb-muted: #5A5A5A;         /* Secondary descriptions, meta text */
+  --nb-primary: #A6171C;       /* Signature Prolabios Ruby Red */
+  --nb-primary-dark: #7A1015;  /* Ruby hover / active */
+  --nb-accent: #F1C045;        /* Sunny gold / category tags */
+
+  /* ── Alert & Status Palette ──────────────────────────────────────────── */
+  --nb-mint: #A7F3D0;          /* In-stock green pill */
+  --nb-mint-dark: #065F46;     /* In-stock icon text */
+  --nb-alert-bg: #FEE2E2;      /* Validation error background */
+  --nb-alert-text: #7F1D1D;    /* Validation error text */
+  --nb-success: #16A34A;       /* Verified SSL / check pill */
+
+  /* ── Geometry & Borders ───────────────────────────────────────────────── */
+  --nb-border-w: 2px;
+  --nb-border: 2px solid #1E1E1E;
+  --nb-border-sm: 1.5px solid #1E1E1E;
+  --nb-radius-sm: 4px;
+  --nb-radius: 6px;
+  --nb-radius-lg: 8px;
+
+  /* ── Hard Directional Shadows (0 blur) ────────────────────────────────── */
+  --nb-shadow-xs: 1.5px 1.5px 0 #1E1E1E;
+  --nb-shadow-sm: 3px 3px 0 #1E1E1E;
+  --nb-shadow: 4px 4px 0 #1E1E1E;
+  --nb-shadow-lg: 6px 6px 0 #1E1E1E;
+  --nb-shadow-xl: 8px 8px 0 #1E1E1E;
+
+  /* ── Transition Timing ────────────────────────────────────────────────── */
+  --transition-fast: 0.12s ease;
+  --transition-base: 0.15s ease;
+
+  /* ── Legacy Mappings (Backward compatibility with existing templates) ──── */
+  --color-primary: var(--nb-primary);
+  --color-secondary: var(--nb-primary-dark);
+  --color-accent: var(--nb-accent);
+  --color-ruby: var(--nb-primary);
+  --color-sunny: var(--nb-accent);
+  --color-natural: var(--nb-bg);
+  --color-natural-dark: var(--nb-bg);
+  --color-natural-light: var(--nb-bg);
+  --color-text-main: var(--nb-ink);
+  --color-text-muted: var(--nb-muted);
+  --color-bg: var(--nb-bg);
+  --color-bg-body: var(--nb-bg);
+  --color-bg-white: var(--nb-card);
+  --color-bg-gray: var(--nb-bg-soft);
+  --color-border: var(--nb-ink);
+  --shadow-sm: var(--nb-shadow-sm);
+  --shadow-md: var(--nb-shadow);
+  --shadow-hover: 2px 2px 0 #1E1E1E;
 }

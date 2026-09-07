@@ -4,9 +4,9 @@
    ========================================================================== */
 
 .profil-hero-banner {
-  padding: 130px 0 45px;
-  background-color: var(--nb-bg, #FEFEFE);
-  border-bottom: none !important;
+  padding: 120px 0 45px !important;
+  background: #FEFEFE !important;
+  border-bottom: var(--nb-border, 2px solid #1E1E1E) !important;
 }
 
 .profil-main-title {
@@ -25,6 +25,7 @@
   line-height: 1.65;
   color: var(--nb-muted, #5A5A5A) !important;
   max-width: 720px;
+  margin-bottom: 0 !important;
 }
 
 .profil-stats-strip {
@@ -440,7 +441,7 @@
   transition: box-shadow 0.12s ease, border-color 0.12s ease !important;
 }
 .kontak-form-input:focus {
-  border-color: var(--nb-primary, #A6171C) !important;
+  border-color: var(--nb-ink, #1E1E1E) !important;
   background-color: #FFFFFF !important;
   outline: none !important;
   box-shadow: 4px 4px 0 var(--nb-ink, #1E1E1E) !important;

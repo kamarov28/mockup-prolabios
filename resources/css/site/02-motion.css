@@ -1,123 +1,138 @@
-/* site/02-motion.css */
 /* ==========================================================================
-   Micro-interactions & QOL Animations
+   02-motion.css — Tactile Press Physics & Micro-interactions
    ========================================================================== */
 
-/* Navbar Brand Logo */
-.navbar-brand img {
-  transition: opacity 0.15s ease;
-}
-.navbar-brand:hover img {
-  opacity: 0.85;
-}
-
-/* Navbar Download Button Icon Slide */
-.navbar .btn-outline-danger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.navbar .btn-outline-danger i {
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-.navbar .btn-outline-danger:hover i {
-  transform: translateX(2px);
+/* ── Universal Tactile Press Physics ─────────────────────────────────────── */
+.card,
+.product-card,
+.blog-card,
+.hitech-bento-card,
+.b2b-usecase-card,
+.profil-vm-card,
+.editorial-featured-card,
+.editorial-side-card,
+.nb-card,
+.btn,
+.nb-btn,
+.nb-icon-btn,
+.btn-primary,
+.btn-hero {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
-/* Hero CTA Button Micro-animations */
-.typo-btn-link i {
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-.typo-btn-link:hover i {
-  transform: translateX(4px);
-}
-
-/* Sektor Fokus Arrow Translation */
-.typo-index-link i {
-  display: inline-block;
-  transition: transform 0.15s ease;
-}
-.typo-index-link:hover i {
-  transform: translateX(4px);
+/* Hover: subtle press-in (card moves 2px down-right, shadow collapses) */
+.card:hover,
+.product-card:hover,
+.blog-card:hover,
+.hitech-bento-card:hover,
+.b2b-usecase-card:hover,
+.profil-vm-card:hover,
+.editorial-featured-card:hover,
+.editorial-side-card:hover,
+.nb-card:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  border-color: var(--nb-ink) !important;
 }
 
-/* Back to Top — Neo-Brutalist press button (Natural bg, charcoal border, hard shadow) */
+/* Active: full press-in (card moves 4px down-right, shadow = 0) */
+.card:active,
+.product-card:active,
+.blog-card:active,
+.hitech-bento-card:active,
+.b2b-usecase-card:active,
+.profil-vm-card:active,
+.editorial-featured-card:active,
+.editorial-side-card:active,
+.nb-card:active {
+  transform: translate(4px, 4px) !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
+}
+
+/* ── Buttons Micro-motion ────────────────────────────────────────────────── */
+.nb-btn-primary:hover,
+.btn-primary:hover {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+}
+
+.nb-btn-primary:active,
+.btn-primary:active {
+  transform: translate(3px, 3px) !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
+}
+
+/* Universal Icon Buttons Tactile Hover & Press */
+.nb-icon-btn {
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast) !important;
+}
+
+.nb-icon-btn:hover,
+.navbar .nb-icon-btn:hover {
+  background: var(--nb-accent) !important;
+  color: var(--nb-ink) !important;
+  transform: translate(1px, 1px) !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+}
+
+.nb-icon-btn:active,
+.navbar .nb-icon-btn:active {
+  transform: translate(2px, 2px) !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
+}
+
+/* ── Back to Top Press Button ────────────────────────────────────────────── */
+#scroll-to-top,
 .btn-scroll-to-top {
   position: fixed;
   bottom: 35px;
   right: 35px;
   width: 44px;
   height: 44px;
-  border-radius: 6px !important;
-  background: #F1C045 !important;
-  border: 2px solid #1E1E1E !important;
-  color: #1E1E1E !important;
+  border-radius: var(--nb-radius) !important;
+  background: var(--nb-primary) !important;
+  border: var(--nb-border) !important;
+  color: #FFFFFF !important;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
-  box-shadow: 3px 3px 0 #1E1E1E !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast) !important;
+  box-shadow: var(--nb-shadow-sm) !important;
   cursor: pointer;
 }
+#scroll-to-top i,
 .btn-scroll-to-top i {
   font-size: 1.25rem;
   line-height: 1;
   color: #FFFFFF !important;
-  transition: none;
   display: inline-block;
 }
+#scroll-to-top:hover,
 .btn-scroll-to-top:hover {
-  background: #7A1015 !important;
-  border-color: #1E1E1E !important;
+  background: var(--nb-primary-dark, #7A1015) !important;
+  border-color: var(--nb-ink) !important;
   color: #FFFFFF !important;
   transform: translate(2px, 2px) !important;
-  box-shadow: 1px 1px 0 #1E1E1E !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
 }
-.btn-scroll-to-top:hover i {
-  color: #FFFFFF !important;
-}
+#scroll-to-top:active,
 .btn-scroll-to-top:active {
   transform: translate(3px, 3px) !important;
-  box-shadow: 0 0 0 #1E1E1E !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
 }
 
-/* Nav-link Hover */
-.navbar-nav .nav-link {
-  position: relative;
-}
-.navbar-nav .nav-link::after {
-  display: none !important;
-}
-
-/* Navbar Utilities Styling — Neo-Brutal press micro-interaction */
-.navbar-utilities a.nav-link,
-.navbar-utilities button.nav-link {
-  transition: transform 0.12s ease, color 0.12s ease;
-  color: #1E1E1E !important;
-}
-.navbar-utilities a.nav-link:hover,
-.navbar-utilities button.nav-link:hover {
-  color: #A6171C !important;
-  transform: translate(1px, 1px);
-}
-.navbar-utilities span {
-  font-family: var(--font-body);
-}
-
-/* Minimalist Search Overlay Styling */
+/* ── Minimalist Search Overlay ───────────────────────────────────────────── */
 .search-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(249, 245, 242, 0.88);
+  background: rgba(249, 245, 242, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 999999;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -136,40 +151,39 @@
   width: 44px !important;
   height: 44px !important;
   background: #FFFFFF !important;
-  border: 2px solid #1E1E1E !important;
-  border-radius: 6px !important;
-  box-shadow: 3px 3px 0 #1E1E1E !important;
-  color: #1E1E1E !important;
+  border: var(--nb-border) !important;
+  border-radius: var(--nb-radius) !important;
+  box-shadow: var(--nb-shadow-sm) !important;
+  color: var(--nb-ink) !important;
   font-size: 1.1rem !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  z-index: 10001 !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
+  z-index: 1000001 !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast) !important;
 }
 .search-close-btn:hover {
-  background: #F1C045 !important;
-  color: #1E1E1E !important;
+  background: var(--nb-accent) !important;
+  color: var(--nb-ink) !important;
   transform: translate(2px, 2px) !important;
-  box-shadow: 1px 1px 0 #1E1E1E !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
 }
 .search-close-btn:active {
   transform: translate(3px, 3px) !important;
-  box-shadow: 0 0 0 #1E1E1E !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
 }
 
-/* Search Modal Card & Components */
 .search-modal-card {
   width: 90%;
   max-width: 580px;
   background: #FFFFFF !important;
-  border: 2px solid #1E1E1E !important;
-  border-radius: 8px !important;
+  border: var(--nb-border) !important;
+  border-radius: var(--nb-radius-lg) !important;
   padding: 24px 26px !important;
-  box-shadow: 6px 6px 0 #1E1E1E !important;
+  box-shadow: var(--nb-shadow-lg) !important;
   position: relative;
-  z-index: 10;
+  z-index: 1000000;
   text-align: left;
 }
 
@@ -184,37 +198,36 @@
   position: absolute;
   left: 16px;
   font-size: 1.25rem;
-  color: #1E1E1E !important;
+  color: var(--nb-ink) !important;
   pointer-events: none;
   z-index: 2;
 }
 
 .search-input-box input#search-overlay-input {
   width: 100% !important;
-  background: #FEFEFE !important;
-  border: 2px solid #1E1E1E !important;
-  border-radius: 6px !important;
+  background: #FFFFFF !important;
+  border: var(--nb-border) !important;
+  border-radius: var(--nb-radius) !important;
   padding: 14px 18px 14px 48px !important;
-  color: #1E1E1E !important;
+  color: var(--nb-ink) !important;
   font-size: 1.05rem !important;
   outline: none !important;
-  box-shadow: 3px 3px 0 #1E1E1E !important;
-  transition: border-color 0.12s ease, box-shadow 0.12s ease !important;
+  box-shadow: var(--nb-shadow-sm) !important;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
 .search-input-box input#search-overlay-input:focus {
-  border-color: #A6171C !important;
-  background: #FFFFFF !important;
-  box-shadow: 4px 4px 0 #A6171C !important;
+  border-color: var(--nb-primary) !important;
+  box-shadow: 4px 4px 0 var(--nb-primary) !important;
 }
 
 .search-section-label {
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #5A5A5A !important;
+  color: var(--nb-muted) !important;
   margin-bottom: 12px;
 }
 
@@ -226,28 +239,61 @@
 }
 
 .suggestion-tag {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 600;
-  color: #1E1E1E !important;
-  background: #FEFEFE !important;
-  border: 1.5px solid #1E1E1E !important;
+  color: var(--nb-ink) !important;
+  background: #FFFFFF !important;
+  border: var(--nb-border-sm) !important;
   padding: 6px 12px !important;
-  border-radius: 4px !important;
+  border-radius: var(--nb-radius-sm) !important;
   text-decoration: none !important;
-  box-shadow: 2px 2px 0 #1E1E1E !important;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease !important;
+  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast) !important;
 }
 
 .suggestion-tag:hover {
-  color: #1E1E1E !important;
-  background: #F1C045 !important;
+  color: var(--nb-ink) !important;
+  background: var(--nb-accent) !important;
   transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 #1E1E1E !important;
+  box-shadow: 1px 1px 0 var(--nb-ink) !important;
 }
 
 .suggestion-tag:active {
   transform: translate(2px, 2px);
-  box-shadow: 0 0 0 #1E1E1E !important;
+  box-shadow: 0 0 0 var(--nb-ink) !important;
 }
 
+/* ── Scroll Entrance Animations ─────────────────────────────────────────── */
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-slide-up { transform: translateY(24px); }
+.animate-slide-down { transform: translateY(-24px); }
+.animate-slide-left { transform: translateX(24px); }
+.animate-slide-right { transform: translateX(-24px); }
+.animate-scale-in { transform: scale(0.96); }
+.animate-fade-in { transform: none; }
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }
+.delay-500 { transition-delay: 500ms; }
+
+/* ── Accessibility: Reduced Motion ──────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+}

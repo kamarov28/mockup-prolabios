@@ -1,13 +1,13 @@
-/* experimental-typo.css — Vite entry barrel */
-@import './site/01-base.css';
+/* ==========================================================================
+   experimental-typo.css — Soft Neo-Brutalism Site Styling Barrel
+   ========================================================================== */
+
 @import './site/00-tokens.css';
+@import './site/01-base.css';
 @import './site/02-motion.css';
-@import './site/03-theme.css';
+@import './site/03-components.css';
 @import './site/04-pages-core.css';
 @import './site/05-pages-catalog.css';
 @import './site/06-content-areas.css';
 @import './site/08-b2b-hitech.css';
 @import './site/09-cart-rfq.css';
-@import './site/light-mode.css';
-@import './site/nb-layout.css'; /* Soft Neo-Brutalism structure — last */
-

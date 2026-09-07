@@ -140,12 +140,6 @@
       </div>
     </div>
   @endif
-            <span>Edit Setelan</span> <i class="bi bi-arrow-right ms-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  @endif
 
   @if($section === 'homepage')
     @include('admin.partials.editor-homepage')

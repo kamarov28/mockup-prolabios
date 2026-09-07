@@ -108,7 +108,7 @@ class AdminPrincipalController extends Controller
             return redirect()->route('admin.principals')->with('error', 'Prinsipal tidak ditemukan.');
         }
 
-        $usedCount = Product::where('principal_id', $id)->count();
+        $usedCount = $principal->products()->count();
         if ($usedCount > 0) {
             return redirect()->route('admin.principals')->with('error', "Prinsipal \"{$principal->name}\" masih terhubung dengan {$usedCount} produk katalog. Silakan pindahkan atau ubah prinsipal pada produk terkait terlebih dahulu.");
         }
