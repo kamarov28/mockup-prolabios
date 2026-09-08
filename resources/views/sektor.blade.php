@@ -173,9 +173,19 @@
                             @endif
                           </td>
                           <td>
-                            <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">
-                              {{ $prod['title'] }}
-                            </a>
+                            <div class="d-flex align-items-center justify-content-between gap-2">
+                              <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">
+                                {{ $prod['title'] }}
+                              </a>
+                              @if(!empty($prod->principal) && !empty($prod->principal->logo))
+                                <div class="flex-shrink-0" title="Prinsipal: {{ $prod->principal->name }}" style="padding: 1px 3px; background: #FFFFFF; border: 1px solid var(--nb-ink); border-radius: 3px;">
+                                  <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
+                                       alt="Logo {{ $prod->principal->name }}"
+                                       loading="lazy"
+                                       style="max-height: 18px; max-width: 45px; width: auto; height: auto; object-fit: contain;">
+                                </div>
+                              @endif
+                            </div>
                           </td>
                           <td style="color: var(--nb-muted); font-size: 0.88rem; line-height: 1.5;">
                             {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 140) }}

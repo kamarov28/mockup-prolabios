@@ -18,6 +18,7 @@ class Product extends Model
         'title',
         'slug',
         'description',
+        'datasheet_url',
         'category',
         'sub_category',
         'sector',
@@ -31,11 +32,11 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'price'          => 'float',
-            'stock'          => 'integer',
+            'price' => 'float',
+            'stock' => 'integer',
             'gallery_images' => 'array',
-            'created_at'     => 'datetime',
-            'updated_at'     => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
@@ -188,7 +189,7 @@ class Product extends Model
     public function getFormattedPriceAttribute(): string
     {
         return $this->price > 0
-            ? 'Rp ' . number_format($this->price, 0, ',', '.')
+            ? 'Rp '.number_format($this->price, 0, ',', '.')
             : 'Est. Penawaran';
     }
 

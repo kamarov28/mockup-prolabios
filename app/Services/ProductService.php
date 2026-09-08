@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Helpers\HtmlSanitizer;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -148,7 +149,7 @@ class ProductService
 
         return Cache::remember('categories_structure', 3600, function () use ($fallback) {
             try {
-                $categories = \App\Models\ProductCategory::with('children')
+                $categories = ProductCategory::with('children')
                     ->whereNull('parent_id')
                     ->orderBy('sort_order')
                     ->orderBy('name')
@@ -224,6 +225,7 @@ class ProductService
         }
 
         $query = Product::query()
+            ->with('principal')
             ->select($this->listColumns())
             ->orderBy('id');
 
@@ -267,6 +269,7 @@ class ProductService
         }
 
         $query = Product::query()
+            ->with('principal')
             ->select($this->listColumns())
             ->orderBy('id');
 
@@ -359,6 +362,7 @@ class ProductService
             'catalog' => $product['catalog'] ?? null,
             'title' => $product['title'],
             'description' => HtmlSanitizer::clean($product['description'] ?? null),
+            'datasheet_url' => $product['datasheet_url'] ?? null,
             'category' => $product['category'],
             'sub_category' => $product['sub_category'] ?? null,
             'sector' => $product['sector'] ?? null,
@@ -388,6 +392,7 @@ class ProductService
             'catalog' => $updatedProduct['catalog'] ?? null,
             'title' => $updatedProduct['title'],
             'description' => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
+            'datasheet_url' => $updatedProduct['datasheet_url'] ?? null,
             'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
             'sector' => $updatedProduct['sector'] ?? null,

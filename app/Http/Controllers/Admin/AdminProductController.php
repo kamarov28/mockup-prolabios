@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Principal;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\AuditLogger;
@@ -120,7 +121,7 @@ class AdminProductController extends Controller
         $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
-        $principals = \App\Models\Principal::orderBy('name')->get();
+        $principals = Principal::orderBy('name')->get();
 
         $product = [
             'title' => '',
@@ -129,6 +130,7 @@ class AdminProductController extends Controller
             'sub_category' => '',
             'sector' => '',
             'principal_id' => '',
+            'datasheet_url' => '',
             'image' => '',
             'gallery_images' => [],
             'description' => '',
@@ -147,11 +149,13 @@ class AdminProductController extends Controller
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
         $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+        $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
 
         $product = [
             'catalog' => $request->input('catalog') ?: '',
             'title' => $title,
             'description' => $request->input('description') ?: '',
+            'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',
@@ -182,7 +186,7 @@ class AdminProductController extends Controller
         $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
             ->orderBy('sort_order')->orderBy('name')->get();
-        $principals = \App\Models\Principal::orderBy('name')->get();
+        $principals = Principal::orderBy('name')->get();
 
         return view('admin.products.form', compact('product', 'sectors', 'categories', 'principals'));
     }
@@ -203,6 +207,7 @@ class AdminProductController extends Controller
         }
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image'] ?? $product->image ?? null);
+        $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url', $product['datasheet_url'] ?? $product->datasheet_url ?? null);
 
         $existingGallery = $product['gallery_images'] ?? $product->gallery_images ?? [];
         if (! is_array($existingGallery)) {
@@ -221,6 +226,7 @@ class AdminProductController extends Controller
             'catalog' => $request->input('catalog') ?: '',
             'title' => $newTitle,
             'description' => $request->input('description') ?: '',
+            'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
             'sector' => $request->input('sector') ?: '',

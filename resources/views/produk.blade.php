@@ -79,14 +79,24 @@
                         </div>
                       @endif
                       @if(!empty($prod->principal))
-                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2" style="font-size: 0.65rem; font-weight: 500; letter-spacing: 0.5px;">
-                          <i class="bi bi-building me-1" style="color: var(--color-accent);"></i>{{ $prod->principal->name }}
+                        <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
+                          <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
                         </span>
                       @endif
                     </div>
-                    <h3 class="card-title fs-6 fw-semibold mb-2">
-                      <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
-                    </h3>
+                    <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
+                      <h3 class="card-title fs-6 fw-semibold mb-0 flex-grow-1" style="line-height: 1.4;">
+                        <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
+                      </h3>
+                      @if(!empty($prod->principal) && !empty($prod->principal->logo))
+                        <div class="product-principal-logo flex-shrink-0" title="Prinsipal: {{ $prod->principal->name }}" style="padding: 2px 4px; background: #FFFFFF; border: 1.5px solid var(--nb-ink); border-radius: 4px; box-shadow: 1.5px 1.5px 0 var(--nb-ink); max-height: 32px; display: inline-flex; align-items: center; justify-content: center;">
+                          <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
+                               alt="Logo {{ $prod->principal->name }}"
+                               loading="lazy"
+                               style="max-height: 22px; max-width: 55px; width: auto; height: auto; object-fit: contain;">
+                        </div>
+                      @endif
+                    </div>
                     <p class="product-card-desc mb-3 flex-grow-1">
                       {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 75) ?: 'Produk laboratorium' }}
                     </p>

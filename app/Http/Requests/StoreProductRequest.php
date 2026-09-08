@@ -29,6 +29,8 @@ class StoreProductRequest extends FormRequest
             'sub_category' => ['nullable', 'string', 'max:255'],
             'catalog' => ['nullable', 'string', 'max:255'],
             'principal_id' => ['nullable', 'integer', 'exists:principals,id'],
+            'datasheet_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'datasheet_url' => ['nullable', 'string', 'max:500'],
             'sector' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],

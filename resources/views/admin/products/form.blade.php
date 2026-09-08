@@ -132,6 +132,33 @@
             </select>
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="admin-form-group mb-0">
+            <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
+            <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+              <div class="mb-2">
+                <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
+                  <i class="bi bi-upload me-1"></i>Upload File PDF (Maks. 10MB)
+                </label>
+                <input class="form-control" type="file" id="datasheet_file" name="datasheet_file" accept=".pdf,application/pdf">
+              </div>
+              <div class="mb-2">
+                <label for="datasheet_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
+                  <i class="bi bi-link-45deg me-1"></i>Atau Masukkan URL PDF Eksternal
+                </label>
+                <input type="text" class="form-control" id="datasheet_url" name="datasheet_url" value="{{ old('datasheet_url', $product['datasheet_url'] ?? '') }}" placeholder="https://principal.com/datasheet.pdf">
+              </div>
+              @if(!empty($product['datasheet_url']))
+                <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: rgba(30,30,30,0.1) !important;">
+                  <i class="bi bi-file-earmark-pdf-fill text-danger"></i>
+                  <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="small fw-bold text-decoration-underline" style="color: var(--color-accent, #A6171C);">
+                    Lihat Dokumen Terpasang <i class="bi bi-box-arrow-up-right ms-1"></i>
+                  </a>
+                </div>
+              @endif
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="sub-category-block" style="display: none;">

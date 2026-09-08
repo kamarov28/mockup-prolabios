@@ -262,4 +262,44 @@ trait HandlesImageUploads
 
         return $stored;
     }
+
+    /**
+     * Securely handle PDF datasheet / document upload or URL fallback.
+     */
+    protected function handlePdfUpload(
+        Request $request,
+        string $fileKey = 'datasheet_file',
+        string $urlKey = 'datasheet_url',
+        ?string $current = null,
+        string $folder = 'datasheets',
+        int $maxSizeBytes = 10485760
+    ): ?string {
+        if ($request->hasFile($fileKey)) {
+            $file = $request->file($fileKey);
+            if ($file && $file->isValid()) {
+                if ($file->getSize() > $maxSizeBytes) {
+                    throw ValidationException::withMessages([
+                        $fileKey => ['Ukuran file PDF terlalu besar (maksimal '.round($maxSizeBytes / 1024 / 1024).'MB).'],
+                    ]);
+                }
+
+                $extension = strtolower($file->getClientOriginalExtension());
+                if ($extension !== 'pdf' || $file->getMimeType() !== 'application/pdf') {
+                    throw ValidationException::withMessages([
+                        $fileKey => ['Format dokumen harus berupa file PDF.'],
+                    ]);
+                }
+
+                $filename = 'datasheet_'.time().'_'.Str::random(12).'.pdf';
+                $relativePath = trim($folder, '/').'/'.$filename;
+                Storage::disk('public')->putFileAs(trim($folder, '/'), $file, $filename);
+
+                return '/storage/'.$relativePath;
+            }
+        }
+
+        $urlInput = trim((string) $request->input($urlKey, ''));
+
+        return $urlInput !== '' ? $urlInput : $current;
+    }
 }

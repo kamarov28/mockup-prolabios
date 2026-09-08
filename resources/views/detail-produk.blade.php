@@ -59,13 +59,38 @@
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
             @endphp
 
-            <div style="border-bottom: 2px solid var(--nb-ink); padding-bottom: 24px; margin-bottom: 40px;">
-              <h1 class="profil-section-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
-              @if(!empty($product['category']))
-                <p class="profil-body-text mb-0 text-capitalize">
-                  <span class="nb-badge-sm me-2">Kategori</span>
-                  <span class="fw-semibold text-dark">{{ str_replace('-', ' ', $product['category']) }}</span>
-                </p>
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-4" style="border-bottom: 2px solid var(--nb-ink); padding-bottom: 24px; margin-bottom: 40px;">
+              <div class="flex-grow-1" style="max-width: 800px;">
+                <h1 class="profil-section-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                  @if(!empty($product['category']))
+                    <span class="nb-badge-sm text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
+                  @endif
+                  @if(!empty($product['catalog']))
+                    <span class="product-cat-code" style="font-size: 0.78rem !important; padding: 4px 10px !important;">
+                      CAT. {{ $product['catalog'] }}
+                    </span>
+                  @endif
+                </div>
+              </div>
+
+              @if(!empty($product->principal))
+                <div class="d-flex align-items-center gap-3 p-3 bg-white" style="border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: var(--nb-shadow-sm); min-width: 220px;">
+                  @if(!empty($product->principal->logo))
+                    <div style="width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: 4px; padding: 5px;">
+                      <img src="{{ str_starts_with($product->principal->logo, 'http') || str_starts_with($product->principal->logo, '/') ? $product->principal->logo : asset('storage/' . $product->principal->logo) }}"
+                           alt="Logo {{ $product->principal->name }}"
+                           style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    </div>
+                  @endif
+                  <div>
+                    <span class="d-block text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Prinsipal Resmi</span>
+                    <strong class="d-block text-dark" style="font-family: var(--font-display); font-size: 0.95rem;">{{ $product->principal->name }}</strong>
+                    @if(!empty($product->principal->address))
+                      <span class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-geo-alt me-1"></i>{{ $product->principal->address }}</span>
+                    @endif
+                  </div>
+                </div>
               @endif
             </div>
 
@@ -107,8 +132,47 @@
                   <h3 class="layanan-feature-title mb-3" style="font-size: 1.1rem !important; font-family: var(--font-display); font-weight: 700; color: var(--nb-ink); border-bottom: 2px solid rgba(30,30,30,0.1); padding-bottom: 8px;">
                     <i class="bi bi-file-earmark-text text-primary me-2"></i>Deskripsi & Spesifikasi Produk
                   </h3>
-                  <div class="profil-body-text" style="line-height: 1.8; color: var(--nb-ink);">
+                  <div class="profil-body-text mb-4" style="line-height: 1.8; color: var(--nb-ink);">
                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
+                  </div>
+
+                  {{-- B2B Technical Datasheet & Specification Link --}}
+                  <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: var(--nb-bg-soft); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                    <div class="d-flex align-items-center gap-3">
+                      <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #FFFFFF; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                        <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.4rem;"></i>
+                      </div>
+                      <div>
+                        <strong class="d-block" style="font-family: var(--font-display); font-size: 0.92rem; color: var(--nb-ink);">Dokumen Lembar Data &amp; Spesifikasi Teknis (PDF)</strong>
+                        <span class="text-muted small" style="font-size: 0.78rem;">
+                          @if(!empty($product->principal))
+                            Brosur teknis &amp; lembar data spesifikasi resmi dari {{ $product->principal->name }}.
+                          @else
+                            Lembar spesifikasi dan petunjuk teknis analitika dari prinsipal resmi.
+                          @endif
+                        </span>
+                      </div>
+                    </div>
+                    @if(!empty($product['datasheet_url']))
+                      <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2" style="font-size: 0.82rem; padding: 8px 16px;">
+                        <i class="bi bi-download"></i> Unduh Spesifikasi (PDF) <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.75rem;"></i>
+                      </a>
+                    @else
+                      <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2" style="font-size: 0.82rem; padding: 8px 14px; background: #FFFFFF;">
+                        <i class="bi bi-envelope-paper"></i> Request Lembar Data Resmi <i class="bi bi-arrow-right ms-1"></i>
+                      </a>
+                    @endif
+                  </div>
+                </div>
+
+                {{-- B2B Trust Badge & SLA Response Commitment --}}
+                <div class="mb-4 p-3 d-flex align-items-center gap-3" style="background: #FFFFFF; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                  <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: var(--nb-accent, #F1C045); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm);">
+                    <i class="bi bi-clock-history text-dark" style="font-size: 1.25rem;"></i>
+                  </div>
+                  <div style="font-size: 0.82rem; line-height: 1.4; color: var(--nb-ink);">
+                    <strong class="d-block" style="font-family: var(--font-display); font-size: 0.88rem;">Komitmen Respon Cepat B2B (SLA 1×24 Jam)</strong>
+                    Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
                   </div>
                 </div>
 

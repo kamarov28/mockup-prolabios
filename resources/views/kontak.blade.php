@@ -118,7 +118,15 @@
                   <label for="pesan" class="kontak-form-label">Detail Pesan <span class="text-danger">*</span></label>
                   <textarea class="form-control kontak-form-input" id="pesan" name="pesan" rows="5" required placeholder="Tuliskan pertanyaan, konsultasi, atau pesan yang ingin disampaikan..."></textarea>
                 </div>
-                <div class="col-12 mt-4">
+                <div class="col-12 mt-3">
+                  <div class="p-3 d-flex align-items-center gap-2" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                    <i class="bi bi-clock-history text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
+                    <span class="small" style="font-size: 0.8rem; color: var(--nb-ink); line-height: 1.4;">
+                      <strong>Komitmen Respon B2B (SLA 1×24 Jam):</strong> Setiap pertanyaan teknis, konsultasi metode, atau permohonan kalibrasi instrumen akan direspon oleh tim teknis kami dalam 1×24 jam kerja.
+                    </span>
+                  </div>
+                </div>
+                <div class="col-12 mt-3">
                   <button type="submit" class="kontak-submit-btn">
                     <i class="bi bi-send-fill me-1"></i> Kirim Pesan Sekarang
                   </button>
