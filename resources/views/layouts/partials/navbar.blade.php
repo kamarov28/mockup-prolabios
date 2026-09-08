@@ -1,27 +1,4 @@
 <!-- Header / Navigation -->
-<style>
-  @media (max-width: 991.98px) {
-    .navbar,
-    .navbar-collapse,
-    .navbar-collapse-inner {
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      filter: none !important;
-    }
-    .navbar-collapse.collapsing,
-    .navbar-collapse.collapsing *,
-    .navbar-collapse.collapsing .navbar-collapse-inner,
-    .navbar-collapse.show .navbar-collapse-inner,
-    .navbar-collapse .navbar-collapse-inner {
-      opacity: 1 !important;
-      transition: none !important;
-      filter: none !important;
-    }
-    .navbar-collapse.collapsing {
-      transition: height 0.3s ease !important;
-    }
-  }
-</style>
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
   <div class="container-fluid px-3 px-lg-4">
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">

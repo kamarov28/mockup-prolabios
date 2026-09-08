@@ -123,35 +123,4 @@
       </div>
     </div>
   </section>
-
-  <script>
-    function stepQty(amount) {
-      const input = document.getElementById('qty-input');
-      if (input) {
-        let val = parseInt(input.value) || 1;
-        val = Math.max(1, val + amount);
-        input.value = val;
-        toggleIndentNotice();
-      }
-    }
-
-    function toggleIndentNotice() {
-      const input = document.getElementById('qty-input');
-      const notice = document.getElementById('indent-notice');
-      if (!input || !notice) return;
-
-      const stock = parseInt(input.dataset.stock || '0', 10);
-      const qty = parseInt(input.value || '1', 10);
-
-      notice.style.display = (qty > stock) ? 'block' : 'none';
-    }
-
-    document.addEventListener('DOMContentLoaded', function () {
-      const input = document.getElementById('qty-input');
-      if (input) {
-        input.addEventListener('input', toggleIndentNotice);
-        toggleIndentNotice();
-      }
-    });
-  </script>
 @endsection

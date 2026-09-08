@@ -36,6 +36,11 @@
         "rule": "overused-font",
         "value": "plus jakarta sans",
         "createdAt": "2026-09-03T09:04:05.464Z"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "height",
+        "createdAt": "2026-09-08T02:29:57.830Z"
       }
     ]
   }

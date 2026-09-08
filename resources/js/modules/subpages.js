@@ -153,7 +153,214 @@ function initSektorAjax() {
   });
 }
 
+function initProductDetail() {
+  const detailWrap = document.querySelector('.detail-product-img-wrap');
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+  if (!detailWrap && !thumbs.length) return;
+
+  window.switchProductImage = function (src, thumbEl) {
+    const mainImg = document.getElementById('main-product-image');
+    const lightboxImg = document.getElementById('lightbox-product-image');
+    if (mainImg) mainImg.src = src;
+    if (lightboxImg) lightboxImg.src = src;
+    document.querySelectorAll('.gallery-thumb').forEach(function (el) {
+      el.classList.remove('active');
+    });
+    if (thumbEl) thumbEl.classList.add('active');
+  };
+
+  const lightboxModal = document.getElementById('imageLightboxModal');
+  if (lightboxModal && lightboxModal.parentElement !== document.body) {
+    document.body.appendChild(lightboxModal);
+  }
+}
+
+function initBeliProduk() {
+  const qtyInput = document.getElementById('qty-input');
+  if (!qtyInput) return;
+
+  function toggleIndentNotice() {
+    const notice = document.getElementById('indent-notice');
+    if (!qtyInput || !notice) return;
+    const stock = parseInt(qtyInput.dataset.stock || '0', 10);
+    const qty = parseInt(qtyInput.value || '1', 10);
+    notice.style.display = (qty > stock) ? 'block' : 'none';
+  }
+
+  window.stepQty = function (amount) {
+    let val = parseInt(qtyInput.value) || 1;
+    val = Math.max(1, val + amount);
+    qtyInput.value = val;
+    toggleIndentNotice();
+  };
+
+  qtyInput.addEventListener('input', toggleIndentNotice);
+  toggleIndentNotice();
+}
+
+function initCartPage() {
+  const cartSection = document.querySelector('.cart-item-card') || document.querySelector('.cart-sidebar-panel');
+  if (!cartSection) return;
+
+  window.stepCartQty = function (btn, amount) {
+    const form = btn.closest('form');
+    if (!form) return;
+    const input = form.querySelector('.cart-qty-input');
+    if (!input) return;
+
+    let val = parseInt(input.value) || 1;
+    val = Math.max(1, val + amount);
+    input.value = val;
+
+    window.updateCartItemAjax(form);
+  };
+
+  window.updateCartItemAjax = function (form) {
+    const formData = new FormData(form);
+    const itemCard = form.closest('.cart-item-card');
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        if (itemCard) {
+          const subtotalEl = itemCard.querySelector('.item-subtotal-val');
+          if (subtotalEl) {
+            subtotalEl.textContent = data.itemSubtotal;
+          }
+        }
+
+        const totalUnitsEl = document.getElementById('sidebar-total-units');
+        if (totalUnitsEl) {
+          totalUnitsEl.textContent = data.cartCount + ' Unit';
+        }
+
+        const totalEstEl = document.getElementById('sidebar-total-estimate');
+        if (totalEstEl) {
+          totalEstEl.textContent = data.totalFormatted;
+        }
+
+        document.querySelectorAll('.nav-cart-badge').forEach(el => {
+          el.textContent = data.cartCount;
+          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+        });
+      }
+    })
+    .catch(err => console.error('Ajax Cart Error:', err));
+  };
+
+  function executeRemoveAjax(form) {
+    const formData = new FormData(form);
+    const itemCard = form.closest('.cart-item-card');
+
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        if (itemCard) {
+          itemCard.style.transition = 'all 0.3s ease';
+          itemCard.style.opacity = '0';
+          itemCard.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            itemCard.remove();
+            if (data.cartCount === 0) {
+              window.location.reload();
+            }
+          }, 300);
+        }
+
+        const totalUnitsEl = document.getElementById('sidebar-total-units');
+        if (totalUnitsEl) {
+          totalUnitsEl.textContent = data.cartCount + ' Unit';
+        }
+
+        const totalEstEl = document.getElementById('sidebar-total-estimate');
+        if (totalEstEl) {
+          totalEstEl.textContent = data.totalFormatted;
+        }
+
+        document.querySelectorAll('.nav-cart-badge').forEach(el => {
+          el.textContent = data.cartCount;
+          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+        });
+
+        if (typeof window.Swal !== 'undefined') {
+          window.Swal.fire({
+            toast: true,
+            position: 'bottom-end',
+            icon: 'success',
+            title: 'Item berhasil dihapus',
+            showConfirmButton: false,
+            timer: 2000,
+            background: '#0f172a',
+            color: '#ffffff'
+          });
+        }
+      }
+    })
+    .catch(err => console.error('Ajax Remove Error:', err));
+  }
+
+  window.confirmClearCart = function (e, form) {
+    e.preventDefault();
+    if (typeof window.Swal === 'undefined') {
+      if (confirm('Kosongkan semua item di keranjang?')) form.submit();
+      return;
+    }
+    window.Swal.fire({
+      title: 'Kosongkan keranjang pengajuan?',
+      text: 'Seluruh item produk di dalam keranjang akan dihapus.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Kosongkan!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        form.submit();
+      }
+    });
+  };
+
+  window.removeCartItemAjax = function (form) {
+    if (typeof window.Swal === 'undefined') {
+      if (!confirm('Hapus item ini dari keranjang?')) return;
+      executeRemoveAjax(form);
+      return;
+    }
+
+    window.Swal.fire({
+      title: 'Hapus Item Produk?',
+      text: 'Item produk ini akan dihapus dari pengajuan penawaran.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        executeRemoveAjax(form);
+      }
+    });
+  };
+}
+
 export function initSubpages() {
   initLayananTabs();
   initSektorAjax();
+  initProductDetail();
+  initBeliProduk();
+  initCartPage();
 }

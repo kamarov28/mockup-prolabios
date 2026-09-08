@@ -114,45 +114,132 @@
   flex: 1;
 }
 
-/* ── Detail Produk Page ──────────────────────────────────────────────────── */
+/* ── Detail Produk Page & Lightbox ───────────────────────────────────────── */
 .detail-product-img-wrap {
-  background: #FFFFFF;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-lg);
-  box-shadow: var(--nb-shadow);
-  padding: 24px;
-  cursor: zoom-in;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border: 1.5px solid var(--nb-ink, #1E1E1E);
+  background-color: #FFFFFF;
+  border-radius: var(--nb-radius, 6px);
+  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.detail-product-img-wrap img {
+  transition: transform 0.2s ease;
+}
+.detail-product-img-wrap:hover img {
+  transform: scale(1.02);
+}
+.detail-product-img-wrap::after {
+  content: '\F52A';
+  font-family: 'bootstrap-icons';
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  background: var(--nb-primary, #A6171C);
+  border: 1.5px solid #1E1E1E;
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 #1E1E1E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.2s ease;
+}
+.detail-product-img-wrap:hover::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.detail-product-img-wrap:hover {
+.lightbox-image-wrapper {
+  padding: 16px;
+  background: #FFFFFF;
+  border: 2px solid var(--nb-ink, #1E1E1E);
+  border-radius: var(--nb-radius-lg, 8px);
+  box-shadow: 6px 6px 0 var(--nb-ink, #1E1E1E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(92vw, 1100px);
+  height: 85vh;
+  margin: auto;
+}
+.lightbox-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+}
+.btn-close-lightbox {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 38px;
+  height: 38px;
+  background: var(--nb-primary, #A6171C);
+  border: 2px solid var(--nb-ink, #1E1E1E);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  z-index: 1090;
+}
+.btn-close-lightbox:hover {
+  background: var(--nb-primary-dark, #7A1015);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+}
+.btn-close-lightbox:active {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  box-shadow: 0 0 0 var(--nb-ink, #1E1E1E);
 }
 
+.product-gallery-thumbs {
+  justify-content: flex-start;
+}
 .gallery-thumb {
-  width: 68px;
-  height: 68px;
-  background: #FFFFFF;
-  border: 1.5px solid var(--nb-ink);
-  border-radius: var(--nb-radius-sm);
+  width: 60px;
+  height: 60px;
+  border: 1.5px solid var(--nb-ink, #1E1E1E);
+  border-radius: var(--nb-radius-sm, 4px);
+  background-color: #FFFFFF;
+  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
   padding: 4px;
   cursor: pointer;
-  box-shadow: 2px 2px 0 var(--nb-ink);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  opacity: 0.7;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
 }
-
-.gallery-thumb:hover,
-.gallery-thumb.active {
-  border-color: var(--nb-primary);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--nb-primary);
-}
-
 .gallery-thumb img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+.gallery-thumb:hover {
+  opacity: 1;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+}
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--nb-primary, #A6171C) !important;
+  outline: 2px solid var(--nb-primary, #A6171C);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
 }
 
 /* ── Editorial Blog Cards (Informasi Page) ────────────────────────────────── */

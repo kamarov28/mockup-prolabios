@@ -159,39 +159,4 @@
     });
 </script>
 @endif
-
-<style>
-  .rfq-input {
-    background-color: #FFFFFF !important;
-    border: var(--nb-border) !important;
-    color: var(--nb-ink) !important;
-    font-size: 0.9rem !important;
-    padding: 10px 14px !important;
-    border-radius: var(--nb-radius-sm) !important;
-    box-shadow: 2px 2px 0 rgba(30,30,30,0.12) !important;
-    transition: box-shadow 0.12s ease !important;
-  }
-  .rfq-input::placeholder {
-    color: var(--nb-muted) !important;
-    opacity: 0.6;
-  }
-  .rfq-input:focus {
-    border-color: var(--nb-primary) !important;
-    box-shadow: 3px 3px 0 var(--nb-ink) !important;
-    outline: none !important;
-    color: var(--nb-ink) !important;
-  }
-  .kontak-form-label {
-    color: var(--nb-ink) !important;
-    font-weight: 700 !important;
-    font-family: var(--font-display) !important;
-    font-size: 0.85rem !important;
-    margin-bottom: 6px !important;
-  }
-  .cart-sidebar-title {
-    color: var(--nb-ink) !important;
-    font-family: var(--font-display) !important;
-    font-weight: 700 !important;
-  }
-</style>
 @endsection
