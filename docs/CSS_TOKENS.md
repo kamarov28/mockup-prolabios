@@ -4,10 +4,9 @@
 
 | File | Approx. role |
 |------|----------------|
-| Bootstrap 5 CDN | Grid, components |
-| `resources/css/style.css` | Base site styles |
-| `resources/css/experimental-typo.css` | Heavy editorial overrides (`!important`, navbar, typography) |
-| `public/css/sticky-sidebar.css` | Sidebar helper |
+| Bootstrap 5 + Icons | Grid, utilities, icons (bundled via Vite) |
+| `resources/css/style.css` | Vendor imports |
+| `resources/css/experimental-typo.css` | Soft Neo-Brutalism modular styles (`resources/css/site/`) |
 
 ## Admin (`admin/layout.blade.php`)
 

@@ -5,12 +5,14 @@ Edit files in this folder, then run `npm run build`.
 
 | File | Scope |
 |------|--------|
-| 01-base.css | Tokens, navbar, hero, footer |
-| 02-motion.css | Micro-interactions |
-| 03-theme.css | Global dark theme + page headers |
-| 04-pages-core.css | Profil, layanan/sektor, kontak |
-| 05-pages-catalog.css | Produk, blog, product cards, tables |
-| 06-content-areas.css | Content areas, marquee, mobile filter |
-| 07-admin-login.css | Admin login |
-| 08-b2b-hitech.css | B2B / high-tech homepage |
-| 09-cart-rfq.css | Cart & RFQ |
+| 00-tokens.css | Design tokens, color palette & typography variables |
+| 01-base.css | Reset, base typography & structural layout |
+| 02-motion.css | Universal tactile press physics & micro-interactions |
+| 03-components.css | Buttons, badges, cards, navigation & form controls |
+| 04-pages-core.css | Homepage, profil, layanan/sektor, kontak |
+| 05-pages-catalog.css | Produk catalog, detail produk, filtering & search |
+| 06-content-areas.css | Content layouts, marquee, callouts & empty states |
+| 08-b2b-hitech.css | B2B sector grid, hero bento & technical showcase |
+| 09-cart-rfq.css | Shopping cart, RFQ checkout & submission success |
+
+*(Note: Admin dashboard styles are organized in `resources/css/admin/`)*
