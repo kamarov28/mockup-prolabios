@@ -17,6 +17,7 @@ import { revealHeroStatic } from './modules/typography-split.js';
 import { initGSAPAnimations } from './modules/animations.js';
 import { initBacteriaSwarm } from './modules/bacteria-swarm.js';
 import { initSubpages } from './modules/subpages.js';
+import { initCatalogAjax } from './modules/catalog-ajax.js';
 
 document.addEventListener('DOMContentLoaded', function () {
   function safeInit(name, fn) {
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initAnimations', initAnimations);
   safeInit('initCatalogCart', initCatalogCart);
   safeInit('initSubpages', initSubpages);
+  safeInit('initCatalogAjax', initCatalogAjax);
 
   // Bacteria swarm prototype: active on homepage
   if (document.querySelector('.home-hero') || document.querySelector('.hero-cinematic') || window.location.pathname === '/' || window.location.pathname === '') {
