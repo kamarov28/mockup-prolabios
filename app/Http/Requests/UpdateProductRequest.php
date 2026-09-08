@@ -37,6 +37,10 @@ class UpdateProductRequest extends FormRequest
             'stock' => ['nullable', 'integer', 'min:0'],
             'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'image_url' => ['nullable', 'string', 'max:2000', 'regex:/^(\/|https?:\/\/)/i'],
+            'gallery_files' => ['nullable', 'array', 'max:10'],
+            'gallery_files.*' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'remove_gallery' => ['nullable', 'array'],
+            'remove_gallery.*' => ['string'],
         ];
     }
 

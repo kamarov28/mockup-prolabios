@@ -37,6 +37,8 @@ class StoreProductRequest extends FormRequest
             'stock' => ['nullable', 'integer', 'min:0'],
             'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'image_url' => ['nullable', 'string', 'max:2048'],
+            'gallery_files' => ['nullable', 'array', 'max:10'],
+            'gallery_files.*' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
         ];
     }
 

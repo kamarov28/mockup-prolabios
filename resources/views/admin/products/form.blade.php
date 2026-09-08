@@ -197,27 +197,62 @@
       </div>
 
       <div class="admin-form-group mb-0">
-        <label class="admin-form-label">Galeri Foto Tambahan</label>
-        <p class="form-text mb-3">Maks. 10 foto (di luar cover).</p>
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <label class="admin-form-label mb-0">Galeri Foto Tambahan</label>
+          <span id="gallery_count_badge" class="badge" style="background: var(--color-surface-2, #EDE8E0); color: var(--color-text-main); border: 1.5px solid #1E1E1E; display: none; font-size: 0.75rem;">0 foto dipilih</span>
+        </div>
+        <p class="form-text mb-3">Maksimal 10 foto (di luar cover utama). Bisa pilih banyak foto sekaligus atau tambah satu per satu.</p>
 
         @if(!empty($product['gallery_images']))
-          <div class="row g-2 mb-3">
-            @foreach($product['gallery_images'] as $galleryPath)
-              <div class="col-4 col-sm-2">
-                <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
-                  <img src="{{ $galleryPath }}" alt="Galeri" style="width: 100%; height: 100%; object-fit: cover;">
-                  <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: var(--color-border, #1E1E1E); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
-                    <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
-                    <i class="bi bi-trash" style="color: #FFFFFF;"></i>
-                  </label>
+          <div class="mb-3 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="small fw-bold" style="color: var(--color-text-main);">
+                <i class="bi bi-images me-1"></i>Foto Galeri Tersimpan ({{ count($product['gallery_images']) }})
+              </span>
+              <span class="small text-muted">Centang untuk menghapus foto saat disimpan</span>
+            </div>
+            <div class="row g-2">
+              @foreach($product['gallery_images'] as $galleryPath)
+                <div class="col-4 col-sm-3 col-md-2">
+                  <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 2px solid var(--color-border); border-radius: 6px; background: #FFFFFF; box-shadow: 2px 2px 0 #1E1E1E;">
+                    <img src="{{ $galleryPath }}" alt="Galeri" style="width: 100%; height: 100%; object-fit: cover;">
+                    <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: var(--color-border, #1E1E1E); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
+                      <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
+                      <i class="bi bi-trash" style="color: #FFFFFF;"></i>
+                    </label>
+                  </div>
                 </div>
-              </div>
-            @endforeach
+              @endforeach
+            </div>
           </div>
-          <p class="form-text mb-2" style="color: var(--color-accent, #A6171C); font-weight: 600;">Centang foto yang ingin dihapus, lalu simpan.</p>
         @endif
 
-        <input class="form-control" type="file" id="gallery_files" name="gallery_files[]" accept="image/*" multiple>
+        {{-- Dropzone & Multi-file picker --}}
+        <div id="gallery_dropzone" class="p-4 text-center mb-3" style="border: 2px dashed #1E1E1E; border-radius: 6px; background: #FAF8F5; cursor: pointer; transition: background 0.15s ease;">
+          <i class="bi bi-cloud-arrow-up fs-2 d-block mb-1" style="color: var(--color-accent, #A6171C);"></i>
+          <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.95rem;">
+            + Klik di sini untuk menambah foto galeri
+          </span>
+          <span class="small text-muted d-block mt-1">
+            Dapat memilih beberapa file sekaligus (Ctrl/Shift) atau menambah foto satu per satu (Maks. 5MB per file, format JPG, PNG, WEBP).
+          </span>
+        </div>
+
+        {{-- Previews of newly selected files --}}
+        <div id="gallery_previews_wrapper" class="mb-3" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="small fw-bold" style="color: var(--color-text-main);">
+              <i class="bi bi-check2-circle text-success me-1"></i>Foto Baru Siap Diunggah:
+            </span>
+            <button type="button" id="btn_add_more_photos" class="admin-btn admin-btn-outline py-1 px-2" style="font-size: 0.78rem;">
+              <i class="bi bi-plus-lg me-1"></i>Tambah Foto Lainnya
+            </button>
+          </div>
+          <div id="gallery_previews" class="row g-2"></div>
+        </div>
+
+        {{-- Synced hidden file input holding all staged files for form submission --}}
+        <input type="file" id="gallery_files" name="gallery_files[]" accept="image/*" multiple style="display: none;">
       </div>
 
       <div class="admin-form-group mb-0">
@@ -343,6 +378,147 @@
         this.setSelectionRange(cursor + diff, cursor + diff);
       });
     }
+
+    // Multi-photo gallery uploader with cumulative selection & instant previews
+    (function() {
+      var galleryInput = document.getElementById('gallery_files');
+      var dropZone = document.getElementById('gallery_dropzone');
+      var wrapper = document.getElementById('gallery_previews_wrapper');
+      var previewContainer = document.getElementById('gallery_previews');
+      var addMoreBtn = document.getElementById('btn_add_more_photos');
+      var countBadge = document.getElementById('gallery_count_badge');
+      if (!galleryInput || !previewContainer) return;
+
+      var dt = new DataTransfer();
+      var maxAllowed = 10;
+      var existingCount = {{ !empty($product['gallery_images']) ? count($product['gallery_images']) : 0 }};
+
+      function updateUI() {
+        var totalStaged = dt.files.length;
+        var totalCombined = existingCount + totalStaged;
+
+        if (countBadge) {
+          countBadge.textContent = totalStaged + ' foto baru dipilih (Total: ' + totalCombined + '/' + maxAllowed + ')';
+          countBadge.style.display = totalStaged > 0 ? 'inline-block' : 'none';
+        }
+
+        if (addMoreBtn) {
+          addMoreBtn.style.display = (totalCombined < maxAllowed) ? 'inline-flex' : 'none';
+        }
+
+        previewContainer.innerHTML = '';
+        if (totalStaged === 0) {
+          if (wrapper) wrapper.style.display = 'none';
+          return;
+        }
+
+        if (wrapper) wrapper.style.display = 'block';
+
+        Array.from(dt.files).forEach(function(file, index) {
+          var col = document.createElement('div');
+          col.className = 'col-4 col-sm-3 col-md-2';
+
+          var card = document.createElement('div');
+          card.className = 'position-relative';
+          card.style.cssText = 'aspect-ratio: 1/1; overflow: hidden; border: 2px solid #1E1E1E; border-radius: 6px; background: #FFFFFF; box-shadow: 2px 2px 0 #1E1E1E;';
+
+          var img = document.createElement('img');
+          img.src = URL.createObjectURL(file);
+          img.alt = file.name;
+          img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
+
+          var delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center';
+          delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: #A6171C; color: #FFFFFF; border: 1.5px solid #1E1E1E; border-radius: 4px;';
+          delBtn.title = 'Hapus dari daftar unggah';
+          delBtn.innerHTML = '<i class="bi bi-x-lg" style="font-size: 0.65rem;"></i>';
+          delBtn.onclick = function() {
+            removeStagedPhoto(index);
+          };
+
+          var sizeBadge = document.createElement('div');
+          sizeBadge.className = 'position-absolute bottom-0 start-0 end-0 p-1 text-truncate';
+          sizeBadge.style.cssText = 'background: rgba(30,30,30,0.75); color: #fff; font-size: 0.65rem; font-family: var(--font-mono); font-weight: 600;';
+          sizeBadge.textContent = file.size > 1048576 ? (file.size / 1048576).toFixed(1) + 'MB' : Math.round(file.size / 1024) + 'KB';
+
+          card.appendChild(img);
+          card.appendChild(delBtn);
+          card.appendChild(sizeBadge);
+          col.appendChild(card);
+          previewContainer.appendChild(col);
+        });
+      }
+
+      function removeStagedPhoto(index) {
+        var newDt = new DataTransfer();
+        Array.from(dt.files).forEach(function(f, i) {
+          if (i !== index) newDt.items.add(f);
+        });
+        dt = newDt;
+        galleryInput.files = dt.files;
+        updateUI();
+      }
+
+      function handleFiles(files) {
+        var currentCombined = existingCount + dt.files.length;
+        var availableSlots = maxAllowed - currentCombined;
+        if (availableSlots <= 0) {
+          alert('Maksimal ' + maxAllowed + ' foto galeri tercapai.');
+          return;
+        }
+
+        var toAdd = Array.from(files).slice(0, availableSlots);
+        toAdd.forEach(function(file) {
+          if (file.type.startsWith('image/')) {
+            dt.items.add(file);
+          }
+        });
+
+        galleryInput.files = dt.files;
+        updateUI();
+      }
+
+      var tempPicker = document.createElement('input');
+      tempPicker.type = 'file';
+      tempPicker.accept = 'image/*';
+      tempPicker.multiple = true;
+      tempPicker.style.display = 'none';
+      document.body.appendChild(tempPicker);
+
+      tempPicker.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+          handleFiles(this.files);
+          this.value = '';
+        }
+      });
+
+      if (dropZone) {
+        dropZone.addEventListener('click', function() {
+          tempPicker.click();
+        });
+        dropZone.addEventListener('dragover', function(e) {
+          e.preventDefault();
+          this.style.background = '#EDE8E0';
+        });
+        dropZone.addEventListener('dragleave', function() {
+          this.style.background = '#FAF8F5';
+        });
+        dropZone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.style.background = '#FAF8F5';
+          if (e.dataTransfer && e.dataTransfer.files) {
+            handleFiles(e.dataTransfer.files);
+          }
+        });
+      }
+
+      if (addMoreBtn) {
+        addMoreBtn.addEventListener('click', function() {
+          tempPicker.click();
+        });
+      }
+    })();
 
     $(document).ready(function() {
       $('#description').summernote({
