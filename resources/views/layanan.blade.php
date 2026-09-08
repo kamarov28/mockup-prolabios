@@ -201,46 +201,5 @@
 
   @push('scripts')
   @include('partials.gsap-loader')
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-
-      const sidebarLinks = document.querySelectorAll('#service-nav .layanan-sidebar-link');
-      
-      sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const urlObj = new URL(this.href);
-          const serviceKey = urlObj.searchParams.get('s');
-          if (!serviceKey) return;
-          sidebarLinks.forEach(l => l.classList.remove('is-active'));
-          this.classList.add('is-active');
-          document.querySelectorAll('.service-content-block').forEach(block => block.classList.add('d-none'));
-          const targetBlock = document.getElementById('service-content-' + serviceKey);
-          if (targetBlock) {
-            targetBlock.classList.remove('d-none');
-            targetBlock.querySelectorAll('.animate-on-scroll').forEach(el => el.classList.add('is-visible'));
-          }
-          history.pushState(null, '', window.location.pathname + '?s=' + serviceKey);
-          
-          if (typeof initGSAPAnimations === 'function') {
-            initGSAPAnimations();
-          }
-        });
-      });
-      
-      window.addEventListener('popstate', function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const serviceKey = urlParams.get('s') || 'maintenance';
-        sidebarLinks.forEach(link => {
-          const urlObj = new URL(link.href);
-          link.classList.toggle('is-active', urlObj.searchParams.get('s') === serviceKey);
-        });
-        document.querySelectorAll('.service-content-block').forEach(block => block.classList.add('d-none'));
-        const targetBlock = document.getElementById('service-content-' + serviceKey);
-        if (targetBlock) targetBlock.classList.remove('d-none');
-      });
-    });
-  </script>
   @endpush
 @endsection
