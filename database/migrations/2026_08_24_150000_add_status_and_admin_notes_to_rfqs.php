@@ -21,7 +21,7 @@ return new class extends Migration
             Schema::table('rfqs', function (Blueprint $table) {
                 $table->index('status', 'rfqs_status_index');
             });
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // index may already exist
         }
     }
@@ -32,7 +32,7 @@ return new class extends Migration
             Schema::table('rfqs', function (Blueprint $table) {
                 $table->dropIndex('rfqs_status_index');
             });
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
 
         Schema::table('rfqs', function (Blueprint $table) {

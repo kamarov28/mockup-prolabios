@@ -11,11 +11,7 @@ class AuditLogger
     /**
      * Log a sensitive or critical administrative action.
      *
-     * @param string $action
-     * @param string|null $targetType
-     * @param int|string|null $targetId
-     * @param array $details
-     * @return void
+     * @param  int|string|null  $targetId
      */
     public static function log(string $action, ?string $targetType = null, $targetId = null, array $details = []): void
     {

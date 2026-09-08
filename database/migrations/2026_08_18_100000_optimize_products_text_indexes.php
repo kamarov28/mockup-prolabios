@@ -29,7 +29,7 @@ return new class extends Migration
                 Schema::table('products', function (Blueprint $table) {
                     $table->fullText(['title', 'description'], 'products_fulltext_index');
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if fulltext already exists or driver unsupported
             }
         }

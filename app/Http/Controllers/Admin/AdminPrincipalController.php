@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePrincipalRequest;
 use App\Http\Requests\UpdatePrincipalRequest;
 use App\Models\Principal;
-use App\Models\Product;
 use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;

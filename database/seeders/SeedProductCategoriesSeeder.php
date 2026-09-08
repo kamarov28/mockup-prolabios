@@ -15,10 +15,10 @@ class SeedProductCategoriesSeeder extends Seeder
     {
         $categories = [
             [
-                'key'        => 'microbiology',
-                'name'       => 'Microbiology',
+                'key' => 'microbiology',
+                'name' => 'Microbiology',
                 'sort_order' => 1,
-                'subs'       => [
+                'subs' => [
                     ['key' => 'food-safety',               'name' => 'Food Safety',                                    'sort_order' => 1],
                     ['key' => 'antimicrobial',              'name' => 'Antimicrobial Susceptibility Testing',           'sort_order' => 2],
                     ['key' => 'identification',             'name' => 'Microbiological Identification',                 'sort_order' => 3],
@@ -38,10 +38,10 @@ class SeedProductCategoriesSeeder extends Seeder
                 ],
             ],
             [
-                'key'        => 'reference-standards',
-                'name'       => 'Reference Standards',
+                'key' => 'reference-standards',
+                'name' => 'Reference Standards',
                 'sort_order' => 2,
-                'subs'       => [
+                'subs' => [
                     ['key' => 'pharmaceutical',   'name' => 'Pharmaceutical Reference Standards', 'sort_order' => 1],
                     ['key' => 'green-standards',  'name' => 'Green Standards',                    'sort_order' => 2],
                     ['key' => 'environmental',    'name' => 'Environmental Standards',             'sort_order' => 3],
@@ -50,10 +50,10 @@ class SeedProductCategoriesSeeder extends Seeder
                 ],
             ],
             [
-                'key'        => 'device',
-                'name'       => 'Device',
+                'key' => 'device',
+                'name' => 'Device',
                 'sort_order' => 3,
-                'subs'       => [
+                'subs' => [
                     ['key' => 'bsc-lfc',                      'name' => 'Bio Safety Cabinet (BSC) and Laminar Flow Cabinet (LFC)', 'sort_order' => 1],
                     ['key' => 'microbiological-instruments',   'name' => 'Microbiological Instruments',                            'sort_order' => 2],
                     ['key' => 'liquid-handling',               'name' => 'Liquid Handling',                                       'sort_order' => 3],
@@ -61,10 +61,10 @@ class SeedProductCategoriesSeeder extends Seeder
                 ],
             ],
             [
-                'key'        => 'instruments',
-                'name'       => 'Instruments',
+                'key' => 'instruments',
+                'name' => 'Instruments',
                 'sort_order' => 4,
-                'subs'       => [
+                'subs' => [
                     ['key' => 'liofilchem-giotto-2',         'name' => 'Liofilchem® Giotto 2',                        'sort_order' => 1],
                     ['key' => 'agar-filler',                 'name' => 'Agar Filler',                                 'sort_order' => 2],
                     ['key' => 'agar-preparator',             'name' => 'Agar Preparator',                             'sort_order' => 3],
@@ -96,6 +96,6 @@ class SeedProductCategoriesSeeder extends Seeder
             }
         }
 
-        $this->command->info('✅ Product categories seeded successfully (' . count($categories) . ' parent categories).');
+        $this->command->info('✅ Product categories seeded successfully ('.count($categories).' parent categories).');
     }
 }

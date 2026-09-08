@@ -54,7 +54,7 @@ return new class extends Migration
         try {
             $sm = Schema::getConnection()->select("SHOW INDEX FROM products WHERE Key_name = 'products_slug_unique'");
             $indexExists = ! empty($sm);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // SQLite / other: try creating and ignore duplicate
         }
 
@@ -63,7 +63,7 @@ return new class extends Migration
                 Schema::table('products', function (Blueprint $table) {
                     $table->unique('slug', 'products_slug_unique');
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Index may already exist under another name
             }
         }
@@ -75,7 +75,7 @@ return new class extends Migration
             Schema::table('products', function (Blueprint $table) {
                 $table->dropUnique('products_slug_unique');
             });
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
         }
 
         if (Schema::hasColumn('products', 'slug')) {

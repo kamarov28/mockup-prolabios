@@ -42,8 +42,8 @@ class AdminProductCategoryController extends Controller
         $selectedParentId = $request->query('parent_id');
 
         return view('admin.categories.form', [
-            'category'         => null,
-            'parents'          => $parents,
+            'category' => null,
+            'parents' => $parents,
             'selectedParentId' => $selectedParentId,
         ]);
     }
@@ -51,9 +51,9 @@ class AdminProductCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'       => 'required|string|max:150',
-            'key'        => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key',
-            'parent_id'  => [
+            'name' => 'required|string|max:150',
+            'key' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key',
+            'parent_id' => [
                 'nullable',
                 'exists:product_categories,id',
                 function ($attribute, $value, $fail) {
@@ -67,7 +67,7 @@ class AdminProductCategoryController extends Controller
             ],
             'sort_order' => 'nullable|integer|min:0',
         ], [
-            'key.regex'  => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
+            'key.regex' => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
             'key.unique' => 'Key ini sudah dipakai kategori lain.',
         ]);
 
@@ -80,15 +80,15 @@ class AdminProductCategoryController extends Controller
         }
 
         $cat = ProductCategory::create([
-            'key'        => $key,
-            'name'       => trim($request->input('name')),
-            'parent_id'  => $request->input('parent_id') ?: null,
+            'key' => $key,
+            'name' => trim($request->input('name')),
+            'parent_id' => $request->input('parent_id') ?: null,
             'sort_order' => (int) $request->input('sort_order', 0),
         ]);
 
         AuditLogger::log('product_category.create', 'ProductCategory', $cat->id, [
-            'key'       => $cat->key,
-            'name'      => $cat->name,
+            'key' => $cat->key,
+            'name' => $cat->name,
             'parent_id' => $cat->parent_id,
         ]);
 
@@ -103,14 +103,14 @@ class AdminProductCategoryController extends Controller
     public function edit(int $id)
     {
         $category = ProductCategory::findOrFail($id);
-        $parents  = ProductCategory::whereNull('parent_id')
+        $parents = ProductCategory::whereNull('parent_id')
             ->where('id', '!=', $id)
             ->orderBy('sort_order')->orderBy('name')
             ->get(['id', 'key', 'name']);
 
         return view('admin.categories.form', [
-            'category'         => $category,
-            'parents'          => $parents,
+            'category' => $category,
+            'parents' => $parents,
             'selectedParentId' => $category->parent_id,
         ]);
     }
@@ -120,9 +120,9 @@ class AdminProductCategoryController extends Controller
         $category = ProductCategory::findOrFail($id);
 
         $request->validate([
-            'name'       => 'required|string|max:150',
-            'key'        => "nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key,{$id}",
-            'parent_id'  => [
+            'name' => 'required|string|max:150',
+            'key' => "nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key,{$id}",
+            'parent_id' => [
                 'nullable',
                 'exists:product_categories,id',
                 function ($attribute, $value, $fail) use ($id) {
@@ -141,7 +141,7 @@ class AdminProductCategoryController extends Controller
             ],
             'sort_order' => 'nullable|integer|min:0',
         ], [
-            'key.regex'  => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
+            'key.regex' => 'Key hanya boleh berisi huruf kecil, angka, dan tanda hubung (-)',
             'key.unique' => 'Key ini sudah dipakai kategori lain.',
         ]);
 
@@ -160,9 +160,9 @@ class AdminProductCategoryController extends Controller
 
         DB::transaction(function () use ($category, $key, $oldKey, $request, $newParentId) {
             $category->update([
-                'key'        => $key,
-                'name'       => trim($request->input('name')),
-                'parent_id'  => $newParentId,
+                'key' => $key,
+                'name' => trim($request->input('name')),
+                'parent_id' => $newParentId,
                 'sort_order' => (int) $request->input('sort_order', 0),
             ]);
 
@@ -175,8 +175,8 @@ class AdminProductCategoryController extends Controller
         AuditLogger::log('product_category.update', 'ProductCategory', $id, [
             'old_name' => $old['name'],
             'new_name' => $category->name,
-            'old_key'  => $old['key'],
-            'new_key'  => $category->key,
+            'old_key' => $old['key'],
+            'new_key' => $category->key,
         ]);
 
         Cache::forget('categories_structure');

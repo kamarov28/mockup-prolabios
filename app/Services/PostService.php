@@ -54,14 +54,14 @@ class PostService
     public function addPost(array $post): bool
     {
         Post::create([
-            'slug'        => $post['slug'],
-            'title'       => $post['title'],
-            'date'        => $post['date'],
-            'category'    => $post['category'],
-            'status'      => $post['status'] ?? 'online',
+            'slug' => $post['slug'],
+            'title' => $post['title'],
+            'date' => $post['date'],
+            'category' => $post['category'],
+            'status' => $post['status'] ?? 'online',
             'is_featured' => $post['is_featured'] ?? false,
-            'image'       => $post['image'] ?? null,
-            'content'     => HtmlSanitizer::clean($post['content'] ?? null),
+            'image' => $post['image'] ?? null,
+            'content' => HtmlSanitizer::clean($post['content'] ?? null),
         ]);
 
         Cache::forget('blog_category_counts');
@@ -77,14 +77,14 @@ class PostService
         }
 
         $post->update([
-            'slug'        => $updatedPost['slug'],
-            'title'       => $updatedPost['title'],
-            'date'        => $updatedPost['date'],
-            'category'    => $updatedPost['category'],
-            'status'      => $updatedPost['status'] ?? 'online',
+            'slug' => $updatedPost['slug'],
+            'title' => $updatedPost['title'],
+            'date' => $updatedPost['date'],
+            'category' => $updatedPost['category'],
+            'status' => $updatedPost['status'] ?? 'online',
             'is_featured' => $updatedPost['is_featured'] ?? false,
-            'image'       => $updatedPost['image'] ?? null,
-            'content'     => HtmlSanitizer::clean($updatedPost['content'] ?? null),
+            'image' => $updatedPost['image'] ?? null,
+            'content' => HtmlSanitizer::clean($updatedPost['content'] ?? null),
         ]);
 
         Cache::forget('blog_category_counts');
@@ -107,17 +107,17 @@ class PostService
     private function toArray(Post $post): array
     {
         return [
-            'id'          => $post->id,
-            'slug'        => $post->slug,
-            'title'       => $post->title,
-            'date'        => $post->date ? $post->date->format('Y-m-d') : null,
-            'category'    => $post->category,
-            'status'      => $post->status,
+            'id' => $post->id,
+            'slug' => $post->slug,
+            'title' => $post->title,
+            'date' => $post->date ? $post->date->format('Y-m-d') : null,
+            'category' => $post->category,
+            'status' => $post->status,
             'is_featured' => (bool) $post->is_featured,
-            'image'       => $post->image,
-            'content'     => $post->content,
-            'created_at'  => optional($post->created_at)?->toDateTimeString(),
-            'updated_at'  => optional($post->updated_at)?->toDateTimeString(),
+            'image' => $post->image,
+            'content' => $post->content,
+            'created_at' => optional($post->created_at)?->toDateTimeString(),
+            'updated_at' => optional($post->updated_at)?->toDateTimeString(),
         ];
     }
 }

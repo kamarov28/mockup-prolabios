@@ -14,7 +14,7 @@ class ProductCategory extends Model
     protected function casts(): array
     {
         return [
-            'parent_id'  => 'integer',
+            'parent_id' => 'integer',
             'sort_order' => 'integer',
         ];
     }

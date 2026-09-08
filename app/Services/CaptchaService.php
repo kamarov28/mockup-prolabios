@@ -43,19 +43,19 @@ class CaptchaService
                 $response = Http::asForm()
                     ->timeout(5)
                     ->post('https://www.google.com/recaptcha/api/siteverify', [
-                        'secret'   => $recaptchaSecret,
+                        'secret' => $recaptchaSecret,
                         'response' => $token,
                         'remoteip' => $request->ip(),
                     ]);
 
-                $data    = $response->json();
+                $data = $response->json();
                 $success = (bool) ($data['success'] ?? false);
-                $score   = (float) ($data['score'] ?? 0.0);
+                $score = (float) ($data['score'] ?? 0.0);
 
                 if (! $success || $score < self::MIN_HUMAN_SCORE) {
                     Log::warning('Captcha verification failed or low score.', [
-                        'ip'     => $request->ip(),
-                        'score'  => $score,
+                        'ip' => $request->ip(),
+                        'score' => $score,
                         'errors' => $data['error-codes'] ?? [],
                     ]);
 
@@ -83,7 +83,7 @@ class CaptchaService
                 $response = Http::asForm()
                     ->timeout(5)
                     ->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
-                        'secret'   => $turnstileSecret,
+                        'secret' => $turnstileSecret,
                         'response' => $token,
                         'remoteip' => $request->ip(),
                     ]);

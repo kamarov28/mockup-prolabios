@@ -28,11 +28,11 @@ class AdminPostController extends Controller
 
     public function postsIndex(Request $request)
     {
-        $search    = $request->input('s');
-        $category  = $request->input('category');
+        $search = $request->input('s');
+        $category = $request->input('category');
         $startDate = $request->input('start_date');
-        $endDate   = $request->input('end_date');
-        $sort      = $request->input('sort', 'newest');
+        $endDate = $request->input('end_date');
+        $sort = $request->input('sort', 'newest');
 
         $query = Post::query()
             ->when($search, function ($q) use ($search) {
@@ -46,10 +46,10 @@ class AdminPostController extends Controller
             ->when($endDate, fn ($q) => $q->whereDate('created_at', '<=', $endDate));
 
         match ($sort) {
-            'oldest'     => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
-            'title_asc'  => $query->orderBy('title', 'asc'),
+            'oldest' => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
+            'title_asc' => $query->orderBy('title', 'asc'),
             'title_desc' => $query->orderBy('title', 'desc'),
-            default      => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
+            default => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
         };
 
         // PaginatesQuery expects base Query\Builder; toBase() keeps same WHERE/ORDER
@@ -57,14 +57,14 @@ class AdminPostController extends Controller
             = $this->paginateQuery($query->toBase(), $request, self::POSTS_PER_PAGE);
 
         return view('admin.posts.index', [
-            'posts'       => $posts,
-            'search'      => $search,
-            'category'    => $category,
-            'sort'        => $sort,
-            'start_date'  => $startDate,
-            'end_date'    => $endDate,
+            'posts' => $posts,
+            'search' => $search,
+            'category' => $category,
+            'sort' => $sort,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'currentPage' => $currentPage,
-            'totalPages'  => $totalPages,
+            'totalPages' => $totalPages,
         ]);
     }
 
@@ -76,7 +76,7 @@ class AdminPostController extends Controller
     public function postsStore(StorePostRequest $request)
     {
         $title = $request->input('title');
-        $slug  = Str::slug($title);
+        $slug = Str::slug($title);
 
         if ($this->posts->getPostBySlug($slug)) {
             $slug .= '-'.Str::lower(Str::random(6));
@@ -85,7 +85,7 @@ class AdminPostController extends Controller
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', null);
 
         $statusOption = $request->input('status_option', 'online_now');
-        $status       = ($statusOption === 'draft') ? 'draft' : 'online';
+        $status = ($statusOption === 'draft') ? 'draft' : 'online';
 
         $publishDate = date('Y-m-d');
         if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
@@ -95,21 +95,21 @@ class AdminPostController extends Controller
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
 
         $post = [
-            'slug'        => $slug,
-            'title'       => $title,
-            'date'        => $publishDate,
-            'category'    => $request->input('category'),
-            'status'      => $status,
+            'slug' => $slug,
+            'title' => $title,
+            'date' => $publishDate,
+            'category' => $request->input('category'),
+            'status' => $status,
             'is_featured' => $isFeatured,
-            'image'       => $image,
-            'content'     => $request->input('content'),
+            'image' => $image,
+            'content' => $request->input('content'),
         ];
 
         $this->posts->addPost($post);
 
         AuditLogger::log('post.create', 'Post', null, [
-            'title'  => $title,
-            'slug'   => $slug,
+            'title' => $title,
+            'slug' => $slug,
             'status' => $status,
         ]);
 
@@ -135,7 +135,7 @@ class AdminPostController extends Controller
 
         $oldTitle = $post['title'];
         $newTitle = $request->input('title');
-        $newSlug  = $post['slug'];
+        $newSlug = $post['slug'];
         if ($newTitle !== $post['title']) {
             $newSlug = Str::slug($newTitle);
 
@@ -147,7 +147,7 @@ class AdminPostController extends Controller
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $post['image']);
 
         $statusOption = $request->input('status_option', 'online_now');
-        $status       = ($statusOption === 'draft') ? 'draft' : 'online';
+        $status = ($statusOption === 'draft') ? 'draft' : 'online';
 
         $publishDate = ! empty($post['date']) ? date('Y-m-d', strtotime($post['date'])) : date('Y-m-d');
         if ($statusOption === 'scheduled' && $request->filled('publish_date')) {
@@ -159,14 +159,14 @@ class AdminPostController extends Controller
         $isFeatured = $request->input('highlight') == '1' || $request->input('is_featured') == '1';
 
         $updatedPost = [
-            'slug'        => $newSlug,
-            'title'       => $newTitle,
-            'date'        => $publishDate,
-            'category'    => $request->input('category'),
-            'status'      => $status,
+            'slug' => $newSlug,
+            'title' => $newTitle,
+            'date' => $publishDate,
+            'category' => $request->input('category'),
+            'status' => $status,
             'is_featured' => $isFeatured,
-            'image'       => $image,
-            'content'     => $request->input('content'),
+            'image' => $image,
+            'content' => $request->input('content'),
         ];
 
         $this->posts->updatePost($slug, $updatedPost);
@@ -174,8 +174,8 @@ class AdminPostController extends Controller
         AuditLogger::log('post.update', 'Post', $post['id'] ?? $slug, [
             'old_title' => $oldTitle,
             'new_title' => $newTitle,
-            'slug'      => $newSlug,
-            'status'    => $updatedPost['status'],
+            'slug' => $newSlug,
+            'status' => $updatedPost['status'],
         ]);
 
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil diperbarui!');
@@ -183,15 +183,15 @@ class AdminPostController extends Controller
 
     public function postsDestroy(string $slug)
     {
-        $post  = $this->posts->getPostBySlug($slug);
+        $post = $this->posts->getPostBySlug($slug);
         $title = $post['title'] ?? null;
-        $id    = $post['id'] ?? null;
+        $id = $post['id'] ?? null;
 
         $this->posts->deletePost($slug);
 
         AuditLogger::log('post.delete', 'Post', $id ?? $slug, [
             'title' => $title,
-            'slug'  => $slug,
+            'slug' => $slug,
         ]);
 
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil dihapus!');

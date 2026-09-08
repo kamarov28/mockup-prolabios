@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRfqRequest;
 use App\Jobs\SendRfqCustomerReceiptEmailJob;
 use App\Jobs\SendRfqSubmittedEmailJob;
-use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\RfqItem;
 use App\Services\AuditLogger;
@@ -47,9 +46,9 @@ class RfqController extends Controller
         foreach ($cart as $key => $item) {
             $product = $this->resolveProduct($item['id'] ?? null, $item['title'] ?? null);
 
-            $price               = $product ? (float) ($product->price ?? 0) : (float) ($item['price'] ?? 0);
+            $price = $product ? (float) ($product->price ?? 0) : (float) ($item['price'] ?? 0);
             $cart[$key]['price'] = $price;
-            $total              += $price * (int) $item['quantity'];
+            $total += $price * (int) $item['quantity'];
         }
         session()->put('cart', $cart);
 
@@ -61,7 +60,7 @@ class RfqController extends Controller
         // Anti-Bot Honeypot Guard: if invisible field is populated, silently drop spam
         if ($request->filled('_hp_website')) {
             Log::warning('RFQ submission bot honeypot triggered.', [
-                'ip'         => $request->ip(),
+                'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
 
@@ -89,12 +88,12 @@ class RfqController extends Controller
 
         $rfq = DB::transaction(function () use ($rfqNumber, $validated, $cart) {
             $rfq = Rfq::create([
-                'rfq_number'   => $rfqNumber,
-                'name'         => $validated['name'],
-                'email'        => $validated['email'],
+                'rfq_number' => $rfqNumber,
+                'name' => $validated['name'],
+                'email' => $validated['email'],
                 'company_name' => $validated['company_name'],
-                'phone_wa'     => $validated['phone_wa'],
-                'notes'        => $validated['notes'] ?? null,
+                'phone_wa' => $validated['phone_wa'],
+                'notes' => $validated['notes'] ?? null,
             ]);
 
             foreach ($cart as $item) {
@@ -102,15 +101,15 @@ class RfqController extends Controller
 
                 // Use fresh DB price when available; fall back to session-cached value
                 $origPrice = $product ? (float) ($product->price ?? 0) : (float) ($item['price'] ?? 0);
-                $qty       = max(1, (int) ($item['quantity'] ?? 1));
+                $qty = max(1, (int) ($item['quantity'] ?? 1));
 
                 RfqItem::create([
-                    'rfq_id'         => $rfq->id,
-                    'product_id'     => $product?->id       ?? ($item['id']      ?? null),
-                    'product_title'  => $product?->title    ?? ($item['title']   ?? ''),
-                    'catalog_no'     => $product?->catalog  ?? ($item['catalog'] ?? null),
+                    'rfq_id' => $rfq->id,
+                    'product_id' => $product?->id ?? ($item['id'] ?? null),
+                    'product_title' => $product?->title ?? ($item['title'] ?? ''),
+                    'catalog_no' => $product?->catalog ?? ($item['catalog'] ?? null),
                     'original_price' => $origPrice,
-                    'quantity'       => $qty,
+                    'quantity' => $qty,
                 ]);
             }
 
@@ -123,9 +122,9 @@ class RfqController extends Controller
         session()->put('submitted_rfq_number', $rfq->rfq_number);
 
         AuditLogger::log('rfq.submit', 'Rfq', $rfq->id, [
-            'rfq_number'  => $rfq->rfq_number,
-            'company'     => $rfq->company_name,
-            'email'       => $rfq->email,
+            'rfq_number' => $rfq->rfq_number,
+            'company' => $rfq->company_name,
+            'email' => $rfq->email,
             'items_count' => count($cart),
         ]);
 

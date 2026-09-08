@@ -92,7 +92,7 @@ class Rfq extends Model
         $total = $this->estimated_grand_total;
 
         return $total > 0
-            ? 'Rp ' . number_format($total, 0, ',', '.')
+            ? 'Rp '.number_format($total, 0, ',', '.')
             : 'Est. Penawaran';
     }
 

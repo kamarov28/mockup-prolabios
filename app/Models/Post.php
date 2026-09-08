@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,19 +24,19 @@ class Post extends Model
     {
         return [
             'is_featured' => 'boolean',
-            'created_at'  => 'datetime',
-            'updated_at'  => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
-    public function getDateAttribute($value): ?\Carbon\Carbon
+    public function getDateAttribute($value): ?Carbon
     {
         if (empty($value)) {
             return null;
         }
 
-        if ($value instanceof \Carbon\CarbonInterface) {
-            return \Carbon\Carbon::instance($value);
+        if ($value instanceof CarbonInterface) {
+            return Carbon::instance($value);
         }
 
         $indoMonths = [
@@ -55,7 +57,7 @@ class Post extends Model
         try {
             $normalized = str_ireplace(array_keys($indoMonths), array_values($indoMonths), (string) $value);
 
-            return \Carbon\Carbon::parse($normalized);
+            return Carbon::parse($normalized);
         } catch (\Throwable $e) {
             return null;
         }

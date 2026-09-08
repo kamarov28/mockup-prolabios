@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Jobs\SendContactEmailJob;
-use App\Jobs\SendRfqSubmittedEmailJob;
 use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\User;
@@ -96,7 +95,7 @@ class SecurityHardeningTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
-        Queue::assertPushed(\App\Jobs\SendContactEmailJob::class);
+        Queue::assertPushed(SendContactEmailJob::class);
     }
 
     public function test_contact_form_rejects_quotation_and_missing_institution(): void

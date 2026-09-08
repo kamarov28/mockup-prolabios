@@ -24,8 +24,8 @@ class Sector extends Model
     {
         return [
             'description' => 'array',
-            'created_at'  => 'datetime',
-            'updated_at'  => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 

@@ -20,11 +20,11 @@ class StoreRfqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'         => ['required', 'string', 'max:255'],
-            'email'        => ['required', 'email', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'company_name' => ['required', 'string', 'max:255'],
-            'phone_wa'     => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
-            'notes'        => ['nullable', 'string', 'max:3000'],
+            'phone_wa' => ['required', 'string', 'regex:/^[0-9+\-\s]{8,20}$/'],
+            'notes' => ['nullable', 'string', 'max:3000'],
         ];
     }
 
@@ -34,13 +34,13 @@ class StoreRfqRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required'         => 'Nama lengkap wajib diisi.',
-            'email.required'        => 'Alamat email wajib diisi.',
-            'email.email'           => 'Format alamat email tidak valid.',
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
             'company_name.required' => 'Nama instansi atau perusahaan wajib diisi.',
-            'phone_wa.required'     => 'Nomor telepon / WhatsApp wajib diisi.',
-            'phone_wa.regex'        => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
-            'notes.max'             => 'Catatan pengadaan maksimal 3000 karakter.',
+            'phone_wa.required' => 'Nomor telepon / WhatsApp wajib diisi.',
+            'phone_wa.regex' => 'Nomor WhatsApp hanya boleh berisi angka, spasi, serta karakter + atau - (minimal 8 digit).',
+            'notes.max' => 'Catatan pengadaan maksimal 3000 karakter.',
         ];
     }
 }

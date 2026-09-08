@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuditLogger;
+use App\Services\HomepageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,7 @@ class AdminController extends Controller
     // ----------------------------------------------------
     // Admin Authentication Handlers
     // ----------------------------------------------------
-    public function showLogin(\App\Services\HomepageService $homepage)
+    public function showLogin(HomepageService $homepage)
     {
         if (Auth::check()) {
             return redirect()->route('admin.dashboard');

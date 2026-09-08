@@ -19,7 +19,7 @@ return new class extends Migration
                         $table->index('deleted_at', 'rfqs_deleted_at_index');
                     }
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if index already exists
             }
         }
@@ -31,7 +31,7 @@ return new class extends Migration
                         $table->index('deleted_at', 'rfq_items_deleted_at_index');
                     }
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if index already exists
             }
         }
@@ -44,7 +44,7 @@ return new class extends Migration
                         $table->index('date', 'posts_date_index');
                     }
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if index already exists
             }
         }
@@ -57,7 +57,7 @@ return new class extends Migration
                         $table->index('created_at', 'products_created_at_index');
                     }
                 });
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Ignore if index already exists
             }
         }
@@ -73,7 +73,8 @@ return new class extends Migration
                 Schema::table('rfqs', function (Blueprint $table) {
                     $table->dropIndex('rfqs_deleted_at_index');
                 });
-            } catch (\Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
 
         if (Schema::hasTable('rfq_items')) {
@@ -81,7 +82,8 @@ return new class extends Migration
                 Schema::table('rfq_items', function (Blueprint $table) {
                     $table->dropIndex('rfq_items_deleted_at_index');
                 });
-            } catch (\Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
 
         if (Schema::hasTable('posts')) {
@@ -89,7 +91,8 @@ return new class extends Migration
                 Schema::table('posts', function (Blueprint $table) {
                     $table->dropIndex('posts_date_index');
                 });
-            } catch (\Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
 
         if (Schema::hasTable('products')) {
@@ -97,7 +100,8 @@ return new class extends Migration
                 Schema::table('products', function (Blueprint $table) {
                     $table->dropIndex('products_created_at_index');
                 });
-            } catch (\Throwable $e) {}
+            } catch (Throwable $e) {
+            }
         }
     }
 };

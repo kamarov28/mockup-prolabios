@@ -7,9 +7,11 @@ use App\Http\Requests\UpdateRfqRequest;
 use App\Models\Rfq;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -48,9 +50,9 @@ class AdminRfqController extends Controller
     public function export(Request $request)
     {
         $rfqs = $this->buildFilteredQuery($request)->with('items.product')->get();
-        $filename = 'rekap-rfq-prolabios-' . now()->format('Ymd-His') . '.xlsx';
+        $filename = 'rekap-rfq-prolabios-'.now()->format('Ymd-His').'.xlsx';
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Data Rekap RFQ');
 
@@ -60,11 +62,11 @@ class AdminRfqController extends Controller
         // Document Meta Title
         $sheet->setCellValue('A1', 'PT. PROLABIOS MITRA ANALITIKA — REKAPITULASI PENGAJUAN RFQ');
         $sheet->mergeCells('A1:N1');
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(12)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0F172A'));
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(12)->setColor(new Color('0F172A'));
 
-        $sheet->setCellValue('A2', 'Diekspor: ' . now()->translatedFormat('d F Y, H:i') . ' WIB | Total RFQ: ' . $rfqs->count() . ' Pengajuan');
+        $sheet->setCellValue('A2', 'Diekspor: '.now()->translatedFormat('d F Y, H:i').' WIB | Total RFQ: '.$rfqs->count().' Pengajuan');
         $sheet->mergeCells('A2:N2');
-        $sheet->getStyle('A2')->getFont()->setSize(9)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('64748B'));
+        $sheet->getStyle('A2')->getFont()->setSize(9)->setColor(new Color('64748B'));
 
         // Table Headers (Baris 3)
         $headers = [
@@ -127,13 +129,13 @@ class AdminRfqController extends Controller
             };
 
             // 1. Data Level RFQ (A - G, M, N)
-            $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, DataType::TYPE_STRING);
             $sheet->setCellValue("B{$startRow}", $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : '-');
             $sheet->setCellValue("C{$startRow}", $rfq->status_label);
             $sheet->setCellValue("D{$startRow}", $rfq->company_name);
             $sheet->setCellValue("E{$startRow}", $rfq->name);
             $sheet->setCellValue("F{$startRow}", $rfq->email);
-            $sheet->setCellValueExplicit("G{$startRow}", (string) $rfq->phone_wa, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("G{$startRow}", (string) $rfq->phone_wa, DataType::TYPE_STRING);
             $sheet->setCellValue("M{$startRow}", $rfq->notes ?: '-');
             $sheet->setCellValue("N{$startRow}", $rfq->admin_notes ?: '-');
 
@@ -170,7 +172,7 @@ class AdminRfqController extends Controller
                     $catalogNo = $item->catalog_no ?: ($item->product?->catalog ?? '-');
                     $productName = $item->product_title ?: ($item->product?->title ?? '-');
 
-                    $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+                    $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, DataType::TYPE_STRING);
                     $sheet->setCellValue("I{$currentRow}", $productName);
                     $sheet->setCellValue("J{$currentRow}", $qty);
                     $sheet->setCellValue("K{$currentRow}", $price > 0 ? $price : '-');
@@ -199,10 +201,10 @@ class AdminRfqController extends Controller
 
             // Alignment spesifik
             $sheet->getStyle("A{$startRow}:C{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $sheet->getStyle("A{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('0369A1'));
-            $sheet->getStyle("C{$startRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color($statusColor));
+            $sheet->getStyle("A{$startRow}")->getFont()->setBold(true)->setColor(new Color('0369A1'));
+            $sheet->getStyle("C{$startRow}")->getFont()->setBold(true)->setColor(new Color($statusColor));
             $sheet->getStyle("J{$startRow}:L{$endRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-            $sheet->getStyle("H{$startRow}:H{$endRow}")->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('475569'));
+            $sheet->getStyle("H{$startRow}:H{$endRow}")->getFont()->setBold(true)->setColor(new Color('475569'));
 
             // Border dalam (halus) dan border bawah penutup RFQ (tegas)
             $sheet->getStyle("A{$startRow}:N{$endRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E2E8F0');

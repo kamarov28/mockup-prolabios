@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -39,11 +40,11 @@ return new class extends Migration
             try {
                 $raw = (string) $post->date;
                 $normalized = str_ireplace(array_keys($indoMonths), array_values($indoMonths), $raw);
-                $carbon = \Carbon\Carbon::parse($normalized);
+                $carbon = Carbon::parse($normalized);
                 $isoDate = $carbon->format('Y-m-d');
 
                 DB::table('posts')->where('id', $post->id)->update(['date' => $isoDate]);
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // If unparseable, leave as is
             }
         }

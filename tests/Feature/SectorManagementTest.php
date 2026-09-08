@@ -21,7 +21,7 @@ class SectorManagementTest extends TestCase
         $this->admin = User::firstOrCreate(
             ['email' => 'admin@prolabios.com'],
             [
-                'name'     => 'Admin User',
+                'name' => 'Admin User',
                 'password' => Hash::make('password123'),
                 'is_admin' => true,
             ]
@@ -31,10 +31,10 @@ class SectorManagementTest extends TestCase
     public function test_public_sector_page_displays_sectors(): void
     {
         Sector::create([
-            'id'          => 'pharma',
-            'name'        => 'Pharmaceutical',
+            'id' => 'pharma',
+            'name' => 'Pharmaceutical',
             'description' => ['Paragraph 1', 'Paragraph 2'],
-            'image'       => 'https://example.com/pharma.jpg',
+            'image' => 'https://example.com/pharma.jpg',
         ]);
 
         $response = $this->get('/sektor?s=pharma');
@@ -47,14 +47,14 @@ class SectorManagementTest extends TestCase
     {
         // 1. Create
         $response = $this->actingAs($this->admin)->post(route('admin.sectors.store'), [
-            'id'          => 'biotech',
-            'name'        => 'Biotechnology',
+            'id' => 'biotech',
+            'name' => 'Biotechnology',
             'description' => "Intro to biotech\nApplications in labs",
         ]);
 
         $response->assertRedirect(route('admin.sectors'));
         $this->assertDatabaseHas('sectors', [
-            'id'   => 'biotech',
+            'id' => 'biotech',
             'name' => 'Biotechnology',
         ]);
 
@@ -64,13 +64,13 @@ class SectorManagementTest extends TestCase
 
         // 2. Update
         $updateResponse = $this->actingAs($this->admin)->put(route('admin.sectors.update', ['id' => 'biotech']), [
-            'name'        => 'Biotechnology & Genomics',
+            'name' => 'Biotechnology & Genomics',
             'description' => 'Updated description line',
         ]);
 
         $updateResponse->assertRedirect(route('admin.sectors'));
         $this->assertDatabaseHas('sectors', [
-            'id'   => 'biotech',
+            'id' => 'biotech',
             'name' => 'Biotechnology & Genomics',
         ]);
 

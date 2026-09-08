@@ -22,7 +22,7 @@ class ProductManagementTest extends TestCase
         $this->admin = User::firstOrCreate(
             ['email' => 'admin@prolabios.com'],
             [
-                'name'     => 'Admin User',
+                'name' => 'Admin User',
                 'password' => Hash::make('password123'),
                 'is_admin' => true,
             ]
@@ -30,18 +30,18 @@ class ProductManagementTest extends TestCase
 
         ProductCategory::create([
             'name' => 'Microbiology',
-            'key'  => 'microbiology',
+            'key' => 'microbiology',
         ]);
     }
 
     public function test_admin_can_view_products_index_with_pagination_and_filters(): void
     {
         Product::create([
-            'title'    => 'Culture Media Kit',
-            'catalog'  => 'CM-01',
+            'title' => 'Culture Media Kit',
+            'catalog' => 'CM-01',
             'category' => 'microbiology',
-            'price'    => 500000,
-            'stock'    => 10,
+            'price' => 500000,
+            'stock' => 10,
         ]);
 
         $response = $this->actingAs($this->admin)->get(route('admin.products', ['s' => 'Culture']));
@@ -53,17 +53,17 @@ class ProductManagementTest extends TestCase
     {
         // 1. Create
         $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
-            'title'       => 'Antimicrobial Disc Set',
-            'catalog'     => 'ADS-99',
-            'category'    => 'microbiology',
-            'price'       => 750000,
-            'stock'       => 20,
+            'title' => 'Antimicrobial Disc Set',
+            'catalog' => 'ADS-99',
+            'category' => 'microbiology',
+            'price' => 750000,
+            'stock' => 20,
             'description' => 'Detailed test description',
         ]);
 
         $response->assertRedirect(route('admin.products'));
         $this->assertDatabaseHas('products', [
-            'title'   => 'Antimicrobial Disc Set',
+            'title' => 'Antimicrobial Disc Set',
             'catalog' => 'ADS-99',
         ]);
 
@@ -72,20 +72,20 @@ class ProductManagementTest extends TestCase
 
         // 2. Update
         $updateResponse = $this->actingAs($this->admin)->put(route('admin.products.update', ['id' => $product->id]), [
-            'title'       => 'Antimicrobial Disc Set v2',
-            'catalog'     => 'ADS-100',
-            'category'    => 'microbiology',
-            'price'       => 800000,
-            'stock'       => 15,
+            'title' => 'Antimicrobial Disc Set v2',
+            'catalog' => 'ADS-100',
+            'category' => 'microbiology',
+            'price' => 800000,
+            'stock' => 15,
             'description' => 'Updated test description',
         ]);
 
         $updateResponse->assertRedirect(route('admin.products'));
         $this->assertDatabaseHas('products', [
-            'id'      => $product->id,
-            'title'   => 'Antimicrobial Disc Set v2',
+            'id' => $product->id,
+            'title' => 'Antimicrobial Disc Set v2',
             'catalog' => 'ADS-100',
-            'price'   => 800000,
+            'price' => 800000,
         ]);
 
         // 3. Delete
@@ -97,8 +97,8 @@ class ProductManagementTest extends TestCase
     public function test_admin_can_bulk_store_products(): void
     {
         $response = $this->actingAs($this->admin)->post(route('admin.products.store-bulk'), [
-            'title'    => ['Bulk Prod 1', 'Bulk Prod 2'],
-            'catalog'  => ['BP-01', 'BP-02'],
+            'title' => ['Bulk Prod 1', 'Bulk Prod 2'],
+            'catalog' => ['BP-01', 'BP-02'],
             'category' => ['microbiology', 'microbiology'],
         ]);
 

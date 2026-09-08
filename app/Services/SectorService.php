@@ -27,12 +27,12 @@ class SectorService
     public function addSector(array $sector): bool
     {
         Sector::create([
-            'id'          => $sector['id'],
-            'name'        => $sector['name'],
+            'id' => $sector['id'],
+            'name' => $sector['name'],
             'description' => is_array($sector['description'] ?? null)
                 ? $sector['description']
                 : (json_decode($sector['description'] ?? '[]', true) ?? []),
-            'image'       => $sector['image'] ?? null,
+            'image' => $sector['image'] ?? null,
         ]);
 
         Cache::forget('sectors_list_v2');
@@ -48,11 +48,11 @@ class SectorService
         }
 
         $sector->update([
-            'name'        => $updatedSector['name'],
+            'name' => $updatedSector['name'],
             'description' => is_array($updatedSector['description'] ?? null)
                 ? $updatedSector['description']
                 : (json_decode($updatedSector['description'] ?? '[]', true) ?? []),
-            'image'       => $updatedSector['image'] ?? null,
+            'image' => $updatedSector['image'] ?? null,
         ]);
 
         Cache::forget('sectors_list_v2');
@@ -81,13 +81,12 @@ class SectorService
         }
 
         return [
-            'id'          => $sector->id,
-            'name'        => $sector->name,
+            'id' => $sector->id,
+            'name' => $sector->name,
             'description' => is_array($desc) ? $desc : [],
-            'image'       => $sector->image,
-            'created_at'  => optional($sector->created_at)?->toDateTimeString(),
-            'updated_at'  => optional($sector->updated_at)?->toDateTimeString(),
+            'image' => $sector->image,
+            'created_at' => optional($sector->created_at)?->toDateTimeString(),
+            'updated_at' => optional($sector->updated_at)?->toDateTimeString(),
         ];
     }
 }
-
