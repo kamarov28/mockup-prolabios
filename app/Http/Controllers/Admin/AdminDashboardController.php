@@ -23,14 +23,14 @@ class AdminDashboardController extends Controller
     public function dashboard()
     {
         // Use COUNT/LIMIT queries instead of loading entire tables to memory
-        $productsCount = Product::count();
-        $postsCount = Post::count();
-        $sectorsCount = Sector::count();
-        $rfqsCount = Rfq::count();
+        $productsCount = Product::query()->count('*');
+        $postsCount = Post::query()->count('*');
+        $sectorsCount = Sector::query()->count('*');
+        $rfqsCount = Rfq::query()->count('*');
 
-        $recentProducts = Product::latest()->limit(5)->get()->toArray();
-        $recentPosts = Post::latest()->limit(5)->get()->toArray();
-        $recentRfqs = Rfq::with('items')->latest()->limit(5)->get();
+        $recentProducts = Product::query()->latest('created_at')->limit(5)->get(['id', 'catalog', 'title', 'category'])->toArray();
+        $recentPosts = Post::query()->latest('created_at')->limit(5)->get(['id', 'slug', 'title', 'category'])->toArray();
+        $recentRfqs = Rfq::query()->with('items')->latest('created_at')->limit(5)->get();
 
         // Category distribution via GROUP BY (single query, no PHP counting)
         $categoryRows = Product::query()
