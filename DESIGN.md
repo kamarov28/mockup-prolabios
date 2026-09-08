@@ -131,8 +131,12 @@ All shadows are **0-blur directional drop shadows** producing crisp, physical "c
 
 ## 6. Implementation Files
 
-- `resources/css/style.css` — Global entry point, vendor imports, and base tokens.
-- `resources/css/site/light-mode.css` — Core Soft Neo-Brutalism rules, variables, navbar, and components.
-- `resources/css/site/nb-layout.css` — Structural layout, scrollbar, section spacing, and page overrides.
-- `resources/css/site/00-tokens.css` — Token definitions and semantic color mappings.
-- `resources/css/admin.css` — Admin panel styling aligned with the Neo-Brutalism system.
+- `resources/css/style.css` — Global entry point for vendor libraries (Bootstrap 5 & Bootstrap Icons).
+- `resources/css/site.css` — Main site barrel importing modular stylesheets from `resources/css/site/`:
+  - `tokens.css` — Color tokens, font families, and geometry variables.
+  - `base.css` — Base HTML element styles, typography resets, and global layout.
+  - `motion.css` — 0-blur tactile button press and card micro-interactions.
+  - `components.css` — Buttons, cards, badges, navbar, and common components.
+  - `pages-core.css`, `pages-catalog.css`, `content-areas.css`, `b2b-hitech.css`, `cart-rfq.css` — Specialized page layouts.
+- `resources/css/admin.css` — Admin panel barrel importing modular stylesheets from `resources/css/admin/`:
+  - `tokens.css`, `base.css`, `layout.css`, `components.css`, `forms-tables.css`, `auth.css`.

@@ -6,7 +6,7 @@ Dokumen ini menjelaskan ekosistem pengujian otomatis (*automated testing*), inte
 
 ## 🧪 1. Menjalankan Test Suite
 
-Sistem dilengkapi dengan **38+ Feature & Unit Tests** yang mencakup pengujian regresi end-to-end:
+Sistem dilengkapi dengan **41 Feature Tests (174 assertions)** yang mencakup pengujian regresi end-to-end:
 
 ```bash
 # Menjalankan seluruh test suite
@@ -30,8 +30,10 @@ php artisan test --filter=test_rfq_submission_workflow
 | `AdminAuthTest.php` | Login admin, proteksi user non-admin, session regeneration, rate limiter login. |
 | `ProductManagementTest.php` | CRUD produk, auto-generate slug, validasi field, dan invalidasi cache. |
 | `SectorManagementTest.php` | CRUD sektor industri dan relasi multi-sektor. |
+| `SectorPivotFilterTest.php` | Filter query pivot katalog produk terhadap sektor laboratorium. |
+| `AdminProductSectorFilterTest.php` | Filter pencarian dan pagination produk per sektor di admin. |
 | `AdminRfqTest.php` | Akses view admin RFQ, pembaruan status penawaran, dan penghapusan RFQ. |
-| `SecurityHardeningTest.php` | Verifikasi header CSP, HSTS, endpoint `/health`, dan anti-XSS. |
+| `SecurityHardeningTest.php` | Verifikasi header CSP, HSTS, endpoint `/health`, rate limiting, dan anti-XSS. |
 | `ProductSlugTest.php` | Canonical slug routing & fallback ID numeric legasi. |
 
 ---

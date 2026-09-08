@@ -17,9 +17,8 @@
 
 ## Overlap / waste
 
-- `:root` tokens (accent, bg, fonts) redefined in **style** and **experimental-typo**
-- Admin has its own token set (intentional isolation)
-- Do **not** merge experimental into style in one PR — visual regression risk is high
+- `:root` tokens (accent, bg, fonts) defined in `site/tokens.css`
+- Admin has its own token set (`admin/tokens.css`, intentional isolation)
 
 ## Safe next steps (after merge + visual QA)
 

@@ -61,7 +61,7 @@ php artisan db:backup
 1. **Catalog Carting (Session)**: Buyers add products to RFQ cart (`/cart`, `CartController`).
 2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (company info, corporate email, PIC). Dispatches asynchronous jobs for receipt and admin notifications (`app/Jobs/SendRfq*Job.php`).
 3. **Operational Follow-up**: Primary workflow forwards RFQ to Sales via WhatsApp / Admin dashboard (`/admin/rfqs`).
-4. **Access Control**: RFQ success page restricted to submitting session. Product detail uses numeric IDs (`/produk/detail?id=12`).
+4. **Access Control**: RFQ success page restricted to submitting session. Product detail uses canonical slugs (`/produk/{slug}`) with numeric ID legacy fallback (`/produk/detail?id=12`).
 
 ### Security & Upload Conventions
 - **Uploads**: Handled via `storage/app/public/uploads` (accessible via `/storage/uploads/...`). SVG blocked, images re-encoded to WebP via GD.
