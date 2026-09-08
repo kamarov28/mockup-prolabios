@@ -50,13 +50,17 @@
 }
 
 /* ── Buttons Micro-motion ────────────────────────────────────────────────── */
+.nb-btn:hover,
 .nb-btn-primary:hover,
+.nb-btn-ghost:hover,
 .btn-primary:hover {
   transform: translate(2px, 2px) !important;
   box-shadow: 1px 1px 0 var(--nb-ink) !important;
 }
 
+.nb-btn:active,
 .nb-btn-primary:active,
+.nb-btn-ghost:active,
 .btn-primary:active {
   transform: translate(3px, 3px) !important;
   box-shadow: 0 0 0 var(--nb-ink) !important;
