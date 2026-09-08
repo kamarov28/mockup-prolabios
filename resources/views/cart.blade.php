@@ -2,9 +2,6 @@
 
 @section('title', 'Keranjang Pengajuan Penawaran - PT. Prolabios Mitra Analitika')
 
-@push('styles')
-@endpush
-
 @section('content')
 <section class="cart-page-bg" style="padding-top: 140px !important; padding-bottom: 80px !important;">
   <div class="container py-2">

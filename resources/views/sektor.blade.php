@@ -263,31 +263,6 @@
     </div>
   </section>
 
-  @push('styles')
-  <style>
-    #sektor-main { position: relative; }
-    #sektor-main.is-loading { pointer-events: none; }
-    #sektor-main .ajax-loading-overlay {
-      position: absolute; inset: 0; z-index: 6;
-      display: none; align-items: flex-start; justify-content: center;
-      padding-top: 80px;
-      background: rgba(249, 245, 242, 0.45);
-      backdrop-filter: blur(2px);
-      border-radius: var(--nb-radius-lg, 8px);
-    }
-    #sektor-main.is-loading .ajax-loading-overlay { display: flex; }
-    #sektor-main.is-loading > *:not(.ajax-loading-overlay) { opacity: 0.35; transition: opacity 0.15s; }
-    .ajax-spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(30, 30, 30, 0.15);
-      border-top-color: var(--nb-primary, #A6171C);
-      border-radius: 50%;
-      animation: ajax-spin 0.7s linear infinite;
-    }
-    @keyframes ajax-spin { to { transform: rotate(360deg); } }
-  </style>
-  @endpush
-
   @push('scripts')
   @include('partials.gsap-loader')
   <script>

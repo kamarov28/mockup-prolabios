@@ -120,33 +120,6 @@
 
 
 
-  @push('styles')
-  <style>
-    .ajax-loading-wrap { position: relative; min-height: 200px; }
-    .ajax-loading-wrap.is-loading { pointer-events: none; }
-    .ajax-loading-overlay {
-      position: absolute; inset: 0; z-index: 5;
-      display: none; align-items: center; justify-content: center;
-      background: rgba(249, 245, 242, 0.45);
-      backdrop-filter: blur(2px);
-      border-radius: var(--nb-radius-lg, 8px);
-    }
-    .ajax-loading-wrap.is-loading .ajax-loading-overlay { display: flex; }
-    .ajax-spinner {
-      width: 40px; height: 40px;
-      border: 3px solid rgba(30, 30, 30, 0.15);
-      border-top-color: var(--nb-primary, #A6171C);
-      border-radius: 50%;
-      animation: ajax-spin 0.7s linear infinite;
-    }
-    @keyframes ajax-spin { to { transform: rotate(360deg); } }
-    .ajax-loading-wrap.is-loading #product-container {
-      opacity: 0.35;
-      transition: opacity 0.15s ease;
-    }
-  </style>
-  @endpush
-
   @push('scripts')
   @include('partials.gsap-loader')
   <script>

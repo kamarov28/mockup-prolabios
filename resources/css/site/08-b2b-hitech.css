@@ -557,6 +557,24 @@
   background: var(--nb-bg-soft) !important;
 }
 
+.focus-section-pin .hitech-tab-panel.active > .row > .col-lg-6:first-child {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: calc(var(--bs-gutter-x) * 0.5) !important;
+  padding-right: calc(var(--bs-gutter-x) * 0.5) !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+@media (max-width: 575.98px) {
+  .focus-section-pin .hitech-info-card,
+  .focus-section-pin .hitech-spec-card {
+    padding: 1.25rem !important;
+    box-shadow: 3px 3px 0 #1E1E1E !important;
+  }
+}
+
 .focus-section-pin .hitech-spec-stat {
   border: var(--nb-border-sm) !important;
   border-radius: var(--nb-radius-sm) !important;
