@@ -357,10 +357,59 @@ function initCartPage() {
   };
 }
 
+function initHitechTabs() {
+  const tabBtns = Array.from(document.querySelectorAll('.hitech-tab-btn'));
+  const tabPanels = document.querySelectorAll('.hitech-tab-panel');
+  if (!tabBtns.length || !tabPanels.length) return;
+
+  function activateTab(tab, setFocus) {
+    if (!tab) return;
+    const target = tab.getAttribute('data-target');
+    tabBtns.forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+      b.setAttribute('tabindex', '-1');
+    });
+    tabPanels.forEach(p => p.classList.remove('active'));
+
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    tab.setAttribute('tabindex', '0');
+    if (setFocus) tab.focus();
+
+    const activePanel = document.getElementById('panel-' + target);
+    if (activePanel) activePanel.classList.add('active');
+  }
+
+  tabBtns.forEach((btn, idx) => {
+    btn.addEventListener('click', function () {
+      activateTab(this, false);
+    });
+
+    btn.addEventListener('keydown', function (e) {
+      let targetIdx = null;
+      if (e.key === 'ArrowRight') {
+        targetIdx = (idx + 1) % tabBtns.length;
+      } else if (e.key === 'ArrowLeft') {
+        targetIdx = (idx - 1 + tabBtns.length) % tabBtns.length;
+      } else if (e.key === 'Home') {
+        targetIdx = 0;
+      } else if (e.key === 'End') {
+        targetIdx = tabBtns.length - 1;
+      }
+      if (targetIdx !== null) {
+        e.preventDefault();
+        activateTab(tabBtns[targetIdx], true);
+      }
+    });
+  });
+}
+
 export function initSubpages() {
   initLayananTabs();
   initSektorAjax();
   initProductDetail();
   initBeliProduk();
   initCartPage();
+  initHitechTabs();
 }

@@ -124,24 +124,89 @@ function filterProductsByCategory(rawCategory) {
 }
 
 export function initContactForm() {
-  const form = document.querySelector('form.contact-form');
+  const form = document.getElementById('contactForm') || document.querySelector('form.contact-form');
   if (!form) return;
 
-  form.addEventListener('submit', function (event) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const subjekParam = urlParams.get('subjek');
+  if (subjekParam) {
+    const subjekSelect = document.getElementById('subjek');
+    if (subjekSelect) subjekSelect.value = subjekParam;
+  }
+
+  form.addEventListener('submit', async function (event) {
     event.preventDefault();
-    const btn = form.querySelector('button[type="submit"]');
-    if (!btn) return;
+    const success = document.getElementById('formSuccess');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (!submitBtn) return;
 
-    const originalText = btn.textContent;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Sending...';
+    const requiredFields = form.querySelectorAll('[required]');
+    let valid = true;
+    requiredFields.forEach(function (field) {
+      if (!field.value.trim()) {
+        field.style.borderColor = 'var(--nb-primary, #A6171C)';
+        valid = false;
+      } else {
+        field.style.borderColor = '';
+      }
+    });
+    if (!valid) return;
 
-    setTimeout(function () {
-      btn.disabled = false;
-      btn.textContent = originalText;
-      showToast('Pesan Anda berhasil dikirim! Tim kami akan segera menghubungi Anda.', 'success');
-      form.reset();
-    }, 1200);
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Mengirim...';
+
+    const recaptchaKey = form.dataset.recaptchaKey || '';
+    if (recaptchaKey && typeof window.grecaptcha !== 'undefined') {
+      try {
+        const recaptchaToken = await window.grecaptcha.execute(recaptchaKey, { action: 'contact_submit' });
+        const tokenInput = document.getElementById('g-recaptcha-response-contact') || form.querySelector('input[name="g-recaptcha-response"]');
+        if (tokenInput) tokenInput.value = recaptchaToken;
+      } catch (err) {
+        console.error('reCAPTCHA error:', err);
+        alert('Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        return;
+      }
+    }
+
+    const csrfInput = form.querySelector('input[name="_token"]');
+    const csrfToken = csrfInput ? csrfInput.value : '';
+    const submitUrl = form.action || '/kontak/submit';
+
+    const formData = new FormData(form);
+    fetch(submitUrl, {
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: formData
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          form.style.display = 'none';
+          if (success) {
+            success.style.display = 'block';
+            const msgEl = success.querySelector('p.profil-body-text');
+            if (msgEl && data.message) msgEl.textContent = data.message;
+            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          alert(data.message || 'Gagal mengirim pesan.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      })
+      .catch(error => {
+        console.error('Error submitting form:', error);
+        alert('Terjadi gangguan koneksi atau server. Silakan hubungi admin.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+      });
   });
 }
 

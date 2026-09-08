@@ -75,7 +75,7 @@
               </div>
             </div>
 
-            <form id="contactForm" class="contact-form" onsubmit="return handleContactForm(event)">
+            <form id="contactForm" class="contact-form" action="{{ route('contact.submit', [], false) }}" method="POST" data-recaptcha-key="{{ config('services.recaptcha.site_key') ?? '' }}">
               @csrf
               {{-- Anti-Bot Honeypot Field --}}
               <div style="display:none !important; position:absolute; left:-9999px;" aria-hidden="true">
@@ -157,86 +157,5 @@
   @if(config('services.recaptcha.site_key'))
   <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
   @endif
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-      window.handleContactForm = async function(e) {
-        e.preventDefault();
-        const form = document.getElementById('contactForm');
-        const success = document.getElementById('formSuccess');
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (!form || !success || !submitBtn) return false;
-
-        const requiredFields = form.querySelectorAll('[required]');
-        let valid = true;
-        requiredFields.forEach(function(field) {
-          if (!field.value.trim()) {
-            field.style.borderColor = 'var(--color-accent)';
-            valid = false;
-          } else {
-            field.style.borderColor = 'var(--color-border)';
-          }
-        });
-        if (!valid) return false;
-
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Mengirim...';
-
-        const csrfToken = '{{ csrf_token() }}';
-
-        @if(config('services.recaptcha.site_key'))
-        // Generate reCAPTCHA v3 token before submitting
-        let recaptchaToken = '';
-        try {
-          recaptchaToken = await grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'contact_submit'});
-          document.getElementById('g-recaptcha-response-contact').value = recaptchaToken;
-        } catch (err) {
-          console.error('reCAPTCHA error:', err);
-          alert('Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-          return false;
-        }
-        @endif
-
-        const formData = new FormData(form);
-        fetch('{{ route("contact.submit", [], false) }}', {
-          method: 'POST',
-          headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json' },
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            form.style.display = 'none';
-            success.style.display = 'block';
-            const msgEl = success.querySelector('p.profil-body-text');
-            if (msgEl) msgEl.textContent = data.message;
-            success.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          } else {
-            alert(data.message || 'Gagal mengirim pesan.');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-          }
-        })
-        .catch(error => {
-          console.error('Error submitting form:', error);
-          alert('Terjadi gangguan koneksi atau server. Silakan hubungi admin.');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
-        });
-        return false;
-      };
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const subjekParam = urlParams.get('subjek');
-      if (subjekParam) {
-        const subjekSelect = document.getElementById('subjek');
-        if (subjekSelect) subjekSelect.value = subjekParam;
-      }
-    });
-  </script>
   @endpush
 @endsection

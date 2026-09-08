@@ -22,35 +22,3 @@
 
   </div>
 </div>
-
-<script>
-  (function () {
-    const consentKey = 'prolabios_cookie_consent_v1';
-    const banner = document.getElementById('cookieConsentBanner');
-    const acceptBtn = document.getElementById('acceptCookieConsentBtn');
-
-    if (!banner || !acceptBtn) return;
-
-    if (!localStorage.getItem(consentKey)) {
-      setTimeout(function () {
-        banner.style.display = 'block';
-        banner.style.opacity = '0';
-        banner.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        banner.style.transform = 'translateY(10px)';
-        requestAnimationFrame(function () {
-          banner.style.opacity = '1';
-          banner.style.transform = 'translateY(0)';
-        });
-      }, 600);
-    }
-
-    acceptBtn.addEventListener('click', function () {
-      localStorage.setItem(consentKey, '1');
-      banner.style.opacity = '0';
-      banner.style.transform = 'translateY(10px)';
-      setTimeout(function () {
-        banner.style.display = 'none';
-      }, 300);
-    });
-  })();
-</script>
