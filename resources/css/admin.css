@@ -3,9 +3,9 @@
    Hard shadows · thick charcoal borders · warm Natural canvas · press UI
    ========================================================================== */
 
-@import './admin/00-tokens.css';
-@import './admin/01-base.css';
-@import './admin/02-layout.css';
-@import './admin/03-components.css';
-@import './admin/04-forms-tables.css';
-@import './admin/05-auth.css';
+@import './admin/tokens.css';
+@import './admin/base.css';
+@import './admin/layout.css';
+@import './admin/components.css';
+@import './admin/forms-tables.css';
+@import './admin/auth.css';

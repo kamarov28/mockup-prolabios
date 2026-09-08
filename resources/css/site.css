@@ -2,12 +2,12 @@
    site.css — Soft Neo-Brutalism Site Styling Barrel
    ========================================================================== */
 
-@import './site/00-tokens.css';
-@import './site/01-base.css';
-@import './site/02-motion.css';
-@import './site/03-components.css';
-@import './site/04-pages-core.css';
-@import './site/05-pages-catalog.css';
-@import './site/06-content-areas.css';
-@import './site/07-b2b-hitech.css';
-@import './site/08-cart-rfq.css';
+@import './site/tokens.css';
+@import './site/base.css';
+@import './site/motion.css';
+@import './site/components.css';
+@import './site/pages-core.css';
+@import './site/pages-catalog.css';
+@import './site/content-areas.css';
+@import './site/b2b-hitech.css';
+@import './site/cart-rfq.css';
