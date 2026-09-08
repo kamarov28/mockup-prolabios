@@ -103,7 +103,7 @@
                   @endif
                 </div>
 
-                <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+                <div class="card p-4 mb-4">
                   <h3 class="layanan-feature-title mb-3" style="font-size: 1.1rem !important; font-family: var(--font-display); font-weight: 700; color: var(--nb-ink); border-bottom: 2px solid rgba(30,30,30,0.1); padding-bottom: 8px;">
                     <i class="bi bi-file-earmark-text text-primary me-2"></i>Deskripsi & Spesifikasi Produk
                   </h3>

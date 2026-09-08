@@ -31,7 +31,7 @@
         <div class="col-12 col-lg-4 order-2 order-lg-1">
           @php $activeService = request()->get('s') ?? 'maintenance'; @endphp
 
-          <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+          <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title"><i class="bi bi-list-nested me-2"></i>Pilih Layanan</h3>
             <nav class="layanan-sidebar-nav d-flex flex-column gap-2">
               <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="profil-social-link {{ $activeService == 'maintenance' ? 'is-active' : '' }}" style="{{ $activeService == 'maintenance' ? 'background: var(--nb-accent) !important;' : '' }}">

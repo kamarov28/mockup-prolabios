@@ -36,7 +36,7 @@
             </div>
 
             <!-- Compact Product Header -->
-            <div class="card p-4 d-flex flex-row align-items-center gap-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div class="card p-4 d-flex flex-row align-items-center gap-4 mb-4">
               <div style="width: 100px; height: 100px; flex-shrink: 0; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); background-color: var(--nb-bg-soft); padding: 8px;">
                 <img src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $product['title'] }}" class="w-100 h-100" style="object-fit: contain;" loading="lazy" decoding="async">
               </div>
@@ -49,7 +49,7 @@
             </div>
 
             <!-- Price Box -->
-            <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div class="card p-4 mb-4">
               <span class="text-muted small d-block mb-1 fw-medium">Harga Estimasi / Penawaran per Unit:</span>
               <strong class="fs-2 d-block mb-3" style="color: var(--nb-primary); font-family: var(--font-display); font-weight: 700;">
                 {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}

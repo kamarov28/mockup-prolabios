@@ -35,7 +35,7 @@
           {{-- $activeSector is passed from PageController::sektor() --}}
 
           <!-- Sector Selector Card -->
-          <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+          <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title mb-3">
               <i class="bi bi-grid-fill me-2 text-primary"></i> Pilih Sektor Industri
             </h3>
@@ -59,10 +59,10 @@
           </div>
 
           <!-- Sidebar Card 2: B2B Consultation CTA Box -->
-          <div class="profil-cta-box p-4" style="background: var(--nb-primary, #A6171C); color: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 8px; box-shadow: 4px 4px 0 #1E1E1E;">
+          <div class="profil-cta-box p-4">
             <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">B2B CONSULTATION</span>
-            <h3 class="profil-sidebar-title" style="color: #FFFFFF !important; border-bottom-color: rgba(255,255,255,0.3) !important;">Butuh Solusi Spesifik?</h3>
-            <p style="font-size: 0.88rem; color: #FFFFFF !important; margin-bottom: 20px; line-height: 1.6;">Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
+            <h3 class="profil-sidebar-title">Butuh Solusi Spesifik?</h3>
+            <p>Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
             <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-ghost w-100 justify-content-center mb-2" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
               Konsultasi Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
             </a>
@@ -106,7 +106,7 @@
 
           @if($currentData)
             <!-- Sector Detail Card -->
-            <div class="card p-4 p-md-5 mb-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div class="card p-4 p-md-5 mb-5">
               <!-- Sector Hero Image -->
               <div class="profil-hero-img mb-4">
                 <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 440px;" loading="lazy" decoding="async">

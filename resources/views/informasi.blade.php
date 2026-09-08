@@ -39,7 +39,7 @@
         <div class="{{ $currentBlog ? 'col-lg-10 col-xl-8 mx-auto' : 'col-lg-8 col-md-7 order-1' }}">
           @if($currentBlog)
             <!-- Detail View -->
-            <div class="card p-4 p-md-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div class="card p-4 p-md-5">
               <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="nb-btn nb-btn-ghost mb-4 d-inline-flex" style="padding: 6px 14px; font-size: 0.85rem;">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Informasi
               </a>
@@ -98,7 +98,7 @@
               </div>
 
             @else
-              <div class="col-12 text-center p-5 card" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+              <div class="col-12 text-center p-5 card">
                 <i class="bi bi-newspaper" style="font-size: 2.5rem; color: var(--nb-muted); display: block; margin-bottom: 16px;"></i>
                 <h3 class="fs-5 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Belum Ada Artikel</h3>
                 <p style="color: var(--nb-muted); margin-bottom: 20px;">Tidak ada artikel untuk kategori yang Anda pilih.</p>
@@ -115,7 +115,7 @@
           <div class="col-lg-4 col-md-5 order-2">
 
             <!-- Category Filter -->
-            <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div class="card p-4 mb-4">
               <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
                 <h3 class="profil-sidebar-title mb-0 border-0 p-0"><i class="bi bi-tags me-2"></i>Kategori</h3>
                 @if($selectedCategory)

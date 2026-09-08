@@ -62,7 +62,7 @@
 
         <!-- Contact Form -->
         <div class="col-12 col-lg-8 order-1 order-lg-2">
-          <div class="card p-4 p-md-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+          <div class="card p-4 p-md-5">
             <span class="nb-badge mb-2"><i class="bi bi-envelope-paper me-1"></i> TINGGALKAN PESAN</span>
             <h2 class="profil-section-title mb-3">Kirim Pesan &amp; Pertanyaan</h2>
 

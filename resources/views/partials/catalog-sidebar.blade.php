@@ -21,7 +21,7 @@
     </form>
 
     <!-- Categories Card -->
-    <div class="card p-4 mb-4" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+    <div class="card p-4 mb-4">
       <h3 class="profil-sidebar-title mb-3">
         <i class="bi bi-grid-fill me-2 text-primary"></i> Kategori Produk
       </h3>
@@ -70,10 +70,10 @@
     </div>
 
     <!-- Sidebar Card 2: Butuh Bantuan CTA -->
-    <div class="profil-cta-box p-4" style="background: var(--nb-primary, #A6171C); color: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 8px; box-shadow: 4px 4px 0 #1E1E1E;">
+    <div class="profil-cta-box p-4">
       <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">B2B INQUIRY</span>
-      <h3 class="profil-sidebar-title" style="color: #FFFFFF !important; border-bottom-color: rgba(255,255,255,0.3) !important;">Butuh Bantuan?</h3>
-      <p style="font-size: 0.88rem; color: #FFFFFF !important; margin-bottom: 20px; line-height: 1.6;">Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.</p>
+      <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
+      <p>Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.</p>
       <a href="{{ url('/kontak') }}?subjek=inquiry" class="nb-btn nb-btn-ghost w-100 justify-content-center mb-2" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
         Tanya Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
       </a>

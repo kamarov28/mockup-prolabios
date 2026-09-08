@@ -324,14 +324,14 @@
           </div>
 
           <!-- Sidebar Card 3: Direct Consultation & RFQ CTA Box -->
-          <div class="profil-cta-box p-4" style="background: var(--nb-primary, #A6171C); color: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 8px; box-shadow: 4px 4px 0 #1E1E1E;">
+          <div class="profil-cta-box p-4">
             <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">
               B2B CONSULTATION
             </span>
-            <h3 class="profil-sidebar-title" style="color: #FFFFFF !important; border-bottom-color: rgba(255,255,255,0.3) !important;">
+            <h3 class="profil-sidebar-title">
               Butuh Penawaran atau Diskusi Teknis?
             </h3>
-            <p style="font-size: 0.88rem; color: #FFFFFF !important; margin-bottom: 20px; line-height: 1.6;">
+            <p>
               Tim representatif teknis kami siap mendampingi pemilihan instrumen, reagen, atau penerbitan surat penawaran harga resmi (Quotation) untuk institusi Anda.
             </p>
             <div class="d-flex flex-column gap-2">
