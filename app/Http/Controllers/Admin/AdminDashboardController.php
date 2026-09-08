@@ -34,7 +34,7 @@ class AdminDashboardController extends Controller
 
         // Category distribution via GROUP BY (single query, no PHP counting)
         $categoryRows = Product::query()
-            ->select('category', DB::raw('COUNT(*) as total'))
+            ->selectRaw('category, COUNT(*) as total')
             ->whereNotNull('category')
             ->where('category', '!=', '')
             ->groupBy('category')
