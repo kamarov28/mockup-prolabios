@@ -14,6 +14,7 @@ use App\Services\DataService;
 use App\Traits\ResolvesProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class RfqController extends Controller
@@ -59,7 +60,7 @@ class RfqController extends Controller
     {
         // Anti-Bot Honeypot Guard: if invisible field is populated, silently drop spam
         if ($request->filled('_hp_website')) {
-            \Illuminate\Support\Facades\Log::warning('RFQ submission bot honeypot triggered.', [
+            Log::warning('RFQ submission bot honeypot triggered.', [
                 'ip'         => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
@@ -133,7 +134,7 @@ class RfqController extends Controller
             SendRfqSubmittedEmailJob::dispatch($rfq->id);
             SendRfqCustomerReceiptEmailJob::dispatch($rfq->id);
         } catch (\Throwable $e) {
-            \Log::warning('Failed to dispatch RFQ email jobs: '.$e->getMessage());
+            Log::warning('Failed to dispatch RFQ email jobs: '.$e->getMessage());
         }
 
         return redirect()->route('rfq.success', ['number' => $rfq->rfq_number]);

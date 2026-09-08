@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class HealthController extends Controller
@@ -27,7 +28,7 @@ class HealthController extends Controller
             $status = 'unhealthy';
             $httpCode = 503;
             $details['database'] = $isLocal ? 'disconnected ('.$e->getMessage().')' : 'disconnected';
-            \Log::error('Health check DB connection failed: '.$e->getMessage());
+            Log::error('Health check DB connection failed: '.$e->getMessage());
         }
 
         // 2. Queue Backlog and Failure Checks
@@ -49,7 +50,7 @@ class HealthController extends Controller
             $details['queue'] = [
                 'status' => 'error',
             ];
-            \Log::error('Health check Queue inspect failed: '.$e->getMessage());
+            Log::error('Health check Queue inspect failed: '.$e->getMessage());
         }
 
         // 3. Cache Driver Check
@@ -59,7 +60,7 @@ class HealthController extends Controller
             $details['cache'] = $cacheOk ? 'operational' : 'degraded';
         } catch (\Throwable $e) {
             $details['cache'] = 'error';
-            \Log::error('Health check Cache ping failed: '.$e->getMessage());
+            Log::error('Health check Cache ping failed: '.$e->getMessage());
         }
 
         // 4. Storage Write Check
