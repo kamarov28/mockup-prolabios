@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
-  @vite(['resources/css/style.css', 'resources/css/experimental-typo.css'])
+  @vite(['resources/css/style.css', 'resources/css/site.css'])
 
   @stack('styles')
 

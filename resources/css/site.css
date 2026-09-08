@@ -1,5 +1,5 @@
 /* ==========================================================================
-   experimental-typo.css — Soft Neo-Brutalism Site Styling Barrel
+   site.css — Soft Neo-Brutalism Site Styling Barrel
    ========================================================================== */
 
 @import './site/00-tokens.css';
@@ -9,5 +9,5 @@
 @import './site/04-pages-core.css';
 @import './site/05-pages-catalog.css';
 @import './site/06-content-areas.css';
-@import './site/08-b2b-hitech.css';
-@import './site/09-cart-rfq.css';
+@import './site/07-b2b-hitech.css';
+@import './site/08-cart-rfq.css';

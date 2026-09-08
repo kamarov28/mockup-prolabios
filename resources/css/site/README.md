@@ -1,6 +1,6 @@
 # Site CSS modules
 
-`experimental-typo.css` is the Vite entry (barrel only).
+`site.css` is the Vite entry (barrel only).
 Edit files in this folder, then run `npm run build`.
 
 | File | Scope |
@@ -12,7 +12,7 @@ Edit files in this folder, then run `npm run build`.
 | 04-pages-core.css | Homepage, profil, layanan/sektor, kontak |
 | 05-pages-catalog.css | Produk catalog, detail produk, filtering & search |
 | 06-content-areas.css | Content layouts, marquee, callouts & empty states |
-| 08-b2b-hitech.css | B2B sector grid, hero bento & technical showcase |
-| 09-cart-rfq.css | Shopping cart, RFQ checkout & submission success |
+| 07-b2b-hitech.css | B2B sector grid, hero bento & technical showcase |
+| 08-cart-rfq.css | Shopping cart, RFQ checkout & submission success |
 
 *(Note: Admin dashboard styles are organized in `resources/css/admin/`)*

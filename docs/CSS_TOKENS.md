@@ -6,7 +6,7 @@
 |------|----------------|
 | Bootstrap 5 + Icons | Grid, utilities, icons (bundled via Vite) |
 | `resources/css/style.css` | Vendor imports |
-| `resources/css/experimental-typo.css` | Soft Neo-Brutalism modular styles (`resources/css/site/`) |
+| `resources/css/site.css` | Soft Neo-Brutalism modular styles (`resources/css/site/`) |
 
 ## Admin (`admin/layout.blade.php`)
 
@@ -24,5 +24,4 @@
 ## Safe next steps (after merge + visual QA)
 
 1. Single `:root` block as source of truth for public
-2. Rename `experimental-typo.css` → `site-editorial.css` when stable
-3. Trim duplicate `!important` only where specificity allows
+2. Trim duplicate `!important` only where specificity allows
