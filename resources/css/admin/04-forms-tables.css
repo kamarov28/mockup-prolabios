@@ -130,13 +130,48 @@
   color: var(--color-text-main) !important;
 }
 
-.input-group-text {
+/* ── Input Group Styling (Soft Neo-Brutalism) ── */
+.input-group {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch !important;
+  box-shadow: 2px 2px 0 #1E1E1E !important;
+  border-radius: 4px !important;
+  transition: box-shadow 0.15s ease !important;
+}
+.input-group > .input-group-text {
   background: #EDE8E0 !important;
   border: 2px solid #1E1E1E !important;
+  border-right: none !important;
   color: var(--color-text-main) !important;
-  border-radius: 4px;
-  font-weight: 600;
+  border-radius: 4px 0 0 4px !important;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease !important;
 }
+.input-group > .form-control,
+.input-group > .admin-form-control {
+  width: 1% !important;
+  flex: 1 1 auto !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  box-shadow: none !important;
+}
+.input-group:focus-within {
+  box-shadow: 3px 3px 0 var(--color-accent) !important;
+}
+.input-group:focus-within > .input-group-text {
+  border-color: var(--color-accent) !important;
+}
+.input-group:focus-within > .form-control,
+.input-group:focus-within > .admin-form-control {
+  border-color: var(--color-accent) !important;
+}
+
 select.form-select option {
   background: #FFFFFF;
   color: var(--color-text-main);

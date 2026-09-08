@@ -71,7 +71,7 @@
           <div class="admin-form-group mb-0">
             <label for="price" class="admin-form-label">Harga Produk (Rp)</label>
             <div class="input-group">
-              <span class="input-group-text" style="background: var(--color-surface-2, #EDE8E0); border: 2px solid var(--color-border); border-right: none; font-weight: 700; font-size: 0.85rem;">Rp</span>
+              <span class="input-group-text">Rp</span>
               <input type="text" inputmode="numeric" class="form-control" id="price" name="price" value="{{ old('price') !== null ? number_format((float) str_replace(['.', ' '], '', old('price')), 0, ',', '.') : (!empty($product['price']) ? number_format((float) $product['price'], 0, ',', '.') : '') }}" placeholder="Contoh: 1.500.000">
             </div>
           </div>
