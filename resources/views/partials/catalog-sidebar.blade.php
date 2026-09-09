@@ -71,13 +71,13 @@
 
     <!-- Sidebar Card 2: Butuh Bantuan CTA -->
     <div class="profil-cta-box p-4">
-      <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">B2B INQUIRY</span>
+      <span class="nb-badge mb-3">B2B INQUIRY</span>
       <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
       <p>Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.</p>
-      <a href="{{ url('/kontak') }}?subjek=inquiry" class="nb-btn nb-btn-ghost w-100 justify-content-center mb-2" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
+      <a href="{{ url('/kontak') }}?subjek=inquiry" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">
         Tanya Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
       </a>
-      <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="background: #FFFFFF; color: #1E1E1E !important; font-size: 0.82rem;">
+      <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem;">
         <i class="bi bi-download me-1"></i> Unduh Katalog PDF
       </a>
     </div>

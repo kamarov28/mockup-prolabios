@@ -262,27 +262,32 @@
 }
 
 .profil-trust-box {
-  background: var(--nb-bg-soft, #FEFEFE);
+  background: var(--nb-card, #FFFFFF);
   border: 2px solid var(--nb-ink, #1E1E1E);
+  border-top: 5px solid var(--nb-primary, #A6171C);
   border-radius: var(--nb-radius-lg, 8px);
   box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
   padding: 1.75rem;
 }
+.profil-trust-box p {
+  color: #374151;
+}
 
 .profil-cta-box {
-  background: var(--nb-primary, #A6171C);
-  color: #FFFFFF;
-  border: 2px solid #1E1E1E;
+  background: var(--nb-card, #FFFFFF);
+  color: var(--nb-ink, #1E1E1E);
+  border: 2px solid var(--nb-ink, #1E1E1E);
+  border-top: 5px solid var(--nb-primary, #A6171C);
   border-radius: var(--nb-radius-lg, 8px);
   box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
 }
 .profil-cta-box .profil-sidebar-title {
-  color: #FFFFFF;
-  border-bottom-color: rgba(255, 255, 255, 0.3);
+  color: var(--nb-ink, #1E1E1E);
+  border-bottom: 2px solid var(--nb-ink, #1E1E1E);
 }
 .profil-cta-box p {
   font-size: 0.88rem;
-  color: #FFFFFF;
+  color: #374151;
   margin-bottom: 20px;
   line-height: 1.6;
 }

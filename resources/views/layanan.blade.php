@@ -48,7 +48,7 @@
 
           <div class="profil-trust-box d-none d-md-block">
             <h3 class="profil-sidebar-title"><i class="bi bi-headset me-2"></i>Hubungi Tim Teknis</h3>
-            <p style="font-size: 0.88rem; color: var(--nb-muted); margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan servis rutin, instalasi baru, atau konsultasi instrumen bersama konsultan kami.</p>
+            <p style="font-size: 0.88rem; color: #374151; margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan servis rutin, instalasi baru, atau konsultasi instrumen bersama konsultan kami.</p>
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary d-flex justify-content-center mb-3">
               Formulir Kontak <i class="bi bi-arrow-right ms-2"></i>
             </a>
@@ -188,7 +188,7 @@
           <!-- Mobile-only CTA Box -->
           <div class="profil-trust-box d-md-none mt-5">
             <h3 class="profil-sidebar-title"><i class="bi bi-headset me-2"></i>Hubungi Kami</h3>
-            <p style="font-size: 0.88rem; color: var(--nb-muted); margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan perbaikan atau konsultasi instrumen melalui saluran kontak resmi kami.</p>
+            <p style="font-size: 0.88rem; color: #374151; margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan perbaikan atau konsultasi instrumen melalui saluran kontak resmi kami.</p>
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center mb-3">
               Formulir Kontak <i class="bi bi-arrow-right ms-2"></i>
             </a>

@@ -325,7 +325,7 @@
 
           <!-- Sidebar Card 3: Direct Consultation & RFQ CTA Box -->
           <div class="profil-cta-box p-4">
-            <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">
+            <span class="nb-badge mb-3">
               B2B CONSULTATION
             </span>
             <h3 class="profil-sidebar-title">
@@ -335,10 +335,10 @@
               Tim representatif teknis kami siap mendampingi pemilihan instrumen, reagen, atau penerbitan surat penawaran harga resmi (Quotation) untuk institusi Anda.
             </p>
             <div class="d-flex flex-column gap-2">
-              <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
+              <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center">
                 Hubungi Kami <i class="bi bi-arrow-right ms-1"></i>
               </a>
-              <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="background: #FFFFFF; color: #1E1E1E !important;">
+              <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center">
                 <i class="bi bi-box-seam me-1"></i> Lihat Katalog Produk
               </a>
             </div>

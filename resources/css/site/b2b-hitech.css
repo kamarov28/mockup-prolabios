@@ -349,7 +349,7 @@
 .b2b-usecase-desc {
   font-family: var(--font-body);
   font-size: 0.88rem;
-  color: var(--nb-muted);
+  color: #374151;
   line-height: 1.6;
   margin-bottom: 20px;
   flex-grow: 1;
@@ -451,7 +451,7 @@
 .hitech-bento-desc {
   font-family: var(--font-body);
   font-size: 0.88rem;
-  color: var(--nb-muted);
+  color: #374151;
   line-height: 1.65;
   margin: 0;
 }
@@ -631,7 +631,7 @@
 .hitech-panel-desc {
   font-family: var(--font-body);
   font-size: 0.92rem;
-  color: var(--nb-muted);
+  color: #374151;
   line-height: 1.7;
 }
 
@@ -696,7 +696,7 @@
 
 .nb-rfq-sub {
   font-family: var(--font-body);
-  color: var(--nb-muted);
+  color: #374151;
   font-size: 1.05rem;
   line-height: 1.65;
   max-width: 36em;

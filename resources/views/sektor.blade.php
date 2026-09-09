@@ -60,13 +60,13 @@
 
           <!-- Sidebar Card 2: B2B Consultation CTA Box -->
           <div class="profil-cta-box p-4">
-            <span class="nb-badge mb-3" style="background: var(--nb-accent, #F1C045); color: #FFFFFF;">B2B CONSULTATION</span>
+            <span class="nb-badge mb-3">B2B CONSULTATION</span>
             <h3 class="profil-sidebar-title">Butuh Solusi Spesifik?</h3>
             <p>Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-ghost w-100 justify-content-center mb-2" style="background: var(--nb-accent, #F1C045); color: #1E1E1E !important;">
+            <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">
               Konsultasi Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
             </a>
-            <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="background: #FFFFFF; color: #1E1E1E !important; font-size: 0.82rem;">
+            <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem;">
               <i class="bi bi-box-seam me-1"></i> Jelajahi Seluruh Katalog
             </a>
           </div>
