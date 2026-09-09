@@ -66,16 +66,16 @@
 
 .product-cat-code,
 .catalogue-no {
-  display: inline-block !important;
-  background: var(--nb-accent) !important;
-  color: var(--nb-ink) !important;
-  border: var(--nb-border-sm) !important;
-  border-radius: var(--nb-radius-sm) !important;
-  padding: 3px 8px !important;
-  font-size: 0.7rem !important;
-  font-weight: 700 !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
-  font-family: var(--font-mono) !important;
+  display: inline-block;
+  background: var(--nb-accent);
+  color: var(--nb-ink);
+  border: var(--nb-border-sm);
+  border-radius: var(--nb-radius-sm);
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  font-family: var(--font-mono);
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
@@ -269,8 +269,8 @@
 .nb-stepper-btn {
   width: 44px;
   height: 100%;
-  background: var(--nb-accent) !important;
-  color: var(--nb-ink) !important;
+  background: var(--nb-accent);
+  color: var(--nb-ink);
   border: none;
   border-right: 2px solid var(--nb-ink);
   display: inline-flex;
@@ -285,7 +285,7 @@
   border-right: none;
   border-left: 2px solid var(--nb-ink);
 }
-.nb-stepper-btn:hover { background: #e5b338 !important; }
+.nb-stepper-btn:hover { background: #e5b338; }
 
 .nb-stepper-input {
   width: 58px;
@@ -326,46 +326,46 @@ input[type=number].hide-spinner {
 .b2b-qty-pill {
   display: inline-flex;
   align-items: center;
-  background: var(--nb-card) !important;
-  border: var(--nb-border) !important;
-  border-radius: var(--nb-radius-sm) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
   height: 38px;
   overflow: hidden;
 }
 .b2b-qty-btn {
-  width: 34px !important;
-  height: 100% !important;
-  background: var(--nb-accent) !important;
-  color: var(--nb-ink) !important;
-  border: none !important;
-  border-right: 2px solid var(--nb-ink) !important;
-  font-weight: 700 !important;
+  width: 34px;
+  height: 100%;
+  background: var(--nb-accent);
+  color: var(--nb-ink);
+  border: none;
+  border-right: 2px solid var(--nb-ink);
+  font-weight: 700;
   font-size: 0.95rem;
-  display: inline-flex !important;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 0 !important;
+  border-radius: 0;
 }
 .b2b-qty-btn:last-child {
-  border-right: none !important;
-  border-left: 2px solid var(--nb-ink) !important;
+  border-right: none;
+  border-left: 2px solid var(--nb-ink);
 }
-.b2b-qty-btn:hover { background: #e5b338 !important; }
+.b2b-qty-btn:hover { background: #e5b338; }
 .b2b-qty-input {
-  width: 46px !important;
-  height: 100% !important;
-  border: none !important;
-  background: transparent !important;
+  width: 46px;
+  height: 100%;
+  border: none;
+  background: transparent;
   text-align: center;
-  font-family: var(--font-mono) !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  color: var(--nb-ink) !important;
-  padding: 0 !important;
-  outline: none !important;
-  box-shadow: none !important;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--nb-ink);
+  padding: 0;
+  outline: none;
+  box-shadow: none;
 }
 
 /* ── Form Inputs & Validation ────────────────────────────────────────────── */
