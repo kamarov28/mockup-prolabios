@@ -137,9 +137,9 @@
                   </div>
 
                   {{-- B2B Technical Datasheet & Specification Link --}}
-                  <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3" style="background: var(--nb-bg-soft); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                  <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3 rfq-details-box">
                     <div class="d-flex align-items-center gap-3">
-                      <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 44px; height: 44px; background: #FFFFFF; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                      <div class="d-flex align-items-center justify-content-center flex-shrink-0 rfq-trust-box" style="width: 44px; height: 44px;">
                         <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.4rem;"></i>
                       </div>
                       <div>

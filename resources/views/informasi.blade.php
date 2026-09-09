@@ -137,7 +137,7 @@
               @if(count($recentPosts) > 0)
                 <div class="d-flex flex-column gap-3">
                   @foreach($recentPosts as $index => $rPost)
-                    <div class="p-3" style="background: var(--nb-card); border: 1.5px solid #1E1E1E; border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 #1E1E1E;">
+                    <div class="p-3 rfq-trust-box">
                       <div class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.72rem; color: var(--nb-muted); font-family: var(--font-mono); font-weight: 600;">
                         <i class="bi bi-calendar3"></i> {{ $rPost['date'] }}
                       </div>
