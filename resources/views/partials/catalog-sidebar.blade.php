@@ -45,15 +45,17 @@
             </a>
 
             <!-- Subcategories container -->
-            <div id="sub-group-{{ $catKey }}" class="sub-category-group ps-2 mb-2 {{ ($activeCategory ?? '') === $catKey ? '' : 'd-none' }}" style="max-height: 350px; overflow-y: auto;">
+            <div id="sub-group-{{ $catKey }}" class="sub-category-group {{ ($activeCategory ?? '') === $catKey ? '' : 'd-none' }}">
               <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory=all#catalog-section"
                  class="sub-category-link {{ ($activeCategory ?? '') === $catKey && (!($activeSubCategory ?? null) || $activeSubCategory === 'all') ? 'is-active' : '' }}">
-                Semua {{ $catData['name'] }}
+                <span>Semua {{ $catData['name'] }}</span>
+                <i class="bi bi-arrow-right-short sub-category-icon"></i>
               </a>
               @foreach($catData['subs'] as $subKey => $subName)
                 <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory={{ $subKey }}#catalog-section"
                    class="sub-category-link {{ ($activeCategory ?? '') === $catKey && ($activeSubCategory ?? '') === $subKey ? 'is-active' : '' }}">
-                  {{ $subName }}
+                  <span>{{ $subName }}</span>
+                  <i class="bi bi-arrow-right-short sub-category-icon"></i>
                 </a>
               @endforeach
             </div>
