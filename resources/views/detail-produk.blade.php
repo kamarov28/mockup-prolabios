@@ -26,6 +26,12 @@
       ]))
     : 'prolabios, alat laboratorium';
   $seoCanonical = $product ? product_url($product) : url('/produk');
+  $productSlug = $product
+    ? (is_array($product) ? ($product['slug'] ?? null) : ($product->slug ?? null))
+    : null;
+  $beliUrl = $productSlug
+    ? route('produk.beli', ['slug' => $productSlug])
+    : url('/produk');
 @endphp
 
 @section('title', $seoTitle)
@@ -57,6 +63,8 @@
               $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
               $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
+              $stock = (int) ($product['stock'] ?? 0);
+              $price = (float) ($product['price'] ?? 0);
             @endphp
 
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
@@ -164,64 +172,30 @@
                   </div>
                 </div>
 
-                @php
-                  $stock = (int) ($product['stock'] ?? 0);
-                  $price = (float) ($product['price'] ?? 0);
-                @endphp
-
-                <!-- RFQ Procurement & Direct Add-to-Cart Card -->
+                {{-- Summary + CTA ke page beli (form qty dipisah) --}}
                 <div class="card p-4 mb-4">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom detail-spec-divider">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                     <div>
-                      <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit / Penawaran Resmi:</span>
+                      <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit:</span>
                       <strong class="fs-4 d-block detail-price">
                         {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
                       </strong>
-                    </div>
-                    <div>
-                      @if($stock > 0)
-                        <span class="nb-badge-stock">
-                          <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
-                        </span>
-                      @else
-                        <span class="nb-badge-stock nb-badge-stock--empty">
-                          <i class="bi bi-clock-history me-1"></i> Pesanan Khusus (Indent)
-                        </span>
-                      @endif
-                    </div>
-                  </div>
-
-                  <!-- Direct Add to Cart Form -->
-                  <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form" class="mb-1">
-                    @csrf
-                    <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
-                    <input type="hidden" name="title" value="{{ $product['title'] }}">
-
-                    <div class="d-flex flex-wrap align-items-end gap-3">
-                      <div>
-                        <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label">Jumlah Unit</label>
-                        <div class="nb-stepper-wrap">
-                          <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
-                            <i class="bi bi-dash-lg"></i>
-                          </button>
-                          <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
-                          <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
-                            <i class="bi bi-plus-lg"></i>
-                          </button>
-                        </div>
+                      <div class="mt-2">
+                        @if($stock > 0)
+                          <span class="nb-badge-stock">
+                            <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
+                          </span>
+                        @else
+                          <span class="nb-badge-stock nb-badge-stock--empty">
+                            <i class="bi bi-clock-history me-1"></i> Pesanan Khusus (Indent)
+                          </span>
+                        @endif
                       </div>
-
-                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
-                        <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang Penawaran
-                      </button>
                     </div>
-
-                    <!-- Live Indent Notice -->
-                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
-                      <i class="bi bi-info-circle-fill me-1"></i>
-                      Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
-                    </div>
-                  </form>
+                    <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-add-btn text-decoration-none" aria-label="Minta penawaran {{ $product['title'] }}">
+                      <i class="bi bi-cart-plus me-2"></i> Minta Penawaran
+                    </a>
+                  </div>
                 </div>
 
                 {{-- B2B Trust Badge & SLA Response Commitment --}}
@@ -236,8 +210,8 @@
                 </div>
 
                 <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ route('cart.index') }}" class="nb-btn detail-nav-btn detail-nav-btn--cart text-decoration-none">
-                    <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
+                  <a href="{{ $beliUrl }}" class="nb-btn detail-nav-btn detail-nav-btn--cart text-decoration-none">
+                    <i class="bi bi-cart-plus me-2"></i> Lanjut ke Form Penawaran
                   </a>
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
