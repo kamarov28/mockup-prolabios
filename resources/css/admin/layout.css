@@ -110,7 +110,7 @@
 }
 .sidebar-link i {
   font-size: 1.15rem;
-  color: var(--color-border-subtle);
+  color: var(--color-text-muted);
   transition: color 0.12s ease;
 }
 .sidebar-link:hover {
