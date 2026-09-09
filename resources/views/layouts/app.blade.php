@@ -28,23 +28,40 @@
   @stack('styles')
 
   <!-- Page Preloads -->
-  @stack('head')
+  <link rel="preload" as="image" href="{{ asset('images/hero-placeholder.webp') }}" type="image/webp">
 
-  <!-- Open Graph / Twitter -->
-  <meta property="og:type" content="@yield('og_type', 'website')">
-  <meta property="og:title" content="@yield('og_title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')">
-  <meta property="og:description" content="@yield('og_description', $siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.')">
-  <meta property="og:url" content="@yield('canonical', request()->url())">
-  <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+  <!-- Open Graph Defaults -->
+  <meta property="og:locale" content="id_ID">
   <meta property="og:site_name" content="{{ $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika' }}">
+  <meta property="og:type" content="@yield('og_type', 'website')">
+  <meta property="og:title" content="@yield('og_title', trim($__env->yieldContent('title')) ?: ($siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika'))">
+  <meta property="og:description" content="@yield('og_description', trim($__env->yieldContent('meta_description')) ?: ($siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.'))">
+  <meta property="og:url" content="@yield('canonical', request()->url())">
+  <meta property="og:image" content="@yield('og_image', !empty($siteSettings['og_image']) ? $siteSettings['og_image'] : asset('images/og-default.jpg'))">
+
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="@yield('og_title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')">
-  <meta name="twitter:description" content="@yield('og_description', $siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.')">
-  <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+  <meta name="twitter:title" content="@yield('og_title', trim($__env->yieldContent('title')) ?: ($siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika'))">
+  <meta name="twitter:description" content="@yield('og_description', trim($__env->yieldContent('meta_description')) ?: ($siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.'))">
+  <meta name="twitter:image" content="@yield('og_image', !empty($siteSettings['og_image']) ? $siteSettings['og_image'] : asset('images/og-default.jpg'))">
 
   @stack('meta')
+
+  @php
+    $gaId = $siteSettings['google_analytics_id'] ?? null;
+  @endphp
+  @if(!empty($gaId))
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ $gaId }}');
+    </script>
+  @endif
 </head>
 <body class="@yield('body_class')">
+  <a class="visually-hidden-focusable" href="#main-content">Lewati ke konten utama</a>
+
   @include('layouts.partials.navbar')
 
   <main id="main-content">
@@ -56,6 +73,43 @@
   @include('layouts.partials.cookie-consent')
 
   @vite(['resources/js/app.js'])
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Close mobile navbar on link click
+      var mainNavbar = document.getElementById('mainNavbar');
+      if (mainNavbar) {
+        mainNavbar.querySelectorAll('.nav-link, .dropdown-item').forEach(function (link) {
+          link.addEventListener('click', function () {
+            if (window.innerWidth < 992 && mainNavbar.classList.contains('show')) {
+              var bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
+              bsCollapse.hide();
+            }
+          });
+        });
+      }
+    });
+
+    // Flash toasts via SweetAlert2 if available
+    @if(session('success') || session('error') || session('warning') || session('info'))
+      document.addEventListener('DOMContentLoaded', function () {
+        if (typeof Swal === 'undefined') return;
+        @if(session('success'))
+          Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: @json(session('success')), showConfirmButton: false, timer: 3500, timerProgressBar: true });
+        @endif
+        @if(session('error'))
+          Swal.fire({ toast: true, position: 'top-end', icon: 'error', title: @json(session('error')), showConfirmButton: false, timer: 4500, timerProgressBar: true });
+        @endif
+        @if(session('warning'))
+          Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: @json(session('warning')), showConfirmButton: false, timer: 4000, timerProgressBar: true });
+        @endif
+        @if(session('info'))
+          Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: @json(session('info')), showConfirmButton: false, timer: 3500, timerProgressBar: true });
+        @endif
+      });
+    @endif
+  </script>
+
   @stack('scripts')
 </body>
 </html>
