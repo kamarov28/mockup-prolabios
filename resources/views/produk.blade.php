@@ -127,10 +127,4 @@
       </div>
     </div>
   </section>
-
-
-
-  @push('scripts')
-  @include('partials.gsap-loader')
-  @endpush
 @endsection

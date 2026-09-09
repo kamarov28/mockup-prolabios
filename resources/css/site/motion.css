@@ -268,10 +268,118 @@
   box-shadow: 0 0 0 var(--nb-ink);
 }
 
+/* ── High-Performance Hero Entrance Physics (CSS-Powered) ───────────────── */
+@keyframes nb-hero-slide-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes nb-hero-badge-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes nb-hero-text-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nb-hero-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nb-hero-actions-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nb-controls-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nb-hero--immersive .nb-hero-backdrop .nb-hero-slide.is-active {
+  animation: nb-hero-slide-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.nb-hero--immersive .nb-badge {
+  animation: nb-hero-badge-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.nb-hero--immersive .nb-hero-title {
+  animation: nb-hero-text-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+.nb-hero--immersive .nb-hero-lead {
+  animation: nb-hero-fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.nb-hero--immersive .nb-hero-actions {
+  animation: nb-hero-actions-in 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+.nb-hero-controls--immersive {
+  animation: nb-controls-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+}
+
+/* ── Editorial Subpage Entrance Animations ───────────────────────────────── */
+@keyframes nb-page-header-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.editorial-page-header {
+  animation: nb-page-header-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
 /* ── Scroll Entrance Animations ─────────────────────────────────────────── */
 .animate-on-scroll {
   opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .animate-slide-up { transform: translateY(24px); }
 .animate-slide-down { transform: translateY(-24px); }
@@ -283,11 +391,11 @@
   opacity: 1;
   transform: translate(0, 0) scale(1);
 }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-.delay-300 { transition-delay: 300ms; }
-.delay-400 { transition-delay: 400ms; }
-.delay-500 { transition-delay: 500ms; }
+.delay-100, .stagger-1 { transition-delay: 80ms; }
+.delay-200, .stagger-2 { transition-delay: 160ms; }
+.delay-300, .stagger-3 { transition-delay: 240ms; }
+.delay-400, .stagger-4 { transition-delay: 320ms; }
+.delay-500, .stagger-5 { transition-delay: 400ms; }
 
 /* ── Accessibility: Reduced Motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

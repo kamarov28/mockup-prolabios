@@ -373,7 +373,3 @@
   </section>
 @endsection
 
-@push('scripts')
-  @include('partials.gsap-loader')
-@endpush
-

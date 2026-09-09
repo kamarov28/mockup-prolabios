@@ -51,68 +51,36 @@ export function initHeroBgSlideshow() {
   let autoTimer = null;
   let isPaused = false;
 
-  function getGsap() {
-    return !prefersReduced && !motionOff && typeof window !== 'undefined' && window.gsap
-      ? window.gsap
-      : null;
-  }
-
   function goTo(next) {
     if (next === current) return;
     const outSlide = slides[current];
     const inSlide = slides[next];
-    const g = getGsap();
 
     let dir = next > current ? 1 : -1;
     if (current === slides.length - 1 && next === 0) dir = 1;
     if (current === 0 && next === slides.length - 1) dir = -1;
 
-    if (g) {
-      g.killTweensOf([outSlide, inSlide]);
+    // Snappy Neo-Brutalist mechanical push transition
+    outSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
+    inSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
 
-      g.set(inSlide, { opacity: 1, xPercent: dir * 100, zIndex: 3 });
-      g.set(outSlide, { zIndex: 2 });
+    inSlide.style.zIndex = '3';
+    outSlide.style.zIndex = '2';
 
-      // Hard mechanical push (Neo-Brutalist snappy horizontal slide)
-      g.to(outSlide, {
-        xPercent: -dir * 30,
-        opacity: 0.4,
-        duration: 0.55,
-        ease: 'power3.inOut',
-        onComplete: function () {
-          g.set(outSlide, { zIndex: 1, opacity: 0, xPercent: 0 });
-        },
-      });
+    inSlide.style.transform = `translateX(${dir * 100}%)`;
+    inSlide.style.opacity = '1';
+    void inSlide.offsetWidth; // force reflow
 
-      g.to(inSlide, {
-        xPercent: 0,
-        opacity: 1,
-        duration: 0.55,
-        ease: 'power3.inOut',
-      });
-    } else {
-      // Native CSS fallback: Mechanical sliding classes
-      outSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
-      inSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
+    inSlide.style.transform = 'translateX(0%)';
+    outSlide.style.transform = `translateX(${-dir * 30}%)`;
+    outSlide.style.opacity = '0';
 
-      inSlide.style.zIndex = '3';
-      outSlide.style.zIndex = '2';
-
-      inSlide.style.transform = `translateX(${dir * 100}%)`;
-      inSlide.style.opacity = '1';
-      void inSlide.offsetWidth; // force reflow
-
-      inSlide.style.transform = 'translateX(0%)';
-      outSlide.style.transform = `translateX(${-dir * 30}%)`;
-      outSlide.style.opacity = '0';
-
-      setTimeout(() => {
-        outSlide.style.zIndex = '1';
-        outSlide.style.transform = '';
-        outSlide.style.transition = '';
-        inSlide.style.transition = '';
-      }, 550);
-    }
+    setTimeout(() => {
+      outSlide.style.zIndex = '1';
+      outSlide.style.transform = '';
+      outSlide.style.transition = '';
+      inSlide.style.transition = '';
+    }, 550);
 
     slides[current].classList.remove('active', 'is-active');
     slides[next].classList.add(ACTIVE);
