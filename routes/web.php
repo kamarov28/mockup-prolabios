@@ -27,7 +27,12 @@ Route::get('/profil', [PageController::class, 'profil']);
 Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
 
 Route::get('/produk/detail', [PageController::class, 'detailProdukLegacy'])->name('produk.detail.legacy');
-Route::get('/produk/beli', [PageController::class, 'beliProduk'])->name('produk.beli');
+Route::get('/produk/beli', [PageController::class, 'beliProdukLegacy'])->name('produk.beli.legacy');
+
+// Buy page must be registered before /produk/{slug}
+Route::get('/produk/{slug}/beli', [PageController::class, 'beliProduk'])
+    ->where('slug', '[A-Za-z0-9\-]+')
+    ->name('produk.beli');
 
 Route::get('/produk/{slug}', [PageController::class, 'detailProduk'])
     ->where('slug', '[A-Za-z0-9\-]+')
