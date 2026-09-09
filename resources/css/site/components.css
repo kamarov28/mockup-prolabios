@@ -77,6 +77,12 @@
   box-shadow: 2px 2px 0 var(--nb-ink);
   font-family: var(--font-mono);
 }
+.product-cat-code.is-copyable {
+  cursor: pointer;
+}
+.product-cat-code.is-copied {
+  border-color: var(--nb-success, #16A34A);
+}
 
 .nb-status-icon-box {
   width: 64px;
@@ -536,7 +542,8 @@ input[type=number].hide-spinner {
   padding-top: 80px;
 }
 .ajax-loading-wrap.is-loading .ajax-loading-overlay,
-#sektor-main.is-loading .ajax-loading-overlay {
+#sektor-main.is-loading .ajax-loading-overlay,
+.ajax-loading-overlay.is-visible {
   display: flex;
 }
 .ajax-loading-wrap.is-loading #product-container,
@@ -556,3 +563,79 @@ input[type=number].hide-spinner {
 @keyframes ajax-spin {
   to { transform: rotate(360deg); }
 }
+
+/* ── State Utilities (class-based JS toggles) ─────────────────────────────── */
+.is-hidden {
+  display: none !important;
+}
+
+.nav-cart-badge.is-hidden {
+  display: none !important;
+}
+.nav-cart-badge.is-bump {
+  transform: scale(1.4);
+  transition: transform 0.2s ease;
+}
+
+.cart-item-card.is-removing {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+#formSuccess.is-hidden {
+  display: none !important;
+}
+#formSuccess.is-visible {
+  display: block !important;
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--nb-bg-soft);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow);
+}
+
+/* Fallback toast (when SweetAlert is unavailable) */
+.nb-toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 100000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.nb-toast-item {
+  background: #FFFFFF;
+  color: var(--nb-ink);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  padding: 12px 18px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  box-shadow: var(--nb-shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+.nb-toast-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.nb-toast-item.is-leaving {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+.nb-toast-icon {
+  font-size: 1.15rem;
+}
+.nb-toast-icon--success { color: #137333; }
+.nb-toast-icon--warning { color: var(--nb-primary); }
+.nb-toast-text { font-weight: 600; }
