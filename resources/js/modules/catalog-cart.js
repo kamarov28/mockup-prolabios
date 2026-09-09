@@ -152,7 +152,7 @@ export function initAjaxAddToCart() {
     const formData = new FormData(form);
 
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Adding...';
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menambahkan...';
 
     fetch(form.action, {
       method: 'POST',
@@ -168,17 +168,16 @@ export function initAjaxAddToCart() {
         if (data.success) {
           setCartBadgeCount(data.cartCount);
 
-          submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1 text-success"></i> Added to RFQ';
-          submitBtn.classList.remove('btn-outline-danger');
-          submitBtn.classList.add('btn-success');
+          // Success state: green surface + white icon (no green-on-ruby clash)
+          submitBtn.classList.add('is-success');
+          submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Ditambahkan ke RFQ';
 
-          showToast(data.message || 'Added to RFQ Cart!');
+          showToast(data.message || 'Ditambahkan ke keranjang penawaran!');
 
           setTimeout(function () {
             submitBtn.disabled = false;
+            submitBtn.classList.remove('is-success');
             submitBtn.innerHTML = originalBtnHtml;
-            submitBtn.classList.remove('btn-success');
-            submitBtn.classList.add('btn-outline-danger');
           }, 2000);
         } else {
           showToast(data.message || 'Gagal menambahkan produk.', 'warning');
