@@ -194,17 +194,12 @@
     -webkit-backdrop-filter: none !important;
     filter: none !important;
   }
-  .navbar-collapse.collapsing,
-  .navbar-collapse.collapsing *,
+  .navbar-collapse-inner,
   .navbar-collapse.collapsing .navbar-collapse-inner,
-  .navbar-collapse.show .navbar-collapse-inner,
-  .navbar-collapse .navbar-collapse-inner {
+  .navbar-collapse.show .navbar-collapse-inner {
     opacity: 1 !important;
     transition: none !important;
     filter: none !important;
-  }
-  .navbar-collapse.collapsing {
-    transition: height 0.3s ease !important;
   }
 }
 
