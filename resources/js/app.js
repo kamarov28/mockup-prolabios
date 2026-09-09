@@ -11,7 +11,7 @@ window.Swal = Swal;
 import { initNavigation } from './modules/navigation.js';
 import { initSearchModal } from './modules/search-modal.js';
 import { initHeroSlideshow } from './modules/hero-slideshow.js';
-import { initAnimations, initGSAPAnimations, revealHeroStatic } from './modules/animations.js';
+import { initAnimations, initScrollAnimations, initGSAPAnimations } from './modules/animations.js';
 import { initCatalogCart } from './modules/catalog-cart.js';
 import { initBacteriaSwarm } from './modules/bacteria-swarm.js';
 import { initSubpages } from './modules/subpages.js';
@@ -42,6 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// Expose key global window helpers required by Blade views
+// Expose key global window helpers required by Blade views and dynamic components
+window.initScrollAnimations = initScrollAnimations;
 window.initGSAPAnimations = initGSAPAnimations;
-window.revealHeroStatic = revealHeroStatic;

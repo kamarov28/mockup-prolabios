@@ -27,8 +27,8 @@ function initLayananTabs() {
       }
       history.pushState(null, '', window.location.pathname + '?s=' + serviceKey);
 
-      if (typeof window.initGSAPAnimations === 'function') {
-        window.initGSAPAnimations();
+      if (typeof window.initScrollAnimations === 'function') {
+        window.initScrollAnimations();
       }
     });
   });

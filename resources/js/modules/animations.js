@@ -8,14 +8,6 @@ export function initAnimations() {
   initScrollAnimations();
 }
 
-export function revealHeroStatic() {
-  const heroTextContainer = document.querySelector('.nb-hero-immersive-content, .typo-hero-entrance');
-  if (heroTextContainer) {
-    heroTextContainer.style.opacity = '1';
-    heroTextContainer.dataset.gsapDone = '1';
-  }
-}
-
 export function initScrollAnimations() {
   const animateElements = document.querySelectorAll(
     '.animate-on-scroll, .hitech-bento-card, .b2b-usecase-card, .layanan-feature-card, .profil-mission-card, .profil-value-card'
@@ -67,7 +59,5 @@ export function initScrollAnimations() {
   });
 }
 
-// Backward-compatible export for any legacy Blade references
-export function initGSAPAnimations() {
-  // Pure CSS keyframes & IntersectionObserver handles motion without external scripts
-}
+// Backward-compatible alias for any legacy callers
+export const initGSAPAnimations = initScrollAnimations;

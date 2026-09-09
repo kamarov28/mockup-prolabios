@@ -78,7 +78,6 @@ export function initCatalogAjax() {
 
         if (!isLiveSearch) {
           if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
-          if (typeof window.initGSAPAnimations === 'function') window.initGSAPAnimations();
 
           const sidebarCollapse = document.getElementById('sidebarCollapse');
           if (sidebarCollapse && window.innerWidth < 768 && window.bootstrap) {
