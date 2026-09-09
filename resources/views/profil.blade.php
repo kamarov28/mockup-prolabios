@@ -4,24 +4,11 @@
 @section('meta_description', 'Mengenal lebih dekat PT. Prolabios Mitra Analitika (PMA) — Distributor terpercaya instrumen laboratorium, media mikrobiologi, dan perlengkapan pengujian analitika di Indonesia.')
 
 @section('content')
-  <!-- Profil Hero Banner -->
-  <section class="profil-hero-banner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-9">
-          <span class="nb-badge">
-            <i class="bi bi-building me-1"></i> TENTANG KAMI
-          </span>
-          <h1 class="profil-main-title">
-            Membangun Kepercayaan Melalui Standar &amp; Keandalan Lab
-          </h1>
-          <p class="profil-main-subtitle">
-            <strong>PT. Prolabios Mitra Analitika (PMA)</strong> adalah distributor B2B instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian laboratorium dengan standar mutu internasional dan kepatuhan regulasi teruji di Indonesia.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.subpage-hero', [
+    'badge' => '<i class="bi bi-building me-1"></i> TENTANG KAMI',
+    'title' => 'Membangun Kepercayaan Melalui Standar & Keandalan Lab',
+    'subtitle' => '<strong>PT. Prolabios Mitra Analitika (PMA)</strong> adalah distributor B2B instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian laboratorium dengan standar mutu internasional dan kepatuhan regulasi teruji di Indonesia.'
+  ])
 
   <!-- Main Content Layout -->
   <section class="section-spacious nb-section">

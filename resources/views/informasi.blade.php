@@ -10,24 +10,11 @@
 
 @section('content')
   @if(!$currentBlog)
-    <!-- Hero Banner (Soft Neo-Brutalism) -->
-    <section class="profil-hero-banner">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-9">
-            <span class="nb-badge">
-              <i class="bi bi-newspaper me-1"></i> BERITA &amp; ARTIKEL
-            </span>
-            <h1 class="profil-main-title">
-              Pusat Informasi &amp; Wawasan Industri
-            </h1>
-            <p class="profil-main-subtitle">
-              Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    @include('partials.subpage-hero', [
+      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA &amp; ARTIKEL',
+      'title' => 'Pusat Informasi & Wawasan Industri',
+      'subtitle' => 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.'
+    ])
   @endif
 
   <!-- Informasi Content -->

@@ -303,27 +303,33 @@
   }
 }
 
-/* ── B2B Use Case / Pillar Cards ─────────────────────────────────────────── */
-.b2b-usecase-card {
+/* ── B2B Use Case & Bento Base Cards ─────────────────────────────────────── */
+.b2b-usecase-card,
+.hitech-bento-card {
   background: var(--nb-card);
   border: var(--nb-border);
   border-radius: var(--nb-radius-lg);
   box-shadow: var(--nb-shadow);
-  padding: 30px 24px;
   height: 100%;
-  display: flex;
-  flex-direction: column;
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.b2b-usecase-card:hover {
+.b2b-usecase-card:hover,
+.hitech-bento-card:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 var(--nb-ink);
 }
 
-.b2b-usecase-card:active {
+.b2b-usecase-card:active,
+.hitech-bento-card:active {
   transform: translate(4px, 4px);
   box-shadow: 0 0 0 var(--nb-ink);
+}
+
+.b2b-usecase-card {
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
 }
 
 .b2b-usecase-card.highlight-card {
@@ -390,25 +396,9 @@
 
 /* ── Hi-Tech Interactive Bento Cards ─────────────────────────────────────── */
 .hitech-bento-card {
-  background: var(--nb-card);
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-lg);
-  box-shadow: var(--nb-shadow);
   padding: 32px 26px;
-  height: 100%;
   position: relative;
   overflow: hidden;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-}
-
-.hitech-bento-card:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--nb-ink);
-}
-
-.hitech-bento-card:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--nb-ink);
 }
 
 .hitech-bento-number {

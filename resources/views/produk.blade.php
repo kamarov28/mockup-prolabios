@@ -7,24 +7,11 @@
 @endsection
 
 @section('content')
-  <!-- Page Header (Soft Neo-Brutalism Hero Banner, follows Profil page) -->
-  <section class="profil-hero-banner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-9">
-          <span class="nb-badge">
-            <i class="bi bi-box-seam me-1"></i> KATALOG PRODUK
-          </span>
-          <h1 class="profil-main-title">
-            Produk &amp; Instrumen Laboratorium
-          </h1>
-          <p class="profil-main-subtitle">
-            {{ $siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi Prolabios.' }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.subpage-hero', [
+    'badge' => '<i class="bi bi-box-seam me-1"></i> KATALOG PRODUK',
+    'title' => 'Produk & Instrumen Laboratorium',
+    'subtitle' => $siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi Prolabios.'
+  ])
 
   <!-- Product Content -->
   <section class="section-spacious nb-section" id="catalog-section">
@@ -66,49 +53,7 @@
             <div class="row row-cols-1 row-cols-sm-2 g-3 g-md-4" id="product-container">
             @if(isset($products) && (is_array($products) || $products instanceof \Countable) && count($products) > 0)
               @foreach($products as $prod)
-              <div class="col" data-category="{{ $prod['category'] ?? '' }} {{ $prod['sector'] ?? '' }}">
-                <div class="card h-100 product-card border-0">
-                  <div class="img-wrap">
-                    <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250">
-                  </div>
-                  <div class="card-body p-4 d-flex flex-column">
-                    <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                      @if(!empty($prod['catalog']))
-                        <div class="product-cat-code">
-                          CAT. {{ $prod['catalog'] }}
-                        </div>
-                      @else
-                        <div></div>
-                      @endif
-                      @if(!empty($prod->principal))
-                        @if(!empty($prod->principal->logo))
-                          <div class="product-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
-                            <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
-                                 alt="Logo {{ $prod->principal->name }}"
-                                 loading="lazy">
-                          </div>
-                        @else
-                          <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
-                            <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
-                          </span>
-                        @endif
-                      @endif
-                    </div>
-                    <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
-                      <a href="{{ product_url($prod) }}" class="product-card-link">{{ $prod['title'] }}</a>
-                    </h3>
-                    <p class="product-card-desc mb-3 flex-grow-1">
-                      {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 75) ?: 'Produk laboratorium' }}
-                    </p>
-
-                    <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
-                      <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
-                        Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                @include('partials.product-card', ['prod' => $prod])
               @endforeach
             @else
               <div class="col-12 text-center p-5 card">

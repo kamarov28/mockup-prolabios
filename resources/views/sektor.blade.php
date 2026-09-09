@@ -6,24 +6,11 @@
 @section('canonical_url', url('/sektor'))
 
 @section('content')
-  <!-- Page Header (Soft Neo-Brutalism Hero Banner, follows Profil & Katalog) -->
-  <section class="profil-hero-banner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-9">
-          <span class="nb-badge">
-            <i class="bi bi-diagram-3 me-1"></i> SEKTOR INDUSTRI
-          </span>
-          <h1 class="profil-main-title">
-            Solusi Pengujian &amp; Analisis Lintas Sektor
-          </h1>
-          <p class="profil-main-subtitle">
-            Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.subpage-hero', [
+    'badge' => '<i class="bi bi-diagram-3 me-1"></i> SEKTOR INDUSTRI',
+    'title' => 'Solusi Pengujian & Analisis Lintas Sektor',
+    'subtitle' => 'Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia.'
+  ])
 
   <!-- Sektor Content -->
   <section class="section-spacious nb-section" id="sektor-nav">
@@ -241,29 +228,7 @@
                   }
                 @endphp
                 @foreach($related as $prod)
-                  <div class="col">
-                    <div class="card h-100 product-card border-0">
-                      <div class="img-wrap">
-                        <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk Sektor" loading="lazy" decoding="async">
-                      </div>
-                      <div class="card-body p-3 d-flex flex-column">
-                        @if(!empty($prod['catalog']))
-                          <div class="product-cat-code mb-2" style="font-size: 0.65rem;">CAT. {{ $prod['catalog'] }}</div>
-                        @endif
-                        <h4 class="card-title fs-6 fw-bold mb-2">
-                          <a href="{{ product_url($prod) }}" class="text-decoration-none" style="color: var(--nb-ink);">{{ $prod['title'] }}</a>
-                        </h4>
-                        <p class="mb-3 flex-grow-1" style="font-size: 0.8rem; color: var(--nb-muted); line-height: 1.5;">
-                          {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 75) ?: 'Instrumen dan solusi laboratorium resmi.' }}
-                        </p>
-                        <div class="mt-auto pt-2 border-top" style="border-color: rgba(30,30,30,0.12) !important;">
-                          <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.78rem; padding: 6px 10px;">
-                            Lihat Detail <i class="bi bi-arrow-right ms-1"></i>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  @include('partials.product-card', ['prod' => $prod])
                 @endforeach
               </div>
             </div>

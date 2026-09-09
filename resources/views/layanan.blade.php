@@ -3,24 +3,11 @@
 @section('title', 'Layanan Kami | PROLABIOS')
 
 @section('content')
-  <!-- Hero Banner (Soft Neo-Brutalism) -->
-  <section class="profil-hero-banner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-9">
-          <span class="nb-badge">
-            <i class="bi bi-gear-wide-connected me-1"></i> LAYANAN TEKNIS
-          </span>
-          <h1 class="profil-main-title">
-            Layanan Purna Jual &amp; Rekayasa Laboratorium
-          </h1>
-          <p class="profil-main-subtitle">
-            Solusi komprehensif mulai dari pemeliharaan instrumen, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, hingga pelatihan terakreditasi prinsipal.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.subpage-hero', [
+    'badge' => '<i class="bi bi-gear-wide-connected me-1"></i> LAYANAN TEKNIS',
+    'title' => 'Layanan Purna Jual & Rekayasa Laboratorium',
+    'subtitle' => 'Solusi komprehensif mulai dari pemeliharaan instrumen, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, hingga pelatihan terakreditasi prinsipal.'
+  ])
 
   <!-- Layanan Content -->
   <section class="section-spacious nb-section" id="service-nav">

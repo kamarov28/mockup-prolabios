@@ -3,24 +3,11 @@
 @section('title', 'Kontak | PROLABIOS')
 
 @section('content')
-  <!-- Hero Banner (Soft Neo-Brutalism) -->
-  <section class="profil-hero-banner">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-9">
-          <span class="nb-badge">
-            <i class="bi bi-chat-square-dots me-1"></i> HUBUNGI KAMI
-          </span>
-          <h1 class="profil-main-title">
-            Kontak &amp; Layanan Pelanggan
-          </h1>
-          <p class="profil-main-subtitle">
-            Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.subpage-hero', [
+    'badge' => '<i class="bi bi-chat-square-dots me-1"></i> HUBUNGI KAMI',
+    'title' => 'Kontak & Layanan Pelanggan',
+    'subtitle' => 'Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen.'
+  ])
 
   <!-- Contact Content -->
   <section class="section-spacious nb-section">

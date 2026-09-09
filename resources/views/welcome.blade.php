@@ -33,47 +33,7 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 align-items-stretch">
         @if(isset($featuredProducts) && count($featuredProducts) > 0)
           @foreach($featuredProducts as $idx => $prod)
-            <div class="col">
-              <div class="card h-100 product-card"
-                   style="view-transition-name: prod-card-{{ Str::slug($prod['title']) }};">
-                <div class="img-wrap">
-                  <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk laboratorium" loading="lazy" decoding="async">
-                </div>
-                <div class="card-body p-4 d-flex flex-column">
-                  <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                    @if(!empty($prod['catalog']))
-                      <div class="product-cat-code">CAT. {{ $prod['catalog'] }}</div>
-                    @else
-                      <div></div>
-                    @endif
-                    @if(!empty($prod->principal))
-                      @if(!empty($prod->principal->logo))
-                        <div class="product-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
-                          <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
-                               alt="Logo {{ $prod->principal->name }}"
-                               loading="lazy">
-                        </div>
-                      @else
-                        <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
-                          <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
-                        </span>
-                      @endif
-                    @endif
-                  </div>
-                  <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
-                    <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
-                  </h3>
-                  <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.82rem; line-height: 1.5;">
-                    {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
-                  </p>
-                  <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
-                    <a href="{{ product_url($prod) }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}" aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
-                      Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            @include('partials.product-card', ['prod' => $prod, 'vt' => 'prod-card-' . Str::slug($prod['title'])])
           @endforeach
         @else
           <div class="col-12 text-center py-4">
