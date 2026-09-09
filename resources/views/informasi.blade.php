@@ -11,7 +11,7 @@
 @section('content')
   @if(!$currentBlog)
     @include('partials.subpage-hero', [
-      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA & ARTIKEL',
+      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA &amp; ARTIKEL',
       'title' => 'Pusat Informasi & Wawasan Industri',
       'subtitle' => 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.'
     ])
@@ -81,7 +81,7 @@
 
               <!-- Pagination -->
               <div class="d-flex justify-content-center mt-5">
-                {{ $posts->links('partials.catalog-pagination') }}
+                {{ $posts->links('partials.catalog-pagination', ['itemLabel' => 'artikel']) }}
               </div>
 
             @else

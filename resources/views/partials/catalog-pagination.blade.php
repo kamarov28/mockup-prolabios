@@ -1,8 +1,11 @@
+@php
+  $itemLabel = $itemLabel ?? 'produk';
+@endphp
 @if ($paginator->hasPages())
-  <nav class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 w-100 py-3 mt-4 border-top" aria-label="Navigasi Halaman Produk">
+  <nav class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 w-100 py-3 mt-4 border-top" aria-label="Navigasi halaman">
     {{-- Pagination Status Summary --}}
     <div class="text-muted small fw-medium">
-      Menampilkan <span class="fw-semibold text-dark">{{ $paginator->firstItem() ?? 0 }}</span> &ndash; <span class="fw-semibold text-dark">{{ $paginator->lastItem() ?? 0 }}</span> dari total <span class="fw-semibold text-dark">{{ $paginator->total() }}</span> produk
+      Menampilkan <span class="fw-semibold text-dark">{{ $paginator->firstItem() ?? 0 }}</span> &ndash; <span class="fw-semibold text-dark">{{ $paginator->lastItem() ?? 0 }}</span> dari total <span class="fw-semibold text-dark">{{ $paginator->total() }}</span> {{ $itemLabel }}
     </div>
 
     {{-- Pagination Buttons --}}
@@ -63,6 +66,6 @@
   </nav>
 @elseif ($paginator->total() > 0)
   <div class="d-flex justify-content-between align-items-center w-100 py-3 mt-4 border-top text-muted small fw-medium">
-    <span>Menampilkan seluruh <span class="fw-semibold text-dark">{{ $paginator->total() }}</span> produk dalam kategori ini</span>
+    <span>Menampilkan seluruh <span class="fw-semibold text-dark">{{ $paginator->total() }}</span> {{ $itemLabel }} dalam kategori ini</span>
   </div>
 @endif
