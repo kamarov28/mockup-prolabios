@@ -111,8 +111,8 @@ function initSektorAjax() {
           window.history.pushState({ url: url }, '', url);
         }
 
-        if (typeof window.initGSAPAnimations === 'function') {
-          window.initGSAPAnimations();
+        if (typeof window.initScrollAnimations === 'function') {
+          window.initScrollAnimations();
         }
 
         const section = document.getElementById('sektor-nav');

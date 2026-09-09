@@ -1,126 +1,10 @@
 /**
- * Catalog Navigation, Sidebar Accordion, Blog Filters, & Contact Form Controls
+ * Form Controls, Clipboard Helper, & AJAX Add-to-Cart
  */
-import { isProductPath, sanitizeCategorySlug, getQueryParam, setTextContent } from './utils.js';
-
 export function initCatalogCart() {
-  initSidebarNavigation();
   initContactForm();
-  initBlogCategoryFilter();
   initCopyCatalogCode();
   initAjaxAddToCart();
-}
-
-let cachedProductCards = null;
-function getProductCards() {
-  if (!cachedProductCards) {
-    cachedProductCards = Array.from(document.querySelectorAll('.product-card'));
-  }
-  return cachedProductCards;
-}
-
-export function initSidebarNavigation() {
-  const sidebarLinks = document.querySelectorAll('.nav-list .nav-item a, .list-group a.list-group-item');
-  if (!sidebarLinks.length) return;
-
-  sidebarLinks.forEach(function (link) {
-    link.addEventListener('click', function (event) {
-      handleSidebarClick(event, link);
-    });
-  });
-
-  applyInitialCategoryFromURL();
-}
-
-function handleSidebarClick(event, link) {
-  const href = link.getAttribute('href') || '';
-  const isInternal = href === '#' || href.startsWith('javascript:');
-
-  if (isInternal) {
-    event.preventDefault();
-  }
-
-  if (isProductPath() && href.indexOf('?') !== -1 && (href.indexOf('kategori=') !== -1 || href.indexOf('s=') !== -1)) {
-    event.preventDefault();
-    const url = new URL(href, window.location.origin);
-    const cat = url.searchParams.get('kategori') || url.searchParams.get('s');
-
-    const newUrl = new URL(window.location.href);
-    if (cat) {
-      newUrl.searchParams.set('kategori', cat);
-      newUrl.searchParams.delete('s');
-    }
-    window.history.pushState({}, '', newUrl.toString());
-
-    updateSidebarSelection(link, cat);
-    filterProductsByCategory(cat);
-  }
-}
-
-function setActiveSidebarForCategory(category) {
-  if (!category) return;
-  const safeCategory = sanitizeCategorySlug(category);
-  document.querySelectorAll('.nav-list, .list-group').forEach(function (list) {
-    list.querySelectorAll('.nav-item, a.list-group-item').forEach(function (item) {
-      item.classList.remove('active');
-    });
-
-    const match = list.querySelector("a[href*='=" + safeCategory + "']");
-    if (match) {
-      const parent = match.closest('.nav-item');
-      if (parent) {
-        parent.classList.add('active');
-      } else {
-        match.classList.add('active');
-      }
-    }
-  });
-}
-
-function updateSidebarSelection(link, category) {
-  const parentList = link.closest('.nav-list, .list-group');
-  if (parentList) {
-    parentList.querySelectorAll('.nav-item, a.list-group-item').forEach(function (item) {
-      item.classList.remove('active');
-    });
-  }
-
-  const selectedItem = link.closest('.nav-item');
-  if (selectedItem) {
-    selectedItem.classList.add('active');
-  } else {
-    link.classList.add('active');
-  }
-
-  const selectedText = link.textContent.trim();
-  const cleanText = selectedText.replace(/\s*\d+\s*$/, '').trim();
-
-  setTextContent('.main-content h2, #category-title', cleanText);
-  setTextContent('.main-content .text-muted, #category-subtitle', 'Menampilkan hasil untuk ' + cleanText);
-}
-
-function applyInitialCategoryFromURL() {
-  if (!isProductPath()) return;
-  const urlCategory = getQueryParam('kategori') || getQueryParam('s');
-  if (urlCategory) {
-    setActiveSidebarForCategory(urlCategory);
-    filterProductsByCategory(urlCategory);
-  }
-}
-
-function filterProductsByCategory(rawCategory) {
-  const category = sanitizeCategorySlug(rawCategory);
-  const cards = getProductCards();
-  if (!cards.length) return;
-
-  cards.forEach(function (card) {
-    const cardCategory = sanitizeCategorySlug(card.dataset.category || '');
-    if (category === 'semua' || !category || cardCategory.includes(category) || category.includes(cardCategory)) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
 }
 
 export function initContactForm() {
@@ -207,38 +91,6 @@ export function initContactForm() {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
       });
-  });
-}
-
-export function initBlogCategoryFilter() {
-  const categoryLinks = document.querySelectorAll('.blog-category-filter a');
-  const blogCards = document.querySelectorAll('.blog-card');
-  if (!categoryLinks.length) return;
-
-  categoryLinks.forEach(function (link) {
-    link.addEventListener('click', function (event) {
-      event.preventDefault();
-      const raw = link.textContent.trim();
-      const categoryName = raw.replace(/\s*\d+\s*$/, '').trim().toLowerCase();
-
-      const parentList = link.closest('.nav-list');
-      if (parentList) {
-        parentList.querySelectorAll('.nav-item').forEach(function (item) {
-          item.classList.remove('active');
-        });
-      }
-
-      const selectedItem = link.closest('.nav-item');
-      if (selectedItem) selectedItem.classList.add('active');
-
-      blogCards.forEach(function (card) {
-        const meta = card.querySelector('.blog-meta');
-        if (!meta) return;
-
-        const metaText = meta.textContent.toLowerCase();
-        card.style.display = metaText.includes(categoryName) || categoryName === 'semua' ? '' : 'none';
-      });
-    });
   });
 }
 

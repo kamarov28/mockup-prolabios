@@ -35,19 +35,3 @@ export function isProductPath(pathname) {
   const path = pathname || window.location.pathname;
   return path === '/produk' || path.endsWith('/produk.php') || path.includes('/produk');
 }
-
-export function sanitizeCategorySlug(slug) {
-  if (!slug) return '';
-  return slug.replace(/[^a-zA-Z0-9\-_]/g, '');
-}
-
-export function getQueryParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
-
-export function setTextContent(selector, text) {
-  const element = document.querySelector(selector);
-  if (element) {
-    element.textContent = text;
-  }
-}
