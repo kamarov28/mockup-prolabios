@@ -127,6 +127,19 @@
   color: #FFFFFF !important;
 }
 
+/* Success feedback after add-to-RFQ (overrides primary ruby) */
+.nb-btn.is-success,
+.nb-btn-primary.is-success {
+  background: #16A34A !important;
+  color: #FFFFFF !important;
+  box-shadow: 3px 3px 0 var(--nb-ink);
+  pointer-events: none;
+}
+.nb-btn.is-success i,
+.nb-btn-primary.is-success i {
+  color: #FFFFFF !important;
+}
+
 .nb-btn-ghost {
   background: #FFFFFF;
   color: var(--nb-ink) !important;
