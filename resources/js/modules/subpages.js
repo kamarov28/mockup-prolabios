@@ -67,7 +67,7 @@ function initSektorAjax() {
         overlay.innerHTML = '<div class="ajax-spinner" role="status" aria-label="Memuat"></div>';
         main.insertBefore(overlay, main.firstChild);
       } else {
-        overlay.style.display = 'flex';
+        overlay.classList.add('is-visible');
         overlay.setAttribute('aria-hidden', 'false');
       }
     } else if (overlay) {
@@ -175,6 +175,13 @@ function initProductDetail() {
   }
 }
 
+function setCartBadgeCount(count) {
+  document.querySelectorAll('#cart-badge-count, .nav-cart-badge').forEach(function (el) {
+    el.textContent = count;
+    el.classList.toggle('is-hidden', !(count > 0));
+  });
+}
+
 function initBeliProduk() {
   const qtyInput = document.getElementById('qty-input');
   if (!qtyInput) return;
@@ -184,7 +191,7 @@ function initBeliProduk() {
     if (!qtyInput || !notice) return;
     const stock = parseInt(qtyInput.dataset.stock || '0', 10);
     const qty = parseInt(qtyInput.value || '1', 10);
-    notice.style.display = (qty > stock) ? 'block' : 'none';
+    notice.classList.toggle('is-hidden', !(qty > stock));
   }
 
   window.stepQty = function (amount) {
@@ -247,10 +254,7 @@ function initCartPage() {
           totalEstEl.textContent = data.totalFormatted;
         }
 
-        document.querySelectorAll('.nav-cart-badge').forEach(el => {
-          el.textContent = data.cartCount;
-          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-        });
+        setCartBadgeCount(data.cartCount);
       }
     })
     .catch(err => console.error('Ajax Cart Error:', err));
@@ -272,9 +276,7 @@ function initCartPage() {
     .then(data => {
       if (data.success) {
         if (itemCard) {
-          itemCard.style.transition = 'all 0.3s ease';
-          itemCard.style.opacity = '0';
-          itemCard.style.transform = 'scale(0.95)';
+          itemCard.classList.add('is-removing');
           setTimeout(() => {
             itemCard.remove();
             if (data.cartCount === 0) {
@@ -293,10 +295,7 @@ function initCartPage() {
           totalEstEl.textContent = data.totalFormatted;
         }
 
-        document.querySelectorAll('.nav-cart-badge').forEach(el => {
-          el.textContent = data.cartCount;
-          el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-        });
+        setCartBadgeCount(data.cartCount);
 
         if (typeof window.Swal !== 'undefined') {
           window.Swal.fire({

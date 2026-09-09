@@ -7,6 +7,17 @@ export function initCatalogCart() {
   initAjaxAddToCart();
 }
 
+function setCartBadgeCount(count) {
+  document.querySelectorAll('#cart-badge-count, .nav-cart-badge').forEach(function (b) {
+    b.textContent = count;
+    b.classList.toggle('is-hidden', !(count > 0));
+    if (count > 0) {
+      b.classList.add('is-bump');
+      setTimeout(function () { b.classList.remove('is-bump'); }, 250);
+    }
+  });
+}
+
 export function initContactForm() {
   const form = document.getElementById('contactForm') || document.querySelector('form.contact-form');
   if (!form) return;
@@ -28,10 +39,10 @@ export function initContactForm() {
     let valid = true;
     requiredFields.forEach(function (field) {
       if (!field.value.trim()) {
-        field.style.borderColor = 'var(--nb-primary, #A6171C)';
+        field.classList.add('has-error');
         valid = false;
       } else {
-        field.style.borderColor = '';
+        field.classList.remove('has-error');
       }
     });
     if (!valid) return;
@@ -72,9 +83,10 @@ export function initContactForm() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          form.style.display = 'none';
+          form.classList.add('is-hidden');
           if (success) {
-            success.style.display = 'block';
+            success.classList.remove('is-hidden');
+            success.classList.add('is-visible');
             const msgEl = success.querySelector('p.profil-body-text');
             if (msgEl && data.message) msgEl.textContent = data.message;
             success.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -99,7 +111,7 @@ export function initCopyCatalogCode() {
   if (!codes.length) return;
 
   codes.forEach(function (el) {
-    el.style.cursor = 'pointer';
+    el.classList.add('is-copyable');
     el.setAttribute('title', 'Click to copy catalog code');
     el.addEventListener('click', function (e) {
       e.preventDefault();
@@ -110,11 +122,11 @@ export function initCopyCatalogCode() {
       navigator.clipboard.writeText(fullText).then(function () {
         const originalText = el.textContent;
         el.innerHTML = '<i class="bi bi-check2 text-success me-1"></i> Copied!';
-        el.style.borderColor = 'var(--color-accent)';
+        el.classList.add('is-copied');
 
         setTimeout(function () {
           el.textContent = originalText;
-          el.style.borderColor = '';
+          el.classList.remove('is-copied');
         }, 1800);
       }).catch(function () {
         // Fallback
@@ -154,16 +166,8 @@ export function initAjaxAddToCart() {
       .then(function (res) { return res.json(); })
       .then(function (data) {
         if (data.success) {
-          // Update cart badge counts across navbar
-          const badges = document.querySelectorAll('#cart-badge-count, .nav-cart-badge');
-          badges.forEach(function (b) {
-            b.textContent = data.cartCount;
-            b.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-            b.style.transform = 'scale(1.4)';
-            setTimeout(function () { b.style.transform = 'scale(1)'; }, 250);
-          });
+          setCartBadgeCount(data.cartCount);
 
-          // Show Button Success Feedback
           submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1 text-success"></i> Added to RFQ';
           submitBtn.classList.remove('btn-outline-danger');
           submitBtn.classList.add('btn-success');
@@ -214,29 +218,27 @@ export function showToast(message, type = 'success') {
   if (!container) {
     container = document.createElement('div');
     container.id = 'prolabios-toast-container';
-    container.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:100000;display:flex;flex-direction:column;gap:10px;pointer-events:none;';
+    container.className = 'nb-toast-container';
     document.body.appendChild(container);
   }
 
   const toast = document.createElement('div');
-  toast.className = 'prolabios-toast-item';
-  toast.style.cssText = 'background:#FFFFFF;color:#1E1E1E;border:2px solid #1E1E1E;border-radius:4px;padding:12px 18px;font-family:var(--font-body);font-size:0.88rem;box-shadow:3px 3px 0 #1E1E1E;display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(15px);transition:all 0.2s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;';
+  toast.className = 'nb-toast-item' + (type === 'warning' ? ' nb-toast-item--warning' : '');
 
   const iconHtml = type === 'success'
-    ? '<i class="bi bi-check-circle-fill" style="color: #137333; font-size: 1.15rem;"></i>'
-    : '<i class="bi bi-exclamation-triangle-fill" style="color: #A6171C; font-size: 1.15rem;"></i>';
+    ? '<i class="bi bi-check-circle-fill nb-toast-icon nb-toast-icon--success"></i>'
+    : '<i class="bi bi-exclamation-triangle-fill nb-toast-icon nb-toast-icon--warning"></i>';
 
-  toast.innerHTML = iconHtml + '<span style="font-weight: 600;">' + message + '</span>';
+  toast.innerHTML = iconHtml + '<span class="nb-toast-text">' + message + '</span>';
   container.appendChild(toast);
 
   requestAnimationFrame(function () {
-    toast.style.opacity = '1';
-    toast.style.transform = 'translateY(0)';
+    toast.classList.add('is-visible');
   });
 
   setTimeout(function () {
-    toast.style.opacity = '0';
-    toast.style.transform = 'translateY(-10px)';
+    toast.classList.remove('is-visible');
+    toast.classList.add('is-leaving');
     setTimeout(function () {
       if (toast.parentElement) toast.parentElement.removeChild(toast);
     }, 200);
