@@ -122,8 +122,8 @@
             </form>
 
             <div id="formSuccess" style="display: none; text-align: center; padding: 40px 20px; background: var(--nb-bg-soft); border: 2px solid #1E1E1E; border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
-              <div class="mb-3 d-inline-flex align-items-center justify-content-center" style="width: 64px; height: 64px; background: var(--nb-accent); border: 2px solid #1E1E1E; border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 #1E1E1E;">
-                <i class="bi bi-check2-circle" style="font-size: 2rem; color: var(--nb-ink);"></i>
+              <div class="nb-status-icon-box mb-3 mx-auto">
+                <i class="bi bi-check2-circle"></i>
               </div>
               <h3 class="profil-section-title" style="font-size: 1.5rem !important; margin-bottom: 10px !important;">Pesan Berhasil Terkirim!</h3>
               <p class="profil-body-text mb-4" style="max-width: 500px; margin-left: auto; margin-right: auto;">Terima kasih telah menghubungi PT Prolabios Mitra Analitika. Tim sales &amp; teknis kami akan segera menindaklanjuti pesan Anda dalam 1×24 jam kerja.</p>

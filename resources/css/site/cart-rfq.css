@@ -292,3 +292,41 @@
     justify-content: space-between;
   }
 }
+
+/* ── Reusable Shell Containers & Cards ────────────────────────────────────── */
+.cart-empty-card {
+  max-width: 640px;
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow);
+}
+
+.rfq-success-card {
+  max-width: 680px;
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow-lg);
+}
+
+.rfq-details-box {
+  background: var(--nb-bg-soft);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+}
+
+.rfq-trust-box {
+  background: #FFFFFF;
+  border: 1.5px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+}
+
+.rfq-total-row {
+  border-top: 2px solid var(--nb-ink);
+  border-bottom: 2px solid var(--nb-ink);
+  color: var(--nb-ink);
+}
+

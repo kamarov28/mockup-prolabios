@@ -101,18 +101,18 @@
                   @endforeach
                 </div>
 
-                <div class="d-flex justify-content-between py-3 fw-bold mb-3" style="border-top: 2px solid var(--nb-ink); border-bottom: 2px solid var(--nb-ink); color: var(--nb-ink);">
+                <div class="d-flex justify-content-between py-3 fw-bold mb-3 rfq-total-row">
                   <span style="font-family: var(--font-mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Estimasi Total:</span>
                   <span style="font-family: var(--font-display); font-size: 1.2rem; color: var(--nb-primary);">Rp {{ number_format($total, 0, ',', '.') }}</span>
                 </div>
 
-                <div class="rfq-info-box mb-3" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); padding: 12px; box-shadow: 2px 2px 0 var(--nb-ink); color: var(--nb-ink);">
+                <div class="rfq-info-box mb-3">
                   <i class="bi bi-info-circle-fill me-1" style="color: var(--nb-primary);"></i>
                   Harga di atas adalah estimasi katalog. Tim sales kami akan memberikan diskon khusus institusi &amp; harga final via WhatsApp/Email.
                 </div>
 
                 {{-- SLA Response & Institutional Trust Guarantee --}}
-                <div class="mb-4 p-3" style="background: #FFFFFF; border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                <div class="rfq-trust-box mb-4 p-3">
                   <div class="d-flex align-items-center gap-2 mb-1">
                     <i class="bi bi-patch-check-fill text-success" style="font-size: 1.1rem;"></i>
                     <strong style="font-family: var(--font-display); font-size: 0.85rem; color: var(--nb-ink);">Jaminan Penawaran Resmi (SLA 1×24 Jam)</strong>

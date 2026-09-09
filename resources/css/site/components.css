@@ -78,6 +78,23 @@
   font-family: var(--font-mono);
 }
 
+.nb-status-icon-box {
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nb-accent);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+}
+
+.nb-status-icon-box i {
+  font-size: 2.2rem;
+  color: var(--nb-ink);
+}
+
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
 .nb-btn {
   display: inline-flex;

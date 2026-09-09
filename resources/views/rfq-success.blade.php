@@ -5,11 +5,11 @@
 @section('content')
 <section class="cart-page-bg">
   <div class="container py-4 text-center">
-    <div class="card max-w-2xl mx-auto p-4 p-md-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-lg); max-width: 680px;">
+    <div class="card rfq-success-card mx-auto p-4 p-md-5">
 
       <!-- Icon Check Circle -->
-      <div class="d-inline-flex align-items-center justify-content-center mb-3 mx-auto" style="width: 68px; height: 68px; background: var(--nb-accent); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
-        <i class="bi bi-check2-circle" style="font-size: 2.2rem; color: var(--nb-ink);"></i>
+      <div class="nb-status-icon-box mb-3 mx-auto">
+        <i class="bi bi-check2-circle"></i>
       </div>
 
       <div class="mb-3">
@@ -22,7 +22,7 @@
       </p>
 
       <!-- Details Box -->
-      <div class="p-4 mb-4 text-start" style="background: var(--nb-bg-soft); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+      <div class="rfq-details-box p-4 mb-4 text-start">
         <h3 class="cart-sidebar-title" style="font-size: 1rem; margin-bottom: 16px; color: var(--nb-ink); font-weight: 700;">
           <i class="bi bi-file-earmark-text text-primary me-2"></i> Detail Pengajuan Penawaran
         </h3>

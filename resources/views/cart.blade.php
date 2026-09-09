@@ -180,7 +180,7 @@
 
             <hr style="border-color: rgba(30,30,30,0.15); margin: 1.25rem 0;">
 
-            <div class="rfq-info-box mb-4" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); padding: 12px; box-shadow: 2px 2px 0 var(--nb-ink);">
+            <div class="rfq-info-box mb-4">
               <div class="d-flex gap-2">
                 <i class="bi bi-shield-check fs-5 flex-shrink-0 text-primary"></i>
                 <div style="font-size: 0.82rem; color: var(--nb-ink);">
@@ -202,7 +202,7 @@
 
       </div>
     @else
-      <div class="card text-center p-5 mx-auto" style="max-width: 640px; background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+      <div class="card cart-empty-card text-center p-5 mx-auto">
         <i class="bi bi-cart-x" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
         <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Keranjang Belanja Masih Kosong</h2>
         <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
