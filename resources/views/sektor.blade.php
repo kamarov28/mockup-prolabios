@@ -60,7 +60,7 @@
 
           <!-- Sidebar Card 2: B2B Consultation CTA Box -->
           <div class="profil-cta-box p-4">
-            <span class="nb-badge mb-3">B2B CONSULTATION</span>
+            <span class="nb-badge mb-3">KONSULTASI SPESIFIKASI</span>
             <h3 class="profil-sidebar-title">Butuh Solusi Spesifik?</h3>
             <p>Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
             <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">

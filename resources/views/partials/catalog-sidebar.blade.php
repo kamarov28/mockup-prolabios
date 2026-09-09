@@ -71,7 +71,7 @@
 
     <!-- Sidebar Card 2: Butuh Bantuan CTA -->
     <div class="profil-cta-box p-4">
-      <span class="nb-badge mb-3">B2B INQUIRY</span>
+      <span class="nb-badge mb-3">KONSULTASI PRODUK</span>
       <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
       <p>Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.</p>
       <a href="{{ url('/kontak') }}?subjek=inquiry" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">

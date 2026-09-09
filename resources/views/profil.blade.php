@@ -318,7 +318,7 @@
               <a href="https://wa.me/6281211118744"
                  target="_blank" rel="noopener noreferrer" class="profil-social-link">
                 <i class="bi bi-whatsapp text-success fs-5"></i>
-                <span>WhatsApp B2B Support</span>
+                <span>WhatsApp Layanan Resmi</span>
               </a>
             </div>
           </div>
@@ -326,7 +326,7 @@
           <!-- Sidebar Card 3: Direct Consultation & RFQ CTA Box -->
           <div class="profil-cta-box p-4">
             <span class="nb-badge mb-3">
-              B2B CONSULTATION
+              KONSULTASI PENGADAAN
             </span>
             <h3 class="profil-sidebar-title">
               Butuh Penawaran atau Diskusi Teknis?
@@ -354,7 +354,7 @@
   <section class="nb-rfq-section">
     <div class="container">
       <div class="nb-rfq-box">
-        <span class="nb-badge">B2B PROCUREMENT</span>
+        <span class="nb-badge">PENGADAAN LABORATORIUM</span>
         <h2 class="nb-rfq-title">Siap Memulai Pengadaan Laboratorium Anda?</h2>
         <p class="nb-rfq-sub">
           Ajukan permintaan penawaran harga resmi (RFQ) untuk reagen, instrumen, maupun konsumabel. Tim kami akan segera merespons dengan ketersediaan stok, harga khusus, dan dokumen kepatuhan lengkap.

@@ -122,7 +122,7 @@
                   <div class="p-3 d-flex align-items-center gap-2" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
                     <i class="bi bi-clock-history text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
                     <span class="small" style="font-size: 0.8rem; color: var(--nb-ink); line-height: 1.4;">
-                      <strong>Komitmen Respon B2B (SLA 1×24 Jam):</strong> Setiap pertanyaan teknis, konsultasi metode, atau permohonan kalibrasi instrumen akan direspon oleh tim teknis kami dalam 1×24 jam kerja.
+                      <strong>Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja):</strong> Setiap pertanyaan teknis, konsultasi metode, atau permohonan kalibrasi instrumen akan direspon oleh tim teknis kami dalam 1×24 jam kerja.
                     </span>
                   </div>
                 </div>

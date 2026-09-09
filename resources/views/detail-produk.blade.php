@@ -171,7 +171,7 @@
                     <i class="bi bi-clock-history text-dark" style="font-size: 1.25rem;"></i>
                   </div>
                   <div style="font-size: 0.82rem; line-height: 1.4; color: var(--nb-ink);">
-                    <strong class="d-block" style="font-family: var(--font-display); font-size: 0.88rem;">Komitmen Respon Cepat B2B (SLA 1×24 Jam)</strong>
+                    <strong class="d-block" style="font-family: var(--font-display); font-size: 0.88rem;">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
                     Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
                   </div>
                 </div>

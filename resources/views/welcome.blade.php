@@ -90,7 +90,7 @@
   <section class="nb-rfq-section">
     <div class="container">
       <div class="nb-rfq-box">
-        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'PENGADAAN B2B' }}</span>
+        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'PENGADAAN LABORATORIUM' }}</span>
         <h2 class="nb-rfq-title">{{ $homeData['cta_banner_title'] ?? 'Butuh penawaran resmi untuk laboratorium Anda?' }}</h2>
         <p class="nb-rfq-sub">{{ $homeData['cta_banner_sub'] ?? 'Kirimkan daftar kebutuhan alat & reagen Anda. Tim kami akan segera menindaklanjuti dengan penawaran harga resmi, ketersediaan stok, dan dokumen sertifikasi.' }}</p>
         <div class="nb-rfq-actions">
@@ -99,7 +99,7 @@
             <i class="bi bi-arrow-right"></i>
           </a>
           <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
-            <i class="bi bi-cart3"></i> Buka Keranjang RFQ
+            <i class="bi bi-cart3"></i> Keranjang Penawaran (RFQ)
           </a>
         </div>
       </div>
