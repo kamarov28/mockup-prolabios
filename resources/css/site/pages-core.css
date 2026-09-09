@@ -6,7 +6,7 @@
 .profil-hero-banner {
   padding: 120px 0 45px;
   background: #FEFEFE;
-  border-bottom: var(--nb-border, 2px solid #1E1E1E);
+  border-bottom: var(--nb-border);
 }
 
 .profil-main-title {
@@ -15,7 +15,7 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.15;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 1rem;
 }
 
@@ -23,7 +23,7 @@
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.65;
-  color: var(--nb-muted, #5A5A5A);
+  color: var(--nb-muted);
   max-width: 720px;
   margin-bottom: 0;
 }
@@ -36,30 +36,30 @@
 }
 
 .profil-stat-box {
-  background: var(--nb-card, #FFFFFF);
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius, 6px);
-  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E);
+  background: var(--nb-card);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius);
+  box-shadow: var(--nb-shadow-sm);
   padding: 1rem 1.25rem;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .profil-stat-box:hover {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 1px 1px 0 var(--nb-ink);
 }
 
 .profil-stat-num {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 1.35rem;
-  color: var(--nb-primary, #A6171C);
+  color: var(--nb-primary);
   line-height: 1.2;
 }
 
 .profil-stat-label {
   font-family: var(--font-body);
   font-size: 0.82rem;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   font-weight: 600;
   margin-top: 0.25rem;
 }
@@ -69,8 +69,8 @@
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--nb-ink, #1E1E1E);
-  border-bottom: 2px solid var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
+  border-bottom: 2px solid var(--nb-ink);
   padding-bottom: 8px;
   margin-bottom: 14px;
 }
@@ -94,7 +94,7 @@
 }
 .profil-info-table th {
   font-family: var(--font-mono);
-  color: var(--nb-muted, #5A5A5A);
+  color: var(--nb-muted);
   font-weight: 600;
   font-size: 0.75rem;
   padding: 8px 0;
@@ -103,19 +103,19 @@
 }
 .profil-info-table td {
   font-family: var(--font-body);
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   font-weight: 600;
   padding: 8px 0;
   vertical-align: top;
 }
 
 .profil-hero-img {
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-lg, 8px);
-  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow);
   overflow: hidden;
   position: relative;
-  background: var(--nb-bg-soft, #FEFEFE);
+  background: var(--nb-bg-soft);
 }
 .profil-hero-img img {
   width: 100%;
@@ -136,12 +136,12 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--nb-ink, #1E1E1E);
-  background: var(--nb-accent, #F1C045);
-  border: 1.5px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-sm, 4px);
+  color: var(--nb-ink);
+  background: var(--nb-accent);
+  border: 1.5px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
   padding: 2px 8px;
-  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 2px 2px 0 var(--nb-ink);
   margin-bottom: 0.75rem;
 }
 
@@ -150,7 +150,7 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 1rem;
 }
 
@@ -158,28 +158,28 @@
   font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.75;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
 }
 
 .profil-mission-card {
-  background: var(--nb-card, #FFFFFF);
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius, 6px);
-  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E);
+  background: var(--nb-card);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius);
+  box-shadow: var(--nb-shadow-sm);
   padding: 1.25rem;
   height: 100%;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .profil-mission-card:hover {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 1px 1px 0 var(--nb-ink);
 }
 
 .profil-mission-title {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -189,10 +189,10 @@
 .profil-cta-box,
 .layanan-feature-card,
 .layanan-cta-strip {
-  background: var(--nb-card, #FFFFFF);
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-lg, 8px);
-  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
+  background: var(--nb-card);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow);
 }
 
 .profil-value-card,
@@ -206,13 +206,13 @@
 .profil-value-card:hover,
 .layanan-feature-card:hover {
   transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 2px 2px 0 var(--nb-ink);
 }
 
 .profil-value-card:active,
 .layanan-feature-card:active {
   transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 0 0 0 var(--nb-ink);
 }
 
 .profil-value-card {
@@ -224,7 +224,7 @@
 }
 
 .layanan-cta-strip {
-  background: var(--nb-bg-soft, #FEFEFE);
+  background: var(--nb-bg-soft);
   padding: 32px;
 }
 
@@ -234,32 +234,32 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-sm, 4px);
-  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
   font-family: var(--font-mono);
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 .profil-value-letter-wrap.letter-p {
-  background: var(--nb-accent, #F1C045);
-  color: var(--nb-ink, #1E1E1E);
+  background: var(--nb-accent);
+  color: var(--nb-ink);
 }
 .profil-value-letter-wrap.letter-r {
-  background: var(--nb-primary, #A6171C);
+  background: var(--nb-primary);
   color: #FFFFFF;
 }
 .profil-value-letter-wrap.letter-o {
-  background: var(--nb-bg-soft, #FEFEFE);
-  color: var(--nb-ink, #1E1E1E);
+  background: var(--nb-bg-soft);
+  color: var(--nb-ink);
 }
 
 .profil-value-title {
   font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 0.5rem;
   letter-spacing: -0.02em;
 }
@@ -272,11 +272,11 @@
 }
 
 .profil-cta-box {
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
 }
 .profil-cta-box .profil-sidebar-title {
-  color: var(--nb-ink, #1E1E1E);
-  border-bottom: 2px solid var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
+  border-bottom: 2px solid var(--nb-ink);
 }
 .profil-cta-box p {
   font-size: 0.88rem;
@@ -302,12 +302,12 @@
   font-family: var(--font-display);
   font-size: 0.88rem;
   font-weight: 600;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   text-decoration: none;
   padding: 11px 14px;
-  background: var(--nb-card, #FFFFFF);
+  background: var(--nb-card);
   border: 1.5px solid #1E1E1E;
-  border-radius: var(--nb-radius-sm, 4px);
+  border-radius: var(--nb-radius-sm);
   box-shadow: 2px 2px 0 #1E1E1E;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
   letter-spacing: -0.01em;
@@ -316,8 +316,8 @@
 .nb-sidebar-link:hover,
 .layanan-sidebar-link:hover,
 .profil-social-link:hover {
-  background: var(--nb-accent, #F1C045);
-  color: var(--nb-ink, #1E1E1E);
+  background: var(--nb-accent);
+  color: var(--nb-ink);
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 #1E1E1E;
 }
@@ -325,12 +325,12 @@
 .layanan-sidebar-link:active,
 .profil-social-link:active {
   transform: translate(2px, 2px);
-  box-shadow: 0 0 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 0 0 0 var(--nb-ink);
 }
 .nb-sidebar-link.is-active,
 .layanan-sidebar-link.is-active,
 .profil-social-link.is-active {
-  background: var(--nb-primary, #A6171C);
+  background: var(--nb-primary);
   color: #FFFFFF;
   font-weight: 700;
   box-shadow: 2px 2px 0 #1E1E1E;
@@ -351,24 +351,24 @@
   gap: 5px;
   margin: -2px 0 10px 10px;
   padding: 8px;
-  background: var(--nb-bg, #f9f5f2);
-  border: 2px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-sm, 4px);
-  box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
+  background: var(--nb-bg);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
   max-height: 290px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--nb-ink, #1E1E1E) var(--nb-bg, #f9f5f2);
+  scrollbar-color: var(--nb-ink) var(--nb-bg);
 }
 
 .sub-category-group::-webkit-scrollbar {
   width: 5px;
 }
 .sub-category-group::-webkit-scrollbar-track {
-  background: var(--nb-bg, #f9f5f2);
+  background: var(--nb-bg);
 }
 .sub-category-group::-webkit-scrollbar-thumb {
-  background: var(--nb-ink, #1E1E1E);
+  background: var(--nb-ink);
   border-radius: 2px;
 }
 
@@ -379,13 +379,13 @@
   font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 600;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   text-decoration: none;
   padding: 6px 10px;
-  background: var(--nb-card, #FFFFFF);
-  border: 1.5px solid var(--nb-ink, #1E1E1E);
-  border-radius: var(--nb-radius-sm, 4px);
-  box-shadow: 1.5px 1.5px 0 var(--nb-ink, #1E1E1E);
+  background: var(--nb-card);
+  border: 1.5px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 1.5px 1.5px 0 var(--nb-ink);
   line-height: 1.35;
   transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease, color 0.1s ease;
 }
@@ -398,10 +398,10 @@
 }
 
 .sub-category-link:hover {
-  background: var(--nb-accent, #F1C045);
-  color: var(--nb-ink, #1E1E1E);
+  background: var(--nb-accent);
+  color: var(--nb-ink);
   transform: translate(1px, 1px);
-  box-shadow: 0.5px 0.5px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 0.5px 0.5px 0 var(--nb-ink);
 }
 
 .sub-category-link:hover .sub-category-icon {
@@ -410,10 +410,10 @@
 }
 
 .sub-category-link.is-active {
-  background: var(--nb-primary, #A6171C);
+  background: var(--nb-primary);
   color: #FFFFFF;
-  border-color: var(--nb-ink, #1E1E1E);
-  box-shadow: 1.5px 1.5px 0 var(--nb-ink, #1E1E1E);
+  border-color: var(--nb-ink);
+  box-shadow: 1.5px 1.5px 0 var(--nb-ink);
   font-weight: 700;
 }
 
@@ -426,14 +426,14 @@
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 10px;
 }
 .layanan-cta-title {
   font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 12px;
   letter-spacing: -0.02em;
 }
@@ -443,20 +443,20 @@
    ========================================================================== */
 .kontak-info-block {
   padding: 20px;
-  background: var(--nb-card, #FFFFFF);
-  border: var(--nb-border, 2px solid #1E1E1E);
-  border-radius: var(--nb-radius-lg, 8px);
-  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E);
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: var(--nb-shadow-sm);
   margin-bottom: 16px;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .kontak-info-block:hover {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink, #1E1E1E);
+  box-shadow: 1px 1px 0 var(--nb-ink);
 }
 .kontak-info-icon {
   font-size: 1.35rem;
-  color: var(--nb-primary, #A6171C);
+  color: var(--nb-primary);
   margin-bottom: 8px;
 }
 .kontak-info-title {
@@ -465,7 +465,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 8px;
 }
 .kontak-info-link {
@@ -473,13 +473,13 @@
   font-family: var(--font-body);
   font-size: 0.92rem;
   font-weight: 600;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   text-decoration: none;
   transition: color 0.12s ease;
   margin-bottom: 4px;
 }
 .kontak-info-link:hover {
-  color: var(--nb-primary, #A6171C);
+  color: var(--nb-primary);
   text-decoration: underline;
 }
 .kontak-form-label {
@@ -489,28 +489,28 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--nb-ink, #1E1E1E);
+  color: var(--nb-ink);
   margin-bottom: 8px;
 }
 .kontak-form-input {
-  background-color: var(--nb-card, #FFFFFF) !important;
-  border: var(--nb-border, 2px solid #1E1E1E) !important;
-  border-radius: var(--nb-radius, 6px) !important;
-  color: var(--nb-ink, #1E1E1E) !important;
+  background-color: var(--nb-card) !important;
+  border: var(--nb-border) !important;
+  border-radius: var(--nb-radius) !important;
+  color: var(--nb-ink) !important;
   font-family: var(--font-body) !important;
   font-size: 0.92rem !important;
   padding: 12px 16px !important;
-  box-shadow: var(--nb-shadow-sm, 3px 3px 0 #1E1E1E) !important;
+  box-shadow: var(--nb-shadow-sm) !important;
   transition: box-shadow 0.12s ease, border-color 0.12s ease !important;
 }
 .kontak-form-input:focus {
-  border-color: var(--nb-ink, #1E1E1E) !important;
+  border-color: var(--nb-ink) !important;
   background-color: #FFFFFF !important;
   outline: none !important;
-  box-shadow: 4px 4px 0 var(--nb-ink, #1E1E1E) !important;
+  box-shadow: 4px 4px 0 var(--nb-ink) !important;
 }
 .kontak-form-input::placeholder {
-  color: var(--nb-muted, #5A5A5A) !important;
+  color: var(--nb-muted) !important;
   opacity: 0.65;
 }
 .kontak-form-input option {
@@ -527,16 +527,16 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #FFFFFF !important;
-  background-color: var(--nb-primary, #A6171C) !important;
+  background-color: var(--nb-primary) !important;
   border: 2px solid #1E1E1E !important;
-  border-radius: var(--nb-radius, 6px) !important;
+  border-radius: var(--nb-radius) !important;
   padding: 12px 28px !important;
   cursor: pointer;
-  box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E) !important;
+  box-shadow: var(--nb-shadow) !important;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 }
 .kontak-submit-btn:hover {
-  background-color: var(--nb-primary-dark, #7A1015) !important;
+  background-color: var(--nb-primary-dark) !important;
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 #1E1E1E !important;
 }

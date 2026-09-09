@@ -114,7 +114,7 @@
 }
 #scroll-to-top:hover,
 .btn-scroll-to-top:hover {
-  background: var(--nb-primary-dark, #7A1015);
+  background: var(--nb-primary-dark);
   border-color: var(--nb-ink);
   color: #FFFFFF;
   transform: translate(2px, 2px);
