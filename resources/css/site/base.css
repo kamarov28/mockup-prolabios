@@ -315,6 +315,7 @@ a:hover {
 .btn-outline-danger,
 .navbar-cta-btn {
   height: 38px !important;
+  padding: 0 16px !important;
   background: var(--nb-primary) !important;
   border: var(--nb-border) !important;
   color: #FFFFFF !important;
