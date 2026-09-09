@@ -11,7 +11,7 @@
 @section('content')
   @if(!$currentBlog)
     @include('partials.subpage-hero', [
-      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA &amp; ARTIKEL',
+      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA & ARTIKEL',
       'title' => 'Pusat Informasi & Wawasan Industri',
       'subtitle' => 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.'
     ])
@@ -27,22 +27,22 @@
           @if($currentBlog)
             <!-- Detail View -->
             <div class="card p-4 p-md-5">
-              <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="nb-btn nb-btn-ghost mb-4 d-inline-flex" style="padding: 6px 14px; font-size: 0.85rem;">
+              <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="nb-btn nb-btn-ghost mb-4 d-inline-flex blog-back-btn">
                 <i class="bi bi-arrow-left me-1"></i> Kembali ke Informasi
               </a>
 
               <div class="d-flex align-items-center gap-3 mb-3">
-                <span class="blog-card-category" style="margin-bottom: 0;">{{ $currentBlog['category'] }}</span>
-                <span class="text-muted" style="font-family: var(--font-mono); font-size: 0.82rem; font-weight: 600;"><i class="bi bi-calendar3 me-1"></i>{{ $currentBlog['date'] }}</span>
+                <span class="blog-card-category mb-0">{{ $currentBlog['category'] }}</span>
+                <span class="blog-card-date-inline"><i class="bi bi-calendar3 me-1"></i>{{ $currentBlog['date'] }}</span>
               </div>
 
-              <h1 class="profil-main-title" style="font-size: clamp(1.8rem, 3.5vw, 2.4rem) !important; margin-bottom: 24px !important;">{{ $currentBlog['title'] }}</h1>
+              <h1 class="profil-main-title blog-detail-title">{{ $currentBlog['title'] }}</h1>
 
               <div class="profil-hero-img mb-4">
-                <img src="{{ $currentBlog['image'] }}" class="w-100" style="max-height: 480px; object-fit: cover; display: block;" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
+                <img src="{{ $currentBlog['image'] }}" class="w-100 blog-detail-img" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
               </div>
 
-              <div class="profil-body-text" style="line-height: 1.85;">
+              <div class="profil-body-text blog-detail-body">
                 {!! \App\Services\DataService::sanitizeHtml($currentBlog['content'] ?? '') !!}
               </div>
             </div>
@@ -86,9 +86,9 @@
 
             @else
               <div class="col-12 text-center p-5 card">
-                <i class="bi bi-newspaper" style="font-size: 2.5rem; color: var(--nb-muted); display: block; margin-bottom: 16px;"></i>
-                <h3 class="fs-5 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Belum Ada Artikel</h3>
-                <p style="color: var(--nb-muted); margin-bottom: 20px;">Tidak ada artikel untuk kategori yang Anda pilih.</p>
+                <i class="bi bi-newspaper blog-empty-icon"></i>
+                <h3 class="fs-5 fw-bold blog-empty-title">Belum Ada Artikel</h3>
+                <p class="blog-empty-text">Tidak ada artikel untuk kategori yang Anda pilih.</p>
                 <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">
                   Lihat Semua Artikel <i class="bi bi-arrow-right ms-1"></i>
                 </a>
@@ -103,10 +103,10 @@
 
             <!-- Category Filter -->
             <div class="card p-4 mb-4">
-              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom" style="border-color: rgba(30,30,30,0.15) !important;">
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom blog-sidebar-head">
                 <h3 class="profil-sidebar-title mb-0 border-0 p-0"><i class="bi bi-tags me-2"></i>Kategori</h3>
                 @if($selectedCategory)
-                  <a href="{{ url('/informasi') }}" class="nb-badge" style="text-decoration: none; font-size: 0.65rem;">
+                  <a href="{{ url('/informasi') }}" class="nb-badge blog-reset-badge">
                     <i class="bi bi-x-circle me-1"></i>Reset
                   </a>
                 @endif
@@ -122,10 +122,9 @@
                     elseif ($catName === 'Kegiatan') $catSlug = 'kegiatan';
                   @endphp
                   <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
-                     class="profil-social-link justify-content-between {{ $selectedCategory == $catSlug ? 'is-active' : '' }}"
-                     style="{{ $selectedCategory == $catSlug ? 'background: var(--nb-accent) !important;' : '' }}">
+                     class="profil-social-link justify-content-between {{ $selectedCategory == $catSlug ? 'is-active' : '' }}">
                     <span>{{ $catName }}</span>
-                    <span class="badge" style="background: var(--nb-bg-soft); color: var(--nb-ink); border: 1px solid #1E1E1E; font-family: var(--font-mono);">{{ $count }}</span>
+                    <span class="blog-cat-count">{{ $count }}</span>
                   </a>
                 @endforeach
               </nav>
@@ -135,16 +134,14 @@
             <div class="profil-trust-box">
               <h3 class="profil-sidebar-title"><i class="bi bi-clock-history me-2"></i>Berita Terbaru</h3>
               @if(count($recentPosts) > 0)
-                <div class="d-flex flex-column gap-3">
+                <div class="blog-recent-list">
                   @foreach($recentPosts as $index => $rPost)
-                    <div class="p-3 rfq-trust-box">
-                      <div class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.72rem; color: var(--nb-muted); font-family: var(--font-mono); font-weight: 600;">
+                    <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" class="blog-recent-item">
+                      <div class="blog-recent-date">
                         <i class="bi bi-calendar3"></i> {{ $rPost['date'] }}
                       </div>
-                      <h4 style="font-size: 0.88rem; line-height: 1.45; margin: 0; font-family: var(--font-display); font-weight: 700;">
-                        <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" style="color: var(--nb-ink); text-decoration: none;" onmouseover="this.style.color='var(--nb-primary)'" onmouseout="this.style.color='var(--nb-ink)'">{{ $rPost['title'] }}</a>
-                      </h4>
-                    </div>
+                      <h4 class="blog-recent-title">{{ $rPost['title'] }}</h4>
+                    </a>
                   @endforeach
                 </div>
               @else
