@@ -26,9 +26,9 @@
           <div class="kontak-info-block">
             <div class="kontak-info-icon"><i class="bi bi-telephone"></i></div>
             <h3 class="kontak-info-title">Telepon Kantor</h3>
-            <p class="profil-body-text mb-1"><strong style="color: var(--nb-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Marketing &amp; Sales:</strong></p>
+            <p class="profil-body-text mb-1"><strong style="color: var(--nb-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Marketing & Sales:</strong></p>
             <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="kontak-info-link">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }}</a>
-            <p class="profil-body-text mt-3 mb-1"><strong style="color: var(--nb-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Keuangan &amp; Gudang:</strong></p>
+            <p class="profil-body-text mt-3 mb-1"><strong style="color: var(--nb-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Keuangan & Gudang:</strong></p>
             <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_finance'] ?? '021-8792-9433') }}" class="kontak-info-link">{{ $siteSettings['contact_phone_finance'] ?? '021-8792-9433' }}</a>
           </div>
 
@@ -51,7 +51,7 @@
         <div class="col-12 col-lg-8 order-1 order-lg-2">
           <div class="card p-4 p-md-5">
             <span class="nb-badge mb-2"><i class="bi bi-envelope-paper me-1"></i> TINGGALKAN PESAN</span>
-            <h2 class="profil-section-title mb-3">Kirim Pesan &amp; Pertanyaan</h2>
+            <h2 class="profil-section-title mb-3">Kirim Pesan & Pertanyaan</h2>
 
             {{-- RFQ Redirection Notice --}}
             <div class="mb-4 p-3 d-flex align-items-start gap-3" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
@@ -96,8 +96,8 @@
                     <option value="">-- Pilih Keperluan --</option>
                     <option value="inquiry">Pertanyaan Umum</option>
                     <option value="service">Permintaan Perbaikan / Kalibrasi</option>
-                    <option value="consultation">Konsultasi Metode &amp; Teknis</option>
-                    <option value="labdesign">Desain &amp; Pembangunan Lab</option>
+                    <option value="consultation">Konsultasi Metode & Teknis</option>
+                    <option value="labdesign">Desain & Pembangunan Lab</option>
                     <option value="other">Lainnya</option>
                   </select>
                 </div>
@@ -121,12 +121,12 @@
               </div>
             </form>
 
-            <div id="formSuccess" style="display: none; text-align: center; padding: 40px 20px; background: var(--nb-bg-soft); border: 2px solid #1E1E1E; border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+            <div id="formSuccess" class="is-hidden">
               <div class="nb-status-icon-box mb-3 mx-auto">
                 <i class="bi bi-check2-circle"></i>
               </div>
-              <h3 class="profil-section-title" style="font-size: 1.5rem !important; margin-bottom: 10px !important;">Pesan Berhasil Terkirim!</h3>
-              <p class="profil-body-text mb-4" style="max-width: 500px; margin-left: auto; margin-right: auto;">Terima kasih telah menghubungi PT Prolabios Mitra Analitika. Tim sales &amp; teknis kami akan segera menindaklanjuti pesan Anda dalam 1×24 jam kerja.</p>
+              <h3 class="profil-section-title detail-empty-title mb-2">Pesan Berhasil Terkirim!</h3>
+              <p class="profil-body-text mb-4 mx-auto" style="max-width: 500px;">Terima kasih telah menghubungi PT Prolabios Mitra Analitika. Tim sales & teknis kami akan segera menindaklanjuti pesan Anda dalam 1×24 jam kerja.</p>
               <a href="{{ url('/') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">Kembali ke Beranda <i class="bi bi-arrow-right ms-1"></i></a>
             </div>
           </div>
