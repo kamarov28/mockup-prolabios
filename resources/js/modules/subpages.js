@@ -326,7 +326,13 @@ function initCartPage() {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Ya, Kosongkan!',
-      cancelButtonText: 'Batal'
+      cancelButtonText: 'Batal',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'nb-btn nb-btn-primary',
+        cancelButton: 'nb-btn nb-btn-ghost',
+        actions: 'gap-2'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         form.submit();
@@ -347,7 +353,13 @@ function initCartPage() {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Ya, Hapus!',
-      cancelButtonText: 'Batal'
+      cancelButtonText: 'Batal',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'nb-btn nb-btn-primary',
+        cancelButton: 'nb-btn nb-btn-ghost',
+        actions: 'gap-2'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         executeRemoveAjax(form);
