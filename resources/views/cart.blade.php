@@ -3,25 +3,25 @@
 @section('title', 'Keranjang Pengajuan Penawaran - PT. Prolabios Mitra Analitika')
 
 @section('content')
-<section class="cart-page-bg" style="padding-top: 140px !important; padding-bottom: 80px !important;">
+<section class="cart-page-bg">
   <div class="container py-2">
 
     <!-- Stepper Navigation -->
     <div class="cart-stepper-wrap">
       <div class="d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
         <div class="d-flex flex-row align-items-center gap-3 flex-wrap">
-          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-ink); font-weight: 700;">
-            <span class="step-num-badge step-num-active" style="background: var(--nb-primary); color: #FFFFFF; border: 1.5px solid var(--nb-ink); box-shadow: 1px 1px 0 var(--nb-ink);">1</span>
+          <div class="d-inline-flex align-items-center gap-2 fw-bold text-ink">
+            <span class="step-num-badge step-num-active">1</span>
             <span class="step-label">Keranjang Pengajuan</span>
           </div>
-          <span style="color: var(--nb-ink); font-weight: bold; font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-muted);">
-            <span class="step-num-badge step-num-inactive" style="background: var(--nb-bg-soft); color: var(--nb-ink); border: 1.5px solid var(--nb-ink);">2</span>
+          <span class="fw-bold text-ink" style="font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2 text-muted">
+            <span class="step-num-badge step-num-inactive">2</span>
             <span class="step-label">Data Kontak &amp; Instansi</span>
           </div>
-          <span style="color: var(--nb-ink); font-weight: bold; font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2" style="color: var(--nb-muted);">
-            <span class="step-num-badge step-num-inactive" style="background: var(--nb-bg-soft); color: var(--nb-ink); border: 1.5px solid var(--nb-ink);">3</span>
+          <span class="fw-bold text-ink" style="font-size: 0.85rem;">&gt;</span>
+          <div class="d-inline-flex align-items-center gap-2 text-muted">
+            <span class="step-num-badge step-num-inactive">3</span>
             <span class="step-label">Konfirmasi Selesai</span>
           </div>
         </div>

@@ -3,7 +3,7 @@
 @section('title', 'Pengajuan Berhasil Dikirim | PT. Prolabios Mitra Analitika')
 
 @section('content')
-<section class="py-5" style="background-color: var(--nb-bg); min-height: 85vh; padding-top: 140px !important; padding-bottom: 80px !important;">
+<section class="cart-page-bg">
   <div class="container py-4 text-center">
     <div class="card max-w-2xl mx-auto p-4 p-md-5" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-lg); max-width: 680px;">
 

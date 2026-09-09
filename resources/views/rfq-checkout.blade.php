@@ -3,7 +3,7 @@
 @section('title', 'Pengajuan Penawaran | PT. Prolabios Mitra Analitika')
 
 @section('content')
-<section class="py-5" style="background-color: var(--nb-bg); min-height: 85vh; padding-top: 140px !important; padding-bottom: 80px !important;">
+<section class="cart-page-bg">
   <div class="container py-4">
 
     <div class="max-w-4xl mx-auto" style="max-width: 960px;">
