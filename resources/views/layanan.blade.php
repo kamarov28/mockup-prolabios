@@ -21,14 +21,17 @@
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title"><i class="bi bi-list-nested me-2"></i>Pilih Layanan</h3>
             <nav class="layanan-sidebar-nav d-flex flex-column gap-2">
-              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="profil-social-link {{ $activeService == 'maintenance' ? 'is-active' : '' }}" style="{{ $activeService == 'maintenance' ? 'background: var(--nb-accent) !important;' : '' }}">
-                <i class="bi bi-tools text-danger"></i> Perawatan &amp; Perbaikan
+              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'maintenance' ? 'is-active' : '' }}">
+                <span><i class="bi bi-tools text-danger me-2"></i>Perawatan &amp; Perbaikan</span>
+                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
               </a>
-              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="profil-social-link {{ $activeService == 'labdesign' ? 'is-active' : '' }}" style="{{ $activeService == 'labdesign' ? 'background: var(--nb-accent) !important;' : '' }}">
-                <i class="bi bi-building-gear text-primary"></i> Desain &amp; Pembangunan Lab
+              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'labdesign' ? 'is-active' : '' }}">
+                <span><i class="bi bi-building-gear text-primary me-2"></i>Desain &amp; Pembangunan Lab</span>
+                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
               </a>
-              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="profil-social-link {{ $activeService == 'consultation' ? 'is-active' : '' }}" style="{{ $activeService == 'consultation' ? 'background: var(--nb-accent) !important;' : '' }}">
-                <i class="bi bi-mortarboard text-success"></i> Konsultasi &amp; Pelatihan
+              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'consultation' ? 'is-active' : '' }}">
+                <span><i class="bi bi-mortarboard text-success me-2"></i>Konsultasi &amp; Pelatihan</span>
+                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
               </a>
             </nav>
           </div>

@@ -287,22 +287,22 @@
               Ikuti publikasi resmi dan update produk melalui saluran media kami:
             </p>
             <div class="d-flex flex-column gap-2">
-              <a href="https://web.facebook.com/PT-Prolabios-Mitra-Analitika-1787666991553394/"
+              <a href="{{ $siteSettings['social_facebook'] ?? 'https://web.facebook.com/PT-Prolabios-Mitra-Analitika-1787666991553394/' }}"
                  target="_blank" rel="noopener noreferrer" class="profil-social-link">
                 <i class="bi bi-facebook text-primary fs-5"></i>
                 <span>Facebook Resmi PMA</span>
               </a>
-              <a href="https://www.instagram.com/prolabios.id"
+              <a href="{{ $siteSettings['social_instagram'] ?? 'https://www.instagram.com/prolabios.id' }}"
                  target="_blank" rel="noopener noreferrer" class="profil-social-link">
                 <i class="bi bi-instagram text-danger fs-5"></i>
                 <span>Instagram @prolabios.id</span>
               </a>
-              <a href="https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all"
+              <a href="{{ $siteSettings['social_linkedin'] ?? 'https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all' }}"
                  target="_blank" rel="noopener noreferrer" class="profil-social-link">
                 <i class="bi bi-linkedin text-primary fs-5"></i>
                 <span>LinkedIn Company Page</span>
               </a>
-              <a href="https://wa.me/6281211118744"
+              <a href="{{ !empty($siteSettings['contact_whatsapp']) ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $siteSettings['contact_whatsapp']) : 'https://wa.me/6281211118744' }}"
                  target="_blank" rel="noopener noreferrer" class="profil-social-link">
                 <i class="bi bi-whatsapp text-success fs-5"></i>
                 <span>WhatsApp Layanan Resmi</span>
@@ -338,25 +338,9 @@
   </section>
 
   <!-- Unified RFQ Callout Section -->
-  <section class="nb-rfq-section">
-    <div class="container">
-      <div class="nb-rfq-box">
-        <span class="nb-badge">PENGADAAN LABORATORIUM</span>
-        <h2 class="nb-rfq-title">Siap Memulai Pengadaan Laboratorium Anda?</h2>
-        <p class="nb-rfq-sub">
-          Ajukan permintaan penawaran harga resmi (RFQ) untuk reagen, instrumen, maupun konsumabel. Tim kami akan segera merespons dengan ketersediaan stok, harga khusus, dan dokumen kepatuhan lengkap.
-        </p>
-        <div class="nb-rfq-actions">
-          <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary">
-            Hubungi Sales / Minta Penawaran
-            <i class="bi bi-arrow-right ms-1"></i>
-          </a>
-          <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
-            <i class="bi bi-cart3 me-1"></i> Buka Keranjang RFQ
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.rfq-banner', [
+    'title' => 'Siap Memulai Pengadaan Laboratorium Anda?',
+    'subtitle' => 'Ajukan permintaan penawaran harga resmi (RFQ) untuk reagen, instrumen, maupun konsumabel. Tim kami akan segera merespons dengan ketersediaan stok, harga khusus, dan dokumen kepatuhan lengkap.'
+  ])
 @endsection
 

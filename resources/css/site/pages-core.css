@@ -10,7 +10,7 @@
 }
 
 .profil-main-title {
-  font-family: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -20,7 +20,7 @@
 }
 
 .profil-main-subtitle {
-  font-family: var(--font-body, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.65;
   color: var(--nb-muted, #5A5A5A);
@@ -49,7 +49,7 @@
 }
 
 .profil-stat-num {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: 1.35rem;
   color: var(--nb-primary, #A6171C);
@@ -57,7 +57,7 @@
 }
 
 .profil-stat-label {
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-body);
   font-size: 0.82rem;
   color: var(--nb-ink, #1E1E1E);
   font-weight: 600;
@@ -65,7 +65,7 @@
 }
 
 .profil-sidebar-title {
-  font-family: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -93,7 +93,7 @@
   border-bottom: none;
 }
 .profil-info-table th {
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   color: var(--nb-muted, #5A5A5A);
   font-weight: 600;
   font-size: 0.75rem;
@@ -102,7 +102,7 @@
   vertical-align: top;
 }
 .profil-info-table td {
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-body);
   color: var(--nb-ink, #1E1E1E);
   font-weight: 600;
   padding: 8px 0;
@@ -131,7 +131,7 @@
 
 .profil-section-label {
   display: inline-block;
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -146,7 +146,7 @@
 }
 
 .profil-section-title {
-  font-family: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -155,7 +155,7 @@
 }
 
 .profil-body-text {
-  font-family: var(--font-body, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-family: var(--font-body);
   font-size: 0.95rem;
   line-height: 1.75;
   color: var(--nb-ink, #1E1E1E);
@@ -176,7 +176,7 @@
 }
 
 .profil-mission-title {
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--nb-ink, #1E1E1E);
@@ -237,7 +237,7 @@
   border: 2px solid var(--nb-ink, #1E1E1E);
   border-radius: var(--nb-radius-sm, 4px);
   box-shadow: 2px 2px 0 var(--nb-ink, #1E1E1E);
-  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-family: var(--font-mono);
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -256,7 +256,7 @@
 }
 
 .profil-value-title {
-  font-family: var(--font-display, 'Space Grotesk', system-ui, sans-serif);
+  font-family: var(--font-display);
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--nb-ink, #1E1E1E);
@@ -299,7 +299,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--nb-ink, #1E1E1E);
@@ -376,7 +376,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-body);
   font-size: 0.82rem;
   font-weight: 600;
   color: var(--nb-ink, #1E1E1E);
@@ -423,14 +423,14 @@
 }
 
 .layanan-feature-title {
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--nb-ink, #1E1E1E);
   margin-bottom: 10px;
 }
 .layanan-cta-title {
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--nb-ink, #1E1E1E);
@@ -460,7 +460,7 @@
   margin-bottom: 8px;
 }
 .kontak-info-title {
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -470,7 +470,7 @@
 }
 .kontak-info-link {
   display: block;
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-family: var(--font-body);
   font-size: 0.92rem;
   font-weight: 600;
   color: var(--nb-ink, #1E1E1E);
@@ -484,7 +484,7 @@
 }
 .kontak-form-label {
   display: block;
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 0.82rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -521,7 +521,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-display, 'Space Grotesk', sans-serif);
+  font-family: var(--font-display);
   font-size: 0.88rem;
   font-weight: 700;
   text-transform: uppercase;

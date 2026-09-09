@@ -47,22 +47,12 @@
   @include('partials.home-news')
 
   <!-- RFQ giant callout -->
-  <section class="nb-rfq-section">
-    <div class="container">
-      <div class="nb-rfq-box">
-        <span class="nb-badge">{{ $homeData['cta_banner_badge'] ?? 'PENGADAAN LABORATORIUM' }}</span>
-        <h2 class="nb-rfq-title">{{ $homeData['cta_banner_title'] ?? 'Butuh penawaran resmi untuk laboratorium Anda?' }}</h2>
-        <p class="nb-rfq-sub">{{ $homeData['cta_banner_sub'] ?? 'Kirimkan daftar kebutuhan alat & reagen Anda. Tim kami akan segera menindaklanjuti dengan penawaran harga resmi, ketersediaan stok, dan dokumen sertifikasi.' }}</p>
-        <div class="nb-rfq-actions">
-          <a href="{{ url($homeData['cta_banner_btn_url'] ?? '/kontak') }}" class="nb-btn nb-btn-primary">
-            {{ $homeData['cta_banner_btn_text'] ?? 'Hubungi Sales / Minta Penawaran' }}
-            <i class="bi bi-arrow-right"></i>
-          </a>
-          <a href="{{ url('/cart') }}" class="nb-btn nb-btn-ghost">
-            <i class="bi bi-cart3"></i> Keranjang Penawaran (RFQ)
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+  @include('partials.rfq-banner', [
+    'badge' => $homeData['cta_banner_badge'] ?? null,
+    'title' => $homeData['cta_banner_title'] ?? null,
+    'subtitle' => $homeData['cta_banner_sub'] ?? null,
+    'btnUrl' => $homeData['cta_banner_btn_url'] ?? null,
+    'btnText' => $homeData['cta_banner_btn_text'] ?? null,
+    'cartText' => 'Keranjang Penawaran (RFQ)'
+  ])
 @endsection
