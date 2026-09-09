@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Soft Neo-Brutalism Typography: 2 Core WebFonts (Bricolage Grotesque & Plus Jakarta Sans) + System Monospace -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <!-- Soft Neo-Brutalism Typography: Bricolage Grotesque (display) + IBM Plex Sans (body) + System Monospace -->
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/site.css'])
@@ -28,168 +28,34 @@
   @stack('styles')
 
   <!-- Page Preloads -->
-  @yield('preload')
+  @stack('head')
 
-  <!-- Open Graph / Facebook Metadata -->
-  <meta property="og:site_name" content="{{ $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika' }}">
+  <!-- Open Graph / Twitter -->
   <meta property="og:type" content="@yield('og_type', 'website')">
-  <meta property="og:locale" content="id_ID">
-  <meta property="og:url" content="{{ request()->url() }}">
-  <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
-  <meta property="og:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
-  <meta property="og:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
-
-  <!-- Twitter Card Metadata -->
+  <meta property="og:title" content="@yield('og_title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')">
+  <meta property="og:description" content="@yield('og_description', $siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.')">
+  <meta property="og:url" content="@yield('canonical', request()->url())">
+  <meta property="og:image" content="@yield('og_image', asset('images/og-default.jpg'))">
+  <meta property="og:site_name" content="{{ $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika' }}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:url" content="{{ request()->url() }}">
-  <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
-  <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
-  <meta name="twitter:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
+  <meta name="twitter:title" content="@yield('og_title', $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika')">
+  <meta name="twitter:description" content="@yield('og_description', $siteSettings['meta_default_description'] ?? 'Distributor alat laboratorium dan instrumen analitika.')">
+  <meta name="twitter:image" content="@yield('og_image', asset('images/og-default.jpg'))">
 
-  <!-- Google Analytics 4 / GTM (If configured via .env or SiteSettings) -->
-  @php
-    $gaId = config('services.google_analytics_id', env('GOOGLE_ANALYTICS_ID', $siteSettings['google_analytics_id'] ?? null));
-    $gtmId = config('services.google_tag_manager_id', env('GOOGLE_TAG_MANAGER_ID', $siteSettings['google_tag_manager_id'] ?? null));
-  @endphp
-  @if(!empty($gaId))
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '{{ $gaId }}');
-    </script>
-  @endif
-  @if(!empty($gtmId))
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
-  @endif
+  @stack('meta')
 </head>
-<body>
-  @if(!empty($gtmId))
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  @endif
-
-  <!-- Header / Navigation -->
+<body class="@yield('body_class')">
   @include('layouts.partials.navbar')
 
-  <main>
+  <main id="main-content">
     @yield('content')
   </main>
 
-  <!-- Corporate Footer -->
   @include('layouts.partials.footer')
-
-  <!-- Cookie Consent Notice -->
+  @include('layouts.partials.search-modal')
   @include('layouts.partials.cookie-consent')
 
-  <!-- Core App Scripts (Bundled Bootstrap 5 + SweetAlert2 + Site Behaviors) -->
   @vite(['resources/js/app.js'])
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var mainNavbar = document.getElementById('mainNavbar');
-      var hamburgerInput = document.getElementById('hamburger-checkbox');
-      
-      if (mainNavbar && hamburgerInput) {
-        var bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
-        hamburgerInput.checked = false;
-        hamburgerInput.setAttribute('aria-expanded', 'false');
-
-        hamburgerInput.addEventListener('change', function () {
-          var isExpanded = hamburgerInput.checked;
-          hamburgerInput.setAttribute('aria-expanded', String(isExpanded));
-          if (isExpanded) {
-            bsCollapse.show();
-          } else {
-            bsCollapse.hide();
-          }
-        });
-
-        mainNavbar.addEventListener('show.bs.collapse', function () {
-          hamburgerInput.checked = true;
-          hamburgerInput.setAttribute('aria-expanded', 'true');
-        });
-        mainNavbar.addEventListener('hide.bs.collapse', function () {
-          hamburgerInput.checked = false;
-          hamburgerInput.setAttribute('aria-expanded', 'false');
-        });
-      }
-
-      var searchOverlay = document.getElementById('search-overlay');
-      var searchOverlayInput = document.getElementById('search-overlay-input');
-      var mobileSearchOpen = document.getElementById('mobile-search-open');
-      var navSearchOpen = document.getElementById('nav-search-open');
-      var searchCloseBtn = document.getElementById('search-close');
-      var searchCloseBackdrop = document.getElementById('search-close-backdrop');
-
-      function openSearchOverlay() {
-        if (searchOverlay) {
-          searchOverlay.classList.add('active');
-          searchOverlay.setAttribute('aria-hidden', 'false');
-          if (searchOverlayInput) {
-            setTimeout(function() { searchOverlayInput.focus(); }, 100);
-          }
-        }
-      }
-
-      function closeSearchOverlay() {
-        if (searchOverlay) {
-          searchOverlay.classList.remove('active');
-          searchOverlay.setAttribute('aria-hidden', 'true');
-        }
-      }
-
-      if (mobileSearchOpen) mobileSearchOpen.addEventListener('click', openSearchOverlay);
-      if (navSearchOpen) navSearchOpen.addEventListener('click', openSearchOverlay);
-      if (searchCloseBtn) searchCloseBtn.addEventListener('click', closeSearchOverlay);
-      if (searchCloseBackdrop) searchCloseBackdrop.addEventListener('click', closeSearchOverlay);
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) {
-          closeSearchOverlay();
-        }
-      });
-    });
-  </script>
-
-  @if(session('success') || session('error') || session('info'))
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        if (typeof Swal === 'undefined') return;
-
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 4000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-          }
-        });
-
-        @if(session('success'))
-          Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
-        @endif
-        @if(session('error'))
-          Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
-        @endif
-        @if(session('info'))
-          Toast.fire({ icon: 'info', title: {!! json_encode(session('info')) !!} });
-        @endif
-      });
-    </script>
-  @endif
-
   @stack('scripts')
-
-  <!-- Global Search Overlay & Scroll-to-top Button -->
-  @include('layouts.partials.search-modal')
 </body>
 </html>
