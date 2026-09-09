@@ -26,10 +26,10 @@
   --color-border-subtle: #A39D93;
 
   --sidebar-width: 250px;
-  --sidebar-bg: #1E1E1E;
-  --sidebar-surface: #2D2D2D;
-  --sidebar-text: #BDBDBD;
-  --sidebar-text-active: #FFFFFF;
+  --sidebar-bg: #FFFFFF;
+  --sidebar-surface: #F5F2EB;
+  --sidebar-text: #5A5A5A;
+  --sidebar-text-active: #1E1E1E;
 
   --header-height: 68px;
 
