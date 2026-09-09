@@ -366,6 +366,122 @@
   align-items: center;
 }
 
+/* Recent posts sidebar — do NOT reuse .rfq-trust-box (icon-only 44px) */
+.blog-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blog-recent-item {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--nb-card);
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+}
+
+.blog-recent-item:hover {
+  background: var(--nb-accent);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink);
+  color: inherit;
+  text-decoration: none;
+}
+
+.blog-recent-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--nb-muted);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.blog-recent-title {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--nb-ink);
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+.blog-recent-item:hover .blog-recent-title {
+  color: var(--nb-ink);
+}
+
+.blog-sidebar-head {
+  border-color: rgba(30, 30, 30, 0.15) !important;
+}
+
+.blog-reset-badge {
+  text-decoration: none;
+  font-size: 0.65rem;
+  margin-bottom: 0;
+}
+
+.blog-cat-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  padding: 2px 8px;
+  background: var(--nb-bg-soft);
+  color: var(--nb-ink);
+  border: 1px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.blog-back-btn {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.blog-detail-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem) !important;
+  margin-bottom: 24px !important;
+}
+
+.blog-detail-img {
+  max-height: 480px;
+  object-fit: cover;
+  display: block;
+}
+
+.blog-detail-body {
+  line-height: 1.85;
+}
+
+.blog-empty-icon {
+  font-size: 2.5rem;
+  color: var(--nb-muted);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.blog-empty-title {
+  color: var(--nb-ink);
+  font-family: var(--font-display);
+}
+
+.blog-empty-text {
+  color: var(--nb-muted);
+  margin-bottom: 20px;
+}
+
 /* ── Specifications & Custom Tables ─────────────────────────────────────── */
 .custom-table {
   background-color: var(--nb-card);
