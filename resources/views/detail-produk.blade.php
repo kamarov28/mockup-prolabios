@@ -59,15 +59,15 @@
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
             @endphp
 
-            <div class="d-flex align-items-start justify-content-between flex-wrap gap-4" style="border-bottom: 2px solid var(--nb-ink); padding-bottom: 24px; margin-bottom: 40px;">
-              <div class="flex-grow-1" style="max-width: 800px;">
-                <h1 class="profil-section-title" style="font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important; margin-bottom: 12px !important;">{{ $product['title'] }}</h1>
+            <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
+              <div class="flex-grow-1 detail-header-copy">
+                <h1 class="profil-section-title detail-product-title">{{ $product['title'] }}</h1>
                 <div class="d-flex flex-wrap gap-2 align-items-center">
                   @if(!empty($product['category']))
                     <span class="nb-badge-sm text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
                   @endif
                   @if(!empty($product['catalog']))
-                    <span class="product-cat-code" style="font-size: 0.78rem !important; padding: 4px 10px !important;">
+                    <span class="product-cat-code">
                       CAT. {{ $product['catalog'] }}
                     </span>
                   @endif
@@ -75,19 +75,19 @@
               </div>
 
               @if(!empty($product->principal))
-                <div class="d-flex align-items-center gap-3 p-3 bg-white" style="border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: var(--nb-shadow-sm); min-width: 220px;">
+                <div class="detail-principal-card">
                   @if(!empty($product->principal->logo))
-                    <div style="width: 58px; height: 58px; display: flex; align-items: center; justify-content: center; background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: 4px; padding: 5px;">
+                    <div class="detail-principal-logo-box">
                       <img src="{{ str_starts_with($product->principal->logo, 'http') || str_starts_with($product->principal->logo, '/') ? $product->principal->logo : asset('storage/' . $product->principal->logo) }}"
                            alt="Logo {{ $product->principal->name }}"
                            style="max-width: 100%; max-height: 100%; object-fit: contain;">
                     </div>
                   @endif
                   <div>
-                    <span class="d-block text-muted text-uppercase fw-bold" style="font-size: 0.65rem; letter-spacing: 0.5px;">Prinsipal Resmi</span>
-                    <strong class="d-block text-dark" style="font-family: var(--font-display); font-size: 0.95rem;">{{ $product->principal->name }}</strong>
+                    <span class="d-block text-muted text-uppercase fw-bold detail-principal-label">Prinsipal Resmi</span>
+                    <strong class="d-block text-dark detail-principal-name">{{ $product->principal->name }}</strong>
                     @if(!empty($product->principal->address))
-                      <span class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-geo-alt me-1"></i>{{ $product->principal->address }}</span>
+                      <span class="text-muted small detail-principal-address"><i class="bi bi-geo-alt me-1"></i>{{ $product->principal->address }}</span>
                     @endif
                   </div>
                 </div>
@@ -97,7 +97,7 @@
             <div class="row g-5">
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100" style="object-fit: contain; max-height: 350px; display: block;" loading="lazy" decoding="async">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" loading="lazy" decoding="async">
                 </div>
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
@@ -113,13 +113,13 @@
               <div class="col-md-7">
                 <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
                   @if(!empty($product['catalog']))
-                    <div class="product-cat-code" style="font-size: 0.8rem !important; padding: 6px 12px !important;">
+                    <div class="product-cat-code">
                       CAT. {{ $product['catalog'] }}
                     </div>
                   @endif
 
                   @if(!empty($product->principal))
-                    <span class="nb-badge-sm d-inline-flex align-items-center gap-1" style="font-size: 0.75rem; padding: 5px 10px;">
+                    <span class="nb-badge-sm d-inline-flex align-items-center gap-1">
                       <i class="bi bi-building text-primary"></i> {{ $product->principal->name }}
                       @if(!empty($product->principal->address))
                         <span class="text-muted ms-1">({{ $product->principal->address }})</span>
@@ -129,22 +129,22 @@
                 </div>
 
                 <div class="card p-4 mb-4">
-                  <h3 class="layanan-feature-title mb-3" style="font-size: 1.1rem !important; font-family: var(--font-display); font-weight: 700; color: var(--nb-ink); border-bottom: 2px solid rgba(30,30,30,0.1); padding-bottom: 8px;">
+                  <h3 class="layanan-feature-title detail-section-heading mb-3">
                     <i class="bi bi-file-earmark-text text-primary me-2"></i>Deskripsi & Spesifikasi Produk
                   </h3>
-                  <div class="profil-body-text mb-4" style="line-height: 1.8; color: var(--nb-ink);">
+                  <div class="profil-body-text mb-4">
                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                   </div>
 
                   {{-- B2B Technical Datasheet & Specification Link --}}
                   <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3 rfq-details-box">
                     <div class="d-flex align-items-center gap-3">
-                      <div class="d-flex align-items-center justify-content-center flex-shrink-0 rfq-trust-box" style="width: 44px; height: 44px;">
+                      <div class="rfq-trust-box">
                         <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.4rem;"></i>
                       </div>
                       <div>
-                        <strong class="d-block" style="font-family: var(--font-display); font-size: 0.92rem; color: var(--nb-ink);">Dokumen Lembar Data &amp; Spesifikasi Teknis (PDF)</strong>
-                        <span class="text-muted small" style="font-size: 0.78rem;">
+                        <strong class="d-block detail-datasheet-title">Dokumen Lembar Data &amp; Spesifikasi Teknis (PDF)</strong>
+                        <span class="text-muted small detail-datasheet-sub">
                           @if(!empty($product->principal))
                             Brosur teknis &amp; lembar data spesifikasi resmi dari {{ $product->principal->name }}.
                           @else
@@ -154,11 +154,11 @@
                       </div>
                     </div>
                     @if(!empty($product['datasheet_url']))
-                      <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2" style="font-size: 0.82rem; padding: 8px 16px;">
+                      <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2 detail-btn-sm">
                         <i class="bi bi-download"></i> Unduh Spesifikasi (PDF) <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.75rem;"></i>
                       </a>
                     @else
-                      <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2" style="font-size: 0.82rem; padding: 8px 14px; background: #FFFFFF;">
+                      <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2 detail-btn-ghost-sm">
                         <i class="bi bi-envelope-paper"></i> Request Lembar Data Resmi <i class="bi bi-arrow-right ms-1"></i>
                       </a>
                     @endif
@@ -172,10 +172,10 @@
 
                 <!-- RFQ Procurement & Direct Add-to-Cart Card -->
                 <div class="card p-4 mb-4">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom" style="border-color: rgba(30,30,30,0.12) !important;">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom detail-spec-divider">
                     <div>
                       <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit / Penawaran Resmi:</span>
-                      <strong class="fs-4 d-block" style="color: var(--nb-primary); font-family: var(--font-display); font-weight: 700;">
+                      <strong class="fs-4 d-block detail-price">
                         {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
                       </strong>
                     </div>
@@ -200,7 +200,7 @@
 
                     <div class="d-flex flex-wrap align-items-end gap-3">
                       <div>
-                        <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.72rem; letter-spacing: 1px; color: var(--nb-ink); font-family: var(--font-mono);">Jumlah Unit</label>
+                        <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label">Jumlah Unit</label>
                         <div class="nb-stepper-wrap">
                           <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
                             <i class="bi bi-dash-lg"></i>
@@ -212,13 +212,13 @@
                         </div>
                       </div>
 
-                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1" style="height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
-                        <i class="bi bi-cart-plus me-2" style="font-size: 1.15rem;"></i> Tambah ke Keranjang Penawaran
+                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
+                        <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang Penawaran
                       </button>
                     </div>
 
                     <!-- Live Indent Notice -->
-                    <div id="indent-notice" class="p-3 mt-3" style="display: none; background: var(--nb-accent); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink); color: var(--nb-ink); font-size: 0.85rem;">
+                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice" style="display: none;">
                       <i class="bi bi-info-circle-fill me-1"></i>
                       Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
                     </div>
@@ -227,20 +227,20 @@
 
                 {{-- B2B Trust Badge & SLA Response Commitment --}}
                 <div class="mb-4 p-3 d-flex align-items-center gap-3 rfq-trust-box">
-                  <div class="nb-status-icon-box flex-shrink-0" style="width: 40px; height: 40px;">
-                    <i class="bi bi-clock-history text-dark" style="font-size: 1.25rem;"></i>
+                  <div class="nb-status-icon-box detail-response-icon flex-shrink-0">
+                    <i class="bi bi-clock-history text-dark"></i>
                   </div>
                   <div style="font-size: 0.82rem; line-height: 1.4; color: var(--nb-ink);">
-                    <strong class="d-block" style="font-family: var(--font-display); font-size: 0.88rem;">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
+                    <strong class="d-block detail-datasheet-title">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
                     Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
                   </div>
                 </div>
 
                 <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ route('cart.index') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem; background: var(--nb-accent); color: var(--nb-ink);">
+                  <a href="{{ route('cart.index') }}" class="nb-btn d-inline-flex align-items-center justify-content-center text-decoration-none detail-add-btn" style="padding: 0 20px; font-size: 0.85rem; background: var(--nb-accent); color: var(--nb-ink); border: var(--nb-border); box-shadow: var(--nb-shadow);">
                     <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
                   </a>
-                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem;">
+                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none detail-add-btn" style="padding: 0 20px; font-size: 0.85rem;">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
                   </a>
                 </div>

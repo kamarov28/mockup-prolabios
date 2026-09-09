@@ -33,23 +33,23 @@
                    loading="lazy">
             </div>
           @else
-            <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
+            <span class="nb-badge-sm">
               <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
             </span>
           @endif
         @endif
       </div>
 
-      <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
+      <h3 class="card-title fs-6 fw-semibold mb-2">
         <a href="{{ $cardUrl }}" class="product-card-link" {!! $vtTarget !!}>{{ $prod['title'] }}</a>
       </h3>
 
-      <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.84rem; line-height: 1.55;">
+      <p class="product-card-desc mb-3 flex-grow-1 text-muted">
         {{ Str::limit($desc, 75) }}
       </p>
 
-      <div class="mt-auto pt-3 border-top d-flex align-items-center justify-content-between nb-card-foot" style="border-color: rgba(30,30,30,0.12) !important;">
-        <a href="{{ $cardUrl }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem; padding: 8px 14px; font-weight: 700;" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
+      <div class="mt-auto pt-3 d-flex align-items-center justify-content-between nb-card-foot">
+        <a href="{{ $cardUrl }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
           Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
         </a>
       </div>

@@ -53,7 +53,7 @@
             <a class="nav-link {{ request()->is('kontak*') ? 'active' : '' }}" href="{{ url('/kontak') }}">Kontak</a>
           </li>
           <li class="nav-item ms-lg-2 my-2 my-lg-0">
-            <a class="navbar-cta-btn btn btn-sm btn-outline-danger px-3 py-2 d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer">
+            <a class="navbar-cta-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer">
               <i class="bi bi-download"></i> Unduh Katalog
             </a>
           </li>
