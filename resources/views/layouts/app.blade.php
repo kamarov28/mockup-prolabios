@@ -19,8 +19,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Soft Neo-Brutalism Typography: Bricolage Grotesque (display) + IBM Plex Sans (body) + System Monospace -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+      <!-- Soft Neo-Brutalism Typography: Bricolage Grotesque (display) + IBM Plex Sans (body) + System Monospace -->
+      <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
 
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/site.css'])
@@ -41,15 +41,16 @@
 
   <!-- Twitter Card Metadata -->
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="{{ request()->url() }}">
   <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
   <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
   <meta name="twitter:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
 
+  <!-- Google Analytics 4 / GTM (If configured via .env or SiteSettings) -->
   @php
-    $gaId = $siteSettings['google_analytics_id'] ?? null;
-    $gtmId = $siteSettings['google_tag_manager_id'] ?? null;
+    $gaId = config('services.google_analytics_id', env('GOOGLE_ANALYTICS_ID', $siteSettings['google_analytics_id'] ?? null));
+    $gtmId = config('services.google_tag_manager_id', env('GOOGLE_TAG_MANAGER_ID', $siteSettings['google_tag_manager_id'] ?? null));
   @endphp
-
   @if(!empty($gaId))
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}"></script>
     <script>
@@ -59,7 +60,6 @@
       gtag('config', '{{ $gaId }}');
     </script>
   @endif
-
   @if(!empty($gtmId))
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -68,21 +68,23 @@
     })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
   @endif
 </head>
-<body class="@yield('body_class')">
+<body>
   @if(!empty($gtmId))
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   @endif
 
-  <a class="visually-hidden-focusable position-absolute top-0 start-0 m-2 p-2 bg-dark text-white" href="#main-content">Lewati ke konten</a>
-
+  <!-- Header / Navigation -->
   @include('layouts.partials.navbar')
 
-  <main id="main-content">
+  <main>
     @yield('content')
   </main>
 
+  <!-- Corporate Footer -->
   @include('layouts.partials.footer')
+
+  <!-- Cookie Consent Notice -->
   @include('layouts.partials.cookie-consent')
 
   <!-- Core App Scripts (Bundled Bootstrap 5 + SweetAlert2 + Site Behaviors) -->
@@ -91,14 +93,30 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var mainNavbar = document.getElementById('mainNavbar');
-      if (mainNavbar) {
-        mainNavbar.querySelectorAll('a.nav-link, a.dropdown-item').forEach(function (link) {
-          link.addEventListener('click', function () {
-            if (window.innerWidth < 992 && mainNavbar.classList.contains('show')) {
-              var bsCollapse = bootstrap.Collapse.getInstance(mainNavbar) || new bootstrap.Collapse(mainNavbar, { toggle: false });
-              bsCollapse.hide();
-            }
-          });
+      var hamburgerInput = document.getElementById('hamburger-checkbox');
+      
+      if (mainNavbar && hamburgerInput) {
+        var bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
+        hamburgerInput.checked = false;
+        hamburgerInput.setAttribute('aria-expanded', 'false');
+
+        hamburgerInput.addEventListener('change', function () {
+          var isExpanded = hamburgerInput.checked;
+          hamburgerInput.setAttribute('aria-expanded', String(isExpanded));
+          if (isExpanded) {
+            bsCollapse.show();
+          } else {
+            bsCollapse.hide();
+          }
+        });
+
+        mainNavbar.addEventListener('show.bs.collapse', function () {
+          hamburgerInput.checked = true;
+          hamburgerInput.setAttribute('aria-expanded', 'true');
+        });
+        mainNavbar.addEventListener('hide.bs.collapse', function () {
+          hamburgerInput.checked = false;
+          hamburgerInput.setAttribute('aria-expanded', 'false');
         });
       }
 
