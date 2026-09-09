@@ -79,8 +79,7 @@
                   @if(!empty($product->principal->logo))
                     <div class="detail-principal-logo-box">
                       <img src="{{ str_starts_with($product->principal->logo, 'http') || str_starts_with($product->principal->logo, '/') ? $product->principal->logo : asset('storage/' . $product->principal->logo) }}"
-                           alt="Logo {{ $product->principal->name }}"
-                           style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                           alt="Logo {{ $product->principal->name }}">
                     </div>
                   @endif
                   <div>
@@ -140,7 +139,7 @@
                   <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3 rfq-details-box">
                     <div class="d-flex align-items-center gap-3">
                       <div class="rfq-trust-box">
-                        <i class="bi bi-file-earmark-pdf-fill text-danger" style="font-size: 1.4rem;"></i>
+                        <i class="bi bi-file-earmark-pdf-fill text-danger"></i>
                       </div>
                       <div>
                         <strong class="d-block detail-datasheet-title">Dokumen Lembar Data &amp; Spesifikasi Teknis (PDF)</strong>
@@ -155,7 +154,7 @@
                     </div>
                     @if(!empty($product['datasheet_url']))
                       <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2 detail-btn-sm">
-                        <i class="bi bi-download"></i> Unduh Spesifikasi (PDF) <i class="bi bi-box-arrow-up-right ms-1" style="font-size: 0.75rem;"></i>
+                        <i class="bi bi-download"></i> Unduh Spesifikasi (PDF) <i class="bi bi-box-arrow-up-right ms-1"></i>
                       </a>
                     @else
                       <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2 detail-btn-ghost-sm">
@@ -218,7 +217,7 @@
                     </div>
 
                     <!-- Live Indent Notice -->
-                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice" style="display: none;">
+                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
                       <i class="bi bi-info-circle-fill me-1"></i>
                       Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
                     </div>
@@ -230,17 +229,17 @@
                   <div class="nb-status-icon-box detail-response-icon flex-shrink-0">
                     <i class="bi bi-clock-history text-dark"></i>
                   </div>
-                  <div style="font-size: 0.82rem; line-height: 1.4; color: var(--nb-ink);">
+                  <div class="detail-trust-copy">
                     <strong class="d-block detail-datasheet-title">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
                     Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
                   </div>
                 </div>
 
                 <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ route('cart.index') }}" class="nb-btn d-inline-flex align-items-center justify-content-center text-decoration-none detail-add-btn" style="padding: 0 20px; font-size: 0.85rem; background: var(--nb-accent); color: var(--nb-ink); border: var(--nb-border); box-shadow: var(--nb-shadow);">
+                  <a href="{{ route('cart.index') }}" class="nb-btn detail-nav-btn detail-nav-btn--cart text-decoration-none">
                     <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
                   </a>
-                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none detail-add-btn" style="padding: 0 20px; font-size: 0.85rem;">
+                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
                   </a>
                 </div>
@@ -249,7 +248,7 @@
 
             {{-- Lightbox Modal --}}
             <div class="modal fade" id="imageLightboxModal" tabindex="-1" aria-labelledby="imageLightboxModalLabel" aria-hidden="true" data-bs-backdrop="true">
-              <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 95vw; margin: 1.5rem auto;">
+              <div class="modal-dialog modal-dialog-centered modal-xl detail-lightbox-dialog">
                 <div class="modal-content bg-transparent border-0 shadow-none position-relative">
                   <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Tutup">
                     <i class="bi bi-x-lg"></i>
@@ -325,8 +324,8 @@
             </script>
           @else
             <div class="empty-state-card">
-              <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.4; display: block; margin-bottom: 20px;"></i>
-              <h2 class="profil-section-title" style="font-size: 1.4rem !important;">Produk Tidak Ditemukan</h2>
+              <i class="bi bi-box-seam detail-empty-icon"></i>
+              <h2 class="profil-section-title detail-empty-title">Produk Tidak Ditemukan</h2>
               <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
               <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i class="bi bi-arrow-right"></i></a>
             </div>

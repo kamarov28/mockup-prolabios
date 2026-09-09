@@ -446,6 +446,11 @@
   padding: 5px;
   flex-shrink: 0;
 }
+.detail-principal-logo-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
 .detail-principal-label {
   font-size: 0.65rem;
   letter-spacing: 0.5px;
@@ -503,6 +508,9 @@
   justify-content: center;
   flex-shrink: 0;
 }
+.rfq-trust-box .bi-file-earmark-pdf-fill {
+  font-size: 1.4rem;
+}
 
 .detail-datasheet-title {
   font-family: var(--font-display);
@@ -514,6 +522,9 @@
 .detail-btn-sm {
   font-size: 0.82rem;
   padding: 8px 16px;
+}
+.detail-btn-sm .bi-box-arrow-up-right {
+  font-size: 0.75rem;
 }
 .detail-btn-ghost-sm {
   font-size: 0.82rem;
@@ -529,10 +540,50 @@
   color: var(--nb-ink);
   font-size: 0.85rem;
 }
+.detail-indent-notice.is-hidden {
+  display: none;
+}
 
 .detail-response-icon {
   width: 40px;
   height: 40px;
   font-size: 1.25rem;
   flex-shrink: 0;
+}
+
+.detail-trust-copy {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--nb-ink);
+}
+
+.detail-nav-btn {
+  padding: 0 20px;
+  font-size: 0.85rem;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.detail-nav-btn--cart {
+  background: var(--nb-accent);
+  color: var(--nb-ink);
+  border: var(--nb-border);
+  box-shadow: var(--nb-shadow);
+}
+
+.detail-lightbox-dialog {
+  max-width: 95vw;
+  margin: 1.5rem auto;
+}
+
+.detail-empty-icon {
+  font-size: 3rem;
+  color: var(--nb-muted);
+  opacity: 0.4;
+  display: block;
+  margin-bottom: 20px;
+}
+.detail-empty-title {
+  font-size: 1.4rem;
 }
