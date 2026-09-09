@@ -114,6 +114,28 @@
   flex: 1;
 }
 
+.product-principal-logo {
+  padding: 2px 6px;
+  background: var(--nb-card, #FFFFFF);
+  border: 1.5px solid var(--nb-ink, #1E1E1E);
+  border-radius: var(--nb-radius-sm, 4px);
+  box-shadow: 1.5px 1.5px 0 var(--nb-ink, #1E1E1E);
+  max-height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.product-principal-logo img {
+  max-height: 18px;
+  max-width: 65px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
 /* ── Detail Produk Page & Lightbox ───────────────────────────────────────── */
 .detail-product-img-wrap {
   border: 1.5px solid var(--nb-ink, #1E1E1E);

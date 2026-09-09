@@ -40,29 +40,29 @@
                   <img src="{{ $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $prod['title'] }} — Produk laboratorium" loading="lazy" decoding="async">
                 </div>
                 <div class="card-body p-4 d-flex flex-column">
-                  <div class="d-flex flex-wrap gap-1 align-items-center mb-2">
+                  <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
                     @if(!empty($prod['catalog']))
                       <div class="product-cat-code">CAT. {{ $prod['catalog'] }}</div>
+                    @else
+                      <div></div>
                     @endif
                     @if(!empty($prod->principal))
-                      <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
-                        <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
-                      </span>
+                      @if(!empty($prod->principal->logo))
+                        <div class="product-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
+                          <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
+                               alt="Logo {{ $prod->principal->name }}"
+                               loading="lazy">
+                        </div>
+                      @else
+                        <span class="nb-badge-sm" style="font-size: 0.68rem; padding: 2px 6px;">
+                          <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
+                        </span>
+                      @endif
                     @endif
                   </div>
-                  <div class="d-flex align-items-start justify-content-between gap-2 mb-2">
-                    <h3 class="card-title fs-6 fw-semibold mb-0 flex-grow-1" style="line-height: 1.4;">
-                      <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
-                    </h3>
-                    @if(!empty($prod->principal) && !empty($prod->principal->logo))
-                      <div class="product-principal-logo flex-shrink-0" title="Prinsipal: {{ $prod->principal->name }}" style="padding: 2px 4px; background: #FFFFFF; border: 1.5px solid var(--nb-ink); border-radius: 4px; box-shadow: 1.5px 1.5px 0 var(--nb-ink); max-height: 32px; display: inline-flex; align-items: center; justify-content: center;">
-                        <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
-                             alt="Logo {{ $prod->principal->name }}"
-                             loading="lazy"
-                             style="max-height: 22px; max-width: 55px; width: auto; height: auto; object-fit: contain;">
-                      </div>
-                    @endif
-                  </div>
+                  <h3 class="card-title fs-6 fw-semibold mb-2" style="line-height: 1.4;">
+                    <a href="{{ product_url($prod) }}" class="product-card-link" data-vt-target="prod-card-{{ Str::slug($prod['title']) }}">{{ $prod['title'] }}</a>
+                  </h3>
                   <p class="product-card-desc mb-3 flex-grow-1 text-muted" style="font-size: 0.82rem; line-height: 1.5;">
                     {{ Str::limit(str_replace('-', ' ', $prod['sub_category'] ?? $prod['category'] ?? ''), 65) ?: 'Instrumen dan reagen analitika standar pengujian laboratorium' }}
                   </p>
