@@ -63,8 +63,6 @@
               $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
               $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
-              $stock = (int) ($product['stock'] ?? 0);
-              $price = (float) ($product['price'] ?? 0);
             @endphp
 
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
@@ -172,46 +170,9 @@
                   </div>
                 </div>
 
-                {{-- Summary + CTA ke page beli (form qty dipisah) --}}
-                <div class="card p-4 mb-4">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <div>
-                      <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit:</span>
-                      <strong class="fs-4 d-block detail-price">
-                        {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
-                      </strong>
-                      <div class="mt-2">
-                        @if($stock > 0)
-                          <span class="nb-badge-stock">
-                            <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
-                          </span>
-                        @else
-                          <span class="nb-badge-stock nb-badge-stock--empty">
-                            <i class="bi bi-clock-history me-1"></i> Pesanan Khusus (Indent)
-                          </span>
-                        @endif
-                      </div>
-                    </div>
-                    <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-add-btn text-decoration-none" aria-label="Minta penawaran {{ $product['title'] }}">
-                      <i class="bi bi-cart-plus me-2"></i> Minta Penawaran
-                    </a>
-                  </div>
-                </div>
-
-                {{-- B2B Trust Badge & SLA Response Commitment --}}
-                <div class="mb-4 p-3 d-flex align-items-center gap-3 rfq-trust-box">
-                  <div class="nb-status-icon-box detail-response-icon flex-shrink-0">
-                    <i class="bi bi-clock-history text-dark"></i>
-                  </div>
-                  <div class="detail-trust-copy">
-                    <strong class="d-block detail-datasheet-title">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
-                    Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
-                  </div>
-                </div>
-
-                <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ $beliUrl }}" class="nb-btn detail-nav-btn detail-nav-btn--cart text-decoration-none">
-                    <i class="bi bi-cart-plus me-2"></i> Lanjut ke Form Penawaran
+                <div class="mt-2 d-flex flex-wrap gap-3">
+                  <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-nav-btn text-decoration-none">
+                    <i class="bi bi-cart-plus me-2"></i> Minta Penawaran
                   </a>
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
