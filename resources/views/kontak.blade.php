@@ -20,7 +20,7 @@
           <div class="kontak-info-block">
             <div class="kontak-info-icon"><i class="bi bi-geo-alt"></i></div>
             <h3 class="kontak-info-title">Alamat Kantor</h3>
-            <p class="profil-body-text mb-0">{!! nl2br(e($siteSettings['contact_address'] ?? "Komplek Cibinong Griya Asri Blok: A9/10, RT 01 RW 08\nCibinong – Bogor, West Java, Indonesia 16913")) !!}</p>
+            <p class="profil-body-text mb-0">{!! nl2br(e($siteSettings['contact_address'] ?? 'GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914')) !!}</p>
           </div>
 
           <div class="kontak-info-block">

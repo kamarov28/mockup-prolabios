@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5, h6,
 .b2b-final-title,
 .hitech-final-title {
   font-family: var(--font-display) !important;
-  color: var(--nb-ink) !important;
+  color: var(--nb-ink);
   letter-spacing: -0.03em;
   font-weight: 700;
 }
@@ -377,18 +377,39 @@ a:hover {
   border-top: 4px solid #1E1E1E !important;
   color: #FFFFFF !important;
 }
-.site-footer .footer-logo {
-  filter: brightness(0) invert(1);
+.site-footer .footer-logo-box {
+  display: inline-block;
+  background: #FFFFFF;
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  padding: 6px 12px;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
-.site-footer .footer-heading {
-  color: #FFFFFF;
-  font-family: var(--font-display);
+.site-footer .footer-logo-box:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink);
+}
+.site-footer .footer-logo {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+.site-footer .footer-heading,
+.site-footer h1,
+.site-footer h2,
+.site-footer h3,
+.site-footer h4 {
+  color: #FFFFFF !important;
+  font-family: var(--font-display) !important;
   font-weight: 700;
   font-size: 1.05rem;
   letter-spacing: -0.01em;
   margin-bottom: 1.25rem;
 }
 .site-footer .footer-text,
+.site-footer .footer-text span,
 .site-footer p,
 .site-footer ul,
 .site-footer li,
@@ -396,29 +417,89 @@ a:hover {
 .site-footer .footer-links a,
 .site-footer .footer-copy,
 .site-footer .footer-legal-link {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.92) !important;
   font-family: var(--font-body);
   text-decoration: none;
   transition: color 0.12s ease;
 }
+.site-footer strong {
+  color: #FFFFFF !important;
+}
 .site-footer .footer-links a:hover,
 .site-footer .footer-contact-link:hover,
 .site-footer .footer-legal-link:hover {
-  color: var(--nb-accent);
+  color: var(--nb-accent) !important;
 }
 .site-footer .footer-icon {
-  color: var(--nb-accent);
+  color: var(--nb-accent) !important;
+}
+.site-footer .footer-subicon {
+  color: var(--nb-accent) !important;
+  font-size: 0.85rem;
+}
+.site-footer .footer-trust-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.site-footer .footer-trust-pill span {
+  color: var(--nb-ink) !important;
+}
+.site-footer .footer-trust-icon {
+  color: var(--nb-primary) !important;
+  font-size: 0.95rem;
+}
+.site-footer .footer-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: var(--nb-accent);
+  color: var(--nb-ink) !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.88rem;
+  border: 2px solid var(--nb-ink);
+  border-radius: var(--nb-radius-sm);
+  box-shadow: 2px 2px 0 var(--nb-ink);
+  text-decoration: none !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.site-footer .footer-wa-btn,
+.site-footer .footer-wa-btn span,
+.site-footer .footer-wa-btn i {
+  color: var(--nb-ink) !important;
+}
+.site-footer .footer-wa-btn:hover {
+  background: #E5B235;
+  color: var(--nb-ink) !important;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--nb-ink);
+}
+.site-footer .footer-wa-btn:hover span,
+.site-footer .footer-wa-btn:hover i {
+  color: var(--nb-ink) !important;
 }
 .site-footer .footer-divider {
-  border-color: rgba(255, 255, 255, 0.25);
+  border-top: 2px solid rgba(255, 255, 255, 0.25);
   opacity: 1;
 }
 .site-footer .footer-social-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: #FFFFFF;
   border: 2px solid var(--nb-ink);
   color: var(--nb-ink);
@@ -426,6 +507,7 @@ a:hover {
   box-shadow: 2px 2px 0 var(--nb-ink);
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
   text-decoration: none;
+  font-size: 1.15rem;
 }
 .site-footer .footer-social-icon:hover {
   background: var(--nb-accent);

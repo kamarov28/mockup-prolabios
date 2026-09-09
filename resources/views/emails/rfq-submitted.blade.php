@@ -115,7 +115,7 @@
     <div class="footer">
       <strong>PT. Prolabios Mitra Analitika</strong><br>
       Inquiry Notification System &bull; Automatic Sales Alert<br>
-      Komp. Cibinong Griya Asri Blok A9/10, Bogor, Jawa Barat 16913
+      GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914
     </div>
   </div>
 </body>
