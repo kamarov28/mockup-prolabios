@@ -311,25 +311,16 @@
           </div>
 
           <!-- Sidebar Card 3: Direct Consultation & RFQ CTA Box -->
-          <div class="profil-cta-box p-4">
-            <span class="nb-badge mb-3">
-              KONSULTASI PENGADAAN
-            </span>
-            <h3 class="profil-sidebar-title">
-              Butuh Penawaran atau Diskusi Teknis?
-            </h3>
-            <p>
-              Tim representatif teknis kami siap mendampingi pemilihan instrumen, reagen, atau penerbitan surat penawaran harga resmi (Quotation) untuk institusi Anda.
-            </p>
-            <div class="d-flex flex-column gap-2">
-              <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center">
-                Hubungi Kami <i class="bi bi-arrow-right ms-1"></i>
-              </a>
-              <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center">
-                <i class="bi bi-box-seam me-1"></i> Lihat Katalog Produk
-              </a>
-            </div>
-          </div>
+          @include('partials.sidebar-cta', [
+            'badge' => 'KONSULTASI PENGADAAN',
+            'title' => 'Butuh Penawaran atau Diskusi Teknis?',
+            'text' => 'Tim representatif teknis kami siap mendampingi pemilihan instrumen, reagen, atau penerbitan surat penawaran harga resmi (Quotation) untuk institusi Anda.',
+            'primaryUrl' => url('/kontak'),
+            'primaryText' => 'Hubungi Kami',
+            'secondaryUrl' => url('/produk'),
+            'secondaryText' => 'Lihat Katalog Produk',
+            'secondaryIcon' => 'bi bi-box-seam'
+          ])
 
         </div>
 

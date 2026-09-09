@@ -72,16 +72,16 @@
     </div>
 
     <!-- Sidebar Card 2: Butuh Bantuan CTA -->
-    <div class="profil-cta-box p-4">
-      <span class="nb-badge mb-3">KONSULTASI PRODUK</span>
-      <h3 class="profil-sidebar-title">Butuh Bantuan?</h3>
-      <p>Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.</p>
-      <a href="{{ url('/kontak') }}?subjek=inquiry" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">
-        Tanya Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
-      </a>
-      <a href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem;">
-        <i class="bi bi-download me-1"></i> Unduh Katalog PDF
-      </a>
-    </div>
+    @include('partials.sidebar-cta', [
+      'badge' => 'KONSULTASI PRODUK',
+      'title' => 'Butuh Bantuan?',
+      'text' => 'Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.',
+      'primaryUrl' => url('/kontak') . '?subjek=inquiry',
+      'primaryText' => 'Tanya Tim Teknis',
+      'secondaryUrl' => !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf'),
+      'secondaryText' => 'Unduh Katalog PDF',
+      'secondaryIcon' => 'bi bi-download',
+      'secondaryBlank' => true
+    ])
   </div>
 </aside>

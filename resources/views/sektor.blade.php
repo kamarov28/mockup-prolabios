@@ -46,17 +46,16 @@
           </div>
 
           <!-- Sidebar Card 2: B2B Consultation CTA Box -->
-          <div class="profil-cta-box p-4">
-            <span class="nb-badge mb-3">KONSULTASI SPESIFIKASI</span>
-            <h3 class="profil-sidebar-title">Butuh Solusi Spesifik?</h3>
-            <p>Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.</p>
-            <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-primary w-100 justify-content-center mb-2">
-              Konsultasi Tim Teknis <i class="bi bi-arrow-right ms-1"></i>
-            </a>
-            <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem;">
-              <i class="bi bi-box-seam me-1"></i> Jelajahi Seluruh Katalog
-            </a>
-          </div>
+          @include('partials.sidebar-cta', [
+            'badge' => 'KONSULTASI SPESIFIKASI',
+            'title' => 'Butuh Solusi Spesifik?',
+            'text' => 'Diskusikan alur pengujian laboratorium atau spesifikasi instrumen industri Anda dengan tim spesialis kami.',
+            'primaryUrl' => url('/kontak') . '?subjek=consultation',
+            'primaryText' => 'Konsultasi Tim Teknis',
+            'secondaryUrl' => url('/produk'),
+            'secondaryText' => 'Jelajahi Seluruh Katalog',
+            'secondaryIcon' => 'bi bi-box-seam'
+          ])
         </div>
 
         <!-- Main Content (Right, Order 2 on Desktop, Order 1 on Mobile/Tablet) -->
