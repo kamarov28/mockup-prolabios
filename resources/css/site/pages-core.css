@@ -264,7 +264,6 @@
 .profil-trust-box {
   background: var(--nb-card, #FFFFFF);
   border: 2px solid var(--nb-ink, #1E1E1E);
-  border-top: 5px solid var(--nb-primary, #A6171C);
   border-radius: var(--nb-radius-lg, 8px);
   box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
   padding: 1.75rem;
@@ -277,7 +276,6 @@
   background: var(--nb-card, #FFFFFF);
   color: var(--nb-ink, #1E1E1E);
   border: 2px solid var(--nb-ink, #1E1E1E);
-  border-top: 5px solid var(--nb-primary, #A6171C);
   border-radius: var(--nb-radius-lg, 8px);
   box-shadow: var(--nb-shadow, 4px 4px 0 #1E1E1E);
 }
