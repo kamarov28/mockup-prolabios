@@ -8,283 +8,190 @@
       </div>
     </div>
 
-    <!-- Sector Tabs Bar (Responsive: Full-width stacked on mobile, 2x2 on tablet, inline on desktop) -->
-    <div class="hitech-tab-bar mb-4 mb-md-5" role="tablist" aria-label="Pilihan Sektor Industri">
-      <button class="hitech-tab-btn active" role="tab" id="tab-pharma" aria-selected="true" aria-controls="panel-pharma" tabindex="0" data-target="pharma">
-        <i class="bi bi-capsule me-2" aria-hidden="true"></i> Farmasi &amp; Biotech
-      </button>
-      <button class="hitech-tab-btn" role="tab" id="tab-fnb" aria-selected="false" aria-controls="panel-fnb" tabindex="-1" data-target="fnb">
-        <i class="bi bi-cup-hot me-2" aria-hidden="true"></i> Makanan &amp; Minuman
-      </button>
-      <button class="hitech-tab-btn" role="tab" id="tab-healthcare" aria-selected="false" aria-controls="panel-healthcare" tabindex="-1" data-target="healthcare">
-        <i class="bi bi-hospital me-2" aria-hidden="true"></i> Kesehatan &amp; Klinis
-      </button>
-      <button class="hitech-tab-btn" role="tab" id="tab-brewing" aria-selected="false" aria-controls="panel-brewing" tabindex="-1" data-target="brewing">
-        <i class="bi bi-bezier2 me-2" aria-hidden="true"></i> Brewing &amp; Riset
-      </button>
-    </div>
-
     @php
       $sp = $homeData['sector_panels'] ?? [];
+      $sectors = [
+        'pharma' => [
+          'label' => 'Farmasi & Biotech',
+          'icon' => 'bi-capsule',
+          'tag' => $sp['pharma']['tag'] ?? 'FARMASI & KOSMETIK',
+          'title' => $sp['pharma']['title'] ?? 'Pengujian Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>',
+          'desc' => $sp['pharma']['desc'] ?? 'Kit Uji Endotoksin LAL (Bioendo), Indikator Biologi SCBI (Terragene), serta media kultur standar farmakope untuk kepatuhan QC obat & kosmetik.',
+          'link' => $sp['pharma']['link'] ?? '/sektor?s=pharmaceutical#sektor-nav',
+          'linkText' => 'Jelajahi Solusi Farmasi',
+          'compliance' => 'USP / EP / BP Compliant',
+          'cat' => 'CAT. BIO-TAL01',
+          'brand' => 'Bioendo Reagents',
+          'badge' => 'Ready Stock',
+          'badgeIcon' => 'bi-check2',
+          'prodTitle' => 'Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)',
+          'prodDesc' => 'Reagen sensitivitas tinggi (0.03 – 0.25 EU/ml) untuk deteksi cepat endotoksin bakteri pada sediaan farmasi injeksi, air WFI, dan alat kesehatan steril.',
+          'stat1_label' => 'Sensitivitas',
+          'stat1_val' => '0.03 EU/mL',
+          'stat1_class' => 'fw-bold small nb-mono',
+          'stat2_label' => 'Kemasan',
+          'stat2_val' => '5.2 mL / Vial',
+          'stat2_class' => 'fw-bold small nb-mono',
+          'certIcon' => 'bi-file-earmark-check',
+          'cert' => 'Sertifikat COA per batch',
+          'rfqLink' => url('/produk?q=endotoxin'),
+          'rfqAria' => 'Ajukan RFQ produk reagen endotoksin',
+        ],
+        'fnb' => [
+          'label' => 'Makanan & Minuman',
+          'icon' => 'bi-cup-hot',
+          'tag' => $sp['fnb']['tag'] ?? 'INDUSTRI MAKANAN & MINUMAN',
+          'title' => $sp['fnb']['title'] ?? 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>',
+          'desc' => $sp['fnb']['desc'] ?? 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk memastikan kepatuhan standar HACCP & BPOM.',
+          'link' => $sp['fnb']['link'] ?? '/sektor?s=food#sektor-nav',
+          'linkText' => 'Jelajahi Solusi F&B',
+          'compliance' => 'HACCP & ISO 22000',
+          'cat' => 'CAT. SCH-MEDIA02',
+          'brand' => 'Scharlau Microbiology',
+          'badge' => 'Ready Stock',
+          'badgeIcon' => 'bi-check2',
+          'prodTitle' => 'Chromogenic Media for Salmonella & E. coli',
+          'prodDesc' => 'Media kultur selektif diferensiasi warna spesifik untuk identifikasi koloni patogen makanan dalam 24 jam dengan akurasi isolasi tinggi.',
+          'stat1_label' => 'Inkubasi',
+          'stat1_val' => '24 Jam (37°C)',
+          'stat1_class' => 'fw-bold small nb-mono',
+          'stat2_label' => 'Bentuk',
+          'stat2_val' => 'Dehydrated / Ready Plate',
+          'stat2_class' => 'fw-bold small',
+          'certIcon' => 'bi-shield-check',
+          'cert' => 'BPOM Food Standard',
+          'rfqLink' => url('/produk?q=salmonella'),
+          'rfqAria' => 'Ajukan RFQ media kromogenik salmonella',
+        ],
+        'healthcare' => [
+          'label' => 'Kesehatan & Klinis',
+          'icon' => 'bi-hospital',
+          'tag' => $sp['healthcare']['tag'] ?? 'KESEHATAN & CSSD RUMAH SAKIT',
+          'title' => $sp['healthcare']['title'] ?? 'Diagnostik & <span class="text-accent">Indikator Sterilisasi</span>',
+          'desc' => $sp['healthcare']['desc'] ?? 'Identifikasi mikroba, uji sensitivitas antibiotik MIC, serta indikator kimia & biologi untuk sterilisator CSSD rumah sakit.',
+          'link' => $sp['healthcare']['link'] ?? '/sektor?s=hospital-clinic#sektor-nav',
+          'linkText' => 'Jelajahi Solusi Kesehatan',
+          'compliance' => 'AKL Kemenkes RI',
+          'cat' => 'CAT. TER-BT20',
+          'brand' => 'Terragene Bionova',
+          'badge' => 'AKL Certified',
+          'badgeIcon' => 'bi-patch-check',
+          'prodTitle' => 'Self-Contained Biological Indicator (SCBI) Steam',
+          'prodDesc' => 'Indikator biologi Geobacillus stearothermophilus untuk monitoring sterilisasi uap CSSD rumah sakit dengan pembacaan cepat 24 jam.',
+          'stat1_label' => 'Organisme',
+          'stat1_val' => 'G. stearothermophilus',
+          'stat1_class' => 'fw-bold small fst-italic',
+          'stat2_label' => 'Populasi Spora',
+          'stat2_val' => '> 10^6 CFU',
+          'stat2_class' => 'fw-bold small nb-mono',
+          'certIcon' => 'bi-patch-check',
+          'cert' => 'Kemenkes AKL Resmi',
+          'rfqLink' => url('/produk?q=indicator'),
+          'rfqAria' => 'Ajukan RFQ indikator biologi SCBI',
+        ],
+        'brewing' => [
+          'label' => 'Brewing & Riset',
+          'icon' => 'bi-bezier2',
+          'tag' => $sp['brewing']['tag'] ?? 'INDUSTRI BREWING & RISET',
+          'title' => $sp['brewing']['title'] ?? 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>',
+          'desc' => $sp['brewing']['desc'] ?? 'Media spesifik bakteri pembusuk bir (Lactobacillus, Pediococcus) dan penanganan cairan presisi untuk riset biologi molekuler.',
+          'link' => $sp['brewing']['link'] ?? '/sektor?s=brewing#sektor-nav',
+          'linkText' => 'Jelajahi Solusi Brewing',
+          'compliance' => 'R&D Quality Control',
+          'cat' => 'CAT. DOH-NBB01',
+          'brand' => 'Döhler NBB Diagnostics',
+          'badge' => 'Ready Stock',
+          'badgeIcon' => 'bi-check2',
+          'prodTitle' => 'NBB®-A Agar for Spoilage Microorganisms',
+          'prodDesc' => 'Media deteksi selektif spesifik untuk isolasi bakteri pembusuk bir dan fermentasi (Lactobacillus & Pediococcus) tanpa gangguan ragi kultur.',
+          'stat1_label' => 'Deteksi Target',
+          'stat1_val' => 'Lactobacillus / Pediococcus',
+          'stat1_class' => 'fw-bold small',
+          'stat2_label' => 'Format',
+          'stat2_val' => 'Solid Ready Agar',
+          'stat2_class' => 'fw-bold small',
+          'certIcon' => 'bi-journal-check',
+          'cert' => 'Brewing Lab Protocol',
+          'rfqLink' => url('/produk?q=nbb'),
+          'rfqAria' => 'Ajukan RFQ media NBB agar brewing',
+        ],
+      ];
     @endphp
 
-    <!-- Tab Content Panels (Interactive Spec Card) -->
+    <!-- Sector Tabs Bar (Responsive) -->
+    <div class="hitech-tab-bar mb-4 mb-md-5" role="tablist" aria-label="Pilihan Sektor Industri">
+      @foreach($sectors as $id => $sec)
+        <button class="hitech-tab-btn {{ $loop->first ? 'active' : '' }}" role="tab" id="tab-{{ $id }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}" aria-controls="panel-{{ $id }}" tabindex="{{ $loop->first ? '0' : '-1' }}" data-target="{{ $id }}">
+          <i class="bi {{ $sec['icon'] }} me-2" aria-hidden="true"></i> {{ $sec['label'] }}
+        </button>
+      @endforeach
+    </div>
+
+    <!-- Tab Content Panels (Interactive Spec Cards) -->
     <div class="hitech-tab-panels">
-      <!-- Panel 1: Pharma -->
-      @php $ph = $sp['pharma'] ?? []; @endphp
-      <div class="hitech-tab-panel active" id="panel-pharma" role="tabpanel" aria-labelledby="tab-pharma" tabindex="0">
-        <div class="row g-4 align-items-stretch">
-          <div class="col-lg-6">
-            <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <span class="hitech-panel-tag">{{ $ph['tag'] ?? 'FARMASI & KOSMETIK' }}</span>
-                <h3 class="hitech-panel-title">{!! $ph['title'] ?? 'Pengujian Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>' !!}</h3>
-                <p class="hitech-panel-desc">{{ $ph['desc'] ?? 'Kit Uji Endotoksin LAL (Bioendo), Indikator Biologi SCBI (Terragene), serta media kultur standar farmakope untuk kepatuhan QC obat & kosmetik.' }}</p>
-              </div>
-              <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-                <a href="{{ url($ph['link'] ?? '/sektor?s=pharmaceutical#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                  Jelajahi Solusi Farmasi <i class="bi bi-arrow-right"></i>
-                </a>
-                <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> USP / EP / BP Compliant</span>
+      @foreach($sectors as $id => $sec)
+        <div class="hitech-tab-panel {{ $loop->first ? 'active' : '' }}" id="panel-{{ $id }}" role="tabpanel" aria-labelledby="tab-{{ $id }}" tabindex="0">
+          <div class="row g-4 align-items-stretch">
+            <div class="col-lg-6">
+              <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <span class="hitech-panel-tag">{{ $sec['tag'] }}</span>
+                  <h3 class="hitech-panel-title">{!! $sec['title'] !!}</h3>
+                  <p class="hitech-panel-desc">{{ $sec['desc'] }}</p>
+                </div>
+                <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
+                  <a href="{{ url($sec['link']) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
+                    {{ $sec['linkText'] }} <i class="bi bi-arrow-right"></i>
+                  </a>
+                  <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> {{ $sec['compliance'] }}</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Interactive Spec Card Preview -->
-          <div class="col-lg-6">
-            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="product-cat-code">CAT. BIO-TAL01</span>
-                    <span class="text-muted small">Bioendo Reagents</span>
-                  </div>
-                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
-                </div>
-
-                <h4 class="fs-6 fw-semibold mb-2">Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)</h4>
-                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
-                  Reagen sensitivitas tinggi (0.03 – 0.25 EU/ml) untuk deteksi cepat endotoksin bakteri pada sediaan farmasi injeksi, air WFI, dan alat kesehatan steril.
-                </p>
-
-                <div class="row g-2 mb-3">
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Sensitivitas</div>
-                      <div class="fw-bold small nb-mono">0.03 EU/mL</div>
+            <!-- Interactive Spec Card Preview -->
+            <div class="col-lg-6">
+              <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
+                <div>
+                  <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
+                    <div class="d-flex align-items-center gap-2">
+                      <span class="product-cat-code">{{ $sec['cat'] }}</span>
+                      <span class="text-muted small">{{ $sec['brand'] }}</span>
                     </div>
+                    <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi {{ $sec['badgeIcon'] }} me-1" style="color:#A6171C;"></i> {{ $sec['badge'] }}</span>
                   </div>
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Kemasan</div>
-                      <div class="fw-bold small nb-mono">5.2 mL / Vial</div>
+
+                  <h4 class="fs-6 fw-semibold mb-2">{{ $sec['prodTitle'] }}</h4>
+                  <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                    {{ $sec['prodDesc'] }}
+                  </p>
+
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <div class="hitech-spec-stat p-2 rounded">
+                        <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">{{ $sec['stat1_label'] }}</div>
+                        <div class="{{ $sec['stat1_class'] }}">{{ $sec['stat1_val'] }}</div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-file-earmark-check text-primary me-1"></i> Sertifikat COA per batch</span>
-                <a href="{{ url('/produk?q=endotoxin') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ produk reagen endotoksin">
-                  <i class="bi bi-cart-plus"></i> Tambah RFQ
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel 2: FNB -->
-      @php $fn = $sp['fnb'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-fnb" role="tabpanel" aria-labelledby="tab-fnb" tabindex="0">
-        <div class="row g-4 align-items-stretch">
-          <div class="col-lg-6">
-            <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <span class="hitech-panel-tag">{{ $fn['tag'] ?? 'INDUSTRI MAKANAN & MINUMAN' }}</span>
-                <h3 class="hitech-panel-title">{!! $fn['title'] ?? 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>' !!}</h3>
-                <p class="hitech-panel-desc">{{ $fn['desc'] ?? 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk memastikan kepatuhan standar HACCP & BPOM.' }}</p>
-              </div>
-              <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-                <a href="{{ url($fn['link'] ?? '/sektor?s=food#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                  Jelajahi Solusi F&amp;B <i class="bi bi-arrow-right"></i>
-                </a>
-                <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> HACCP &amp; ISO 22000</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Interactive Spec Card Preview -->
-          <div class="col-lg-6">
-            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="product-cat-code">CAT. SCH-MEDIA02</span>
-                    <span class="text-muted small">Scharlau Microbiology</span>
-                  </div>
-                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
-                </div>
-
-                <h4 class="fs-6 fw-semibold mb-2">Chromogenic Media for Salmonella &amp; E. coli</h4>
-                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
-                  Media kultur selektif diferensiasi warna spesifik untuk identifikasi koloni patogen makanan dalam 24 jam dengan akurasi isolasi tinggi.
-                </p>
-
-                <div class="row g-2 mb-3">
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Inkubasi</div>
-                      <div class="fw-bold small nb-mono">24 Jam (37°C)</div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Bentuk</div>
-                      <div class="fw-bold small">Dehydrated / Ready Plate</div>
+                    <div class="col-6">
+                      <div class="hitech-spec-stat p-2 rounded">
+                        <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">{{ $sec['stat2_label'] }}</div>
+                        <div class="{{ $sec['stat2_class'] }}">{{ $sec['stat2_val'] }}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-shield-check text-primary me-1"></i> BPOM Food Standard</span>
-                <a href="{{ url('/produk?q=salmonella') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ media kromogenik salmonella">
-                  <i class="bi bi-cart-plus"></i> Tambah RFQ
-                </a>
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
+                  <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi {{ $sec['certIcon'] }} text-primary me-1"></i> {{ $sec['cert'] }}</span>
+                  <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="{{ $sec['rfqAria'] }}">
+                    <i class="bi bi-cart-plus"></i> Tambah RFQ
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Panel 3: Healthcare -->
-      @php $hc = $sp['healthcare'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-healthcare" role="tabpanel" aria-labelledby="tab-healthcare" tabindex="0">
-        <div class="row g-4 align-items-stretch">
-          <div class="col-lg-6">
-            <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <span class="hitech-panel-tag">{{ $hc['tag'] ?? 'KESEHATAN & CSSD RUMAH SAKIT' }}</span>
-                <h3 class="hitech-panel-title">{!! $hc['title'] ?? 'Diagnostik & <span class="text-accent">Indikator Sterilisasi</span>' !!}</h3>
-                <p class="hitech-panel-desc">{{ $hc['desc'] ?? 'Identifikasi mikroba, uji sensitivitas antibiotik MIC, serta indikator kimia & biologi untuk sterilisator CSSD rumah sakit.' }}</p>
-              </div>
-              <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-                <a href="{{ url($hc['link'] ?? '/sektor?s=hospital-clinic#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                  Jelajahi Solusi Kesehatan <i class="bi bi-arrow-right"></i>
-                </a>
-                <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> AKL Kemenkes RI</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Interactive Spec Card Preview -->
-          <div class="col-lg-6">
-            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="product-cat-code">CAT. TER-BT20</span>
-                    <span class="text-muted small">Terragene Bionova</span>
-                  </div>
-                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-patch-check me-1" style="color:#A6171C;"></i> AKL Certified</span>
-                </div>
-
-                <h4 class="fs-6 fw-semibold mb-2">Self-Contained Biological Indicator (SCBI) Steam</h4>
-                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
-                  Indikator biologi Geobacillus stearothermophilus untuk monitoring sterilisasi uap CSSD rumah sakit dengan pembacaan cepat 24 jam.
-                </p>
-
-                <div class="row g-2 mb-3">
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Organisme</div>
-                      <div class="fw-bold small fst-italic">G. stearothermophilus</div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Populasi Spora</div>
-                      <div class="fw-bold small nb-mono">&gt; 10^6 CFU</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-patch-check text-primary me-1"></i> Kemenkes AKL Resmi</span>
-                <a href="{{ url('/produk?q=indicator') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ indikator biologi SCBI">
-                  <i class="bi bi-cart-plus"></i> Tambah RFQ
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Panel 4: Brewing -->
-      @php $br = $sp['brewing'] ?? []; @endphp
-      <div class="hitech-tab-panel" id="panel-brewing" role="tabpanel" aria-labelledby="tab-brewing" tabindex="0">
-        <div class="row g-4 align-items-stretch">
-          <div class="col-lg-6">
-            <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <span class="hitech-panel-tag">{{ $br['tag'] ?? 'INDUSTRI BREWING & RISET' }}</span>
-                <h3 class="hitech-panel-title">{!! $br['title'] ?? 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>' !!}</h3>
-                <p class="hitech-panel-desc">{{ $br['desc'] ?? 'Media spesifik bakteri pembusuk bir (Lactobacillus, Pediococcus) dan penanganan cairan presisi untuk riset biologi molekuler.' }}</p>
-              </div>
-              <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
-                <a href="{{ url($br['link'] ?? '/sektor?s=brewing#sektor-nav') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                  Jelajahi Solusi Brewing <i class="bi bi-arrow-right"></i>
-                </a>
-                <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> R&amp;D Quality Control</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Interactive Spec Card Preview -->
-          <div class="col-lg-6">
-            <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
-              <div>
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
-                  <div class="d-flex align-items-center gap-2">
-                    <span class="product-cat-code">CAT. DOH-NBB01</span>
-                    <span class="text-muted small">Döhler NBB Diagnostics</span>
-                  </div>
-                  <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi bi-check2 me-1" style="color:#A6171C;"></i> Ready Stock</span>
-                </div>
-
-                <h4 class="fs-6 fw-semibold mb-2">NBB®-A Agar for Spoilage Microorganisms</h4>
-                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
-                  Media deteksi selektif spesifik untuk isolasi bakteri pembusuk bir dan fermentasi (Lactobacillus &amp; Pediococcus) tanpa gangguan ragi kultur.
-                </p>
-
-                <div class="row g-2 mb-3">
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Deteksi Target</div>
-                      <div class="fw-bold small">Lactobacillus / Pediococcus</div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="hitech-spec-stat p-2 rounded">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">Format</div>
-                      <div class="fw-bold small">Solid Ready Agar</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi bi-journal-check text-primary me-1"></i> Brewing Lab Protocol</span>
-                <a href="{{ url('/produk?q=nbb') }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="Ajukan RFQ media NBB agar brewing">
-                  <i class="bi bi-cart-plus"></i> Tambah RFQ
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      @endforeach
     </div>
   </div>
 </section>
