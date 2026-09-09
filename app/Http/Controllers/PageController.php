@@ -122,7 +122,11 @@ class PageController extends Controller
             }
         }
 
-        return view('beli-produk', compact('product'));
+        if ($product && ! empty($product->slug)) {
+            return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
+        }
+
+        return redirect()->route('produk.index', [], 301);
     }
 
     public function sektor(DataService $dataService)

@@ -165,9 +165,69 @@
                   </div>
                 </div>
 
+                @php
+                  $stock = (int) ($product['stock'] ?? 0);
+                  $price = (float) ($product['price'] ?? 0);
+                @endphp
+
+                <!-- RFQ Procurement & Direct Add-to-Cart Card -->
+                <div class="card p-4 mb-4">
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom" style="border-color: rgba(30,30,30,0.12) !important;">
+                    <div>
+                      <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit / Penawaran Resmi:</span>
+                      <strong class="fs-4 d-block" style="color: var(--nb-primary); font-family: var(--font-display); font-weight: 700;">
+                        {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
+                      </strong>
+                    </div>
+                    <div>
+                      @if($stock > 0)
+                        <span class="nb-badge-stock">
+                          <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
+                        </span>
+                      @else
+                        <span class="nb-badge-stock nb-badge-stock--empty">
+                          <i class="bi bi-clock-history me-1"></i> Pesanan Khusus (Indent)
+                        </span>
+                      @endif
+                    </div>
+                  </div>
+
+                  <!-- Direct Add to Cart Form -->
+                  <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form" class="mb-1">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
+                    <input type="hidden" name="title" value="{{ $product['title'] }}">
+
+                    <div class="d-flex flex-wrap align-items-end gap-3">
+                      <div>
+                        <label class="d-block text-uppercase fw-bold mb-2" style="font-size: 0.72rem; letter-spacing: 1px; color: var(--nb-ink); font-family: var(--font-mono);">Jumlah Unit</label>
+                        <div class="nb-stepper-wrap">
+                          <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
+                            <i class="bi bi-dash-lg"></i>
+                          </button>
+                          <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
+                          <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
+                            <i class="bi bi-plus-lg"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1" style="height: 48px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
+                        <i class="bi bi-cart-plus me-2" style="font-size: 1.15rem;"></i> Tambah ke Keranjang Penawaran
+                      </button>
+                    </div>
+
+                    <!-- Live Indent Notice -->
+                    <div id="indent-notice" class="p-3 mt-3" style="display: none; background: var(--nb-accent); border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink); color: var(--nb-ink); font-size: 0.85rem;">
+                      <i class="bi bi-info-circle-fill me-1"></i>
+                      Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
+                    </div>
+                  </form>
+                </div>
+
                 {{-- B2B Trust Badge & SLA Response Commitment --}}
-                <div class="mb-4 p-3 d-flex align-items-center gap-3" style="background: #FFFFFF; border: 2px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
-                  <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; background: var(--nb-accent, #F1C045); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm);">
+                <div class="mb-4 p-3 d-flex align-items-center gap-3 rfq-trust-box">
+                  <div class="nb-status-icon-box flex-shrink-0" style="width: 40px; height: 40px;">
                     <i class="bi bi-clock-history text-dark" style="font-size: 1.25rem;"></i>
                   </div>
                   <div style="font-size: 0.82rem; line-height: 1.4; color: var(--nb-ink);">
@@ -177,8 +237,8 @@
                 </div>
 
                 <div class="mt-4 pt-2 d-flex flex-wrap gap-3">
-                  <a href="{{ url('/produk/beli') }}?id={{ $product['id'] }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 24px; font-size: 0.88rem;" aria-label="Permintaan penawaran dan harga untuk {{ $product['title'] }}">
-                    <i class="bi bi-cart-check me-2" style="font-size: 1.15rem;"></i> Permintaan Penawaran & Harga
+                  <a href="{{ route('cart.index') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem; background: var(--nb-accent); color: var(--nb-ink);">
+                    <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
                   </a>
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center justify-content-center text-decoration-none" style="height: 48px; padding: 0 20px; font-size: 0.85rem;">
                     <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
