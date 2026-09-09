@@ -83,6 +83,20 @@ class PageController extends Controller
     }
 
     /**
+     * Canonical buy / RFQ add page: /produk/{slug}/beli
+     */
+    public function beliProduk(string $slug, DataService $dataService)
+    {
+        $product = $dataService->getProductBySlug($slug);
+
+        if (! $product) {
+            abort(404);
+        }
+
+        return view('beli-produk', compact('product'));
+    }
+
+    /**
      * Legacy /produk/detail?id=123 → permanent redirect to /produk/{slug}
      */
     public function detailProdukLegacy(Request $request, DataService $dataService)
@@ -94,7 +108,6 @@ class PageController extends Controller
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                // Prefer slug, then legacy title match
                 $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
                     ?? $dataService->getProductByTitle((string) $identifier);
             }
@@ -104,26 +117,28 @@ class PageController extends Controller
             return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
         }
 
-        // Soft landing: still show detail if we found product without slug, else empty view
         return view('detail-produk', compact('product'));
     }
 
-    public function beliProduk(Request $request, DataService $dataService)
+    /**
+     * Legacy /produk/beli?id=123 → permanent redirect to /produk/{slug}/beli
+     */
+    public function beliProdukLegacy(Request $request, DataService $dataService)
     {
         $product = null;
         $identifier = $request->query('id');
+
         if ($identifier !== null && $identifier !== '') {
             if (is_numeric($identifier)) {
                 $product = $dataService->getProductById((int) $identifier);
             } else {
-                // Prefer slug, then legacy title match
                 $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
                     ?? $dataService->getProductByTitle((string) $identifier);
             }
         }
 
         if ($product && ! empty($product->slug)) {
-            return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
+            return redirect()->route('produk.beli', ['slug' => $product->slug], 301);
         }
 
         return redirect()->route('produk.index', [], 301);
