@@ -15,14 +15,14 @@
     <div class="d-inline-flex gap-2 align-items-center">
       <div class="admin-view-switcher">
         <a href="{{ request()->fullUrlWithQuery(['view' => 'table']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'table' ? 'active' : '' }}" title="Tampilan Tabel">
-          <i class="bi bi-table"></i>
+          <i data-lucide="table"></i>
         </a>
         <a href="{{ request()->fullUrlWithQuery(['view' => 'kanban']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'kanban' ? 'active' : '' }}" title="Tampilan Papan Kanban">
-          <i class="bi bi-kanban"></i>
+          <i data-lucide="kanban"></i>
         </a>
       </div>
       <a href="{{ route('admin.rfqs.export', request()->query()) }}" class="admin-btn admin-btn-ghost text-success" title="Download Excel/CSV sesuai filter saat ini">
-        <i class="bi bi-file-earmark-spreadsheet me-1"></i> Ekspor Excel
+        <i data-lucide="file-spreadsheet" class="me-1"></i> Ekspor Excel
       </a>
       <span class="admin-badge admin-badge-muted px-3 py-2">
         Total: {{ ($viewMode ?? 'table') === 'kanban' ? ($totalRfqs ?? 0) : ($rfqs->total() ?? 0) }} Pengajuan
@@ -57,16 +57,16 @@
                   data-bs-toggle="collapse" data-bs-target="#rfqDateFilterCollapse"
                   aria-expanded="{{ (request('start_date') || request('end_date')) ? 'true' : 'false' }}"
                   aria-controls="rfqDateFilterCollapse" title="Filter Rentang Tanggal">
-            <i class="bi bi-calendar-range"></i>
+            <i data-lucide="calendar-range"></i>
           </button>
         </div>
         <div class="col-md-2 d-flex gap-1">
           <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center" title="Terapkan Filter">
-            <i class="bi bi-funnel me-1"></i> Filter
+            <i data-lucide="filter" class="me-1"></i> Filter
           </button>
           @if(request('s') || request('product_name') || request('status') || request('start_date') || request('end_date'))
             <a href="{{ route('admin.rfqs.index', request('view') === 'kanban' ? ['view' => 'kanban'] : []) }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter">
-              <i class="bi bi-x-lg"></i>
+              <i data-lucide="x"></i>
             </a>
           @endif
         </div>
@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-2">
               <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-                <i class="bi bi-check2"></i> Terapkan
+                <i data-lucide="check"></i> Terapkan
               </button>
             </div>
           </div>
@@ -131,7 +131,7 @@
                         <i class="bi bi-whatsapp"></i>
                       </a>
                       <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="text-secondary" title="Buka Detail">
-                        <i class="bi bi-arrow-up-right-square"></i>
+                        <i data-lucide="arrow-up-right"></i>
                       </a>
                     </div>
                   </div>
@@ -184,7 +184,7 @@
                       </a>
                     </div>
                     <div class="text-secondary small">
-                      <i class="bi bi-envelope me-1"></i>{{ $rfq->email }}
+                      <i data-lucide="mail" class="me-1"></i>{{ $rfq->email }}
                     </div>
                   </td>
                   <td>
@@ -200,13 +200,13 @@
                   <td style="text-align: right;">
                     <div class="d-inline-flex gap-2">
                       <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-btn admin-btn-ghost admin-btn-sm" title="Lihat Detail">
-                        <i class="bi bi-eye"></i> Detail
+                        <i data-lucide="eye"></i> Detail
                       </a>
                       <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="m-0 form-delete">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" title="Hapus Pengajuan">
-                          <i class="bi bi-trash3"></i>
+                          <i data-lucide="trash-2"></i>
                         </button>
                       </form>
                     </div>
@@ -227,7 +227,7 @@
               <ul class="pagination pagination-sm mb-0">
                 <li class="page-item {{ $rfqs->onFirstPage() ? 'disabled' : '' }}">
                   <a class="page-link" href="{{ $rfqs->previousPageUrl() ?? '#' }}" aria-label="Sebelumnya">
-                    <i class="bi bi-chevron-left"></i>
+                    <i data-lucide="chevron-left"></i>
                   </a>
                 </li>
                 @for($i = 1; $i <= $rfqs->lastPage(); $i++)
@@ -237,7 +237,7 @@
                 @endfor
                 <li class="page-item {{ !$rfqs->hasMorePages() ? 'disabled' : '' }}">
                   <a class="page-link" href="{{ $rfqs->nextPageUrl() ?? '#' }}" aria-label="Berikutnya">
-                    <i class="bi bi-chevron-right"></i>
+                    <i data-lucide="chevron-right"></i>
                   </a>
                 </li>
               </ul>
@@ -247,7 +247,7 @@
 
       @else
         <div class="text-center py-5">
-          <i class="bi bi-inbox" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.6;"></i>
+          <i data-lucide="inbox" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.6;"></i>
           <h4 class="h6 mt-3 mb-1" style="color: var(--color-text-main); font-weight: 700;">Belum Ada Pengajuan RFQ</h4>
           <p class="small mb-0" style="color: var(--color-text-muted);">Pengajuan penawaran dari pelanggan akan otomatis tampil di tabel ini.</p>
         </div>

@@ -7,7 +7,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-diagram-3 me-1"></i> SEKTOR INDUSTRI',
+    'badge' => '<i data-lucide="folder-tree" class="me-1"></i> SEKTOR INDUSTRI',
     'title' => 'Solusi Pengujian & Analisis Lintas Sektor',
     'subtitle' => 'Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia.'
   ])
@@ -24,7 +24,7 @@
           <!-- Sector Selector Card -->
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title mb-3">
-              <i class="bi bi-grid-fill me-2 text-primary"></i> Pilih Sektor Industri
+              <i data-lucide="grid" class="me-2 text-primary"></i> Pilih Sektor Industri
             </h3>
             <nav class="layanan-sidebar-nav">
               @if(isset($sectors) && count($sectors) > 0)
@@ -33,13 +33,13 @@
                      class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeSector == $sec['id'] ? 'is-active' : '' }}"
                      data-sector-id="{{ $sec['id'] }}">
                     <span>{{ $sec['name'] }}</span>
-                    <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                    <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
                   </a>
                 @endforeach
               @else
                 <a href="#" class="layanan-sidebar-link d-flex align-items-center justify-content-between is-active">
                   <span>Brewing</span>
-                  <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                  <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
                 </a>
               @endif
             </nav>
@@ -54,7 +54,7 @@
             'primaryText' => 'Konsultasi Tim Teknis',
             'secondaryUrl' => url('/produk'),
             'secondaryText' => 'Jelajahi Seluruh Katalog',
-            'secondaryIcon' => 'bi bi-box-seam'
+            'secondaryLucide' => 'package'
           ])
         </div>
 
@@ -101,7 +101,7 @@
               <!-- Sector Title & Description -->
               <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                 <span class="nb-badge-sm">
-                  <i class="bi bi-tag-fill me-1 text-primary"></i> Sektor Terpilih
+                  <i data-lucide="tag" class="me-1 text-primary"></i> Sektor Terpilih
                 </span>
                 <span class="nb-mono text-muted small">AKREDITASI &amp; REGULASI INDUSTRI</span>
               </div>
@@ -112,9 +112,9 @@
               @endforeach
 
               <div class="pt-3 border-top d-flex flex-wrap gap-2 mt-4" style="border-color: rgba(30,30,30,0.12) !important;">
-                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Instrumen Terkalibrasi</span>
-                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Jaminan COA &amp; MSDS</span>
-                <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Penanganan Rantai Dingin</span>
+                <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Instrumen Terkalibrasi</span>
+                <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Jaminan COA &amp; MSDS</span>
+                <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Penanganan Rantai Dingin</span>
               </div>
             </div>
 
@@ -132,7 +132,7 @@
               <!-- Mobile Swipe Indicator -->
               <div class="d-md-none text-end mb-2">
                 <span class="nb-badge-sm" style="background: var(--nb-accent); color: var(--nb-ink);">
-                  <i class="bi bi-arrow-left-right me-1"></i> Geser Tabel
+                  <i data-lucide="arrow-left-right" class="me-1"></i> Geser Tabel
                 </span>
               </div>
 
@@ -185,12 +185,12 @@
               <div id="sektor-pagination-or-empty">
                 @if(!$hasProducts)
                   <div class="text-center p-5 card mt-3" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-sm);">
-                    <i class="bi bi-inbox fs-1 text-muted mb-2"></i>
+                    <i data-lucide="inbox" class="fs-1 text-muted mb-2"></i>
                     <p class="mb-2 fw-semibold" style="color: var(--nb-ink);">Belum ada produk terdaftar untuk sektor ini.</p>
                     <p class="text-muted small mb-3">Silakan hubungi tim kami untuk ketersediaan katalog indent atau jelajahi katalog utama.</p>
                     <div>
                       <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost" style="font-size: 0.82rem;">
-                        <i class="bi bi-box-seam me-1"></i> Buka Katalog Utama
+                        <i data-lucide="package" class="me-1"></i> Buka Katalog Utama
                       </a>
                     </div>
                   </div>
@@ -214,7 +214,7 @@
                   </span>
                 </div>
                 <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost" style="font-size: 0.82rem; padding: 6px 14px;">
-                  Semua Produk <i class="bi bi-arrow-right ms-1"></i>
+                  Semua Produk <i data-lucide="arrow-right" class="ms-1"></i>
                 </a>
               </div>
 

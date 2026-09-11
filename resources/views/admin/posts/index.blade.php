@@ -14,7 +14,7 @@
       <h2 class="admin-card-header-title">Daftar Artikel</h2>
     </div>
     <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
-      <i class="bi bi-plus-lg"></i> Tulis Artikel
+      <i data-lucide="plus"></i> Tulis Artikel
     </a>
   </div>
 
@@ -25,7 +25,7 @@
         <div class="col-md-5">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; transition: border-color 0.25s ease;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: transparent; border-right: 1px solid var(--color-border);">
-              <i class="bi bi-search" style="font-size: 0.8rem;"></i>
+              <i data-lucide="search" style="font-size: 0.8rem;"></i>
             </span>
             <input type="text" name="s" id="local-search-input"
                    style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem;"
@@ -43,7 +43,7 @@
         </div>
         <div class="col-md-2">
           <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-            <i class="bi bi-search"></i> Cari
+            <i data-lucide="search"></i> Cari
           </button>
         </div>
         <div class="col-md-2">
@@ -51,7 +51,7 @@
                   data-bs-toggle="collapse" data-bs-target="#advancedPostFilterBlock"
                   aria-expanded="{{ ($sort !== 'newest' || $start_date || $end_date) ? 'true' : 'false' }}"
                   aria-controls="advancedPostFilterBlock">
-            <i class="bi bi-sliders"></i> Lanjutan
+            <i data-lucide="sliders"></i> Lanjutan
           </button>
         </div>
       </div>
@@ -79,7 +79,7 @@
             </div>
             <div class="col-md-2">
               <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-                <i class="bi bi-funnel-fill"></i> Terapkan
+                <i data-lucide="filter"></i> Terapkan
               </button>
             </div>
           </div>
@@ -117,9 +117,9 @@
                 <td>
                   <div style="width: 60px; height: 42px; border: 1px solid var(--color-border); border-radius: 5px; overflow: hidden; background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center;">
                     @if($thumbSrc)
-                      <img src="{{ $thumbSrc }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-image\' style=\'opacity:0.35;font-size:1.1rem\'></i>';">
+                      <img src="{{ $thumbSrc }}" alt="{{ $post['title'] }}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i data-lucide=\'image\' style=\'opacity:0.35;\'></i>'; if(window.lucide) window.lucide.createIcons();">
                     @else
-                      <i class="bi bi-image" style="opacity: 0.35; font-size: 1.1rem;"></i>
+                      <i data-lucide="image" style="opacity: 0.35;"></i>
                     @endif
                   </div>
                 </td>
@@ -141,20 +141,20 @@
                   </div>
                 </td>
                 <td class="cell-muted" style="white-space: nowrap;">
-                  <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
+                  <i data-lucide="calendar" class="me-1"></i>{{ $post['date'] }}
                 </td>
                 <td style="text-align: right; white-space: nowrap;">
                   <a href="{{ url('/informasi') }}?detail={{ urlencode($post['slug']) }}" target="_blank" class="admin-action-link view" title="Lihat">
-                    <i class="bi bi-eye"></i>
+                    <i data-lucide="eye"></i>
                   </a>
                   <a href="{{ route('admin.posts.edit', ['slug' => $post['slug']]) }}" class="admin-action-link edit" title="Edit">
-                    <i class="bi bi-pencil-square"></i> Edit
+                    <i data-lucide="file-edit"></i> Edit
                   </a>
                   <form action="{{ route('admin.posts.destroy', ['slug' => $post['slug']]) }}" method="POST" class="d-inline form-delete" data-name="{{ $post['title'] }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i class="bi bi-trash"></i>
+                      <i data-lucide="trash-2"></i>
                     </button>
                   </form>
                 </td>
@@ -173,7 +173,7 @@
             <ul class="pagination pagination-sm mb-0">
               <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $currentPage - 1])) }}" aria-label="Sebelumnya">
-                  <i class="bi bi-chevron-left"></i>
+                  <i data-lucide="chevron-left"></i>
                 </a>
               </li>
               @for($i = 1; $i <= $totalPages; $i++)
@@ -183,7 +183,7 @@
               @endfor
               <li class="page-item {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.posts', array_merge(request()->query(), ['page' => $currentPage + 1])) }}" aria-label="Berikutnya">
-                  <i class="bi bi-chevron-right"></i>
+                  <i data-lucide="chevron-right"></i>
                 </a>
               </li>
             </ul>
@@ -193,7 +193,7 @@
 
     @else
       <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i class="bi bi-file-text" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <i data-lucide="file-text" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
         <p style="font-size: 0.88rem;">Belum ada artikel diterbitkan.</p>
         <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">Tulis Sekarang</a>
       </div>

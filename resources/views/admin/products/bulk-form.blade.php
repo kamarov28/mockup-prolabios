@@ -14,7 +14,7 @@
     </p>
   </div>
   <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">
-    <i class="bi bi-arrow-left"></i> Kembali
+    <i data-lucide="arrow-left"></i> Kembali
   </a>
 </div>
 
@@ -27,7 +27,7 @@
 
   <div class="text-center my-4">
     <button type="button" class="admin-btn admin-btn-outline" onclick="addNewProductCard()">
-      <i class="bi bi-plus-circle"></i> Tambah Formulir Produk
+      <i data-lucide="plus-circle"></i> Tambah Formulir Produk
     </button>
   </div>
 
@@ -37,7 +37,7 @@
       <div class="d-inline-flex gap-2">
         <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">Batal</a>
         <button type="submit" class="admin-btn admin-btn-primary">
-          <i class="bi bi-check-lg"></i> Simpan Semua
+          <i data-lucide="check"></i> Simpan Semua
         </button>
       </div>
     </div>
@@ -56,7 +56,7 @@
           </h3>
         </div>
         <button type="button" class="admin-btn admin-btn-outline btn-remove-card" onclick="removeProductCard(this)">
-          <i class="bi bi-trash"></i> Hapus
+          <i data-lucide="trash-2"></i> Hapus
         </button>
       </div>
       <div class="admin-card-body">

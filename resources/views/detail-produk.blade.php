@@ -92,7 +92,7 @@
                     <span class="d-block text-muted text-uppercase fw-bold detail-principal-label">Prinsipal Resmi</span>
                     <strong class="d-block text-dark detail-principal-name">{{ $product->principal->name }}</strong>
                     @if(!empty($product->principal->address))
-                      <span class="text-muted small detail-principal-address"><i class="bi bi-geo-alt me-1"></i>{{ $product->principal->address }}</span>
+                      <span class="text-muted small detail-principal-address"><i data-lucide="map-pin" class="me-1"></i>{{ $product->principal->address }}</span>
                     @endif
                   </div>
                 </div>
@@ -125,7 +125,7 @@
 
                   @if(!empty($product->principal))
                     <span class="nb-badge-sm d-inline-flex align-items-center gap-1">
-                      <i class="bi bi-building text-primary"></i> {{ $product->principal->name }}
+                      <i data-lucide="building" class="text-primary"></i> {{ $product->principal->name }}
                       @if(!empty($product->principal->address))
                         <span class="text-muted ms-1">({{ $product->principal->address }})</span>
                       @endif
@@ -135,7 +135,7 @@
 
                 <div class="card p-4 mb-4">
                   <h3 class="layanan-feature-title detail-section-heading mb-3">
-                    <i class="bi bi-file-earmark-text text-primary me-2"></i>Deskripsi & Spesifikasi Produk
+                    <i data-lucide="file-text" class="text-primary me-2"></i>Deskripsi & Spesifikasi Produk
                   </h3>
                   <div class="profil-body-text mb-4">
                     {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
@@ -145,7 +145,7 @@
                   <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3 rfq-details-box">
                     <div class="d-flex align-items-center gap-3">
                       <div class="rfq-trust-icon">
-                        <i class="bi bi-file-earmark-pdf-fill text-danger"></i>
+                        <i data-lucide="file-text" class="text-danger"></i>
                       </div>
                       <div>
                         <strong class="d-block detail-datasheet-title">Dokumen Lembar Data & Spesifikasi Teknis (PDF)</strong>
@@ -160,11 +160,11 @@
                     </div>
                     @if(!empty($product['datasheet_url']))
                       <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2 detail-btn-sm">
-                        <i class="bi bi-download"></i> Unduh Spesifikasi (PDF) <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        <i data-lucide="download"></i> Unduh Spesifikasi (PDF) <i data-lucide="external-link" class="ms-1"></i>
                       </a>
                     @else
                       <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2 detail-btn-ghost-sm">
-                        <i class="bi bi-envelope-paper"></i> Request Lembar Data Resmi <i class="bi bi-arrow-right ms-1"></i>
+                        <i data-lucide="mail"></i> Request Lembar Data Resmi <i data-lucide="arrow-right" class="ms-1"></i>
                       </a>
                     @endif
                   </div>
@@ -172,10 +172,10 @@
 
                 <div class="mt-2 d-flex flex-wrap gap-3">
                   <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-nav-btn text-decoration-none">
-                    <i class="bi bi-cart-plus me-2"></i> Minta Penawaran
+                    <i data-lucide="shopping-cart" class="me-2"></i> Minta Penawaran
                   </a>
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                    <i class="bi bi-arrow-left me-2"></i> Kembali ke Katalog
+                    <i data-lucide="arrow-left" class="me-2"></i> Kembali ke Katalog
                   </a>
                 </div>
               </div>
@@ -186,7 +186,7 @@
               <div class="modal-dialog modal-dialog-centered modal-xl detail-lightbox-dialog">
                 <div class="modal-content bg-transparent border-0 shadow-none position-relative">
                   <button type="button" class="btn-close-lightbox" data-bs-dismiss="modal" aria-label="Tutup">
-                    <i class="bi bi-x-lg"></i>
+                    <i data-lucide="x"></i>
                   </button>
                   <div class="modal-body text-center p-0" data-bs-dismiss="modal">
                     <div class="lightbox-image-wrapper" onclick="event.stopPropagation();">
@@ -259,10 +259,10 @@
             </script>
           @else
             <div class="empty-state-card">
-              <i class="bi bi-box-seam detail-empty-icon"></i>
+              <i data-lucide="package" class="detail-empty-icon"></i>
               <h2 class="profil-section-title detail-empty-title">Produk Tidak Ditemukan</h2>
               <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
-              <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i class="bi bi-arrow-right"></i></a>
+              <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i data-lucide="arrow-right"></i></a>
             </div>
           @endif
         </div>

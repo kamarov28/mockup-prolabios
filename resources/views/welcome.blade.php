@@ -25,7 +25,7 @@
         </div>
         <div class="mt-3 mt-md-0">
           <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-            Lihat Semua Produk <i class="bi bi-arrow-right"></i>
+            Lihat Semua Produk <i data-lucide="arrow-right"></i>
           </a>
         </div>
       </div>

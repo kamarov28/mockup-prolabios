@@ -5,7 +5,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-shield-lock me-1"></i> LEGAL &amp; KEPATUHAN',
+    'badge' => '<i data-lucide="shield-alert" class="me-1"></i> LEGAL &amp; KEPATUHAN',
     'title' => 'Kebijakan Privasi',
     'subtitle' => 'Komitmen kami dalam melindungi kerahasiaan dan keamanan data institusi serta pelanggan Anda sesuai UU No. 27 Tahun 2022 (UU PDP).'
   ])
@@ -20,10 +20,10 @@
 
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom" style="border-color: rgba(30,30,30,0.12) !important;">
               <span class="nb-badge mb-0" style="font-size: 0.7rem; padding: 3px 8px;">
-                <i class="bi bi-patch-check-fill me-1"></i> UU NO. 27 TAHUN 2022 (UU PDP)
+                <i data-lucide="badge-check" class="me-1"></i> UU NO. 27 TAHUN 2022 (UU PDP)
               </span>
               <span class="text-muted small" style="font-family: var(--font-mono); font-weight: 600;">
-                <i class="bi bi-calendar3 me-1"></i> Terakhir Diperbarui: {{ date('d F Y') }}
+                <i data-lucide="calendar" class="me-1"></i> Terakhir Diperbarui: {{ date('d F Y') }}
               </span>
             </div>
 

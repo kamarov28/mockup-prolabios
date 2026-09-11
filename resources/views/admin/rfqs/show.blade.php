@@ -14,7 +14,7 @@
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
   <div>
     <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost mb-2">
-      <i class="bi bi-arrow-left"></i> Kembali ke Daftar RFQ
+      <i data-lucide="arrow-left"></i> Kembali ke Daftar RFQ
     </a>
     <h1 class="h3 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">
       {{ $rfq->rfq_number }}
@@ -27,7 +27,7 @@
       <i class="bi bi-whatsapp"></i> Hubungi Customer via WA
     </a>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-ghost">
-      <i class="bi bi-envelope"></i> Kirim Email
+      <i data-lucide="mail"></i> Kirim Email
     </a>
   </div>
 </div>
@@ -90,11 +90,11 @@
                   <td>
                     @if(!$isIndent)
                       <span class="admin-badge admin-badge-success">
-                        <i class="bi bi-box-seam me-1"></i> Ready Stock
+                        <i data-lucide="package" class="me-1"></i> Ready Stock
                       </span>
                     @else
                       <span class="admin-badge admin-badge-warning" title="Stok ready {{ $stockVal }} unit">
-                        <i class="bi bi-clock-history me-1"></i> Indent (Ready: {{ $stockVal }})
+                        <i data-lucide="history" class="me-1"></i> Indent (Ready: {{ $stockVal }})
                       </span>
                     @endif
                   </td>
@@ -145,7 +145,7 @@
             @enderror
           </div>
           <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-            <i class="bi bi-check2 me-1"></i> Simpan Status
+            <i data-lucide="check" class="me-1"></i> Simpan Status
           </button>
         </form>
       </div>
@@ -173,7 +173,7 @@
         <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Email:</span>
           <a href="mailto:{{ $rfq->email }}" class="text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-text-main);">
-            <i class="bi bi-envelope text-secondary"></i> {{ $rfq->email }}
+            <i data-lucide="mail" class="text-secondary"></i> {{ $rfq->email }}
           </a>
         </div>
 
@@ -204,7 +204,7 @@
           @csrf
           @method('DELETE')
           <button type="submit" class="admin-btn admin-btn-danger w-100 justify-content-center">
-            <i class="bi bi-trash3 me-1"></i> Hapus Pengajuan Ini
+            <i data-lucide="trash-2" class="me-1"></i> Hapus Pengajuan Ini
           </button>
         </form>
       </div>

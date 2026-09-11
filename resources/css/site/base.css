@@ -518,3 +518,14 @@ a:hover {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--nb-ink);
 }
+
+/* ── Lucide Icons Baseline ────────────────────────────────────────────── */
+.lucide, i[data-lucide] {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.18em;
+  stroke-width: 1.75px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+

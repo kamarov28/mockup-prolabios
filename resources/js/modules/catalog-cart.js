@@ -121,8 +121,9 @@ export function initCopyCatalogCode() {
 
       navigator.clipboard.writeText(fullText).then(function () {
         const originalText = el.textContent;
-        el.innerHTML = '<i class="bi bi-check2 text-success me-1"></i> Copied!';
+        el.innerHTML = '<i data-lucide="check" class="text-success me-1"></i> Copied!';
         el.classList.add('is-copied');
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
 
         setTimeout(function () {
           el.textContent = originalText;
@@ -170,7 +171,8 @@ export function initAjaxAddToCart() {
 
           // Success state: green surface + white icon (no green-on-ruby clash)
           submitBtn.classList.add('is-success');
-          submitBtn.innerHTML = '<i class="bi bi-check2-circle me-1"></i> Ditambahkan ke RFQ';
+          submitBtn.innerHTML = '<i data-lucide="check-circle-2" class="me-1"></i> Ditambahkan ke RFQ';
+          if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
 
           showToast(data.message || 'Ditambahkan ke keranjang penawaran!');
 
@@ -178,17 +180,20 @@ export function initAjaxAddToCart() {
             submitBtn.disabled = false;
             submitBtn.classList.remove('is-success');
             submitBtn.innerHTML = originalBtnHtml;
+            if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
           }, 2000);
         } else {
           showToast(data.message || 'Gagal menambahkan produk.', 'warning');
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnHtml;
+          if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
         }
       })
       .catch(function () {
         showToast('Terjadi kesalahan koneksi. Silakan coba lagi.', 'warning');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnHtml;
+        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
       });
   });
 }
@@ -225,11 +230,12 @@ export function showToast(message, type = 'success') {
   toast.className = 'nb-toast-item' + (type === 'warning' ? ' nb-toast-item--warning' : '');
 
   const iconHtml = type === 'success'
-    ? '<i class="bi bi-check-circle-fill nb-toast-icon nb-toast-icon--success"></i>'
-    : '<i class="bi bi-exclamation-triangle-fill nb-toast-icon nb-toast-icon--warning"></i>';
+    ? '<i data-lucide="check-circle-2" class="nb-toast-icon nb-toast-icon--success"></i>'
+    : '<i data-lucide="alert-triangle" class="nb-toast-icon nb-toast-icon--warning"></i>';
 
   toast.innerHTML = iconHtml + '<span class="nb-toast-text">' + message + '</span>';
   container.appendChild(toast);
+  if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
 
   requestAnimationFrame(function () {
     toast.classList.add('is-visible');

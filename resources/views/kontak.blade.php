@@ -4,7 +4,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-chat-square-dots me-1"></i> HUBUNGI KAMI',
+    'badge' => '<i data-lucide="message-square" class="me-1"></i> HUBUNGI KAMI',
     'title' => 'Kontak & Layanan Pelanggan',
     'subtitle' => 'Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen.'
   ])
@@ -18,13 +18,13 @@
         <div class="col-12 col-lg-4 order-2 order-lg-1">
 
           <div class="kontak-info-block">
-            <div class="kontak-info-icon"><i class="bi bi-geo-alt"></i></div>
+            <div class="kontak-info-icon"><i data-lucide="map-pin"></i></div>
             <h3 class="kontak-info-title">Alamat Kantor</h3>
             <p class="profil-body-text mb-0">{!! nl2br(e($siteSettings['contact_address'] ?? 'GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914')) !!}</p>
           </div>
 
           <div class="kontak-info-block">
-            <div class="kontak-info-icon"><i class="bi bi-telephone"></i></div>
+            <div class="kontak-info-icon"><i data-lucide="phone"></i></div>
             <h3 class="kontak-info-title">Telepon Kantor</h3>
             <p class="profil-body-text mb-1"><strong style="color: var(--nb-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Marketing & Sales:</strong></p>
             <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '021-3874-1447') }}" class="kontak-info-link">{{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }}</a>
@@ -33,14 +33,14 @@
           </div>
 
           <div class="kontak-info-block">
-            <div class="kontak-info-icon"><i class="bi bi-envelope"></i></div>
+            <div class="kontak-info-icon"><i data-lucide="mail"></i></div>
             <h3 class="kontak-info-title">Email Resmi</h3>
             <a href="mailto:{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}" class="kontak-info-link">{{ $siteSettings['contact_email'] ?? 'marketing@prolabios.com' }}</a>
             <a href="mailto:sandi@prolabios.com" class="kontak-info-link">sandi@prolabios.com</a>
           </div>
 
           <div class="kontak-info-block">
-            <div class="kontak-info-icon"><i class="bi bi-clock"></i></div>
+            <div class="kontak-info-icon"><i data-lucide="clock"></i></div>
             <h3 class="kontak-info-title">Jam Operasional</h3>
             <p class="profil-body-text mb-0">{{ $siteSettings['operational_hours'] ?? 'Senin – Jumat: 08.00 – 17.00 WIB' }}</p>
           </div>
@@ -50,12 +50,12 @@
         <!-- Contact Form -->
         <div class="col-12 col-lg-8 order-1 order-lg-2">
           <div class="card p-4 p-md-5">
-            <span class="nb-badge mb-2"><i class="bi bi-envelope-paper me-1"></i> TINGGALKAN PESAN</span>
+            <span class="nb-badge mb-2"><i data-lucide="mail" class="me-1"></i> TINGGALKAN PESAN</span>
             <h2 class="profil-section-title mb-3">Kirim Pesan & Pertanyaan</h2>
 
             {{-- RFQ Redirection Notice --}}
             <div class="mb-4 p-3 d-flex align-items-start gap-3 rfq-redirect-box">
-              <i class="bi bi-info-circle-fill text-primary mt-1 flex-shrink-0" style="font-size: 1.25rem;"></i>
+              <i data-lucide="info" class="text-primary mt-1 flex-shrink-0" style="font-size: 1.25rem;"></i>
               <div class="small" style="color: var(--nb-ink); line-height: 1.5;">
                 <strong class="d-block mb-1" style="font-family: var(--font-display); font-size: 0.88rem;">Informasi Permintaan Penawaran Harga (RFQ):</strong>
                 Formulir kontak ini khusus untuk pertanyaan umum, bantuan teknis, dan layanan servis. Pengajuan penawaran harga resmi (RFQ) institusi dilakukan melalui <a href="{{ url('/produk') }}" class="fw-bold text-decoration-underline" style="color: var(--nb-primary);">Katalog Produk</a> dengan menambahkan produk ke dalam Keranjang RFQ.
@@ -107,7 +107,7 @@
                 </div>
                 <div class="col-12 mt-3">
                   <div class="p-3 d-flex align-items-center gap-2 rfq-redirect-box">
-                    <i class="bi bi-clock-history text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
+                    <i data-lucide="history" class="text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
                     <span class="small" style="font-size: 0.8rem; color: var(--nb-ink); line-height: 1.4;">
                       <strong>Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja):</strong> Setiap pertanyaan teknis, konsultasi metode, atau permohonan kalibrasi instrumen akan direspon oleh tim teknis kami dalam 1×24 jam kerja.
                     </span>
@@ -115,7 +115,7 @@
                 </div>
                 <div class="col-12 mt-3">
                   <button type="submit" class="kontak-submit-btn">
-                    <i class="bi bi-send-fill me-1"></i> Kirim Pesan Sekarang
+                    <i data-lucide="send" class="me-1"></i> Kirim Pesan Sekarang
                   </button>
                 </div>
               </div>
@@ -123,11 +123,11 @@
 
             <div id="formSuccess" class="is-hidden">
               <div class="nb-status-icon-box mb-3 mx-auto">
-                <i class="bi bi-check2-circle"></i>
+                <i data-lucide="check-circle-2"></i>
               </div>
               <h3 class="profil-section-title detail-empty-title mb-2">Pesan Berhasil Terkirim!</h3>
               <p class="profil-body-text mb-4 mx-auto" style="max-width: 500px;">Terima kasih telah menghubungi PT Prolabios Mitra Analitika. Tim sales & teknis kami akan segera menindaklanjuti pesan Anda dalam 1×24 jam kerja.</p>
-              <a href="{{ url('/') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">Kembali ke Beranda <i class="bi bi-arrow-right ms-1"></i></a>
+              <a href="{{ url('/') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">Kembali ke Beranda <i data-lucide="arrow-right" class="ms-1"></i></a>
             </div>
           </div>
         </div>

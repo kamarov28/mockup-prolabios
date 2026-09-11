@@ -5,7 +5,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-building me-1"></i> TENTANG KAMI',
+    'badge' => '<i data-lucide="building" class="me-1"></i> TENTANG KAMI',
     'title' => 'Membangun Kepercayaan Melalui Standar & Keandalan Lab',
     'subtitle' => '<strong>PT. Prolabios Mitra Analitika (PMA)</strong> adalah distributor B2B instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian laboratorium dengan standar mutu internasional dan kepatuhan regulasi teruji di Indonesia.'
   ])
@@ -48,11 +48,11 @@
 
             <!-- Capability Chips -->
             <div class="pt-3 nb-card-foot d-flex flex-wrap gap-2">
-              <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Reagen Mikrobiologi</span>
-              <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Media Kultur Siap Pakai</span>
-              <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Biological Indicator</span>
-              <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Instrumen Analitika</span>
-              <span class="nb-badge-sm"><i class="bi bi-check-circle me-1 text-primary"></i> Jasa Kalibrasi &amp; Servis</span>
+              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Reagen Mikrobiologi</span>
+              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Media Kultur Siap Pakai</span>
+              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Biological Indicator</span>
+              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Instrumen Analitika</span>
+              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Jasa Kalibrasi &amp; Servis</span>
             </div>
           </div>
 
@@ -70,7 +70,7 @@
             <div class="card p-4 p-md-5 mb-4 highlight-card">
               <div class="d-flex align-items-center gap-3 mb-3">
                 <div class="profil-value-letter-wrap letter-p m-0" style="width: 44px; height: 44px; font-size: 1.25rem;">
-                  <i class="bi bi-eye"></i>
+                  <i data-lucide="eye"></i>
                 </div>
                 <h3 class="profil-section-title m-0 fs-4">Visi Kami</h3>
               </div>
@@ -85,7 +85,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">01. PRODUK</span>
-                    <i class="bi bi-box-seam text-primary fs-5"></i>
+                    <i data-lucide="package" class="text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Kualitas &amp; Ketersediaan</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -98,7 +98,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">02. PENGGUNA</span>
-                    <i class="bi bi-people text-primary fs-5"></i>
+                    <i data-lucide="users" class="text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Edukasi &amp; Solusi Teknis</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -111,7 +111,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">03. PENGADAAN</span>
-                    <i class="bi bi-file-earmark-check text-primary fs-5"></i>
+                    <i data-lucide="file-check" class="text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Keandalan Pengadaan B2B</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -124,7 +124,7 @@
                 <div class="profil-mission-card">
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="nb-badge-sm">04. LAYANAN</span>
-                    <i class="bi bi-tools text-primary fs-5"></i>
+                    <i data-lucide="wrench" class="text-primary fs-5"></i>
                   </div>
                   <h4 class="profil-mission-title">Layanan Purna Jual &amp; Kalibrasi</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
@@ -155,7 +155,7 @@
                     Menunjukkan tingkat keahlian teknis yang tinggi, integritas moral, serta standar operasional profesional dalam melayani setiap mitra industri maupun institusi pendidikan.
                   </p>
                   <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
-                    <i class="bi bi-check2-circle text-primary me-1"></i> Integritas &amp; Mutu
+                    <i data-lucide="check-circle-2" class="text-primary me-1"></i> Integritas &amp; Mutu
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@
                     Tangguh dan sigap menghadapi tantangan distribusi rantai pasok untuk memastikan ketersediaan barang dan stabilitas kualitas reagen yang kami kirimkan.
                   </p>
                   <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
-                    <i class="bi bi-check2-circle text-primary me-1"></i> Rantai Pasok Kuat
+                    <i data-lucide="check-circle-2" class="text-primary me-1"></i> Rantai Pasok Kuat
                   </div>
                 </div>
               </div>
@@ -183,7 +183,7 @@
                     Berkomitmen menghadirkan produk-produk terbaik dari prinsipal berkelas dunia serta solusi menyeluruh demi memajukan kemampuan riset lab Anda.
                   </p>
                   <div class="pt-3 nb-card-foot text-muted small" style="font-weight: 600;">
-                    <i class="bi bi-check2-circle text-primary me-1"></i> Solusi Terdepan
+                    <i data-lucide="check-circle-2" class="text-primary me-1"></i> Solusi Terdepan
                   </div>
                 </div>
               </div>
@@ -193,7 +193,7 @@
           <!-- 4. Komitmen Kepatuhan & Jaminan Mutu -->
           <div class="profil-trust-box">
             <div class="d-flex align-items-center gap-2 mb-3">
-              <i class="bi bi-shield-lock-fill text-primary fs-4"></i>
+              <i data-lucide="shield-alert" class="text-primary fs-4"></i>
               <h3 class="profil-section-title m-0 fs-5">Standar Regulasi &amp; Jaminan Distribusi</h3>
             </div>
             <p class="profil-body-text mb-3" style="font-size: 0.92rem;">
@@ -202,7 +202,7 @@
             <div class="row g-3">
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
+                  <i data-lucide="badge-check" class="text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Sertifikat Keaslian &amp; COA</strong>
                     <span class="text-muted small">Dokumen batch certificate dan MSDS siap audit.</span>
@@ -211,7 +211,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
+                  <i data-lucide="badge-check" class="text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Izin Edar Kemenkes RI</strong>
                     <span class="text-muted small">Registrasi AKL/AKD untuk perlengkapan medis dan diagnostik.</span>
@@ -220,7 +220,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
+                  <i data-lucide="badge-check" class="text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Prinsipal Resmi Terakreditasi</strong>
                     <span class="text-muted small">Kemitraan resmi dengan produsen global teruji.</span>
@@ -229,7 +229,7 @@
               </div>
               <div class="col-sm-6">
                 <div class="d-flex align-items-start gap-2">
-                  <i class="bi bi-patch-check-fill text-primary mt-1"></i>
+                  <i data-lucide="badge-check" class="text-primary mt-1"></i>
                   <div>
                     <strong class="d-block text-ink" style="font-size: 0.88rem;">Penyimpanan Rantai Dingin</strong>
                     <span class="text-muted small">Fasilitas cold storage terkontrol 2°C – 8°C.</span>
@@ -247,7 +247,7 @@
           <!-- Sidebar Card 1: Data Perusahaan -->
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title">
-              <i class="bi bi-card-list me-1 text-primary"></i> DATA PERUSAHAAN
+              <i data-lucide="clipboard-list" class="me-1 text-primary"></i> DATA PERUSAHAAN
             </h3>
             <table class="profil-info-table mb-3">
               <tbody>
@@ -281,7 +281,7 @@
           <!-- Sidebar Card 2: Saluran Resmi & Media Sosial -->
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title">
-              <i class="bi bi-share me-1 text-primary"></i> TETAP TERHUBUNG
+              <i data-lucide="share-2" class="me-1 text-primary"></i> TETAP TERHUBUNG
             </h3>
             <p class="profil-body-text text-muted mb-3" style="font-size: 0.85rem;">
               Ikuti publikasi resmi dan update produk melalui saluran media kami:
@@ -319,7 +319,7 @@
             'primaryText' => 'Hubungi Kami',
             'secondaryUrl' => url('/produk'),
             'secondaryText' => 'Lihat Katalog Produk',
-            'secondaryIcon' => 'bi bi-box-seam'
+            'secondaryLucide' => 'package'
           ])
 
         </div>

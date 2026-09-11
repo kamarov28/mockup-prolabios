@@ -130,19 +130,28 @@ export function initCatalogAjax() {
           if (otherBtn !== btn) {
             otherBtn.classList.remove('is-active');
             const otherChevron = otherBtn.querySelector('.chevron-icon');
-            if (otherChevron) otherChevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
+            if (otherChevron) {
+              otherChevron.setAttribute('data-lucide', 'chevron-right');
+            }
           }
         });
         if (isHidden) {
           targetGroup.classList.remove('d-none');
           btn.classList.add('is-active');
           const chevron = btn.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.replace('bi-chevron-right', 'bi-chevron-down');
+          if (chevron) {
+            chevron.setAttribute('data-lucide', 'chevron-down');
+          }
         } else {
           targetGroup.classList.add('d-none');
           btn.classList.remove('is-active');
           const chevron = btn.querySelector('.chevron-icon');
-          if (chevron) chevron.classList.replace('bi-chevron-down', 'bi-chevron-right');
+          if (chevron) {
+            chevron.setAttribute('data-lucide', 'chevron-right');
+          }
+        }
+        if (window.lucide && window.lucide.createIcons) {
+          window.lucide.createIcons();
         }
       }
     }

@@ -15,10 +15,10 @@
     </div>
     <div class="d-inline-flex gap-2">
       <a href="{{ route('admin.products.create.bulk') }}" class="admin-btn admin-btn-ghost">
-        <i class="bi bi-grid-3x3-gap"></i> Bulk
+        <i data-lucide="grid"></i> Bulk
       </a>
       <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
-        <i class="bi bi-plus-lg"></i> Tambah
+        <i data-lucide="plus"></i> Tambah
       </a>
     </div>
   </div>
@@ -30,7 +30,7 @@
         <div class="col-md-4">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; transition: border-color 0.25s ease; background: #FFFFFF;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: #F8FAFC; border-right: 1px solid var(--color-border);">
-              <i class="bi bi-search" style="font-size: 0.85rem;"></i>
+              <i data-lucide="search" style="font-size: 0.85rem;"></i>
             </span>
             <input type="text" name="s" id="local-search-input"
                    style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.92rem;"
@@ -55,7 +55,7 @@
         </div>
         <div class="col-md-2">
           <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-            <i class="bi bi-search"></i> Cari
+            <i data-lucide="search"></i> Cari
           </button>
         </div>
         <div class="col-md-2">
@@ -63,7 +63,7 @@
                   data-bs-toggle="collapse" data-bs-target="#advancedProductFilterBlock"
                   aria-expanded="{{ ($sort !== 'newest' || $start_date || $end_date) ? 'true' : 'false' }}"
                   aria-controls="advancedProductFilterBlock">
-            <i class="bi bi-sliders"></i> Lanjutan
+            <i data-lucide="sliders"></i> Lanjutan
           </button>
         </div>
       </div>
@@ -90,7 +90,7 @@
             </div>
             <div class="col-md-2">
               <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-                <i class="bi bi-funnel-fill"></i> Terapkan
+                <i data-lucide="filter"></i> Terapkan
               </button>
             </div>
           </div>
@@ -121,7 +121,7 @@
                 {{-- Icon only: no <img> network requests (was blocking navigate-away) --}}
                 <td>
                   <div style="width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px; background: #F8FAFC; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
-                    <i class="bi bi-box-seam" style="font-size: 0.95rem;"></i>
+                    <i data-lucide="package" style="font-size: 0.95rem;"></i>
                   </div>
                 </td>
                 <td class="cell-code">{{ $p['catalog'] ?: '—' }}</td>
@@ -140,19 +140,19 @@
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>
                 <td style="text-align: right; white-space: nowrap;">
                   <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat">
-                    <i class="bi bi-eye"></i>
+                    <i data-lucide="eye"></i>
                   </a>
                   <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ $p['id'] }}" title="Salin link">
-                    <i class="bi bi-clipboard"></i>
+                    <i data-lucide="clipboard"></i>
                   </button>
                   <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit">
-                    <i class="bi bi-pencil-square"></i> Edit
+                    <i data-lucide="file-edit"></i> Edit
                   </a>
                   <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ e($p['title'] ?? '') }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i class="bi bi-trash"></i>
+                      <i data-lucide="trash-2"></i>
                     </button>
                   </form>
                 </td>
@@ -171,7 +171,7 @@
             <ul class="pagination pagination-sm mb-0">
               <li class="page-item {{ $currentPage <= 1 ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => $currentPage - 1])) }}" aria-label="Sebelumnya">
-                  <i class="bi bi-chevron-left"></i>
+                  <i data-lucide="chevron-left"></i>
                 </a>
               </li>
               @php
@@ -198,7 +198,7 @@
               @endif
               <li class="page-item {{ $currentPage >= $totalPages ? 'disabled' : '' }}">
                 <a class="page-link" href="{{ route('admin.products', array_merge(request()->query(), ['page' => $currentPage + 1])) }}" aria-label="Berikutnya">
-                  <i class="bi bi-chevron-right"></i>
+                  <i data-lucide="chevron-right"></i>
                 </a>
               </li>
             </ul>
@@ -208,7 +208,7 @@
 
     @else
       <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i class="bi bi-box-seam" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <i data-lucide="package" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
         <p style="font-size: 0.88rem;">Produk tidak ditemukan. Coba ubah filter atau kata kunci pencarian.</p>
         <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-ghost">Reset Filter</a>
       </div>

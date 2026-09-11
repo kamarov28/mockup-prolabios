@@ -9,7 +9,7 @@
 
       <!-- Icon Check Circle -->
       <div class="nb-status-icon-box mb-3 mx-auto">
-        <i class="bi bi-check2-circle"></i>
+        <i data-lucide="check-circle-2"></i>
       </div>
 
       <div class="mb-3">
@@ -24,7 +24,7 @@
       <!-- Details Box -->
       <div class="rfq-details-box p-4 mb-4 text-start">
         <h3 class="cart-sidebar-title" style="font-size: 1rem; margin-bottom: 16px; color: var(--nb-ink); font-weight: 700;">
-          <i class="bi bi-file-earmark-text text-primary me-2"></i> Detail Pengajuan Penawaran
+          <i data-lucide="file-text" class="text-primary me-2"></i> Detail Pengajuan Penawaran
         </h3>
 
         <div class="row g-2 small mb-3" style="color: var(--nb-ink);">
@@ -61,10 +61,10 @@
 
       <div class="d-flex flex-wrap justify-content-center gap-3">
         <a href="{{ route('home') }}" class="nb-btn nb-btn-primary">
-          <i class="bi bi-house me-2"></i> Kembali ke Beranda
+          <i data-lucide="home" class="me-2"></i> Kembali ke Beranda
         </a>
         <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost">
-          Lihat Katalog Produk <i class="bi bi-arrow-right ms-2"></i>
+          Lihat Katalog Produk <i data-lucide="arrow-right" class="ms-2"></i>
         </a>
       </div>
 

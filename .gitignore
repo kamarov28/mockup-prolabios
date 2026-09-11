@@ -23,6 +23,7 @@ yarn-error.log
 /.zed
 .DS_Store
 Thumbs.db
+.impeccable
 
 # User-uploaded media (legacy path — keep folder, ignore files)
 /public/uploads/*

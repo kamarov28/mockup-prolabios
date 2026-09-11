@@ -6,11 +6,16 @@
   <p>{{ $text ?? 'Diskusikan kebutuhan spesifikasi produk atau instrumen laboratorium Anda langsung dengan tim teknis kami.' }}</p>
   <div class="d-flex flex-column gap-2">
     <a href="{{ $primaryUrl ?? url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center">
-      {{ $primaryText ?? 'Hubungi Kami' }} <i class="bi bi-arrow-right ms-1"></i>
+      {{ $primaryText ?? 'Hubungi Kami' }} <i data-lucide="arrow-right" class="ms-1"></i>
     </a>
     @if(!empty($secondaryUrl))
       <a href="{{ $secondaryUrl }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" style="font-size: 0.82rem;" @if(!empty($secondaryBlank)) target="_blank" rel="noopener noreferrer" @endif>
-        @if(!empty($secondaryIcon)) <i class="{{ $secondaryIcon }} me-1"></i> @endif {{ $secondaryText ?? 'Katalog' }}
+        @if(!empty($secondaryLucide))
+          <i data-lucide="{{ $secondaryLucide }}" class="me-1"></i>
+        @elseif(!empty($secondaryIcon))
+          <i class="{{ $secondaryIcon }} me-1"></i>
+        @endif
+        {{ $secondaryText ?? 'Katalog' }}
       </a>
     @endif
   </div>

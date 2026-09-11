@@ -9,14 +9,14 @@
     <div class="d-flex align-items-center gap-2 ms-auto d-lg-none">
       @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
       <a href="{{ route('cart.index') }}" class="nb-icon-btn position-relative text-decoration-none" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
-        <i class="bi bi-cart3"></i>
+        <i data-lucide="shopping-cart"></i>
         <span class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
           {{ $cartCount }}
         </span>
       </a>
 
       <button type="button" id="mobile-search-open" class="nb-icon-btn" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
-        <i class="bi bi-search"></i>
+        <i data-lucide="search"></i>
       </button>
 
       <label class="hamburger" for="hamburger-checkbox" aria-label="Buka menu navigasi" role="button">
@@ -54,19 +54,19 @@
           </li>
           <li class="nav-item ms-lg-2 my-2 my-lg-0">
             <a class="navbar-cta-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer">
-              <i class="bi bi-file-earmark-arrow-down"></i> Unduh Katalog
+              <i data-lucide="file-down"></i> Unduh Katalog
             </a>
           </li>
           <li class="nav-item d-none d-lg-flex align-items-center gap-2 ms-lg-2 navbar-utilities">
             <a href="{{ route('cart.index') }}" class="nb-icon-btn position-relative text-decoration-none" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
-              <i class="bi bi-cart3"></i>
+              <i data-lucide="shopping-cart"></i>
               @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
               <span id="cart-badge-count" class="nav-cart-badge" style="display: {{ $cartCount > 0 ? 'inline-flex' : 'none' }};">
                 {{ $cartCount }}
               </span>
             </a>
             <button type="button" id="nav-search-open" class="nb-icon-btn" title="Cari produk" aria-label="Cari produk" aria-haspopup="dialog" aria-controls="search-overlay">
-              <i class="bi bi-search"></i>
+              <i data-lucide="search"></i>
             </button>
           </li>
         </ul>

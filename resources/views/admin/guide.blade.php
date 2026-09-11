@@ -29,12 +29,12 @@
   </div>
   <div class="admin-card-body" style="padding: 16px 20px;">
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px;">
-      <a href="#rfq" class="guide-toc-link"><i class="bi bi-receipt"></i> RFQ / Penawaran</a>
-      <a href="#produk" class="guide-toc-link"><i class="bi bi-box-seam"></i> Produk &amp; Katalog</a>
-      <a href="#kategori" class="guide-toc-link"><i class="bi bi-diagram-3"></i> Kategori &amp; Sektor</a>
-      <a href="#konten" class="guide-toc-link"><i class="bi bi-sliders"></i> Beranda &amp; Konten</a>
-      <a href="#artikel" class="guide-toc-link"><i class="bi bi-file-text"></i> Artikel &amp; Prinsipal</a>
-      <a href="#keamanan" class="guide-toc-link"><i class="bi bi-shield-check"></i> Keamanan &amp; Tips</a>
+      <a href="#rfq" class="guide-toc-link"><i data-lucide="receipt"></i> RFQ / Penawaran</a>
+      <a href="#produk" class="guide-toc-link"><i data-lucide="package"></i> Produk &amp; Katalog</a>
+      <a href="#kategori" class="guide-toc-link"><i data-lucide="folder-tree"></i> Kategori &amp; Sektor</a>
+      <a href="#konten" class="guide-toc-link"><i data-lucide="sliders"></i> Beranda &amp; Konten</a>
+      <a href="#artikel" class="guide-toc-link"><i data-lucide="file-text"></i> Artikel &amp; Prinsipal</a>
+      <a href="#keamanan" class="guide-toc-link"><i data-lucide="shield-check"></i> Keamanan &amp; Tips</a>
     </div>
   </div>
 </div>
@@ -44,7 +44,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Modul utama</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-receipt me-2" style="color: var(--color-accent);"></i>Pengajuan RFQ</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="receipt" class="me-2" style="color: var(--color-accent);"></i>Pengajuan RFQ</h2>
     </div>
     <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Buka daftar RFQ</a>
   </div>
@@ -106,7 +106,7 @@
     </ul>
 
     <div class="guide-note">
-      <i class="bi bi-info-circle"></i>
+      <i data-lucide="info"></i>
       <div>
         <strong>Belum jadi alur utama</strong> (jika nanti dibutuhkan, development terpisah):
         diskon/price override di admin, PDF surat penawaran otomatis, approve online + signed URL, potong stok otomatis.
@@ -121,7 +121,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Katalog</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-box-seam me-2" style="color: var(--color-accent);"></i>Produk</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="package" class="me-2" style="color: var(--color-accent);"></i>Produk</h2>
     </div>
     <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola produk</a>
   </div>
@@ -140,7 +140,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Taksonomi</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-diagram-3 me-2" style="color: var(--color-accent);"></i>Kategori &amp; Sektor</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="folder-tree" class="me-2" style="color: var(--color-accent);"></i>Kategori &amp; Sektor</h2>
     </div>
   </div>
   <div class="admin-card-body">
@@ -167,7 +167,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Website</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-sliders me-2" style="color: var(--color-accent);"></i>Pengaturan Web / Beranda</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="sliders" class="me-2" style="color: var(--color-accent);"></i>Pengaturan Web / Beranda</h2>
     </div>
     <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Edit beranda</a>
   </div>
@@ -186,7 +186,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Konten &amp; mitra</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-file-text me-2" style="color: var(--color-accent);"></i>Artikel &amp; Prinsipal</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="file-text" class="me-2" style="color: var(--color-accent);"></i>Artikel &amp; Prinsipal</h2>
     </div>
   </div>
   <div class="admin-card-body">
@@ -215,7 +215,7 @@
   <div class="admin-card-header">
     <div>
       <span class="admin-card-header-label">Operasional aman</span>
-      <h2 class="admin-card-header-title"><i class="bi bi-shield-check me-2" style="color: var(--color-accent);"></i>Keamanan &amp; tips</h2>
+      <h2 class="admin-card-header-title"><i data-lucide="shield-check" class="me-2" style="color: var(--color-accent);"></i>Keamanan &amp; tips</h2>
     </div>
   </div>
   <div class="admin-card-body">
@@ -235,23 +235,22 @@
     align-items: center;
     gap: 10px;
     padding: 10px 14px;
-    border: 2px solid #1E1E1E;
-    border-radius: 4px;
+    border: 1px solid var(--color-border, #E5E7EB);
+    border-radius: 8px;
     background: #FFFFFF;
-    box-shadow: 2px 2px 0 #1E1E1E;
-    font-family: var(--font-headline);
-    font-size: 0.8rem;
-    font-weight: 700;
+    box-shadow: var(--shadow-xs);
+    font-family: var(--font-body);
+    font-size: 0.84rem;
+    font-weight: 600;
     color: var(--color-text-main);
     text-decoration: none;
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
   }
-  .guide-toc-link i { color: var(--color-accent, #A6171C); }
+  .guide-toc-link i { color: var(--color-accent, #A6171C); font-size: 1rem; }
   .guide-toc-link:hover {
-    color: var(--color-text-main);
-    background-color: var(--color-surface-2, #EDE8E0);
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 #1E1E1E;
+    color: var(--color-accent);
+    background-color: var(--color-surface-2, #F3F4F6);
+    border-color: #D1D5DB;
   }
   .guide-lead {
     font-size: 0.92rem;
@@ -261,17 +260,17 @@
   }
   .guide-h3 {
     font-family: var(--font-headline);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: var(--color-text-main);
+    color: var(--color-text-muted);
     margin: 24px 0 12px;
   }
   .guide-steps {
     margin: 0 0 12px;
     padding-left: 1.25rem;
-    color: var(--color-text-secondary, #3F3F46);
+    color: var(--color-text-secondary, #374151);
     font-size: 0.88rem;
     line-height: 1.75;
   }
@@ -279,7 +278,7 @@
   .guide-list {
     margin: 0;
     padding-left: 1.15rem;
-    color: var(--color-text-secondary, #3F3F46);
+    color: var(--color-text-secondary, #374151);
     font-size: 0.88rem;
     line-height: 1.75;
   }
@@ -289,25 +288,24 @@
     gap: 14px;
     margin-top: 24px;
     padding: 16px 18px;
-    border-radius: 4px;
-    border: 2px solid #1E1E1E;
-    box-shadow: 3px 3px 0 #1E1E1E;
-    background: #FEF3C7;
-    color: #1E1E1E;
+    border-radius: 10px;
+    border: 1px solid #FEF3C7;
+    background: #FFFBEB;
+    color: #92400E;
     font-size: 0.85rem;
     line-height: 1.6;
   }
   .guide-note i { color: #D97706; font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
-  .guide-note strong { color: #1E1E1E; }
+  .guide-note strong { color: #78350F; }
   code {
     font-family: var(--font-mono, 'JetBrains Mono', Consolas, monospace);
-    font-size: 0.85em;
-    font-weight: 600;
+    font-size: 0.82em;
+    font-weight: 500;
     color: var(--color-accent, #A6171C);
-    background: var(--color-surface-2, #EDE8E0);
-    border: 1px solid var(--color-border, #1E1E1E);
+    background: var(--color-surface-2, #F3F4F6);
+    border: 1px solid var(--color-border, #E5E7EB);
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 6px;
   }
   @media (max-width: 768px) {
     .admin-card-body > div[style*="grid-template-columns: 1fr 1fr"] {

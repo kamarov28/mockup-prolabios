@@ -4,9 +4,14 @@
 
 import * as bootstrap from 'bootstrap';
 import Swal from 'sweetalert2';
+import { createIcons, icons } from 'lucide';
 
 window.bootstrap = bootstrap;
 window.Swal = Swal;
+window.lucide = {
+  createIcons: (options = {}) => createIcons({ icons, attrs: { 'stroke-width': 1.75 }, ...options }),
+  icons
+};
 
 import { initNavigation } from './modules/navigation.js';
 import { initSearchModal } from './modules/search-modal.js';
@@ -35,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initCatalogCart', initCatalogCart);
   safeInit('initSubpages', initSubpages);
   safeInit('initCatalogAjax', initCatalogAjax);
+  safeInit('lucide', () => window.lucide.createIcons());
 
   // Bacteria swarm prototype: active on homepage
   if (document.querySelector('.nb-hero') || document.querySelector('.page-home') || document.querySelector('.home-hero') || document.querySelector('.hero-cinematic') || window.location.pathname === '/' || window.location.pathname === '') {

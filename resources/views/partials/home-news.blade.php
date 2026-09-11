@@ -9,7 +9,7 @@
       </div>
       <div class="flex-shrink-0">
         <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2" aria-label="Lihat semua artikel dan informasi">
-          Lihat Semua Artikel <i class="bi bi-arrow-right"></i>
+          Lihat Semua Artikel <i data-lucide="arrow-right"></i>
         </a>
       </div>
     </div>
@@ -68,7 +68,7 @@
 
                 <div class="mt-auto pt-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
                   <a href="{{ url('/informasi') }}?detail={{ $leadPost['slug'] }}" class="editorial-read-link" aria-label="Baca pembahasan lengkap: {{ $leadPost['title'] }}">
-                    Baca Pembahasan Lengkap <i class="bi bi-arrow-right ms-1"></i>
+                    Baca Pembahasan Lengkap <i data-lucide="arrow-right" class="ms-1"></i>
                   </a>
                   <span class="editorial-meta">Panduan Mutu &amp; Regulasi</span>
                 </div>
@@ -94,7 +94,7 @@
                     {{ $pDateRaw }}
                   </span>
                 </div>
-                <i class="bi bi-arrow-right text-muted editorial-card-arrow"></i>
+                <i data-lucide="arrow-right" class="text-muted editorial-card-arrow"></i>
               </div>
 
               <h4 class="editorial-list-title mb-0">

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   04-forms-tables.css — Data Tables, Form Inputs & Bootstrap Card Overrides
+   04-forms-tables.css — Data Tables, Form Inputs & Card Overrides (Modern Flat)
    ========================================================================== */
 
 /* ── 9. Tables ────────────────────────────────────────────────────────── */
@@ -9,34 +9,34 @@
   border-spacing: 0;
 }
 .admin-table thead tr {
-  background-color: var(--color-surface-2);
-  border-bottom: 2px solid #1E1E1E;
+  background-color: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border);
 }
 .admin-table thead th {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: #1E1E1E;
-  padding: 14px 20px;
-  background: var(--color-surface-2);
-  border-bottom: 2px solid #1E1E1E;
+  color: var(--color-text-muted);
+  padding: 12px 20px;
+  background: var(--color-surface-subtle);
+  border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
 }
 .admin-table tbody tr {
-  border-bottom: 1px solid #1E1E1E;
+  border-bottom: 1px solid var(--color-border);
   transition: background-color 0.12s ease;
 }
 .admin-table tbody tr:hover {
-  background-color: #F7F5F0;
+  background-color: var(--color-surface-subtle);
 }
 .admin-table tbody td {
-  padding: 15px 20px;
+  padding: 14px 20px;
   vertical-align: middle;
   color: var(--color-text-secondary);
-  font-size: 0.92rem;
-  border-bottom: 1px solid rgba(30, 30, 30, 0.12);
+  font-size: 0.88rem;
+  border-bottom: 1px solid #F3F4F6;
 }
 .admin-table tbody tr:last-child td {
   border-bottom: none;
@@ -44,24 +44,24 @@
 
 .admin-table .cell-title {
   font-family: var(--font-body);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text-main);
-  font-size: 0.94rem;
+  font-size: 0.92rem;
 }
 .admin-table .cell-muted {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--color-text-muted);
 }
 .admin-table .cell-code,
 .admin-table code {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #1E1E1E;
-  background: #EDE8E0;
-  border: 1.5px solid #1E1E1E;
-  padding: 3px 8px;
-  border-radius: 4px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  padding: 2px 7px;
+  border-radius: 6px;
   white-space: nowrap;
 }
 
@@ -69,7 +69,7 @@
   position: relative;
   overflow-x: auto;
   scrollbar-width: thin;
-  scrollbar-color: #1E1E1E #EDE8E0;
+  scrollbar-color: #D1D5DB #F3F4F6;
   cursor: grab;
 }
 .table-responsive.is-grabbing,
@@ -79,79 +79,76 @@
   cursor: grabbing !important;
 }
 .table-responsive::-webkit-scrollbar {
-  height: 6px;
+  height: 5px;
 }
 .table-responsive::-webkit-scrollbar-track {
-  background: #EDE8E0;
+  background: #F3F4F6;
 }
 .table-responsive::-webkit-scrollbar-thumb {
-  background: #1E1E1E;
-  border-radius: 0;
+  background: #D1D5DB;
+  border-radius: 4px;
 }
 
 /* ── 12. Forms & Inputs ───────────────────────────────────────────────── */
 .admin-form-group { margin-bottom: 22px; }
 .admin-form-label {
   font-family: var(--font-body);
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--color-text-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
   display: block;
   margin-bottom: 7px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.2px;
 }
 .admin-form-control,
 .form-control:not(.note-editor *):not(.note-popover *),
 .form-select:not(.note-editor *):not(.note-popover *) {
   width: 100%;
   background: #FFFFFF !important;
-  border: 2px solid #1E1E1E !important;
-  border-radius: 4px !important;
-  padding: 10px 14px !important;
+  border: 1px solid #D1D5DB !important;
+  border-radius: 8px !important;
+  padding: 9px 13px !important;
   color: var(--color-text-main) !important;
   font-family: var(--font-body) !important;
-  font-size: 0.92rem !important;
-  font-weight: 500;
-  box-shadow: 2px 2px 0 #1E1E1E !important;
-  transition: all 0.15s ease !important;
+  font-size: 0.9rem !important;
+  font-weight: 400;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
   outline: none;
 }
 .admin-form-control::placeholder,
 .form-control::placeholder {
-  color: #888888;
+  color: #9CA3AF;
 }
 .admin-form-control:focus,
 .form-control:focus:not(.note-editor *):not(.note-popover *),
 .form-select:focus:not(.note-editor *):not(.note-popover *) {
   border-color: var(--color-accent) !important;
-  box-shadow: 3px 3px 0 var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
   background: #FFFFFF !important;
   color: var(--color-text-main) !important;
 }
 
-/* ── Input Group Styling (Soft Neo-Brutalism) ── */
+/* ── Input Group Styling (Modern Flat) ── */
 .input-group {
   display: flex !important;
   flex-wrap: nowrap !important;
   align-items: stretch !important;
-  box-shadow: 2px 2px 0 #1E1E1E !important;
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   transition: box-shadow 0.15s ease !important;
 }
 .input-group > .input-group-text {
-  background: #EDE8E0 !important;
-  border: 2px solid #1E1E1E !important;
+  background: #F9FAFB !important;
+  border: 1px solid #D1D5DB !important;
   border-right: none !important;
-  color: var(--color-text-main) !important;
-  border-radius: 4px 0 0 4px !important;
-  font-weight: 700;
+  color: var(--color-text-muted) !important;
+  border-radius: 8px 0 0 8px !important;
+  font-weight: 500;
   font-size: 0.88rem;
-  padding: 10px 14px;
+  padding: 9px 13px;
   display: flex;
   align-items: center;
   box-shadow: none !important;
-  transition: border-color 0.15s ease !important;
 }
 .input-group > .form-control,
 .input-group > .admin-form-control {
@@ -161,15 +158,13 @@
   border-bottom-left-radius: 0 !important;
   box-shadow: none !important;
 }
-.input-group:focus-within {
-  box-shadow: 3px 3px 0 var(--color-accent) !important;
-}
 .input-group:focus-within > .input-group-text {
   border-color: var(--color-accent) !important;
 }
 .input-group:focus-within > .form-control,
 .input-group:focus-within > .admin-form-control {
   border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
 }
 
 select.form-select option {
@@ -180,16 +175,16 @@ select.form-select option {
 /* Bootstrap Card Compatibility */
 .card {
   background-color: var(--color-surface) !important;
-  border: 2px solid #1E1E1E !important;
-  border-radius: 6px !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 14px !important;
   color: var(--color-text-main) !important;
-  box-shadow: 4px 4px 0 #1E1E1E !important;
+  box-shadow: var(--shadow-xs) !important;
 }
 .card-header {
   background-color: #FFFFFF !important;
-  border-bottom: 2px solid #1E1E1E !important;
+  border-bottom: 1px solid var(--color-border) !important;
   color: var(--color-text-main) !important;
-  font-weight: 700;
+  font-weight: 600;
   padding: 16px 20px !important;
 }
 .card-body {
@@ -198,16 +193,16 @@ select.form-select option {
   padding: 20px !important;
 }
 .card-footer {
-  background-color: var(--color-surface-2) !important;
-  border-top: 2px solid #1E1E1E !important;
+  background-color: var(--color-surface-subtle) !important;
+  border-top: 1px solid var(--color-border) !important;
   color: var(--color-text-muted) !important;
   padding: 14px 20px !important;
 }
 
 .form-label, label {
-  color: var(--color-text-main) !important;
-  font-weight: 700;
-  font-size: 0.84rem;
+  color: var(--color-text-secondary) !important;
+  font-weight: 600;
+  font-size: 0.82rem;
 }
 .form-text {
   color: var(--color-text-muted) !important;

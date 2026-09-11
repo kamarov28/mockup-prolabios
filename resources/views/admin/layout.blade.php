@@ -6,9 +6,9 @@
   <title>@yield('title', 'Admin Panel') | PROLABIOS</title>
   {{-- Critical: prevent dark flash before admin.css (Vite) loads --}}
   <style>
-    html { color-scheme: light; background-color: #D6D0C5; }
-    html, body { margin: 0; padding: 0; background-color: #D6D0C5 !important; color: #1E1E1E; }
-    body.admin-panel { background-color: #D6D0C5 !important; }
+    html { color-scheme: light; background-color: #F8F9FA; }
+    html, body { margin: 0; padding: 0; background-color: #F8F9FA !important; color: #111827; }
+    body.admin-panel { background-color: #F8F9FA !important; }
   </style>
   <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
   <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -25,8 +25,8 @@
   <!-- Bootstrap 5 CSS (Layout utilities only — visual system = admin.css) -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-  <!-- Admin Design System (Vite) -->
-  @vite(['resources/css/admin.css'])
+  <!-- Admin Design System & Scripts (Vite) -->
+  @vite(['resources/css/admin.css', 'resources/js/admin.js'])
 
   @yield('admin_styles')
 </head>
@@ -49,19 +49,19 @@
 
         <div class="sidebar-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
           <a href="{{ route('admin.dashboard') }}" class="sidebar-link">
-            <i class="bi bi-grid-1x2"></i> Dashboard
+            <i data-lucide="layout-grid"></i> Dashboard
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/rfqs*') ? 'active' : '' }}">
           <a href="{{ route('admin.rfqs.index') }}" class="sidebar-link">
-            <i class="bi bi-receipt"></i> Pengajuan RFQ
+            <i data-lucide="file-spreadsheet"></i> Pengajuan RFQ
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->routeIs('admin.home.edit') ? 'active' : '' }}">
           <a href="{{ route('admin.home.edit') }}" class="sidebar-link">
-            <i class="bi bi-sliders"></i> Pengaturan Web
+            <i data-lucide="sliders"></i> Pengaturan Web
           </a>
         </div>
 
@@ -69,31 +69,31 @@
 
         <div class="sidebar-item {{ request()->is('admin/products*') ? 'active' : '' }}">
           <a href="{{ route('admin.products') }}" class="sidebar-link">
-            <i class="bi bi-box-seam"></i> Produk
+            <i data-lucide="package"></i> Produk
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
           <a href="{{ route('admin.categories.index') }}" class="sidebar-link">
-            <i class="bi bi-diagram-3"></i> Kategori Produk
+            <i data-lucide="folder-tree"></i> Kategori Produk
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/principals*') ? 'active' : '' }}">
           <a href="{{ route('admin.principals') }}" class="sidebar-link">
-            <i class="bi bi-award"></i> Prinsipal / Mitra
+            <i data-lucide="award"></i> Prinsipal / Mitra
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
           <a href="{{ route('admin.posts') }}" class="sidebar-link">
-            <i class="bi bi-file-text"></i> Artikel
+            <i data-lucide="file-text"></i> Artikel
           </a>
         </div>
 
         <div class="sidebar-item {{ request()->is('admin/sectors*') ? 'active' : '' }}">
           <a href="{{ route('admin.sectors') }}" class="sidebar-link">
-            <i class="bi bi-layers"></i> Sektor
+            <i data-lucide="layers"></i> Sektor
           </a>
         </div>
 
@@ -101,7 +101,7 @@
 
         <div class="sidebar-item {{ request()->routeIs('admin.guide') ? 'active' : '' }}">
           <a href="{{ route('admin.guide') }}" class="sidebar-link">
-            <i class="bi bi-book"></i> Panduan Admin
+            <i data-lucide="book-open"></i> Panduan Admin
           </a>
         </div>
 
@@ -110,7 +110,7 @@
           <form id="logout-form" action="{{ route('admin.logout') }}" method="POST">
             @csrf
             <button type="submit" class="sidebar-link" style="color: #F87171 !important;">
-              <i class="bi bi-arrow-bar-left" style="color: #F87171;"></i> Keluar
+              <i data-lucide="log-out" style="color: #F87171;"></i> Keluar
             </button>
           </form>
         </div>
@@ -124,11 +124,11 @@
         <p class="admin-header-title">@yield('page_title', 'Dashboard')</p>
         <div class="admin-header-actions">
           <span class="admin-header-user">
-            <i class="bi bi-person-circle"></i>
+            <i data-lucide="user"></i>
             Administrator
           </span>
           <a href="{{ url('/') }}" target="_blank" class="admin-header-web-link">
-            <i class="bi bi-box-arrow-up-right"></i>
+            <i data-lucide="external-link"></i>
             Lihat Web
           </a>
         </div>
@@ -141,8 +141,8 @@
     </div>
   </div>
 
-  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--color-surface, #FFFFFF); border: 2px solid var(--color-border, #1E1E1E); border-radius: 6px; box-shadow: 3px 3px 0 var(--color-border, #1E1E1E); color: var(--color-text-main, #1E1E1E); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1050;">
-    <i class="bi bi-arrow-up" style="font-size: 1rem; font-weight: 700;"></i>
+  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; background: var(--color-surface, #FFFFFF); border: 1px solid var(--color-border, #E5E7EB); border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); color: var(--color-text-main, #111827); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1050;">
+    <i data-lucide="arrow-up" style="font-size: 1rem; font-weight: 600;"></i>
   </button>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

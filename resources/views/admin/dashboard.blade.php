@@ -12,7 +12,7 @@
     <div class="admin-stat-card">
       <span class="admin-stat-label">Pengajuan RFQ</span>
       <div class="admin-stat-value" style="color: var(--color-accent, #A6171C);">{{ $rfqsCount }}</div>
-      <a href="{{ route('admin.rfqs.index') }}" class="admin-stat-link">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+      <a href="{{ route('admin.rfqs.index') }}" class="admin-stat-link">Lihat Semua <i data-lucide="arrow-right"></i></a>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
     <div class="admin-stat-card">
       <span class="admin-stat-label">Total Produk</span>
       <div class="admin-stat-value">{{ $productsCount }}</div>
-      <a href="{{ route('admin.products') }}" class="admin-stat-link">Kelola <i class="bi bi-arrow-right"></i></a>
+      <a href="{{ route('admin.products') }}" class="admin-stat-link">Kelola <i data-lucide="arrow-right"></i></a>
     </div>
   </div>
 
@@ -28,7 +28,7 @@
     <div class="admin-stat-card">
       <span class="admin-stat-label">Total Artikel</span>
       <div class="admin-stat-value">{{ $postsCount }}</div>
-      <a href="{{ route('admin.posts') }}" class="admin-stat-link">Kelola <i class="bi bi-arrow-right"></i></a>
+      <a href="{{ route('admin.posts') }}" class="admin-stat-link">Kelola <i data-lucide="arrow-right"></i></a>
     </div>
   </div>
 
@@ -36,7 +36,7 @@
     <div class="admin-stat-card">
       <span class="admin-stat-label">Sektor Industri</span>
       <div class="admin-stat-value">{{ $sectorsCount }}</div>
-      <a href="{{ route('admin.sectors') }}" class="admin-stat-link">Kelola <i class="bi bi-arrow-right"></i></a>
+      <a href="{{ route('admin.sectors') }}" class="admin-stat-link">Kelola <i data-lucide="arrow-right"></i></a>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
           <h2 class="admin-card-header-title">Pengajuan RFQ Terbaru</h2>
         </div>
         <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost">
-          Lihat Semua <i class="bi bi-arrow-right"></i>
+          Lihat Semua <i data-lucide="arrow-right"></i>
         </a>
       </div>
       <div class="admin-card-body-flush">
@@ -92,7 +92,7 @@
                     </td>
                     <td>
                       <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-btn admin-btn-ghost admin-btn-sm">
-                        <i class="bi bi-eye"></i> Detail
+                        <i data-lucide="eye"></i> Detail
                       </a>
                     </td>
                   </tr>
@@ -102,7 +102,7 @@
           </div>
         @else
           <div class="text-center py-4">
-            <i class="bi bi-inbox" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
+            <i data-lucide="inbox" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
             <p class="mt-2 mb-0" style="color: var(--color-text-muted); font-size: 0.85rem;">Belum ada pengajuan RFQ terbaru.</p>
           </div>
         @endif
@@ -117,7 +117,7 @@
           <h2 class="admin-card-header-title">Produk Terbaru</h2>
         </div>
         <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
-          <i class="bi bi-plus-lg"></i> Tambah
+          <i data-lucide="plus"></i> Tambah
         </a>
       </div>
       <div class="admin-card-body-flush">
@@ -160,7 +160,7 @@
           <h2 class="admin-card-header-title">Artikel Terbaru</h2>
         </div>
         <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
-          <i class="bi bi-plus-lg"></i> Tambah
+          <i data-lucide="plus"></i> Tambah
         </a>
       </div>
       <div class="admin-card-body-flush">

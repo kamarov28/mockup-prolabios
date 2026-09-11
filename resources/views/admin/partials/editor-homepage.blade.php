@@ -1,17 +1,17 @@
 <div class="admin-card">
-  <div class="admin-card-header pb-0" style="background: var(--color-surface); border-bottom: 2px solid #1E1E1E;">
+  <div class="admin-card-header pb-0" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
     <ul class="nav nav-pills" id="homeTabs" role="tablist" style="gap: 8px; margin-bottom: 14px;">
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i class="bi bi-image me-1"></i> <span>Hero Banner</span></button>
+        <button class="admin-btn admin-btn-outline active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="image" class="me-1"></i> <span>Hero Banner</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i class="bi bi-grid-1x2 me-1"></i> <span>Bento Grid Cards</span></button>
+        <button class="admin-btn admin-btn-outline" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="layout-grid" class="me-1"></i> <span>Bento Grid Cards</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i class="bi bi-diagram-3 me-1"></i> <span>Sector Finder</span></button>
+        <button class="admin-btn admin-btn-outline" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="folder-tree" class="me-1"></i> <span>Sector Finder</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i class="bi bi-megaphone me-1"></i> <span>Banner Konversi RFQ</span></button>
+        <button class="admin-btn admin-btn-outline" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="megaphone" class="me-1"></i> <span>Banner Konversi RFQ</span></button>
       </li>
     </ul>
   </div>
@@ -25,7 +25,7 @@
 
       <!-- Sub-panel 1: Hero Section -->
       <div class="tab-pane fade show active" id="hero-panel" role="tabpanel">
-        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 2px solid #1E1E1E;">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">HERO HEADLINE & SLIDESHOW</span>
             <h2 class="h5 fw-bold mb-0" style="font-family: var(--font-headline); color: var(--color-text-main);">Hero Section Main Banner</h2>
@@ -72,12 +72,12 @@
           </div>
         </div>
 
-        <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 2px solid #1E1E1E;">Gambar Background Carousel Hero (Maks. 4 Gambar)</h3>
+        <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);">Gambar Background Carousel Hero (Maks. 4 Gambar)</h3>
         <div class="row g-3">
           @for($i = 0; $i < 4; $i++)
             @php $imgUrl = $homeData['hero_images'][$i] ?? ''; @endphp
             <div class="col-md-6 col-lg-3">
-              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
                   <div class="d-flex align-items-center justify-content-between mb-2">
                     <span class="admin-badge admin-badge-accent">Slide #{{ $i + 1 }}</span>
@@ -87,7 +87,7 @@
                       <span class="admin-badge admin-badge-muted">Kosong</span>
                     @endif
                   </div>
-                  <div class="overflow-hidden mb-3" style="aspect-ratio: 16/9; background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 4px;">
+                  <div class="overflow-hidden mb-3" style="aspect-ratio: 16/9; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
                     <img id="hero_image_preview_{{ $i }}" src="{{ $imgUrl ?: asset('images/placeholder.svg') }}" alt="Slide {{ $i + 1 }}" class="w-100 h-100" style="object-fit: cover;">
                   </div>
                   <div class="mb-2">
@@ -107,7 +107,7 @@
 
       <!-- Sub-panel 2: Bento Grid Standar -->
       <div class="tab-pane fade" id="bento-panel" role="tabpanel">
-        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 2px solid #1E1E1E;">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">VALUE PILLARS & STANDARDS</span>
             <h2 class="h5 fw-bold mb-0" style="font-family: var(--font-headline); color: var(--color-text-main);">Bento Grid Standards &amp; Infrastructure</h2>
@@ -128,19 +128,19 @@
           </div>
         </div>
 
-        <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 2px solid #1E1E1E;">4 Kartu Pilar Nilai (Bento Cards)</h3>
+        <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);">4 Kartu Pilar Nilai (Bento Cards)</h3>
         <div class="row g-3">
           @for($i = 0; $i < 4; $i++)
             @php $bCard = $homeData['bento_cards'][$i] ?? []; @endphp
             <div class="col-md-6">
-              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
                   <span class="admin-badge admin-badge-accent mb-2">Kartu Bento #{{ $i + 1 }}</span>
                   <div class="mb-2">
-                    <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Bootstrap (<a href="https://icons.getbootstrap.com" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i class="bi bi-box-arrow-up-right"></i></a>)</label>
+                    <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Bootstrap (<a href="https://icons.getbootstrap.com" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i data-lucide="external-link"></i></a>)</label>
                     <div class="input-group input-group-sm">
-                      <span class="input-group-text" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi {{ $bCard['icon'] ?? 'bi-patch-check' }}"></i></span>
-                      <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" style="border: 2px solid #1E1E1E;" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'bi-patch-check') }}" placeholder="bi-patch-check" required>
+                      <span class="input-group-text"><i class="bi {{ $bCard['icon'] ?? 'bi-patch-check' }}"></i></span>
+                      <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'bi-patch-check') }}" placeholder="bi-patch-check" required>
                     </div>
                   </div>
                   <div class="mb-2">
@@ -160,7 +160,7 @@
 
       <!-- Sub-panel 3: Interactive Sector Finder -->
       <div class="tab-pane fade" id="sector-panel" role="tabpanel">
-        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 2px solid #1E1E1E;">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">SECTOR WORKFLOWS</span>
             <h2 class="h5 fw-bold mb-0" style="font-family: var(--font-headline); color: var(--color-text-main);">Interactive Sector Finder</h2>
@@ -194,7 +194,7 @@
           @foreach($sectorConfigs as $sKey => $sLabel)
             @php $sPanel = $homeData['sector_panels'][$sKey] ?? []; @endphp
             <div class="col-md-6">
-              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
                   <span class="admin-badge admin-badge-info mb-2">{{ $sLabel }}</span>
                   <div class="mb-2">
@@ -222,7 +222,7 @@
 
       <!-- Sub-panel 4: Bottom Conversion CTA Banner -->
       <div class="tab-pane fade" id="cta-panel" role="tabpanel">
-        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 2px solid #1E1E1E;">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">BOTTOM CONVERSION ACTION</span>
             <h2 class="h5 fw-bold mb-0" style="font-family: var(--font-headline); color: var(--color-text-main);">Banner Konversi CTA Bawah (Bottom RFQ Callout)</h2>
@@ -264,8 +264,8 @@
 
     </div>
 
-    <div class="mt-4 pt-4 text-end" style="border-top: 2px solid #1E1E1E;">
-      <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i class="bi bi-save me-1"></i> SIMPAN PERUBAHAN BERANDA</button>
+    <div class="mt-4 pt-4 text-end" style="border-top: 1px solid var(--color-border);">
+      <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i data-lucide="save" class="me-1"></i> SIMPAN PERUBAHAN BERANDA</button>
     </div>
   </form>
 </div>

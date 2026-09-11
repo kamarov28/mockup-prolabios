@@ -34,7 +34,7 @@
     </p>
   </div>
   <a href="{{ route('admin.posts') }}" class="admin-btn admin-btn-outline">
-    <i class="bi bi-arrow-left"></i> Kembali
+    <i data-lucide="arrow-left"></i> Kembali
   </a>
 </div>
 
@@ -129,7 +129,7 @@
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="highlight" id="highlightYes" value="1" {{ old('highlight', ($post['is_featured'] ?? false) ? '1' : '0') === '1' ? 'checked' : '' }}>
                 <label class="form-check-label" for="highlightYes" style="color: #f59e0b;">
-                  <i class="bi bi-star-fill me-1"></i> Tampil di beranda
+                  <i data-lucide="star" class="me-1"></i> Tampil di beranda
                 </label>
               </div>
             </div>
@@ -168,10 +168,10 @@
 
     <div class="d-flex justify-content-between align-items-center gap-3 mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
       <a href="{{ route('admin.posts') }}" class="admin-btn admin-btn-outline">
-        <i class="bi bi-arrow-left"></i> Batal
+        <i data-lucide="arrow-left"></i> Batal
       </a>
       <button type="submit" class="admin-btn admin-btn-primary">
-        <i class="bi bi-check-lg"></i> Simpan Artikel
+        <i data-lucide="check"></i> Simpan Artikel
       </button>
     </div>
   </form>

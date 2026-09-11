@@ -4,7 +4,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-gear-wide-connected me-1"></i> LAYANAN TEKNIS',
+    'badge' => '<i data-lucide="settings" class="me-1"></i> LAYANAN TEKNIS',
     'title' => 'Layanan Purna Jual & Rekayasa Laboratorium',
     'subtitle' => 'Solusi komprehensif mulai dari pemeliharaan instrumen, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, hingga pelatihan terakreditasi prinsipal.'
   ])
@@ -19,30 +19,30 @@
           @php $activeService = request()->get('s') ?? 'maintenance'; @endphp
 
           <div class="card p-4 mb-4">
-            <h3 class="profil-sidebar-title"><i class="bi bi-list-nested me-2"></i>Pilih Layanan</h3>
+            <h3 class="profil-sidebar-title"><i data-lucide="list-tree" class="me-2"></i>Pilih Layanan</h3>
             <nav class="layanan-sidebar-nav d-flex flex-column gap-2">
               <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'maintenance' ? 'is-active' : '' }}">
-                <span><i class="bi bi-tools text-danger me-2"></i>Perawatan &amp; Perbaikan</span>
-                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                <span><i data-lucide="wrench" class="text-danger me-2"></i>Perawatan &amp; Perbaikan</span>
+                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
               <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'labdesign' ? 'is-active' : '' }}">
-                <span><i class="bi bi-building-gear text-primary me-2"></i>Desain &amp; Pembangunan Lab</span>
-                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                <span><i data-lucide="building" class="text-primary me-2"></i>Desain &amp; Pembangunan Lab</span>
+                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
               <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'consultation' ? 'is-active' : '' }}">
-                <span><i class="bi bi-mortarboard text-success me-2"></i>Konsultasi &amp; Pelatihan</span>
-                <i class="bi bi-arrow-right-short fs-5 ms-auto"></i>
+                <span><i data-lucide="graduation-cap" class="text-success me-2"></i>Konsultasi &amp; Pelatihan</span>
+                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
             </nav>
           </div>
 
           <div class="profil-trust-box d-none d-md-block">
-            <h3 class="profil-sidebar-title"><i class="bi bi-headset me-2"></i>Hubungi Tim Teknis</h3>
+            <h3 class="profil-sidebar-title"><i data-lucide="headphones" class="me-2"></i>Hubungi Tim Teknis</h3>
             <p style="font-size: 0.88rem; color: #374151; margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan servis rutin, instalasi baru, atau konsultasi instrumen bersama konsultan kami.</p>
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary d-flex justify-content-center mb-3">
-              Formulir Kontak <i class="bi bi-arrow-right ms-2"></i>
+              Formulir Kontak <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
-            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i class="bi bi-telephone me-2"></i> 021-3874-1447</a>
+            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> 021-3874-1447</a>
           </div>
         </div>
 
@@ -54,28 +54,28 @@
             <div class="profil-hero-img mb-4">
               <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Layanan Perawatan" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
             </div>
-            <span class="profil-section-label"><i class="bi bi-wrench me-1"></i> Layanan 01</span>
+            <span class="profil-section-label"><i data-lucide="wrench" class="me-1"></i> Layanan 01</span>
             <h2 class="profil-section-title">Perawatan &amp; Perbaikan Instrumen</h2>
             <p class="profil-body-text">Sebagai komitmen kami sebagai penyedia <em>layanan purna jual</em> terpercaya, PT Prolabios Mitra Analitika memastikan investasi Anda pada instrumen laboratorium tetap berkinerja prima. Teknisi kami terlatih langsung dari pabrikan internasional.</p>
 
             <div class="row g-3 mt-3">
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-shield-check"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="shield-check"></i></div>
                   <h3 class="layanan-feature-title">Pemeliharaan Preventif</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Pembersihan, lubrikasi, dan penggantian komponen habis pakai terencana untuk mencegah downtime mendadak.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-gear"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="settings"></i></div>
                   <h3 class="layanan-feature-title">Troubleshooting Cepat</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Diagnosa masalah elektrikal &amp; mekanikal cepat menggunakan 100% suku cadang orisinal prinsipal.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-speedometer2"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="gauge"></i></div>
                   <h3 class="layanan-feature-title">Verifikasi &amp; Kalibrasi</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Pengujian akurasi berkala berstandar baku mutu agar hasil analisis pengujian lab Anda selalu valid.</p>
                 </div>
@@ -86,7 +86,7 @@
               <h3 class="layanan-cta-title">Jadwalkan Kunjungan Teknisi</h3>
               <p class="profil-body-text mb-4">Mengalami kendala pada instrumen analitika atau alat ukur Anda? Tim servis kami siap melakukan inspeksi langsung ke fasilitas Anda.</p>
               <a href="{{ url('/kontak') }}?subjek=service" class="nb-btn nb-btn-primary">
-                Formulir Permintaan Servis <i class="bi bi-arrow-right ms-1"></i>
+                Formulir Permintaan Servis <i data-lucide="arrow-right" class="ms-1"></i>
               </a>
             </div>
           </div>
@@ -96,28 +96,28 @@
             <div class="profil-hero-img mb-4">
               <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Lab Design & Build" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
             </div>
-            <span class="profil-section-label"><i class="bi bi-layout-wtf me-1"></i> Layanan 02</span>
+            <span class="profil-section-label"><i data-lucide="layout" class="me-1"></i> Layanan 02</span>
             <h2 class="profil-section-title">Desain &amp; Pembangunan Laboratorium</h2>
             <p class="profil-body-text">Kami merancang dan merealisasikan laboratorium modern yang memenuhi standar K3, alur kerja efisien, serta regulasi nasional dan internasional (ISO 17025 / GLP). Tim ahli kami mendampingi dari tahap blueprint hingga commissioning.</p>
 
             <div class="row g-3 mt-3">
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-grid-1x2"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="layout-grid"></i></div>
                   <h3 class="layanan-feature-title">Layout &amp; Ergonomi</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Penataan meja lab anti-kimia, lemari asam (fume hood), biosafety cabinet, dan sirkulasi udara bertekanan.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-patch-check"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="badge-check"></i></div>
                   <h3 class="layanan-feature-title">Kepatuhan Regulasi</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Memastikan rancangan fasilitas lab Anda lolos audit standar K3, ISO 17025, dan regulasi dinas lingkungan.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-pip"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="picture-in-picture"></i></div>
                   <h3 class="layanan-feature-title">Instalasi Utilitas Lab</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Pemasangan instalasi gas murni (high purity), sistem suplai listrik stabil terisolasi, dan saluran netralisasi limbah.</p>
                 </div>
@@ -128,7 +128,7 @@
               <h3 class="layanan-cta-title">Mulai Rencana Pengembangan Lab Anda</h3>
               <p class="profil-body-text mb-4">Konsultasikan kebutuhan ekspansi atau renovasi laboratorium Anda bersama konsultan arsitektur lab kami.</p>
               <a href="{{ url('/kontak') }}?subjek=labdesign" class="nb-btn nb-btn-primary">
-                Konsultasi Desain Lab <i class="bi bi-arrow-right ms-1"></i>
+                Konsultasi Desain Lab <i data-lucide="arrow-right" class="ms-1"></i>
               </a>
             </div>
           </div>
@@ -138,28 +138,28 @@
             <div class="profil-hero-img mb-4">
               <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Konsultasi & Pelatihan" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
             </div>
-            <span class="profil-section-label"><i class="bi bi-award me-1"></i> Layanan 03</span>
+            <span class="profil-section-label"><i data-lucide="award" class="me-1"></i> Layanan 03</span>
             <h2 class="profil-section-title">Konsultasi Metode &amp; Pelatihan Analis</h2>
             <p class="profil-body-text">Tingkatkan kompetensi analis laboratorium Anda melalui pelatihan pengoperasian instrumen, interpretasi data spektrum/kromatografi, serta optimasi pemilihan metode uji analitika.</p>
 
             <div class="row g-3 mt-3">
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-people"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="users"></i></div>
                   <h3 class="layanan-feature-title">Pelatihan Alat Baru</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Sesi workshop langsung (hands-on) di lokasi fasilitas Anda dipandu oleh spesialis aplikasi instrumen.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-sliders"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="sliders"></i></div>
                   <h3 class="layanan-feature-title">Optimasi Metode Uji</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Panduan pemilihan reagen dan parameter pengujian untuk efisiensi biaya serta akurasi hasil analisis.</p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="layanan-feature-card">
-                  <div class="profil-stat-num mb-2"><i class="bi bi-file-earmark-check"></i></div>
+                  <div class="profil-stat-num mb-2"><i data-lucide="file-check"></i></div>
                   <h3 class="layanan-feature-title">Jaminan Mutu (QA/QC)</h3>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">Pendampingan standarisasi SOP, logbook instrumen, dan penyiapan berkas verifikasi harian.</p>
                 </div>
@@ -170,19 +170,19 @@
               <h3 class="layanan-cta-title">Butuh Sesi Pelatihan In-House?</h3>
               <p class="profil-body-text mb-4">Ajukan workshop spesifik sesuai jenis instrumen dan modul yang ingin didalami oleh tim laboratorium Anda.</p>
               <a href="{{ url('/kontak') }}?subjek=consultation" class="nb-btn nb-btn-primary">
-                Hubungi Tim Pelatihan <i class="bi bi-arrow-right ms-1"></i>
+                Hubungi Tim Pelatihan <i data-lucide="arrow-right" class="ms-1"></i>
               </a>
             </div>
           </div>
 
           <!-- Mobile-only CTA Box -->
           <div class="profil-trust-box d-md-none mt-5">
-            <h3 class="profil-sidebar-title"><i class="bi bi-headset me-2"></i>Hubungi Kami</h3>
+            <h3 class="profil-sidebar-title"><i data-lucide="headphones" class="me-2"></i>Hubungi Kami</h3>
             <p style="font-size: 0.88rem; color: #374151; margin-bottom: 20px; line-height: 1.6;">Ajukan permintaan perbaikan atau konsultasi instrumen melalui saluran kontak resmi kami.</p>
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center mb-3">
-              Formulir Kontak <i class="bi bi-arrow-right ms-2"></i>
+              Formulir Kontak <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
-            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i class="bi bi-telephone me-2"></i> 021-3874-1447</a>
+            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> 021-3874-1447</a>
           </div>
         </div>
       </div>

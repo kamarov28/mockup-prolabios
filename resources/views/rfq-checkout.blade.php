@@ -38,7 +38,7 @@
           <div class="col-lg-7">
             <div class="cart-sidebar-panel rfq-card-form h-100">
               <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-                <i class="bi bi-person-lines-fill" style="color: var(--nb-primary);"></i> 1. Informasi Pemohon
+                <i data-lucide="user-check" style="color: var(--nb-primary);"></i> 1. Informasi Pemohon
               </h3>
 
               <!-- Nama Lengkap -->
@@ -80,7 +80,7 @@
             <div class="cart-sidebar-panel rfq-card-summary h-100 d-flex flex-column justify-content-between">
               <div>
                 <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-                  <i class="bi bi-cart-check" style="color: var(--nb-primary);"></i> 2. Ringkasan Produk
+                  <i data-lucide="shopping-cart" style="color: var(--nb-primary);"></i> 2. Ringkasan Produk
                 </h3>
 
                 <div class="list-group list-group-flush bg-transparent mb-3">
@@ -107,14 +107,14 @@
                 </div>
 
                 <div class="rfq-info-box mb-3">
-                  <i class="bi bi-info-circle-fill me-1" style="color: var(--nb-primary);"></i>
+                  <i data-lucide="info" class="me-1" style="color: var(--nb-primary);"></i>
                   Harga di atas adalah estimasi katalog. Tim sales kami akan memberikan diskon khusus institusi &amp; harga final via WhatsApp/Email.
                 </div>
 
                 {{-- SLA Response & Institutional Trust Guarantee --}}
                 <div class="rfq-trust-box mb-4 p-3">
                   <div class="d-flex align-items-center gap-2 mb-1">
-                    <i class="bi bi-patch-check-fill text-success" style="font-size: 1.1rem;"></i>
+                    <i data-lucide="badge-check" class="text-success" style="font-size: 1.1rem;"></i>
                     <strong style="font-family: var(--font-display); font-size: 0.85rem; color: var(--nb-ink);">Jaminan Penawaran Resmi (SLA 1×24 Jam)</strong>
                   </div>
                   <p class="mb-0 text-muted small" style="font-size: 0.76rem; line-height: 1.45;">
@@ -125,11 +125,11 @@
 
               <div>
                 <button type="submit" id="rfqSubmitBtn" class="rfq-primary-btn w-100 mb-2" style="border: none;">
-                  <i class="bi bi-send-fill me-2"></i> Kirim Pengajuan Penawaran
+                  <i data-lucide="send" class="me-2"></i> Kirim Pengajuan Penawaran
                 </button>
 
                 <a href="{{ route('cart.index') }}" class="rfq-secondary-btn">
-                  <i class="bi bi-pencil me-1"></i> Ubah Keranjang Belanja
+                  <i data-lucide="edit" class="me-1"></i> Ubah Keranjang Belanja
                 </a>
               </div>
             </div>

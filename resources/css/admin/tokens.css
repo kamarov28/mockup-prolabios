@@ -1,41 +1,42 @@
 /* ==========================================================================
-   00-tokens.css — Design Tokens & CSS Variables for Admin Panel
+   00-tokens.css — Design Tokens & CSS Variables for Admin Panel (Modern Flat)
    ========================================================================== */
 
 :root {
-  --font-headline: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-headline: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* Soft Neo-Brutalism Canvas & Surfaces */
-  --color-bg: #D6D0C5;
+  /* Modern Flat Canvas & Surfaces */
+  --color-bg: #F8F9FA;
   --color-surface: #FFFFFF;
-  --color-surface-2: #EDE8E0;
-  --color-surface-subtle: #F5F2EB;
+  --color-surface-2: #F3F4F6;
+  --color-surface-subtle: #F9FAFB;
 
-  --color-text-main: #1E1E1E;
-  --color-text-secondary: #333333;
-  --color-text-muted: #5A5A5A;
+  --color-text-main: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
 
+  /* Signature Prolabios Ruby Red */
   --color-accent: #A6171C;
-  --color-accent-hover: #7A1015;
+  --color-accent-hover: #8B1115;
   --color-accent-light: rgba(166, 23, 28, 0.08);
 
-  --color-sunny: #F1C045;
-  --color-border: #1E1E1E;
-  --color-border-subtle: #A39D93;
+  --color-sunny: #F59E0B;
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F3F4F6;
 
-  --sidebar-width: 250px;
+  --sidebar-width: 260px;
   --sidebar-bg: #FFFFFF;
-  --sidebar-surface: #F5F2EB;
-  --sidebar-text: #5A5A5A;
-  --sidebar-text-active: #1E1E1E;
+  --sidebar-surface: #F9FAFB;
+  --sidebar-text: #4B5563;
+  --sidebar-text-active: #A6171C;
 
-  --header-height: 68px;
+  --header-height: 64px;
 
-  /* Neo-Brutal Hard Zero-Blur Shadows */
-  --shadow-xs: 2px 2px 0 #1E1E1E;
-  --shadow-sm: 3px 3px 0 #1E1E1E;
-  --shadow-md: 4px 4px 0 #1E1E1E;
-  --shadow-lg: 6px 6px 0 #1E1E1E;
+  /* Modern Flat Elevation Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 }

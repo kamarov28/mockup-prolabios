@@ -11,7 +11,7 @@
 @section('content')
   @if(!$currentBlog)
     @include('partials.subpage-hero', [
-      'badge' => '<i class="bi bi-newspaper me-1"></i> BERITA &amp; ARTIKEL',
+      'badge' => '<i data-lucide="newspaper" class="me-1"></i> BERITA &amp; ARTIKEL',
       'title' => 'Pusat Informasi & Wawasan Industri',
       'subtitle' => 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.'
     ])
@@ -28,12 +28,12 @@
             <!-- Detail View -->
             <div class="card p-4 p-md-5">
               <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="nb-btn nb-btn-ghost mb-4 d-inline-flex blog-back-btn">
-                <i class="bi bi-arrow-left me-1"></i> Kembali ke Informasi
+                <i data-lucide="arrow-left" class="me-1"></i> Kembali ke Informasi
               </a>
 
               <div class="d-flex align-items-center gap-3 mb-3">
                 <span class="blog-card-category mb-0">{{ $currentBlog['category'] }}</span>
-                <span class="blog-card-date-inline"><i class="bi bi-calendar3 me-1"></i>{{ $currentBlog['date'] }}</span>
+                <span class="blog-card-date-inline"><i data-lucide="calendar" class="me-1"></i>{{ $currentBlog['date'] }}</span>
               </div>
 
               <h1 class="profil-main-title blog-detail-title">{{ $currentBlog['title'] }}</h1>
@@ -66,7 +66,7 @@
                         <div class="d-flex align-items-center justify-content-between mb-2">
                           <span class="blog-card-category mb-0">{{ $post['category'] }}</span>
                           <span class="blog-card-date-inline">
-                            <i class="bi bi-calendar3 me-1"></i>{{ $post['date'] }}
+                            <i data-lucide="calendar" class="me-1"></i>{{ $post['date'] }}
                           </span>
                         </div>
                         <h3 class="blog-card-title">
@@ -86,11 +86,11 @@
 
             @else
               <div class="col-12 text-center p-5 card">
-                <i class="bi bi-newspaper blog-empty-icon"></i>
+                <i data-lucide="newspaper" class="blog-empty-icon"></i>
                 <h3 class="fs-5 fw-bold blog-empty-title">Belum Ada Artikel</h3>
                 <p class="blog-empty-text">Tidak ada artikel untuk kategori yang Anda pilih.</p>
                 <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">
-                  Lihat Semua Artikel <i class="bi bi-arrow-right ms-1"></i>
+                  Lihat Semua Artikel <i data-lucide="arrow-right" class="ms-1"></i>
                 </a>
               </div>
             @endif
@@ -104,10 +104,10 @@
             <!-- Category Filter -->
             <div class="card p-4 mb-4">
               <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom blog-sidebar-head">
-                <h3 class="profil-sidebar-title mb-0 border-0 p-0"><i class="bi bi-tags me-2"></i>Kategori</h3>
+                <h3 class="profil-sidebar-title mb-0 border-0 p-0"><i data-lucide="tags" class="me-2"></i>Kategori</h3>
                 @if($selectedCategory)
                   <a href="{{ url('/informasi') }}" class="nb-badge blog-reset-badge">
-                    <i class="bi bi-x-circle me-1"></i>Reset
+                    <i data-lucide="x-circle" class="me-1"></i>Reset
                   </a>
                 @endif
               </div>
@@ -132,13 +132,13 @@
 
             <!-- Recent Posts -->
             <div class="profil-trust-box">
-              <h3 class="profil-sidebar-title"><i class="bi bi-clock-history me-2"></i>Berita Terbaru</h3>
+              <h3 class="profil-sidebar-title"><i data-lucide="history" class="me-2"></i>Berita Terbaru</h3>
               @if(count($recentPosts) > 0)
                 <div class="blog-recent-list">
                   @foreach($recentPosts as $index => $rPost)
                     <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" class="blog-recent-item">
                       <div class="blog-recent-date">
-                        <i class="bi bi-calendar3"></i> {{ $rPost['date'] }}
+                        <i data-lucide="calendar"></i> {{ $rPost['date'] }}
                       </div>
                       <h4 class="blog-recent-title">{{ $rPost['title'] }}</h4>
                     </a>

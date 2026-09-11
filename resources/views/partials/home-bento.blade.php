@@ -16,7 +16,7 @@
           <div>
             <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
               <span class="nb-badge nb-badge-sm mb-0">
-                <i class="bi bi-shield-check me-1"></i> VALIDASI &amp; COMPLIANCE
+                <i data-lucide="shield-check" class="me-1"></i> VALIDASI &amp; COMPLIANCE
               </span>
               <span class="nb-badge-sm">ISO 17025 • BPOM • AKL</span>
             </div>
@@ -31,16 +31,16 @@
           <div class="hitech-bento-widget p-3 mt-3">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2 pb-2 hitech-bento-widget-row" style="font-size: 0.8rem;">
               <span class="d-inline-flex align-items-center gap-1 fw-bold text-dark">
-                <i class="bi bi-file-earmark-check text-primary me-1"></i> BATCH-2026-TERRA09
+                <i data-lucide="file-check" class="text-primary me-1"></i> BATCH-2026-TERRA09
               </span>
               <span class="nb-badge-sm" style="background: #E8F5E9; color: #2E7D32; border-color: #2E7D32;">
-                <i class="bi bi-check-circle-fill me-1"></i> Verified &amp; Passed
+                <i data-lucide="check-circle-2" class="me-1"></i> Verified &amp; Passed
               </span>
             </div>
             <div class="d-flex justify-content-between align-items-center" style="font-size: 0.82rem;">
               <span class="text-muted">Terragene SCBI Biological Indicator</span>
               <a href="{{ url('/kontak?subjek=request_coa') }}" class="fw-bold text-decoration-none" style="color: var(--nb-primary) !important;">
-                Minta Dokumen <i class="bi bi-arrow-right ms-1"></i>
+                Minta Dokumen <i data-lucide="arrow-right" class="ms-1"></i>
               </a>
             </div>
           </div>
@@ -58,7 +58,7 @@
             </p>
           </div>
           <div class="pt-3 nb-card-foot text-muted" style="font-size: 0.8rem; font-weight: 600;">
-            <i class="bi bi-thermometer-snow text-primary me-1"></i> Temperatur Terjaga • Packing Farmasi
+            <i data-lucide="thermometer-snowflake" class="text-primary me-1"></i> Temperatur Terjaga • Packing Farmasi
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@
           </div>
           <div class="pt-3 nb-card-foot">
             <a href="{{ url('/layanan') }}" class="fw-bold text-decoration-none" style="color: var(--nb-primary) !important; font-size: 0.85rem;">
-              Lihat Layanan Kalibrasi <i class="bi bi-arrow-right ms-1"></i>
+              Lihat Layanan Kalibrasi <i data-lucide="arrow-right" class="ms-1"></i>
             </a>
           </div>
         </div>

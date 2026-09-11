@@ -34,7 +34,7 @@
             </div>
           @else
             <span class="nb-badge-sm">
-              <i class="bi bi-building me-1 text-primary"></i>{{ $prod->principal->name }}
+              <i data-lucide="building" class="me-1 text-primary"></i>{{ $prod->principal->name }}
             </span>
           @endif
         @endif
@@ -50,7 +50,7 @@
 
       <div class="mt-auto pt-3 d-flex align-items-center justify-content-between nb-card-foot">
         <a href="{{ $cardUrl }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
-          Detail &amp; Spek <i class="bi bi-arrow-right ms-1"></i>
+          Detail &amp; Spek <i data-lucide="arrow-right" class="ms-1"></i>
         </a>
       </div>
     </div>

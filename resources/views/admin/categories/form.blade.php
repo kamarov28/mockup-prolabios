@@ -27,7 +27,7 @@
     </p>
   </div>
   <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-outline">
-    <i class="bi bi-arrow-left"></i> Kembali
+    <i data-lucide="arrow-left"></i> Kembali
   </a>
 </div>
 
@@ -79,7 +79,7 @@
         </p>
         @if($isEdit)
           <p class="form-text mb-0 mt-2" style="color: #f59e0b;">
-            <i class="bi bi-exclamation-triangle me-1"></i>
+            <i data-lucide="alert-triangle" class="me-1"></i>
             Mengubah key akan ikut meng-update produk yang memakai key lama.
           </p>
         @endif
@@ -117,10 +117,10 @@
     {{-- Buttons --}}
     <div class="d-flex justify-content-between align-items-center gap-3 mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
       <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-outline">
-        <i class="bi bi-arrow-left"></i> Batal
+        <i data-lucide="arrow-left"></i> Batal
       </a>
       <button type="submit" class="admin-btn admin-btn-primary">
-        <i class="bi bi-check-lg"></i> Simpan
+        <i data-lucide="check"></i> Simpan
       </button>
     </div>
   </form>

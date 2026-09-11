@@ -103,7 +103,7 @@
             <a href="{{ route('terms') }}">Syarat &amp; Ketentuan</a>
             <span class="sep" aria-hidden="true">&bull;</span>
             <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="d-inline-flex align-items-center gap-1">
-              Ke Atas <i class="bi bi-chevron-up"></i>
+              Ke Atas <i data-lucide="chevron-up"></i>
             </a>
           </div>
         </div>

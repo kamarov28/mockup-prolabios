@@ -15,14 +15,14 @@
     </p>
   </div>
   <a href="{{ route('admin.categories.create') }}" class="admin-btn admin-btn-primary">
-    <i class="bi bi-plus-lg"></i> Tambah Kategori
+    <i data-lucide="plus"></i> Tambah Kategori
   </a>
 </div>
 
 @if($parents->isEmpty())
   <div class="admin-card">
     <div class="admin-card-body text-center py-5">
-      <i class="bi bi-diagram-3" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+      <i data-lucide="folder-tree" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
       <p style="color: var(--color-text-muted); font-size: 0.88rem;">
         Belum ada kategori produk. Klik "Tambah Kategori" untuk mulai.
       </p>
@@ -32,17 +32,17 @@
   {{-- Toolbar: filter + expand/collapse --}}
   <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
     <div class="position-relative" style="flex: 1; min-width: 200px; max-width: 360px;">
-      <i class="bi bi-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); font-size: 0.85rem; pointer-events: none;"></i>
+      <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); font-size: 0.85rem; pointer-events: none;"></i>
       <input type="search" id="category-filter" class="form-control form-control-sm"
              placeholder="Cari nama atau key kategori..."
              autocomplete="off"
              style="padding-left: 36px;">
     </div>
     <button type="button" id="btn-expand-all" class="admin-btn admin-btn-outline" style="padding: 8px 14px;">
-      <i class="bi bi-arrows-expand"></i> Buka semua
+      <i data-lucide="unfold-vertical"></i> Buka semua
     </button>
     <button type="button" id="btn-collapse-all" class="admin-btn admin-btn-outline" style="padding: 8px 14px;">
-      <i class="bi bi-arrows-collapse"></i> Tutup semua
+      <i data-lucide="fold-vertical"></i> Tutup semua
     </button>
     <span id="category-count" style="color: var(--color-text-muted); font-size: 0.8rem; margin-left: auto;">
       {{ $parents->count() }} kategori utama
@@ -61,7 +61,7 @@
            aria-expanded="false"
            style="cursor: pointer; user-select: none;">
         <div class="d-flex align-items-center gap-3 flex-wrap">
-          <i class="bi bi-chevron-right category-chevron" style="color: var(--color-text-muted); transition: transform 0.2s ease; font-size: 0.9rem;"></i>
+          <i data-lucide="chevron-right" class="category-chevron" style="color: var(--color-text-muted); transition: transform 0.2s ease; font-size: 0.9rem;"></i>
           <div>
             <span class="admin-card-header-label">Kategori Utama</span>
             <h3 class="admin-card-header-title mb-0">
@@ -76,20 +76,20 @@
         <div class="d-flex align-items-center gap-2 flex-shrink-0" onclick="event.stopPropagation()">
           <a href="{{ route('admin.categories.create', ['parent_id' => $parent->id]) }}"
              class="admin-btn admin-btn-outline" title="Tambah sub-kategori">
-            <i class="bi bi-plus-lg"></i> Sub-kategori
+            <i data-lucide="plus"></i> Sub-kategori
           </a>
           <div class="d-flex align-items-center gap-1">
             <a href="{{ route('admin.categories.edit', $parent->id) }}"
                class="admin-action-link edit" title="Edit"
                style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0;">
-              <i class="bi bi-pencil-square"></i>
+              <i data-lucide="file-edit"></i>
             </a>
             <form method="POST" action="{{ route('admin.categories.destroy', $parent->id) }}"
                   style="display: contents;">
               @csrf @method('DELETE')
               <button type="submit" class="admin-action-link delete" title="Hapus"
                       style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; padding: 0;">
-                <i class="bi bi-trash"></i>
+                <i data-lucide="trash-2"></i>
               </button>
             </form>
           </div>
@@ -115,7 +115,7 @@
                 <tr>
                   <td>
                     <div class="d-flex align-items-center gap-2">
-                      <i class="bi bi-arrow-return-right" style="color: var(--color-text-muted); font-size: 0.85rem;"></i>
+                      <i data-lucide="corner-down-right" style="color: var(--color-text-muted); font-size: 0.85rem;"></i>
                       <span class="cell-title">{{ $child->name }}</span>
                     </div>
                   </td>
@@ -130,14 +130,14 @@
                       <a href="{{ route('admin.categories.edit', $child->id) }}"
                          class="admin-action-link edit" title="Edit"
                          style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                        <i class="bi bi-pencil-square"></i>
+                        <i data-lucide="file-edit"></i>
                       </a>
                       <form method="POST" action="{{ route('admin.categories.destroy', $child->id) }}"
                             style="display: contents;">
                         @csrf @method('DELETE')
                         <button type="submit" class="admin-action-link delete" title="Hapus"
                                 style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                          <i class="bi bi-trash"></i>
+                          <i data-lucide="trash-2"></i>
                         </button>
                       </form>
                     </div>
@@ -151,7 +151,7 @@
         @else
         <div class="admin-card-body text-center py-4">
           <p style="color: var(--color-text-muted); font-size: 0.85rem; margin: 0;">
-            <i class="bi bi-info-circle me-1"></i>
+            <i data-lucide="info" class="me-1"></i>
             Belum ada sub-kategori.
             <a href="{{ route('admin.categories.create', ['parent_id' => $parent->id]) }}"
                style="color: var(--color-accent);">Tambah sekarang</a>

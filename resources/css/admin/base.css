@@ -31,3 +31,13 @@ a {
 a:hover {
   color: var(--color-accent-hover);
 }
+
+/* ── Lucide Icons Baseline ────────────────────────────────────────────── */
+.lucide, i[data-lucide] {
+  width: 1.15em;
+  height: 1.15em;
+  vertical-align: -0.18em;
+  stroke-width: 1.75px;
+  display: inline-block;
+  flex-shrink: 0;
+}

@@ -3,7 +3,7 @@
   <div style="padding: 18px 20px;">
 
     <div class="d-flex align-items-center gap-2 mb-2">
-      <i class="bi bi-shield-check" style="color: #A6171C; font-size: 1.25rem;"></i>
+      <i data-lucide="shield-check" style="color: #A6171C; font-size: 1.25rem;"></i>
       <span class="fw-bold" style="font-family: var(--font-headline, 'Bricolage Grotesque', sans-serif); font-size: 0.95rem; color: #1E1E1E; letter-spacing: -0.01em;">Privasi &amp; Penggunaan Cookie</span>
     </div>
 

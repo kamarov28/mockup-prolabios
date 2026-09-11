@@ -141,9 +141,9 @@
                 </div>
                 <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
                   <a href="{{ url($sec['link']) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                    {{ $sec['linkText'] }} <i class="bi bi-arrow-right"></i>
+                    {{ $sec['linkText'] }} <i data-lucide="arrow-right"></i>
                   </a>
-                  <span class="nb-badge-sm"><i class="bi bi-patch-check-fill text-primary me-1"></i> {{ $sec['compliance'] }}</span>
+                  <span class="nb-badge-sm"><i data-lucide="badge-check" class="text-primary me-1"></i> {{ $sec['compliance'] }}</span>
                 </div>
               </div>
             </div>
@@ -184,7 +184,7 @@
                 <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
                   <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi {{ $sec['certIcon'] }} text-primary me-1"></i> {{ $sec['cert'] }}</span>
                   <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="{{ $sec['rfqAria'] }}">
-                    <i class="bi bi-cart-plus"></i> Tambah RFQ
+                    <i data-lucide="shopping-cart"></i> Tambah RFQ
                   </a>
                 </div>
               </div>

@@ -5,7 +5,7 @@
 
 @section('content')
   @include('partials.subpage-hero', [
-    'badge' => '<i class="bi bi-file-earmark-text me-1"></i> LEGAL &amp; KEPATUHAN',
+    'badge' => '<i data-lucide="file-text" class="me-1"></i> LEGAL &amp; KEPATUHAN',
     'title' => 'Syarat & Ketentuan',
     'subtitle' => 'Ketentuan penggunaan platform dan prosedur permohonan penawaran pengadaan resmi alat laboratorium PT Prolabios Mitra Analitika.'
   ])
@@ -20,10 +20,10 @@
 
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom" style="border-color: rgba(30,30,30,0.12) !important;">
               <span class="nb-badge mb-0" style="font-size: 0.7rem; padding: 3px 8px;">
-                <i class="bi bi-patch-check-fill me-1"></i> STANDAR PENGADAAN B2B
+                <i data-lucide="badge-check" class="me-1"></i> STANDAR PENGADAAN B2B
               </span>
               <span class="text-muted small" style="font-family: var(--font-mono); font-weight: 600;">
-                <i class="bi bi-calendar3 me-1"></i> Berlaku Efektif: {{ date('d F Y') }}
+                <i data-lucide="calendar" class="me-1"></i> Berlaku Efektif: {{ date('d F Y') }}
               </span>
             </div>
 

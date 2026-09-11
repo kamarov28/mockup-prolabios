@@ -41,7 +41,7 @@
         <div class="nb-hero-actions">
           <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
             {{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }}
-            <i class="bi bi-arrow-right"></i>
+            <i data-lucide="arrow-right"></i>
           </a>
           <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost">
             Hubungi Sales
@@ -60,8 +60,8 @@
         </span>
         <div class="nb-hero-progress"><div id="hero-progress-fill" class="nb-hero-progress-fill"></div></div>
         <div class="nb-hero-arrows">
-          <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i class="bi bi-arrow-left"></i></button>
-          <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i class="bi bi-arrow-right"></i></button>
+          <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i data-lucide="arrow-left"></i></button>
+          <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i data-lucide="arrow-right"></i></button>
         </div>
       </div>
     @endif

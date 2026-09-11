@@ -31,7 +31,7 @@
             <form action="{{ route('cart.clear') }}" method="POST" onsubmit="confirmClearCart(event, this);" class="m-0">
               @csrf
               <button type="submit" class="cart-clear-btn">
-                <i class="bi bi-trash3 me-1"></i> Kosongkan Keranjang
+                <i data-lucide="trash-2" class="me-1"></i> Kosongkan Keranjang
               </button>
             </form>
           </div>
@@ -48,14 +48,14 @@
     <!-- Alerts -->
     @if(session('success'))
       <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        <i data-lucide="check-circle-2" class="me-2"></i> {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
       </div>
     @endif
 
     @if(session('error'))
       <div class="alert alert-danger bg-danger bg-opacity-10 text-danger border-danger border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+        <i data-lucide="alert-triangle" class="me-2"></i> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
       </div>
     @endif
@@ -96,11 +96,11 @@
 
                     @if(!$isIndent)
                       <span class="nb-badge-stock">
-                        <i class="bi bi-box-seam me-1"></i> Stok Siap
+                        <i data-lucide="package" class="me-1"></i> Stok Siap
                       </span>
                     @else
                       <span class="nb-badge-stock nb-badge-stock--empty" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
-                        <i class="bi bi-clock-history me-1"></i> Pesanan khusus (siap: {{ $stockVal }})
+                        <i data-lucide="history" class="me-1"></i> Pesanan khusus (siap: {{ $stockVal }})
                       </span>
                     @endif
                   </div>
@@ -114,11 +114,11 @@
                     <input type="hidden" name="title" value="{{ $item['title'] }}">
                     <div class="nb-stepper-wrap" style="height: 38px;">
                       <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
-                        <i class="bi bi-dash-lg"></i>
+                        <i data-lucide="minus"></i>
                       </button>
                       <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="nb-stepper-input cart-qty-input hide-spinner" style="width: 46px; font-size: 0.95rem;" onchange="updateCartItemAjax(this.form)">
                       <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
-                        <i class="bi bi-plus-lg"></i>
+                        <i data-lucide="plus"></i>
                       </button>
                     </div>
                   </form>
@@ -138,7 +138,7 @@
                       <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                       <input type="hidden" name="title" value="{{ $item['title'] }}">
                       <button type="submit" class="cart-remove-btn" title="Hapus Item" aria-label="Hapus item">
-                        <i class="bi bi-trash3" style="font-size: 0.88rem;"></i>
+                        <i data-lucide="trash-2" style="font-size: 0.88rem;"></i>
                       </button>
                     </form>
                   </div>
@@ -154,7 +154,7 @@
         <div class="col-lg-4">
           <div class="cart-sidebar-panel sticky-top" style="top: 130px; z-index: 100;">
             <h3 class="cart-sidebar-title d-flex align-items-center gap-2">
-              <i class="bi bi-receipt" style="color: var(--nb-primary);"></i> Ringkasan Pengajuan
+              <i data-lucide="receipt" style="color: var(--nb-primary);"></i> Ringkasan Pengajuan
             </h3>
 
             <div class="d-flex justify-content-between mb-2 small">
@@ -182,7 +182,7 @@
 
             <div class="rfq-info-box mb-4">
               <div class="d-flex gap-2">
-                <i class="bi bi-shield-check fs-5 flex-shrink-0 text-primary"></i>
+                <i data-lucide="shield-check" class="fs-5 flex-shrink-0 text-primary"></i>
                 <div style="font-size: 0.82rem; color: var(--nb-ink);">
                   <strong class="d-block mb-1" style="font-family: var(--font-display); font-weight: 700;">Informasi Penawaran</strong>
                   Harga final, diskon khusus kuantitas, dan estimasi waktu pengadaan akan diinformasikan langsung oleh Tim Sales via Email/WhatsApp.
@@ -191,11 +191,11 @@
             </div>
 
             <a href="{{ route('rfq.checkout') }}" class="rfq-primary-btn">
-              Lanjut ke Form Pengajuan <i class="bi bi-arrow-right ms-2"></i>
+              Lanjut ke Form Pengajuan <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
 
             <a href="{{ url('/produk') }}" class="rfq-secondary-btn">
-              <i class="bi bi-plus-lg me-1"></i> Tambah Produk Lain
+              <i data-lucide="plus" class="me-1"></i> Tambah Produk Lain
             </a>
           </div>
         </div>
@@ -203,11 +203,11 @@
       </div>
     @else
       <div class="card cart-empty-card text-center p-5 mx-auto">
-        <i class="bi bi-cart-x" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
+        <i data-lucide="shopping-cart" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
         <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Keranjang Belanja Masih Kosong</h2>
         <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
         <div>
-          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary">Jelajahi Katalog Produk <i class="bi bi-arrow-right ms-1"></i></a>
+          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary">Jelajahi Katalog Produk <i data-lucide="arrow-right" class="ms-1"></i></a>
         </div>
       </div>
     @endif

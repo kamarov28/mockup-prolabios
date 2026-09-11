@@ -26,7 +26,7 @@
     </p>
   </div>
   <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">
-    <i class="bi bi-arrow-left"></i> Kembali
+    <i data-lucide="arrow-left"></i> Kembali
   </a>
 </div>
 
@@ -98,7 +98,7 @@
             </select>
             <p class="form-text mb-0 mt-2">
               <a href="{{ route('admin.categories.index') }}" target="_blank" style="color: var(--color-text-muted);">
-                <i class="bi bi-diagram-3 me-1"></i>Kelola kategori
+                <i data-lucide="folder-tree" class="me-1"></i>Kelola kategori
               </a>
             </p>
           </div>
@@ -116,7 +116,7 @@
             </select>
             <p class="form-text mb-0 mt-2">
               <a href="{{ route('admin.principals.index') }}" target="_blank" style="color: var(--color-text-muted);">
-                <i class="bi bi-building me-1"></i>Kelola data prinsipal
+                <i data-lucide="building" class="me-1"></i>Kelola data prinsipal
               </a>
             </p>
           </div>
@@ -138,21 +138,21 @@
             <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
               <div class="mb-2">
                 <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
-                  <i class="bi bi-upload me-1"></i>Upload File PDF (Maks. 10MB)
+                  <i data-lucide="upload" class="me-1"></i>Upload File PDF (Maks. 10MB)
                 </label>
                 <input class="form-control" type="file" id="datasheet_file" name="datasheet_file" accept=".pdf,application/pdf">
               </div>
               <div class="mb-2">
                 <label for="datasheet_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
-                  <i class="bi bi-link-45deg me-1"></i>Atau Masukkan URL PDF Eksternal
+                  <i data-lucide="link" class="me-1"></i>Atau Masukkan URL PDF Eksternal
                 </label>
                 <input type="text" class="form-control" id="datasheet_url" name="datasheet_url" value="{{ old('datasheet_url', $product['datasheet_url'] ?? '') }}" placeholder="https://principal.com/datasheet.pdf">
               </div>
               @if(!empty($product['datasheet_url']))
                 <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: rgba(30,30,30,0.1) !important;">
-                  <i class="bi bi-file-earmark-pdf-fill text-danger"></i>
+                  <i data-lucide="file-text" class="text-danger"></i>
                   <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="small fw-bold text-decoration-underline" style="color: var(--color-accent, #A6171C);">
-                    Lihat Dokumen Terpasang <i class="bi bi-box-arrow-up-right ms-1"></i>
+                    Lihat Dokumen Terpasang <i data-lucide="external-link" class="ms-1"></i>
                   </a>
                 </div>
               @endif
@@ -164,7 +164,7 @@
       <div id="sub-category-block" style="display: none;">
         <div class="admin-form-group mb-0 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
           <label for="admin-subcategory-select" class="admin-form-label">
-            <i class="bi bi-diagram-3 me-1" style="color: var(--color-accent);"></i>Subkategori <span style="color: var(--color-accent);">*</span>
+            <i data-lucide="folder-tree" class="me-1" style="color: var(--color-accent);"></i>Subkategori <span style="color: var(--color-accent);">*</span>
           </label>
           <select class="form-select" id="admin-subcategory-select" name="sub_category"
                   data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
@@ -207,7 +207,7 @@
           <div class="mb-3 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="small fw-bold" style="color: var(--color-text-main);">
-                <i class="bi bi-images me-1"></i>Foto Galeri Tersimpan ({{ count($product['gallery_images']) }})
+                <i data-lucide="images" class="me-1"></i>Foto Galeri Tersimpan ({{ count($product['gallery_images']) }})
               </span>
               <span class="small text-muted">Centang untuk menghapus foto saat disimpan</span>
             </div>
@@ -218,7 +218,7 @@
                     <img src="{{ $galleryPath }}" alt="Galeri" style="width: 100%; height: 100%; object-fit: cover;">
                     <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: var(--color-border, #1E1E1E); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
                       <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
-                      <i class="bi bi-trash" style="color: #FFFFFF;"></i>
+                      <i data-lucide="trash-2" style="color: #FFFFFF;"></i>
                     </label>
                   </div>
                 </div>
@@ -229,7 +229,7 @@
 
         {{-- Dropzone & Multi-file picker --}}
         <div id="gallery_dropzone" class="p-4 text-center mb-3" style="border: 2px dashed #1E1E1E; border-radius: 6px; background: #FAF8F5; cursor: pointer; transition: background 0.15s ease;">
-          <i class="bi bi-cloud-arrow-up fs-2 d-block mb-1" style="color: var(--color-accent, #A6171C);"></i>
+          <i data-lucide="cloud-upload" class="fs-2 d-block mb-1" style="color: var(--color-accent, #A6171C);"></i>
           <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.95rem;">
             + Klik di sini untuk menambah foto galeri
           </span>
@@ -242,10 +242,10 @@
         <div id="gallery_previews_wrapper" class="mb-3" style="display: none;">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="small fw-bold" style="color: var(--color-text-main);">
-              <i class="bi bi-check2-circle text-success me-1"></i>Foto Baru Siap Diunggah:
+              <i data-lucide="check-circle-2" class="text-success me-1"></i>Foto Baru Siap Diunggah:
             </span>
             <button type="button" id="btn_add_more_photos" class="admin-btn admin-btn-outline py-1 px-2" style="font-size: 0.78rem;">
-              <i class="bi bi-plus-lg me-1"></i>Tambah Foto Lainnya
+              <i data-lucide="plus" class="me-1"></i>Tambah Foto Lainnya
             </button>
           </div>
           <div id="gallery_previews" class="row g-2"></div>
@@ -264,10 +264,10 @@
 
     <div class="d-flex justify-content-between align-items-center gap-3 mt-5 pt-4" style="border-top: 1px solid var(--color-border);">
       <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">
-        <i class="bi bi-arrow-left"></i> Batal
+        <i data-lucide="arrow-left"></i> Batal
       </a>
       <button type="submit" class="admin-btn admin-btn-primary">
-        <i class="bi bi-check-lg"></i> Simpan Data
+        <i data-lucide="check"></i> Simpan Data
       </button>
     </div>
   </form>
@@ -432,7 +432,7 @@
           delBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center';
           delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: #A6171C; color: #FFFFFF; border: 1.5px solid #1E1E1E; border-radius: 4px;';
           delBtn.title = 'Hapus dari daftar unggah';
-          delBtn.innerHTML = '<i class="bi bi-x-lg" style="font-size: 0.65rem;"></i>';
+          delBtn.innerHTML = '<i data-lucide="x" style="font-size: 0.65rem;"></i>';
           delBtn.onclick = function() {
             removeStagedPhoto(index);
           };

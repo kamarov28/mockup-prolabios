@@ -12,7 +12,7 @@
       <h2 class="admin-card-header-title">Sektor Industri</h2>
     </div>
     <a href="{{ route('admin.sectors.create') }}" class="admin-btn admin-btn-primary">
-      <i class="bi bi-plus-lg"></i> Tambah Sektor
+      <i data-lucide="plus"></i> Tambah Sektor
     </a>
   </div>
 
@@ -45,7 +45,7 @@
                     <a href="{{ route('admin.sectors.edit', ['id' => $sec['id']]) }}"
                        class="admin-action-link edit" title="Edit"
                        style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                      <i class="bi bi-pencil-square"></i>
+                      <i data-lucide="file-edit"></i>
                     </a>
                     <form action="{{ route('admin.sectors.destroy', ['id' => $sec['id']]) }}" method="POST"
                           class="form-delete" data-name="{{ $sec['name'] }}"
@@ -54,7 +54,7 @@
                       @method('DELETE')
                       <button type="submit" class="admin-action-link delete" title="Hapus"
                               style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                        <i class="bi bi-trash"></i>
+                        <i data-lucide="trash-2"></i>
                       </button>
                     </form>
                   </div>
@@ -66,7 +66,7 @@
       </div>
     @else
       <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i class="bi bi-layers" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <i data-lucide="layers" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
         <p style="font-size: 0.88rem;">Belum ada sektor industri.</p>
         <a href="{{ route('admin.sectors.create') }}" class="admin-btn admin-btn-primary">Tambah Sekarang</a>
       </div>

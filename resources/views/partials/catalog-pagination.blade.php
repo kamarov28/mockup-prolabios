@@ -14,13 +14,13 @@
       @if ($paginator->onFirstPage())
         <li class="page-item disabled" aria-disabled="true" aria-label="Halaman Sebelumnya">
           <span class="page-link">
-            <i class="bi bi-chevron-left me-1"></i> Prev
+            <i data-lucide="chevron-left" class="me-1"></i> Prev
           </span>
         </li>
       @else
         <li class="page-item">
           <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Halaman Sebelumnya">
-            <i class="bi bi-chevron-left me-1"></i> Prev
+            <i data-lucide="chevron-left" class="me-1"></i> Prev
           </a>
         </li>
       @endif
@@ -52,13 +52,13 @@
       @if ($paginator->hasMorePages())
         <li class="page-item">
           <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Halaman Berikutnya">
-            Next <i class="bi bi-chevron-right ms-1"></i>
+            Next <i data-lucide="chevron-right" class="ms-1"></i>
           </a>
         </li>
       @else
         <li class="page-item disabled" aria-disabled="true" aria-label="Halaman Berikutnya">
           <span class="page-link">
-            Next <i class="bi bi-chevron-right ms-1"></i>
+            Next <i data-lucide="chevron-right" class="ms-1"></i>
           </span>
         </li>
       @endif

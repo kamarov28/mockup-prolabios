@@ -1,9 +1,9 @@
 @if($section === 'contacts')
   <div class="admin-card max-w-4xl mx-auto">
-    <div class="admin-card-header py-3 d-flex align-items-center justify-content-between" style="background: var(--color-surface); border-bottom: 2px solid #1E1E1E;">
+    <div class="admin-card-header py-3 d-flex align-items-center justify-content-between" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
       <div>
         <span class="admin-card-header-label">COMMUNICATION CHANNELS</span>
-        <h2 class="h5 mb-0 fw-bold" style="font-family: var(--font-headline); color: var(--color-text-main);"><i class="bi bi-telephone-outbound text-success me-2"></i>Informasi Kontak Global &amp; Lokasi</h2>
+        <h2 class="h5 mb-0 fw-bold" style="font-family: var(--font-headline); color: var(--color-text-main);"><i data-lucide="phone-outgoing" class="text-success me-2"></i>Informasi Kontak Global &amp; Lokasi</h2>
       </div>
       <span class="admin-badge admin-badge-success">Header, Footer &amp; RFQ Sync</span>
     </div>
@@ -17,8 +17,8 @@
         <div class="col-md-6">
           <label for="contact_phone" class="admin-form-label mb-2">Nomor WhatsApp Utama (CS / Sales)</label>
           <div class="input-group">
-            <span class="input-group-text text-success" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-whatsapp"></i></span>
-            <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '0821-8792-9433') }}" required>
+            <span class="input-group-text text-success"><i class="bi bi-whatsapp"></i></span>
+            <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '0821-8792-9433') }}" required>
           </div>
           @error('contact_phone') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Format: 08xx / 62xx. Terhubung ke tombol floating WhatsApp dan header.</div>
@@ -27,8 +27,8 @@
         <div class="col-md-6">
           <label for="contact_phone_technician" class="admin-form-label mb-2">Nomor WhatsApp Layanan Teknik (Teknisi)</label>
           <div class="input-group">
-            <span class="input-group-text text-info" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-wrench-adjustable"></i></span>
-            <input type="text" class="form-control @error('contact_phone_technician') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_phone_technician" name="contact_phone_technician" value="{{ old('contact_phone_technician', $homeData['contact_phone_technician'] ?? '0812-837-4867') }}" required>
+            <span class="input-group-text text-info"><i data-lucide="wrench"></i></span>
+            <input type="text" class="form-control @error('contact_phone_technician') is-invalid @enderror" id="contact_phone_technician" name="contact_phone_technician" value="{{ old('contact_phone_technician', $homeData['contact_phone_technician'] ?? '0812-837-4867') }}" required>
           </div>
           @error('contact_phone_technician') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Kontak WhatsApp untuk konsultasi teknis pada halaman Layanan.</div>
@@ -37,8 +37,8 @@
         <div class="col-md-6">
           <label for="contact_phone_marketing" class="admin-form-label mb-2">Telepon Kantor - Head Office (Marketing)</label>
           <div class="input-group">
-            <span class="input-group-text" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-telephone"></i></span>
-            <input type="text" class="form-control @error('contact_phone_marketing') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_phone_marketing" name="contact_phone_marketing" value="{{ old('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '021-3874-1447') }}" required>
+            <span class="input-group-text"><i data-lucide="phone"></i></span>
+            <input type="text" class="form-control @error('contact_phone_marketing') is-invalid @enderror" id="contact_phone_marketing" name="contact_phone_marketing" value="{{ old('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '021-3874-1447') }}" required>
           </div>
           @error('contact_phone_marketing') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Nomor telepon kantor pusat (PMA HOPMA) divisi marketing.</div>
@@ -47,8 +47,8 @@
         <div class="col-md-6">
           <label for="contact_phone_finance" class="admin-form-label mb-2">Telepon Kantor - Finance &amp; Warehouse</label>
           <div class="input-group">
-            <span class="input-group-text" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-building"></i></span>
-            <input type="text" class="form-control @error('contact_phone_finance') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_phone_finance" name="contact_phone_finance" value="{{ old('contact_phone_finance', $homeData['contact_phone_finance'] ?? '021-8792-9433') }}" required>
+            <span class="input-group-text"><i data-lucide="building"></i></span>
+            <input type="text" class="form-control @error('contact_phone_finance') is-invalid @enderror" id="contact_phone_finance" name="contact_phone_finance" value="{{ old('contact_phone_finance', $homeData['contact_phone_finance'] ?? '021-8792-9433') }}" required>
           </div>
           @error('contact_phone_finance') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Nomor telepon kantor operasional finance &amp; gudang.</div>
@@ -57,7 +57,7 @@
         <!-- Template Sapaan WhatsApp Otomatis -->
         <div class="col-12">
           <label for="whatsapp_default_message" class="admin-form-label mb-2">Pesan Otomatis Default WhatsApp (Greeting Template)</label>
-          <input type="text" class="form-control @error('whatsapp_default_message') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="whatsapp_default_message" name="whatsapp_default_message" value="{{ old('whatsapp_default_message', $homeData['whatsapp_default_message'] ?? 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.') }}">
+          <input type="text" class="form-control @error('whatsapp_default_message') is-invalid @enderror" id="whatsapp_default_message" name="whatsapp_default_message" value="{{ old('whatsapp_default_message', $homeData['whatsapp_default_message'] ?? 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.') }}">
           @error('whatsapp_default_message') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Teks pembuka yang otomatis terisi ketika pengunjung mengklik tombol WhatsApp di website.</div>
         </div>
@@ -66,8 +66,8 @@
         <div class="col-md-6">
           <label for="contact_email" class="admin-form-label mb-2">Alamat Email Resmi</label>
           <div class="input-group">
-            <span class="input-group-text" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control @error('contact_email') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_email" name="contact_email" value="{{ old('contact_email', $homeData['contact_email'] ?? 'marketing@prolabios.com') }}" required>
+            <span class="input-group-text"><i data-lucide="mail"></i></span>
+            <input type="email" class="form-control @error('contact_email') is-invalid @enderror" id="contact_email" name="contact_email" value="{{ old('contact_email', $homeData['contact_email'] ?? 'marketing@prolabios.com') }}" required>
           </div>
           @error('contact_email') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
@@ -75,8 +75,8 @@
         <div class="col-md-6">
           <label for="catalog_pdf_url" class="admin-form-label mb-2">Link Google Drive / Download Katalog PDF</label>
           <div class="input-group">
-            <span class="input-group-text text-danger" style="background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-file-earmark-pdf"></i></span>
-            <input type="text" class="form-control @error('catalog_pdf_url') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="catalog_pdf_url" name="catalog_pdf_url" value="{{ old('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '') }}" placeholder="https://drive.google.com/...">
+            <span class="input-group-text text-danger"><i data-lucide="file-text"></i></span>
+            <input type="text" class="form-control @error('catalog_pdf_url') is-invalid @enderror" id="catalog_pdf_url" name="catalog_pdf_url" value="{{ old('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '') }}" placeholder="https://drive.google.com/...">
           </div>
           @error('catalog_pdf_url') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
@@ -84,21 +84,21 @@
         <!-- Alamat Kantor -->
         <div class="col-12">
           <label for="contact_address" class="admin-form-label mb-2">Alamat Lengkap Kantor &amp; Gudang</label>
-          <textarea class="form-control @error('contact_address') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="contact_address" name="contact_address" rows="3" required>{{ old('contact_address', $homeData['contact_address'] ?? '') }}</textarea>
+          <textarea class="form-control @error('contact_address') is-invalid @enderror" id="contact_address" name="contact_address" rows="3" required>{{ old('contact_address', $homeData['contact_address'] ?? '') }}</textarea>
           @error('contact_address') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
         <!-- Google Maps Embed URL -->
         <div class="col-12">
           <label for="google_maps_embed_url" class="admin-form-label mb-2">URL Google Maps Embed (iframe src)</label>
-          <input type="text" class="form-control @error('google_maps_embed_url') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="google_maps_embed_url" name="google_maps_embed_url" value="{{ old('google_maps_embed_url', $homeData['google_maps_embed_url'] ?? '') }}" placeholder="https://www.google.com/maps/embed?...">
+          <input type="text" class="form-control @error('google_maps_embed_url') is-invalid @enderror" id="google_maps_embed_url" name="google_maps_embed_url" value="{{ old('google_maps_embed_url', $homeData['google_maps_embed_url'] ?? '') }}" placeholder="https://www.google.com/maps/embed?...">
           @error('google_maps_embed_url') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Masukkan URL dari fitur Google Maps &gt; Bagikan &gt; Sematkan Peta &gt; Ambil nilai di dalam <code>src="..."</code>.</div>
         </div>
       </div>
 
-      <div class="mt-4 pt-4 text-end" style="border-top: 2px solid #1E1E1E;">
-        <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i class="bi bi-save me-1"></i> SIMPAN PENGATURAN KONTAK</button>
+      <div class="mt-4 pt-4 text-end" style="border-top: 1px solid var(--color-border);">
+        <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i data-lucide="save" class="me-1"></i> SIMPAN PENGATURAN KONTAK</button>
       </div>
     </form>
   </div>
@@ -106,10 +106,10 @@
 
 @if($section === 'general')
   <div class="admin-card">
-    <div class="admin-card-header py-3 d-flex align-items-center justify-content-between" style="background: var(--color-surface); border-bottom: 2px solid #1E1E1E;">
+    <div class="admin-card-header py-3 d-flex align-items-center justify-content-between" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
       <div>
         <span class="admin-card-header-label">SITE CONFIGURATION</span>
-        <h2 class="h5 mb-0 fw-bold" style="font-family: var(--font-headline); color: var(--color-text-main);"><i class="bi bi-gear-wide-connected text-warning me-2"></i>Pengaturan Umum, Identitas, Logo &amp; SEO</h2>
+        <h2 class="h5 mb-0 fw-bold" style="font-family: var(--font-headline); color: var(--color-text-main);"><i data-lucide="settings" class="text-warning me-2"></i>Pengaturan Umum, Identitas, Logo &amp; SEO</h2>
       </div>
       <span class="admin-badge admin-badge-warning">Konfigurasi Global</span>
     </div>
@@ -122,14 +122,14 @@
       <div class="row g-3">
         <div class="col-md-6">
           <label for="company_name" class="admin-form-label mb-2">Nama Perusahaan / PT</label>
-          <input type="text" class="form-control @error('company_name') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="company_name" name="company_name" value="{{ old('company_name', $homeData['company_name'] ?? 'PT. Prolabios Mitra Analitika') }}" required>
+          <input type="text" class="form-control @error('company_name') is-invalid @enderror" id="company_name" name="company_name" value="{{ old('company_name', $homeData['company_name'] ?? 'PT. Prolabios Mitra Analitika') }}" required>
           @error('company_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Nama utama PT / Perusahaan yang tampil di title bar dan footer website.</div>
         </div>
 
         <div class="col-md-6">
           <label for="operational_hours" class="admin-form-label mb-2">Jam Operasional</label>
-          <input type="text" class="form-control @error('operational_hours') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="operational_hours" name="operational_hours" value="{{ old('operational_hours', $homeData['operational_hours'] ?? 'Senin - Jumat: 08.00 - 17.00') }}" required>
+          <input type="text" class="form-control @error('operational_hours') is-invalid @enderror" id="operational_hours" name="operational_hours" value="{{ old('operational_hours', $homeData['operational_hours'] ?? 'Senin - Jumat: 08.00 - 17.00') }}" required>
           @error('operational_hours') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Jadwal operasional kantor resmi (tampil di footer &amp; halaman kontak).</div>
         </div>
@@ -139,9 +139,9 @@
       <div class="row g-4 mt-2">
         <div class="col-md-6">
           <label class="admin-form-label mb-2">Logo Utama Website (PNG Transparan)</label>
-          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
             <div class="col-sm-4 text-center">
-              <div class="p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 130px; height: 65px; background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 4px;">
+              <div class="p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 130px; height: 65px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
                 <img id="site_logo_preview" src="{{ !empty($homeData['site_logo']) ? $homeData['site_logo'] : asset('images/logo-prolabios.png') }}" alt="Preview Logo" class="w-100 h-100" style="object-fit: contain;">
               </div>
             </div>
@@ -160,9 +160,9 @@
 
         <div class="col-md-6">
           <label class="admin-form-label mb-2">Favicon Browser (.ico / .png)</label>
-          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
             <div class="col-sm-4 text-center">
-              <div class="p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 65px; height: 65px; background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 4px;">
+              <div class="p-2 mx-auto d-flex align-items-center justify-content-center" style="width: 65px; height: 65px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
                 <img id="site_favicon_preview" src="{{ !empty($homeData['site_favicon']) ? $homeData['site_favicon'] : asset('images/favicon.png') }}" alt="Preview Favicon" style="width: 36px; height: 36px; object-fit: contain;">
               </div>
             </div>
@@ -181,9 +181,9 @@
 
         <div class="col-12">
           <label class="admin-form-label mb-2">Background Banner Login Admin (Kolom Kanan)</label>
-          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 2px 2px 0 #1E1E1E;">
+          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
             <div class="col-sm-3 text-center">
-              <div class="p-2 mx-auto d-flex align-items-center justify-content-center overflow-hidden" style="width: 160px; height: 90px; background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 4px;">
+              <div class="p-2 mx-auto d-flex align-items-center justify-content-center overflow-hidden" style="width: 160px; height: 90px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
                 <img id="admin_login_bg_preview" src="{{ !empty($homeData['admin_login_bg']) ? $homeData['admin_login_bg'] : 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="Preview Login Background" class="w-100 h-100" style="object-fit: cover;">
               </div>
             </div>
@@ -203,64 +203,64 @@
       </div>
 
       <!-- Pengaturan SEO & Meta Global -->
-      <h3 class="h6 fw-bold mt-5 mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 2px solid #1E1E1E;"><i class="bi bi-search text-info me-2"></i>Pengaturan SEO &amp; Mesin Pencari</h3>
+      <h3 class="h6 fw-bold mt-5 mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);"><i data-lucide="search" class="text-info me-2"></i>Pengaturan SEO &amp; Mesin Pencari</h3>
       <div class="row g-3">
         <div class="col-md-6">
           <label for="meta_default_description" class="admin-form-label mb-2">Default Meta Description</label>
-          <textarea class="form-control @error('meta_default_description') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="meta_default_description" name="meta_default_description" rows="3">{{ old('meta_default_description', $homeData['meta_default_description'] ?? '') }}</textarea>
+          <textarea class="form-control @error('meta_default_description') is-invalid @enderror" id="meta_default_description" name="meta_default_description" rows="3">{{ old('meta_default_description', $homeData['meta_default_description'] ?? '') }}</textarea>
           @error('meta_default_description') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Deskripsi ringkas yang muncul pada hasil pencarian Google &amp; preview share media sosial.</div>
         </div>
 
         <div class="col-md-6">
           <label for="meta_default_keywords" class="admin-form-label mb-2">Default Meta Keywords</label>
-          <textarea class="form-control @error('meta_default_keywords') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="meta_default_keywords" name="meta_default_keywords" rows="3">{{ old('meta_default_keywords', $homeData['meta_default_keywords'] ?? '') }}</textarea>
+          <textarea class="form-control @error('meta_default_keywords') is-invalid @enderror" id="meta_default_keywords" name="meta_default_keywords" rows="3">{{ old('meta_default_keywords', $homeData['meta_default_keywords'] ?? '') }}</textarea>
           @error('meta_default_keywords') <div class="invalid-feedback">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Kata kunci dipisahkan koma (contoh: alat laboratorium, mikrobiologi, media kultur).</div>
         </div>
 
         <div class="col-12">
           <label for="google_search_console_id" class="admin-form-label mb-2">Google Search Console Verification Tag / Code (Opsional)</label>
-          <input type="text" class="form-control @error('google_search_console_id') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="google_search_console_id" name="google_search_console_id" value="{{ old('google_search_console_id', $homeData['google_search_console_id'] ?? '') }}" placeholder="google-site-verification=...">
+          <input type="text" class="form-control @error('google_search_console_id') is-invalid @enderror" id="google_search_console_id" name="google_search_console_id" value="{{ old('google_search_console_id', $homeData['google_search_console_id'] ?? '') }}" placeholder="google-site-verification=...">
           @error('google_search_console_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
       </div>
 
       <!-- Media Sosial Links -->
-      <h3 class="h6 fw-bold mt-5 mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 2px solid #1E1E1E;"><i class="bi bi-share text-accent me-2"></i>Link Akun Media Sosial Resmi</h3>
+      <h3 class="h6 fw-bold mt-5 mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);"><i data-lucide="share-2" class="text-accent me-2"></i>Link Akun Media Sosial Resmi</h3>
       <div class="row g-3">
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-danger" style="width: 45px; justify-content: center; background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-instagram"></i></span>
-            <input type="text" class="form-control @error('social_instagram') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="social_instagram" name="social_instagram" placeholder="https://instagram.com/akun" value="{{ old('social_instagram', $homeData['social_instagram'] ?? '') }}">
+            <span class="input-group-text text-danger" style="width: 42px; justify-content: center;"><i class="bi bi-instagram"></i></span>
+            <input type="text" class="form-control @error('social_instagram') is-invalid @enderror" id="social_instagram" name="social_instagram" placeholder="https://instagram.com/akun" value="{{ old('social_instagram', $homeData['social_instagram'] ?? '') }}">
           </div>
           @error('social_instagram') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-primary" style="width: 45px; justify-content: center; background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-facebook"></i></span>
-            <input type="text" class="form-control @error('social_facebook') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="social_facebook" name="social_facebook" placeholder="https://facebook.com/akun" value="{{ old('social_facebook', $homeData['social_facebook'] ?? '') }}">
+            <span class="input-group-text text-primary" style="width: 42px; justify-content: center;"><i class="bi bi-facebook"></i></span>
+            <input type="text" class="form-control @error('social_facebook') is-invalid @enderror" id="social_facebook" name="social_facebook" placeholder="https://facebook.com/akun" value="{{ old('social_facebook', $homeData['social_facebook'] ?? '') }}">
           </div>
           @error('social_facebook') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-info" style="width: 45px; justify-content: center; background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-linkedin"></i></span>
-            <input type="text" class="form-control @error('social_linkedin') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="social_linkedin" name="social_linkedin" placeholder="https://linkedin.com/company/akun" value="{{ old('social_linkedin', $homeData['social_linkedin'] ?? '') }}">
+            <span class="input-group-text text-info" style="width: 42px; justify-content: center;"><i class="bi bi-linkedin"></i></span>
+            <input type="text" class="form-control @error('social_linkedin') is-invalid @enderror" id="social_linkedin" name="social_linkedin" placeholder="https://linkedin.com/company/akun" value="{{ old('social_linkedin', $homeData['social_linkedin'] ?? '') }}">
           </div>
           @error('social_linkedin') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-dark" style="width: 45px; justify-content: center; background: #FFFFFF; border: 2px solid #1E1E1E; border-right: none;"><i class="bi bi-twitter-x"></i></span>
-            <input type="text" class="form-control @error('social_twitter') is-invalid @enderror" style="border: 2px solid #1E1E1E;" id="social_twitter" name="social_twitter" placeholder="https://twitter.com/akun" value="{{ old('social_twitter', $homeData['social_twitter'] ?? '') }}">
+            <span class="input-group-text text-dark" style="width: 42px; justify-content: center;"><i class="bi bi-twitter-x"></i></span>
+            <input type="text" class="form-control @error('social_twitter') is-invalid @enderror" id="social_twitter" name="social_twitter" placeholder="https://twitter.com/akun" value="{{ old('social_twitter', $homeData['social_twitter'] ?? '') }}">
           </div>
           @error('social_twitter') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
       </div>
 
-      <div class="mt-4 pt-4 text-end" style="border-top: 2px solid #1E1E1E;">
-        <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i class="bi bi-save me-1"></i> SIMPAN PENGATURAN UMUM</button>
+      <div class="mt-4 pt-4 text-end" style="border-top: 1px solid var(--color-border);">
+        <button type="submit" class="admin-btn admin-btn-accent px-4 py-2" style="font-size: 0.82rem;"><i data-lucide="save" class="me-1"></i> SIMPAN PENGATURAN UMUM</button>
       </div>
     </form>
   </div>

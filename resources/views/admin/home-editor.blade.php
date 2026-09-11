@@ -27,37 +27,37 @@
 <div class="container-fluid px-0">
 
   @if($section)
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3" style="background: var(--color-surface); border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 3px 3px 0 #1E1E1E;">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 admin-card">
       <div class="d-flex flex-wrap align-items-center gap-2">
         <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline me-1" style="padding: 6px 14px; font-size: 0.78rem;">
-          <i class="bi bi-grid-fill me-1"></i> <span>Semua Modul</span>
+          <i data-lucide="grid" class="me-1"></i> <span>Semua Modul</span>
         </a>
-        <div class="vr bg-dark opacity-50 d-none d-md-block mx-1" style="width: 2px; height: 24px;"></div>
+        <div class="vr bg-secondary opacity-25 d-none d-md-block mx-1" style="width: 1px; height: 24px;"></div>
         <div class="admin-view-switcher">
           <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-view-switcher-btn {{ $section === 'homepage' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
-            <i class="bi bi-house-door me-1"></i> <span>Beranda</span>
+            <i data-lucide="home" class="me-1"></i> <span>Beranda</span>
           </a>
           <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-view-switcher-btn {{ $section === 'contacts' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
-            <i class="bi bi-telephone-outbound me-1"></i> <span>Kontak & Alamat</span>
+            <i data-lucide="phone-outgoing" class="me-1"></i> <span>Kontak & Alamat</span>
           </a>
           <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-view-switcher-btn {{ $section === 'general' ? 'active' : '' }}" style="padding: 6px 14px; font-size: 0.78rem;">
-            <i class="bi bi-gear-wide-connected me-1"></i> <span>Umum & SEO</span>
+            <i data-lucide="settings" class="me-1"></i> <span>Umum & SEO</span>
           </a>
         </div>
       </div>
 
       <div class="d-flex align-items-center gap-2">
         <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-ghost" style="padding: 6px 14px; font-size: 0.78rem;" title="Lihat Website Publik">
-          <i class="bi bi-box-arrow-up-right me-1"></i> <span>Live Preview</span>
+          <i data-lucide="external-link" class="me-1"></i> <span>Live Preview</span>
         </a>
       </div>
     </div>
   @endif
 
   @if ($errors->any())
-    <div class="alert alert-dismissible fade show mb-4" style="background: #FEE2E2; border: 2px solid #1E1E1E; border-radius: 4px; box-shadow: 3px 3px 0 #1E1E1E; color: #1E1E1E;" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
       <div class="d-flex align-items-center mb-1">
-        <i class="bi bi-exclamation-triangle-fill text-danger fs-5 me-2"></i>
+        <i data-lucide="alert-triangle" class="text-danger fs-5 me-2"></i>
         <strong style="color: #991B1B;">Terdapat beberapa data yang belum sesuai:</strong>
       </div>
       <ul class="mb-0 small ps-4" style="color: #991B1B; font-weight: 500;">
@@ -83,8 +83,8 @@
         <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #FFD4D6; color: var(--color-accent); box-shadow: 2px 2px 0 #1E1E1E;">
-                <i class="bi bi-house-gear fs-4"></i>
+              <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: #FEE2E2; color: var(--color-accent);">
+                <i data-lucide="home" class="fs-5"></i>
               </div>
               <span class="admin-badge admin-badge-accent">Halaman Utama</span>
             </div>
@@ -94,7 +94,7 @@
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'homepage']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
-            <span>Edit Beranda</span> <i class="bi bi-arrow-right ms-1"></i>
+            <span>Edit Beranda</span> <i data-lucide="arrow-right" class="ms-1"></i>
           </a>
         </div>
       </div>
@@ -103,8 +103,8 @@
         <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #B9F5D0; color: #166534; box-shadow: 2px 2px 0 #1E1E1E;">
-                <i class="bi bi-telephone-outbound fs-4"></i>
+              <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: #DCFCE7; color: #15803D;">
+                <i data-lucide="phone-outgoing" class="fs-5"></i>
               </div>
               <span class="admin-badge admin-badge-success">Informasi Kontak</span>
             </div>
@@ -114,7 +114,7 @@
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
-            <span>Edit Kontak</span> <i class="bi bi-arrow-right ms-1"></i>
+            <span>Edit Kontak</span> <i data-lucide="arrow-right" class="ms-1"></i>
           </a>
         </div>
       </div>
@@ -123,8 +123,8 @@
         <div class="admin-card h-100 d-flex flex-column justify-content-between p-4">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <div class="d-flex align-items-center justify-content-center" style="width: 48px; height: 48px; border: 2px solid #1E1E1E; border-radius: 4px; background: #FDE68A; color: #92400E; box-shadow: 2px 2px 0 #1E1E1E;">
-                <i class="bi bi-gear-wide-connected fs-4"></i>
+              <div class="d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; border-radius: 10px; background: #FEF3C7; color: #B45309;">
+                <i data-lucide="settings" class="fs-5"></i>
               </div>
               <span class="admin-badge admin-badge-warning">Setelan Situs</span>
             </div>
@@ -134,7 +134,7 @@
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">
-            <span>Edit Setelan</span> <i class="bi bi-arrow-right ms-1"></i>
+            <span>Edit Setelan</span> <i data-lucide="arrow-right" class="ms-1"></i>
           </a>
         </div>
       </div>

@@ -53,7 +53,7 @@
             </div>
             <div class="mt-3">
               <a href="{{ $detailUrl }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                <i class="bi bi-file-earmark-text me-2"></i> Lihat Spesifikasi Lengkap
+                <i data-lucide="file-text" class="me-2"></i> Lihat Spesifikasi Lengkap
               </a>
             </div>
           </div>
@@ -69,7 +69,7 @@
               @endif
               @if(!empty($product->principal))
                 <span class="nb-badge-sm d-inline-flex align-items-center gap-1">
-                  <i class="bi bi-building text-primary"></i> {{ $product->principal->name }}
+                  <i data-lucide="building" class="text-primary"></i> {{ $product->principal->name }}
                 </span>
               @endif
             </div>
@@ -85,11 +85,11 @@
                 <div>
                   @if($stock > 0)
                     <span class="nb-badge-stock">
-                      <i class="bi bi-box-seam me-1"></i> Stok Siap: {{ $stock }} unit
+                      <i data-lucide="package" class="me-1"></i> Stok Siap: {{ $stock }} unit
                     </span>
                   @else
                     <span class="nb-badge-stock nb-badge-stock--empty">
-                      <i class="bi bi-clock-history me-1"></i> Pesanan Khusus (Indent)
+                      <i data-lucide="history" class="me-1"></i> Pesanan Khusus (Indent)
                     </span>
                   @endif
                 </div>
@@ -105,22 +105,22 @@
                     <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label">Jumlah Unit</label>
                     <div class="nb-stepper-wrap">
                       <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
-                        <i class="bi bi-dash-lg"></i>
+                        <i data-lucide="minus"></i>
                       </button>
                       <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
                       <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
-                        <i class="bi bi-plus-lg"></i>
+                        <i data-lucide="plus"></i>
                       </button>
                     </div>
                   </div>
 
                   <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
-                    <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang Penawaran
+                    <i data-lucide="shopping-cart" class="me-2"></i> Tambah ke Keranjang Penawaran
                   </button>
                 </div>
 
                 <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
-                  <i class="bi bi-info-circle-fill me-1"></i>
+                  <i data-lucide="info" class="me-1"></i>
                   Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
                 </div>
               </form>
@@ -128,7 +128,7 @@
 
             <div class="mb-4 p-3 d-flex align-items-center gap-3 rfq-trust-box">
               <div class="nb-status-icon-box detail-response-icon flex-shrink-0">
-                <i class="bi bi-clock-history text-dark"></i>
+                <i data-lucide="history" class="text-dark"></i>
               </div>
               <div class="detail-trust-copy">
                 <strong class="d-block detail-datasheet-title">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
@@ -138,20 +138,20 @@
 
             <div class="d-flex flex-wrap gap-3">
               <a href="{{ route('cart.index') }}" class="nb-btn detail-nav-btn detail-nav-btn--cart text-decoration-none">
-                <i class="bi bi-cart me-2"></i> Lihat Keranjang Penawaran
+                <i data-lucide="shopping-cart" class="me-2"></i> Lihat Keranjang Penawaran
               </a>
               <a href="{{ $detailUrl }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                <i class="bi bi-arrow-left me-2"></i> Kembali ke Detail Produk
+                <i data-lucide="arrow-left" class="me-2"></i> Kembali ke Detail Produk
               </a>
             </div>
           </div>
         </div>
       @else
         <div class="empty-state-card">
-          <i class="bi bi-box-seam detail-empty-icon"></i>
+          <i data-lucide="package" class="detail-empty-icon"></i>
           <h2 class="profil-section-title detail-empty-title">Produk Tidak Ditemukan</h2>
           <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
-          <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i class="bi bi-arrow-right"></i></a>
+          <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i data-lucide="arrow-right"></i></a>
         </div>
       @endif
     </div>

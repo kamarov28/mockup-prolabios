@@ -13,7 +13,7 @@
       <h2 class="admin-card-header-title">Daftar Prinsipal / Brand Mitra</h2>
     </div>
     <a href="{{ route('admin.principals.create') }}" class="admin-btn admin-btn-primary">
-      <i class="bi bi-plus-lg"></i> Tambah Prinsipal Baru
+      <i data-lucide="plus"></i> Tambah Prinsipal Baru
     </a>
   </div>
 
@@ -23,7 +23,7 @@
         <div class="col-md-6">
           <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;" id="search-group">
             <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted);">
-              <i class="bi bi-search" style="font-size: 0.8rem;"></i>
+              <i data-lucide="search" style="font-size: 0.8rem;"></i>
             </span>
             <input type="text" name="s" id="local-search-input"
                    style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-size: 0.88rem;"
@@ -32,7 +32,7 @@
         </div>
         <div class="col-md-2">
           <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-            <i class="bi bi-funnel-fill"></i> Cari
+            <i data-lucide="filter"></i> Cari
           </button>
         </div>
       </div>
@@ -86,7 +86,7 @@
                     <a href="{{ route('admin.principals.edit', $p->id) }}"
                        class="admin-action-link edit" title="Edit"
                        style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                      <i class="bi bi-pencil-square"></i>
+                      <i data-lucide="file-edit"></i>
                     </a>
                     <form action="{{ route('admin.principals.destroy', $p->id) }}" method="POST"
                           class="form-delete" data-name="{{ $p->name }}"
@@ -95,7 +95,7 @@
                       @method('DELETE')
                       <button type="submit" class="admin-action-link delete" title="Hapus"
                               style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
-                        <i class="bi bi-trash"></i>
+                        <i data-lucide="trash-2"></i>
                       </button>
                     </form>
                   </div>
@@ -107,7 +107,7 @@
       </div>
     @else
       <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i class="bi bi-award" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
+        <i data-lucide="award" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
         <p style="font-size: 0.88rem;">Belum ada data prinsipal.</p>
         <a href="{{ route('admin.principals.create') }}" class="admin-btn admin-btn-primary">Tambah Prinsipal</a>
       </div>
