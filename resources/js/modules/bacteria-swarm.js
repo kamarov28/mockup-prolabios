@@ -108,6 +108,12 @@ export function initBacteriaSwarm() {
   let lastTime = performance.now();
 
   function update() {
+    if (document.hidden) {
+      rafId = requestAnimationFrame(update);
+      lastTime = performance.now();
+      return;
+    }
+
     const now = performance.now();
     const dt = Math.min((now - lastTime) / 16.66, 2.0); // normalize 60fps
     lastTime = now;
