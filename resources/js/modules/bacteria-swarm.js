@@ -57,7 +57,7 @@ export function initBacteriaSwarm() {
     const size = Math.floor(Math.random() * 36) + 38; // 38px - 74px
     const opacity = (Math.random() * 0.25 + 0.65).toFixed(2); // 0.65 - 0.90 solid visibility
 
-    // Native transparent SVGs with crisp neo-brutal drop-shadow
+    // Flat minimal styling with soft natural ambient depth
     el.style.cssText = `
       position: absolute;
       top: 0;
@@ -67,7 +67,7 @@ export function initBacteriaSwarm() {
       opacity: ${opacity};
       will-change: transform;
       user-select: none;
-      filter: drop-shadow(2px 2px 0px rgba(30, 30, 30, 0.5));
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
       transition: opacity 0.4s ease;
     `;
 
