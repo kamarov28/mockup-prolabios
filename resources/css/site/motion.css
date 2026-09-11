@@ -18,10 +18,10 @@
 .nb-icon-btn,
 .btn-primary,
 .btn-hero {
-  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast) !important;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
 }
 
-/* Hover: subtle ambient elevation, no translate jump */
+/* Hover: subtle ambient elevation */
 .card:hover,
 .product-card:hover,
 .blog-card:hover,
@@ -31,59 +31,19 @@
 .editorial-featured-card:hover,
 .editorial-side-card:hover,
 .nb-card:hover {
-  transform: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
-  border-color: #CBD5E1 !important;
-}
-
-/* Active: no coordinate jumping */
-.card:active,
-.product-card:active,
-.blog-card:active,
-.hitech-bento-card:active,
-.b2b-usecase-card:active,
-.profil-vm-card:active,
-.editorial-featured-card:active,
-.editorial-side-card:active,
-.nb-card:active {
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-/* ── Buttons Micro-motion (Color transitions only) ───────────────────────── */
-.nb-btn:hover,
-.nb-btn-primary:hover,
-.nb-btn-ghost:hover,
-.btn-primary:hover {
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.nb-btn:active,
-.nb-btn-primary:active,
-.nb-btn-ghost:active,
-.btn-primary:active {
-  transform: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #CBD5E1;
 }
 
 /* Universal Icon Buttons Smooth Hover */
 .nb-icon-btn {
-  transition: background-color var(--transition-fast), color var(--transition-fast) !important;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .nb-icon-btn:hover,
 .navbar .nb-icon-btn:hover {
-  background: #E5E7EB !important;
-  color: var(--nb-primary) !important;
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.nb-icon-btn:active,
-.navbar .nb-icon-btn:active {
-  transform: none !important;
-  box-shadow: none !important;
+  background: #E5E7EB;
+  color: var(--nb-primary);
 }
 
 /* ── Back to Top Button ─────────────────────────────────────────────────── */
@@ -117,13 +77,7 @@
 .btn-scroll-to-top:hover {
   background: var(--nb-primary-dark);
   color: #FFFFFF;
-  transform: none !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
-}
-#scroll-to-top:active,
-.btn-scroll-to-top:active {
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 /* ── Minimalist Search Overlay ───────────────────────────────────────────── */
@@ -170,12 +124,7 @@
 .search-close-btn:hover {
   background: #F3F4F6;
   color: var(--nb-primary);
-  transform: none !important;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-.search-close-btn:active {
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 .search-modal-card {
@@ -261,13 +210,6 @@
   color: var(--nb-primary);
   background: #FEE2E2;
   border-color: rgba(166, 23, 28, 0.2);
-  transform: none !important;
-  box-shadow: none !important;
-}
-
-.suggestion-tag:active {
-  transform: none !important;
-  box-shadow: none !important;
 }
 
 /* ── High-Performance Hero Entrance Physics (CSS-Powered) ───────────────── */
