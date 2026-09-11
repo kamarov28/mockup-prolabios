@@ -13,7 +13,7 @@
       $sectors = [
         'pharma' => [
           'label' => 'Farmasi & Biotech',
-          'icon' => 'bi-capsule',
+          'icon' => 'pill',
           'tag' => $sp['pharma']['tag'] ?? 'FARMASI & KOSMETIK',
           'title' => $sp['pharma']['title'] ?? 'Pengujian Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>',
           'desc' => $sp['pharma']['desc'] ?? 'Kit Uji Endotoksin LAL (Bioendo), Indikator Biologi SCBI (Terragene), serta media kultur standar farmakope untuk kepatuhan QC obat & kosmetik.',
@@ -23,7 +23,7 @@
           'cat' => 'CAT. BIO-TAL01',
           'brand' => 'Bioendo Reagents',
           'badge' => 'Ready Stock',
-          'badgeIcon' => 'bi-check2',
+          'badgeIcon' => 'check',
           'prodTitle' => 'Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)',
           'prodDesc' => 'Reagen sensitivitas tinggi (0.03 – 0.25 EU/ml) untuk deteksi cepat endotoksin bakteri pada sediaan farmasi injeksi, air WFI, dan alat kesehatan steril.',
           'stat1_label' => 'Sensitivitas',
@@ -32,14 +32,14 @@
           'stat2_label' => 'Kemasan',
           'stat2_val' => '5.2 mL / Vial',
           'stat2_class' => 'fw-bold small nb-mono',
-          'certIcon' => 'bi-file-earmark-check',
+          'certIcon' => 'file-check',
           'cert' => 'Sertifikat COA per batch',
           'rfqLink' => url('/produk?q=endotoxin'),
           'rfqAria' => 'Ajukan RFQ produk reagen endotoksin',
         ],
         'fnb' => [
           'label' => 'Makanan & Minuman',
-          'icon' => 'bi-cup-hot',
+          'icon' => 'coffee',
           'tag' => $sp['fnb']['tag'] ?? 'INDUSTRI MAKANAN & MINUMAN',
           'title' => $sp['fnb']['title'] ?? 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>',
           'desc' => $sp['fnb']['desc'] ?? 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk memastikan kepatuhan standar HACCP & BPOM.',
@@ -49,7 +49,7 @@
           'cat' => 'CAT. SCH-MEDIA02',
           'brand' => 'Scharlau Microbiology',
           'badge' => 'Ready Stock',
-          'badgeIcon' => 'bi-check2',
+          'badgeIcon' => 'check',
           'prodTitle' => 'Chromogenic Media for Salmonella & E. coli',
           'prodDesc' => 'Media kultur selektif diferensiasi warna spesifik untuk identifikasi koloni patogen makanan dalam 24 jam dengan akurasi isolasi tinggi.',
           'stat1_label' => 'Inkubasi',
@@ -58,14 +58,14 @@
           'stat2_label' => 'Bentuk',
           'stat2_val' => 'Dehydrated / Ready Plate',
           'stat2_class' => 'fw-bold small',
-          'certIcon' => 'bi-shield-check',
+          'certIcon' => 'shield-check',
           'cert' => 'BPOM Food Standard',
           'rfqLink' => url('/produk?q=salmonella'),
           'rfqAria' => 'Ajukan RFQ media kromogenik salmonella',
         ],
         'healthcare' => [
           'label' => 'Kesehatan & Klinis',
-          'icon' => 'bi-hospital',
+          'icon' => 'hospital',
           'tag' => $sp['healthcare']['tag'] ?? 'KESEHATAN & CSSD RUMAH SAKIT',
           'title' => $sp['healthcare']['title'] ?? 'Diagnostik & <span class="text-accent">Indikator Sterilisasi</span>',
           'desc' => $sp['healthcare']['desc'] ?? 'Identifikasi mikroba, uji sensitivitas antibiotik MIC, serta indikator kimia & biologi untuk sterilisator CSSD rumah sakit.',
@@ -75,7 +75,7 @@
           'cat' => 'CAT. TER-BT20',
           'brand' => 'Terragene Bionova',
           'badge' => 'AKL Certified',
-          'badgeIcon' => 'bi-patch-check',
+          'badgeIcon' => 'badge-check',
           'prodTitle' => 'Self-Contained Biological Indicator (SCBI) Steam',
           'prodDesc' => 'Indikator biologi Geobacillus stearothermophilus untuk monitoring sterilisasi uap CSSD rumah sakit dengan pembacaan cepat 24 jam.',
           'stat1_label' => 'Organisme',
@@ -84,14 +84,14 @@
           'stat2_label' => 'Populasi Spora',
           'stat2_val' => '> 10^6 CFU',
           'stat2_class' => 'fw-bold small nb-mono',
-          'certIcon' => 'bi-patch-check',
+          'certIcon' => 'badge-check',
           'cert' => 'Kemenkes AKL Resmi',
           'rfqLink' => url('/produk?q=indicator'),
           'rfqAria' => 'Ajukan RFQ indikator biologi SCBI',
         ],
         'brewing' => [
           'label' => 'Brewing & Riset',
-          'icon' => 'bi-bezier2',
+          'icon' => 'beaker',
           'tag' => $sp['brewing']['tag'] ?? 'INDUSTRI BREWING & RISET',
           'title' => $sp['brewing']['title'] ?? 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>',
           'desc' => $sp['brewing']['desc'] ?? 'Media spesifik bakteri pembusuk bir (Lactobacillus, Pediococcus) dan penanganan cairan presisi untuk riset biologi molekuler.',
@@ -101,7 +101,7 @@
           'cat' => 'CAT. DOH-NBB01',
           'brand' => 'Döhler NBB Diagnostics',
           'badge' => 'Ready Stock',
-          'badgeIcon' => 'bi-check2',
+          'badgeIcon' => 'check',
           'prodTitle' => 'NBB®-A Agar for Spoilage Microorganisms',
           'prodDesc' => 'Media deteksi selektif spesifik untuk isolasi bakteri pembusuk bir dan fermentasi (Lactobacillus & Pediococcus) tanpa gangguan ragi kultur.',
           'stat1_label' => 'Deteksi Target',
@@ -110,7 +110,7 @@
           'stat2_label' => 'Format',
           'stat2_val' => 'Solid Ready Agar',
           'stat2_class' => 'fw-bold small',
-          'certIcon' => 'bi-journal-check',
+          'certIcon' => 'file-check',
           'cert' => 'Brewing Lab Protocol',
           'rfqLink' => url('/produk?q=nbb'),
           'rfqAria' => 'Ajukan RFQ media NBB agar brewing',
@@ -122,7 +122,7 @@
     <div class="hitech-tab-bar mb-4 mb-md-5" role="tablist" aria-label="Pilihan Sektor Industri">
       @foreach($sectors as $id => $sec)
         <button class="hitech-tab-btn {{ $loop->first ? 'active' : '' }}" role="tab" id="tab-{{ $id }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}" aria-controls="panel-{{ $id }}" tabindex="{{ $loop->first ? '0' : '-1' }}" data-target="{{ $id }}">
-          <i class="bi {{ $sec['icon'] }} me-2" aria-hidden="true"></i> {{ $sec['label'] }}
+          <i data-lucide="{{ $sec['icon'] }}" class="me-2" aria-hidden="true"></i> {{ $sec['label'] }}
         </button>
       @endforeach
     </div>
@@ -157,7 +157,7 @@
                       <span class="product-cat-code">{{ $sec['cat'] }}</span>
                       <span class="text-muted small">{{ $sec['brand'] }}</span>
                     </div>
-                    <span class="nb-badge-sm" style="color: #1E1E1E;"><i class="bi {{ $sec['badgeIcon'] }} me-1" style="color:#A6171C;"></i> {{ $sec['badge'] }}</span>
+                    <span class="nb-badge-sm" style="color: #1E1E1E;"><i data-lucide="{{ $sec['badgeIcon'] }}" class="me-1" style="color:#A6171C;"></i> {{ $sec['badge'] }}</span>
                   </div>
 
                   <h4 class="fs-6 fw-semibold mb-2">{{ $sec['prodTitle'] }}</h4>
@@ -182,7 +182,7 @@
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                  <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i class="bi {{ $sec['certIcon'] }} text-primary me-1"></i> {{ $sec['cert'] }}</span>
+                  <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i data-lucide="{{ $sec['certIcon'] }}" class="text-primary me-1"></i> {{ $sec['cert'] }}</span>
                   <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="{{ $sec['rfqAria'] }}">
                     <i data-lucide="shopping-cart"></i> Tambah RFQ
                   </a>
