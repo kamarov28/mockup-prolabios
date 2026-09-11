@@ -181,10 +181,19 @@ body.is-flat .hitech-bento-widget {
   border-radius: 10px !important;
 }
 
+body.is-flat .focus-section-pin .hitech-spec-stat,
 body.is-flat .hitech-spec-stat {
-  border: none !important;
-  background: #F3F4F6 !important;
+  border: 1px solid #E5E7EB !important;
+  background: #F8F9FA !important;
   border-radius: 8px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.is-flat .focus-section-pin .hitech-info-card,
+body.is-flat .focus-section-pin .hitech-spec-card {
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
 }
 
 /* Product Card adjustments */
@@ -350,6 +359,8 @@ body.is-flat .catalogue-no {
   color: #374151 !important;
   border: 1px solid #E2E8F0 !important;
   border-radius: 6px !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 body.is-flat .hitech-panel-tag {
