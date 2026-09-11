@@ -249,6 +249,30 @@
   border-radius: var(--nb-radius);
 }
 
+.rfq-success-card {
+  max-width: 680px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.rfq-success-card .nb-status-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #ECFDF5;
+  border: none;
+  box-shadow: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.rfq-success-card .nb-status-icon-box i {
+  color: #10B981;
+  font-size: 2.2rem;
+}
+
 @media (max-width: 575.98px) {
   .cart-item-card {
     padding: 1rem;

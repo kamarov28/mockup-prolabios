@@ -373,8 +373,15 @@ a:hover {
   border-top: 1px solid #F1F5F9 !important;
 }
 
+/* Ensure bacteria swarm container floats behind all content and footer */
+.bacteria-swarm-container {
+  z-index: 0 !important;
+}
+
 /* ── Footer (Apple-style Clean Minimal Light Neutral) ────────────────────── */
 .site-footer {
+  position: relative !important;
+  z-index: 2 !important;
   background: #F5F5F7 !important;
   border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
   color: #6E6E73 !important;

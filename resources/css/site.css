@@ -1,5 +1,5 @@
 /* ==========================================================================
-   site.css — Soft Neo-Brutalism Site Styling Barrel
+   site.css — Modern Flat Design Site Styling Barrel
    ========================================================================== */
 
 @import './site/tokens.css';
@@ -11,4 +11,3 @@
 @import './site/content-areas.css';
 @import './site/b2b-hitech.css';
 @import './site/cart-rfq.css';
-@import './site/flat-home.css';
