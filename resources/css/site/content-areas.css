@@ -15,14 +15,13 @@
 
 .editorial-featured-card:hover,
 .editorial-side-card:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
 .editorial-featured-card:active,
 .editorial-side-card:active {
-  transform: translate(4px, 4px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: none;
 }
 
 /* Featured Article Thumbnail */
@@ -145,19 +144,20 @@
   padding: 0.25rem 0.6rem;
   border-radius: var(--nb-radius-sm);
   line-height: 1;
-  border: var(--nb-border-sm);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  border: 1px solid transparent;
+  box-shadow: none;
 }
 
 .editorial-badge-sunny {
-  background: var(--nb-accent);
-  color: var(--nb-ink);
+  background: #FEF3C7;
+  color: #92400E;
+  border-color: #FDE68A;
 }
 
 .editorial-badge-ruby {
   background: var(--nb-primary);
   color: #FFFFFF;
-  border-color: var(--nb-ink);
+  border-color: var(--nb-primary);
 }
 
 .editorial-meta {
@@ -174,29 +174,27 @@
   gap: 0.4rem;
   background: #FFFFFF;
   color: var(--nb-ink);
-  border: var(--nb-border-sm);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
   padding: 0.45rem 0.9rem;
   font-family: var(--font-display);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
   letter-spacing: 0.02em;
-  border-radius: var(--nb-radius-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  border-radius: var(--nb-radius);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
   white-space: nowrap;
 }
 
 .editorial-all-btn:hover {
-  background: var(--nb-accent);
+  background: var(--nb-bg-soft);
+  border-color: #CBD5E1;
   color: var(--nb-ink);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
 }
 
 .editorial-all-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: none;
 }
 
 /* ── Hero Manual Slider Controls ─────────────────────────────────────────── */
@@ -210,31 +208,30 @@
 }
 
 .typo-hero-ctrl-btn {
-  background: var(--nb-card);
-  border: var(--nb-border);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
   color: var(--nb-ink);
   width: 44px;
   height: 44px;
-  border-radius: var(--nb-radius-sm);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 2px 2px 0 var(--nb-ink);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
   outline: none;
 }
 
 .typo-hero-ctrl-btn:hover {
-  background: var(--nb-accent);
+  background: var(--nb-bg-soft);
+  border-color: #CBD5E1;
   color: var(--nb-ink);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  transform: scale(1.04);
 }
 
 .typo-hero-ctrl-btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: scale(0.96);
 }
 
 @media (max-width: 768px) {
@@ -266,29 +263,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     padding: 0;
     margin: 0;
-    background: var(--nb-card);
-    border: var(--nb-border);
-    border-radius: var(--nb-radius-sm);
-    box-shadow: 2px 2px 0 var(--nb-ink);
-    transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: var(--nb-radius);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
   .hamburger:hover {
-    background: var(--nb-accent);
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0 var(--nb-ink);
+    background: var(--nb-bg-soft);
+    border-color: #CBD5E1;
   }
   .hamburger:active {
-    transform: translate(2px, 2px);
-    box-shadow: 0 0 0 var(--nb-ink);
+    transform: none;
   }
   .hamburger:has(input:checked) {
-    background: var(--nb-accent);
+    background: var(--nb-bg-soft);
   }
 }
 
@@ -367,18 +362,18 @@
   width: 180px;
   height: 88px;
   background-color: #FFFFFF;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius);
-  box-shadow: var(--nb-shadow-sm);
+  border: 1px solid #E5E7EB;
+  border-radius: var(--nb-radius-lg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
   flex-shrink: 0;
   overflow: hidden;
   padding: 12px 20px;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .marquee-logo-box:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .marquee-logo-box img {
@@ -390,26 +385,25 @@
 
 /* ── Mobile Responsive Helpers ───────────────────────────────────────────── */
 .catalog-filter-toggle-btn {
-  background: var(--nb-card);
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-sm);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: var(--nb-radius);
   font-family: var(--font-display);
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--nb-ink);
-  box-shadow: 2px 2px 0 var(--nb-ink);
-  padding: 8px 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  padding: 8px 16px;
   cursor: pointer;
   outline: none;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .catalog-filter-toggle-btn:hover {
-  background: var(--nb-accent);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  background: var(--nb-bg-soft);
+  border-color: #CBD5E1;
 }
 
 .table-responsive {

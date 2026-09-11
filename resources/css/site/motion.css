@@ -1,8 +1,9 @@
 /* ==========================================================================
-   02-motion.css — Tactile Press Physics & Micro-interactions
+   02-motion.css — Smooth Transitions & Modern Physics
+   Official Design System: Seamless Fluid Elevations without Coordinate Jumps
    ========================================================================== */
 
-/* ── Universal Tactile Press Physics ─────────────────────────────────────── */
+/* ── Universal Smooth Card & Button Transitions ───────────────────────────── */
 .card,
 .product-card,
 .blog-card,
@@ -17,10 +18,10 @@
 .nb-icon-btn,
 .btn-primary,
 .btn-hero {
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast) !important;
 }
 
-/* Hover: subtle press-in (card moves 2px down-right, shadow collapses) */
+/* Hover: subtle ambient elevation, no translate jump */
 .card:hover,
 .product-card:hover,
 .blog-card:hover,
@@ -30,12 +31,12 @@
 .editorial-featured-card:hover,
 .editorial-side-card:hover,
 .nb-card:hover {
-  transform: translate(2px, 2px) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
-  border-color: var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border-color: #CBD5E1 !important;
 }
 
-/* Active: full press-in (card moves 4px down-right, shadow = 0) */
+/* Active: no coordinate jumping */
 .card:active,
 .product-card:active,
 .blog-card:active,
@@ -45,47 +46,47 @@
 .editorial-featured-card:active,
 .editorial-side-card:active,
 .nb-card:active {
-  transform: translate(4px, 4px) !important;
-  box-shadow: 0 0 0 var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* ── Buttons Micro-motion ────────────────────────────────────────────────── */
+/* ── Buttons Micro-motion (Color transitions only) ───────────────────────── */
 .nb-btn:hover,
 .nb-btn-primary:hover,
 .nb-btn-ghost:hover,
 .btn-primary:hover {
-  transform: translate(2px, 2px) !important;
-  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .nb-btn:active,
 .nb-btn-primary:active,
 .nb-btn-ghost:active,
 .btn-primary:active {
-  transform: translate(3px, 3px) !important;
-  box-shadow: 0 0 0 var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Universal Icon Buttons Tactile Hover & Press */
+/* Universal Icon Buttons Smooth Hover */
 .nb-icon-btn {
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast) !important;
+  transition: background-color var(--transition-fast), color var(--transition-fast) !important;
 }
 
 .nb-icon-btn:hover,
 .navbar .nb-icon-btn:hover {
-  background: var(--nb-accent) !important;
-  color: var(--nb-ink) !important;
-  transform: translate(1px, 1px) !important;
-  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+  background: #E5E7EB !important;
+  color: var(--nb-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .nb-icon-btn:active,
 .navbar .nb-icon-btn:active {
-  transform: translate(2px, 2px) !important;
-  box-shadow: 0 0 0 var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* ── Back to Top Press Button ────────────────────────────────────────────── */
+/* ── Back to Top Button ─────────────────────────────────────────────────── */
 #scroll-to-top,
 .btn-scroll-to-top {
   position: fixed;
@@ -93,16 +94,16 @@
   right: 35px;
   width: 44px;
   height: 44px;
-  border-radius: var(--nb-radius);
+  border-radius: 50%;
   background: var(--nb-primary);
-  border: var(--nb-border);
+  border: none;
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
-  box-shadow: var(--nb-shadow-sm);
+  transition: background-color var(--transition-fast), opacity var(--transition-fast);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   cursor: pointer;
 }
 #scroll-to-top i,
@@ -115,15 +116,14 @@
 #scroll-to-top:hover,
 .btn-scroll-to-top:hover {
   background: var(--nb-primary-dark);
-  border-color: var(--nb-ink);
   color: #FFFFFF;
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  transform: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
 }
 #scroll-to-top:active,
 .btn-scroll-to-top:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* ── Minimalist Search Overlay ───────────────────────────────────────────── */
@@ -133,7 +133,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(249, 245, 242, 0.92);
+  background: rgba(17, 24, 39, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 999999;
@@ -155,37 +155,37 @@
   width: 44px;
   height: 44px;
   background: #FFFFFF;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius);
-  box-shadow: var(--nb-shadow-sm);
-  color: var(--nb-ink);
+  border: 1px solid #E5E7EB;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: #374151;
   font-size: 1.1rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000001;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 .search-close-btn:hover {
-  background: var(--nb-accent);
-  color: var(--nb-ink);
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  background: #F3F4F6;
+  color: var(--nb-primary);
+  transform: none !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 .search-close-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .search-modal-card {
   width: 90%;
   max-width: 580px;
   background: #FFFFFF;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-lg);
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
   padding: 24px 26px;
-  box-shadow: var(--nb-shadow-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   position: relative;
   z-index: 1000000;
   text-align: left;
@@ -202,27 +202,28 @@
   position: absolute;
   left: 16px;
   font-size: 1.25rem;
-  color: var(--nb-ink);
+  color: #9CA3AF;
   pointer-events: none;
   z-index: 2;
 }
 
 .search-input-box input#search-overlay-input {
   width: 100%;
-  background: #FFFFFF;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius);
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
   padding: 14px 18px 14px 48px;
-  color: var(--nb-ink);
+  color: #111827;
   font-size: 1.05rem;
   outline: none;
-  box-shadow: var(--nb-shadow-sm);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: none;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .search-input-box input#search-overlay-input:focus {
+  background: #FFFFFF;
   border-color: var(--nb-primary);
-  box-shadow: 4px 4px 0 var(--nb-primary);
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12);
 }
 
 .search-section-label {
@@ -231,7 +232,7 @@
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--nb-muted);
+  color: #6B7280;
   margin-bottom: 12px;
 }
 
@@ -243,29 +244,30 @@
 }
 
 .suggestion-tag {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--nb-ink);
-  background: #FFFFFF;
-  border: var(--nb-border-sm);
-  padding: 6px 12px;
-  border-radius: var(--nb-radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  padding: 6px 14px;
+  border-radius: 20px;
   text-decoration: none;
-  box-shadow: 2px 2px 0 var(--nb-ink);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
+  box-shadow: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .suggestion-tag:hover {
-  color: var(--nb-ink);
-  background: var(--nb-accent);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--nb-ink);
+  color: var(--nb-primary);
+  background: #FEE2E2;
+  border-color: rgba(166, 23, 28, 0.2);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .suggestion-tag:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 var(--nb-ink);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* ── High-Performance Hero Entrance Physics (CSS-Powered) ───────────────── */

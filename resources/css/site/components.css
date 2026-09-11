@@ -1,21 +1,22 @@
 /* ==========================================================================
-   03-components.css — Reusable Neo-Brutalist Components & Atoms
+   03-components.css — Reusable Modern Flat Components & Atoms
+   Official Design System: Clean, Minimal, Precision Laboratory Aesthetic.
    ========================================================================== */
 
 /* ── Badges & Chips ──────────────────────────────────────────────────────── */
 .nb-badge {
   display: inline-block;
-  font-family: var(--font-mono) !important;
+  font-family: var(--font-body) !important;
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: var(--nb-accent);
-  color: var(--nb-ink);
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-sm);
+  background: #FEE2E2;
+  color: var(--nb-primary);
+  border: 1px solid rgba(166, 23, 28, 0.18);
+  border-radius: 6px;
   padding: 0.35rem 0.65rem;
-  box-shadow: var(--nb-shadow-sm);
+  box-shadow: none;
   margin-bottom: 1rem;
 }
 
@@ -23,16 +24,16 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  background: #FFFFFF;
-  color: var(--nb-ink);
-  border: var(--nb-border-sm);
-  border-radius: var(--nb-radius-sm);
-  box-shadow: var(--nb-shadow-xs);
-  padding: 2px 8px;
+  background: #F8F9FA;
+  color: #374151;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  box-shadow: none;
+  padding: 3px 8px;
   margin-bottom: 0;
 }
 
@@ -40,48 +41,52 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
-  background: var(--nb-mint);
-  color: var(--nb-ink);
-  border: var(--nb-border-sm);
-  border-radius: var(--nb-radius-sm);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+  border-radius: 6px;
+  box-shadow: none;
   padding: 4px 12px;
   margin-bottom: 0;
 }
 .nb-badge-stock i {
-  color: var(--nb-mint-dark);
+  color: #10B981;
   font-size: 0.88rem;
 }
 .nb-badge-stock--empty {
-  background: var(--nb-accent);
-  color: var(--nb-ink);
+  background: #FEF2F2;
+  color: #991B1B;
+  border-color: #FECACA;
 }
 .nb-badge-stock--empty i {
-  color: var(--nb-ink);
+  color: #DC2626;
 }
 
 .product-cat-code,
 .catalogue-no {
   display: inline-block;
-  background: var(--nb-accent);
-  color: var(--nb-ink);
-  border: var(--nb-border-sm);
-  border-radius: var(--nb-radius-sm);
+  background: #F8F9FA;
+  color: #374151;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
   padding: 3px 8px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  font-size: 0.72rem;
+  font-weight: 600;
+  box-shadow: none;
+  transform: none;
   font-family: var(--font-mono);
 }
 .product-cat-code.is-copyable {
   cursor: pointer;
 }
 .product-cat-code.is-copied {
-  border-color: var(--nb-success, #16A34A);
+  border-color: #16A34A;
+  color: #16A34A;
+  background: #F0FDF4;
 }
 
 .nb-status-icon-box {
@@ -90,15 +95,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--nb-accent);
-  border: 2px solid var(--nb-ink);
-  border-radius: var(--nb-radius-sm);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  background: #ECFDF5;
+  border: none;
+  border-radius: 50%;
+  box-shadow: none;
 }
 
 .nb-status-icon-box i {
   font-size: 2.2rem;
-  color: var(--nb-ink);
+  color: #10B981;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
@@ -106,33 +111,35 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: var(--font-display);
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none !important;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius);
-  padding: 0.7rem 1.25rem;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  transition: background-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
   cursor: pointer;
+  box-shadow: none;
 }
 
 .nb-btn-primary {
   background: var(--nb-primary);
   color: #FFFFFF !important;
-  box-shadow: var(--nb-shadow);
+  border: none;
+  box-shadow: none;
 }
 .nb-btn-primary:hover {
   background: var(--nb-primary-dark);
   color: #FFFFFF !important;
 }
 
-/* Success feedback after add-to-RFQ (overrides primary ruby) */
+/* Success feedback after add-to-RFQ */
 .nb-btn.is-success,
 .nb-btn-primary.is-success {
   background: #16A34A !important;
   color: #FFFFFF !important;
-  box-shadow: 3px 3px 0 var(--nb-ink);
+  box-shadow: none;
   pointer-events: none;
 }
 .nb-btn.is-success i,
@@ -141,21 +148,22 @@
 }
 
 .nb-btn-ghost {
-  background: #FFFFFF;
-  color: var(--nb-ink) !important;
-  box-shadow: var(--nb-shadow);
+  background: #E5E7EB;
+  color: #1F2937 !important;
+  border: none;
+  box-shadow: none;
 }
 .nb-btn-ghost:hover {
-  background: var(--nb-accent);
-  color: var(--nb-ink) !important;
+  background: #D1D5DB;
+  color: #111827 !important;
 }
 
 .btn-primary {
   background-color: var(--nb-primary);
-  border: var(--nb-border);
+  border: none;
   color: #FFFFFF;
-  box-shadow: var(--nb-shadow-sm);
-  border-radius: var(--nb-radius);
+  box-shadow: none;
+  border-radius: 8px;
 }
 .btn-primary:hover {
   background-color: var(--nb-primary-dark);
@@ -182,17 +190,23 @@
   min-width: 38px !important;
   padding: 0 !important;
   font-size: 0.85rem !important;
-  background: var(--nb-card) !important;
-  border: var(--nb-border) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
   color: var(--nb-ink) !important;
-  border-radius: var(--nb-radius-sm) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  border-radius: var(--nb-radius) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
 }
+.navbar .nb-icon-btn:hover,
+.nb-icon-btn:hover {
+  background: var(--nb-bg-soft) !important;
+  border-color: #CBD5E1 !important;
+}
+
 .navbar .nb-icon-btn i,
 .nb-icon-btn i {
   font-size: 0.95rem !important;
@@ -248,62 +262,61 @@
   color: #FFFFFF;
 }
 
-/* ── Cards & Surfaces ────────────────────────────────────────────────────── */
+/* ── Cards & Surfaces (Clean Flat Standard) ─────────────────────────────── */
 .card,
 .nb-card {
-  background-color: var(--nb-card) !important;
-  border: var(--nb-border) !important;
-  border-radius: var(--nb-radius-lg) !important;
-  box-shadow: var(--nb-shadow) !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   overflow: hidden;
 }
 
 .card-header {
   background: transparent !important;
-  border-bottom: var(--nb-border) !important;
+  border-bottom: 1px solid #F1F5F9 !important;
 }
 
 .card-footer {
   background: transparent !important;
-  border-top: var(--nb-border) !important;
+  border-top: 1px solid #F1F5F9 !important;
 }
 
 .empty-state-card {
   text-align: center;
   padding: 80px 0;
-  border: var(--nb-border);
-  border-radius: var(--nb-radius);
-  box-shadow: var(--nb-shadow-sm);
-  background: var(--nb-card);
+  border: 1px solid #E5E7EB;
+  border-radius: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background: #FFFFFF;
 }
 
 .hitech-bento-card--lead,
 .typo-blog-card--lead,
 .highlight-card {
-  background: var(--nb-card) !important;
-  border: 2.5px solid var(--nb-primary) !important;
-  box-shadow: 5px 5px 0 var(--nb-primary) !important;
+  background: #FFF5F5 !important;
+  border: 1px solid rgba(166, 23, 28, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(166, 23, 28, 0.06) !important;
 }
 
-/* ── Quantity Steppers ───────────────────────────────────────────────────── */
+/* ── Quantity Steppers (Clean Modern Pill) ───────────────────────────────── */
 .nb-stepper-wrap {
   display: inline-flex;
   align-items: center;
   height: 48px;
-  background: var(--nb-card);
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-sm);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  background: #F3F4F6;
+  border: none;
+  border-radius: 10px;
+  box-shadow: none;
   overflow: hidden;
 }
 
 .nb-stepper-btn {
   width: 44px;
   height: 100%;
-  background: var(--nb-accent);
-  color: var(--nb-ink);
+  background: #E5E7EB;
+  color: #374151;
   border: none;
-  border-right: 2px solid var(--nb-ink);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -311,12 +324,12 @@
   font-weight: 700;
   cursor: pointer;
   user-select: none;
+  transition: background-color var(--transition-fast);
 }
 .nb-stepper-btn:last-child {
-  border-right: none;
-  border-left: 2px solid var(--nb-ink);
+  border: none;
 }
-.nb-stepper-btn:hover { background: #e5b338; }
+.nb-stepper-btn:hover { background: #D1D5DB; color: #111827; }
 
 .nb-stepper-input {
   width: 58px;
@@ -327,7 +340,7 @@
   font-family: var(--font-mono);
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--nb-ink);
+  color: #111827;
   outline: none;
   box-shadow: none;
   padding: 0;
@@ -357,20 +370,19 @@ input[type=number].hide-spinner {
 .b2b-qty-pill {
   display: inline-flex;
   align-items: center;
-  background: var(--nb-card);
-  border: var(--nb-border);
-  border-radius: var(--nb-radius-sm);
-  box-shadow: 2px 2px 0 var(--nb-ink);
+  background: #F3F4F6;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: none;
   height: 38px;
   overflow: hidden;
 }
 .b2b-qty-btn {
   width: 34px;
   height: 100%;
-  background: var(--nb-accent);
-  color: var(--nb-ink);
+  background: #E5E7EB;
+  color: #374151;
   border: none;
-  border-right: 2px solid var(--nb-ink);
   font-weight: 700;
   font-size: 0.95rem;
   display: inline-flex;
@@ -378,12 +390,12 @@ input[type=number].hide-spinner {
   justify-content: center;
   cursor: pointer;
   border-radius: 0;
+  transition: background-color var(--transition-fast);
 }
 .b2b-qty-btn:last-child {
-  border-right: none;
-  border-left: 2px solid var(--nb-ink);
+  border: none;
 }
-.b2b-qty-btn:hover { background: #e5b338; }
+.b2b-qty-btn:hover { background: #D1D5DB; color: #111827; }
 .b2b-qty-input {
   width: 46px;
   height: 100%;
@@ -393,31 +405,32 @@ input[type=number].hide-spinner {
   font-family: var(--font-mono);
   font-weight: 700;
   font-size: 0.95rem;
-  color: var(--nb-ink);
+  color: #111827;
   padding: 0;
   outline: none;
   box-shadow: none;
 }
 
-/* ── Form Inputs & Validation ────────────────────────────────────────────── */
+/* ── Form Inputs & Validation (Modern Flat) ──────────────────────────────── */
 .form-control,
 .form-select,
 .kontak-form-input {
-  background-color: #FFFFFF !important;
-  border: var(--nb-border) !important;
-  border-radius: var(--nb-radius) !important;
-  box-shadow: var(--nb-shadow-xs) !important;
-  color: var(--nb-ink) !important;
+  background-color: #F8F9FA !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  color: #1F2937 !important;
   padding: 10px 14px;
-  font-size: 0.95rem;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-size: 0.92rem;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .form-control:focus,
 .form-select:focus,
 .kontak-form-input:focus {
-  border-color: var(--nb-ink) !important;
-  box-shadow: var(--nb-shadow-sm) !important;
+  background-color: #FFFFFF !important;
+  border-color: var(--nb-primary) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
   outline: none !important;
 }
 
@@ -425,7 +438,7 @@ input[type=number].hide-spinner {
 .has-error,
 .login-nb-input-group.has-error {
   border-color: var(--nb-primary) !important;
-  box-shadow: 3px 3px 0 var(--nb-primary) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.15) !important;
 }
 
 .login-nb-input-group.has-error .login-nb-input-icon {
@@ -435,11 +448,11 @@ input[type=number].hide-spinner {
 }
 
 .login-nb-alert-error {
-  border: var(--nb-border) !important;
+  border: 1px solid rgba(166, 23, 28, 0.2) !important;
   background: var(--nb-alert-bg) !important;
   color: var(--nb-alert-text) !important;
-  box-shadow: var(--nb-shadow-sm) !important;
-  border-radius: var(--nb-radius) !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
   padding: 12px 14px !important;
   font-size: 0.85rem !important;
   font-weight: 600 !important;
@@ -458,45 +471,45 @@ input[type=number].hide-spinner {
 .pagination .page-item .page-link {
   color: var(--nb-ink) !important;
   background: #FFFFFF !important;
-  border: var(--nb-border) !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: var(--nb-radius-sm) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
   font-family: var(--font-display) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 0.88rem !important;
   padding: 8px 14px !important;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast) !important;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast) !important;
 }
 .pagination .page-item .page-link:hover {
-  background: var(--nb-accent) !important;
-  transform: translate(1px, 1px) !important;
-  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+  background: var(--nb-bg-soft) !important;
+  border-color: #CBD5E1 !important;
+  color: var(--nb-ink) !important;
 }
 .pagination .page-item.active .page-link {
   background: var(--nb-primary) !important;
   color: #FFFFFF !important;
-  border-color: var(--nb-ink) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  border-color: var(--nb-primary) !important;
+  box-shadow: 0 2px 6px rgba(166, 23, 28, 0.25) !important;
   transform: none !important;
 }
 
-/* ── SweetAlert2 Neo-Brutalism Overrides ──────────────────────────────────── */
+/* ── SweetAlert2 Flat Overrides ──────────────────────────────────────────── */
 .swal2-container {
   z-index: 100005 !important;
 }
 .swal2-popup {
   background: var(--nb-card) !important;
-  border: var(--nb-border) !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: var(--nb-radius-lg) !important;
-  box-shadow: var(--nb-shadow-lg) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
   color: var(--nb-ink) !important;
   font-family: var(--font-body) !important;
   padding: 1.75rem !important;
 }
 .swal2-popup.swal2-toast {
-  box-shadow: var(--nb-shadow-sm) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   padding: 0.85rem 1.2rem !important;
-  border-radius: var(--nb-radius-sm) !important;
+  border-radius: var(--nb-radius) !important;
 }
 .swal2-title {
   font-family: var(--font-display) !important;
@@ -517,20 +530,19 @@ input[type=number].hide-spinner {
 .swal2-confirm {
   background: var(--nb-primary) !important;
   color: #FFFFFF !important;
-  border: var(--nb-border) !important;
-  border-radius: var(--nb-radius-sm) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  border: 1px solid var(--nb-primary) !important;
+  border-radius: var(--nb-radius) !important;
+  box-shadow: 0 2px 6px rgba(166, 23, 28, 0.25) !important;
   font-family: var(--font-display) !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
   font-size: 0.88rem !important;
   padding: 0.6rem 1.4rem !important;
   outline: none !important;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast) !important;
+  transition: background-color var(--transition-fast) !important;
 }
 .swal2-confirm:hover {
   background: var(--nb-primary-dark) !important;
-  transform: translate(1px, 1px) !important;
-  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+  border-color: var(--nb-primary-dark) !important;
 }
 
 /* ── AJAX Loading States & Spinners ──────────────────────────────────────── */

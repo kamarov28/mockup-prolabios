@@ -1,5 +1,6 @@
 /* ==========================================================================
-   00-tokens.css — Soft Neo-Brutalism Design Tokens (Single Source of Truth)
+   00-tokens.css — Modern Flat Design Tokens (Single Source of Truth)
+   Official Design System: Clean, Minimal, Precision Laboratory Aesthetic.
    ========================================================================== */
 :root {
   /* ── Typography Families ──────────────────────────────────────────────── */
@@ -13,41 +14,41 @@
   --font-family-sans: var(--font-body);
   --font-family-mono: var(--font-mono);
 
-  /* ── Neo-Brutal Brand Palette ─────────────────────────────────────────── */
-  --nb-bg: #f9f5f2;            /* Warm Natural paper canvas */
-  --nb-bg-soft: #f9f5f2;       /* Soft section backgrounds */
+  /* ── Modern Flat Brand Palette ─────────────────────────────────────────── */
+  --nb-bg: #F8F9FA;            /* Clean crisp neutral canvas */
+  --nb-bg-soft: #F1F4F8;       /* Soft card/section background */
   --nb-card: #FFFFFF;          /* Pure white card interiors */
-  --nb-ink: #1E1E1E;           /* Solid charcoal text, borders, hard shadows */
-  --nb-muted: #5A5A5A;         /* Secondary descriptions, meta text */
+  --nb-ink: #111827;           /* Modern Slate/Charcoal text */
+  --nb-muted: #64748B;         /* Secondary descriptions, meta text */
   --nb-primary: #A6171C;       /* Signature Prolabios Ruby Red */
   --nb-primary-dark: #7A1015;  /* Ruby hover / active */
-  --nb-accent: #F1C045;        /* Sunny gold / category tags */
+  --nb-accent: #FEE2E2;        /* Soft ruby tint / active indicator pill */
 
   /* ── Alert & Status Palette ──────────────────────────────────────────── */
-  --nb-mint: #A7F3D0;          /* In-stock green pill */
+  --nb-mint: #ECFDF5;          /* In-stock green pill */
   --nb-mint-dark: #065F46;     /* In-stock icon text */
-  --nb-alert-bg: #FEE2E2;      /* Validation error background */
-  --nb-alert-text: #7F1D1D;    /* Validation error text */
-  --nb-success: #16A34A;       /* Verified SSL / check pill */
+  --nb-alert-bg: #FEF2F2;      /* Validation error background */
+  --nb-alert-text: #991B1B;    /* Validation error text */
+  --nb-success: #10B981;       /* Verified emerald check */
 
-  /* ── Geometry & Borders ───────────────────────────────────────────────── */
-  --nb-border-w: 2px;
-  --nb-border: 2px solid #1E1E1E;
-  --nb-border-sm: 1.5px solid #1E1E1E;
-  --nb-radius-sm: 4px;
-  --nb-radius: 6px;
-  --nb-radius-lg: 8px;
+  /* ── Geometry & Borders (1px Precision Line System) ───────────────────── */
+  --nb-border-w: 1px;
+  --nb-border: 1px solid #E5E7EB;
+  --nb-border-sm: 1px solid #E2E8F0;
+  --nb-radius-sm: 6px;
+  --nb-radius: 8px;
+  --nb-radius-lg: 14px;
 
-  /* ── Hard Directional Shadows (0 blur) ────────────────────────────────── */
-  --nb-shadow-xs: 1.5px 1.5px 0 #1E1E1E;
-  --nb-shadow-sm: 3px 3px 0 #1E1E1E;
-  --nb-shadow: 4px 4px 0 #1E1E1E;
-  --nb-shadow-lg: 6px 6px 0 #1E1E1E;
-  --nb-shadow-xl: 8px 8px 0 #1E1E1E;
+  /* ── Soft Ambient Elevations (Zero hard black offset shadows) ────────── */
+  --nb-shadow-xs: none;
+  --nb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --nb-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  --nb-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.05);
+  --nb-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.07);
 
-  /* ── Transition Timing ────────────────────────────────────────────────── */
-  --transition-fast: 0.12s ease;
-  --transition-base: 0.15s ease;
+  /* ── Smooth Transitions ───────────────────────────────────────────────── */
+  --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-base: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ── Legacy Mappings (Backward compatibility with existing templates) ──── */
   --color-primary: var(--nb-primary);
@@ -64,8 +65,8 @@
   --color-bg-body: var(--nb-bg);
   --color-bg-white: var(--nb-card);
   --color-bg-gray: var(--nb-bg-soft);
-  --color-border: var(--nb-ink);
+  --color-border: var(--nb-border);
   --shadow-sm: var(--nb-shadow-sm);
   --shadow-md: var(--nb-shadow);
-  --shadow-hover: 2px 2px 0 #1E1E1E;
+  --shadow-hover: none;
 }
