@@ -67,7 +67,7 @@
             </div>
 
             <!-- Visi Lead Anchor Card -->
-            <div class="card p-4 p-md-5 mb-4 highlight-card" style="border: 2.5px solid var(--nb-primary); box-shadow: 5px 5px 0 var(--nb-primary);">
+            <div class="card p-4 p-md-5 mb-4 highlight-card">
               <div class="d-flex align-items-center gap-3 mb-3">
                 <div class="profil-value-letter-wrap letter-p m-0" style="width: 44px; height: 44px; font-size: 1.25rem;">
                   <i class="bi bi-eye"></i>

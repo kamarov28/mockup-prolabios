@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initCatalogAjax', initCatalogAjax);
 
   // Bacteria swarm prototype: active on homepage
-  if (document.querySelector('.home-hero') || document.querySelector('.hero-cinematic') || window.location.pathname === '/' || window.location.pathname === '') {
+  if (document.querySelector('.nb-hero') || document.querySelector('.page-home') || document.querySelector('.home-hero') || document.querySelector('.hero-cinematic') || window.location.pathname === '/' || window.location.pathname === '') {
     safeInit('initBacteriaSwarm', initBacteriaSwarm);
   }
 });

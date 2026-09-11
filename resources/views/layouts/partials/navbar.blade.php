@@ -1,5 +1,5 @@
 <!-- Header / Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+<nav class="navbar navbar-expand-lg navbar-light py-3">
   <div class="container-fluid px-3 px-lg-4">
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
         <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="54" width="auto" decoding="async" fetchpriority="high">
@@ -54,7 +54,7 @@
           </li>
           <li class="nav-item ms-lg-2 my-2 my-lg-0">
             <a class="navbar-cta-btn d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none" href="{{ !empty($siteSettings['catalog_pdf_url']) ? $siteSettings['catalog_pdf_url'] : asset('catalog.pdf') }}" target="_blank" rel="noopener noreferrer">
-              <i class="bi bi-download"></i> Unduh Katalog
+              <i class="bi bi-file-earmark-arrow-down"></i> Unduh Katalog
             </a>
           </li>
           <li class="nav-item d-none d-lg-flex align-items-center gap-2 ms-lg-2 navbar-utilities">

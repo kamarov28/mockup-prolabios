@@ -54,7 +54,7 @@
             <h2 class="profil-section-title mb-3">Kirim Pesan & Pertanyaan</h2>
 
             {{-- RFQ Redirection Notice --}}
-            <div class="mb-4 p-3 d-flex align-items-start gap-3" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+            <div class="mb-4 p-3 d-flex align-items-start gap-3 rfq-redirect-box">
               <i class="bi bi-info-circle-fill text-primary mt-1 flex-shrink-0" style="font-size: 1.25rem;"></i>
               <div class="small" style="color: var(--nb-ink); line-height: 1.5;">
                 <strong class="d-block mb-1" style="font-family: var(--font-display); font-size: 0.88rem;">Informasi Permintaan Penawaran Harga (RFQ):</strong>
@@ -106,7 +106,7 @@
                   <textarea class="form-control kontak-form-input" id="pesan" name="pesan" rows="5" required placeholder="Tuliskan pertanyaan, konsultasi, atau pesan yang ingin disampaikan..."></textarea>
                 </div>
                 <div class="col-12 mt-3">
-                  <div class="p-3 d-flex align-items-center gap-2" style="background: var(--nb-bg-soft); border: 1.5px solid var(--nb-ink); border-radius: var(--nb-radius-sm); box-shadow: 2px 2px 0 var(--nb-ink);">
+                  <div class="p-3 d-flex align-items-center gap-2 rfq-redirect-box">
                     <i class="bi bi-clock-history text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
                     <span class="small" style="font-size: 0.8rem; color: var(--nb-ink); line-height: 1.4;">
                       <strong>Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja):</strong> Setiap pertanyaan teknis, konsultasi metode, atau permohonan kalibrasi instrumen akan direspon oleh tim teknis kami dalam 1×24 jam kerja.
@@ -139,7 +139,7 @@
   @if(!empty($siteSettings['google_maps_embed_url']))
   <section class="pb-5 pt-0">
     <div class="container">
-      <div class="overflow-hidden" style="height: 380px; border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow);">
+      <div class="overflow-hidden kontak-map-wrap" style="height: 380px;">
         <iframe src="{{ $siteSettings['google_maps_embed_url'] }}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>

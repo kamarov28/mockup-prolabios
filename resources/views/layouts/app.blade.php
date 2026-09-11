@@ -68,7 +68,7 @@
     })(window,document,'script','dataLayer','{{ $gtmId }}');</script>
   @endif
 </head>
-<body>
+<body class="is-flat @yield('body_class', request()->is('/') ? 'page-home' : '')">
   @if(!empty($gtmId))
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

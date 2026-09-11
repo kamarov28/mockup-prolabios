@@ -1,17 +1,17 @@
-# DESIGN SYSTEM — Soft Neo-Brutalism
+# DESIGN SYSTEM — Modern Flat Precision
 
 > **PT. Prolabios Mitra Analitika**
-> High-precision B2B E-Procurement & Scientific RFQ Platform.
-> Visual Style: **Soft Neo-Brutalism** (Clean industrial laboratory, high-contrast typography, tactile physical components, warm paper canvas).
+> High-Precision B2B Scientific E-Procurement & RFQ Platform.
+> Visual Style: **Modern Flat Precision** (Clean industrial laboratory, confident typography, solid color planes, zero drop shadows, zero heavy black borders).
 
 ---
 
 ## 1. Core Philosophy & Principles
 
-1. **Precision & Trust**: Laboratory instruments require clarity, readability, and authority. Every element communicates technical accuracy.
-2. **Tactile Neo-Brutalism**: Solid borders, hard 0-blur offset drop shadows, and physical button "press" mechanics (2px hover, 4px active translation).
-3. **Softness & Warmth**: Avoiding cold brutalism or harsh harsh neon; grounded by a warm Natural canvas (`#f9f5f2`), crisp white cards (`#FFFFFF`), bold Ruby accents (`#A6171C`), and Sunny gold highlights (`#F1C045`).
-4. **No Visual Gimmicks**: Keep content purposeful. No extraneous decorative stats strips, no artificial backdrop blurs that degrade mobile performance.
+1. **Flat Precision & Clarity**: Laboratory instruments, diagnostic media, and chemical reagents demand utmost legibility and modern clarity. Surfaces are defined by pure geometric whitespace and subtle contrast planes, not artificial borders or heavy drop shadows.
+2. **Zero Shadows & Zero Borders**: All hard offset shadows (`box-shadow: 4px 4px 0 #1E1E1E`) and thick ink borders (`2px solid #1E1E1E`) are completely retired. Contrast is achieved via background surface hierarchy (`#FFFFFF` on `#F8F9FA`).
+3. **Smooth Color & Opacity Transitions**: Eliminating physical "press/translate" physics (`transform: translate(2px, 2px)`). Interactions now rely on refined, rapid color shifts (0.15s – 0.20s ease).
+4. **Signature Palette Integrity**: Retaining Prolabios authority with Ruby Red (`#A6171C`) as the core brand driver, Sunny Gold (`#F1C045`) for accents, and clean Slate/Neutral surfaces.
 
 ---
 
@@ -21,122 +21,103 @@
 
 | Token | Value | Role |
 |---|---|---|
-| `--nb-bg` / `--color-bg` | `#f9f5f2` | Primary page background (warm paper / natural canvas) |
-| `--nb-ink` / `--color-text-main` | `#1E1E1E` | Primary ink for text, borders, and hard shadows |
-| `--nb-card` / `--color-bg-white` | `#FFFFFF` | Card surfaces, modals, popovers |
-| `--nb-primary` / `--color-ruby` | `#A6171C` | Prolabios signature Ruby Red (primary CTA, active nav, key accents) |
-| `--nb-primary-dark` | `#7A1015` | Hover/active state for primary red actions |
-| `--nb-accent` / `--color-sunny` | `#F1C045` | Sunny yellow (technical badges, category tags, notification pills) |
-| `--nb-muted` / `--color-text-muted` | `#5A5A5A` | Secondary descriptions, timestamps, metadata |
-
-### Semantic Alert & Feedback Tokens
-
-| Token / Usage | Value | Context |
-|---|---|---|
-| Error Border / Shadow | `#A6171C` | Input `.has-error`, invalid validation alerts |
-| Error Background | `#FEE2E2` | Warning banner background, input error icon container |
-| Error Text | `#7F1D1D` | Error message text |
-| Success / Secure | `#16A34A` / `#22C55E` | Verification badges, SSL status pills |
+| `--color-canvas` | `#F8F9FA` | Primary page canvas (clean neutral laboratory light gray) |
+| `--color-surface` | `#FFFFFF` | Primary card surfaces, modals, elevated panels |
+| `--color-surface-subtle` | `#F3F4F6` | Secondary input backings, table headers, inactive pills |
+| `--color-text-main` | `#111827` / `#1E1E1E` | Primary high-contrast typography |
+| `--color-text-muted` | `#6B7280` / `#5A5A5A` | Secondary metadata, SKU descriptors, timestamps |
+| `--color-primary` (Ruby) | `#A6171C` | Prolabios signature Ruby Red (primary CTA, active navigation) |
+| `--color-primary-dark` | `#871015` | Hover & active state for primary actions |
+| `--color-primary-soft` | `#FEE2E2` | Tinted background for active pill indicators & badges |
+| `--color-accent` (Sunny) | `#F1C045` | High-visibility tag highlights, alert pills |
+| `--color-success` | `#16A34A` | Verified badges, passed certificates, WhatsApp CTA (`#25D366`) |
 
 ---
 
-## 3. Typography & Hierarchy
+## 3. Geometry & Corner Radii
 
-### Font Families
-- **Display / Headings**: `'Bricolage Grotesque', 'Plus Jakarta Sans', system-ui, sans-serif`
-  - Characteristic: Expressive, technical-editorial punch, negative tracking (`letter-spacing: -0.03em`).
-- **Body & Interface**: `'Plus Jakarta Sans', system-ui, sans-serif`
-  - Characteristic: Clean geometric legibility for dense technical catalogs and specifications.
-- **Monospace / Technical Data**: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`
-  - Characteristic: Used with `font-feature-settings: "tnum" 1` for SKU numbers, catalog codes, counters, and dates.
-
-### Typographic Scale
-- **Hero Title**: `clamp(2.4rem, 6.5vw, 4.8rem)` — Bold, tight line-height (1.1).
-- **Page Titles**: `clamp(2.0rem, 4.5vw, 3.2rem)` — Heavy weight, `-0.03em` letter-spacing.
-- **Section Titles**: `clamp(1.75rem, 3.2vw, 2.25rem)` — Bold section headers.
-- **Card Titles**: `1.15rem – 1.35rem` — Crisp headline font.
-- **Body Regular**: `0.95rem – 1.05rem` (15px – 16px), line-height: `1.65`.
-- **Labels & SKU Badges**: `0.70rem – 0.75rem`, uppercase, bold, mono for codes.
-
----
-
-## 4. Geometry, Shadows, and Elevation
-
-All shadows are **0-blur directional drop shadows** producing crisp, physical "cut-out" edges.
+No strokes, no offsets. Pure rounded geometry:
 
 ```css
 :root {
-  --nb-border-w: 2px;
-  --nb-border: 2px solid #1E1E1E;
-  
-  /* Hard offset shadows (no blur) */
-  --nb-shadow-sm: 3px 3px 0 #1E1E1E;
-  --nb-shadow: 4px 4px 0 #1E1E1E;
-  --nb-shadow-lg: 6px 6px 0 #1E1E1E;
-  
-  /* Border Radii (Soft Neo-Brutalist corners) */
-  --nb-radius-sm: 4px;
-  --nb-radius: 6px;
-  --nb-radius-lg: 8px;
+  /* Corner Radii */
+  --radius-xs: 4px;   /* Inline code, micro-badges */
+  --radius-sm: 6px;   /* SKU tags, category pills */
+  --radius-md: 10px;  /* Buttons, form inputs, thumbnails */
+  --radius-lg: 14px;  /* Cards, Bento panels, modals */
+  --radius-xl: 20px;  /* Callout banners, pill badges, nav-links */
+  --radius-full: 9999px; /* Circle icon buttons, avatar pills */
+
+  /* Surface Elevation */
+  --shadow-none: none;
+  --border-none: none;
+  --divider-subtle: 1px solid rgba(0, 0, 0, 0.06);
 }
 ```
 
-### Motion & Physics Rules
-- **Hover State**: Elements depress slightly or elevate (`transform: translate(2px, 2px); box-shadow: 2px 2px 0 #1E1E1E;`).
-- **Active / Pressed State**: Full press effect (`transform: translate(4px, 4px); box-shadow: 0 0 0 #1E1E1E;`).
-- **Transition Duration**: Rapid, responsive feedback (`0.12s – 0.15s ease`).
+---
+
+## 4. Typography & Hierarchy
+
+### Font Families
+- **Display / Headings**: `'Bricolage Grotesque', 'IBM Plex Sans', system-ui, sans-serif`
+  - Expressive, authoritative, tight tracking (`letter-spacing: -0.02em` to `-0.03em`).
+- **Body & Data**: `'IBM Plex Sans', system-ui, sans-serif`
+  - High legibility across technical specifications, catalog grids, and data sheets.
+- **Monospace / Catalog Codes**: `SFMono-Regular, Menlo, Monaco, Consolas, monospace`
+  - Used for CAT numbers, batch identifiers, ISO codes, and quantity counters with tabular figures (`font-feature-settings: "tnum" 1`).
 
 ---
 
-## 5. Key UI Component Standards
+## 5. Standard Component Guidelines
 
-### 5.1 Navbar
-- **Positioning**: Fixed full-bleed (`position: fixed; top: 0; left: 0; right: 0; z-index: 1030/99999`).
-- **Surface**: `--nb-bg-soft` (`#f9f5f2`), with `border-bottom: 3px solid #1E1E1E` and `--nb-shadow-sm`.
-- **Navigation Links**: Tactile pills with transparent borders. On hover: white background with `2px 2px 0 #1E1E1E` shadow. On active route: solid Ruby (`#A6171C`) fill with white text.
-- **Mobile Drawer**: Zero blur/opacity flicker (`opacity: 1 !important; filter: none !important`), snappy collapse height animation.
+### 5.1 Navigation Bar (`navbar`)
+- **Surface**: Pure `#FFFFFF` with a subtle `1px solid rgba(0, 0, 0, 0.06)` bottom divider (zero drop shadow).
+- **Navigation Links**: Pill-shaped with generous padding (`padding: 0.45rem 1rem; border-radius: 20px`).
+  - Hover: Background `#F3F4F6`, text color Ruby `#A6171C`.
+  - Active: Soft Ruby tint `#FEE2E2`, text color `#A6171C`, bold weight.
+- **Utility Buttons**: Circle pill buttons (`width: 40px; height: 40px; border-radius: 50%`) with `#F3F4F6` background.
+- **Catalog Download CTA**: Rounded pill (`border-radius: 20px`), solid Ruby `#A6171C` fill with white text.
 
 ### 5.2 Buttons & CTAs
 - **Primary Button (`.btn-primary`, `.nb-btn-primary`)**:
-  - Background: `--nb-primary` (`#A6171C`), color: `#FFFFFF`.
-  - Border: `2px solid #1E1E1E`, radius: `6px`.
-  - Shadow: `3px 3px 0 #1E1E1E`.
-  - Hover: Background `#7A1015`, `transform: translate(2px, 2px)`, shadow `1px 1px 0 #1E1E1E`.
-- **Accent / Utility Buttons (`.nb-icon-btn`)**:
-  - 38px × 38px (desktop) / 44px × 44px (mobile touch targets).
-  - Background `#FFFFFF`, 2px solid border, 2px offset shadow.
+  - Background: `--color-primary` (`#A6171C`).
+  - Radius: `8px` or `20px` (pill).
+  - Border & Shadow: None.
+  - Hover: Background `--color-primary-dark` (`#871015`), `transform: none`.
+- **Ghost / Secondary Button (`.nb-btn-ghost`)**:
+  - Background: `#E5E7EB`, text: `#1F2937`.
+  - Hover: Background `#D1D5DB`.
 
-### 5.3 Badges & Category Tags (`.nb-badge`, `.product-cat-code`, `.catalogue-no`)
-- Display: Inline-flex with monospace/display bold styling.
-- Border: `1.5px solid #1E1E1E`.
-- Background: `--nb-accent` (`#F1C045`) or white/soft canvas.
-- Shadow: `1.5px – 2px` hard drop shadow.
+### 5.3 Cards & Grids (`.card`, `.product-card`, `.editorial-featured-card`)
+- **Background**: `#FFFFFF` against canvas `#F8F9FA`.
+- **Border & Shadow**: Completely removed (`border: none !important; box-shadow: none !important;`).
+- **Corner Radius**: `14px`.
+- **Image Container**: Separated by subtle contrast background (`#F3F4F6`), top corners rounded `14px`, zero bottom border.
+- **Hover**: Smooth background shift or image zoom, no translate jump.
 
-### 5.4 Cards & Bento Grid (`.card`, `.product-card`, `.hitech-bento-card`)
-- Background: `--nb-card` (`#FFFFFF`).
-- Border: `2px solid #1E1E1E`.
-- Border radius: `6px` to `8px`.
-- Image Container: Separated with a bottom border `2px solid #1E1E1E` on a soft background (`#f9f5f2`).
-- Hover: Tactile translation + shadow adjustment.
+### 5.4 Tabs & Interactive Segmented Controls
+- **Bar Container**: Compact pill bar with `#E5E7EB` background and `12px` border radius.
+- **Tab Buttons**: Clean pill button.
+  - Inactive: Transparent background, text `#4B5563`.
+  - Hover: `rgba(255, 255, 255, 0.6)`.
+  - Active: Solid `#FFFFFF` fill with primary text color `#A6171C` and bold weight.
 
-### 5.5 Form Inputs & Validation
-- Standard Inputs: 2px solid `#1E1E1E` border, 4px border radius, white background.
-- Focus: Border remains solid `#1E1E1E` with `--nb-shadow-sm` accentuation.
-- Error State (`.has-error`):
-  - Border color: `#A6171C !important`.
-  - Shadow: `3px 3px 0 #A6171C !important`.
-  - Error icons: Tinted background (`#FEE2E2`) and inline microcopy.
+### 5.5 Corporate Footer (Apple-style Clean Minimalist)
+- **Background**: Apple Light Neutral `#F5F5F7` with subtle top border `1px solid rgba(0, 0, 0, 0.08)` — eliminates heavy visual clutter and gives breathable space to the page ending.
+- **Typography & Links**: Clean, icon-free links in muted neutral grey `#6E6E73` (hover to `#1D1D1F`), 0.82rem font size.
+- **Section Headers**: Compact uppercase with generous letter-spacing (`0.8rem`, `letter-spacing: 0.06em`, `#1D1D1F`).
+- **Logo & Trust**: Logo without boxed background, paired with a clean status pill with a green dot for PKP verification.
+- **Social Icons**: Subtle grey circular icons (`34px × 34px`, `#E8E8ED` bg, `#424245` icon) turning charcoal on hover.
+- **WhatsApp Action**: Minimal white pill button with subtle green icon and border (`#25D366`), cleanly integrated without overpowering the layout.
+- **Legal Bar**: Discrete single-line layout separated by bullet dots (`&bull;`).
 
 ---
 
 ## 6. Implementation Files
 
-- `resources/css/style.css` — Global entry point for vendor libraries (Bootstrap 5 & Bootstrap Icons).
-- `resources/css/site.css` — Main site barrel importing modular stylesheets from `resources/css/site/`:
-  - `tokens.css` — Color tokens, font families, and geometry variables.
-  - `base.css` — Base HTML element styles, typography resets, and global layout.
-  - `motion.css` — 0-blur tactile button press and card micro-interactions.
-  - `components.css` — Buttons, cards, badges, navbar, and common components.
-  - `pages-core.css`, `pages-catalog.css`, `content-areas.css`, `b2b-hitech.css`, `cart-rfq.css` — Specialized page layouts.
-- `resources/css/admin.css` — Admin panel barrel importing modular stylesheets from `resources/css/admin/`:
-  - `tokens.css`, `base.css`, `layout.css`, `components.css`, `forms-tables.css`, `auth.css`.
+- `resources/css/site/flat-home.css` — Core Modern Flat style rules and overrides.
+- `resources/css/site/tokens.css` — Color tokens and font stack variables.
+- `resources/css/site.css` — CSS barrel file importing modular stylesheets.
+- `resources/views/layouts/partials/navbar.blade.php` — Redesigned modern flat header.
+- `resources/views/layouts/partials/footer.blade.php` — Redesigned modern flat corporate footer.

@@ -140,7 +140,7 @@
                 <table class="table custom-table align-middle mb-0" style="min-width: 650px;">
                   <thead>
                     <tr>
-                      <th style="width: 22%;">Katalog</th>
+                      <th class="table-col-catalog" style="width: 22%;">Katalog</th>
                       <th style="width: 38%;">Produk</th>
                       <th style="width: 40%;">Aplikasi &amp; Fungsi</th>
                     </tr>
@@ -151,24 +151,23 @@
                       @foreach($products as $prod)
                         @php $hasProducts = true; @endphp
                         <tr>
-                          <td>
+                          <td class="table-col-catalog">
                             @if(!empty($prod['catalog']))
-                              <span class="product-cat-code" style="font-size: 0.72rem;">CAT. {{ $prod['catalog'] }}</span>
+                              <span class="catalog-code-text">CAT. {{ $prod['catalog'] }}</span>
                             @else
                               <span class="text-muted small">-</span>
                             @endif
                           </td>
                           <td>
                             <div class="d-flex align-items-center justify-content-between gap-2">
-                              <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">
+                              <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold table-product-link">
                                 {{ $prod['title'] }}
                               </a>
                               @if(!empty($prod->principal) && !empty($prod->principal->logo))
-                                <div class="flex-shrink-0" title="Prinsipal: {{ $prod->principal->name }}" style="padding: 1px 3px; background: #FFFFFF; border: 1px solid var(--nb-ink); border-radius: 3px;">
+                                <div class="flex-shrink-0 table-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
                                   <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
                                        alt="Logo {{ $prod->principal->name }}"
-                                       loading="lazy"
-                                       style="max-height: 18px; max-width: 45px; width: auto; height: auto; object-fit: contain;">
+                                       loading="lazy">
                                 </div>
                               @endif
                             </div>

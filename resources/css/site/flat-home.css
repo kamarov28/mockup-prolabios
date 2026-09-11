@@ -1,0 +1,1733 @@
+/* ==========================================================================
+   flat-home.css — Pure Flat Design Style Overrides for Homepage (.is-flat)
+   Removes all borders and hard offset shadows while maintaining clarity & hierarchy.
+   ========================================================================== */
+
+/* ── 1. Global Reset of Borders & Shadows in Flat Homepage ─────────────────── */
+html:has(body.is-flat),
+html.is-flat {
+  background-color: #F8F9FA !important; /* Move background to html so fixed body-level canvas/particles stay visible */
+}
+
+body.is-flat {
+  background-color: transparent !important;
+}
+
+/* Ensure bacteria swarm container floats behind all content and footer */
+.bacteria-swarm-container {
+  z-index: 0 !important;
+}
+main {
+  position: relative;
+  z-index: 1;
+}
+.site-footer {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+body.is-flat ::-webkit-scrollbar-track {
+  border-left: none !important;
+}
+body.is-flat ::-webkit-scrollbar-thumb {
+  border: none !important;
+  border-radius: 6px !important;
+}
+body.is-flat ::-webkit-scrollbar-corner {
+  border: none !important;
+}
+
+/* Strip all borders and box-shadows on elements */
+body.is-flat .navbar,
+body.is-flat .card,
+body.is-flat .product-card,
+body.is-flat .blog-card,
+body.is-flat .editorial-featured-card,
+body.is-flat .editorial-side-card,
+body.is-flat .hitech-bento-card,
+body.is-flat .hitech-bento-widget,
+body.is-flat .hitech-info-card,
+body.is-flat .hitech-spec-card,
+body.is-flat .hitech-tab-bar,
+body.is-flat .hitech-tab-btn,
+body.is-flat .nb-principals-shell,
+body.is-flat .marquee-logo-box,
+body.is-flat .nb-logo-cell,
+body.is-flat .nb-rfq-box,
+body.is-flat .nb-btn,
+body.is-flat .nb-icon-btn,
+body.is-flat .nb-badge,
+body.is-flat .nb-badge-sm,
+body.is-flat .nb-badge-stock,
+body.is-flat .product-cat-code,
+body.is-flat .catalogue-no,
+body.is-flat .product-principal-logo,
+body.is-flat .editorial-badge,
+body.is-flat .suggestion-tag,
+body.is-flat .hamburger,
+body.is-flat .navbar-cta-btn,
+body.is-flat .nb-hero-controls--immersive,
+body.is-flat .btn-scroll-to-top,
+body.is-flat .footer-logo-box,
+body.is-flat .footer-trust-pill,
+body.is-flat .footer-social-icon,
+body.is-flat .footer-wa-btn,
+body.is-flat #cookieConsentBanner,
+body.is-flat .search-modal-card,
+body.is-flat .search-close-btn,
+body.is-flat .search-input-box input#search-overlay-input,
+body.is-flat .profil-mission-card,
+body.is-flat .profil-value-card,
+body.is-flat .profil-value-letter-wrap,
+body.is-flat .profil-stat-box,
+body.is-flat .profil-hero-img,
+body.is-flat .profil-cta-box,
+body.is-flat .profil-section-label,
+body.is-flat .profil-social-link,
+body.is-flat .highlight-card,
+body.is-flat .sub-category-group,
+body.is-flat .sub-category-link,
+body.is-flat .category-accordion-btn,
+body.is-flat .detail-product-img-wrap,
+body.is-flat .detail-principal-card,
+body.is-flat .detail-principal-logo-box,
+body.is-flat .rfq-trust-box,
+body.is-flat .nb-status-icon-box,
+body.is-flat .detail-response-icon,
+body.is-flat .nb-stepper-wrap,
+body.is-flat .nb-stepper-btn,
+body.is-flat .b2b-qty-pill,
+body.is-flat .b2b-qty-btn,
+body.is-flat .gallery-thumb,
+body.is-flat .detail-indent-notice,
+body.is-flat .empty-state-card,
+body.is-flat .pagination .page-link,
+body.is-flat .pagination .page-item .page-link,
+body.is-flat .layanan-cta-strip,
+body.is-flat .layanan-feature-card,
+body.is-flat .blog-recent-item,
+body.is-flat .blog-cat-count,
+body.is-flat .kontak-submit-btn,
+body.is-flat .kontak-form-input,
+body.is-flat .rfq-redirect-box,
+.swal2-popup,
+.swal2-popup.swal2-toast,
+.swal2-confirm,
+.swal2-cancel,
+body.is-flat .cart-item-card,
+body.is-flat .cart-sidebar-panel,
+body.is-flat .cart-remove-btn,
+body.is-flat .cart-img-box,
+body.is-flat .cart-cat-badge,
+body.is-flat .rfq-info-box,
+body.is-flat .rfq-primary-btn,
+body.is-flat .rfq-secondary-btn,
+body.is-flat .cart-empty-card,
+body.is-flat .rfq-success-card,
+body.is-flat .rfq-details-box {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* Remove image divider borders */
+body.is-flat .product-card .img-wrap,
+body.is-flat .editorial-featured-thumb,
+body.is-flat .nb-principals-label,
+body.is-flat .nb-card-foot,
+body.is-flat .hitech-spec-divider,
+body.is-flat .hitech-bento-widget-row,
+body.is-flat .hitech-box-header,
+body.is-flat .site-footer {
+  border: none !important;
+}
+
+/* ── 2. Modern Rounded Corners & Clean Flat Backgrounds ──────────────────── */
+body.is-flat .navbar {
+  background: #FFFFFF !important;
+}
+
+body.is-flat .card,
+body.is-flat .product-card,
+body.is-flat .editorial-featured-card,
+body.is-flat .editorial-side-card,
+body.is-flat .hitech-bento-card,
+body.is-flat .hitech-info-card,
+body.is-flat .hitech-spec-card,
+body.is-flat .nb-rfq-box,
+body.is-flat .nb-principals-shell {
+  background: #FFFFFF !important;
+  border-radius: 14px !important;
+}
+
+/* Secondary / contrast card backgrounds */
+body.is-flat .hitech-info-card {
+  background: #EEF2F6 !important;
+}
+
+body.is-flat .hitech-bento-card {
+  background: #FFFFFF !important;
+}
+
+body.is-flat .hitech-bento-card--lead {
+  background: #FFF5F5 !important;
+}
+
+body.is-flat .hitech-bento-widget {
+  background: #F1F4F8 !important;
+  border-radius: 10px !important;
+}
+
+body.is-flat .hitech-spec-stat {
+  border: none !important;
+  background: #F3F4F6 !important;
+  border-radius: 8px !important;
+}
+
+/* Product Card adjustments */
+body.is-flat .product-card .img-wrap {
+  background-color: #F3F4F6 !important;
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
+body.is-flat .product-card .img-wrap img {
+  filter: none !important;
+}
+
+body.is-flat .product-principal-logo {
+  background: #F3F4F6 !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+}
+
+/* News / Editorial adjustments */
+body.is-flat .editorial-featured-thumb {
+  background: #F3F4F6 !important;
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
+body.is-flat .editorial-side-card {
+  background: #FFFFFF !important;
+  border-radius: 12px !important;
+  padding: 1.4rem !important;
+  transition: background-color 0.2s ease !important;
+}
+
+body.is-flat .editorial-side-card:hover {
+  background: #F3F4F6 !important;
+}
+
+/* RFQ Banner */
+body.is-flat .nb-rfq-box {
+  background: #FFFFFF !important;
+  border-radius: 20px !important;
+  padding: clamp(2.5rem, 5vw, 4rem) !important;
+}
+
+/* Principals & Marquee */
+body.is-flat .nb-principals-shell {
+  background: #FFFFFF !important;
+  border-radius: 16px !important;
+}
+
+body.is-flat .nb-principals-label {
+  background: #F8F9FA !important;
+}
+
+body.is-flat .marquee-logo-box,
+body.is-flat .nb-logo-cell {
+  background: #F8F9FA !important;
+  border-radius: 10px !important;
+}
+
+/* ── 3. Flat Interactive Tabs & Badges ───────────────────────────────────── */
+body.is-flat .hitech-tab-bar {
+  background: #E5E7EB !important;
+  border-radius: 12px !important;
+  padding: 5px !important;
+}
+
+body.is-flat .hitech-tab-btn {
+  background: transparent !important;
+  color: #4B5563 !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
+}
+
+body.is-flat .hitech-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: var(--nb-ink) !important;
+}
+
+body.is-flat .hitech-tab-btn.active {
+  background: #FFFFFF !important;
+  color: var(--nb-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Badges */
+body.is-flat .nb-badge {
+  background: var(--nb-accent) !important;
+  color: #1E1E1E !important;
+  border-radius: 6px !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* Hero Badge: keep transparent with crisp white text without box background */
+body.is-flat .nb-hero--immersive .nb-badge {
+  background: transparent !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.is-flat .nb-badge-sm,
+body.is-flat .product-cat-code,
+body.is-flat .catalogue-no {
+  background: #E5E7EB !important;
+  color: #374151 !important;
+  border-radius: 6px !important;
+}
+
+body.is-flat .hitech-panel-tag {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+}
+
+body.is-flat .editorial-badge-ruby {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  background: var(--nb-primary) !important;
+}
+
+/* Bento icons */
+body.is-flat .hitech-bento-icon {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+}
+body.is-flat .hitech-bento-icon i {
+  color: var(--nb-primary) !important;
+}
+
+/* ── 4. Flat Buttons & Navigation Links ──────────────────────────────────── */
+body.is-flat .navbar {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .navbar-brand img {
+  height: 48px !important;
+  max-width: 210px !important;
+}
+
+/* Nav links: clean pill hover and active states */
+body.is-flat .navbar-light .navbar-nav .nav-link {
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 0.45rem 1rem !important;
+  margin: 0 3px !important;
+  color: #374151 !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
+}
+body.is-flat .navbar-light .navbar-nav .nav-link:hover {
+  background: #F3F4F6 !important;
+  color: var(--nb-primary) !important;
+}
+body.is-flat .navbar-light .navbar-nav .nav-link.active {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* Utility buttons: circle pill look */
+body.is-flat .nb-icon-btn,
+body.is-flat .navbar .nb-icon-btn,
+body.is-flat .hamburger {
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  box-shadow: none !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
+}
+body.is-flat .nb-icon-btn:hover,
+body.is-flat .navbar .nb-icon-btn:hover,
+body.is-flat .hamburger:hover {
+  background: #E5E7EB !important;
+  color: var(--nb-primary) !important;
+}
+
+/* Cart badge count */
+body.is-flat .nav-cart-badge {
+  border: none !important;
+  box-shadow: none !important;
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border-radius: 10px !important;
+  top: -4px !important;
+  right: -4px !important;
+}
+
+/* Catalog download CTA button */
+body.is-flat .navbar-cta-btn {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 20px !important;
+  padding: 0.5rem 1.2rem !important;
+  height: 40px !important;
+  box-shadow: none !important;
+  transition: background-color 0.18s ease, opacity 0.18s ease !important;
+}
+body.is-flat .navbar-cta-btn:hover {
+  background: var(--nb-primary-dark) !important;
+  color: #FFFFFF !important;
+}
+
+body.is-flat .nb-btn {
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .nb-btn-primary,
+body.is-flat .btn-primary {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background-color 0.2s ease, opacity 0.2s ease !important;
+}
+body.is-flat .nb-btn-primary:hover,
+body.is-flat .btn-primary:hover {
+  background: var(--nb-primary-dark) !important;
+}
+
+body.is-flat .nb-btn-ghost {
+  background: #E5E7EB !important;
+  color: #1F2937 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+body.is-flat .nb-btn-ghost:hover {
+  background: #D1D5DB !important;
+  color: #111827 !important;
+}
+
+/* Hero Controls bar */
+body.is-flat .nb-hero-controls--immersive {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-radius: 10px !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+}
+body.is-flat .nb-hero-progress {
+  border: none !important;
+  background: #E5E7EB !important;
+  border-radius: 4px !important;
+}
+
+/* ── 5. Disable Neo-Brutalist Tactile Motion (No translate jump) ─────────── */
+body.is-flat .card:hover,
+body.is-flat .product-card:hover,
+body.is-flat .blog-card:hover,
+body.is-flat .hitech-bento-card:hover,
+body.is-flat .b2b-usecase-card:hover,
+body.is-flat .editorial-featured-card:hover,
+body.is-flat .editorial-side-card:hover,
+body.is-flat .nb-card:hover,
+body.is-flat .nb-btn:hover,
+body.is-flat .nb-icon-btn:hover,
+body.is-flat .navbar .nb-icon-btn:hover,
+body.is-flat .hamburger:hover,
+body.is-flat .marquee-logo-box:hover,
+body.is-flat .navbar-cta-btn:hover,
+body.is-flat .btn-primary:hover,
+body.is-flat .navbar-light .navbar-nav .nav-link:hover,
+body.is-flat .footer-logo-box:hover,
+body.is-flat .footer-social-icon:hover,
+body.is-flat .footer-wa-btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .card:active,
+body.is-flat .product-card:active,
+body.is-flat .blog-card:active,
+body.is-flat .hitech-bento-card:active,
+body.is-flat .b2b-usecase-card:active,
+body.is-flat .editorial-featured-card:active,
+body.is-flat .editorial-side-card:active,
+body.is-flat .nb-card:active,
+body.is-flat .nb-btn:active,
+body.is-flat .nb-icon-btn:active,
+body.is-flat .navbar .nb-icon-btn:active,
+body.is-flat .hamburger:active,
+body.is-flat .navbar-cta-btn:active,
+body.is-flat .btn-primary:active,
+body.is-flat .navbar-light .navbar-nav .nav-link:active,
+body.is-flat .footer-logo-box:active,
+body.is-flat .footer-social-icon:active,
+body.is-flat .footer-wa-btn:active {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── 6. Footer Flat Adjustments (Apple-style Clean Minimal Light Neutral) ── */
+body.is-flat .site-footer {
+  background: #F5F5F7 !important; /* Apple neutral light background */
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #6E6E73 !important;
+  padding-top: 3.5rem !important;
+  padding-bottom: 2.5rem !important;
+  font-size: 0.82rem !important;
+}
+
+body.is-flat .site-footer .footer-logo-link {
+  display: inline-block !important;
+  transition: opacity 0.2s ease !important;
+}
+body.is-flat .site-footer .footer-logo-link:hover {
+  opacity: 0.75 !important;
+}
+body.is-flat .site-footer .footer-logo {
+  height: 38px !important;
+  width: auto !important;
+}
+
+body.is-flat .site-footer .footer-company-name {
+  color: #1D1D1F !important;
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+body.is-flat .site-footer .footer-address {
+  color: #86868B !important;
+  font-size: 0.8rem !important;
+  line-height: 1.6 !important;
+  max-width: 320px !important;
+}
+
+body.is-flat .site-footer .footer-status-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 20px !important;
+  padding: 4px 12px !important;
+  font-size: 0.74rem !important;
+  font-weight: 500 !important;
+  color: #424245 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+body.is-flat .site-footer .footer-status-pill .status-dot {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background: #10B981 !important; /* Soft verified green dot */
+}
+
+body.is-flat .site-footer .footer-social-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: #E8E8ED !important;
+  color: #424245 !important;
+  font-size: 0.95rem !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
+}
+body.is-flat .site-footer .footer-social-link:hover {
+  background: #1D1D1F !important;
+  color: #FFFFFF !important;
+}
+
+/* Footer Headings / Section Titles */
+body.is-flat .site-footer .footer-section-title {
+  color: #1D1D1F !important;
+  font-family: var(--font-display) !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Footer Link List */
+body.is-flat .site-footer .footer-nav-list li {
+  margin-bottom: 0.55rem !important;
+  line-height: 1.4 !important;
+}
+
+body.is-flat .site-footer .footer-nav-list a {
+  color: #6E6E73 !important;
+  font-size: 0.82rem !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+}
+body.is-flat .site-footer .footer-nav-list a:hover {
+  color: #1D1D1F !important;
+}
+
+/* Contact Info list */
+body.is-flat .site-footer .footer-contact-info li {
+  display: flex !important;
+  flex-direction: column !important;
+  margin-bottom: 0.65rem !important;
+}
+body.is-flat .site-footer .footer-contact-info .info-label {
+  font-size: 0.72rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #86868B !important;
+  font-weight: 600 !important;
+}
+body.is-flat .site-footer .footer-contact-info a,
+body.is-flat .site-footer .footer-contact-info span:not(.info-label) {
+  color: #1D1D1F !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+}
+
+/* Minimal subtle WhatsApp pill */
+body.is-flat .site-footer .footer-wa-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  background: #FFFFFF !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  color: #1D1D1F !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+  transition: all 0.18s ease !important;
+}
+body.is-flat .site-footer .footer-wa-pill i {
+  color: #25D366 !important;
+  font-size: 0.95rem !important;
+}
+body.is-flat .site-footer .footer-wa-pill:hover {
+  background: #F0FDF4 !important;
+  border-color: #86EFAC !important;
+  color: #15803D !important;
+}
+
+/* Bottom bar & copyright */
+body.is-flat .site-footer .footer-bottom-bar {
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+body.is-flat .site-footer .footer-copy-text {
+  color: #86868B !important;
+  font-size: 0.76rem !important;
+}
+body.is-flat .site-footer .footer-legal-links a {
+  color: #6E6E73 !important;
+  font-size: 0.76rem !important;
+  text-decoration: none !important;
+  transition: color 0.15s ease !important;
+}
+body.is-flat .site-footer .footer-legal-links a:hover {
+  color: #1D1D1F !important;
+}
+body.is-flat .site-footer .footer-legal-links .sep {
+  color: #D2D2D7 !important;
+  font-size: 0.65rem !important;
+}
+
+/* ── 7. Floating Overlays (Cookie, Scroll-To-Top, Search) ────────────────── */
+body.is-flat #cookieConsentBanner {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .btn-scroll-to-top {
+  border: none !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s ease !important;
+}
+body.is-flat .btn-scroll-to-top:hover {
+  background: var(--nb-primary-dark) !important;
+}
+
+/* ── 8. Subpages Modern Flat & Minimal Precision System ──────────────────── */
+
+/* Subpage Hero Banners */
+body.is-flat .profil-hero-banner,
+body.is-flat .subpage-hero-banner {
+  background: #FFFFFF !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  padding: 120px 0 45px !important;
+}
+body.is-flat .profil-main-title {
+  color: #111827 !important;
+  letter-spacing: -0.03em !important;
+}
+body.is-flat .profil-main-subtitle {
+  color: #6B7280 !important;
+}
+
+/* Subpage Hero Stats */
+body.is-flat .profil-stat-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 12px !important;
+  transition: background-color 0.2s ease !important;
+}
+body.is-flat .profil-stat-box:hover {
+  background: #F1F4F8 !important;
+  transform: none !important;
+}
+
+/* General Cards on All Pages (Profil, Layanan, Kontak, Produk, Cart) */
+body.is-flat .card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* Catalog: Product Cards */
+body.is-flat .product-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  transition: background-color 0.2s ease !important;
+}
+body.is-flat .product-card:hover {
+  background: #FFFFFF !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+body.is-flat .product-card .card-body {
+  padding: 1.25rem !important;
+}
+body.is-flat .product-card .img-wrap {
+  background-color: #F8F9FA !important;
+  border-bottom: none !important;
+  border-radius: 14px 14px 0 0 !important;
+}
+
+/* Catalog Search & Filter inputs */
+body.is-flat .produk-search-wrap input,
+body.is-flat .catalog-filter-input,
+body.is-flat .form-control,
+body.is-flat .form-select {
+  background-color: #F3F4F6 !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  color: #1F2937 !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+}
+body.is-flat .produk-search-wrap input:focus,
+body.is-flat .catalog-filter-input:focus,
+body.is-flat .form-control:focus,
+body.is-flat .form-select:focus {
+  background-color: #FFFFFF !important;
+  border-color: var(--nb-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+}
+
+/* Catalog Sidebar Filter Accordion & Lists */
+body.is-flat .catalog-filter-panel,
+body.is-flat .catalog-sidebar-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+body.is-flat .catalog-filter-title {
+  color: #111827 !important;
+  font-weight: 700 !important;
+}
+body.is-flat .filter-badge-count {
+  background: #E5E7EB !important;
+  color: #4B5563 !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+/* Badges & Pills */
+body.is-flat .nb-badge {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+}
+body.is-flat .nb-badge-sm {
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+body.is-flat .nb-badge-stock {
+  background: #DCFCE7 !important;
+  color: #15803D !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+body.is-flat .nb-badge-stock i {
+  color: #16A34A !important;
+}
+
+/* Layanan / Services Page */
+body.is-flat .layanan-sidebar-link {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: #374151 !important;
+  padding: 0.85rem 1rem !important;
+  box-shadow: none !important;
+  transition: all 0.18s ease !important;
+}
+body.is-flat .layanan-sidebar-link:hover {
+  background: #F3F4F6 !important;
+  color: var(--nb-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+body.is-flat .layanan-sidebar-link.is-active {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.is-flat .profil-trust-box {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+}
+
+body.is-flat .service-spec-item,
+body.is-flat .layanan-feature-card {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+}
+
+body.is-flat .layanan-cta-strip {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+  padding: 2.5rem !important;
+}
+
+body.is-flat .layanan-cta-title {
+  color: #111827 !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 0.75rem !important;
+}
+
+
+/* Kontak Page */
+body.is-flat .kontak-info-block {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1.25rem !important;
+}
+body.is-flat .kontak-info-icon {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 1rem !important;
+}
+body.is-flat .kontak-info-title {
+  color: #111827 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+}
+
+/* Cart & RFQ Basket Page */
+body.is-flat .cart-page-bg {
+  background: #F8F9FA !important;
+}
+
+body.is-flat .cart-stepper-wrap {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .step-num-badge {
+  border: none !important;
+  border-radius: 50% !important;
+}
+body.is-flat .step-num-active {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+body.is-flat .step-num-inactive {
+  background: #E5E7EB !important;
+  color: #6B7280 !important;
+}
+
+body.is-flat .cart-clear-btn {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease !important;
+}
+body.is-flat .cart-clear-btn:hover {
+  background: #FECACA !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Cart Item Card */
+body.is-flat .cart-item-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  margin-bottom: 1rem !important;
+}
+body.is-flat .cart-item-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .cart-img-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .cart-cat-badge {
+  background: #F3F4F6 !important;
+  color: #4B5563 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .cart-remove-btn {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  transition: background-color 0.15s ease !important;
+}
+body.is-flat .cart-remove-btn:hover {
+  background: #FECACA !important;
+  color: var(--nb-primary-dark) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Cart Sidebar Panel */
+body.is-flat .cart-sidebar-panel {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+  padding: 1.75rem !important;
+}
+
+body.is-flat .cart-sidebar-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 1.25rem !important;
+}
+
+body.is-flat .rfq-info-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .rfq-primary-btn {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .rfq-primary-btn:hover {
+  background: var(--nb-primary-dark) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .rfq-secondary-btn {
+  background: #F3F4F6 !important;
+  color: #1F2937 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .rfq-secondary-btn:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .cart-empty-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+}
+
+
+/* Information / Blog Editorial */
+body.is-flat .blog-card,
+body.is-flat .editorial-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+body.is-flat .blog-card .img-wrap {
+  border-radius: 14px 14px 0 0 !important;
+  border: none !important;
+}
+/* Catalog & Blog Pagination Flat System */
+body.is-flat .pagination {
+  gap: 6px !important;
+}
+
+body.is-flat .pagination .page-item .page-link,
+body.is-flat .pagination .page-link {
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 8px 14px !important;
+  margin: 0 !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  transform: none !important;
+}
+
+body.is-flat .pagination .page-item .page-link:hover,
+body.is-flat .pagination .page-link:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .pagination .page-item.active .page-link,
+body.is-flat .pagination .page-link.active {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  transform: none !important;
+}
+
+body.is-flat .pagination .page-item.disabled .page-link {
+  background: #F9FAFB !important;
+  color: #9CA3AF !important;
+  opacity: 0.7 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+/* ── 9. Profil Page Explicit Flat Rules ───────────────────────────────────── */
+body.is-flat .profil-hero-img {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 14px !important;
+}
+
+body.is-flat .profil-section-label {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+}
+
+body.is-flat .profil-mission-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+}
+body.is-flat .profil-mission-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .profil-value-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1.5rem !important;
+}
+body.is-flat .profil-value-card:hover,
+body.is-flat .profil-value-card:active {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .profil-value-letter-wrap {
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .highlight-card {
+  border: none !important;
+  box-shadow: none !important;
+  background: #FFF5F5 !important;
+  border-radius: 14px !important;
+}
+
+body.is-flat .profil-cta-box {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .profil-sidebar-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  padding-bottom: 10px !important;
+}
+
+body.is-flat .profil-social-link {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  padding: 0.75rem 1rem !important;
+  color: #374151 !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .profil-social-link:hover {
+  background: #F1F4F8 !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .profil-info-table tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+body.is-flat .nb-card-foot {
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ── 10. Sidebar Navigation (Catalog, Sektor, Layanan) Flat Rules ───────── */
+body.is-flat #catalog-sidebar .card,
+body.is-flat #sektor-sidebar .card,
+body.is-flat #service-nav .card,
+body.is-flat .layanan-sidebar-nav {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .layanan-sidebar-nav {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+body.is-flat .layanan-sidebar-link,
+body.is-flat #catalog-sidebar .layanan-sidebar-link,
+body.is-flat #sektor-sidebar .layanan-sidebar-link {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  color: #374151 !important;
+  padding: 0.75rem 1rem !important;
+  box-shadow: none !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0 !important;
+  transition: background-color 0.18s ease, color 0.18s ease !important;
+}
+
+body.is-flat .layanan-sidebar-link:hover,
+body.is-flat #catalog-sidebar .layanan-sidebar-link:hover,
+body.is-flat #sektor-sidebar .layanan-sidebar-link:hover {
+  background: #F3F4F6 !important;
+  color: var(--nb-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .layanan-sidebar-link.is-active,
+body.is-flat #catalog-sidebar .layanan-sidebar-link.is-active,
+body.is-flat #sektor-sidebar .layanan-sidebar-link.is-active {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.is-flat .layanan-sidebar-link.is-active i,
+body.is-flat .layanan-sidebar-link.is-active span,
+body.is-flat #catalog-sidebar .layanan-sidebar-link.is-active i,
+body.is-flat #catalog-sidebar .layanan-sidebar-link.is-active span,
+body.is-flat #sektor-sidebar .layanan-sidebar-link.is-active i,
+body.is-flat #sektor-sidebar .layanan-sidebar-link.is-active span {
+  color: var(--nb-primary) !important;
+}
+
+/* Sektor Product Table (Apple Flat Style with dedicated Catalog column tone) */
+body.is-flat .table-responsive#sektor-product-table-wrap {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  background: #FFFFFF !important;
+}
+
+body.is-flat .custom-table {
+  border: none !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+
+body.is-flat .custom-table th {
+  background-color: #F8F9FA !important;
+  color: #4B5563 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 14px 18px !important;
+}
+
+body.is-flat .custom-table td {
+  background-color: #FFFFFF !important;
+  color: #1F2937 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+  padding: 14px 18px !important;
+  vertical-align: middle !important;
+}
+
+/* Dedicated background for Catalog Column to differentiate without individual boxes */
+body.is-flat .custom-table th.table-col-catalog {
+  background-color: #F1F4F8 !important; /* Distinct calm tone for header */
+  color: #1E293B !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+body.is-flat .custom-table td.table-col-catalog {
+  background-color: #F8FAFC !important; /* Subtle separate slate-tint column surface */
+  border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+body.is-flat .custom-table tr:hover td.table-col-catalog {
+  background-color: #F1F5F9 !important;
+}
+
+body.is-flat .custom-table tr:hover td:not(.table-col-catalog) {
+  background-color: #F9FAFB !important;
+}
+
+/* Plain typography for catalog code (no button/box appearance) */
+body.is-flat .catalog-code-text {
+  font-family: var(--font-mono) !important;
+  font-size: 0.8rem !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  letter-spacing: 0.02em !important;
+  display: inline-block !important;
+}
+
+body.is-flat .table-product-link {
+  color: #111827 !important;
+  font-size: 0.95rem !important;
+  transition: color 0.15s ease !important;
+}
+body.is-flat .table-product-link:hover {
+  color: var(--nb-primary) !important;
+}
+
+body.is-flat .table-principal-logo {
+  padding: 2px 6px !important;
+  background: #F8F9FA !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border-radius: 6px !important;
+}
+body.is-flat .table-principal-logo img {
+  max-height: 18px !important;
+  max-width: 50px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+
+/* Sub-category group drawer */
+body.is-flat .sub-category-group {
+  margin: 4px 0 6px 0 !important;
+  padding: 8px !important;
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  gap: 4px !important;
+  max-height: 320px !important;
+}
+
+body.is-flat .sub-category-group::-webkit-scrollbar-track {
+  background: #F8F9FA !important;
+}
+body.is-flat .sub-category-group::-webkit-scrollbar-thumb {
+  background: #D1D5DB !important;
+  border-radius: 4px !important;
+}
+
+/* Sub-category links inside the drawer */
+body.is-flat .sub-category-link {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  color: #4B5563 !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+body.is-flat .sub-category-link:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .sub-category-link.is-active {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+body.is-flat .sub-category-link.is-active .sub-category-icon,
+body.is-flat .sub-category-link.is-active span {
+  color: #FFFFFF !important;
+}
+
+/* ── 11. Product Detail & Purchase (Beli Produk) Flat Rules ─────────────── */
+body.is-flat .detail-product-img-wrap {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+  padding: 1rem !important;
+}
+
+body.is-flat .detail-product-img-wrap::after {
+  display: none !important; /* Hide neo-brutalist zoom badge */
+}
+
+/* Stepper (Jumlah Unit) */
+body.is-flat .nb-stepper-wrap {
+  background: #F3F4F6 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  height: 48px !important;
+  overflow: hidden !important;
+}
+
+body.is-flat .nb-stepper-btn {
+  background: #E5E7EB !important;
+  color: #374151 !important;
+  border: none !important;
+  width: 44px !important;
+  height: 100% !important;
+  font-weight: 700 !important;
+  transition: background-color 0.15s ease !important;
+}
+body.is-flat .nb-stepper-btn:hover {
+  background: #D1D5DB !important;
+  color: #111827 !important;
+}
+
+body.is-flat .nb-stepper-input {
+  background: transparent !important;
+  border: none !important;
+  color: #111827 !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+/* Komitmen Respon Cepat Trust Box */
+body.is-flat .rfq-trust-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  padding: 1.25rem !important;
+}
+
+body.is-flat .detail-response-icon {
+  background: #FEE2E2 !important;
+  color: var(--nb-primary) !important;
+  border: none !important;
+  border-radius: 10px !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+body.is-flat .detail-response-icon i {
+  color: var(--nb-primary) !important;
+  font-size: 1.2rem !important;
+}
+
+/* Bottom Navigation Buttons on Beli Produk */
+body.is-flat .detail-nav-btn {
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-weight: 600 !important;
+}
+body.is-flat .detail-nav-btn--cart {
+  background: #F3F4F6 !important;
+  color: #1F2937 !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .detail-nav-btn--cart:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .detail-nav-btn.nb-btn-ghost {
+  background: #F8F9FA !important;
+  color: #4B5563 !important;
+}
+body.is-flat .detail-nav-btn.nb-btn-ghost:hover {
+  background: #EEF2F6 !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .detail-add-btn {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .detail-add-btn:hover {
+  background: var(--nb-primary-dark) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .detail-principal-card {
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+body.is-flat .detail-principal-logo-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+body.is-flat .gallery-thumb {
+  border: 2px solid transparent !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  background: #FFFFFF !important;
+}
+body.is-flat .gallery-thumb.active {
+  border-color: var(--nb-primary) !important;
+  outline: none !important;
+}
+
+/* ── 12. Informasi (Blog) & Kontak Page Flat Rules ───────────────────────── */
+
+/* Blog Cards & Badges */
+body.is-flat .blog-card-category {
+  background: #F3F4F6 !important;
+  border: none !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  color: #374151 !important;
+}
+
+body.is-flat .blog-cat-count {
+  background: #E5E7EB !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  color: #4B5563 !important;
+  padding: 2px 8px !important;
+}
+
+/* Recent Posts Widget */
+body.is-flat .blog-recent-item {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  padding: 12px 16px !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .blog-recent-item:hover {
+  background: #F1F4F8 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Kontak Form & Notice Boxes */
+body.is-flat .rfq-redirect-box {
+  background: #F8F9FA !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .kontak-form-input {
+  background: #F3F4F6 !important;
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+body.is-flat .kontak-form-input:focus {
+  background: #FFFFFF !important;
+  border-color: var(--nb-primary) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+}
+
+body.is-flat .kontak-submit-btn {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  padding: 14px 28px !important;
+  transition: background-color 0.18s ease !important;
+}
+body.is-flat .kontak-submit-btn:hover {
+  background: var(--nb-primary-dark) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+body.is-flat .kontak-map-wrap {
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+
+/* ── 13. SweetAlert2 & Toast Notifications (Apple-style Modern Flat) ─────── */
+.swal2-popup {
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  border-radius: 16px !important;
+  background: #FFFFFF !important;
+  font-family: var(--font-body) !important;
+}
+
+.swal2-popup.swal2-toast {
+  border: none !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 14px !important;
+  background: #FFFFFF !important;
+  padding: 12px 18px !important;
+}
+
+.swal2-popup.swal2-toast .swal2-title {
+  font-family: var(--font-display) !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+}
+
+.swal2-title {
+  font-family: var(--font-display) !important;
+  font-weight: 700 !important;
+  color: #111827 !important;
+  font-size: 1.25rem !important;
+}
+
+.swal2-confirm {
+  background: var(--nb-primary) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  padding: 10px 20px !important;
+  transition: background-color 0.18s ease !important;
+  transform: none !important;
+}
+.swal2-confirm:hover {
+  background: var(--nb-primary-dark) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.swal2-cancel {
+  background: #F3F4F6 !important;
+  color: #374151 !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  padding: 10px 20px !important;
+  transition: background-color 0.18s ease !important;
+  transform: none !important;
+}
+.swal2-cancel:hover {
+  background: #E5E7EB !important;
+  color: #111827 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── 14. RFQ Success Page (Apple-style Modern Flat) ─────────────────────── */
+body.is-flat .rfq-success-card {
+  max-width: 680px !important;
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Big Status Icon Box: elegant green soft circle/pill instead of neo-brutal yellow square */
+body.is-flat .rfq-success-card .nb-status-icon-box {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  background: #ECFDF5 !important; /* Soft Emerald tint */
+  border: none !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+body.is-flat .rfq-success-card .nb-status-icon-box i {
+  color: #10B981 !important; /* Emerald green checkmark */
+  font-size: 2.2rem !important;
+}
+
+/* Top Badge */
+body.is-flat .rfq-success-card .nb-badge {
+  background: #F1F5F9 !important;
+  color: #475569 !important;
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  padding: 5px 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Inner Details Box */
+body.is-flat .rfq-details-box {
+  background: #F8FAFC !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+body.is-flat .rfq-details-box .cart-sidebar-title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+
+
+
+
+
+

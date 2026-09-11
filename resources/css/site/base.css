@@ -203,25 +203,25 @@ a:hover {
   }
 }
 
-/* Nav Links Tactile Styling */
+/* Nav Links Modern Flat Styling */
 .navbar-light .navbar-nav .nav-link {
-  color: var(--nb-ink) !important;
-  font-weight: 600 !important;
-  font-family: var(--font-display) !important;
-  font-size: 0.88rem !important;
+  color: var(--nb-ink);
+  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
   letter-spacing: 0.01em;
-  height: 38px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 14px !important;
-  margin: 0 2px !important;
-  background: transparent !important;
-  border: 1.5px solid transparent !important;
-  border-radius: var(--nb-radius) !important;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  margin: 0 3px;
+  background: transparent;
+  border: none !important;
+  border-radius: 20px;
   box-shadow: none !important;
   position: relative;
-  transition: transform var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base) !important;
+  transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 .navbar-light .navbar-nav .nav-link::after {
@@ -229,32 +229,34 @@ a:hover {
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-  color: var(--nb-ink) !important;
-  background: #FFFFFF !important;
-  border-color: var(--nb-ink) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
-  transform: translate(-1px, -1px) !important;
+  color: var(--nb-primary) !important;
+  background: #F3F4F6 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .navbar-light .navbar-nav .nav-link:active {
-  transform: translate(1px, 1px) !important;
-  box-shadow: 1px 1px 0 var(--nb-ink) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-/* Active page: Solid ruby fill */
+/* Active page: Soft pill or primary flat */
 .navbar-light .navbar-nav .nav-link.active {
-  color: #FFFFFF !important;
-  background: var(--nb-primary) !important;
-  border-color: var(--nb-ink) !important;
-  box-shadow: 2px 2px 0 var(--nb-ink) !important;
+  color: var(--nb-primary) !important;
+  background: #FEE2E2 !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-weight: 700;
   transform: none !important;
 }
 
 .navbar-light .navbar-nav .nav-link.active:hover {
-  color: #FFFFFF !important;
-  background: var(--nb-primary-dark) !important;
-  transform: translate(-1px, -1px) !important;
-  box-shadow: 3px 3px 0 var(--nb-ink) !important;
+  color: var(--nb-primary-dark) !important;
+  background: #FEE2E2 !important;
+  border: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Mobile Collapse Drawer */
