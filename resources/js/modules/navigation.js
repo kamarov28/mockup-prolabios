@@ -26,14 +26,43 @@ export function initHeaderScrollEffect() {
 }
 
 export function initMobileMenu() {
+  const mainNavbar = document.getElementById('mainNavbar');
+  const hamburgerInput = document.getElementById('hamburger-checkbox');
+  
+  if (mainNavbar && hamburgerInput && typeof bootstrap !== 'undefined') {
+    const bsCollapse = new bootstrap.Collapse(mainNavbar, { toggle: false });
+    hamburgerInput.checked = false;
+    hamburgerInput.setAttribute('aria-expanded', 'false');
+
+    hamburgerInput.addEventListener('change', function () {
+      const isExpanded = hamburgerInput.checked;
+      hamburgerInput.setAttribute('aria-expanded', String(isExpanded));
+      if (isExpanded) {
+        bsCollapse.show();
+      } else {
+        bsCollapse.hide();
+      }
+    });
+
+    mainNavbar.addEventListener('show.bs.collapse', function () {
+      hamburgerInput.checked = true;
+      hamburgerInput.setAttribute('aria-expanded', 'true');
+    });
+    mainNavbar.addEventListener('hide.bs.collapse', function () {
+      hamburgerInput.checked = false;
+      hamburgerInput.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  // Fallback support for header nav toggle
   const menuToggle = document.querySelector('.menu-toggle');
   const nav = document.querySelector('header nav');
-  if (!menuToggle || !nav) return;
-
-  menuToggle.addEventListener('click', function () {
-    nav.classList.toggle('nav-open');
-    this.classList.toggle('menu-active');
-  });
+  if (menuToggle && nav) {
+    menuToggle.addEventListener('click', function () {
+      nav.classList.toggle('nav-open');
+      this.classList.toggle('menu-active');
+    });
+  }
 }
 
 export function initScrollToTop() {
