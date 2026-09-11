@@ -4,7 +4,7 @@
 
 import * as bootstrap from 'bootstrap';
 import Swal from 'sweetalert2';
-import { createIcons, icons } from 'lucide';
+import { createIcons, icons } from './lucide-icons.js';
 
 window.bootstrap = bootstrap;
 window.Swal = Swal;

@@ -37,21 +37,9 @@ body.is-flat ::-webkit-scrollbar-corner {
   border: none !important;
 }
 
-/* Strip all borders and box-shadows on elements */
-body.is-flat .navbar,
-body.is-flat .card,
-body.is-flat .product-card,
-body.is-flat .blog-card,
-body.is-flat .editorial-featured-card,
-body.is-flat .editorial-side-card,
-body.is-flat .hitech-bento-card,
-body.is-flat .hitech-bento-widget,
-body.is-flat .hitech-info-card,
-body.is-flat .hitech-spec-card,
-body.is-flat .nb-principals-shell,
+/* Elements with border removed (buttons, pills, badges, inputs, etc.) */
 body.is-flat .marquee-logo-box,
 body.is-flat .nb-logo-cell,
-body.is-flat .nb-rfq-box,
 body.is-flat .nb-btn,
 body.is-flat .nb-icon-btn,
 body.is-flat .nb-badge,
@@ -71,73 +59,97 @@ body.is-flat .footer-trust-pill,
 body.is-flat .footer-social-icon,
 body.is-flat .footer-wa-btn,
 body.is-flat #cookieConsentBanner,
-body.is-flat .search-modal-card,
 body.is-flat .search-close-btn,
 body.is-flat .search-input-box input#search-overlay-input,
-body.is-flat .profil-mission-card,
-body.is-flat .profil-value-card,
 body.is-flat .profil-value-letter-wrap,
 body.is-flat .profil-stat-box,
 body.is-flat .profil-hero-img,
-body.is-flat .profil-cta-box,
 body.is-flat .profil-section-label,
 body.is-flat .profil-social-link,
 body.is-flat .highlight-card,
 body.is-flat .sub-category-group,
 body.is-flat .sub-category-link,
 body.is-flat .category-accordion-btn,
-body.is-flat .detail-product-img-wrap,
-body.is-flat .detail-principal-card,
 body.is-flat .detail-principal-logo-box,
-body.is-flat .rfq-trust-box,
 body.is-flat .nb-status-icon-box,
 body.is-flat .detail-response-icon,
 body.is-flat .nb-stepper-wrap,
 body.is-flat .nb-stepper-btn,
 body.is-flat .b2b-qty-pill,
 body.is-flat .b2b-qty-btn,
-body.is-flat .gallery-thumb,
 body.is-flat .detail-indent-notice,
 body.is-flat .empty-state-card,
 body.is-flat .pagination .page-link,
 body.is-flat .pagination .page-item .page-link,
-body.is-flat .layanan-cta-strip,
-body.is-flat .layanan-feature-card,
 body.is-flat .blog-recent-item,
 body.is-flat .blog-cat-count,
 body.is-flat .kontak-submit-btn,
-body.is-flat .kontak-form-input,
 body.is-flat .rfq-redirect-box,
 .swal2-popup,
 .swal2-popup.swal2-toast,
 .swal2-confirm,
 .swal2-cancel,
-body.is-flat .cart-item-card,
-body.is-flat .cart-sidebar-panel,
 body.is-flat .cart-remove-btn,
 body.is-flat .cart-img-box,
 body.is-flat .cart-cat-badge,
-body.is-flat .rfq-info-box,
 body.is-flat .rfq-primary-btn,
 body.is-flat .rfq-secondary-btn,
-body.is-flat .cart-empty-card,
-body.is-flat .rfq-success-card,
-body.is-flat .rfq-details-box {
+body.is-flat .cart-empty-card {
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
 }
 
-/* Remove image divider borders */
-body.is-flat .product-card .img-wrap,
-body.is-flat .editorial-featured-thumb,
-body.is-flat .nb-principals-label,
-body.is-flat .nb-card-foot,
-body.is-flat .hitech-spec-divider,
-body.is-flat .hitech-bento-widget-row,
-body.is-flat .hitech-box-header,
-body.is-flat .site-footer {
+/* Structural cards and major components: Theme-aligned 1px border (not black) */
+body.is-flat .card,
+body.is-flat .product-card,
+body.is-flat .blog-card,
+body.is-flat .editorial-card,
+body.is-flat .editorial-featured-card,
+body.is-flat .editorial-side-card,
+body.is-flat .hitech-bento-card,
+body.is-flat .hitech-info-card,
+body.is-flat .hitech-spec-card,
+body.is-flat .nb-principals-shell,
+body.is-flat .nb-rfq-box,
+body.is-flat .search-modal-card,
+body.is-flat .profil-mission-card,
+body.is-flat .profil-value-card,
+body.is-flat .profil-cta-box,
+body.is-flat .profil-trust-box,
+body.is-flat .layanan-cta-strip,
+body.is-flat .layanan-feature-card,
+body.is-flat .kontak-info-block,
+body.is-flat .cart-item-card,
+body.is-flat .cart-sidebar-panel,
+body.is-flat .rfq-info-box,
+body.is-flat .rfq-success-card,
+body.is-flat .detail-principal-card,
+body.is-flat .detail-product-img-wrap,
+body.is-flat .rfq-trust-box {
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  outline: none !important;
+}
+
+/* Subtle inner dividers: light theme tone (#F1F5F9) instead of hard black */
+body.is-flat .product-card .img-wrap {
+  border-bottom: 1px solid #F1F5F9 !important;
+}
+body.is-flat .editorial-featured-thumb {
+  border-bottom: 1px solid #F1F5F9 !important;
+}
+body.is-flat .hitech-spec-divider {
+  border-bottom: 1px solid #F1F5F9 !important;
+}
+body.is-flat .hitech-box-header {
+  border-bottom: 1px solid #F1F5F9 !important;
+}
+body.is-flat .nb-principals-label {
   border: none !important;
+}
+body.is-flat .hitech-bento-widget-row {
+  border-top: 1px solid #F1F5F9 !important;
 }
 
 /* ── 2. Modern Rounded Corners & Clean Flat Backgrounds ──────────────────── */
@@ -762,31 +774,32 @@ body.is-flat .profil-stat-box:hover {
 /* General Cards on All Pages (Profil, Layanan, Kontak, Produk, Cart) */
 body.is-flat .card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
 }
 
 /* Catalog: Product Cards */
 body.is-flat .product-card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
-  transition: background-color 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 body.is-flat .product-card:hover {
   background: #FFFFFF !important;
+  border-color: #D1D5DB !important;
   transform: none !important;
-  box-shadow: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 body.is-flat .product-card .card-body {
   padding: 1.25rem !important;
 }
 body.is-flat .product-card .img-wrap {
   background-color: #F8F9FA !important;
-  border-bottom: none !important;
-  border-radius: 14px 14px 0 0 !important;
+  border-bottom: 1px solid #F1F5F9 !important;
+  border-radius: 13px 13px 0 0 !important;
 }
 
 /* Catalog Search & Filter inputs */
@@ -883,26 +896,26 @@ body.is-flat .layanan-sidebar-link.is-active {
 
 body.is-flat .profil-trust-box {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 1.5rem !important;
 }
 
 body.is-flat .service-spec-item,
 body.is-flat .layanan-feature-card {
   background: #F8F9FA !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
   padding: 1.5rem !important;
 }
 
 body.is-flat .layanan-cta-strip {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 16px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 2.5rem !important;
 }
 
@@ -918,9 +931,9 @@ body.is-flat .layanan-cta-title {
 /* Kontak Page */
 body.is-flat .kontak-info-block {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 1.5rem !important;
   margin-bottom: 1.25rem !important;
 }
@@ -986,19 +999,20 @@ body.is-flat .cart-clear-btn:hover {
 /* Cart Item Card */
 body.is-flat .cart-item-card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   margin-bottom: 1rem !important;
 }
 body.is-flat .cart-item-card:hover {
   transform: none !important;
-  box-shadow: none !important;
+  border-color: #D1D5DB !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
 body.is-flat .cart-img-box {
   background: #F8F9FA !important;
-  border: none !important;
+  border: 1px solid #F1F5F9 !important;
   border-radius: 10px !important;
   box-shadow: none !important;
 }
@@ -1029,9 +1043,9 @@ body.is-flat .cart-remove-btn:hover {
 /* Cart Sidebar Panel */
 body.is-flat .cart-sidebar-panel {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 16px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 1.75rem !important;
 }
 
@@ -1091,13 +1105,19 @@ body.is-flat .cart-empty-card {
 body.is-flat .blog-card,
 body.is-flat .editorial-card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+body.is-flat .blog-card:hover,
+body.is-flat .editorial-card:hover {
+  border-color: #D1D5DB !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 body.is-flat .blog-card .img-wrap {
-  border-radius: 14px 14px 0 0 !important;
-  border: none !important;
+  border-radius: 13px 13px 0 0 !important;
+  border-bottom: 1px solid #F1F5F9 !important;
 }
 /* Catalog & Blog Pagination Flat System */
 body.is-flat .pagination {
@@ -1166,27 +1186,29 @@ body.is-flat .profil-section-label {
 
 body.is-flat .profil-mission-card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 1.5rem !important;
 }
 body.is-flat .profil-mission-card:hover {
   transform: none !important;
-  box-shadow: none !important;
+  border-color: #D1D5DB !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
 body.is-flat .profil-value-card {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   padding: 1.5rem !important;
 }
 body.is-flat .profil-value-card:hover,
 body.is-flat .profil-value-card:active {
   transform: none !important;
-  box-shadow: none !important;
+  border-color: #D1D5DB !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
 }
 
 body.is-flat .profil-value-letter-wrap {
@@ -1196,7 +1218,7 @@ body.is-flat .profil-value-letter-wrap {
 }
 
 body.is-flat .highlight-card {
-  border: none !important;
+  border: 1px solid rgba(166, 23, 28, 0.15) !important;
   box-shadow: none !important;
   background: #FFF5F5 !important;
   border-radius: 14px !important;
@@ -1204,9 +1226,9 @@ body.is-flat .highlight-card {
 
 body.is-flat .profil-cta-box {
   background: #FFFFFF !important;
-  border: none !important;
+  border: 1px solid #E5E7EB !important;
   border-radius: 14px !important;
-  box-shadow: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
 }
 
 body.is-flat .profil-sidebar-title {

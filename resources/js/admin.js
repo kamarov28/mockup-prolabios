@@ -2,7 +2,7 @@
  * PROLABIOS Mockup - Admin JavaScript Entrypoint
  */
 
-import { createIcons, icons } from "lucide";
+import { createIcons, icons } from "./lucide-icons.js";
 
 // Export lucide to window so any dynamic admin script can call createIcons()
 window.lucide = {
