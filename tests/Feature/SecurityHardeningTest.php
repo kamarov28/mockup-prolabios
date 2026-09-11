@@ -135,7 +135,19 @@ class SecurityHardeningTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
         $this->assertStringContainsString("default-src 'self'", $csp);
         $this->assertStringNotContainsString("'unsafe-eval'", $csp);
+        $response->assertHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
         $this->assertNull($response->headers->get('X-XSS-Protection'));
+    }
+
+    public function test_custom_404_error_page_renders_cleanly_without_information_disclosure(): void
+    {
+        $response = $this->get('/non-existent-route-for-testing-404-handling');
+
+        $response->assertStatus(404);
+        $response->assertSeeText('Halaman Tidak Ditemukan');
+        $response->assertSeeText('Error 404');
+        $response->assertDontSeeText('Whoops');
+        $response->assertDontSeeText('Stack trace');
     }
 
     public function test_system_health_endpoint_returns_operational_status(): void

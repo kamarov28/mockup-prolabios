@@ -16,6 +16,7 @@ class SecurityHeaders
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+        $response->headers->set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
 
         // Content Security Policy (Defense-in-depth against XSS & data injection)
         $csp = "default-src 'self'; "
