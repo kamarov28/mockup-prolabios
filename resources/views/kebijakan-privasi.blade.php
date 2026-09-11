@@ -18,7 +18,7 @@
 
           <div class="card p-4 p-md-5">
 
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom" style="border-color: rgba(30,30,30,0.12) !important;">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom" style="border-color: #E5E7EB !important;">
               <span class="nb-badge mb-0" style="font-size: 0.7rem; padding: 3px 8px;">
                 <i data-lucide="badge-check" class="me-1"></i> UU NO. 27 TAHUN 2022 (UU PDP)
               </span>
