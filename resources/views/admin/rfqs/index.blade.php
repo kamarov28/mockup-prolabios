@@ -96,10 +96,10 @@
 
   <div class="admin-card-body-flush">
     @if(($viewMode ?? 'table') === 'kanban')
-      <div style="display: flex; gap: 18px; padding: 20px; overflow-x: auto; min-height: 520px; background-color: var(--color-bg, #D6D0C5); align-items: flex-start;" class="table-responsive">
+      <div style="display: flex; gap: 18px; padding: 20px; overflow-x: auto; min-height: 520px; background-color: var(--color-bg); align-items: flex-start;" class="table-responsive">
         @foreach($kanbanColumns as $statusKey => $column)
-          <div style="flex: 0 0 310px; width: 310px; background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 6px; box-shadow: 4px 4px 0 #1E1E1E; display: flex; flex-direction: column;">
-            <div style="padding: 12px 16px; border-bottom: 2px solid #1E1E1E; background: var(--color-surface-2, #EDE8E0); display: flex; justify-content: space-between; align-items: center;">
+          <div style="flex: 0 0 310px; width: 310px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 10px; box-shadow: var(--shadow-xs); display: flex; flex-direction: column; overflow: hidden;">
+            <div style="padding: 14px 18px; border-bottom: 1px solid var(--color-border); background: var(--color-surface-subtle); display: flex; justify-content: space-between; align-items: center;">
               <span style="font-family: var(--font-headline); font-weight: 700; font-size: 0.92rem; color: var(--color-text-main);">
                 {{ $column['label'] }}
               </span>
@@ -109,7 +109,7 @@
             </div>
             <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px; max-height: 70vh; overflow-y: auto;">
               @forelse($column['rfqs'] as $rfq)
-                <div style="background: #FFFFFF; border: 2px solid #1E1E1E; border-radius: 4px; padding: 14px; box-shadow: 2px 2px 0 #1E1E1E; transition: transform 0.15s ease;">
+                <div style="background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px; box-shadow: var(--shadow-xs); transition: all 0.15s ease;">
                   <div class="d-flex justify-content-between align-items-start mb-2">
                     <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C); font-size: 0.88rem;">
                       {{ $rfq->rfq_number }}

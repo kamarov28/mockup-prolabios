@@ -14,22 +14,16 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Konten</span>
-    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      @if($isEdit)
-        Mengedit: <strong style="color: var(--color-text-main);">{{ $sector['name'] }}</strong>
-      @else
-        Tambah sektor industri baru.
-      @endif
-    </p>
-  </div>
-  <a href="{{ route('admin.sectors') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header 
+  label="Konten"
+  :title="$titleText"
+  :backUrl="route('admin.sectors')">
+  @if($isEdit)
+    Mengedit: <strong style="color: var(--color-text-main);">{{ $sector['name'] }}</strong>
+  @else
+    Tambah sektor industri baru.
+  @endif
+</x-admin.page-header>
 
 <div class="admin-card" style="max-width: 720px;">
   <div class="admin-card-header">
@@ -82,28 +76,18 @@
         <p class="form-text mb-0 mt-2">Pisahkan paragraf dengan Enter.</p>
       </div>
 
-      <div class="admin-form-group mb-0 pt-3" style="border-top: 1px solid var(--color-border);">
-        <label class="admin-form-label">Gambar Utama Sektor</label>
-        <div class="row g-3 align-items-center">
-          <div class="col-md-3">
-            <div style="width: 100%; aspect-ratio: 16/9; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.03);">
-              <img id="image_preview" src="{{ $previewImage }}" alt="Preview"
-                   style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-          </div>
-          <div class="col-md-9">
-            <div class="mb-3">
-              <label for="image_file" class="admin-form-label">Upload File Lokal</label>
-              <input type="file" id="image_file" class="form-control" name="image_file" accept="image/*">
-            </div>
-            <div>
-              <label for="image_url" class="admin-form-label">Atau URL Gambar</label>
-              <input type="text" class="form-control" id="image_url" name="image_url"
-                     value="{{ old('image_url', $sector['image'] ?? '') }}"
-                     placeholder="https://...">
-            </div>
-          </div>
-        </div>
+      <div class="pt-3" style="border-top: 1px solid var(--color-border);">
+        <x-admin.image-upload
+          label="Gambar Utama Sektor"
+          nameFile="image_file"
+          nameUrl="image_url"
+          :valueUrl="old('image_url', $sector['image'] ?? '')"
+          previewId="image_preview"
+          :placeholderImage="$previewImage"
+          aspectRatio="16/9"
+          boxWidth="100%"
+          boxHeight="130px"
+        />
       </div>
     </div>
 

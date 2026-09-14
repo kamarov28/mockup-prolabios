@@ -151,7 +151,7 @@
               }, $currentSectors);
             @endphp
 
-            <div class="p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
+            <x-admin.section-box description="Pilih satu atau lebih sektor industri yang menggunakan produk atau instrumen ini.">
               <div class="row g-2">
                 @foreach($sectors as $sec)
                   @php
@@ -175,14 +175,13 @@
                   </div>
                 @endforeach
               </div>
-            </div>
-            <p class="form-text mb-0 mt-2">Pilih satu atau lebih sektor industri yang menggunakan produk atau instrumen ini.</p>
+            </x-admin.section-box>
           </div>
         </div>
         <div class="col-12">
           <div class="admin-form-group mb-0">
             <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
-            <div class="p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
+            <x-admin.section-box>
               <div class="mb-2">
                 <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">
                   <i data-lucide="upload" class="me-1"></i>Upload File PDF (Maks. 10MB)
@@ -203,22 +202,22 @@
                   </a>
                 </div>
               @endif
-            </div>
+            </x-admin.section-box>
           </div>
         </div>
       </div>
 
       <div id="sub-category-block" style="display: none;">
-        <div class="admin-form-group mb-0 p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
-          <label for="admin-subcategory-select" class="admin-form-label">
-            <i data-lucide="folder-tree" class="me-1" style="color: var(--color-accent);"></i>Subkategori <span style="color: var(--color-accent);">*</span>
-          </label>
+        <x-admin.section-box
+          title="Subkategori"
+          icon="folder-tree"
+          :required="true"
+          description="Sesuaikan subkategori berdasarkan kategori yang dipilih.">
           <select class="form-select" id="admin-subcategory-select" name="sub_category"
                   data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
             <option value="">-- Pilih Subkategori --</option>
           </select>
-          <p class="form-text mb-0 mt-2">Sesuaikan subkategori berdasarkan kategori yang dipilih.</p>
-        </div>
+        </x-admin.section-box>
       </div>
 
       <div class="pt-3" style="border-top: 1px solid var(--color-border);">

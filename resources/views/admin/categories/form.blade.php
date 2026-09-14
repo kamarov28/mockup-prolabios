@@ -14,22 +14,16 @@
 @section('admin_content')
 
 {{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Konten</span>
-    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      @if($isEdit)
-        Mengedit: <strong style="color: var(--color-text-main);">{{ $category->name }}</strong>
-      @else
-        Buat kategori utama atau sub-kategori baru untuk katalog produk.
-      @endif
-    </p>
-  </div>
-  <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header 
+  label="Konten"
+  :title="$titleText"
+  :backUrl="route('admin.categories.index')">
+  @if($isEdit)
+    Mengedit: <strong style="color: var(--color-text-main);">{{ $category->name }}</strong>
+  @else
+    Buat kategori utama atau sub-kategori baru untuk katalog produk.
+  @endif
+</x-admin.page-header>
 
 <div class="admin-card" style="max-width: 640px;">
   <div class="admin-card-header">
