@@ -79,11 +79,11 @@
   box-shadow: none !important;
   padding: 0 !important;
   font-family: var(--font-mono) !important;
-  font-weight: 600 !important;
-  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  font-size: 0.82rem !important;
   letter-spacing: 0.1em !important;
-  color: rgba(255, 255, 255, 0.85) !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  color: #FFFFFF !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   margin-bottom: 0.85rem !important;
   align-self: flex-start;
 }
