@@ -171,10 +171,10 @@
               }
             @endphp
 
-            <div class="d-flex justify-content-between mb-3 small">
-              <span style="color: var(--nb-muted);">Estimasi Subtotal Katalog:</span>
-              <strong style="font-family: var(--font-display); font-size: 1.25rem; color: var(--nb-primary);" id="sidebar-total-estimate">
-                {{ $totalEstimate > 0 ? 'Rp ' . number_format($totalEstimate, 0, ',', '.') : 'Rp 0' }}
+            <div class="d-flex justify-content-between align-items-center mb-3 small">
+              <span style="color: var(--nb-muted);">Estimasi Subtotal:</span>
+              <strong style="font-family: var(--font-display); font-size: 1.15rem; color: var(--nb-primary);" id="sidebar-total-estimate">
+                {{ $totalEstimate > 0 ? 'Rp ' . number_format($totalEstimate, 0, ',', '.') : 'Konfirmasi SPH Resmi' }}
               </strong>
             </div>
 

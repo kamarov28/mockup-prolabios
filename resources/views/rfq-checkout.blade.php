@@ -101,9 +101,11 @@
                   @endforeach
                 </div>
 
-                <div class="d-flex justify-content-between py-3 fw-bold mb-3 rfq-total-row">
+                <div class="d-flex justify-content-between align-items-center py-3 fw-bold mb-3 rfq-total-row">
                   <span style="font-family: var(--font-mono); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">Estimasi Total:</span>
-                  <span style="font-family: var(--font-display); font-size: 1.2rem; color: var(--nb-primary);">Rp {{ number_format($total, 0, ',', '.') }}</span>
+                  <span style="font-family: var(--font-display); font-size: 1.15rem; color: var(--nb-primary);">
+                    {{ $total > 0 ? 'Rp ' . number_format($total, 0, ',', '.') : 'Konfirmasi SPH Resmi' }}
+                  </span>
                 </div>
 
                 <div class="rfq-info-box mb-3">

@@ -81,15 +81,9 @@ h3, h4, h5, h6,
   letter-spacing: -0.01em;
 }
 
-p, span, li, td, th, label {
+/* Paragraph and typography inheritance */
+p {
   color: var(--nb-ink);
-}
-
-.nb-btn span,
-.btn span,
-.btn-primary span,
-button span {
-  color: inherit !important;
 }
 
 a {

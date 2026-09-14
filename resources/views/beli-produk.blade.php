@@ -31,7 +31,17 @@
 @section('content')
   <div class="editorial-page-header">
     <div class="container">
-      <span class="editorial-page-label">Pengadaan & Penawaran</span>
+      <div class="procurement-flow-indicator mb-2">
+        <a href="{{ $detailUrl }}" class="procurement-step-item text-decoration-none" title="Kembali untuk cek spesifikasi">
+          <span class="procurement-step-badge">1</span>
+          <span>Spesifikasi Produk</span>
+        </a>
+        <span class="procurement-flow-sep"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></span>
+        <span class="procurement-step-item is-active">
+          <span class="procurement-step-badge">2</span>
+          <span>Tentukan Jumlah Unit</span>
+        </span>
+      </div>
       <p class="editorial-page-title">Minta Penawaran Produk</p>
       <p class="editorial-page-subtitle">Tentukan jumlah unit, lalu tambahkan ke keranjang penawaran institusi</p>
     </div>
