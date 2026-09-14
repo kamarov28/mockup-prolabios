@@ -296,7 +296,8 @@
 }
 
 .nb-hero--immersive .nb-hero-backdrop .nb-hero-slide.is-active {
-  animation: nb-hero-slide-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Transition handled smoothly by hero-slideshow.js */
+  opacity: 1;
 }
 
 .nb-hero--immersive .nb-badge {

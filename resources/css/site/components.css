@@ -266,33 +266,33 @@
   color: #FFFFFF;
 }
 
-/* ── Cards & Surfaces (Clean Flat Standard) ─────────────────────────────── */
+/* ── Cards & Surfaces (Industrial Precision Flat Standard) ──────────────── */
 .card,
 .nb-card {
-  background-color: #FFFFFF !important;
-  border: 1px solid #E5E7EB !important;
-  border-radius: 14px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  background-color: var(--nb-card) !important;
+  border: var(--nb-border) !important;
+  border-radius: var(--nb-radius-lg) !important;
+  box-shadow: none !important;
   overflow: hidden;
 }
 
 .card-header {
   background: transparent !important;
-  border-bottom: 1px solid #F1F5F9 !important;
+  border-bottom: var(--nb-border-sm) !important;
 }
 
 .card-footer {
   background: transparent !important;
-  border-top: 1px solid #F1F5F9 !important;
+  border-top: var(--nb-border-sm) !important;
 }
 
 .empty-state-card {
   text-align: center;
   padding: 80px 0;
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  background: #FFFFFF;
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
+  background: var(--nb-card);
 }
 
 .hitech-bento-card--lead,
@@ -300,7 +300,7 @@
 .highlight-card {
   background: #FFF5F5 !important;
   border: 1px solid rgba(166, 23, 28, 0.2) !important;
-  box-shadow: 0 4px 16px rgba(166, 23, 28, 0.06) !important;
+  box-shadow: none !important;
 }
 
 /* ── Quantity Steppers (Clean Modern Pill) ───────────────────────────────── */

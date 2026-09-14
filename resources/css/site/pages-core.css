@@ -162,17 +162,16 @@
 }
 
 .profil-mission-card {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
   padding: 1.25rem;
   height: 100%;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 .profil-mission-card:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(17, 24, 39, 0.25);
 }
 
 .profil-mission-title {
@@ -189,10 +188,10 @@
 .profil-cta-box,
 .layanan-feature-card,
 .layanan-cta-strip {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
 }
 
 .profil-value-card,
@@ -445,16 +444,15 @@
    ========================================================================== */
 .kontak-info-block {
   padding: 20px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
   margin-bottom: 16px;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color 0.15s ease;
 }
 .kontak-info-block:hover {
-  border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(17, 24, 39, 0.25);
 }
 .kontak-info-icon {
   font-size: 1.35rem;

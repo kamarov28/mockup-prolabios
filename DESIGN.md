@@ -34,24 +34,23 @@
 
 ---
 
-## 3. Geometry & Corner Radii
+## 3. Geometry & Corner Radii (Industrial Precision: 4px–6px)
 
-No strokes, no offsets. Pure rounded geometry:
+Sharp, technical, and engineered corners matching analytical instrument hardware:
 
 ```css
 :root {
-  /* Corner Radii */
-  --radius-xs: 4px;   /* Inline code, micro-badges */
-  --radius-sm: 6px;   /* SKU tags, category pills */
-  --radius-md: 10px;  /* Buttons, form inputs, thumbnails */
-  --radius-lg: 14px;  /* Cards, Bento panels, modals */
-  --radius-xl: 20px;  /* Callout banners, pill badges, nav-links */
-  --radius-full: 9999px; /* Circle icon buttons, avatar pills */
+  /* Corner Radii (Compact Precision) */
+  --radius-xs: 2px;   /* Micro-badges, inline code */
+  --radius-sm: 4px;   /* SKU tags, category pills, input elements */
+  --radius-md: 5px;   /* Buttons, compact cards, thumbnails */
+  --radius-lg: 6px;   /* Panels, cards, modals */
+  --radius-full: 9999px; /* Status dots, circle controls */
 
   /* Surface Elevation */
   --shadow-none: none;
   --border-none: none;
-  --divider-subtle: 1px solid rgba(0, 0, 0, 0.06);
+  --divider-subtle: 1px solid rgba(17, 24, 39, 0.12);
 }
 ```
 
@@ -60,12 +59,12 @@ No strokes, no offsets. Pure rounded geometry:
 ## 4. Typography & Hierarchy
 
 ### Font Families
-- **Display / Headings**: `'Space Grotesk', system-ui, -apple-system, sans-serif`
-  - Industrial precision & scientific grotesque aesthetic, tight tracking (`letter-spacing: -0.02em` to `-0.03em`).
-- **Body & Data**: `'DM Sans', system-ui, -apple-system, sans-serif`
-  - High legibility across technical specifications, catalog grids, and data sheets.
-- **Monospace / Catalog Codes**: `'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace`
-  - Used for CAT numbers, batch identifiers, ISO codes, and quantity counters with tabular figures (`font-feature-settings: "tnum" 1`).
+- **Display / Headings**: `'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
+  - Technical authority, engineered proportions, authoritative medium/bold weights.
+- **Body & Data**: `'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
+  - Supreme legibility across technical specifications, catalog tables, and data sheets.
+- **Monospace / Catalog Codes**: `'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace`
+  - Designed for CAT numbers, batch identifiers, ISO codes, and tabular figures (`font-feature-settings: "tnum" 1`).
 
 ---
 

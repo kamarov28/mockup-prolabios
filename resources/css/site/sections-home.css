@@ -45,9 +45,9 @@
   z-index: 3;
   background: linear-gradient(
     90deg,
-    rgba(22, 22, 24, 0.88) 0%,
-    rgba(22, 22, 24, 0.72) 45%,
-    rgba(22, 22, 24, 0.25) 100%
+    rgba(15, 23, 42, 0.85) 0%,
+    rgba(15, 23, 42, 0.65) 55%,
+    rgba(15, 23, 42, 0.25) 100%
   );
 }
 
@@ -71,34 +71,52 @@
 }
 
 .nb-hero--immersive .nb-badge {
-  background: transparent !important;
-  border: none !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(4px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: var(--nb-radius-sm) !important;
   box-shadow: none !important;
-  padding: 0 !important;
+  padding: 0.35rem 0.75rem !important;
   font-family: var(--font-body) !important;
-  font-weight: 700 !important;
-  font-size: 0.85rem !important;
-  letter-spacing: 0.08em !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.06em !important;
   color: #FFFFFF !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-  margin-bottom: 0.85rem !important;
+  text-shadow: none !important;
+  margin-bottom: 1rem !important;
+  align-self: flex-start;
 }
 
 .nb-hero--immersive .nb-hero-title {
   color: #FFFFFF !important;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .nb-hero--immersive .nb-hero-title .nb-accent,
 .nb-hero--immersive .nb-hero-title .text-accent {
-  color: var(--nb-primary) !important;
-  -webkit-text-fill-color: var(--nb-primary) !important;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  color: #F87171 !important;
+  -webkit-text-fill-color: #F87171 !important;
+  text-shadow: none !important;
 }
 
 .nb-hero--immersive .nb-hero-lead {
-  color: rgba(255, 255, 255, 0.9) !important;
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.88) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  font-size: 1.05rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 1.75rem !important;
+}
+
+.nb-hero--immersive .nb-btn-ghost {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+.nb-hero--immersive .nb-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
 }
 
 .nb-hero-title {
@@ -151,13 +169,46 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: #FFFFFF;
-  border: var(--nb-border);
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--nb-radius);
-  box-shadow: var(--nb-shadow);
+  box-shadow: none;
   padding: 0.5rem 0.85rem;
   min-width: 260px;
 }
+
+.nb-hero-controls--immersive .nb-hero-counter,
+.nb-hero-controls--immersive .nb-hero-counter span {
+  color: #FFFFFF !important;
+}
+
+.nb-hero-controls--immersive .nb-hero-counter .nb-muted {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.nb-hero-controls--immersive .nb-hero-progress {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.nb-hero-controls--immersive .nb-icon-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+}
+
+.nb-hero-controls--immersive .nb-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #FFFFFF !important;
+}
+
+.nb-hero-controls--immersive .nb-icon-btn svg,
+.nb-hero-controls--immersive .nb-icon-btn i {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
 
 @media (max-width: 767.98px) {
   .nb-hero-controls--immersive {
@@ -457,20 +508,20 @@
 .focus-section-pin { background: transparent; }
 
 .focus-section-pin .hitech-tab-bar {
-  border: 1px solid #E2E5E9;
-  border-radius: 14px;
-  background: #F1F3F5;
-  padding: 6px;
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  background: var(--nb-bg-soft);
+  padding: 4px;
   box-shadow: none;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .focus-section-pin .hitech-tab-btn {
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--nb-radius-sm);
   background: transparent;
   color: #64748B;
   font-family: var(--font-body);
@@ -536,10 +587,10 @@
 
 .focus-section-pin .hitech-info-card,
 .focus-section-pin .hitech-spec-card {
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  background: #FFFFFF;
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
+  background: var(--nb-card);
   width: 100%;
   box-sizing: border-box;
 }
@@ -628,10 +679,10 @@
 }
 
 .hitech-panel-box {
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  background: var(--nb-card);
+  border: var(--nb-border);
+  border-radius: var(--nb-radius-lg);
+  box-shadow: none;
   padding: 28px;
 }
 

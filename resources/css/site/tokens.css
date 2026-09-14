@@ -3,11 +3,11 @@
    Official Design System: Clean, Minimal, Precision Laboratory Aesthetic.
    ========================================================================== */
 :root {
-  /* ── Typography Families ──────────────────────────────────────────────── */
-  --font-headline: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* ── Typography Families (Industrial Scientific Authority) ──────────── */
+  --font-headline: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
   /* Legacy typography aliases */
   --font-family-headline: var(--font-headline);
@@ -31,20 +31,21 @@
   --nb-alert-text: #991B1B;    /* Validation error text */
   --nb-success: #10B981;       /* Verified emerald check */
 
-  /* ── Geometry & Borders (1px Precision Line System) ───────────────────── */
+  /* ── Geometry & Borders (Industrial Precision Line System: 4-6px) ───── */
   --nb-border-w: 1px;
-  --nb-border: 1px solid #E5E7EB;
-  --nb-border-sm: 1px solid #E2E8F0;
-  --nb-radius-sm: 6px;
-  --nb-radius: 8px;
-  --nb-radius-lg: 14px;
+  --nb-border: 1px solid rgba(17, 24, 39, 0.12);
+  --nb-border-sm: 1px solid rgba(17, 24, 39, 0.08);
+  --nb-radius-xs: 2px;
+  --nb-radius-sm: 4px;
+  --nb-radius: 5px;
+  --nb-radius-lg: 6px;
 
-  /* ── Soft Ambient Elevations (Zero hard black offset shadows) ────────── */
+  /* ── Surface Elevation (Pure Zero Shadow Flat System) ───────────────── */
   --nb-shadow-xs: none;
-  --nb-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.03);
-  --nb-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-  --nb-shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.05);
-  --nb-shadow-xl: 0 8px 24px rgba(0, 0, 0, 0.07);
+  --nb-shadow-sm: none;
+  --nb-shadow: none;
+  --nb-shadow-lg: none;
+  --nb-shadow-xl: none;
 
   /* ── Smooth Transitions ───────────────────────────────────────────────── */
   --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
