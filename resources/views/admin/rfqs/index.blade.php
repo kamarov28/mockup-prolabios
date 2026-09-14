@@ -73,7 +73,7 @@
       </div>
 
       <div class="collapse {{ (request('start_date') || request('end_date')) ? 'show' : '' }} mt-3" id="rfqDateFilterCollapse">
-        <div style="border: 2px solid #1E1E1E; border-radius: 4px; padding: 14px 16px; background-color: var(--color-surface-2);">
+        <div style="border: 1px solid var(--color-border); border-radius: 8px; padding: 14px 16px; background-color: var(--color-surface-subtle);">
           <div class="row g-3 align-items-end">
             <div class="col-md-5">
               <label class="admin-form-label" for="start_date">Dari Tanggal</label>
