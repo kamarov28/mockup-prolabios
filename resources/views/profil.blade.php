@@ -255,28 +255,7 @@
             <p class="profil-body-text text-muted mb-3" style="font-size: 0.85rem;">
               Ikuti publikasi resmi dan update produk melalui saluran media kami:
             </p>
-            <div class="d-flex flex-column gap-2">
-              <a href="{{ $siteSettings['social_facebook'] ?? 'https://web.facebook.com/PT-Prolabios-Mitra-Analitika-1787666991553394/' }}"
-                 target="_blank" rel="noopener noreferrer" class="profil-social-link">
-                <i class="bi bi-facebook profil-social-icon--facebook fs-5"></i>
-                <span>Facebook Resmi PMA</span>
-              </a>
-              <a href="{{ $siteSettings['social_instagram'] ?? 'https://www.instagram.com/prolabios.id' }}"
-                 target="_blank" rel="noopener noreferrer" class="profil-social-link">
-                <i class="bi bi-instagram profil-social-icon--instagram fs-5"></i>
-                <span>Instagram @prolabios.id</span>
-              </a>
-              <a href="{{ $siteSettings['social_linkedin'] ?? 'https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all' }}"
-                 target="_blank" rel="noopener noreferrer" class="profil-social-link">
-                <i class="bi bi-linkedin profil-social-icon--linkedin fs-5"></i>
-                <span>LinkedIn Company Page</span>
-              </a>
-              <a href="{{ !empty($siteSettings['contact_whatsapp']) ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $siteSettings['contact_whatsapp']) : 'https://wa.me/6281211118744' }}"
-                 target="_blank" rel="noopener noreferrer" class="profil-social-link">
-                <i class="bi bi-whatsapp profil-social-icon--whatsapp fs-5"></i>
-                <span>WhatsApp Layanan Resmi</span>
-              </a>
-            </div>
+            <x-social-links variant="list" />
           </div>
 
           <!-- Sidebar Card 3: Direct Consultation & RFQ CTA Box -->

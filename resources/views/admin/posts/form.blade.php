@@ -21,22 +21,16 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Konten</span>
-    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      @if($isEdit)
-        Mengedit: <strong style="color: var(--color-text-main);">{{ $post['title'] }}</strong>
-      @else
-        Tulis artikel / berita untuk halaman informasi publik.
-      @endif
-    </p>
-  </div>
-  <a href="{{ route('admin.posts') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header 
+  label="Konten"
+  :title="$titleText"
+  :backUrl="route('admin.posts')">
+  @if($isEdit)
+    Mengedit: <strong style="color: var(--color-text-main);">{{ $post['title'] }}</strong>
+  @else
+    Tulis artikel / berita untuk halaman informasi publik.
+  @endif
+</x-admin.page-header>
 
 <div class="admin-card" style="max-width: 900px;">
   <div class="admin-card-header">
@@ -137,26 +131,19 @@
         </div>
       </div>
 
-      <div class="admin-form-group mb-0 pt-3" style="border-top: 1px solid var(--color-border);">
-        <label class="admin-form-label">Gambar Cover</label>
-        <div class="row g-3 align-items-center">
-          <div class="col-sm-4">
-            <div style="width: 100%; aspect-ratio: 16/9; max-height: 140px; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.03);">
-              <img id="image-preview" src="{{ $previewSrc }}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
-            </div>
-          </div>
-          <div class="col-sm-8">
-            <div class="mb-3">
-              <label for="image_file" class="admin-form-label">Upload Cover</label>
-              <input class="form-control" type="file" id="image_file" name="image_file" accept="image/jpeg,image/png,image/webp,image/gif" onchange="previewLocalImage(this)">
-              <p class="form-text mb-0 mt-1" style="font-size: 0.75rem; color: var(--color-text-muted);">JPG, PNG, WebP, GIF — maks 5MB. Disarankan rasio 16:9.</p>
-            </div>
-            <div>
-              <label for="image_url" class="admin-form-label">Atau URL Cover</label>
-              <input type="text" class="form-control" id="image_url" name="image_url" value="{{ old('image_url', $post['image'] ?? '') }}" placeholder="https://example.com/image.jpg atau /storage/uploads/..." oninput="previewUrlImage(this.value)">
-            </div>
-          </div>
-        </div>
+      <div class="pt-3" style="border-top: 1px solid var(--color-border);">
+        <x-admin.image-upload
+          label="Gambar Cover"
+          helpText="JPG, PNG, WebP, GIF — maks 5MB. Disarankan rasio 16:9."
+          nameFile="image_file"
+          nameUrl="image_url"
+          :valueUrl="old('image_url', $post['image'] ?? '')"
+          previewId="image-preview"
+          :placeholderImage="$previewSrc"
+          aspectRatio="16/9"
+          boxWidth="100%"
+          boxHeight="130px"
+        />
       </div>
 
       <div class="admin-form-group mb-0">

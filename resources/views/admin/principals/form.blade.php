@@ -10,22 +10,16 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Mitra & Partner</span>
-    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      @if($isEdit)
-        Mengedit: <strong style="color: var(--color-text-main);">{{ $principal->name }}</strong>
-      @else
-        Tambah brand / prinsipal mitra untuk ditampilkan di beranda.
-      @endif
-    </p>
-  </div>
-  <a href="{{ route('admin.principals') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header 
+  label="Mitra & Partner"
+  :title="$titleText"
+  :backUrl="route('admin.principals')">
+  @if($isEdit)
+    Mengedit: <strong style="color: var(--color-text-main);">{{ $principal->name }}</strong>
+  @else
+    Tambah brand / prinsipal mitra untuk ditampilkan di beranda.
+  @endif
+</x-admin.page-header>
 
 <div class="admin-card" style="max-width: 720px;">
   <div class="admin-card-header">
@@ -79,32 +73,18 @@
         </select>
       </div>
 
-      <div class="admin-form-group mb-0 pt-3" style="border-top: 1px solid var(--color-border);">
-        <label class="admin-form-label">Logo Prinsipal</label>
-        <div class="row g-3 align-items-center">
-          <div class="col-sm-3">
-            <div style="width: 100%; height: 90px; border: 1px solid var(--color-border); border-radius: 6px; background: #ffffff; padding: 8px; display: flex; align-items: center; justify-content: center;">
-              <img id="logo-preview"
-                   src="{{ $principal->logo ?? asset('images/placeholder.svg') }}"
-                   alt="Preview"
-                   style="max-width: 100%; max-height: 100%; object-fit: contain;">
-            </div>
-          </div>
-          <div class="col-sm-9">
-            <div class="mb-3">
-              <label for="logo_file" class="admin-form-label">Upload File Logo (PNG/JPG/WEBP)</label>
-              <input type="file" class="form-control" id="logo_file" name="logo_file" accept="image/*" onchange="previewImage(this)">
-            </div>
-            <div>
-              <label for="logo_url" class="admin-form-label">Atau URL Logo</label>
-              <input type="url" class="form-control" id="logo_url" name="logo_url"
-                     value="{{ old('logo_url', $principal->logo ?? '') }}"
-                     placeholder="https://..."
-                     onchange="document.getElementById('logo-preview').src = this.value || '{{ asset('images/placeholder.svg') }}'">
-            </div>
-          </div>
-        </div>
-        <p class="form-text mb-0 mt-2">Logo ditampilkan di background putih agar brand berwarna gelap tetap terbaca.</p>
+      <div class="pt-3" style="border-top: 1px solid var(--color-border);">
+        <x-admin.image-upload
+          label="Logo Prinsipal"
+          helpText="Logo ditampilkan di background putih agar brand berwarna gelap tetap terbaca."
+          nameFile="logo_file"
+          nameUrl="logo_url"
+          :valueUrl="old('logo_url', $principal->logo ?? '')"
+          previewId="logo-preview"
+          :placeholderImage="asset('images/placeholder.svg')"
+          boxWidth="100%"
+          boxHeight="90px"
+        />
       </div>
 
     </div>

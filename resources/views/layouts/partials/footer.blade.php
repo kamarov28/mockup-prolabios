@@ -20,20 +20,7 @@
           <span class="status-dot"></span>
           <span>Pengusaha Kena Pajak (PKP) Terdaftar</span>
         </div>
-        <div class="footer-social-strip d-flex gap-3">
-          @if(!empty($siteSettings['social_facebook']))
-            <a href="{{ $siteSettings['social_facebook'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
-          @endif
-          @if(!empty($siteSettings['social_instagram']))
-            <a href="{{ $siteSettings['social_instagram'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-          @endif
-          @if(!empty($siteSettings['social_linkedin']))
-            <a href="{{ $siteSettings['social_linkedin'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="LinkedIn"><i class="bi bi-linkedin" aria-hidden="true"></i></a>
-          @endif
-          @if(!empty($siteSettings['social_twitter']))
-            <a href="{{ $siteSettings['social_twitter'] }}" target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label="Twitter"><i class="bi bi-twitter-x" aria-hidden="true"></i></a>
-          @endif
-        </div>
+        <x-social-links variant="pills" class="mb-3" />
       </div>
 
       <!-- Col 2: Katalog & Solusi -->

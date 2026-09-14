@@ -13,22 +13,16 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Katalog</span>
-    <h2 class="admin-page-title mb-1">{{ $titleText }}</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      @if($isEdit)
-        Mengedit: <strong style="color: var(--color-text-main);">{{ $product['title'] ?? '' }}</strong>
-      @else
-        Tambah produk baru ke katalog publik.
-      @endif
-    </p>
-  </div>
-  <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header 
+  label="Katalog"
+  :title="$titleText"
+  :backUrl="route('admin.products')">
+  @if($isEdit)
+    Mengedit: <strong style="color: var(--color-text-main);">{{ $product['title'] ?? '' }}</strong>
+  @else
+    Tambah produk baru ke katalog publik.
+  @endif
+</x-admin.page-header>
 
 <div class="admin-card" style="max-width: 900px;">
   <div class="admin-card-header">
@@ -227,26 +221,16 @@
         </div>
       </div>
 
-      <div class="admin-form-group mb-0 pt-3" style="border-top: 1px solid var(--color-border);">
-        <label class="admin-form-label">Gambar Utama / Cover</label>
-        <p class="form-text mb-3">Thumbnail katalog, kartu, dan PDF penawaran.</p>
-        <div class="row g-3 align-items-center">
-          <div class="col-sm-3 text-center">
-            <div style="width: 120px; height: 120px; margin: 0 auto; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; overflow: hidden;">
-              <img id="image-preview" src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-            </div>
-          </div>
-          <div class="col-sm-9">
-            <div class="mb-3">
-              <label for="image_file" class="admin-form-label">Upload Gambar Baru</label>
-              <input class="form-control" type="file" id="image_file" name="image_file" accept="image/*" onchange="previewLocalImage(this)">
-            </div>
-            <div>
-              <label for="image_url" class="admin-form-label">Atau URL Gambar</label>
-              <input type="text" class="form-control" id="image_url" name="image_url" value="{{ old('image_url', $product['image'] ?? '') }}" placeholder="https://example.com/image.jpg" oninput="previewUrlImage(this.value)">
-            </div>
-          </div>
-        </div>
+      <div class="pt-3" style="border-top: 1px solid var(--color-border);">
+        <x-admin.image-upload
+          label="Gambar Utama / Cover"
+          helpText="Thumbnail katalog, kartu, dan PDF penawaran."
+          nameFile="image_file"
+          nameUrl="image_url"
+          :valueUrl="old('image_url', $product['image'] ?? '')"
+          previewId="image-preview"
+          placeholderImage="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80"
+        />
       </div>
 
       <div class="admin-form-group mb-0">
@@ -280,16 +264,12 @@
           </div>
         @endif
 
-        {{-- Dropzone & Multi-file picker --}}
-        <div id="gallery_dropzone" class="p-4 mb-3 d-flex flex-column align-items-center justify-content-center text-center" style="border: 1.5px dashed var(--color-border); border-radius: 10px; background: var(--color-surface-subtle); cursor: pointer; transition: all 0.15s ease;">
-          <i data-lucide="cloud-upload" class="fs-2 mb-2 d-inline-block mx-auto" style="color: var(--color-accent, #A6171C); width: 36px; height: 36px;"></i>
-          <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.92rem;">
-            + Klik di sini untuk menambah foto galeri
-          </span>
-          <span class="small text-muted d-block mt-1" style="max-width: 520px;">
-            Dapat memilih beberapa file sekaligus (Ctrl/Shift) atau menambah foto satu per satu (Maks. 5MB per file, format JPG, PNG, WEBP).
-          </span>
-        </div>
+        {{-- Dropzone component --}}
+        <x-admin.dropzone 
+          id="gallery_dropzone"
+          title="+ Klik di sini untuk menambah foto galeri"
+          subtitle="Dapat memilih beberapa file sekaligus (Ctrl/Shift) atau menambah foto satu per satu (Maks. 5MB per file, format JPG, PNG, WEBP)."
+        />
 
         {{-- Previews of newly selected files --}}
         <div id="gallery_previews_wrapper" class="mb-3" style="display: none;">
