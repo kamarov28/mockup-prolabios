@@ -164,71 +164,13 @@
                   </div>
                 </div>
 
-                {{-- Integrated B2B Order & RFQ Form --}}
-                @php
-                  $stock = (int) ($product['stock'] ?? 0);
-                  $price = (float) ($product['price'] ?? 0);
-                @endphp
-                <div class="card p-4 mb-4" style="background: #FAFAFA; border: 1px solid #E5E7EB;">
-                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pb-3 mb-3 border-bottom detail-spec-divider">
-                      <div>
-                        <span class="text-muted small d-block mb-1 fw-medium">Estimasi Harga Unit / Penawaran Resmi:</span>
-                        <strong class="fs-4 d-block detail-price">
-                          {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
-                        </strong>
-                      </div>
-                      <div>
-                        @if($stock > 0)
-                          <span class="nb-badge-stock">
-                            <i data-lucide="package" class="me-1"></i> Stok Siap: {{ $stock }} unit
-                          </span>
-                        @else
-                          <span class="nb-badge-stock nb-badge-stock--empty">
-                            <i data-lucide="history" class="me-1"></i> Pesanan Khusus (Indent)
-                          </span>
-                        @endif
-                      </div>
-                    </div>
-
-                    <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form" class="mb-0">
-                      @csrf
-                      <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
-                      <input type="hidden" name="title" value="{{ $product['title'] }}">
-
-                      <div class="d-flex flex-wrap align-items-end gap-3">
-                        <div>
-                          <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label">Jumlah Unit</label>
-                          <div class="nb-stepper-wrap">
-                            <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
-                              <i data-lucide="minus"></i>
-                            </button>
-                            <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
-                            <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
-                              <i data-lucide="plus"></i>
-                            </button>
-                          </div>
-                        </div>
-
-                        <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
-                          <i data-lucide="shopping-cart" class="me-2"></i> Tambah ke Keranjang Penawaran
-                        </button>
-                      </div>
-
-                      <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
-                        <i data-lucide="info" class="me-1"></i>
-                        Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Kelebihannya akan diproses sebagai <strong>pesanan khusus</strong> — estimasi waktu pengadaan akan diinformasikan Tim Sales pada Surat Penawaran.
-                      </div>
-                    </form>
-                  </div>
-
-                  <div class="d-flex flex-wrap gap-3 align-items-center">
-                    <a href="{{ route('cart.index') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                      <i data-lucide="shopping-cart" class="me-2"></i> Cek Keranjang Penawaran
-                    </a>
-                    <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                      <i data-lucide="arrow-left" class="me-2"></i> Kembali ke Katalog
-                    </a>
-                  </div>
+                <div class="mt-4 d-flex flex-wrap gap-3 align-items-center">
+                  <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-nav-btn text-decoration-none">
+                    <i data-lucide="shopping-cart" class="me-2"></i> Minta Penawaran
+                  </a>
+                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
+                    <i data-lucide="arrow-left" class="me-2"></i> Kembali ke Katalog
+                  </a>
                 </div>
               </div>
             </div>
