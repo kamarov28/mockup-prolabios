@@ -98,7 +98,6 @@ class HomepageSettingsUpdater
             'social_instagram' => 'nullable|string|max:500',
             'social_facebook' => 'nullable|string|max:500',
             'social_linkedin' => 'nullable|string|max:500',
-            'social_twitter' => 'nullable|string|max:500',
         ]);
     }
 
@@ -201,7 +200,6 @@ class HomepageSettingsUpdater
         $patch['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
         $patch['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');
         $patch['social_linkedin'] = $request->input('social_linkedin', $homeData['social_linkedin'] ?? '');
-        $patch['social_twitter'] = $request->input('social_twitter', $homeData['social_twitter'] ?? '');
 
         $existingLogo = $homeData['site_logo'] ?? '';
         $patch['site_logo'] = $this->handleImageUpload(

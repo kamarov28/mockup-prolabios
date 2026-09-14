@@ -250,13 +250,6 @@
           </div>
           @error('social_linkedin') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
-        <div class="col-md-6">
-          <div class="input-group">
-            <span class="input-group-text text-dark" style="width: 42px; justify-content: center;"><i class="bi bi-twitter-x"></i></span>
-            <input type="text" class="form-control @error('social_twitter') is-invalid @enderror" id="social_twitter" name="social_twitter" placeholder="https://twitter.com/akun" value="{{ old('social_twitter', $homeData['social_twitter'] ?? '') }}">
-          </div>
-          @error('social_twitter') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-        </div>
       </div>
 
       <div class="mt-4 pt-4 text-end" style="border-top: 1px solid var(--color-border);">

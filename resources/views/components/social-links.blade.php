@@ -40,16 +40,6 @@
     ]
   ];
 
-  if (!empty($siteSettings['social_twitter'])) {
-    $socials[] = [
-      'platform' => 'twitter',
-      'title' => 'Twitter / X',
-      'label' => 'Twitter',
-      'icon' => 'bi bi-twitter-x',
-      'iconClass' => 'profil-social-icon--twitter',
-      'url' => $siteSettings['social_twitter']
-    ];
-  }
 @endphp
 
 @if($variant === 'list')

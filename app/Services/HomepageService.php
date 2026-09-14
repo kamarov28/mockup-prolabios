@@ -215,7 +215,6 @@ class HomepageService
             'social_instagram' => 'https://instagram.com/prolabios',
             'social_facebook' => 'https://facebook.com/prolabios',
             'social_linkedin' => 'https://linkedin.com/company/prolabios',
-            'social_twitter' => 'https://twitter.com/prolabios',
 
             // Page banners
             'products_title' => 'Semua Produk',
