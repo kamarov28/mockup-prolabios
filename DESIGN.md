@@ -60,11 +60,11 @@ No strokes, no offsets. Pure rounded geometry:
 ## 4. Typography & Hierarchy
 
 ### Font Families
-- **Display / Headings**: `'Bricolage Grotesque', 'IBM Plex Sans', system-ui, sans-serif`
-  - Expressive, authoritative, tight tracking (`letter-spacing: -0.02em` to `-0.03em`).
-- **Body & Data**: `'IBM Plex Sans', system-ui, sans-serif`
+- **Display / Headings**: `'Space Grotesk', system-ui, -apple-system, sans-serif`
+  - Industrial precision & scientific grotesque aesthetic, tight tracking (`letter-spacing: -0.02em` to `-0.03em`).
+- **Body & Data**: `'DM Sans', system-ui, -apple-system, sans-serif`
   - High legibility across technical specifications, catalog grids, and data sheets.
-- **Monospace / Catalog Codes**: `SFMono-Regular, Menlo, Monaco, Consolas, monospace`
+- **Monospace / Catalog Codes**: `'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, monospace`
   - Used for CAT numbers, batch identifiers, ISO codes, and quantity counters with tabular figures (`font-feature-settings: "tnum" 1`).
 
 ---
