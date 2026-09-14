@@ -281,12 +281,12 @@
         @endif
 
         {{-- Dropzone & Multi-file picker --}}
-        <div id="gallery_dropzone" class="p-4 text-center mb-3" style="border: 1.5px dashed var(--color-border); border-radius: 10px; background: var(--color-surface-subtle); cursor: pointer; transition: all 0.15s ease;">
-          <i data-lucide="cloud-upload" class="fs-2 d-block mb-2" style="color: var(--color-accent, #A6171C);"></i>
+        <div id="gallery_dropzone" class="p-4 mb-3 d-flex flex-column align-items-center justify-content-center text-center" style="border: 1.5px dashed var(--color-border); border-radius: 10px; background: var(--color-surface-subtle); cursor: pointer; transition: all 0.15s ease;">
+          <i data-lucide="cloud-upload" class="fs-2 mb-2 d-inline-block mx-auto" style="color: var(--color-accent, #A6171C); width: 36px; height: 36px;"></i>
           <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.92rem;">
             + Klik di sini untuk menambah foto galeri
           </span>
-          <span class="small text-muted d-block mt-1">
+          <span class="small text-muted d-block mt-1" style="max-width: 520px;">
             Dapat memilih beberapa file sekaligus (Ctrl/Shift) atau menambah foto satu per satu (Maks. 5MB per file, format JPG, PNG, WEBP).
           </span>
         </div>
