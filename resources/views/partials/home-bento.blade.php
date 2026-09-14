@@ -33,9 +33,6 @@
               <span class="d-inline-flex align-items-center gap-1 fw-bold text-dark">
                 <i data-lucide="file-check" class="text-primary me-1"></i> BATCH-2026-TERRA09
               </span>
-              <span class="nb-badge-sm" style="background: #E8F5E9; color: #2E7D32; border-color: #2E7D32;">
-                <i data-lucide="check-circle-2" class="me-1"></i> Verified &amp; Passed
-              </span>
             </div>
             <div class="d-flex justify-content-between align-items-center" style="font-size: 0.82rem;">
               <span class="text-muted">Terragene SCBI Biological Indicator</span>
