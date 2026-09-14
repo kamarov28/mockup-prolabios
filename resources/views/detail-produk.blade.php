@@ -61,21 +61,24 @@
           @if($product)
             @php
               $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
-              $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
+              $mainImage = !empty($product['image']) ? $product['image'] : asset('images/placeholder.svg');
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
             @endphp
 
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
               <div class="flex-grow-1 detail-header-copy">
                 <h1 class="profil-section-title detail-product-title">{{ $product['title'] }}</h1>
-                <div class="d-flex flex-wrap gap-2 align-items-center">
-                  @if(!empty($product['category']))
-                    <span class="nb-badge-sm text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
-                  @endif
+                <div class="d-flex flex-wrap gap-2 align-items-center mt-2">
                   @if(!empty($product['catalog']))
-                    <span class="product-cat-code">
-                      CAT. {{ $product['catalog'] }}
-                    </span>
+                    <span class="product-cat-code">CAT. {{ $product['catalog'] }}</span>
+                  @endif
+                  @if(!empty($product['category']))
+                    <span class="text-muted small">·</span>
+                    <span class="text-muted small text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
+                  @endif
+                  @if(!empty($product->principal))
+                    <span class="text-muted small">·</span>
+                    <span class="text-dark small fw-semibold">{{ $product->principal->name }}</span>
                   @endif
                 </div>
               </div>
@@ -116,23 +119,6 @@
               </div>
 
               <div class="col-md-7">
-                <div class="mb-4 d-flex flex-wrap gap-2 align-items-center">
-                  @if(!empty($product['catalog']))
-                    <div class="product-cat-code">
-                      CAT. {{ $product['catalog'] }}
-                    </div>
-                  @endif
-
-                  @if(!empty($product->principal))
-                    <span class="nb-badge-sm d-inline-flex align-items-center gap-1">
-                      <i data-lucide="building" class="text-primary"></i> {{ $product->principal->name }}
-                      @if(!empty($product->principal->address))
-                        <span class="text-muted ms-1">({{ $product->principal->address }})</span>
-                      @endif
-                    </span>
-                  @endif
-                </div>
-
                 <div class="card p-4 mb-4">
                   <h3 class="layanan-feature-title detail-section-heading mb-3">
                     <i data-lucide="file-text" class="text-primary me-2"></i>Deskripsi & Spesifikasi Produk

@@ -304,9 +304,7 @@ function initCartPage() {
             icon: 'success',
             title: 'Item berhasil dihapus',
             showConfirmButton: false,
-            timer: 2000,
-            background: '#0f172a',
-            color: '#ffffff'
+            timer: 2000
           });
         }
       }

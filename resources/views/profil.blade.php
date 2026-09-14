@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title', 'Profil Perusahaan | PT Prolabios Mitra Analitika')
-@section('meta_description', 'Mengenal lebih dekat PT. Prolabios Mitra Analitika (PMA) — Distributor terpercaya instrumen laboratorium, media mikrobiologi, dan perlengkapan pengujian analitika di Indonesia.')
+@section('meta_description', 'Profil PT. Prolabios Mitra Analitika — Distributor resmi media kultur mikrobiologi, reagen kimia analitika, dan instrumen laboratorium dengan fasilitas cold-chain di Indonesia.')
 
 @section('content')
   @include('partials.subpage-hero', [
     'badge' => '<i data-lucide="building" class="me-1"></i> TENTANG KAMI',
-    'title' => 'Membangun Kepercayaan Melalui Standar & Keandalan Lab',
-    'subtitle' => '<strong>PT. Prolabios Mitra Analitika (PMA)</strong> adalah distributor B2B instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian laboratorium dengan standar mutu internasional dan kepatuhan regulasi teruji di Indonesia.'
+    'title' => 'Distribusi Reagen & Alat Laboratorium Bergaransi Resmi',
+    'subtitle' => '<strong>PT. Prolabios Mitra Analitika (PMA)</strong> menyuplai media kultur mikrobiologi, reagen kimia analitik, dan instrumen uji untuk laboratorium industri pangan, farmasi, universitas, dan fasilitas riset di Indonesia.'
   ])
 
   <!-- Main Content Layout -->
@@ -18,117 +18,86 @@
         <!-- Left / Main Column -->
         <div class="col-lg-8 order-1">
 
-          <!-- 1. Cerita Kami (Our Story) -->
+          <!-- 1. Operasional & Spesialisasi Kami -->
           <div class="card p-4 p-md-5 mb-5">
             <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
-              <span class="profil-section-label">Cerita Kami</span>
-              <span class="nb-mono text-muted small">ESTABLISHED &amp; TRUSTED</span>
+              <span class="profil-section-label">Fokus Operasional</span>
+              <span class="nb-mono text-muted small">DISTRIBUSI RESMI &amp; COLD-CHAIN</span>
             </div>
 
-            <!-- Hero Image with Neo-Brutal Frame -->
+            <!-- Hero Image with Clean Precision Frame -->
             <div class="profil-hero-img mb-4">
               <img src="{{ asset('images/sectors/general-purpose.jpg') }}"
-                   alt="Laboratorium Pengujian dan Fasilitas Distribusi Prolabios"
+                   alt="Fasilitas Penyimpanan dan Distribusi Prolabios"
                    loading="lazy" decoding="async">
             </div>
 
-            <h2 class="profil-section-title">Dedikasi untuk Ekosistem Laboratorium Indonesia</h2>
+            <h2 class="profil-section-title">Pasokan Reagen &amp; Instrumen Siap Audit</h2>
             
             <div class="profil-body-text">
               <p>
-                <strong>PT. Prolabios Mitra Analitika (PMA)</strong> didirikan dengan komitmen teguh untuk menjadi salah satu distributor instrumen dan reagen laboratorium terkemuka di Indonesia. Kami hadir untuk menjembatani kebutuhan fasilitas laboratorium modern—mulai dari industri farmasi, makanan &amp; minuman, kosmetik, rumah sakit, universitas, hingga lembaga riset independen—dengan teknologi pengujian mutakhir berskala global.
+                Didirikan untuk menjawab kendala pasokan laboratorium di Indonesia, <strong>PT. Prolabios Mitra Analitika (PMA)</strong> berfokus pada penyediaan media mikrobiologi siap pakai, dehidrasi media, indikator biologi, serta instrumen preparasi analitika.
               </p>
               <p>
-                Kami percaya bahwa keberhasilan suatu pengujian analitis dan mikrobiologi bergantung pada kepastian mutu material uji. Oleh karena itu, PMA tidak hanya mendistribusikan produk, tetapi juga mengawal seluruh proses pengadaan: mulai dari seleksi formulasi media, kepastian rantai pasok dingin (<em>cold-chain logistics</em>), penyediaan dokumen ketertelusuran lengkap (COA, MSDS, Izin Edar Kemenkes), hingga pendampingan teknis purna jual.
-              </p>
-              <p class="mb-4">
-                Tolak ukur kesuksesan kami diukur dari keberhasilan penelitian mitra, pertumbuhan keahlian tim laboratorium, kesejahteraan karyawan, serta kepuasan pelanggan yang berkelanjutan.
+                Setiap batch produk kami sertakan dengan dokumen ketertelusuran lengkap: <strong>Certificate of Analysis (COA)</strong>, <strong>Material Safety Data Sheet (MSDS)</strong>, dan izin edar resmi dari otoritas terkait. Untuk media kultur sensitif suhu, kami menerapkan sistem penyimpanan dan ekspedisi rantai dingin (<em>cold-chain 2°C – 8°C</em>) dengan pemantau suhu guna menjaga viabilitas media hingga tiba di lab Anda.
               </p>
             </div>
 
             <!-- Capability Chips -->
             <div class="pt-3 nb-card-foot d-flex flex-wrap gap-2">
-              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Reagen Mikrobiologi</span>
-              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Media Kultur Siap Pakai</span>
-              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Biological Indicator</span>
-              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Instrumen Analitika</span>
-              <span class="nb-badge-sm"><i data-lucide="check-circle" class="me-1 text-primary"></i> Jasa Kalibrasi &amp; Servis</span>
+              <span class="nb-badge-sm"><i data-lucide="check" class="me-1 text-primary"></i> Cold-Chain 2°C – 8°C</span>
+              <span class="nb-badge-sm"><i data-lucide="check" class="me-1 text-primary"></i> COA &amp; MSDS per Nomor Lot</span>
+              <span class="nb-badge-sm"><i data-lucide="check" class="me-1 text-primary"></i> Registrasi Kemenkes / AKL-AKD</span>
+              <span class="nb-badge-sm"><i data-lucide="check" class="me-1 text-primary"></i> Dukungan Instalasi IQ/OQ</span>
             </div>
           </div>
 
-          <!-- 2. Visi & Misi (Vision & Mission) -->
+          <!-- 2. Komitmen Operasional (Menggantikan Visi-Misi Klise) -->
           <div id="visi-misi" class="mb-5">
             <div class="mb-4">
-              <span class="profil-section-label">Prinsip Kami</span>
-              <h2 class="profil-section-title">Visi &amp; Misi Perusahaan</h2>
+              <span class="profil-section-label">Standar Layanan</span>
+              <h2 class="profil-section-title">3 Komitmen Operasional Kami</h2>
               <p class="profil-body-text text-muted">
-                Fondasi arah langkah kami dalam memberikan kontribusi nyata bagi dunia sains dan kendali mutu di Indonesia.
+                Standar kerja harian tim Prolabios dalam mengawal pengadaan material uji Anda.
               </p>
             </div>
 
-            <!-- Visi Lead Anchor Card -->
-            <div class="card p-4 p-md-5 mb-4 highlight-card">
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <div class="profil-value-letter-wrap letter-p m-0" style="width: 44px; height: 44px; font-size: 1.25rem;">
-                  <i data-lucide="eye"></i>
-                </div>
-                <h3 class="profil-section-title m-0 fs-4">Visi Kami</h3>
-              </div>
-              <p class="profil-body-text fs-5 fw-medium mb-0" style="line-height: 1.6; color: var(--nb-ink);">
-                "Menjadi perusahaan terdepan dalam memenuhi kebutuhan laboratorium, meningkatkan kompetensi pengguna, dan menjadi mitra solusi terbaik bagi pelanggan di seluruh Indonesia."
-              </p>
-            </div>
-
-            <!-- 4 Modular Mission Cards (2x2 Grid) -->
             <div class="row g-3">
-              <div class="col-md-6">
-                <div class="profil-mission-card">
+              <div class="col-md-4">
+                <div class="profil-mission-card h-100">
                   <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="nb-badge-sm">01. PRODUK</span>
-                    <i data-lucide="package" class="text-primary fs-5"></i>
+                    <span class="nb-badge-sm">01. MUTU &amp; LOT</span>
+                    <i data-lucide="clipboard-check" class="text-primary fs-5"></i>
                   </div>
-                  <h4 class="profil-mission-title">Kualitas &amp; Ketersediaan</h4>
+                  <h4 class="profil-mission-title">Ketertelusuran Batch</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
-                    Menyediakan produk instrumen, reagen, dan media kultur berstandar farmakope mutu tertinggi dengan harga kompetitif dan manfaat maksimal.
+                    Seluruh reagen dan media memiliki masa kedaluwarsa panjang serta COA spesifik nomor lot untuk kebutuhan akreditasi ISO 17025.
                   </p>
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="profil-mission-card">
+              <div class="col-md-4">
+                <div class="profil-mission-card h-100">
                   <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="nb-badge-sm">02. PENGGUNA</span>
-                    <i data-lucide="users" class="text-primary fs-5"></i>
+                    <span class="nb-badge-sm">02. LOGISTIK</span>
+                    <i data-lucide="truck" class="text-primary fs-5"></i>
                   </div>
-                  <h4 class="profil-mission-title">Edukasi &amp; Solusi Teknis</h4>
+                  <h4 class="profil-mission-title">Proteksi Pengiriman</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
-                    Menjadi mitra aktif dalam transfer pengetahuan produk, pelatihan aplikasi instrumen, serta pemecahan kendala teknis analisis harian.
+                    Pengemasan khusus untuk material cairan, glassware kaca presisi, dan kotak berinsulasi pendingin untuk produk termo-labil.
                   </p>
                 </div>
               </div>
 
-              <div class="col-md-6">
-                <div class="profil-mission-card">
+              <div class="col-md-4">
+                <div class="profil-mission-card h-100">
                   <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="nb-badge-sm">03. PENGADAAN</span>
-                    <i data-lucide="file-check" class="text-primary fs-5"></i>
+                    <span class="nb-badge-sm">03. TEKNIS</span>
+                    <i data-lucide="headset" class="text-primary fs-5"></i>
                   </div>
-                  <h4 class="profil-mission-title">Keandalan Pengadaan B2B</h4>
+                  <h4 class="profil-mission-title">Dukungan Aplikasi</h4>
                   <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
-                    Menjadi mitra pengadaan yang tertib dokumen regulasi (COA, MSDS, AKL/AKD), transparan, dan menjamin ketepatan jadwal pasokan.
-                  </p>
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <div class="profil-mission-card">
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="nb-badge-sm">04. LAYANAN</span>
-                    <i data-lucide="wrench" class="text-primary fs-5"></i>
-                  </div>
-                  <h4 class="profil-mission-title">Layanan Purna Jual &amp; Kalibrasi</h4>
-                  <p class="profil-body-text mb-0" style="font-size: 0.88rem;">
-                    Menyediakan dukungan teknis purna jual yang terpercaya melalui instalasi kualifikasi IQ/OQ/PQ, pemeliharaan preventif, dan ketersediaan suku cadang.
+                    Pendampingan pemilihan formulasi media yang cocok dengan metode uji SNI, AOAC, atau Farmakope Indonesia.
                   </p>
                 </div>
               </div>
@@ -314,11 +283,11 @@
           @include('partials.sidebar-cta', [
             'badge' => 'KONSULTASI PENGADAAN',
             'title' => 'Butuh Penawaran atau Diskusi Teknis?',
-            'text' => 'Tim representatif teknis kami siap mendampingi pemilihan instrumen, reagen, atau penerbitan surat penawaran harga resmi (Quotation) untuk institusi Anda.',
+            'text' => 'Konsultasikan kebutuhan spek alat, ketersediaan lot reagen, atau penerbitan surat penawaran harga resmi (Quotation) langsung dengan sales kami.',
             'primaryUrl' => url('/kontak'),
-            'primaryText' => 'Hubungi Kami',
+            'primaryText' => 'Hubungi Sales',
             'secondaryUrl' => url('/produk'),
-            'secondaryText' => 'Lihat Katalog Produk',
+            'secondaryText' => 'Katalog Produk',
             'secondaryLucide' => 'package'
           ])
 
@@ -330,8 +299,8 @@
 
   <!-- Unified RFQ Callout Section -->
   @include('partials.rfq-banner', [
-    'title' => 'Siap Memulai Pengadaan Laboratorium Anda?',
-    'subtitle' => 'Ajukan permintaan penawaran harga resmi (RFQ) untuk reagen, instrumen, maupun konsumabel. Tim kami akan segera merespons dengan ketersediaan stok, harga khusus, dan dokumen kepatuhan lengkap.'
+    'title' => 'Kirim Daftar Kebutuhan Lab Anda',
+    'subtitle' => 'Pilih produk di katalog atau kirim daftar PO/RFQ Anda. Tim sales kami merespons penawaran harga resmi, stok lot, dan estimasi waktu kirim dalam 1-2 jam kerja.'
   ])
 @endsection
 

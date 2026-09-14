@@ -35,15 +35,15 @@
   <meta property="og:type" content="@yield('og_type', 'website')">
   <meta property="og:locale" content="id_ID">
   <meta property="og:url" content="{{ request()->url() }}">
-  <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
-  <meta property="og:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
+  <meta property="og:title" content="@yield('og_title', 'PROLABIOS | Distributor Media Kultur, Reagen & Instrumen Lab')">
+  <meta property="og:description" content="@yield('og_description', 'Distributor resmi media kultur mikrobiologi, reagen kimia analitika, dan instrumen laboratorium dengan jaminan cold-chain serta dokumen lot resmi.')">
   <meta property="og:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
 
   <!-- Twitter Card Metadata -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="{{ request()->url() }}">
-  <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Solusi Analitika & Mikrobiologi')">
-  <meta name="twitter:description" content="@yield('og_description', 'Penyedia media kultur, instrumen lab, dan perlengkapan pengujian terbaik di Indonesia.')">
+  <meta name="twitter:title" content="@yield('og_title', 'PROLABIOS | Distributor Media Kultur, Reagen & Instrumen Lab')">
+  <meta name="twitter:description" content="@yield('og_description', 'Distributor resmi media kultur mikrobiologi, reagen kimia analitika, dan instrumen laboratorium dengan jaminan cold-chain serta dokumen lot resmi.')">
   <meta name="twitter:image" content="@yield('og_image', asset('images/logo-prolabios.png'))">
 
   <!-- Google Analytics 4 / GTM (If configured via .env or SiteSettings) -->

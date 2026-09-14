@@ -18,8 +18,105 @@
   color: var(--nb-muted);
 }
 
+/* ── Catalog View Switcher (Segmented Control) ──────────────────────────── */
+.catalog-view-switcher {
+  display: inline-flex;
+  align-items: center;
+  background: #F1F4F8;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+.catalog-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  text-decoration: none !important;
+}
+.catalog-view-toggle span {
+  color: inherit;
+}
+.catalog-view-toggle svg,
+.catalog-view-toggle i {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+}
+.catalog-view-toggle:hover {
+  color: var(--nb-ink);
+  background: rgba(255, 255, 255, 0.6);
+}
+.catalog-view-toggle.active {
+  background: #FFFFFF !important;
+  color: var(--nb-primary) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.catalog-view-toggle.active span {
+  color: var(--nb-primary) !important;
+  font-weight: 700;
+}
+.catalog-view-toggle.active svg,
+.catalog-view-toggle.active i {
+  stroke: var(--nb-primary) !important;
+  color: var(--nb-primary) !important;
+}
+
+/* ── Precision Catalog Table (B2B High Density) ─────────────────────────── */
+.catalog-precision-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.catalog-precision-table thead th {
+  background: #F8F9FA !important;
+  color: #475569 !important;
+  font-family: var(--font-headline) !important;
+  font-size: 0.74rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  border-bottom: 1px solid #E2E8F0 !important;
+  padding: 12px 16px !important;
+  white-space: nowrap;
+}
+.catalog-precision-table tbody td {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #F1F5F9 !important;
+  font-size: 0.88rem !important;
+  vertical-align: middle !important;
+}
+.catalog-precision-table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+.catalog-precision-table tbody tr:hover td {
+  background-color: #F8FAFC !important;
+}
+.catalog-table-title {
+  font-family: var(--font-display);
+  font-size: 0.94rem;
+  font-weight: 600;
+  color: var(--nb-ink);
+  transition: color var(--transition-fast);
+}
+.catalog-table-title:hover {
+  color: var(--nb-primary) !important;
+}
+
 .produk-search-wrap {
   position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .produk-search-wrap input {
@@ -29,7 +126,7 @@
   color: var(--nb-ink);
   font-family: var(--font-body);
   font-size: 0.92rem;
-  padding: 12px 18px 12px 46px;
+  padding: 12px 18px 12px 44px;
   transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
   box-shadow: var(--nb-shadow-sm);
   width: 100%;
@@ -41,13 +138,35 @@
   box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12);
 }
 
-.produk-search-wrap i {
+.produk-search-btn {
   position: absolute;
-  left: 16px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--nb-ink);
-  font-size: 1.1rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nb-muted);
+  cursor: pointer;
+  z-index: 2;
+  transition: color var(--transition-fast);
+}
+
+.produk-search-btn:hover {
+  color: var(--nb-primary);
+}
+
+.produk-search-btn svg,
+.produk-search-btn i,
+.produk-search-wrap svg,
+.produk-search-wrap i {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
 }
 
 /* ── Catalog Product Cards ───────────────────────────────────────────────── */

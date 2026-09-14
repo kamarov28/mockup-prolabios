@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PT Prolabios Mitra Analitika | Solusi Laboratorium Terpercaya')
+@section('title', 'PT Prolabios Mitra Analitika | Distributor Media Kultur, Reagen & Alat Lab')
 
 @section('preload')
   @php
@@ -20,8 +20,8 @@
     <div class="container">
       <div class="d-flex flex-wrap justify-content-between align-items-end mb-5 typo-section-head">
         <div>
-          <h2 class="typo-section-title">Produk & Reagen Unggulan</h2>
-          <p class="typo-section-sub">Instrumen teruji dan media kultur standar farmakope siap pakai untuk kebutuhan pengujian lab.</p>
+          <h2 class="typo-section-title">Katalog Reagen &amp; Media Terpilih</h2>
+          <p class="typo-section-sub">Media mikrobiologi siap pakai, endotoksin kit, dan reagen bersertifikasi lot resmi.</p>
         </div>
         <div class="mt-3 mt-md-0">
           <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">

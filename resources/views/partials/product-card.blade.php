@@ -1,6 +1,6 @@
 {{-- resources/views/partials/product-card.blade.php --}}
 @php
-  $cardImage = $prod['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
+  $cardImage = !empty($prod['image']) ? $prod['image'] : asset('images/placeholder.svg');
   $cardUrl = product_url($prod);
   $catAttr = trim(($prod['category'] ?? '') . ' ' . ($prod['sector'] ?? ''));
   $desc = !empty($prod['sub_category'])
@@ -33,8 +33,8 @@
                    loading="lazy">
             </div>
           @else
-            <span class="nb-badge-sm">
-              <i data-lucide="building" class="me-1 text-primary"></i>{{ $prod->principal->name }}
+            <span class="text-muted small fw-semibold">
+              {{ $prod->principal->name }}
             </span>
           @endif
         @endif

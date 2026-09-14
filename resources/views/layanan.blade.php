@@ -56,7 +56,7 @@
             </div>
             <span class="profil-section-label"><i data-lucide="wrench" class="me-1"></i> Layanan 01</span>
             <h2 class="profil-section-title">Perawatan &amp; Perbaikan Instrumen</h2>
-            <p class="profil-body-text">Sebagai komitmen kami sebagai penyedia <em>layanan purna jual</em> terpercaya, PT Prolabios Mitra Analitika memastikan investasi Anda pada instrumen laboratorium tetap berkinerja prima. Teknisi kami terlatih langsung dari pabrikan internasional.</p>
+            <p class="profil-body-text">Layanan purna jual teknis untuk menjaga presisi alat analitika dan memperpanjang masa pakai instrumen lab Anda. Didukung teknisi bersertifikat pabrikan dengan suku cadang orisinal.</p>
 
             <div class="row g-3 mt-3">
               <div class="col-md-4">

@@ -42,7 +42,7 @@
     <!-- Header Title -->
     <div class="mb-4">
       <h1 class="profil-section-title" style="font-size: 2.2rem !important; margin-bottom: 8px !important;">Daftar Item Pengajuan Penawaran</h1>
-      <p class="profil-body-text mb-0">Periksa daftar item dan kuantitas produk sebelum melanjutkan ke form pengajuan.</p>
+      <p class="profil-body-text mb-0">Pastikan item, kemasan, dan jumlah unit sudah sesuai spesifikasi kebutuhan lab Anda.</p>
     </div>
 
     <!-- Alerts -->
@@ -73,7 +73,7 @@
                 <!-- 1. Thumbnail Image -->
                 <div class="col-auto">
                   <div class="cart-img-box">
-                    <img src="{{ $item['image'] ?: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="{{ $item['title'] }} — Item keranjang" loading="lazy" decoding="async">
+                    <img src="{{ $item['image'] ?: asset('images/placeholder.svg') }}" alt="{{ $item['title'] }} — Item keranjang" loading="lazy" decoding="async">
                   </div>
                 </div>
 
@@ -182,16 +182,16 @@
 
             <div class="rfq-info-box mb-4">
               <div class="d-flex gap-2">
-                <i data-lucide="shield-check" class="fs-5 flex-shrink-0 text-primary"></i>
-                <div style="font-size: 0.82rem; color: var(--nb-ink);">
-                  <strong class="d-block mb-1" style="font-family: var(--font-display); font-weight: 700;">Informasi Penawaran</strong>
-                  Harga final, diskon khusus kuantitas, dan estimasi waktu pengadaan akan diinformasikan langsung oleh Tim Sales via Email/WhatsApp.
+                <i data-lucide="info" class="fs-5 flex-shrink-0" style="color: var(--nb-primary);"></i>
+                <div style="font-size: 0.84rem; color: var(--nb-ink); line-height: 1.5;">
+                  <strong class="d-block mb-1" style="font-family: var(--font-display); font-weight: 700;">Catatan Penawaran Resmi</strong>
+                  Harga final, ketersediaan lot/COA, serta diskon pengadaan volume akan dikonfirmasi via WA/Email tim sales (respon maks. 2 jam kerja).
                 </div>
               </div>
             </div>
 
             <a href="{{ route('rfq.checkout') }}" class="rfq-primary-btn">
-              Lanjut ke Form Pengajuan <i data-lucide="arrow-right" class="ms-2"></i>
+              Kirim Permintaan Harga <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
 
             <a href="{{ url('/produk') }}" class="rfq-secondary-btn">
@@ -203,11 +203,11 @@
       </div>
     @else
       <div class="card cart-empty-card text-center p-5 mx-auto">
-        <i data-lucide="shopping-cart" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
-        <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Keranjang Belanja Masih Kosong</h2>
-        <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Pilih produk laboratorium atau reagen di katalog untuk mulai membuat pengajuan penawaran harga.</p>
+        <i data-lucide="package-search" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
+        <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Belum ada item dalam daftar</h2>
+        <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Gunakan pencarian nama produk atau masukkan nomor katalog (CAT#) untuk menambahkan item penawaran.</p>
         <div>
-          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary">Jelajahi Katalog Produk <i data-lucide="arrow-right" class="ms-1"></i></a>
+          <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary">Buka Katalog Produk <i data-lucide="arrow-right" class="ms-1"></i></a>
         </div>
       </div>
     @endif

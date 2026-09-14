@@ -41,7 +41,7 @@
     <div class="container">
       @if($product)
         @php
-          $mainImage = $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80';
+          $mainImage = !empty($product['image']) ? $product['image'] : asset('images/placeholder.svg');
           $stock = (int) ($product['stock'] ?? 0);
           $price = (float) ($product['price'] ?? 0);
         @endphp
@@ -65,12 +65,12 @@
                 <span class="product-cat-code">CAT. {{ $product['catalog'] }}</span>
               @endif
               @if(!empty($product['category']))
-                <span class="nb-badge-sm text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
+                <span class="text-muted small">·</span>
+                <span class="text-muted small text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
               @endif
               @if(!empty($product->principal))
-                <span class="nb-badge-sm d-inline-flex align-items-center gap-1">
-                  <i data-lucide="building" class="text-primary"></i> {{ $product->principal->name }}
-                </span>
+                <span class="text-muted small">·</span>
+                <span class="text-dark small fw-semibold">{{ $product->principal->name }}</span>
               @endif
             </div>
 
@@ -127,12 +127,12 @@
             </div>
 
             <div class="mb-4 p-3 d-flex align-items-center gap-3 rfq-trust-box">
-              <div class="nb-status-icon-box detail-response-icon flex-shrink-0">
-                <i data-lucide="history" class="text-dark"></i>
+              <div class="nb-status-icon-box detail-response-icon flex-shrink-0" style="width: 42px; height: 42px; background: #FEE2E2;">
+                <i data-lucide="clock" style="font-size: 1.15rem; color: var(--nb-primary);"></i>
               </div>
               <div class="detail-trust-copy">
-                <strong class="d-block detail-datasheet-title">Komitmen Respon Cepat (Maksimal 1×24 Jam Kerja)</strong>
-                Permintaan Surat Penawaran Harga (SPH) institusi diproses maksimal dalam 1×24 jam kerja dengan garansi keaslian instrumen/reagen dari prinsipal.
+                <strong class="d-block detail-datasheet-title" style="font-size: 0.88rem;">Penerbitan SPH &amp; Konfirmasi Lot Stok</strong>
+                <span class="text-muted small">Surat Penawaran Harga (SPH) resmi, estimasi lead time kirim, dan COA per batch diterbitkan sales dalam 1–2 jam kerja.</span>
               </div>
             </div>
 

@@ -64,6 +64,7 @@ export function initCatalogAjax() {
           currentGrid.innerHTML = newGrid.innerHTML;
           currentGrid.className = newGrid.className;
           currentGrid.style.opacity = '1';
+          applyCatalogViewMode(localStorage.getItem('prolabios_catalog_view') || 'grid');
         }
 
         const currentPag = document.getElementById('dynamic-pagination');
@@ -71,6 +72,10 @@ export function initCatalogAjax() {
         if (currentPag && newPag) currentPag.innerHTML = newPag.innerHTML;
 
         setProductLoading(false, isLiveSearch);
+
+        if (window.lucide && window.lucide.createIcons) {
+          window.lucide.createIcons();
+        }
 
         if (updateHistory) {
           window.history.replaceState({ url: url }, '', url);
@@ -194,4 +199,47 @@ export function initCatalogAjax() {
       }, 250);
     });
   }
+
+  /* ── View Switcher (Grid vs Table Rapat) ────────────────────────────────── */
+  function applyCatalogViewMode(mode) {
+    const gridPanel = document.querySelector('.catalog-grid-panel');
+    const tablePanel = document.querySelector('.catalog-table-panel');
+    const btnGrid = document.getElementById('btn-view-grid');
+    const btnTable = document.getElementById('btn-view-table');
+
+    if (mode === 'table') {
+      if (gridPanel) gridPanel.classList.add('d-none');
+      if (tablePanel) tablePanel.classList.remove('d-none');
+      if (btnGrid) btnGrid.classList.remove('active');
+      if (btnTable) btnTable.classList.add('active');
+    } else {
+      if (gridPanel) gridPanel.classList.remove('d-none');
+      if (tablePanel) tablePanel.classList.add('d-none');
+      if (btnGrid) btnGrid.classList.add('active');
+      if (btnTable) btnTable.classList.remove('active');
+    }
+
+    try {
+      localStorage.setItem('prolabios_catalog_view', mode);
+    } catch (e) {
+      // LocalStorage unavailable
+    }
+
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons();
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    const toggleBtn = e.target.closest('.catalog-view-toggle');
+    if (toggleBtn) {
+      e.preventDefault();
+      const targetView = toggleBtn.getAttribute('data-view') || 'grid';
+      applyCatalogViewMode(targetView);
+    }
+  });
+
+  // Apply saved preference on page load
+  const initialView = localStorage.getItem('prolabios_catalog_view') || 'grid';
+  applyCatalogViewMode(initialView);
 }

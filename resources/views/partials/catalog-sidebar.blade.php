@@ -16,7 +16,9 @@
       @if(request()->query('subcategory'))
         <input type="hidden" name="subcategory" value="{{ request()->query('subcategory') }}">
       @endif
-      <i data-lucide="search" style="cursor: pointer;" onclick="document.getElementById('catalog-search-form').submit();"></i>
+      <button type="submit" class="produk-search-btn" aria-label="Cari Produk">
+        <i data-lucide="search"></i>
+      </button>
       <input type="text" id="local-search-input" name="s" placeholder="Cari produk, reagen, atau katalog..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
     </form>
 
