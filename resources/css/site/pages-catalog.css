@@ -829,8 +829,8 @@
 .table-principal-logo {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
-  max-height: 24px;
+  justify-content: flex-start;
+  max-height: 26px;
   flex-shrink: 0;
 }
 

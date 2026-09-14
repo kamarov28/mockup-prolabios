@@ -140,9 +140,10 @@
                 <table class="table custom-table align-middle mb-0" style="min-width: 650px;">
                   <thead>
                     <tr>
-                      <th class="table-col-catalog" style="width: 20%;">Katalog</th>
-                      <th style="width: 44%;">Produk &amp; Prinsipal</th>
-                      <th style="width: 36%;">Aplikasi &amp; Fungsi</th>
+                      <th class="table-col-catalog" style="width: 17%;">Katalog</th>
+                      <th style="width: 38%;">Produk</th>
+                      <th style="width: 18%;">Prinsipal</th>
+                      <th style="width: 27%;">Aplikasi &amp; Fungsi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -155,30 +156,32 @@
                             @if(!empty($prod['catalog']))
                               <span class="catalog-code-text">CAT. {{ $prod['catalog'] }}</span>
                             @else
-                              <span class="text-muted small">-</span>
+                              <span class="text-muted small">—</span>
                             @endif
                           </td>
                           <td>
-                            <div class="d-flex align-items-center justify-content-between gap-3">
-                              <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold table-product-link">
-                                {{ $prod['title'] }}
-                              </a>
-                              @if(!empty($prod->principal) && !empty($prod->principal->logo))
-                                <div class="flex-shrink-0 table-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
-                                  <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
-                                       alt="Logo {{ $prod->principal->name }}"
-                                       loading="lazy">
-                                </div>
-                              @elseif(!empty($prod->principal))
-                                <span class="badge bg-light text-secondary border small flex-shrink-0">{{ $prod->principal->name }}</span>
-                              @endif
-                            </div>
+                            <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold table-product-link">
+                              {{ $prod['title'] }}
+                            </a>
+                          </td>
+                          <td>
+                            @if(!empty($prod->principal) && !empty($prod->principal->logo))
+                              <div class="table-principal-logo" title="Prinsipal: {{ $prod->principal->name }}">
+                                <img src="{{ str_starts_with($prod->principal->logo, 'http') || str_starts_with($prod->principal->logo, '/') ? $prod->principal->logo : asset('storage/' . $prod->principal->logo) }}"
+                                     alt="Logo {{ $prod->principal->name }}"
+                                     loading="lazy">
+                              </div>
+                            @elseif(!empty($prod->principal))
+                              <span class="fw-semibold text-secondary small">{{ $prod->principal->name }}</span>
+                            @else
+                              <span class="text-muted small">—</span>
+                            @endif
                           </td>
                           <td style="color: var(--nb-muted); font-size: 0.88rem; line-height: 1.5;">
                             @php
                               $descText = trim(strip_tags(html_entity_decode($prod['description'] ?? '')));
                             @endphp
-                            {{ $descText ? Str::limit($descText, 140) : 'Instrumen dan reagen pendukung pengujian laboratorium.' }}
+                            {{ $descText ? Str::limit($descText, 120) : 'Instrumen dan reagen pendukung pengujian laboratorium.' }}
                           </td>
                         </tr>
                       @endforeach
