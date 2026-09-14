@@ -19,6 +19,12 @@ class StoreProductRequest extends FormRequest
                 'price' => str_replace(['.', ' '], '', $this->price),
             ]);
         }
+
+        if ($this->has('sectors') && is_array($this->sectors)) {
+            $this->merge([
+                'sector' => implode(',', array_filter($this->sectors)),
+            ]);
+        }
     }
 
     public function rules(): array
@@ -31,7 +37,9 @@ class StoreProductRequest extends FormRequest
             'principal_id' => ['nullable', 'integer', 'exists:principals,id'],
             'datasheet_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'datasheet_url' => ['nullable', 'string', 'max:500'],
-            'sector' => ['nullable', 'string', 'max:255'],
+            'sector' => ['nullable'],
+            'sectors' => ['nullable', 'array'],
+            'sectors.*' => ['string'],
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],

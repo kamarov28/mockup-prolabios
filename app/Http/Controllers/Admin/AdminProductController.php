@@ -151,6 +151,9 @@ class AdminProductController extends Controller
         $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
         $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
 
+        $sectorsInput = $request->input('sectors', $request->input('sector'));
+        $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
         $product = [
             'catalog' => $request->input('catalog') ?: '',
             'title' => $title,
@@ -158,7 +161,7 @@ class AdminProductController extends Controller
             'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
-            'sector' => $request->input('sector') ?: '',
+            'sector' => $sectorCsv,
             'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
             'gallery_images' => $galleryImages,
@@ -222,6 +225,9 @@ class AdminProductController extends Controller
             array_slice(array_merge($existingGallery, $newGalleryImages), 0, self::MAX_GALLERY_IMAGES)
         );
 
+        $sectorsInput = $request->input('sectors', $request->input('sector'));
+        $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
         $updatedProduct = [
             'catalog' => $request->input('catalog') ?: '',
             'title' => $newTitle,
@@ -229,7 +235,7 @@ class AdminProductController extends Controller
             'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: '',
-            'sector' => $request->input('sector') ?: '',
+            'sector' => $sectorCsv,
             'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
             'gallery_images' => $galleryImages,

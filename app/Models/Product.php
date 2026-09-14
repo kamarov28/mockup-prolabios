@@ -48,6 +48,37 @@ class Product extends Model
         return 'slug';
     }
 
+    public function getTitleAttribute($value): string
+    {
+        return $this->cleanMojibake($value) ?? '';
+    }
+
+    public function getDescriptionAttribute($value): ?string
+    {
+        return $this->cleanMojibake($value);
+    }
+
+    private function cleanMojibake(?string $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return $value;
+        }
+
+        $replacements = [
+            'â€"' => '–',
+            'â€”' => '—',
+            'â„¢' => '™',
+            'â€œ' => '"',
+            'â€' => '"',
+            'â€™' => "'",
+            'â€˜' => "'",
+            'Â®'  => '®',
+            'â€¢' => '•',
+        ];
+
+        return strtr($value, $replacements);
+    }
+
     // ----------------------------------------------------
     // Relationships
     // ----------------------------------------------------

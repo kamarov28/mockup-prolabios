@@ -814,3 +814,82 @@
 .detail-empty-title {
   font-size: 1.4rem;
 }
+
+/* ── Sektor Page & Table Polish ─────────────────────────────────────────── */
+@media (min-width: 992px) {
+  #sektor-sidebar {
+    position: sticky;
+    top: 96px;
+    align-self: flex-start;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+  }
+}
+
+.table-principal-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  max-height: 24px;
+  flex-shrink: 0;
+}
+
+.table-principal-logo img {
+  max-height: 22px;
+  max-width: 85px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* ── Unified Technical Catalog Column ─────────────────────────────────── */
+.table-col-catalog {
+  white-space: nowrap;
+  background-color: #F8FAFC !important;
+  border-right: 1px solid rgba(17, 24, 39, 0.08) !important;
+}
+
+th.table-col-catalog {
+  background-color: #F1F5F9 !important;
+  color: #475569 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.05em !important;
+}
+
+tr:hover td.table-col-catalog {
+  background-color: #F1F5F9 !important;
+}
+
+.table-col-catalog .catalog-code-text,
+.table-col-catalog .product-cat-code {
+  display: inline-block;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: #1E293B !important;
+  letter-spacing: -0.01em;
+}
+
+.table-col-catalog .text-muted {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: #94A3B8 !important;
+}
+
+
+.table-product-link {
+  color: var(--nb-ink);
+  transition: color 0.15s ease;
+}
+
+.table-product-link:hover {
+  color: var(--nb-primary);
+}
+

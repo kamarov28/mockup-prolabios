@@ -140,9 +140,9 @@
                 <table class="table custom-table align-middle mb-0" style="min-width: 650px;">
                   <thead>
                     <tr>
-                      <th class="table-col-catalog" style="width: 22%;">Katalog</th>
-                      <th style="width: 38%;">Produk</th>
-                      <th style="width: 40%;">Aplikasi &amp; Fungsi</th>
+                      <th class="table-col-catalog" style="width: 20%;">Katalog</th>
+                      <th style="width: 44%;">Produk &amp; Prinsipal</th>
+                      <th style="width: 36%;">Aplikasi &amp; Fungsi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -159,7 +159,7 @@
                             @endif
                           </td>
                           <td>
-                            <div class="d-flex align-items-center justify-content-between gap-2">
+                            <div class="d-flex align-items-center justify-content-between gap-3">
                               <a href="{{ product_url($prod) }}" class="text-decoration-none fw-bold table-product-link">
                                 {{ $prod['title'] }}
                               </a>
@@ -169,11 +169,16 @@
                                        alt="Logo {{ $prod->principal->name }}"
                                        loading="lazy">
                                 </div>
+                              @elseif(!empty($prod->principal))
+                                <span class="badge bg-light text-secondary border small flex-shrink-0">{{ $prod->principal->name }}</span>
                               @endif
                             </div>
                           </td>
                           <td style="color: var(--nb-muted); font-size: 0.88rem; line-height: 1.5;">
-                            {{ Str::limit(strip_tags(html_entity_decode($prod['description'] ?? '')), 140) }}
+                            @php
+                              $descText = trim(strip_tags(html_entity_decode($prod['description'] ?? '')));
+                            @endphp
+                            {{ $descText ? Str::limit($descText, 140) : 'Instrumen dan reagen pendukung pengujian laboratorium.' }}
                           </td>
                         </tr>
                       @endforeach

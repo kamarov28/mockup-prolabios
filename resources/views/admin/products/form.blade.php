@@ -89,9 +89,15 @@
                     data-api-url="{{ route('admin.api.subcategories') }}">
               <option value="">-- Pilih Kategori --</option>
               @foreach($categories as $cat)
+                @php
+                  $selectedCat = strtolower(trim((string) old('category', $product['category'] ?? '')));
+                  $isCatSelected = $selectedCat === strtolower(trim((string) $cat->key))
+                                || $selectedCat === strtolower(trim((string) $cat->name))
+                                || $selectedCat === (string) $cat->id;
+                @endphp
                 <option value="{{ $cat->key }}"
                         data-id="{{ $cat->id }}"
-                        {{ old('category', $product['category'] ?? '') === $cat->key ? 'selected' : '' }}>
+                        {{ $isCatSelected ? 'selected' : '' }}>
                   {{ $cat->name }}
                 </option>
               @endforeach
@@ -121,18 +127,65 @@
             </p>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12">
           <div class="admin-form-group mb-0">
-            <label for="sector" class="admin-form-label">Sektor Industri</label>
-            <select class="form-select" id="sector" name="sector">
-              <option value="">-- Umum / Semua Sektor --</option>
-              @foreach($sectors as $sec)
-                <option value="{{ $sec['id'] }}" {{ old('sector', $product['sector'] ?? '') === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>
-              @endforeach
-            </select>
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+              <label class="admin-form-label mb-0">
+                <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i>Sektor Industri Terkait
+              </label>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(true)">Pilih Semua</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(false)">Hapus Semua</button>
+              </div>
+            </div>
+
+            @php
+              $currentSectors = [];
+              if (old('sectors')) {
+                  $currentSectors = (array) old('sectors');
+              } elseif (old('sector')) {
+                  $currentSectors = is_array(old('sector')) ? old('sector') : array_map('trim', explode(',', old('sector')));
+              } elseif (!empty($product)) {
+                  if (!empty($product['sector'])) {
+                      $currentSectors = array_map('trim', explode(',', $product['sector']));
+                  } elseif (isset($product->sectors) && is_iterable($product->sectors)) {
+                      $currentSectors = $product->sectors->pluck('id')->toArray();
+                  }
+              }
+              $normalizedCurrentSectors = array_map(function($s) {
+                  return strtolower(trim(str_replace([' ', '_'], '-', (string) $s)));
+              }, $currentSectors);
+            @endphp
+
+            <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+              <div class="row g-2">
+                @foreach($sectors as $sec)
+                  @php
+                    $normId = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['id'] ?? ''))));
+                    $normName = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['name'] ?? ''))));
+                    $isChecked = in_array($normId, $normalizedCurrentSectors, true) 
+                              || in_array($normName, $normalizedCurrentSectors, true);
+                  @endphp
+                  <div class="col-6 col-sm-4 col-md-3">
+                    <div class="form-check m-0 d-flex align-items-center gap-2">
+                      <input class="form-check-input sector-checkbox" 
+                             type="checkbox" 
+                             name="sectors[]" 
+                             value="{{ $sec['id'] }}" 
+                             id="sec_{{ $sec['id'] }}" 
+                             {{ $isChecked ? 'checked' : '' }}>
+                      <label class="form-check-label small mb-0" for="sec_{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text);">
+                        {{ $sec['name'] }}
+                      </label>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+            </div>
+            <p class="form-text mb-0 mt-2">Pilih satu atau lebih sektor industri yang menggunakan produk atau instrumen ini.</p>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-12">
           <div class="admin-form-group mb-0">
             <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
             <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
@@ -336,7 +389,12 @@
               var opt = document.createElement('option');
               opt.value       = sub.key;
               opt.textContent = sub.name;
-              if (savedSubKey === sub.key) opt.selected = true;
+              var normSaved = (savedSubKey || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+              var normKey   = (sub.key || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+              var normName  = (sub.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+              if (savedSubKey === sub.key || savedSubKey === sub.name || (normSaved && (normSaved === normKey || normSaved === normName))) {
+                opt.selected = true;
+              }
               subcategorySelect.appendChild(opt);
             });
             block.style.display        = 'block';
@@ -350,6 +408,12 @@
           block.style.display = 'none';
         });
     }
+
+    window.toggleAllSectors = function(check) {
+      document.querySelectorAll('.sector-checkbox').forEach(function(cb) {
+        cb.checked = !!check;
+      });
+    };
 
     if (categorySelect) {
       categorySelect.addEventListener('change', function() {

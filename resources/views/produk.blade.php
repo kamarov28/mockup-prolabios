@@ -82,7 +82,7 @@
                   <table class="table table-hover align-middle mb-0 catalog-precision-table">
                     <thead>
                       <tr>
-                        <th scope="col" style="width: 130px;">KODE CAT.</th>
+                        <th scope="col" style="width: 130px;" class="table-col-catalog">KODE CAT.</th>
                         <th scope="col">PRODUK &amp; SPESIFIKASI</th>
                         <th scope="col" class="d-none d-md-table-cell" style="width: 170px;">KATEGORI</th>
                         <th scope="col" style="width: 140px;">STATUS</th>
@@ -98,7 +98,7 @@
                           $cleanDesc = !empty($prod['description']) ? strip_tags(html_entity_decode($prod['description'])) : '';
                         @endphp
                         <tr>
-                          <td>
+                          <td class="table-col-catalog">
                             @if(!empty($prod['catalog']))
                               <span class="product-cat-code" title="Klik untuk menyalin">CAT. {{ $prod['catalog'] }}</span>
                             @else
