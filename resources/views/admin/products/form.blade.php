@@ -157,7 +157,7 @@
               }, $currentSectors);
             @endphp
 
-            <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+            <div class="p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
               <div class="row g-2">
                 @foreach($sectors as $sec)
                   @php
@@ -174,7 +174,7 @@
                              value="{{ $sec['id'] }}" 
                              id="sec_{{ $sec['id'] }}" 
                              {{ $isChecked ? 'checked' : '' }}>
-                      <label class="form-check-label small mb-0" for="sec_{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text);">
+                      <label class="form-check-label small mb-0" for="sec_{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text-secondary);">
                         {{ $sec['name'] }}
                       </label>
                     </div>
@@ -188,21 +188,21 @@
         <div class="col-12">
           <div class="admin-form-group mb-0">
             <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
-            <div class="p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+            <div class="p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
               <div class="mb-2">
-                <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
+                <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">
                   <i data-lucide="upload" class="me-1"></i>Upload File PDF (Maks. 10MB)
                 </label>
                 <input class="form-control" type="file" id="datasheet_file" name="datasheet_file" accept=".pdf,application/pdf">
               </div>
               <div class="mb-2">
-                <label for="datasheet_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text);">
+                <label for="datasheet_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">
                   <i data-lucide="link" class="me-1"></i>Atau Masukkan URL PDF Eksternal
                 </label>
                 <input type="text" class="form-control" id="datasheet_url" name="datasheet_url" value="{{ old('datasheet_url', $product['datasheet_url'] ?? '') }}" placeholder="https://principal.com/datasheet.pdf">
               </div>
               @if(!empty($product['datasheet_url']))
-                <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: rgba(30,30,30,0.1) !important;">
+                <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: var(--color-border) !important;">
                   <i data-lucide="file-text" class="text-danger"></i>
                   <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="small fw-bold text-decoration-underline" style="color: var(--color-accent, #A6171C);">
                     Lihat Dokumen Terpasang <i data-lucide="external-link" class="ms-1"></i>
@@ -215,7 +215,7 @@
       </div>
 
       <div id="sub-category-block" style="display: none;">
-        <div class="admin-form-group mb-0 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+        <div class="admin-form-group mb-0 p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
           <label for="admin-subcategory-select" class="admin-form-label">
             <i data-lucide="folder-tree" class="me-1" style="color: var(--color-accent);"></i>Subkategori <span style="color: var(--color-accent);">*</span>
           </label>
@@ -232,7 +232,7 @@
         <p class="form-text mb-3">Thumbnail katalog, kartu, dan PDF penawaran.</p>
         <div class="row g-3 align-items-center">
           <div class="col-sm-3 text-center">
-            <div style="width: 120px; height: 120px; margin: 0 auto; border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="width: 120px; height: 120px; margin: 0 auto; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; overflow: hidden;">
               <img id="image-preview" src="{{ $product['image'] ?? 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=400&q=80' }}" alt="Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
             </div>
           </div>
@@ -252,12 +252,12 @@
       <div class="admin-form-group mb-0">
         <div class="d-flex justify-content-between align-items-center mb-1">
           <label class="admin-form-label mb-0">Galeri Foto Tambahan</label>
-          <span id="gallery_count_badge" class="badge" style="background: var(--color-surface-2, #EDE8E0); color: var(--color-text-main); border: 1.5px solid #1E1E1E; display: none; font-size: 0.75rem;">0 foto dipilih</span>
+          <span id="gallery_count_badge" class="badge admin-badge-accent" style="display: none; font-size: 0.75rem;">0 foto dipilih</span>
         </div>
         <p class="form-text mb-3">Maksimal 10 foto (di luar cover utama). Bisa pilih banyak foto sekaligus atau tambah satu per satu.</p>
 
         @if(!empty($product['gallery_images']))
-          <div class="mb-3 p-3" style="border: 2px solid var(--color-border); border-radius: 6px; background: var(--color-surface-2, #EDE8E0);">
+          <div class="mb-3 p-3" style="border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-surface-subtle);">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="small fw-bold" style="color: var(--color-text-main);">
                 <i data-lucide="images" class="me-1"></i>Foto Galeri Tersimpan ({{ count($product['gallery_images']) }})
@@ -267,9 +267,9 @@
             <div class="row g-2">
               @foreach($product['gallery_images'] as $galleryPath)
                 <div class="col-4 col-sm-3 col-md-2">
-                  <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 2px solid var(--color-border); border-radius: 6px; background: #FFFFFF; box-shadow: 2px 2px 0 #1E1E1E;">
+                  <div class="position-relative" style="aspect-ratio: 1/1; overflow: hidden; border: 1px solid var(--color-border); border-radius: 8px; background: #FFFFFF; box-shadow: var(--shadow-xs);">
                     <img src="{{ $galleryPath }}" alt="Galeri" style="width: 100%; height: 100%; object-fit: cover;">
-                    <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: var(--color-border, #1E1E1E); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
+                    <label class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1" style="cursor: pointer; font-size: 0.7rem; background: rgba(17, 24, 39, 0.75); color: #FFFFFF; border-radius: 4px; padding: 2px 6px;" title="Hapus foto ini">
                       <input type="checkbox" name="remove_gallery[]" value="{{ $galleryPath }}" class="form-check-input m-0" style="width: 0.9rem; height: 0.9rem;">
                       <i data-lucide="trash-2" style="color: #FFFFFF;"></i>
                     </label>
@@ -281,9 +281,9 @@
         @endif
 
         {{-- Dropzone & Multi-file picker --}}
-        <div id="gallery_dropzone" class="p-4 text-center mb-3" style="border: 2px dashed #1E1E1E; border-radius: 6px; background: #FAF8F5; cursor: pointer; transition: background 0.15s ease;">
-          <i data-lucide="cloud-upload" class="fs-2 d-block mb-1" style="color: var(--color-accent, #A6171C);"></i>
-          <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.95rem;">
+        <div id="gallery_dropzone" class="p-4 text-center mb-3" style="border: 1.5px dashed var(--color-border); border-radius: 10px; background: var(--color-surface-subtle); cursor: pointer; transition: all 0.15s ease;">
+          <i data-lucide="cloud-upload" class="fs-2 d-block mb-2" style="color: var(--color-accent, #A6171C);"></i>
+          <span class="fw-bold d-block" style="color: var(--color-text-main); font-size: 0.92rem;">
             + Klik di sini untuk menambah foto galeri
           </span>
           <span class="small text-muted d-block mt-1">
@@ -484,7 +484,7 @@
 
           var card = document.createElement('div');
           card.className = 'position-relative';
-          card.style.cssText = 'aspect-ratio: 1/1; overflow: hidden; border: 2px solid #1E1E1E; border-radius: 6px; background: #FFFFFF; box-shadow: 2px 2px 0 #1E1E1E;';
+          card.style.cssText = 'aspect-ratio: 1/1; overflow: hidden; border: 1px solid var(--color-border); border-radius: 8px; background: #FFFFFF; box-shadow: var(--shadow-xs);';
 
           var img = document.createElement('img');
           img.src = URL.createObjectURL(file);
@@ -494,7 +494,7 @@
           var delBtn = document.createElement('button');
           delBtn.type = 'button';
           delBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center';
-          delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: #A6171C; color: #FFFFFF; border: 1.5px solid #1E1E1E; border-radius: 4px;';
+          delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: var(--color-accent); color: #FFFFFF; border: none; border-radius: 4px; box-shadow: var(--shadow-xs);';
           delBtn.title = 'Hapus dari daftar unggah';
           delBtn.innerHTML = '<i data-lucide="x" style="font-size: 0.65rem;"></i>';
           delBtn.onclick = function() {
@@ -503,7 +503,7 @@
 
           var sizeBadge = document.createElement('div');
           sizeBadge.className = 'position-absolute bottom-0 start-0 end-0 p-1 text-truncate';
-          sizeBadge.style.cssText = 'background: rgba(30,30,30,0.75); color: #fff; font-size: 0.65rem; font-family: var(--font-mono); font-weight: 600;';
+          sizeBadge.style.cssText = 'background: rgba(17,24,39,0.75); color: #fff; font-size: 0.65rem; font-family: var(--font-mono); font-weight: 600;';
           sizeBadge.textContent = file.size > 1048576 ? (file.size / 1048576).toFixed(1) + 'MB' : Math.round(file.size / 1024) + 'KB';
 
           card.appendChild(img);
@@ -563,14 +563,17 @@
         });
         dropZone.addEventListener('dragover', function(e) {
           e.preventDefault();
-          this.style.background = '#EDE8E0';
+          this.style.background = '#F3F4F6';
+          this.style.borderColor = 'var(--color-accent)';
         });
         dropZone.addEventListener('dragleave', function() {
-          this.style.background = '#FAF8F5';
+          this.style.background = 'var(--color-surface-subtle)';
+          this.style.borderColor = 'var(--color-border)';
         });
         dropZone.addEventListener('drop', function(e) {
           e.preventDefault();
-          this.style.background = '#FAF8F5';
+          this.style.background = 'var(--color-surface-subtle)';
+          this.style.borderColor = 'var(--color-border)';
           if (e.dataTransfer && e.dataTransfer.files) {
             handleFiles(e.dataTransfer.files);
           }
