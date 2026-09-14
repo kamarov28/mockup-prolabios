@@ -50,15 +50,15 @@
                 </span>
               </div>
 
-              <!-- View Switcher (Grid vs Table Rapat) -->
+              <!-- View Switcher (Grid vs Tabel) -->
               <div class="catalog-view-switcher mt-1" role="group" aria-label="Mode Tampilan Katalog">
                 <button type="button" class="catalog-view-toggle active" data-view="grid" id="btn-view-grid" title="Tampilan Kotak (Grid)" aria-label="Grid View">
                   <i data-lucide="layout-grid"></i>
                   <span class="d-none d-sm-inline ms-1">Grid</span>
                 </button>
-                <button type="button" class="catalog-view-toggle" data-view="table" id="btn-view-table" title="Tampilan Tabel Rapat (B2B Spec)" aria-label="Table View">
-                  <i data-lucide="list"></i>
-                  <span class="d-none d-sm-inline ms-1">Tabel Rapat</span>
+                <button type="button" class="catalog-view-toggle" data-view="table" id="btn-view-table" title="Tampilan Tabel (Table View)" aria-label="Table View">
+                  <i data-lucide="table"></i>
+                  <span class="d-none d-sm-inline ms-1">Tabel</span>
                 </button>
               </div>
             </div>
