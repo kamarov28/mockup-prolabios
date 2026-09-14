@@ -85,6 +85,13 @@ p, span, li, td, th, label {
   color: var(--nb-ink);
 }
 
+.nb-btn span,
+.btn span,
+.btn-primary span,
+button span {
+  color: inherit !important;
+}
+
 a {
   color: var(--nb-ink);
   text-decoration: none;

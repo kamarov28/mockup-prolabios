@@ -122,9 +122,13 @@
   box-shadow: none;
 }
 
+.nb-btn-primary,
+.nb-btn-primary * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 .nb-btn-primary {
   background: var(--nb-primary);
-  color: #FFFFFF !important;
   border: none;
   box-shadow: none;
 }
@@ -137,10 +141,16 @@
   background: var(--nb-primary-dark);
   color: #FFFFFF !important;
 }
+.nb-btn-primary:hover * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
 
 /* Success feedback after add-to-RFQ */
 .nb-btn.is-success,
-.nb-btn-primary.is-success {
+.nb-btn-primary.is-success,
+.nb-btn.is-success *,
+.nb-btn-primary.is-success * {
   background: #16A34A !important;
   color: #FFFFFF !important;
   box-shadow: none;
