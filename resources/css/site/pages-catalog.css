@@ -941,3 +941,25 @@ tr:hover td.table-col-catalog {
   line-height: 1.45;
 }
 
+/* ── Editorial Page Header (Top Spacing to clear fixed navbar) ───────────── */
+.editorial-page-header {
+  padding: 110px 0 30px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E5E7EB;
+}
+.editorial-page-header .editorial-page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--nb-ink);
+  margin-bottom: 6px;
+}
+.editorial-page-header .editorial-page-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--nb-muted);
+  margin-bottom: 0;
+}
+
