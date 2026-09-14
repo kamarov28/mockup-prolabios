@@ -815,16 +815,7 @@
   font-size: 1.4rem;
 }
 
-/* ── Sektor Page & Table Polish ─────────────────────────────────────────── */
-@media (min-width: 992px) {
-  #sektor-sidebar {
-    position: sticky;
-    top: 96px;
-    align-self: flex-start;
-    max-height: calc(100vh - 110px);
-    overflow-y: auto;
-  }
-}
+
 
 .table-principal-logo {
   display: inline-flex;
