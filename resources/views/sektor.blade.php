@@ -98,13 +98,7 @@
                 <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 440px;" loading="lazy" decoding="async">
               </div>
 
-              <!-- Sector Title & Description -->
-              <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                <span class="nb-badge-sm">
-                  <i data-lucide="tag" class="me-1 text-primary"></i> Sektor Terpilih
-                </span>
-                <span class="nb-mono text-muted small">AKREDITASI &amp; REGULASI INDUSTRI</span>
-              </div>
+
 
               <h2 class="profil-section-title mb-3">{{ $currentData['name'] }}</h2>
               @foreach($descriptionParagraphs as $desc)
