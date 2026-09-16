@@ -45,7 +45,7 @@
 }
 .profil-stat-box:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
 }
 
 .profil-stat-num {
@@ -205,7 +205,7 @@
 .profil-value-card:hover,
 .layanan-feature-card:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
 }
 
 .profil-value-card:active,
@@ -526,7 +526,7 @@
   border-color: var(--nb-primary) !important;
   background-color: #FFFFFF !important;
   outline: none !important;
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+  box-shadow: var(--nb-focus-ring) !important;
 }
 .kontak-form-input::placeholder {
   color: #9CA3AF !important;

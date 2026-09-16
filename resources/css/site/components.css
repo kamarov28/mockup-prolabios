@@ -208,7 +208,7 @@
   border: 1px solid #E5E7EB !important;
   color: var(--nb-ink) !important;
   border-radius: var(--nb-radius) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: var(--nb-shadow-subtle) !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -444,7 +444,7 @@ input[type=number].hide-spinner {
 .kontak-form-input:focus {
   background-color: #FFFFFF !important;
   border-color: var(--nb-primary) !important;
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+  box-shadow: var(--nb-focus-ring) !important;
   outline: none !important;
 }
 
@@ -487,7 +487,7 @@ input[type=number].hide-spinner {
   background: #FFFFFF !important;
   border: 1px solid #E5E7EB !important;
   border-radius: var(--nb-radius-sm) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: var(--nb-shadow-subtle) !important;
   font-family: var(--font-display) !important;
   font-weight: 600 !important;
   font-size: 0.88rem !important;

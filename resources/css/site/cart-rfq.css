@@ -58,7 +58,7 @@
   color: var(--nb-primary);
   border: 1px solid #E5E7EB;
   border-radius: var(--nb-radius);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   padding: 6px 14px;
   display: inline-flex;
   align-items: center;
@@ -117,7 +117,7 @@
 
 .cart-item-card:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
 }
 
 .cart-item-card:active {
@@ -216,7 +216,7 @@
   color: var(--nb-ink) !important;
   border: 1px solid #E5E7EB;
   border-radius: var(--nb-radius);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   padding: 0.75rem 1.25rem;
   text-decoration: none !important;
   transition: background-color 0.15s ease, border-color 0.15s ease;

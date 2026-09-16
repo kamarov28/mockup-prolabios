@@ -402,7 +402,7 @@ a:hover {
   font-size: 0.74rem !important;
   font-weight: 500 !important;
   color: #424245 !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: var(--nb-shadow-subtle) !important;
 }
 .site-footer .footer-status-pill .status-dot {
   width: 6px !important;

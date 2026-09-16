@@ -112,7 +112,7 @@
   font-family: var(--font-body) !important;
   font-size: 0.9rem !important;
   font-weight: 400;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: var(--shadow-subtle) !important;
   transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
   outline: none;
 }
@@ -124,7 +124,7 @@
 .form-control:focus:not(.note-editor *):not(.note-popover *),
 .form-select:focus:not(.note-editor *):not(.note-popover *) {
   border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+  box-shadow: var(--focus-ring) !important;
   background: #FFFFFF !important;
   color: var(--color-text-main) !important;
 }
@@ -164,7 +164,7 @@
 .input-group:focus-within > .form-control,
 .input-group:focus-within > .admin-form-control {
   border-color: var(--color-accent) !important;
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12) !important;
+  box-shadow: var(--focus-ring) !important;
 }
 
 select.form-select option {

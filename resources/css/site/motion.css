@@ -31,7 +31,7 @@
 .editorial-featured-card:hover,
 .editorial-side-card:hover,
 .nb-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
   border-color: #CBD5E1;
 }
 
@@ -188,7 +188,7 @@
 .search-input-box input#search-overlay-input:focus {
   background: #FFFFFF;
   border-color: var(--nb-primary);
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12);
+  box-shadow: var(--nb-focus-ring);
 }
 
 .search-section-label {

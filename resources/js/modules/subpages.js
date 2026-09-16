@@ -230,10 +230,7 @@ function initCartPage() {
     fetch(form.action, {
       method: 'POST',
       body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json'
-      }
+      headers: ajaxHeaders()
     })
     .then(res => res.json())
     .then(data => {
@@ -268,10 +265,7 @@ function initCartPage() {
     fetch(form.action, {
       method: 'POST',
       body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json'
-      }
+      headers: ajaxHeaders()
     })
     .then(res => res.json())
     .then(data => {

@@ -175,7 +175,7 @@
   background: #FFFFFF;
   color: var(--nb-ink);
   border: 1px solid #E5E7EB;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   padding: 0.45rem 0.9rem;
   font-family: var(--font-display);
   font-size: 0.78rem;
@@ -272,7 +272,7 @@
     background: #FFFFFF;
     border: 1px solid #E5E7EB;
     border-radius: var(--nb-radius);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    box-shadow: var(--nb-shadow-subtle);
     transition: background-color 0.15s ease, border-color 0.15s ease;
   }
   .hamburger:hover {
@@ -373,7 +373,7 @@
 
 .marquee-logo-box:hover {
   border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
 }
 
 .marquee-logo-box img {
@@ -394,7 +394,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--nb-ink);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   padding: 8px 16px;
   cursor: pointer;
   outline: none;

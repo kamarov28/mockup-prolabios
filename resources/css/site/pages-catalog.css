@@ -135,7 +135,7 @@
 .produk-search-wrap input:focus {
   border-color: var(--nb-primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.12);
+  box-shadow: var(--nb-focus-ring);
 }
 
 .produk-search-btn {
@@ -253,7 +253,7 @@
   background: var(--nb-card);
   border: 1px solid #E5E7EB;
   border-radius: var(--nb-radius-sm);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   max-height: 28px;
   display: inline-flex;
   align-items: center;
@@ -372,7 +372,7 @@
   border: 1px solid #E5E7EB;
   border-radius: var(--nb-radius);
   background-color: #FFFFFF;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   padding: 4px;
   cursor: pointer;
   opacity: 0.7;
@@ -491,7 +491,7 @@
   background: var(--nb-card);
   border: 1px solid #E5E7EB;
   border-radius: var(--nb-radius);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   text-decoration: none;
   color: inherit;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
@@ -500,7 +500,7 @@
 .blog-recent-item:hover {
   background: #FFFFFF;
   border-color: #CBD5E1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--nb-shadow-elevated);
   color: inherit;
   text-decoration: none;
 }
@@ -767,7 +767,7 @@
   background: #FEF3C7;
   border: 1px solid #FCD34D;
   border-radius: var(--nb-radius);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--nb-shadow-subtle);
   color: #92400E;
   font-size: 0.85rem;
 }
