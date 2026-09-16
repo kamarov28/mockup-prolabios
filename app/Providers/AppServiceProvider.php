@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('admin-login', function (Request $request) {
-            $username = (string) $request->input('username', '');
+            $username = Str::transliterate(Str::lower(trim((string) $request->input('username', ''))));
 
             return Limit::perMinute(5)->by($request->ip().'|'.$username)->response(function () {
                 return back()->withErrors([

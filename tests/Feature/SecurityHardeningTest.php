@@ -2,13 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Http\Middleware\ForceHttps;
 use App\Jobs\SendContactEmailJob;
 use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\RateLimiter;
 use Tests\TestCase;
 
 class SecurityHardeningTest extends TestCase
@@ -207,5 +210,39 @@ class SecurityHardeningTest extends TestCase
         ]);
         $this->assertEquals('healthy', $response->json('status'));
         $this->assertEquals('connected', $response->json('checks.database'));
+    }
+
+    public function test_force_https_prevents_protocol_relative_open_redirect(): void
+    {
+        $middleware = new ForceHttps;
+        $this->app['env'] = 'production';
+
+        $request = Request::create('http://localhost//evil.com/phish', 'GET');
+        $response = $middleware->handle($request, fn () => response('ok'));
+
+        $this->assertTrue($response->isRedirection());
+        $targetUrl = $response->headers->get('Location');
+        $this->assertEquals(url('/evil.com/phish', [], true), $targetUrl);
+    }
+
+    public function test_admin_login_rate_limiter_normalizes_username(): void
+    {
+        RateLimiter::clear('admin-login');
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->from(route('admin.login'))->post(route('admin.login'), [
+                'username' => 'Admin '.str_repeat(' ', $i),
+                'password' => 'wrong-password',
+            ]);
+        }
+
+        // 6th attempt with uppercase and leading whitespace should hit the same throttle limit
+        $response = $this->from(route('admin.login'))->post(route('admin.login'), [
+            'username' => '  ADMIN',
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertSessionHasErrors('login');
+        $this->assertStringContainsString('Terlalu banyak percobaan login', session('errors')->first('login'));
     }
 }
