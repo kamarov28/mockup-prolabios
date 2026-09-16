@@ -101,17 +101,7 @@ class PageController extends Controller
      */
     public function detailProdukLegacy(Request $request, DataService $dataService)
     {
-        $product = null;
-        $identifier = $request->query('id');
-
-        if ($identifier !== null && $identifier !== '') {
-            if (is_numeric($identifier)) {
-                $product = $dataService->getProductById((int) $identifier);
-            } else {
-                $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
-                    ?? $dataService->getProductByTitle((string) $identifier);
-            }
-        }
+        $product = $this->resolveLegacyProduct($request, $dataService);
 
         if ($product && ! empty($product->slug)) {
             return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
@@ -125,23 +115,31 @@ class PageController extends Controller
      */
     public function beliProdukLegacy(Request $request, DataService $dataService)
     {
-        $product = null;
-        $identifier = $request->query('id');
-
-        if ($identifier !== null && $identifier !== '') {
-            if (is_numeric($identifier)) {
-                $product = $dataService->getProductById((int) $identifier);
-            } else {
-                $product = $dataService->getProductBySlug(Str::slug((string) $identifier))
-                    ?? $dataService->getProductByTitle((string) $identifier);
-            }
-        }
+        $product = $this->resolveLegacyProduct($request, $dataService);
 
         if ($product && ! empty($product->slug)) {
             return redirect()->route('produk.beli', ['slug' => $product->slug], 301);
         }
 
         return redirect()->route('produk.index', [], 301);
+    }
+
+    /**
+     * Resolve legacy product identifier from query param (id / slug / title).
+     */
+    private function resolveLegacyProduct(Request $request, DataService $dataService)
+    {
+        $identifier = $request->query('id');
+        if ($identifier === null || $identifier === '') {
+            return null;
+        }
+
+        if (is_numeric($identifier)) {
+            return $dataService->getProductById((int) $identifier);
+        }
+
+        return $dataService->getProductBySlug(Str::slug((string) $identifier))
+            ?? $dataService->getProductByTitle((string) $identifier);
     }
 
     public function sektor(DataService $dataService)

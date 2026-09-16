@@ -3,6 +3,7 @@
    Hard shadows · thick charcoal borders · warm Natural canvas · press UI
    ========================================================================== */
 
+@import "bootstrap-icons/font/bootstrap-icons.css";
 @import './admin/tokens.css';
 @import './admin/base.css';
 @import './admin/layout.css';
