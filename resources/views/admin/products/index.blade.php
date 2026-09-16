@@ -207,11 +207,12 @@
       @endif
 
     @else
-      <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i data-lucide="package" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
-        <p style="font-size: 0.88rem;">Produk tidak ditemukan. Coba ubah filter atau kata kunci pencarian.</p>
-        <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-ghost">Reset Filter</a>
-      </div>
+      <x-admin.empty-state 
+        icon="package" 
+        message="Produk tidak ditemukan. Coba ubah filter atau kata kunci pencarian." 
+        :action-url="route('admin.products')" 
+        action-label="Reset Filter" 
+        action-class="admin-btn-ghost" />
     @endif
   </div>
 

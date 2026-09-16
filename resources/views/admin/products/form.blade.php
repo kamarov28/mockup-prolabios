@@ -16,13 +16,9 @@
 <x-admin.page-header 
   label="Katalog"
   :title="$titleText"
-  :backUrl="route('admin.products')">
-  @if($isEdit)
-    Mengedit: <strong style="color: var(--color-text-main);">{{ $product['title'] ?? '' }}</strong>
-  @else
-    Tambah produk baru ke katalog publik.
-  @endif
-</x-admin.page-header>
+  :backUrl="route('admin.products')"
+  :editing="$isEdit ? ($product['title'] ?? '') : null"
+  description="Tambah produk baru ke katalog publik." />
 
 <x-admin.form-card 
   title="Data Produk" 

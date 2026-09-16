@@ -17,13 +17,9 @@
 <x-admin.page-header 
   label="Konten"
   :title="$titleText"
-  :backUrl="route('admin.sectors')">
-  @if($isEdit)
-    Mengedit: <strong style="color: var(--color-text-main);">{{ $sector['name'] }}</strong>
-  @else
-    Tambah sektor industri baru.
-  @endif
-</x-admin.page-header>
+  :backUrl="route('admin.sectors')"
+  :editing="$isEdit ? $sector['name'] : null"
+  description="Tambah sektor industri baru." />
 
 <x-admin.form-card 
   title="Data Sektor" 

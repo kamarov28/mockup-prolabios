@@ -17,13 +17,9 @@
 <x-admin.page-header 
   label="Konten"
   :title="$titleText"
-  :backUrl="route('admin.categories.index')">
-  @if($isEdit)
-    Mengedit: <strong style="color: var(--color-text-main);">{{ $category->name }}</strong>
-  @else
-    Buat kategori utama atau sub-kategori baru untuk katalog produk.
-  @endif
-</x-admin.page-header>
+  :backUrl="route('admin.categories.index')"
+  :editing="$isEdit ? $category->name : null"
+  description="Buat kategori utama atau sub-kategori baru untuk katalog produk." />
 
 <x-admin.form-card 
   title="Data Kategori" 

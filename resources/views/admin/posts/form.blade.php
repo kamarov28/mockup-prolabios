@@ -24,13 +24,9 @@
 <x-admin.page-header 
   label="Konten"
   :title="$titleText"
-  :backUrl="route('admin.posts')">
-  @if($isEdit)
-    Mengedit: <strong style="color: var(--color-text-main);">{{ $post['title'] }}</strong>
-  @else
-    Tulis artikel / berita untuk halaman informasi publik.
-  @endif
-</x-admin.page-header>
+  :backUrl="route('admin.posts')"
+  :editing="$isEdit ? $post['title'] : null"
+  description="Tulis artikel / berita untuk halaman informasi publik." />
 
 <x-admin.form-card 
   title="Data Artikel" 

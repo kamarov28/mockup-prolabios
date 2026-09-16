@@ -2,6 +2,7 @@
   'label' => '',
   'title' => '',
   'description' => '',
+  'editing' => null,
   'backUrl' => null,
   'backText' => 'Kembali',
   'actionUrl' => null,
@@ -15,7 +16,11 @@
       <span class="admin-page-label">{{ $label }}</span>
     @endif
     <h2 class="admin-page-title mb-1">{{ $title }}</h2>
-    @if($description || $slot->isNotEmpty())
+    @if($editing)
+      <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+        Mengedit: <strong style="color: var(--color-text-main);">{{ $editing }}</strong>
+      </div>
+    @elseif($description || $slot->isNotEmpty())
       <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
         @if($description)
           {!! $description !!}

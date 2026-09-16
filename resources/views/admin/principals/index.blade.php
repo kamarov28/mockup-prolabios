@@ -84,8 +84,7 @@
                 <td style="text-align: right; white-space: nowrap;">
                   <div class="d-inline-flex align-items-center gap-1 justify-content-end">
                     <a href="{{ route('admin.principals.edit', $p->id) }}"
-                       class="admin-action-link edit" title="Edit"
-                       style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                       class="admin-action-link edit" title="Edit">
                       <i data-lucide="file-edit"></i>
                     </a>
                     <form action="{{ route('admin.principals.destroy', $p->id) }}" method="POST"
@@ -93,8 +92,7 @@
                           style="display: contents;">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="admin-action-link delete" title="Hapus"
-                              style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 0;">
+                      <button type="submit" class="admin-action-link delete" title="Hapus">
                         <i data-lucide="trash-2"></i>
                       </button>
                     </form>
@@ -106,11 +104,11 @@
         </table>
       </div>
     @else
-      <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i data-lucide="award" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
-        <p style="font-size: 0.88rem;">Belum ada data prinsipal.</p>
-        <a href="{{ route('admin.principals.create') }}" class="admin-btn admin-btn-primary">Tambah Prinsipal</a>
-      </div>
+      <x-admin.empty-state 
+        icon="award" 
+        message="Belum ada data prinsipal." 
+        :action-url="route('admin.principals.create')" 
+        action-label="Tambah Prinsipal" />
     @endif
   </div>
 

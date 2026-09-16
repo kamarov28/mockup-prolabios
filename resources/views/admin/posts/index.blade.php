@@ -192,11 +192,11 @@
       @endif
 
     @else
-      <div class="text-center py-5" style="color: var(--color-text-muted);">
-        <i data-lucide="file-text" style="font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 16px;"></i>
-        <p style="font-size: 0.88rem;">Belum ada artikel diterbitkan.</p>
-        <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">Tulis Sekarang</a>
-      </div>
+      <x-admin.empty-state 
+        icon="file-text" 
+        message="Belum ada artikel diterbitkan." 
+        :action-url="route('admin.posts.create')" 
+        action-label="Tulis Sekarang" />
     @endif
   </div>
 

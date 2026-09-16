@@ -13,13 +13,9 @@
 <x-admin.page-header 
   label="Mitra & Partner"
   :title="$titleText"
-  :backUrl="route('admin.principals')">
-  @if($isEdit)
-    Mengedit: <strong style="color: var(--color-text-main);">{{ $principal->name }}</strong>
-  @else
-    Tambah brand / prinsipal mitra untuk ditampilkan di beranda.
-  @endif
-</x-admin.page-header>
+  :backUrl="route('admin.principals')"
+  :editing="$isEdit ? $principal->name : null"
+  description="Tambah brand / prinsipal mitra untuk ditampilkan di beranda." />
 
 <x-admin.form-card 
   title="Data Prinsipal" 
