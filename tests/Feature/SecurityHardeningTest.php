@@ -135,6 +135,11 @@ class SecurityHardeningTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
         $this->assertStringContainsString("default-src 'self'", $csp);
         $this->assertStringNotContainsString("'unsafe-eval'", $csp);
+
+        // Verify that script-src uses a cryptographic nonce and no longer permits 'unsafe-inline'
+        $this->assertMatchesRegularExpression("/script-src[^;]*'nonce-[A-Za-z0-9+\/]+=*'/", $csp);
+        $this->assertDoesNotMatchRegularExpression("/script-src[^;]*'unsafe-inline'/", $csp);
+
         $response->assertHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
         $this->assertNull($response->headers->get('X-XSS-Protection'));
     }

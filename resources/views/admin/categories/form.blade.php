@@ -123,7 +123,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   const nameInput = document.getElementById('name');
   const keyInput  = document.getElementById('key');
 

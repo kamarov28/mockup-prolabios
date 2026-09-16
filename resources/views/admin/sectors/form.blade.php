@@ -105,7 +105,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   document.getElementById('image_file')?.addEventListener('change', function () {
     if (this.files && this.files[0]) {
       const reader = new FileReader();

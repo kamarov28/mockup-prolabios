@@ -172,7 +172,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
 (function () {
   const list = document.getElementById('category-list');
   if (!list) return;

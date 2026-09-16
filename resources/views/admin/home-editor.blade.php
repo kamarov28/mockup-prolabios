@@ -152,7 +152,7 @@
 
 @section('admin_scripts')
   @if($section)
-  <script>
+  <script @nonce>
     function bindPreviewListener(fileInputId, imgPreviewId) {
       const input = document.getElementById(fileInputId);
       const img = document.getElementById(imgPreviewId);

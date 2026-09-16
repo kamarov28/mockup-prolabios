@@ -219,7 +219,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   const sg = document.getElementById('search-group');
   const si = document.getElementById('local-search-input');
   if (sg && si) {

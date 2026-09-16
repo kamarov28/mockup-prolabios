@@ -77,7 +77,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   document.querySelectorAll('.form-delete').forEach(form => {
     form.addEventListener('submit', function (e) {
       e.preventDefault();

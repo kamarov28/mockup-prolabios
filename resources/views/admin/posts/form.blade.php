@@ -171,10 +171,10 @@
 @endsection
 
 @section('admin_scripts')
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" @nonce></script>
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js" @nonce></script>
 
-  <script>
+  <script @nonce>
     function previewLocalImage(input) {
       if (input.files && input.files[0]) {
         var reader = new FileReader();

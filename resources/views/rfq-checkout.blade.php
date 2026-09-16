@@ -146,7 +146,7 @@
   </div>
 </section>
 
-<script>
+<script @nonce>
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('rfqForm');
     const btn = document.getElementById('rfqSubmitBtn');
@@ -162,8 +162,8 @@
 </script>
 
 @if(config('services.recaptcha.site_key'))
-<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
-<script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}" @nonce></script>
+<script @nonce>
     grecaptcha.ready(function() {
         grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'rfq_submit'})
         .then(function(token) {

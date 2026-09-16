@@ -103,7 +103,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   function previewImage(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();

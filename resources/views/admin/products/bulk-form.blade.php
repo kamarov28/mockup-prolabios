@@ -146,7 +146,7 @@
 @endsection
 
 @section('admin_scripts')
-<script>
+<script @nonce>
   const subCategoriesMap = @json(collect($categoriesStructure)->mapWithKeys(fn($item, $key) => [$key => $item['subs'] ?? []]));
 
   if (document.readyState === 'loading') {

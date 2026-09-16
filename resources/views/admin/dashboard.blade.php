@@ -234,8 +234,8 @@
 @endsection
 
 @section('admin_scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" @nonce></script>
+<script @nonce>
   document.addEventListener('DOMContentLoaded', function() {
     const el = document.getElementById('categoryChart');
     if (!el) return;
