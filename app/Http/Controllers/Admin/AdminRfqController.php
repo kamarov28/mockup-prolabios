@@ -131,13 +131,13 @@ class AdminRfqController extends Controller
             // 1. Data Level RFQ (A - G, M, N)
             $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, DataType::TYPE_STRING);
             $sheet->setCellValue("B{$startRow}", $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : '-');
-            $sheet->setCellValue("C{$startRow}", $rfq->status_label);
-            $sheet->setCellValue("D{$startRow}", $rfq->company_name);
-            $sheet->setCellValue("E{$startRow}", $rfq->name);
-            $sheet->setCellValue("F{$startRow}", $rfq->email);
+            $sheet->setCellValueExplicit("C{$startRow}", $rfq->status_label, DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("D{$startRow}", $rfq->company_name, DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("E{$startRow}", $rfq->name, DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("F{$startRow}", $rfq->email, DataType::TYPE_STRING);
             $sheet->setCellValueExplicit("G{$startRow}", (string) $rfq->phone_wa, DataType::TYPE_STRING);
-            $sheet->setCellValue("M{$startRow}", $rfq->notes ?: '-');
-            $sheet->setCellValue("N{$startRow}", $rfq->admin_notes ?: '-');
+            $sheet->setCellValueExplicit("M{$startRow}", $rfq->notes ?: '-', DataType::TYPE_STRING);
+            $sheet->setCellValueExplicit("N{$startRow}", $rfq->admin_notes ?: '-', DataType::TYPE_STRING);
 
             // Merge kolom induk jika RFQ punya banyak item barang
             if ($itemCount > 1) {
@@ -173,7 +173,7 @@ class AdminRfqController extends Controller
                     $productName = $item->product_title ?: ($item->product?->title ?? '-');
 
                     $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, DataType::TYPE_STRING);
-                    $sheet->setCellValue("I{$currentRow}", $productName);
+                    $sheet->setCellValueExplicit("I{$currentRow}", $productName, DataType::TYPE_STRING);
                     $sheet->setCellValue("J{$currentRow}", $qty);
                     $sheet->setCellValue("K{$currentRow}", $price > 0 ? $price : '-');
                     $sheet->setCellValue("L{$currentRow}", $subtotal > 0 ? $subtotal : '-');

@@ -15,11 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // SECURITY: Since AdminAuthenticate only checks Auth::check() (no role/permission
-        // column on the users table), ANY row in `users` has full admin panel access.
-        // The default Laravel "Test User" (test@example.com / password) must never be
-        // created outside local development, or it becomes a public backdoor account
-        // whenever `php artisan migrate --seed` is run against a production database.
+        // SECURITY: AdminAuthenticate checks both Auth::check() AND Auth::user()->isAdmin()
+        // (enforced via the `is_admin` column on the `users` table added in a later migration).
+        // The default Laravel "Test User" must never be created outside local development —
+        // it would otherwise expose admin access on production databases seeded with `--seed`.
         if (app()->environment('local')) {
             User::factory()->create([
                 'name' => 'Test User',

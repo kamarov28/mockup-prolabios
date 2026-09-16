@@ -7,6 +7,7 @@ use App\Services\DataService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
@@ -109,6 +110,9 @@ class AppServiceProvider extends ServiceProvider
                         }
                     }
                 } catch (\Exception $e) {
+                    Log::warning('search_suggestions cache build failed, using defaults.', [
+                        'exception' => $e->getMessage(),
+                    ]);
                 }
 
                 return $default;
@@ -120,6 +124,9 @@ class AppServiceProvider extends ServiceProvider
             View::share('waDefaultMsg', $waDefaultMsg);
             View::share('searchSuggestions', $searchSuggestions);
         } catch (\Exception $e) {
+            Log::warning('shareFrontendViewData failed; frontend view globals not set.', [
+                'exception' => $e->getMessage(),
+            ]);
         }
     }
 }

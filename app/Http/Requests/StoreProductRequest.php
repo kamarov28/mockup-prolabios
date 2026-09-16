@@ -36,7 +36,7 @@ class StoreProductRequest extends FormRequest
             'catalog' => ['nullable', 'string', 'max:255'],
             'principal_id' => ['nullable', 'integer', 'exists:principals,id'],
             'datasheet_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
-            'datasheet_url' => ['nullable', 'string', 'max:500'],
+            'datasheet_url' => ['nullable', 'string', 'max:500', 'regex:/^(https?:\/\/)/i'],
             'sector' => ['nullable'],
             'sectors' => ['nullable', 'array'],
             'sectors.*' => ['string'],
@@ -44,7 +44,7 @@ class StoreProductRequest extends FormRequest
             'price' => ['nullable', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
             'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
-            'image_url' => ['nullable', 'string', 'max:2048'],
+            'image_url' => ['nullable', 'string', 'max:2048', 'regex:/^(\/|https?:\/\/)/i'],
             'gallery_files' => ['nullable', 'array', 'max:10'],
             'gallery_files.*' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
         ];

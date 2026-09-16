@@ -68,41 +68,9 @@ trait HandlesImageUploads
                 }
 
                 // Prefer WebP re-encode (resize oversized images, strip metadata)
-                if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
-                    $rawContent = file_get_contents($file->getRealPath());
-                    $img = @imagecreatefromstring($rawContent);
-
-                    if ($img !== false) {
-                        $width = imagesx($img);
-                        $height = imagesy($img);
-
-                        if ($width > 1920) {
-                            $newWidth = 1920;
-                            $newHeight = (int) round(($height / $width) * 1920);
-                            $resized = imagecreatetruecolor($newWidth, $newHeight);
-
-                            imagealphablending($resized, false);
-                            imagesavealpha($resized, true);
-
-                            imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                            imagedestroy($img);
-                            $img = $resized;
-                        }
-
-                        $webpFilename = time().'_'.Str::random(16).'.webp';
-                        $relativePath = $folder.'/'.$webpFilename;
-
-                        ob_start();
-                        imagewebp($img, null, 82);
-                        $binary = ob_get_clean();
-                        imagedestroy($img);
-
-                        if ($binary !== false && $binary !== '') {
-                            Storage::disk('public')->put($relativePath, $binary);
-
-                            return '/storage/'.$relativePath;
-                        }
-                    }
+                $webpPath = $this->encodeToWebp($file, $folder);
+                if ($webpPath !== null) {
+                    return $webpPath;
                 }
 
                 // Fallback: store original extension via Storage
@@ -212,43 +180,7 @@ trait HandlesImageUploads
                 ]);
             }
 
-            $storedPath = null;
-
-            if (function_exists('imagewebp') && function_exists('imagecreatefromstring')) {
-                $rawContent = file_get_contents($file->getRealPath());
-                $img = @imagecreatefromstring($rawContent);
-
-                if ($img !== false) {
-                    $width = imagesx($img);
-                    $height = imagesy($img);
-
-                    if ($width > 1920) {
-                        $newWidth = 1920;
-                        $newHeight = (int) round(($height / $width) * 1920);
-                        $resized = imagecreatetruecolor($newWidth, $newHeight);
-
-                        imagealphablending($resized, false);
-                        imagesavealpha($resized, true);
-
-                        imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                        imagedestroy($img);
-                        $img = $resized;
-                    }
-
-                    $webpFilename = time().'_'.Str::random(16).'.webp';
-                    $relativePath = $folder.'/'.$webpFilename;
-
-                    ob_start();
-                    imagewebp($img, null, 82);
-                    $binary = ob_get_clean();
-                    imagedestroy($img);
-
-                    if ($binary !== false && $binary !== '') {
-                        Storage::disk('public')->put($relativePath, $binary);
-                        $storedPath = '/storage/'.$relativePath;
-                    }
-                }
-            }
+            $storedPath = $this->encodeToWebp($file, $folder);
 
             if ($storedPath === null) {
                 $filename = time().'_'.Str::random(16).'.'.$extension;
@@ -300,6 +232,81 @@ trait HandlesImageUploads
 
         $urlInput = trim((string) $request->input($urlKey, ''));
 
-        return $urlInput !== '' ? $urlInput : $current;
+        if ($urlInput !== '') {
+            // Only accept https:// URLs or existing /storage/ relative paths
+            if (
+                str_starts_with($urlInput, '/storage/')
+                || str_starts_with($urlInput, 'storage/')
+            ) {
+                return $urlInput;
+            }
+
+            if (preg_match('/^https?:\/\//i', $urlInput)) {
+                return $urlInput;
+            }
+
+            // Reject anything else (javascript:, data:, ftp:, bare paths, etc.)
+            return $current;
+        }
+
+        return $current;
+    }
+
+    /**
+     * Resize and re-encode an image resource to WebP format, storing it on the public disk.
+     *
+     * Strips EXIF/metadata, downsizes images wider than 1920 px while preserving aspect ratio,
+     * and encodes at quality 82.  Returns the public-facing path (/storage/…) on success,
+     * or null if GD is unavailable or encoding fails (caller should fall back to storing the
+     * original file).
+     *
+     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  string  $folder  Target sub-folder on the public disk (already trimmed of slashes)
+     * @return string|null
+     */
+    private function encodeToWebp(\Illuminate\Http\UploadedFile $file, string $folder): ?string
+    {
+        if (! function_exists('imagewebp') || ! function_exists('imagecreatefromstring')) {
+            return null;
+        }
+
+        $rawContent = file_get_contents($file->getRealPath());
+        $img = @imagecreatefromstring($rawContent);
+
+        if ($img === false) {
+            return null;
+        }
+
+        $width = imagesx($img);
+        $height = imagesy($img);
+
+        if ($width > 1920) {
+            $newWidth = 1920;
+            $newHeight = (int) round(($height / $width) * 1920);
+            $resized = imagecreatetruecolor($newWidth, $newHeight);
+
+            imagealphablending($resized, false);
+            imagesavealpha($resized, true);
+
+            imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+            imagedestroy($img);
+            $img = $resized;
+        }
+
+        $webpFilename = time().'_'.Str::random(16).'.webp';
+        $relativePath = $folder.'/'.$webpFilename;
+
+        ob_start();
+        imagewebp($img, null, 82);
+        $binary = ob_get_clean();
+        imagedestroy($img);
+
+        if ($binary === false || $binary === '') {
+            return null;
+        }
+
+        Storage::disk('public')->put($relativePath, $binary);
+
+        return '/storage/'.$relativePath;
     }
 }
