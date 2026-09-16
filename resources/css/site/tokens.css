@@ -40,12 +40,15 @@
   --nb-radius: 5px;
   --nb-radius-lg: 6px;
 
-  /* ── Surface Elevation (Pure Zero Shadow Flat System) ───────────────── */
+  /* ── Surface Elevation & Focus Ring ───────────────────────────────── */
   --nb-shadow-xs: none;
   --nb-shadow-sm: none;
   --nb-shadow: none;
   --nb-shadow-lg: none;
   --nb-shadow-xl: none;
+  --nb-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --nb-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --nb-focus-ring: 0 0 0 3px rgba(166, 23, 28, 0.12);
 
   /* ── Smooth Transitions ───────────────────────────────────────────────── */
   --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);

@@ -58,6 +58,16 @@ class Product extends Model
         return $this->cleanMojibake($value);
     }
 
+    public static function stockBadgeClass(?int $stock): string
+    {
+        return ($stock ?? 0) > 0 ? 'admin-badge-success' : 'admin-badge-danger';
+    }
+
+    public function getStockBadgeClassAttribute(): string
+    {
+        return self::stockBadgeClass($this->stock);
+    }
+
     private function cleanMojibake(?string $value): ?string
     {
         if ($value === null || $value === '') {

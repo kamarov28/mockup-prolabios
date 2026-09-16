@@ -132,7 +132,7 @@
                   {{ ($p['price'] ?? 0) > 0 ? 'Rp ' . number_format($p['price'], 0, ',', '.') : 'Hubungi Kami' }}
                 </td>
                 <td>
-                  <span class="admin-badge {{ ($p['stock'] ?? 0) > 0 ? 'admin-badge-success' : 'admin-badge-danger' }}">
+                  <span class="admin-badge {{ \App\Models\Product::stockBadgeClass($p['stock'] ?? 0) }}">
                     {{ $p['stock'] ?? 0 }} Unit
                   </span>
                 </td>

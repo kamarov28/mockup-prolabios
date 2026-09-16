@@ -1,6 +1,7 @@
 /**
  * Catalog AJAX navigation, accordion toggle, live search, and dynamic pagination
  */
+import { ajaxHeaders } from './utils.js';
 
 export function initCatalogAjax() {
   const catalogSection = document.getElementById('catalog-section');
@@ -32,7 +33,7 @@ export function initCatalogAjax() {
 
     fetch(url, {
       signal: currentFetchController.signal,
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      headers: ajaxHeaders(null, 'text/html')
     })
       .then(response => response.text())
       .then(html => {

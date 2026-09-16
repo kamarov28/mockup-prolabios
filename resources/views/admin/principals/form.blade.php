@@ -21,28 +21,11 @@
   @endif
 </x-admin.page-header>
 
-<div class="admin-card" style="max-width: 720px;">
-  <div class="admin-card-header">
-    <div>
-      <span class="admin-card-header-label">Formulir</span>
-      <h3 class="admin-card-header-title mb-0">Data Prinsipal</h3>
-    </div>
-  </div>
-
-  <form action="{{ $isEdit ? route('admin.principals.update', $principal->id) : route('admin.principals.store') }}"
-        method="POST" enctype="multipart/form-data" class="admin-card-body">
-    @csrf
-    @if(!empty($isEdit)) @method('PUT') @endif
-
-    @if($errors->any())
-      <div class="alert alert-danger mb-4">
-        <ul class="mb-0 ps-3">
-          @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-      </div>
-    @endif
+<x-admin.form-card 
+  title="Data Prinsipal" 
+  :action="$isEdit ? route('admin.principals.update', $principal->id) : route('admin.principals.store')" 
+  :is-edit="$isEdit" 
+  has-files>
 
     <div class="d-flex flex-column gap-4">
 
@@ -97,8 +80,7 @@
         <i data-lucide="check"></i> {{ $isEdit ? 'Simpan Perubahan' : 'Tambah Prinsipal' }}
       </button>
     </div>
-  </form>
-</div>
+</x-admin.form-card>
 
 @endsection
 

@@ -1,6 +1,7 @@
 /**
  * Subpages module: Client-side tabs for Layanan & AJAX navigator for Sektor
  */
+import { ajaxHeaders } from './utils.js';
 
 function initLayananTabs() {
   const serviceNav = document.getElementById('service-nav');
@@ -85,7 +86,7 @@ function initSektorAjax() {
 
     fetch(url, {
       signal: fetchController.signal,
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      headers: ajaxHeaders(null, 'text/html')
     })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);

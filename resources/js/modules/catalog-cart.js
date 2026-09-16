@@ -1,6 +1,8 @@
 /**
  * Form Controls, Clipboard Helper, & AJAX Add-to-Cart
  */
+import { getCsrfToken, ajaxHeaders } from './utils.js';
+
 export function initCatalogCart() {
   initContactForm();
   initCopyCatalogCode();
@@ -66,18 +68,13 @@ export function initContactForm() {
       }
     }
 
-    const csrfInput = form.querySelector('input[name="_token"]');
-    const csrfToken = csrfInput ? csrfInput.value : '';
+    const csrfToken = getCsrfToken(form);
     const submitUrl = form.action || '/kontak/submit';
 
     const formData = new FormData(form);
     fetch(submitUrl, {
       method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken,
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      headers: ajaxHeaders(csrfToken),
       body: formData
     })
       .then(res => res.json())
@@ -147,9 +144,7 @@ export function initAjaxAddToCart() {
     if (!submitBtn || submitBtn.disabled) return;
 
     const originalBtnHtml = submitBtn.innerHTML;
-    const csrfInput = form.querySelector('input[name="_token"]');
-    const csrfToken = csrfInput ? csrfInput.value : '';
-
+    const csrfToken = getCsrfToken(form);
     const formData = new FormData(form);
 
     submitBtn.disabled = true;
@@ -157,11 +152,7 @@ export function initAjaxAddToCart() {
 
     fetch(form.action, {
       method: 'POST',
-      headers: {
-        'X-CSRF-TOKEN': csrfToken,
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
+      headers: ajaxHeaders(csrfToken),
       body: formData
     })
       .then(function (res) { return res.json(); })

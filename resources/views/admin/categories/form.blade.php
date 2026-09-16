@@ -25,27 +25,11 @@
   @endif
 </x-admin.page-header>
 
-<div class="admin-card" style="max-width: 640px;">
-  <div class="admin-card-header">
-    <div>
-      <span class="admin-card-header-label">Formulir</span>
-      <h3 class="admin-card-header-title mb-0">Data Kategori</h3>
-    </div>
-  </div>
-
-  <form action="{{ $actionUrl }}" method="POST" class="admin-card-body">
-    @csrf
-    @if($isEdit) @method('PUT') @endif
-
-    @if($errors->any())
-      <div class="alert alert-danger mb-4">
-        <ul class="mb-0 ps-3">
-          @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-      </div>
-    @endif
+<x-admin.form-card 
+  title="Data Kategori" 
+  :action="$actionUrl" 
+  :is-edit="$isEdit" 
+  max-width="640px">
 
     <div class="d-flex flex-column gap-4">
 
@@ -117,8 +101,7 @@
         <i data-lucide="check"></i> Simpan
       </button>
     </div>
-  </form>
-</div>
+</x-admin.form-card>
 
 @endsection
 

@@ -35,3 +35,23 @@ export function isProductPath(pathname) {
   const path = pathname || window.location.pathname;
   return path === '/produk' || path.endsWith('/produk.php') || path.includes('/produk');
 }
+
+export function getCsrfToken(form = document) {
+  const input = form?.querySelector?.('input[name="_token"]');
+  if (input && input.value) return input.value;
+  const meta = document.querySelector('meta[name="csrf-token"]');
+  return meta ? meta.getAttribute('content') : '';
+}
+
+export function ajaxHeaders(csrfToken = null, accept = 'application/json') {
+  const headers = {
+    'X-Requested-With': 'XMLHttpRequest'
+  };
+  if (accept) {
+    headers['Accept'] = accept;
+  }
+  if (csrfToken) {
+    headers['X-CSRF-TOKEN'] = csrfToken;
+  }
+  return headers;
+}
