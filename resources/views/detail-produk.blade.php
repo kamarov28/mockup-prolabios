@@ -192,7 +192,7 @@
             </div>
 
             {{-- JSON-LD --}}
-            <script type="application/ld+json">
+            <script type="application/ld+json" @nonce>
             {!! json_encode([
               '@context' => 'https://schema.org/',
               '@type' => 'Product',
@@ -225,7 +225,7 @@
               ],
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
             </script>
-            <script type="application/ld+json">
+            <script type="application/ld+json" @nonce>
             {!! json_encode([
               '@context' => 'https://schema.org',
               '@type' => 'BreadcrumbList',

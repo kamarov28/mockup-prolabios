@@ -144,6 +144,40 @@ class SecurityHardeningTest extends TestCase
         $this->assertNull($response->headers->get('X-XSS-Protection'));
     }
 
+    public function test_json_ld_and_all_scripts_on_product_detail_page_include_csp_nonce(): void
+    {
+        $product = Product::create([
+            'title' => 'Sample Spectrophotometer',
+            'catalog' => 'SPEC-100',
+            'category' => 'Instruments',
+            'price' => 5000000,
+            'stock' => 10,
+        ]);
+
+        $response = $this->get(route('produk.detail', ['slug' => $product->slug]));
+        $response->assertStatus(200);
+
+        $html = $response->getContent();
+
+        // Extract CSP nonce from response header
+        $csp = $response->headers->get('Content-Security-Policy');
+        preg_match("/'nonce-([A-Za-z0-9+\/]+=*)'/", $csp, $matches);
+        $this->assertNotEmpty($matches[1], 'CSP header must contain a nonce');
+        $expectedNonce = $matches[1];
+
+        // Ensure every <script tag has nonce="..." matching the header
+        preg_match_all('/<script\b(?![^>]*\btype=["\']text\/html["\'])[^>]*>/i', $html, $scriptTags);
+        $this->assertNotEmpty($scriptTags[0], 'Product detail page must contain script tags');
+
+        foreach ($scriptTags[0] as $tag) {
+            $this->assertStringContainsString(
+                'nonce="'.$expectedNonce.'"',
+                $tag,
+                "Script tag is missing or has incorrect CSP nonce: {$tag}"
+            );
+        }
+    }
+
     public function test_custom_404_error_page_renders_cleanly_without_information_disclosure(): void
     {
         $response = $this->get('/non-existent-route-for-testing-404-handling');
