@@ -69,6 +69,15 @@
         </div>
       @endif
 
+      @if(session('info'))
+        <div class="login-nb-alert login-nb-alert-info mb-3 d-flex align-items-center" role="alert" style="background: #EFF6FF; border: 1px solid #BFDBFE; color: #1E40AF; border-radius: 10px; padding: 12px 16px; font-size: 0.85rem; font-weight: 500;">
+          <i data-lucide="info" class="fs-5 me-2 flex-shrink-0" style="color: #2563EB;"></i>
+          <div>
+            {{ session('info') }}
+          </div>
+        </div>
+      @endif
+
       @if(session('error') || $errors->any())
         <div class="login-nb-alert login-nb-alert-error mb-3 d-flex align-items-center" role="alert">
           <i data-lucide="alert-triangle" class="fs-5 text-danger me-2 flex-shrink-0"></i>
@@ -84,25 +93,36 @@
 
         <div class="mb-3">
           <label for="username" class="login-nb-label">Username</label>
-          <div class="login-nb-input-group @if(session('error') || $errors->any()) has-error @endif">
+          <div class="login-nb-input-group @if($errors->has('username') || (session('error') && old('username'))) has-error @endif">
             <span class="login-nb-input-icon"><i data-lucide="user"></i></span>
             <input type="text" class="login-nb-input" id="username" name="username" required value="{{ old('username') }}" placeholder="Masukkan username" @if(!old('username')) autofocus @endif autocomplete="username">
           </div>
+          @error('username')
+            <div class="login-nb-field-error mt-2 d-flex align-items-center gap-1">
+              <i data-lucide="x-circle"></i>
+              <span>{{ $message }}</span>
+            </div>
+          @enderror
         </div>
 
         <div class="mb-4">
           <label for="password" class="login-nb-label">Kata Sandi</label>
-          <div class="login-nb-input-group @if(session('error') || $errors->any()) has-error @endif">
+          <div class="login-nb-input-group @if($errors->has('password') || (session('error') && old('username'))) has-error @endif">
             <span class="login-nb-input-icon"><i data-lucide="shield-alert"></i></span>
             <input type="password" class="login-nb-input" id="password" name="password" required placeholder="••••••••" autocomplete="current-password" @if(old('username')) autofocus @endif>
             <button type="button" class="login-nb-toggle-btn" id="toggle-password" title="Lihat password" aria-label="Lihat password">
               <i id="toggle-password-icon" data-lucide="eye-off"></i>
             </button>
           </div>
-          @if(session('error') || $errors->any())
+          @if($errors->has('password'))
             <div class="login-nb-field-error mt-2 d-flex align-items-center gap-1">
               <i data-lucide="x-circle"></i>
-              <span>Kata sandi salah. Silakan periksa kembali.</span>
+              <span>{{ $errors->first('password') }}</span>
+            </div>
+          @elseif(session('error') && old('username'))
+            <div class="login-nb-field-error mt-2 d-flex align-items-center gap-1">
+              <i data-lucide="x-circle"></i>
+              <span>Kata sandi atau username salah. Silakan periksa kembali.</span>
             </div>
           @endif
         </div>

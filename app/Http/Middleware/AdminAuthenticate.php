@@ -19,7 +19,7 @@ class AdminAuthenticate
         if (! Auth::check() || ! Auth::user()?->isAdmin()) {
             Auth::logout();
 
-            return redirect()->route('admin.login')->with('error', 'Silakan login dengan akun administrator untuk mengakses panel admin.');
+            return redirect()->route('admin.login')->with('info', 'Silakan login terlebih dahulu untuk mengakses panel admin.');
         }
 
         return $next($request);
