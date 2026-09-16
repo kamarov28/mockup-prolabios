@@ -68,8 +68,8 @@
         </ul>
         @if(!empty($waNumber))
           <div class="mt-3">
-            <a href="https://wa.me/{{ $waNumber }}?text={{ $waDefaultMsg }}" target="_blank" rel="noopener noreferrer" class="footer-wa-pill" aria-label="Konsultasi WhatsApp">
-              <i class="bi bi-whatsapp"></i> Chat WhatsApp
+            <a href="https://wa.me/{{ $waNumber }}?text={{ $waDefaultMsg }}" target="_blank" rel="noopener noreferrer" class="footer-wa-pill d-inline-flex align-items-center gap-2" aria-label="Konsultasi WhatsApp">
+              <x-brand-icon name="whatsapp" size="18" /> Chat WhatsApp
             </a>
           </div>
         @endif

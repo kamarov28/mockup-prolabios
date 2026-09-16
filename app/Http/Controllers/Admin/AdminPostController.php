@@ -26,7 +26,7 @@ class AdminPostController extends Controller
         $this->posts = $posts;
     }
 
-    public function postsIndex(Request $request)
+    public function index(Request $request)
     {
         $search = $request->input('s');
         $category = $request->input('category');
@@ -68,12 +68,12 @@ class AdminPostController extends Controller
         ]);
     }
 
-    public function postsCreate()
+    public function create()
     {
         return view('admin.posts.form');
     }
 
-    public function postsStore(StorePostRequest $request)
+    public function store(StorePostRequest $request)
     {
         $title = $request->input('title');
         $slug = Str::slug($title);
@@ -116,7 +116,7 @@ class AdminPostController extends Controller
         return redirect()->route('admin.posts')->with('success', 'Artikel baru berhasil dipublikasikan!');
     }
 
-    public function postsEdit(string $slug)
+    public function edit(string $slug)
     {
         $post = $this->posts->getPostBySlug($slug);
         if (! $post) {
@@ -126,7 +126,7 @@ class AdminPostController extends Controller
         return view('admin.posts.form', compact('post'));
     }
 
-    public function postsUpdate(UpdatePostRequest $request, string $slug)
+    public function update(UpdatePostRequest $request, string $slug)
     {
         $post = $this->posts->getPostBySlug($slug);
         if (! $post) {
@@ -181,7 +181,7 @@ class AdminPostController extends Controller
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil diperbarui!');
     }
 
-    public function postsDestroy(string $slug)
+    public function destroy(string $slug)
     {
         $post = $this->posts->getPostBySlug($slug);
         $title = $post['title'] ?? null;

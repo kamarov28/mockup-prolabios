@@ -127,8 +127,8 @@
                       {{ $rfq->items->count() }} item
                     </span>
                     <div class="d-flex gap-2">
-                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success" title="Hubungi WA">
-                        <i class="bi bi-whatsapp"></i>
+                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success d-inline-flex align-items-center" title="Hubungi WA">
+                        <x-brand-icon name="whatsapp" size="14" />
                       </a>
                       <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="text-secondary" title="Buka Detail">
                         <i data-lucide="arrow-up-right"></i>
@@ -180,7 +180,7 @@
                   <td>
                     <div>
                       <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-decoration-none text-success small d-inline-flex align-items-center gap-1">
-                        <i class="bi bi-whatsapp"></i> {{ $rfq->phone_wa }}
+                        <x-brand-icon name="whatsapp" size="14" /> {{ $rfq->phone_wa }}
                       </a>
                     </div>
                     <div class="text-secondary small">

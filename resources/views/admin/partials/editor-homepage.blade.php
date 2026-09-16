@@ -137,10 +137,10 @@
                 <div>
                   <span class="admin-badge admin-badge-accent mb-2">Kartu Bento #{{ $i + 1 }}</span>
                   <div class="mb-2">
-                    <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Bootstrap (<a href="https://icons.getbootstrap.com" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i data-lucide="external-link"></i></a>)</label>
+                    <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Lucide (<a href="https://lucide.dev/icons" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i data-lucide="external-link"></i></a>)</label>
                     <div class="input-group input-group-sm">
-                      <span class="input-group-text"><i class="bi {{ $bCard['icon'] ?? 'bi-patch-check' }}"></i></span>
-                      <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'bi-patch-check') }}" placeholder="bi-patch-check" required>
+                      <span class="input-group-text"><i data-lucide="{{ $bCard['icon'] ?? 'badge-check' }}"></i></span>
+                      <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'badge-check') }}" placeholder="badge-check / wrench / package / thermometer-snowflake" required>
                     </div>
                   </div>
                   <div class="mb-2">

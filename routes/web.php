@@ -70,14 +70,14 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
 
     Route::get('/guide', [AdminDashboardController::class, 'guide'])->name('admin.guide');
 
-    Route::get('/products', [AdminProductController::class, 'productsIndex'])->name('admin.products');
-    Route::get('/products/create', [AdminProductController::class, 'productsCreate'])->name('admin.products.create');
-    Route::get('/products/create-bulk', [AdminProductController::class, 'productsCreateBulk'])->name('admin.products.create.bulk');
-    Route::post('/products/store-bulk', [AdminProductController::class, 'productsStoreBulk'])->name('admin.products.store-bulk');
-    Route::post('/products', [AdminProductController::class, 'productsStore'])->name('admin.products.store');
-    Route::get('/products/{id}/edit', [AdminProductController::class, 'productsEdit'])->name('admin.products.edit');
-    Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'productsUpdate'])->name('admin.products.update');
-    Route::delete('/products/{id}', [AdminProductController::class, 'productsDestroy'])->name('admin.products.destroy');
+    Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products');
+    Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
+    Route::get('/products/create-bulk', [AdminProductController::class, 'createBulk'])->name('admin.products.create.bulk');
+    Route::post('/products/store-bulk', [AdminProductController::class, 'storeBulk'])->name('admin.products.store-bulk');
+    Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+    Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+    Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
+    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
 
     Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');
     Route::get('/categories/create', [AdminProductCategoryController::class, 'create'])->name('admin.categories.create');
@@ -88,19 +88,19 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
 
     Route::get('/api/subcategories', [AdminProductCategoryController::class, 'apiSubcategories'])->name('admin.api.subcategories');
 
-    Route::get('/posts', [AdminPostController::class, 'postsIndex'])->name('admin.posts');
-    Route::get('/posts/create', [AdminPostController::class, 'postsCreate'])->name('admin.posts.create');
-    Route::post('/posts', [AdminPostController::class, 'postsStore'])->name('admin.posts.store');
-    Route::get('/posts/{slug}/edit', [AdminPostController::class, 'postsEdit'])->name('admin.posts.edit');
-    Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'postsUpdate'])->name('admin.posts.update');
-    Route::delete('/posts/{slug}', [AdminPostController::class, 'postsDestroy'])->name('admin.posts.destroy');
+    Route::get('/posts', [AdminPostController::class, 'index'])->name('admin.posts');
+    Route::get('/posts/create', [AdminPostController::class, 'create'])->name('admin.posts.create');
+    Route::post('/posts', [AdminPostController::class, 'store'])->name('admin.posts.store');
+    Route::get('/posts/{slug}/edit', [AdminPostController::class, 'edit'])->name('admin.posts.edit');
+    Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'update'])->name('admin.posts.update');
+    Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
 
-    Route::get('/sectors', [AdminSectorController::class, 'sectorsIndex'])->name('admin.sectors');
-    Route::get('/sectors/create', [AdminSectorController::class, 'sectorsCreate'])->name('admin.sectors.create');
-    Route::post('/sectors', [AdminSectorController::class, 'sectorsStore'])->name('admin.sectors.store');
-    Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'sectorsEdit'])->name('admin.sectors.edit');
-    Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'sectorsUpdate'])->name('admin.sectors.update');
-    Route::delete('/sectors/{id}', [AdminSectorController::class, 'sectorsDestroy'])->name('admin.sectors.destroy');
+    Route::get('/sectors', [AdminSectorController::class, 'index'])->name('admin.sectors');
+    Route::get('/sectors/create', [AdminSectorController::class, 'create'])->name('admin.sectors.create');
+    Route::post('/sectors', [AdminSectorController::class, 'store'])->name('admin.sectors.store');
+    Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'edit'])->name('admin.sectors.edit');
+    Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'update'])->name('admin.sectors.update');
+    Route::delete('/sectors/{id}', [AdminSectorController::class, 'destroy'])->name('admin.sectors.destroy');
 
     Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals.index');
     Route::get('/principals/list', [AdminPrincipalController::class, 'index'])->name('admin.principals');

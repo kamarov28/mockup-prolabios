@@ -8,7 +8,6 @@
       'platform' => 'facebook',
       'title' => 'Facebook Resmi PMA',
       'label' => 'Facebook',
-      'icon' => 'bi bi-facebook',
       'iconClass' => 'profil-social-icon--facebook',
       'url' => $siteSettings['social_facebook'] ?? 'https://web.facebook.com/PT-Prolabios-Mitra-Analitika-1787666991553394/'
     ],
@@ -16,7 +15,6 @@
       'platform' => 'instagram',
       'title' => 'Instagram @prolabios.id',
       'label' => 'Instagram',
-      'icon' => 'bi bi-instagram',
       'iconClass' => 'profil-social-icon--instagram',
       'url' => $siteSettings['social_instagram'] ?? 'https://www.instagram.com/prolabios.id'
     ],
@@ -24,7 +22,6 @@
       'platform' => 'linkedin',
       'title' => 'LinkedIn Company Page',
       'label' => 'LinkedIn',
-      'icon' => 'bi bi-linkedin',
       'iconClass' => 'profil-social-icon--linkedin',
       'url' => $siteSettings['social_linkedin'] ?? 'https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all'
     ],
@@ -32,7 +29,6 @@
       'platform' => 'whatsapp',
       'title' => 'WhatsApp Layanan Resmi',
       'label' => 'WhatsApp',
-      'icon' => 'bi bi-whatsapp',
       'iconClass' => 'profil-social-icon--whatsapp',
       'url' => !empty($siteSettings['contact_whatsapp']) 
                 ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $siteSettings['contact_whatsapp']) 
@@ -50,7 +46,9 @@
            target="_blank" 
            rel="noopener noreferrer" 
            class="profil-social-link">
-          <i class="{{ $item['icon'] }} {{ $item['iconClass'] }} fs-5"></i>
+          <span class="d-inline-flex align-items-center justify-content-center {{ $item['iconClass'] }}" style="width: 24px; height: 24px;">
+            <x-brand-icon :name="$item['platform']" size="20" />
+          </span>
           <span>{{ $item['title'] }}</span>
         </a>
       @endif
@@ -63,10 +61,10 @@
         <a href="{{ $item['url'] }}" 
            target="_blank" 
            rel="noopener noreferrer" 
-           class="footer-social-link" 
+           class="footer-social-link d-inline-flex align-items-center justify-content-center" 
            aria-label="{{ $item['label'] }}"
            title="{{ $item['title'] }}">
-          <i class="{{ $item['icon'] }}" aria-hidden="true"></i>
+          <x-brand-icon :name="$item['platform']" size="16" />
         </a>
       @endif
     @endforeach

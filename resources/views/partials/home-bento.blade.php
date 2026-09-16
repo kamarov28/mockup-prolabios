@@ -45,10 +45,23 @@
       </div>
 
       <!-- 2. Cold Chain Infrastructure -->
+      @php
+        $mapIcon = function($icon, $default) {
+          $icon = $icon ?: $default;
+          $map = [
+            'bi-patch-check' => 'badge-check',
+            'bi-file-earmark-code' => 'file-check',
+            'bi-snow' => 'thermometer-snowflake',
+            'bi-tools' => 'wrench',
+            'bi-box-seam' => 'package',
+          ];
+          return $map[$icon] ?? str_replace('bi-', '', $icon);
+        };
+      @endphp
       <div class="col-lg-5">
         <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5">
           <div>
-            <div class="hitech-bento-icon mb-3"><i class="bi {{ $homeData['bento_cards'][1]['icon'] ?? 'bi-snow' }}"></i></div>
+            <div class="hitech-bento-icon mb-3"><i data-lucide="{{ $mapIcon($homeData['bento_cards'][1]['icon'] ?? null, 'thermometer-snowflake') }}"></i></div>
             <h3 class="hitech-bento-title fs-5 mb-2">{{ $homeData['bento_cards'][1]['title'] ?? 'Logistik Cold-Chain Terkontrol (2°C – 8°C)' }}</h3>
             <p class="hitech-bento-desc">
               {{ $homeData['bento_cards'][1]['desc'] ?? 'Reagen sensitif suhu, enzim, dan media siap pakai dikemas dengan insulasi termal khusus dan pemantauan suhu berkala hingga tiba di laboratorium.' }}
@@ -64,7 +77,7 @@
       <div class="col-lg-5">
         <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5">
           <div>
-            <div class="hitech-bento-icon mb-3"><i class="bi {{ $homeData['bento_cards'][2]['icon'] ?? 'bi-tools' }}"></i></div>
+            <div class="hitech-bento-icon mb-3"><i data-lucide="{{ $mapIcon($homeData['bento_cards'][2]['icon'] ?? null, 'wrench') }}"></i></div>
             <h3 class="hitech-bento-title fs-5 mb-2">{{ $homeData['bento_cards'][2]['title'] ?? 'Layanan Teknis IQ/OQ/PQ & Kalibrasi' }}</h3>
             <p class="hitech-bento-desc">
               {{ $homeData['bento_cards'][2]['desc'] ?? 'Didukung teknisi bersertifikasi untuk instalasi, kualifikasi operasional, pemeliharaan preventif, dan kalibrasi rutin mikropipet serta instrumen lab.' }}
@@ -83,7 +96,7 @@
         <div class="hitech-bento-card h-100 d-flex flex-column justify-content-between p-4 p-md-5">
           <div>
             <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-              <div class="hitech-bento-icon m-0"><i class="bi {{ $homeData['bento_cards'][3]['icon'] ?? 'bi-box-seam' }}"></i></div>
+              <div class="hitech-bento-icon m-0"><i data-lucide="{{ $mapIcon($homeData['bento_cards'][3]['icon'] ?? null, 'package') }}"></i></div>
               <span class="nb-badge-sm">1.000+ SKU Ready Stock</span>
             </div>
             <h3 class="hitech-bento-title fs-5 mb-2">{{ $homeData['bento_cards'][3]['title'] ?? 'Akses Cepat 1.000+ Produk & Reagen Multi-Brand' }}</h3>

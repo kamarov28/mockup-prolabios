@@ -127,22 +127,22 @@ class HomepageService
             'bento_subtitle' => 'Engineered to fulfill strict regulatory compliance and ensure seamless laboratory testing continuity.',
             'bento_cards' => [
                 [
-                    'icon' => 'bi-patch-check',
+                    'icon' => 'badge-check',
                     'title' => 'ISO & AKL Certified Products',
                     'desc' => 'Over 1,000+ officially accredited reagents and instruments, guaranteeing distribution legality for BPOM and ISO 17025 audit compliance.',
                 ],
                 [
-                    'icon' => 'bi-file-earmark-code',
+                    'icon' => 'file-check',
                     'title' => 'Instant COA & MSDS Access',
                     'desc' => 'Every batch of reagents and culture media comes with official Certificate of Analysis (COA) and MSDS ready for lab validation download.',
                 ],
                 [
-                    'icon' => 'bi-snow',
+                    'icon' => 'thermometer-snowflake',
                     'title' => 'Safe Cold-Chain Logistics',
                     'desc' => 'Tested cold-chain infrastructure ensuring temperature-sensitive reagents remain stable and active upon arrival at your laboratory.',
                 ],
                 [
-                    'icon' => 'bi-tools',
+                    'icon' => 'wrench',
                     'title' => 'Integrated After-Sales & Calibration',
                     'desc' => 'Comprehensive equipment qualification (IQ/OQ/PQ), routine calibration services, and technical training by application specialists.',
                 ],

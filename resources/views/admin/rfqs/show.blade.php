@@ -23,8 +23,8 @@
   </div>
   <div class="d-inline-flex gap-2 flex-wrap">
     <a href="{{ $rfq->whatsapp_url }}"
-       target="_blank" rel="noopener" class="admin-btn admin-btn-primary" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
-      <i class="bi bi-whatsapp"></i> Hubungi Customer via WA
+       target="_blank" rel="noopener" class="admin-btn admin-btn-primary d-inline-flex align-items-center gap-1" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
+      <x-brand-icon name="whatsapp" size="16" /> Hubungi Customer via WA
     </a>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-ghost">
       <i data-lucide="mail"></i> Kirim Email
@@ -180,7 +180,7 @@
         <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
           <span class="text-secondary small d-block mb-1">Nomor WhatsApp:</span>
           <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
-            <i class="bi bi-whatsapp"></i> {{ $rfq->phone_wa }}
+            <x-brand-icon name="whatsapp" size="16" /> {{ $rfq->phone_wa }}
           </a>
         </div>
 

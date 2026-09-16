@@ -2,4 +2,3 @@
    Vendor CSS (Bundled locally for performance & zero render-blocking)
    ========================================================================== */
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "bootstrap-icons/font/bootstrap-icons.css";

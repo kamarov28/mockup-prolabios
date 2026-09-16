@@ -50,7 +50,7 @@ class AdminProductController extends Controller
         $this->sectors = $sectors;
     }
 
-    public function productsIndex(Request $request)
+    public function index(Request $request)
     {
         $query = Product::query()->select(self::INDEX_COLUMNS);
 
@@ -116,7 +116,7 @@ class AdminProductController extends Controller
         ]);
     }
 
-    public function productsCreate()
+    public function create()
     {
         $sectors = $this->sectors->getSectors();
         $categories = ProductCategory::whereNull('parent_id')
@@ -139,7 +139,7 @@ class AdminProductController extends Controller
         return view('admin.products.form', compact('sectors', 'product', 'categories', 'principals'));
     }
 
-    public function productsStore(StoreProductRequest $request)
+    public function store(StoreProductRequest $request)
     {
         $title = $request->input('title');
 
@@ -180,7 +180,7 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
     }
 
-    public function productsEdit(int $id)
+    public function edit(int $id)
     {
         $product = $this->products->getProductById($id);
         if (! $product) {
@@ -194,7 +194,7 @@ class AdminProductController extends Controller
         return view('admin.products.form', compact('product', 'sectors', 'categories', 'principals'));
     }
 
-    public function productsUpdate(UpdateProductRequest $request, int $id)
+    public function update(UpdateProductRequest $request, int $id)
     {
         $product = $this->products->getProductById($id);
         if (! $product) {
@@ -254,7 +254,7 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui!');
     }
 
-    public function productsDestroy(int $id)
+    public function destroy(int $id)
     {
         $product = $this->products->getProductById($id);
         $title = is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null);
@@ -270,7 +270,7 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
     }
 
-    public function productsCreateBulk()
+    public function createBulk()
     {
         $sectors = $this->sectors->getSectors();
         $categoriesStructure = $this->products->getCategoriesStructure();
@@ -278,7 +278,7 @@ class AdminProductController extends Controller
         return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure'));
     }
 
-    public function productsStoreBulk(Request $request)
+    public function storeBulk(Request $request)
     {
         $titles = $request->input('title', []);
 

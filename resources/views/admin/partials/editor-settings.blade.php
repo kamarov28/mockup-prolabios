@@ -17,7 +17,7 @@
         <div class="col-md-6">
           <label for="contact_phone" class="admin-form-label mb-2">Nomor WhatsApp Utama (CS / Sales)</label>
           <div class="input-group">
-            <span class="input-group-text text-success"><i class="bi bi-whatsapp"></i></span>
+            <span class="input-group-text text-success d-inline-flex align-items-center"><x-brand-icon name="whatsapp" size="16" /></span>
             <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '0821-8792-9433') }}" required>
           </div>
           @error('contact_phone') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
@@ -231,21 +231,21 @@
       <div class="row g-3">
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-danger" style="width: 42px; justify-content: center;"><i class="bi bi-instagram"></i></span>
+            <span class="input-group-text text-danger d-inline-flex align-items-center justify-content-center" style="width: 42px;"><x-brand-icon name="instagram" size="16" /></span>
             <input type="text" class="form-control @error('social_instagram') is-invalid @enderror" id="social_instagram" name="social_instagram" placeholder="https://instagram.com/akun" value="{{ old('social_instagram', $homeData['social_instagram'] ?? '') }}">
           </div>
           @error('social_instagram') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-primary" style="width: 42px; justify-content: center;"><i class="bi bi-facebook"></i></span>
+            <span class="input-group-text text-primary d-inline-flex align-items-center justify-content-center" style="width: 42px;"><x-brand-icon name="facebook" size="16" /></span>
             <input type="text" class="form-control @error('social_facebook') is-invalid @enderror" id="social_facebook" name="social_facebook" placeholder="https://facebook.com/akun" value="{{ old('social_facebook', $homeData['social_facebook'] ?? '') }}">
           </div>
           @error('social_facebook') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
         <div class="col-md-6">
           <div class="input-group">
-            <span class="input-group-text text-info" style="width: 42px; justify-content: center;"><i class="bi bi-linkedin"></i></span>
+            <span class="input-group-text text-info d-inline-flex align-items-center justify-content-center" style="width: 42px;"><x-brand-icon name="linkedin" size="16" /></span>
             <input type="text" class="form-control @error('social_linkedin') is-invalid @enderror" id="social_linkedin" name="social_linkedin" placeholder="https://linkedin.com/company/akun" value="{{ old('social_linkedin', $homeData['social_linkedin'] ?? '') }}">
           </div>
           @error('social_linkedin') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror

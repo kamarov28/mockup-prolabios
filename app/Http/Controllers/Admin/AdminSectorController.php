@@ -21,19 +21,19 @@ class AdminSectorController extends Controller
         $this->sectors = $sectors;
     }
 
-    public function sectorsIndex()
+    public function index()
     {
         $sectors = $this->sectors->getSectors();
 
         return view('admin.sectors.index', compact('sectors'));
     }
 
-    public function sectorsCreate()
+    public function create()
     {
         return view('admin.sectors.form');
     }
 
-    public function sectorsStore(StoreSectorRequest $request)
+    public function store(StoreSectorRequest $request)
     {
         $id = strtolower($request->input('id'));
 
@@ -63,7 +63,7 @@ class AdminSectorController extends Controller
         return redirect()->route('admin.sectors')->with('success', 'Sektor industri baru berhasil ditambahkan!');
     }
 
-    public function sectorsEdit(string $id)
+    public function edit(string $id)
     {
         $sector = $this->sectors->getSectorById($id);
         if (! $sector) {
@@ -73,7 +73,7 @@ class AdminSectorController extends Controller
         return view('admin.sectors.form', compact('sector'));
     }
 
-    public function sectorsUpdate(UpdateSectorRequest $request, string $id)
+    public function update(UpdateSectorRequest $request, string $id)
     {
         $sector = $this->sectors->getSectorById($id);
         if (! $sector) {
@@ -105,7 +105,7 @@ class AdminSectorController extends Controller
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil diperbarui!');
     }
 
-    public function sectorsDestroy(string $id)
+    public function destroy(string $id)
     {
         $sector = $this->sectors->getSectorById($id);
         if (! $sector) {
