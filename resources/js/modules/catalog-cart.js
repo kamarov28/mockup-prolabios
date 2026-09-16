@@ -233,7 +233,12 @@ export function showToast(message, type = 'success') {
     ? '<i data-lucide="check-circle-2" class="nb-toast-icon nb-toast-icon--success"></i>'
     : '<i data-lucide="alert-triangle" class="nb-toast-icon nb-toast-icon--warning"></i>';
 
-  toast.innerHTML = iconHtml + '<span class="nb-toast-text">' + message + '</span>';
+  // Icon HTML is a static developer-written literal — safe to set via innerHTML.
+  // Message is always set via textContent so it can never be interpreted as HTML,
+  // regardless of what future callers pass (e.g. a product name from the server).
+  toast.innerHTML = iconHtml + '<span class="nb-toast-text"></span>';
+  const textEl = toast.querySelector('.nb-toast-text');
+  if (textEl) textEl.textContent = message;
   container.appendChild(toast);
   if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
 
