@@ -117,9 +117,10 @@
   border: none;
   border-radius: 8px;
   padding: 0.65rem 1.25rem;
-  transition: background-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+  transition: background-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast);
   cursor: pointer;
   box-shadow: none;
+  white-space: nowrap;
 }
 
 .nb-btn-primary,
@@ -161,6 +162,23 @@
   color: #FFFFFF !important;
 }
 
+.nb-btn-secondary,
+.nb-btn-tinted {
+  background: var(--nb-bg-soft);
+  color: var(--nb-ink) !important;
+  border: 1px solid #E5E7EB;
+  box-shadow: none;
+}
+.nb-btn-secondary:hover,
+.nb-btn-tinted:hover {
+  background: #E2E8F0;
+  color: var(--nb-ink) !important;
+}
+.nb-btn-secondary:active,
+.nb-btn-tinted:active {
+  background: #CBD5E1;
+}
+
 .nb-btn-ghost {
   background: #E5E7EB;
   color: #1F2937 !important;
@@ -170,6 +188,36 @@
 .nb-btn-ghost:hover {
   background: #D1D5DB;
   color: #111827 !important;
+}
+
+/* ── HIG Ergonomic Touch Boundary (44x44pt Target) ───────────────────── */
+@media (max-width: 768px), (pointer: coarse) {
+  .nb-btn,
+  .btn,
+  .btn-primary,
+  .nb-btn-ghost,
+  .btn-outline-primary,
+  .cart-clear-btn,
+  .pagination .page-item .page-link {
+    min-height: var(--touch-target-min, 44px) !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart-remove-btn {
+    min-width: var(--touch-target-min, 44px) !important;
+    min-height: var(--touch-target-min, 44px) !important;
+  }
+}
+
+/* ── HIG Tactile Haptic Micro-Interactions ───────────────────────────── */
+.nb-btn:active,
+.btn:active,
+.navbar-cta-btn:active,
+.cart-clear-btn:active,
+.nb-icon-btn:active {
+  transform: scale(0.98);
 }
 
 .btn-primary {
@@ -425,10 +473,31 @@ input[type=number].hide-spinner {
   box-shadow: none;
 }
 
+@media (max-width: 768px) {
+  .b2b-qty-pill {
+    height: var(--touch-target-min, 44px);
+  }
+  .b2b-qty-btn {
+    width: var(--touch-target-min, 44px);
+    font-size: 1.1rem;
+  }
+}
+
 /* ── Form Inputs & Validation (Modern Flat) ──────────────────────────────── */
+.form-label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: var(--tracking-headline);
+  color: var(--nb-ink);
+  margin-bottom: var(--space-2);
+}
+
 .form-control,
 .form-select,
 .kontak-form-input {
+  min-height: 44px;
   background-color: #F8F9FA !important;
   border: 1px solid #E5E7EB !important;
   border-radius: 10px !important;
@@ -436,6 +505,7 @@ input[type=number].hide-spinner {
   color: #1F2937 !important;
   padding: 10px 14px;
   font-size: 0.92rem;
+  letter-spacing: var(--tracking-body);
   transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
@@ -535,8 +605,7 @@ input[type=number].hide-spinner {
 }
 .swal2-popup.swal2-toast {
   background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
-  border-left: 4px solid var(--nb-primary) !important;
+  border: 1px solid rgba(166, 23, 28, 0.2) !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
   padding: 0.85rem 1.2rem !important;
   border-radius: var(--nb-radius) !important;
@@ -628,10 +697,6 @@ input[type=number].hide-spinner {
 
 .nav-cart-badge.is-hidden {
   display: none !important;
-}
-.nav-cart-badge.is-bump {
-  transform: scale(1.4);
-  transition: transform 0.2s ease;
 }
 
 .cart-item-card.is-removing {

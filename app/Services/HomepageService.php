@@ -111,10 +111,10 @@ class HomepageService
     {
         return [
             // 1. Hero Section
-            'hero_badge' => 'PRECISION LABORATORY SOLUTIONS',
-            'hero_title' => 'Uncompromised <span class="text-accent">Testing Accuracy</span> for Research & Industry.',
-            'hero_subtitle' => 'Official provider of analytical instruments, culture media, and laboratory reagents meeting strict international quality standards.',
-            'hero_cta_text' => 'Explore Product Catalog',
+            'hero_badge' => 'Distributor Resmi & Penjaminan Mutu Laboratorium',
+            'hero_title' => 'Solusi Analitika &amp; Mikrobiologi <span class="text-accent">Terpercaya</span>',
+            'hero_subtitle' => 'Distributor resmi media kultur mikrobiologi, instrumen presisi, dan reagen laboratorium berstandar regulasi ISO 17025 & BPOM di Indonesia.',
+            'hero_cta_text' => 'Jelajahi Katalog Produk',
             'hero_cta_link' => '/produk',
             'hero_images' => [
                 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
@@ -123,66 +123,66 @@ class HomepageService
             ],
 
             // 2. Bento Grid
-            'bento_title' => 'Infrastructure & Reliability Standards',
-            'bento_subtitle' => 'Engineered to fulfill strict regulatory compliance and ensure seamless laboratory testing continuity.',
+            'bento_title' => 'Standar Keandalan &amp; Kepatuhan Uji Lab',
+            'bento_subtitle' => 'Dirancang untuk memastikan kelancaran audit regulasi BPOM & ISO serta keandalan hasil pengujian di laboratorium Anda.',
             'bento_cards' => [
                 [
                     'icon' => 'badge-check',
-                    'title' => 'ISO & AKL Certified Products',
-                    'desc' => 'Over 1,000+ officially accredited reagents and instruments, guaranteeing distribution legality for BPOM and ISO 17025 audit compliance.',
+                    'title' => 'Produk Bersertifikat ISO & AKL',
+                    'desc' => 'Didukung legalitas izin edar Kemenkes RI (AKL/AKD) serta kepatuhan standar BPOM dan akreditasi ISO 17025.',
                 ],
                 [
                     'icon' => 'file-check',
-                    'title' => 'Instant COA & MSDS Access',
-                    'desc' => 'Every batch of reagents and culture media comes with official Certificate of Analysis (COA) and MSDS ready for lab validation download.',
+                    'title' => 'Akses Cepat COA & MSDS',
+                    'desc' => 'Setiap nomor lot reagen dan media kultur disertai Certificate of Analysis (COA) resmi yang siap diunduh untuk audit.',
                 ],
                 [
                     'icon' => 'thermometer-snowflake',
-                    'title' => 'Safe Cold-Chain Logistics',
-                    'desc' => 'Tested cold-chain infrastructure ensuring temperature-sensitive reagents remain stable and active upon arrival at your laboratory.',
+                    'title' => 'Logistik Cold-Chain Terpantau',
+                    'desc' => 'Distribusi berinsulasi termal khusus menjaga kestabilan enzim, media siap pakai, dan reagen sensitif suhu (2°C–8°C).',
                 ],
                 [
                     'icon' => 'wrench',
-                    'title' => 'Integrated After-Sales & Calibration',
-                    'desc' => 'Comprehensive equipment qualification (IQ/OQ/PQ), routine calibration services, and technical training by application specialists.',
+                    'title' => 'Purnajual & Kualifikasi Teknis',
+                    'desc' => 'Dukungan instalasi, kualifikasi instrumen (IQ/OQ/PQ), kalibrasi berkala, serta pelatihan operasional oleh teknisi tersertifikasi.',
                 ],
             ],
 
             // 3. Interactive Sector Finder
-            'sector_title' => 'Interactive Sector Finder',
-            'sector_subtitle' => 'Select your industry sector to explore tailored testing workflows and relevant products.',
+            'sector_title' => 'Temukan Sektor Industri Anda',
+            'sector_subtitle' => 'Pilih sektor industri untuk melihat alur kerja pengujian dan instrumen yang relevan.',
             'sector_panels' => [
                 'pharma' => [
-                    'tag' => 'PHARMACEUTICAL & COSMETICS',
-                    'title' => 'Endotoxin Testing & Sterilization Validation',
-                    'desc' => 'LAL Endotoxin Test Kits (Bioendo), sterility media, and environmental monitoring tools for GMP compliance.',
+                    'tag' => 'FARMASI & KOSMETIK',
+                    'title' => 'Uji Endotoksin & Validasi Sterilisasi',
+                    'desc' => 'Kit Uji Endotoksin LAL (Bioendo), media sterilitas, dan indikator biologi untuk kepatuhan CPOB/GMP.',
                     'link' => '/sektor',
                 ],
                 'fnb' => [
-                    'tag' => 'FOOD & BEVERAGE',
-                    'title' => 'Microbiology & Hygiene Monitoring',
-                    'desc' => 'Rapid pathogen detection (Salmonella, Listeria, E. coli) and ATP hygiene indicators ensuring food safety compliance for HACCP & BPOM.',
+                    'tag' => 'MAKANAN & MINUMAN',
+                    'title' => 'Mikrobiologi & Pemantauan Higiene',
+                    'desc' => 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk kepatuhan HACCP & BPOM.',
                     'link' => '/sektor',
                 ],
                 'healthcare' => [
-                    'tag' => 'HOSPITAL & CLINICAL',
-                    'title' => 'Clinical Diagnostics Support',
-                    'desc' => 'Culture media, rapid tests, and lab consumables supporting hospital laboratories and clinical diagnostics workflows.',
+                    'tag' => 'RUMAH SAKIT & KLINIS',
+                    'title' => 'Dukungan Diagnostik Klinis',
+                    'desc' => 'Media kultur mikrobiologi, uji cepat, dan bahan habis pakai penunjang laboratorium patologi klinik.',
                     'link' => '/sektor',
                 ],
                 'brewing' => [
-                    'tag' => 'BREWING & FERMENTATION',
-                    'title' => 'Yeast & Contamination Control',
-                    'desc' => 'Specialized media and detection kits for brewery quality control and fermentation process monitoring.',
+                    'tag' => 'FERMENTASI & MINUMAN',
+                    'title' => 'Kontrol Ragi & Kontaminasi',
+                    'desc' => 'Media spesifik dan deteksi kontaminan untuk kendali mutu proses fermentasi industri.',
                     'link' => '/sektor',
                 ],
             ],
 
             // 4. CTA Banner
-            'cta_banner_badge' => 'B2B PROCUREMENT',
-            'cta_banner_title' => 'Need a formal quotation for your laboratory?',
-            'cta_banner_sub' => 'Submit an RFQ with your product list — our sales team will follow up with pricing, bulk availability, and compliance documentation.',
-            'cta_banner_btn_text' => 'Contact Sales / Request Quote',
+            'cta_banner_badge' => 'PENGAJUAN PENAWARAN (RFQ)',
+            'cta_banner_title' => 'Butuh Surat Penawaran Harga (SPH) Resmi untuk Pengadaan?',
+            'cta_banner_sub' => 'Kirim daftar kebutuhan instrumen atau reagen Anda — tim sales teknis kami akan menerbitkan penawaran harga resmi dan konfirmasi lot dalam 1–2 jam kerja.',
+            'cta_banner_btn_text' => 'Konsultasi Kebutuhan Pengadaan',
             'cta_banner_btn_url' => '/kontak',
 
             'focus_title' => 'Interactive Sector Finder',

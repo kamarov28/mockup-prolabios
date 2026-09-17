@@ -9,20 +9,23 @@
     <!-- Stepper Navigation -->
     <div class="cart-stepper-wrap">
       <div class="d-flex flex-row align-items-center justify-content-between flex-wrap gap-3">
-        <div class="d-flex flex-row align-items-center gap-3 flex-wrap">
-          <div class="d-inline-flex align-items-center gap-2 fw-bold text-ink">
+        <div class="d-flex flex-row align-items-center gap-2 gap-sm-3 flex-wrap">
+          <div class="d-inline-flex align-items-center gap-1 gap-sm-2 fw-bold text-ink">
             <span class="step-num-badge step-num-active">1</span>
-            <span class="step-label">Keranjang Pengajuan</span>
+            <span class="step-label d-none d-sm-inline">Keranjang Pengajuan</span>
+            <span class="step-label d-inline d-sm-none">Keranjang</span>
           </div>
           <span class="fw-bold text-ink" style="font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2 text-muted">
+          <div class="d-inline-flex align-items-center gap-1 gap-sm-2 text-muted">
             <span class="step-num-badge step-num-inactive">2</span>
-            <span class="step-label">Data Kontak &amp; Instansi</span>
+            <span class="step-label d-none d-sm-inline">Data Kontak &amp; Instansi</span>
+            <span class="step-label d-inline d-sm-none">Kontak</span>
           </div>
           <span class="fw-bold text-ink" style="font-size: 0.85rem;">&gt;</span>
-          <div class="d-inline-flex align-items-center gap-2 text-muted">
+          <div class="d-inline-flex align-items-center gap-1 gap-sm-2 text-muted">
             <span class="step-num-badge step-num-inactive">3</span>
-            <span class="step-label">Konfirmasi Selesai</span>
+            <span class="step-label d-none d-sm-inline">Konfirmasi Selesai</span>
+            <span class="step-label d-inline d-sm-none">Selesai</span>
           </div>
         </div>
 
@@ -200,6 +203,21 @@
           </div>
         </div>
 
+      </div>
+
+      {{-- Mobile Sticky Bottom Checkout Bar --}}
+      <div class="d-lg-none position-fixed bottom-0 start-0 w-100 bg-white border-top px-3 py-2 shadow-lg" style="z-index: 1040; border-color: rgba(30,30,30,0.15) !important;">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+          <div>
+            <span class="text-muted small d-block" style="font-size: 0.72rem; line-height: 1.2;">Estimasi Penawaran:</span>
+            <strong class="d-block" style="font-family: var(--font-display); color: var(--nb-primary); font-size: 1.05rem;" id="mobile-total-estimate">
+              {{ $totalEstimate > 0 ? 'Rp ' . number_format($totalEstimate, 0, ',', '.') : 'Konfirmasi SPH' }}
+            </strong>
+          </div>
+          <a href="{{ route('rfq.checkout') }}" class="nb-btn nb-btn-primary py-2 px-3 text-nowrap" style="font-size: 0.85rem; border-radius: 6px;">
+            Lanjut RFQ <i data-lucide="arrow-right" class="ms-1"></i>
+          </a>
+        </div>
       </div>
     @else
       <div class="card cart-empty-card text-center p-5 mx-auto">

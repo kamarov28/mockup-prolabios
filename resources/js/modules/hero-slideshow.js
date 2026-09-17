@@ -56,34 +56,29 @@ export function initHeroBgSlideshow() {
     const outSlide = slides[current];
     const inSlide = slides[next];
 
-    let dir = next > current ? 1 : -1;
-    if (current === slides.length - 1 && next === 0) dir = 1;
-    if (current === 0 && next === slides.length - 1) dir = -1;
+    // Smooth cinematic crossfade & trigger Ken-Burns zoom
+    slides.forEach(function (s, i) {
+      if (i !== current && i !== next) {
+        s.style.zIndex = '1';
+        s.style.opacity = '0';
+        s.classList.remove('active', 'is-active');
+      }
+    });
 
-    // Snappy Neo-Brutalist mechanical push transition
-    outSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
-    inSlide.style.transition = 'transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease';
-
-    inSlide.style.zIndex = '3';
     outSlide.style.zIndex = '2';
-
-    inSlide.style.transform = `translateX(${dir * 100}%)`;
-    inSlide.style.opacity = '1';
-    void inSlide.offsetWidth; // force reflow
-
-    inSlide.style.transform = 'translateX(0%)';
-    outSlide.style.transform = `translateX(${-dir * 30}%)`;
     outSlide.style.opacity = '0';
 
-    setTimeout(() => {
-      outSlide.style.zIndex = '1';
-      outSlide.style.transform = '';
-      outSlide.style.transition = '';
-      inSlide.style.transition = '';
-    }, 550);
+    inSlide.style.zIndex = '3';
+    inSlide.classList.remove('active', 'is-active');
+    void inSlide.offsetWidth; // re-trigger Ken-Burns CSS animation from scale 1.0
+    inSlide.classList.add(ACTIVE);
+    inSlide.style.opacity = '1';
 
-    slides[current].classList.remove('active', 'is-active');
-    slides[next].classList.add(ACTIVE);
+    setTimeout(() => {
+      outSlide.classList.remove('active', 'is-active');
+      outSlide.style.zIndex = '1';
+      inSlide.style.zIndex = '2';
+    }, 850);
 
     current = next;
     updateCounter(current);

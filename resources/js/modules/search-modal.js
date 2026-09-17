@@ -121,6 +121,18 @@ export function initSearchOverlay() {
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && overlay.classList.contains('active')) {
       closeOverlay();
+      return;
+    }
+
+    // Don't trigger shortcut if user is currently typing in an input, textarea, or contenteditable
+    const activeEl = document.activeElement;
+    const isTyping = activeEl && (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) || activeEl.isContentEditable);
+
+    if (!isTyping && !overlay.classList.contains('active')) {
+      if (e.key === '/' || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) {
+        e.preventDefault();
+        openOverlay();
+      }
     }
   });
 

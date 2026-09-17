@@ -133,13 +133,13 @@
         <div class="hitech-tab-panel {{ $loop->first ? 'active' : '' }}" id="panel-{{ $id }}" role="tabpanel" aria-labelledby="tab-{{ $id }}" tabindex="0">
           <div class="row g-4 align-items-stretch">
             <div class="col-lg-6">
-              <div class="hitech-info-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
+              <div class="hitech-info-card p-4 p-md-5 rounded-3 h-100 d-flex flex-column justify-content-between">
                 <div>
-                  <span class="hitech-panel-tag">{{ $sec['tag'] }}</span>
-                  <h3 class="hitech-panel-title">{!! $sec['title'] !!}</h3>
-                  <p class="hitech-panel-desc">{{ $sec['desc'] }}</p>
+                  <span class="hitech-panel-tag mb-3">{{ $sec['tag'] }}</span>
+                  <h3 class="hitech-panel-title mb-3">{!! $sec['title'] !!}</h3>
+                  <p class="hitech-panel-desc mb-4">{{ $sec['desc'] }}</p>
                 </div>
-                <div class="d-flex flex-wrap gap-3 mt-4 pt-3 border-top align-items-center">
+                <div class="d-flex flex-wrap gap-3 pt-3 border-top align-items-center justify-content-between">
                   <a href="{{ url($sec['link']) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
                     {{ $sec['linkText'] }} <i data-lucide="arrow-right"></i>
                   </a>
@@ -150,40 +150,36 @@
 
             <!-- Interactive Spec Card Preview -->
             <div class="col-lg-6">
-              <div class="hitech-spec-card p-4 rounded-3 h-100 d-flex flex-column justify-content-between">
+              <div class="hitech-spec-card p-4 p-md-5 rounded-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
                     <div class="d-flex align-items-center gap-2">
                       <span class="product-cat-code">{{ $sec['cat'] }}</span>
                       <span class="text-muted small">{{ $sec['brand'] }}</span>
                     </div>
-                    <span class="nb-badge-sm" style="color: #1E1E1E;"><i data-lucide="{{ $sec['badgeIcon'] }}" class="me-1" style="color:#A6171C;"></i> {{ $sec['badge'] }}</span>
+                    <span class="nb-badge-sm"><i data-lucide="{{ $sec['badgeIcon'] }}" class="me-1 text-primary"></i> {{ $sec['badge'] }}</span>
                   </div>
 
-                  <h4 class="fs-6 fw-semibold mb-2">{{ $sec['prodTitle'] }}</h4>
-                  <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">
+                  <h4 class="fs-5 fw-bold mb-2">{{ $sec['prodTitle'] }}</h4>
+                  <p class="text-muted mb-4" style="font-size: 0.88rem; line-height: 1.6;">
                     {{ $sec['prodDesc'] }}
                   </p>
 
-                  <div class="row g-2 mb-3">
-                    <div class="col-6">
-                      <div class="hitech-spec-stat p-2 rounded">
-                        <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">{{ $sec['stat1_label'] }}</div>
-                        <div class="{{ $sec['stat1_class'] }}">{{ $sec['stat1_val'] }}</div>
-                      </div>
+                  <div class="d-flex align-items-center gap-4 py-2 mb-3">
+                    <div>
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">{{ $sec['stat1_label'] }}</div>
+                      <div class="{{ $sec['stat1_class'] }} text-dark mt-1">{{ $sec['stat1_val'] }}</div>
                     </div>
-                    <div class="col-6">
-                      <div class="hitech-spec-stat p-2 rounded">
-                        <div class="text-muted" style="font-size: 0.72rem; font-weight: 600;">{{ $sec['stat2_label'] }}</div>
-                        <div class="{{ $sec['stat2_class'] }}">{{ $sec['stat2_val'] }}</div>
-                      </div>
+                    <div class="border-start ps-4">
+                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">{{ $sec['stat2_label'] }}</div>
+                      <div class="{{ $sec['stat2_class'] }} text-dark mt-1">{{ $sec['stat2_val'] }}</div>
                     </div>
                   </div>
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                  <span class="text-muted" style="font-size: 0.78rem; font-weight: 500;"><i data-lucide="{{ $sec['certIcon'] }}" class="text-primary me-1"></i> {{ $sec['cert'] }}</span>
-                  <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;" aria-label="{{ $sec['rfqAria'] }}">
+                  <span class="text-muted small"><i data-lucide="{{ $sec['certIcon'] }}" class="text-primary me-1"></i> {{ $sec['cert'] }}</span>
+                  <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" aria-label="{{ $sec['rfqAria'] }}">
                     <i data-lucide="shopping-cart"></i> Tambah RFQ
                   </a>
                 </div>

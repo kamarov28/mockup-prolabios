@@ -56,7 +56,7 @@ Sharp, technical, and engineered corners matching analytical instrument hardware
 
 ---
 
-## 4. Typography & Hierarchy
+## 4. Typography & Optical Hierarchy (HIG Adapted)
 
 ### Font Families
 - **Display / Headings**: `'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
@@ -64,13 +64,37 @@ Sharp, technical, and engineered corners matching analytical instrument hardware
 - **Body & Data**: `'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
   - Supreme legibility across technical specifications, catalog tables, and data sheets.
 - **Monospace / Catalog Codes**: `'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace`
-  - Designed for CAT numbers, batch identifiers, ISO codes, and tabular figures (`font-feature-settings: "tnum" 1`).
+  - Designed for CAT numbers, batch identifiers, ISO codes, and tabular figures (`font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1`).
+
+### Optical Letter-Spacing (HIG Tracking System)
+- **Large Titles (`h1`, `h2`, `>= 28px`)**: `--tracking-display: -0.03em` (compact, cohesive display).
+- **Section Titles (`h3`, `20px - 26px`)**: `--tracking-title: -0.02em` (clear structural anchors).
+- **Headlines & Card Titles (`h4 - h6`, `16px - 18px`)**: `--tracking-headline: -0.012em`.
+- **Body Text & Form Inputs**: `--tracking-body: -0.005em` (balanced reading flow, bounded to `45ch - 75ch`).
+- **Micro-labels, SKU, Badges (`<= 13px`)**: `--tracking-micro: 0.025em` (open tracking for micro-legibility).
 
 ---
 
-## 5. Standard Component Guidelines
+## 5. Spatial Rhythm & Ergonomics (HIG Adapted)
 
-### 5.1 Navigation Bar (`navbar`)
+### 8pt Grid & 4pt Micro-Rhythm
+- `--space-1` (`4px`): Micro-gaps between inline icons and labels.
+- `--space-2` (`8px`): Form label to input distance, tight badge padding.
+- `--space-3` (`12px`): Compact container gaps.
+- `--space-4` (`16px`): Standard card padding and mobile screen safe gutter.
+- `--space-6` (`24px`): Standard grid column/row gap, tablet margin.
+- `--space-8` (`32px`): Component group separation.
+- `--space-12` (`48px`): Section vertical spacing.
+- `--space-16` (`64px`): Major page section breaks.
+
+### Ergonomic Touch Target (HIG 44x44pt Rule)
+- All interactive elements (buttons, quantity steppers, icon buttons, cart controls, pagination links) must enforce a minimum hit target of **`44px × 44px`** (`--touch-target-min: 44px`) on touch/mobile screens (`@media (max-width: 768px)` or `@media (pointer: coarse)`).
+
+---
+
+## 6. Standard Component Guidelines
+
+### 6.1 Navigation Bar (`navbar`)
 - **Surface**: Pure `#FFFFFF` with a subtle `1px solid rgba(0, 0, 0, 0.06)` bottom divider (zero drop shadow).
 - **Navigation Links**: Pill-shaped with generous padding (`padding: 0.45rem 1rem; border-radius: 20px`).
   - Hover: Background `#F3F4F6`, text color Ruby `#A6171C`.
@@ -78,31 +102,40 @@ Sharp, technical, and engineered corners matching analytical instrument hardware
 - **Utility Buttons**: Circle pill buttons (`width: 40px; height: 40px; border-radius: 50%`) with `#F3F4F6` background.
 - **Catalog Download CTA**: Rounded pill (`border-radius: 20px`), solid Ruby `#A6171C` fill with white text.
 
-### 5.2 Buttons & CTAs
-- **Primary Button (`.btn-primary`, `.nb-btn-primary`)**:
-  - Background: `--color-primary` (`#A6171C`).
-  - Radius: `8px` or `20px` (pill).
-  - Border & Shadow: None.
-  - Hover: Background `--color-primary-dark` (`#871015`), `transform: none`.
-- **Ghost / Secondary Button (`.nb-btn-ghost`)**:
-  - Background: `#E5E7EB`, text: `#1F2937`.
-  - Hover: Background `#D1D5DB`.
+### 6.2 Buttons & 3-Tier Action Hierarchy (HIG Prominence)
+- **Primary / Prominent (`.nb-btn-primary`, `.btn-primary`)**:
+  - Exactly one primary action per visual context (e.g., "Ajukan RFQ", "Tambah ke Keranjang").
+  - Solid Ruby Red fill (`#A6171C`), white text, 8px radius, zero border/shadow.
+  - Hover: `--nb-primary-dark` (`#7A1015`), smooth 0.15s ease.
+- **Secondary / Tinted (`.nb-btn-secondary`, `.nb-btn-tinted`)**:
+  - Contextual supporting actions (e.g., "Lihat Brosur", "Filter Kategori").
+  - Tinted neutral surface (`#F1F4F8` / `#F3F4F6`) with 1px `#E5E7EB` border and dark text (`#111827`).
+  - Hover: `#E2E8F0`.
+- **Tertiary / Plain (`.nb-btn-ghost`)**:
+  - Non-destructive escape actions (e.g., "Kembali", "Batal", "Hapus Keranjang").
+  - Transparent or ultra-light grey, text-only with subtle hover background.
 
-### 5.3 Cards & Grids (`.card`, `.product-card`, `.editorial-featured-card`)
+### 6.3 Cards & Grids (`.card`, `.product-card`, `.editorial-featured-card`)
 - **Background**: `#FFFFFF` against canvas `#F8F9FA`.
 - **Border & Shadow**: Completely removed (`border: none !important; box-shadow: none !important;`).
 - **Corner Radius**: `14px`.
 - **Image Container**: Separated by subtle contrast background (`#F3F4F6`), top corners rounded `14px`, zero bottom border.
 - **Hover**: Smooth background shift or image zoom, no translate jump.
 
-### 5.4 Tabs & Interactive Segmented Controls
+### 6.4 Tabs & Interactive Segmented Controls
 - **Bar Container**: Compact pill bar with `#E5E7EB` background and `12px` border radius.
 - **Tab Buttons**: Clean pill button.
   - Inactive: Transparent background, text `#4B5563`.
   - Hover: `rgba(255, 255, 255, 0.6)`.
   - Active: Solid `#FFFFFF` fill with primary text color `#A6171C` and bold weight.
 
-### 5.5 Corporate Footer (Apple-style Clean Minimalist)
+### 6.5 Forms & Data Input Ergonomics
+- **Stacked Labels**: Always positioned directly above the input with `8px` (`var(--space-2)`) gap.
+- **Touch Target**: Input height default to `44px` (`min-height: 44px;`) with `10px 14px` padding.
+- **Accessible Focus Ring**: 2px solid Ruby outline with 2px offset (`var(--nb-focus-ring)`).
+- **Inline Validation**: Immediate high-contrast error message below the field; no top-of-form error banners alone.
+
+### 6.6 Corporate Footer (Apple-style Clean Minimalist)
 - **Background**: Apple Light Neutral `#F5F5F7` with subtle top border `1px solid rgba(0, 0, 0, 0.08)` — eliminates heavy visual clutter and gives breathable space to the page ending.
 - **Typography & Links**: Clean, icon-free links in muted neutral grey `#6E6E73` (hover to `#1D1D1F`), 0.82rem font size.
 - **Section Headers**: Compact uppercase with generous letter-spacing (`0.8rem`, `letter-spacing: 0.06em`, `#1D1D1F`).

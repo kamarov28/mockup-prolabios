@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PostStatus;
 use App\Helpers\HtmlSanitizer;
 use App\Models\Post;
 use Illuminate\Support\Facades\Cache;
@@ -112,7 +113,7 @@ class PostService
             'title' => $post->title,
             'date' => $post->date ? $post->date->format('Y-m-d') : null,
             'category' => $post->category,
-            'status' => $post->status,
+            'status' => $post->status instanceof PostStatus ? $post->status->value : $post->status,
             'is_featured' => (bool) $post->is_featured,
             'image' => $post->image,
             'content' => $post->content,

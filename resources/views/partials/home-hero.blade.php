@@ -23,47 +23,47 @@
         @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
       >
     @endforeach
-    <!-- Subtle Contrast Gradient Overlay for Perfect Readability -->
     <div class="nb-hero-backdrop-overlay"></div>
   </div>
 
   <div class="container position-relative h-100 d-flex flex-column justify-content-center">
     <div class="nb-hero-immersive-content">
-      <!-- Floating Copy Card with Soft Neo-Brutalist Frame -->
       <div class="nb-hero-copy">
-        <span class="nb-badge">{{ $homeData['hero_badge'] ?? 'SOLUSI LABORATORIUM TERPERCAYA' }}</span>
         <h1 class="nb-hero-title">
           {!! $homeData['hero_title'] ?? 'Solusi Analitika &amp; Mikrobiologi <span class="nb-accent text-accent">Terpercaya</span>' !!}
         </h1>
         <p class="nb-hero-lead">
           {{ $homeData['hero_subtitle'] ?? 'Kami menyediakan media kultur berkualitas tinggi, instrumen laboratorium presisi, dan perlengkapan uji standar industri di Indonesia.' }}
         </p>
-        <div class="nb-hero-actions">
-          <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
-            {{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }}
-            <i data-lucide="arrow-right"></i>
-          </a>
-          <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost">
-            Hubungi Sales
-          </a>
+        <div class="nb-hero-cta-group">
+          <div class="nb-hero-actions d-flex align-items-center gap-3 flex-wrap mb-3">
+            <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
+              <i data-lucide="layers"></i>
+              <span>{{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }}</span>
+            </a>
+            <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost">
+              <i data-lucide="message-square"></i>
+              <span>Hubungi Sales</span>
+            </a>
+          </div>
+
+          <!-- Slide Controls grouped directly beneath action buttons on the left -->
+          @if(count($heroImages) > 1)
+            <div class="nb-hero-controls nb-hero-controls--immersive">
+              <span class="nb-hero-counter">
+                <span id="hero-slide-current" class="nb-mono">01</span>
+                <span class="nb-muted">/</span>
+                <span id="hero-slide-total" class="nb-mono">{{ count($heroImages) < 10 ? '0'.count($heroImages) : count($heroImages) }}</span>
+              </span>
+              <div class="nb-hero-progress"><div id="hero-progress-fill" class="nb-hero-progress-fill"></div></div>
+              <div class="nb-hero-arrows">
+                <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i data-lucide="arrow-left"></i></button>
+                <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i data-lucide="arrow-right"></i></button>
+              </div>
+            </div>
+          @endif
         </div>
       </div>
     </div>
-
-    <!-- Immersive Slide Controls at Bottom Right -->
-    @if(count($heroImages) > 1)
-      <div class="nb-hero-controls nb-hero-controls--immersive">
-        <span class="nb-hero-counter">
-          <span id="hero-slide-current" class="nb-mono">01</span>
-          <span class="nb-muted">/</span>
-          <span id="hero-slide-total" class="nb-mono">{{ count($heroImages) < 10 ? '0'.count($heroImages) : count($heroImages) }}</span>
-        </span>
-        <div class="nb-hero-progress"><div id="hero-progress-fill" class="nb-hero-progress-fill"></div></div>
-        <div class="nb-hero-arrows">
-          <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i data-lucide="arrow-left"></i></button>
-          <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i data-lucide="arrow-right"></i></button>
-        </div>
-      </div>
-    @endif
   </div>
 </section>

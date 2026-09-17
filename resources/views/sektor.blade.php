@@ -60,6 +60,25 @@
 
         <!-- Main Content (Right, Order 2 on Desktop, Order 1 on Mobile/Tablet) -->
         <div class="col-12 col-lg-8 order-1 order-lg-2" id="sektor-main">
+          <!-- Mobile Horizontal Sector Pill Bar (d-lg-none) -->
+          @if(isset($sectors) && count($sectors) > 0)
+            <div class="d-lg-none mb-4 pb-1" id="sektor-mobile-nav">
+              <span class="text-muted small d-block mb-2 fw-semibold" style="font-size: 0.76rem; letter-spacing: 0.5px; text-transform: uppercase;">
+                <i data-lucide="grid" class="me-1" style="width: 14px; height: 14px;"></i> Pilih Sektor Industri:
+              </span>
+              <div class="d-flex align-items-center gap-2 overflow-x-auto pb-2 mobile-pill-scroll">
+                @foreach($sectors as $sec)
+                  <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav"
+                     class="sektor-pill-link nb-btn {{ $activeSector == $sec['id'] ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3"
+                     style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;"
+                     data-sector-id="{{ $sec['id'] }}">
+                    {{ $sec['name'] }}
+                  </a>
+                @endforeach
+              </div>
+            </div>
+          @endif
+
           @php
             $currentData = null;
             if (isset($sectors) && count($sectors) > 0) {

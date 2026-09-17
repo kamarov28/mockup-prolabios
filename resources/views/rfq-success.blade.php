@@ -29,7 +29,12 @@
 
         <div class="row g-2 small mb-3" style="color: var(--nb-ink);">
           <div class="col-sm-4" style="color: var(--nb-muted);">Nomor Pengajuan:</div>
-          <div class="col-sm-8"><strong style="color: var(--nb-primary); font-family: var(--font-mono);">{{ $rfq->rfq_number }}</strong></div>
+          <div class="col-sm-8 d-flex align-items-center gap-2">
+            <strong style="color: var(--nb-primary); font-family: var(--font-mono); font-size: 1.05rem;">{{ $rfq->rfq_number }}</strong>
+            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 d-inline-flex align-items-center gap-1 copy-rfq-btn" onclick="copyRfqNumber('{{ $rfq->rfq_number }}', this)" title="Salin nomor pengajuan RFQ" style="font-size: 0.75rem; border-radius: 4px;">
+              <i data-lucide="copy" style="width: 12px; height: 12px;"></i> <span class="copy-label">Salin</span>
+            </button>
+          </div>
 
           <div class="col-sm-4" style="color: var(--nb-muted);">Nama Instansi:</div>
           <div class="col-sm-8 fw-semibold">{{ $rfq->company_name }}</div>
@@ -59,8 +64,20 @@
         </div>
       </div>
 
-      <div class="d-flex flex-wrap justify-content-center gap-3">
-        <a href="{{ route('home') }}" class="nb-btn nb-btn-primary">
+      @php
+        $waMsg = 'Halo Tim Sales Prolabios, saya telah mengajukan RFQ #' . $rfq->rfq_number . (!empty($rfq->company_name) ? ' atas nama ' . $rfq->company_name : '') . '. Mohon konfirmasi dan info penawaran resminya. Terima kasih.';
+        $targetWa = !empty($waNumber) ? $waNumber : '6282187929433';
+        $waUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($waMsg);
+      @endphp
+
+      <div class="d-flex flex-wrap justify-content-center gap-3 print-hide">
+        <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary" style="background-color: #15803D !important; border-color: #15803D !important; color: #FFFFFF !important;">
+          <i data-lucide="message-circle" class="me-2"></i> Konfirmasi Cepat via WhatsApp
+        </a>
+        <button type="button" onclick="window.print()" class="nb-btn nb-btn-ghost">
+          <i data-lucide="printer" class="me-2"></i> Cetak Bukti RFQ
+        </button>
+        <a href="{{ route('home') }}" class="nb-btn nb-btn-ghost">
           <i data-lucide="home" class="me-2"></i> Kembali ke Beranda
         </a>
         <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost">
@@ -71,4 +88,19 @@
     </div>
   </div>
 </section>
+
+<script @nonce>
+  function copyRfqNumber(text, btn) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        var label = btn.querySelector('.copy-label');
+        if (label) {
+          var original = label.textContent;
+          label.textContent = 'Tersalin!';
+          setTimeout(function() { label.textContent = original; }, 2000);
+        }
+      });
+    }
+  }
+</script>
 @endsection

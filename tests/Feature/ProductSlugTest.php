@@ -86,4 +86,30 @@ class ProductSlugTest extends TestCase
         ]);
         $this->assertStringContainsString('/produk/'.$product->slug, $urlArr);
     }
+
+    public function test_beli_route_redirects_to_detail_page(): void
+    {
+        $product = Product::create([
+            'title' => 'Inoculating Loop',
+            'catalog' => 'IL-10',
+            'category' => 'Consumables',
+            'price' => 25000,
+            'stock' => 50,
+        ]);
+
+        $response = $this->get('/produk/'.$product->slug.'/beli');
+        $response->assertRedirect(route('produk.detail', ['slug' => $product->slug]));
+        $response->assertStatus(301);
+    }
+
+    public function test_robots_txt_serves_dynamic_rules(): void
+    {
+        $response = $this->get('/robots.txt');
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'text/plain; charset=utf-8');
+        $response->assertSee('Disallow: /admin/');
+        $response->assertSee('Disallow: /cart');
+        $response->assertSee('Disallow: /rfq/');
+        $response->assertSee('sitemap.xml');
+    }
 }

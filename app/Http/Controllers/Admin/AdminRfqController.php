@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\RfqStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateRfqRequest;
 use App\Models\Rfq;
@@ -28,7 +29,7 @@ class AdminRfqController extends Controller
             foreach (Rfq::statusOptions() as $key => $label) {
                 $kanbanColumns[$key] = [
                     'label' => $label,
-                    'rfqs' => $allRfqs->where('status', $key),
+                    'rfqs' => $allRfqs->filter(fn (Rfq $rfq) => ($rfq->status instanceof RfqStatus ? $rfq->status->value : $rfq->status) === $key),
                 ];
             }
 
@@ -121,12 +122,14 @@ class AdminRfqController extends Controller
             // Palet selang-seling antar RFQ agar batas awal & akhir tiap pengajuan jelas terbaca
             $blockBg = ($rfqIndex % 2 === 1) ? 'FFFFFF' : 'F8FAFC'; // Putih murni vs Soft Slate
 
-            $statusColor = match ($rfq->status) {
-                Rfq::STATUS_QUOTED => '0369A1',     // Biru
-                Rfq::STATUS_CONTACTED => 'D97706',  // Amber
-                Rfq::STATUS_CLOSED => '475569',     // Muted Slate
-                default => '15803D',                // Emerald (Baru)
-            };
+            $statusColor = $rfq->status instanceof RfqStatus
+                ? $rfq->status->color()
+                : match ($rfq->status) {
+                    Rfq::STATUS_QUOTED => '0369A1',     // Biru
+                    Rfq::STATUS_CONTACTED => 'D97706',  // Amber
+                    Rfq::STATUS_CLOSED => '475569',     // Muted Slate
+                    default => '15803D',                // Emerald (Baru)
+                };
 
             // 1. Data Level RFQ (A - G, M, N)
             $sheet->setCellValueExplicit("A{$startRow}", $rfq->rfq_number, DataType::TYPE_STRING);
@@ -305,7 +308,7 @@ class AdminRfqController extends Controller
 
         AuditLogger::log('rfq.update', 'Rfq', $id, [
             'rfq_number' => $rfq->rfq_number,
-            'status' => $rfq->status,
+            'status' => $rfq->status instanceof RfqStatus ? $rfq->status->value : $rfq->status,
         ]);
 
         return redirect()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PostStatus;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +24,9 @@ class Post extends Model
     protected function casts(): array
     {
         return [
+            'status' => PostStatus::class,
             'is_featured' => 'boolean',
+            'date' => 'date',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ];
@@ -70,7 +73,7 @@ class Post extends Model
     {
         $today = date('Y-m-d');
 
-        return $query->where('status', 'online')
+        return $query->where('status', PostStatus::Online)
             ->where(function (Builder $q) use ($today) {
                 $q->whereNull('date')
                     ->orWhere('date', '<=', $today);

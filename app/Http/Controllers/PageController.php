@@ -83,7 +83,7 @@ class PageController extends Controller
     }
 
     /**
-     * Canonical buy / RFQ add page: /produk/{slug}/beli
+     * Canonical buy / RFQ add redirect: /produk/{slug}/beli → /produk/{slug}
      */
     public function beliProduk(string $slug, DataService $dataService)
     {
@@ -93,7 +93,9 @@ class PageController extends Controller
             abort(404);
         }
 
-        return view('beli-produk', compact('product'));
+        $canonicalSlug = is_array($product) ? ($product['slug'] ?? $slug) : ($product->slug ?? $slug);
+
+        return redirect()->route('produk.detail', ['slug' => $canonicalSlug], 301);
     }
 
     /**
@@ -111,14 +113,14 @@ class PageController extends Controller
     }
 
     /**
-     * Legacy /produk/beli?id=123 → permanent redirect to /produk/{slug}/beli
+     * Legacy /produk/beli?id=123 → permanent redirect to /produk/{slug}
      */
     public function beliProdukLegacy(Request $request, DataService $dataService)
     {
         $product = $this->resolveLegacyProduct($request, $dataService);
 
         if ($product && ! empty($product->slug)) {
-            return redirect()->route('produk.beli', ['slug' => $product->slug], 301);
+            return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
         }
 
         return redirect()->route('produk.index', [], 301);

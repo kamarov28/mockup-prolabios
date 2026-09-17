@@ -48,10 +48,19 @@
         {{ Str::limit($desc, 75) }}
       </p>
 
-      <div class="mt-auto pt-3 d-flex align-items-center justify-content-between nb-card-foot">
-        <a href="{{ $cardUrl }}" class="nb-btn nb-btn-ghost w-100 justify-content-center" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
-          Detail &amp; Spek <i data-lucide="arrow-right" class="ms-1"></i>
+      <div class="mt-auto pt-3 d-flex align-items-center gap-2 nb-card-foot">
+        <a href="{{ $cardUrl }}" class="nb-btn nb-btn-ghost flex-grow-1 justify-content-center" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $prod['title'] }}">
+          Detail <i data-lucide="arrow-right" class="ms-1"></i>
         </a>
+        <form action="{{ route('cart.add') }}" method="POST" class="m-0">
+          @csrf
+          <input type="hidden" name="id" value="{{ $prod['id'] ?? '' }}">
+          <input type="hidden" name="title" value="{{ $prod['title'] }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="nb-btn nb-btn-primary px-3 text-nowrap" title="Tambahkan ke Pengajuan Penawaran" aria-label="Tambah {{ $prod['title'] }} ke keranjang">
+            <i data-lucide="plus"></i> RFQ
+          </button>
+        </form>
       </div>
     </div>
   </div>

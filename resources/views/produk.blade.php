@@ -168,7 +168,25 @@
               <div class="col-12 text-center p-5 card border-0" style="border: var(--nb-border) !important; border-radius: var(--nb-radius-lg);">
                 <i data-lucide="package-search" style="font-size: 2.5rem; color: var(--nb-muted); display: block; margin-bottom: 16px;"></i>
                 <h3 class="fs-5 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Produk Tidak Ditemukan</h3>
-                <p style="color: var(--nb-muted); margin-bottom: 0;">Belum ada produk spesifik di kategori atau kata kunci pencarian ini.</p>
+                <p class="text-muted mb-4" style="max-width: 520px; margin-inline: auto; font-size: 0.92rem;">
+                  Belum ada produk di kategori atau kata kunci pencarian ini. Butuh katalog atau reagen khusus yang belum tercantum di web?
+                </p>
+
+                @php
+                  $searchedTerm = request()->query('s') ?? request()->query('q') ?? '';
+                  $waSourcingMsg = 'Halo Tim Sales Prolabios, saya mencari produk' . ($searchedTerm ? ' "' . $searchedTerm . '"' : '') . ' tapi belum tercantum di website. Apakah bisa dibantu pengecekan ketersediaan atau pengadaan khusus? Terima kasih.';
+                  $targetWa = !empty($siteSettings['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $siteSettings['whatsapp_number']) : '6282187929433';
+                  $waSourcingUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($waSourcingMsg);
+                @endphp
+
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost">
+                    <i data-lucide="rotate-ccw" class="me-1"></i> Reset Pencarian &amp; Filter
+                  </a>
+                  <a href="{{ $waSourcingUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary" style="background-color: #15803D !important; border-color: #15803D !important; color: #FFFFFF !important;">
+                    <i data-lucide="message-circle" class="me-1"></i> Tanya Pengadaan Khusus via WA
+                  </a>
+                </div>
               </div>
             @endif
           </div>

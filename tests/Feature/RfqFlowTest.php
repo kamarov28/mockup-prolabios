@@ -155,5 +155,60 @@ class RfqFlowTest extends TestCase
 
         $validResponse->assertStatus(200);
         $validResponse->assertSee('RFQ-202608-TEST01');
+        $validResponse->assertSee('Konfirmasi Cepat via WhatsApp');
+        $validResponse->assertSee('https://wa.me/', false);
+        $validResponse->assertSee('copyRfqNumber', false);
+    }
+
+    public function test_product_detail_page_has_direct_rfq_quantity_form(): void
+    {
+        $response = $this->get(route('produk.detail', ['slug' => $this->product->slug]));
+
+        $response->assertStatus(200);
+        $response->assertSee('name="quantity"', false);
+        $response->assertSee('Tambah ke Keranjang Penawaran');
+        $response->assertSee('stepQty', false);
+    }
+
+    public function test_catalog_page_grid_cards_have_quick_rfq_button(): void
+    {
+        $response = $this->get(route('produk.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('RFQ');
+        $response->assertSee(route('cart.add'), false);
+    }
+
+    public function test_catalog_empty_search_shows_recovery_ctas(): void
+    {
+        $response = $this->get(route('produk.index', ['s' => 'nonexistentproduct12345']));
+
+        $response->assertStatus(200);
+        $response->assertSee('Produk Tidak Ditemukan');
+        $response->assertSee('Reset Pencarian');
+        $response->assertSee('Tanya Pengadaan Khusus via WA');
+    }
+
+    public function test_cart_page_has_mobile_sticky_checkout_bar(): void
+    {
+        $id = $this->product->id;
+
+        $response = $this->withSession([
+            'cart' => [
+                (string) $id => [
+                    'id' => $id,
+                    'title' => 'Nutrient Agar 500g',
+                    'catalog' => 'NA-500',
+                    'image' => 'https://example.com/na.jpg',
+                    'price' => 250000,
+                    'stock' => 10,
+                    'quantity' => 1,
+                ],
+            ],
+        ])->get(route('cart.index'));
+
+        $response->assertStatus(200);
+        $response->assertSee('mobile-total-estimate', false);
+        $response->assertSee('Lanjut RFQ');
     }
 }

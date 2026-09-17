@@ -44,33 +44,50 @@
               <!-- Nama Lengkap -->
               <div class="mb-3">
                 <label for="name" class="kontak-form-label">Nama Lengkap <span style="color: var(--nb-primary);">*</span></label>
-                <input type="text" class="form-control rfq-input" id="name" name="name" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso">
+                <input type="text" class="form-control rfq-input @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required placeholder="Contoh: Budi Santoso">
+                @error('name')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
 
               <!-- Email Pribadi -->
               <div class="mb-3">
                 <label for="email" class="kontak-form-label">Email Pribadi <span style="color: var(--nb-primary);">*</span></label>
-                <input type="email" class="form-control rfq-input" id="email" name="email" value="{{ old('email') }}" required placeholder="budi@gmail.com" autocomplete="email" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
-                <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Konfirmasi pengajuan penawaran akan dikirimkan ke email ini.</div>
+                <input type="email" class="form-control rfq-input @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required placeholder="budi@gmail.com" autocomplete="email" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
+                @error('email')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                @else
+                  <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Konfirmasi pengajuan penawaran akan dikirimkan ke email ini.</div>
+                @enderror
               </div>
 
               <!-- Nama Perusahaan / Instansi -->
               <div class="mb-3">
                 <label for="company_name" class="kontak-form-label">Nama Instansi / Perusahaan <span style="color: var(--nb-primary);">*</span></label>
-                <input type="text" class="form-control rfq-input" id="company_name" name="company_name" value="{{ old('company_name') }}" required placeholder="Contoh: PT. Indofood Sukses Makmur Tbk / Lab Farmasi Univ. X">
+                <input type="text" class="form-control rfq-input @error('company_name') is-invalid @enderror" id="company_name" name="company_name" value="{{ old('company_name') }}" required placeholder="Contoh: PT. Indofood Sukses Makmur Tbk / Lab Farmasi Univ. X">
+                @error('company_name')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
 
               <!-- Nomor WhatsApp -->
               <div class="mb-3">
                 <label for="phone_wa" class="kontak-form-label">Nomor WhatsApp <span style="color: var(--nb-primary);">*</span></label>
-                <input type="tel" class="form-control rfq-input" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
-                <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Hanya menerima angka / nomor telepon aktif WhatsApp.</div>
+                <input type="tel" class="form-control rfq-input @error('phone_wa') is-invalid @enderror" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
+                @error('phone_wa')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                @else
+                  <div class="form-text small" style="color: var(--color-text-muted); font-size: 0.75rem;">Hanya menerima angka / nomor telepon aktif WhatsApp.</div>
+                @enderror
               </div>
 
               <!-- Catatan Tambahan -->
               <div class="mb-0 mb-lg-3">
                 <label for="notes" class="kontak-form-label">Catatan Tambahan <span style="color: var(--color-text-muted); font-weight: normal;">(Opsional)</span></label>
-                <textarea class="form-control rfq-input" id="notes" name="notes" rows="3" placeholder="Contoh: Butuh sertifikat COA / MSDS, pengiriman urgent, dll.">{{ old('notes') }}</textarea>
+                <textarea class="form-control rfq-input @error('notes') is-invalid @enderror" id="notes" name="notes" rows="3" placeholder="Contoh: Butuh sertifikat COA / MSDS, pengiriman urgent, dll.">{{ old('notes') }}</textarea>
+                @error('notes')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>

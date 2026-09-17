@@ -26,12 +26,6 @@
       ]))
     : 'prolabios, alat laboratorium';
   $seoCanonical = $product ? product_url($product) : url('/produk');
-  $productSlug = $product
-    ? (is_array($product) ? ($product['slug'] ?? null) : ($product->slug ?? null))
-    : null;
-  $beliUrl = $productSlug
-    ? route('produk.beli', ['slug' => $productSlug])
-    : url('/produk');
 @endphp
 
 @section('title', $seoTitle)
@@ -62,8 +56,16 @@
     </div>
   </div>
 
-  <section class="section-main">
+  <section class="section-main detail-product-page">
     <div class="container">
+      @if(session('success'))
+        <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
+          <i data-lucide="check-circle-2" class="me-2"></i> {{ session('success') }}
+          <a href="{{ route('cart.index') }}" class="fw-bold text-success text-decoration-underline ms-2">Buka Keranjang Pengajuan &rarr;</a>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+        </div>
+      @endif
+
       <div class="row g-5">
         <div class="col-12">
           @if($product)
@@ -71,6 +73,11 @@
               $galleryImages = !empty($product['gallery_images']) ? $product['gallery_images'] : [];
               $mainImage = !empty($product['image']) ? $product['image'] : asset('images/placeholder.svg');
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
+              $stock = (int) ($product['stock'] ?? 0);
+              $price = (float) ($product['price'] ?? 0);
+              $productWaMsg = 'Halo Tim Sales Prolabios, saya ingin konsultasi ketersediaan dan penawaran resmi untuk produk ' . $product['title'] . (!empty($product['catalog']) ? ' (Cat: ' . $product['catalog'] . ')' : '') . '. Terima kasih.';
+              $targetWa = !empty($siteSettings['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $siteSettings['whatsapp_number']) : '6282187929433';
+              $productWaUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($productWaMsg);
             @endphp
 
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
@@ -127,50 +134,109 @@
               </div>
 
               <div class="col-md-7">
-                <div class="card p-4 mb-4">
-                  <h3 class="layanan-feature-title detail-section-heading mb-3">
-                    <i data-lucide="file-text" class="text-primary me-2"></i>Deskripsi & Spesifikasi Produk
-                  </h3>
-                  <div class="profil-body-text mb-4">
-                    {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
-                  </div>
+                <div class="card p-4 p-lg-5" style="border: none !important; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
 
-                  {{-- B2B Technical Datasheet & Specification Link --}}
-                  <div class="p-3 d-flex align-items-center justify-content-between flex-wrap gap-3 rfq-details-box">
-                    <div class="d-flex align-items-center gap-3">
-                      <div class="rfq-trust-icon">
-                        <i data-lucide="file-text" class="text-danger"></i>
-                      </div>
-                      <div>
-                        <strong class="d-block detail-datasheet-title">Dokumen Lembar Data & Spesifikasi Teknis (PDF)</strong>
-                        <span class="text-muted small detail-datasheet-sub">
-                          @if(!empty($product->principal))
-                            Brosur teknis & lembar data spesifikasi resmi dari {{ $product->principal->name }}.
-                          @else
-                            Lembar spesifikasi dan petunjuk teknis analitika dari prinsipal resmi.
-                          @endif
-                        </span>
-                      </div>
+                  {{-- 1. Deskripsi & Spesifikasi Produk (At the top per user requirement) --}}
+                  <div>
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                      <h2 class="fs-6 fw-bold text-uppercase tracking-wider text-dark mb-0 d-flex align-items-center gap-2" style="font-family: var(--font-display); letter-spacing: 0.5px;">
+                        <i data-lucide="file-text" style="width: 16px; height: 16px; color: var(--nb-primary);"></i> Deskripsi &amp; Spesifikasi Produk
+                      </h2>
+                      @if(!empty($product['datasheet_url']))
+                        <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold small" style="color: var(--nb-primary); font-size: 0.82rem;">
+                          <i data-lucide="download" style="width: 14px; height: 14px;"></i> Unduh Spesifikasi (PDF) <i data-lucide="external-link" style="width: 11px; height: 11px;" class="ms-1"></i>
+                        </a>
+                      @endif
                     </div>
-                    @if(!empty($product['datasheet_url']))
-                      <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2 detail-btn-sm">
-                        <i data-lucide="download"></i> Unduh Spesifikasi (PDF) <i data-lucide="external-link" class="ms-1"></i>
-                      </a>
-                    @else
-                      <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2 detail-btn-ghost-sm">
-                        <i data-lucide="mail"></i> Request Lembar Data Resmi <i data-lucide="arrow-right" class="ms-1"></i>
-                      </a>
+
+                    <div class="profil-body-text mb-3 text-muted" style="line-height: 1.7; font-size: 0.92rem;">
+                      {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
+                    </div>
+
+                    @if(empty($product['datasheet_url']))
+                      <div class="mb-1">
+                        <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="d-inline-flex align-items-center gap-2 text-decoration-none text-muted small" style="font-size: 0.8rem;">
+                          <i data-lucide="mail" style="width: 13px; height: 13px;"></i> Request Lembar Data Resmi / COA ke Sales &rarr;
+                        </a>
+                      </div>
                     @endif
                   </div>
-                </div>
 
-                <div class="mt-4 d-flex flex-wrap gap-3 align-items-center">
-                  <a href="{{ $beliUrl }}" class="nb-btn nb-btn-primary detail-nav-btn text-decoration-none">
-                    <i data-lucide="shopping-cart" class="me-2"></i> Minta Penawaran
-                  </a>
-                  <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost detail-nav-btn text-decoration-none">
-                    <i data-lucide="arrow-left" class="me-2"></i> Kembali ke Katalog
-                  </a>
+                  {{-- Subtle Divider --}}
+                  <div class="my-4 border-top" style="border-color: rgba(0,0,0,0.08) !important;"></div>
+
+                  {{-- 2. Estimasi Harga Unit & Status Stok --}}
+                  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div>
+                      <span class="text-muted small d-block mb-1" style="font-size: 0.8rem;">Estimasi Harga Unit / Penawaran Resmi:</span>
+                      <strong class="fs-4 d-block detail-price" style="font-family: var(--font-display); color: var(--nb-primary); font-weight: 700;">
+                        {{ $price > 0 ? 'Rp ' . number_format($price, 0, ',', '.') : 'Hubungi Tim Penawaran' }}
+                      </strong>
+                    </div>
+                    <div>
+                      @if($stock > 0)
+                        <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
+                          <i data-lucide="package-check" class="me-1"></i> Stok Siap: {{ $stock }} unit
+                        </span>
+                      @else
+                        <span class="nb-badge-stock nb-badge-stock--empty">
+                          <i data-lucide="clock" class="me-1"></i> Pesanan Khusus (Indent)
+                        </span>
+                      @endif
+                    </div>
+                  </div>
+
+                  {{-- 3. Form Stepper & Tambah ke Keranjang RFQ --}}
+                  <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form" class="mb-3">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
+                    <input type="hidden" name="title" value="{{ $product['title'] }}">
+
+                    <div class="d-flex flex-wrap align-items-end gap-2 gap-sm-3">
+                      <div>
+                        <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label" style="font-size: 0.72rem; color: var(--nb-muted);">Jumlah Unit</label>
+                        <div class="nb-stepper-wrap">
+                          <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
+                            <i data-lucide="minus"></i>
+                          </button>
+                          <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
+                          <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
+                            <i data-lucide="plus"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
+                        <i data-lucide="shopping-cart" class="me-2"></i> Tambah ke Keranjang Penawaran
+                      </button>
+
+                      <a href="{{ $productWaUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost detail-wa-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" title="Konsultasi cepat via WhatsApp">
+                        <i data-lucide="message-circle" class="text-success me-1"></i> Tanya Sales
+                      </a>
+                    </div>
+
+                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
+                      <i data-lucide="info" class="me-1"></i>
+                      Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Sisa unit diproses sebagai <strong>pesanan khusus</strong> (lead time tercantum pada SPH resmi).
+                    </div>
+                  </form>
+
+                  {{-- 4. Subtle SLA Trust Micro-copy --}}
+                  <div class="d-flex align-items-center gap-2 text-muted small pt-1" style="font-size: 0.8rem;">
+                    <i data-lucide="shield-check" class="text-success flex-shrink-0" style="width: 15px; height: 15px;"></i>
+                    <span>Surat Penawaran Harga (SPH) resmi &amp; konfirmasi lot diterbitkan sales dalam 1–2 jam kerja.</span>
+                  </div>
+
+                  {{-- 5. Navigation Links --}}
+                  <div class="pt-3 mt-4 border-top d-flex align-items-center justify-content-between flex-wrap gap-2" style="border-color: rgba(0,0,0,0.06) !important;">
+                    <a href="{{ url('/produk') }}" class="text-muted text-decoration-none small d-inline-flex align-items-center gap-1">
+                      <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Kembali ke Katalog Produk
+                    </a>
+                    <a href="{{ route('cart.index') }}" class="text-decoration-none fw-medium small d-inline-flex align-items-center gap-1" style="color: var(--nb-primary);">
+                      <i data-lucide="receipt" style="width: 14px; height: 14px;"></i> Buka Keranjang Penawaran &rarr;
+                    </a>
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -251,6 +317,25 @@
               ],
             ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
             </script>
+
+            {{-- Mobile Sticky Action Bar --}}
+            <div class="detail-mobile-sticky-bar d-md-none">
+              <div class="container d-flex align-items-center justify-content-between gap-3">
+                <div class="text-truncate">
+                  <div class="fw-bold small text-truncate" style="color: var(--nb-ink); font-size: 0.85rem;">{{ $product['title'] }}</div>
+                  <div class="text-muted" style="font-size: 0.75rem;">
+                    @if($stock > 0)
+                      <span class="text-success fw-medium">Ready Stock ({{ $stock }})</span>
+                    @else
+                      <span class="text-warning fw-medium">Pesanan Khusus (Indent)</span>
+                    @endif
+                  </div>
+                </div>
+                <button type="button" onclick="document.getElementById('beli-produk-form').scrollIntoView({behavior: 'smooth', block: 'center'})" class="nb-btn nb-btn-primary flex-shrink-0" style="height: 38px; padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">
+                  <i data-lucide="shopping-cart"></i> Tambah
+                </button>
+              </div>
+            </div>
           @else
             <div class="empty-state-card">
               <i data-lucide="package" class="detail-empty-icon"></i>

@@ -2,6 +2,7 @@
  * Subpages module: Client-side tabs for Layanan & AJAX navigator for Sektor
  */
 import { ajaxHeaders } from './utils.js';
+import { setCartBadgeCount } from './catalog-cart.js';
 
 function initLayananTabs() {
   const serviceNav = document.getElementById('service-nav');
@@ -17,8 +18,14 @@ function initLayananTabs() {
       const serviceKey = urlObj.searchParams.get('s');
       if (!serviceKey) return;
 
-      sidebarLinks.forEach(l => l.classList.remove('is-active'));
-      this.classList.add('is-active');
+      sidebarLinks.forEach(l => {
+        const isMatch = (new URL(l.href).searchParams.get('s') === serviceKey);
+        l.classList.toggle('is-active', isMatch);
+        if (l.classList.contains('nb-btn')) {
+          l.classList.toggle('nb-btn-primary', isMatch);
+          l.classList.toggle('nb-btn-ghost', !isMatch);
+        }
+      });
 
       document.querySelectorAll('.service-content-block').forEach(block => block.classList.add('d-none'));
       const targetBlock = document.getElementById('service-content-' + serviceKey);
@@ -39,7 +46,12 @@ function initLayananTabs() {
     const serviceKey = urlParams.get('s') || 'maintenance';
     sidebarLinks.forEach(link => {
       const urlObj = new URL(link.href);
-      link.classList.toggle('is-active', urlObj.searchParams.get('s') === serviceKey);
+      const isMatch = (urlObj.searchParams.get('s') === serviceKey);
+      link.classList.toggle('is-active', isMatch);
+      if (link.classList.contains('nb-btn')) {
+        link.classList.toggle('nb-btn-primary', isMatch);
+        link.classList.toggle('nb-btn-ghost', !isMatch);
+      }
     });
     document.querySelectorAll('.service-content-block').forEach(block => block.classList.add('d-none'));
     const targetBlock = document.getElementById('service-content-' + serviceKey);
@@ -97,8 +109,10 @@ function initSektorAjax() {
 
         const newMain = doc.getElementById('sektor-main');
         const newSidebar = doc.getElementById('sektor-sidebar');
+        const newMobileNav = doc.getElementById('sektor-mobile-nav');
         const curMain = document.getElementById('sektor-main');
         const curSidebar = document.getElementById('sektor-sidebar');
+        const curMobileNav = document.getElementById('sektor-mobile-nav');
 
         if (curMain && newMain) {
           curMain.innerHTML = newMain.innerHTML;
@@ -106,6 +120,9 @@ function initSektorAjax() {
         }
         if (curSidebar && newSidebar) {
           curSidebar.innerHTML = newSidebar.innerHTML;
+        }
+        if (curMobileNav && newMobileNav) {
+          curMobileNav.innerHTML = newMobileNav.innerHTML;
         }
 
         if (updateHistory) {
@@ -130,7 +147,7 @@ function initSektorAjax() {
   }
 
   document.addEventListener('click', function (e) {
-    const link = e.target.closest('#sektor-sidebar a.layanan-sidebar-link, #sektor-main .pagination a');
+    const link = e.target.closest('#sektor-sidebar a.layanan-sidebar-link, #sektor-mobile-nav a.sektor-pill-link, #sektor-main .pagination a');
     if (!link || !link.getAttribute('href') || link.getAttribute('href').startsWith('#')) {
       return;
     }
@@ -174,13 +191,6 @@ function initProductDetail() {
   if (lightboxModal && lightboxModal.parentElement !== document.body) {
     document.body.appendChild(lightboxModal);
   }
-}
-
-function setCartBadgeCount(count) {
-  document.querySelectorAll('#cart-badge-count, .nav-cart-badge').forEach(function (el) {
-    el.textContent = count;
-    el.classList.toggle('is-hidden', !(count > 0));
-  });
 }
 
 function initBeliProduk() {
@@ -251,6 +261,10 @@ function initCartPage() {
         if (totalEstEl) {
           totalEstEl.textContent = data.totalFormatted;
         }
+        const mobileTotalEstEl = document.getElementById('mobile-total-estimate');
+        if (mobileTotalEstEl) {
+          mobileTotalEstEl.textContent = data.totalFormatted;
+        }
 
         setCartBadgeCount(data.cartCount);
       }
@@ -288,6 +302,10 @@ function initCartPage() {
         const totalEstEl = document.getElementById('sidebar-total-estimate');
         if (totalEstEl) {
           totalEstEl.textContent = data.totalFormatted;
+        }
+        const mobileTotalEstEl = document.getElementById('mobile-total-estimate');
+        if (mobileTotalEstEl) {
+          mobileTotalEstEl.textContent = data.totalFormatted;
         }
 
         setCartBadgeCount(data.cartCount);

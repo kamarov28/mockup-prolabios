@@ -286,3 +286,30 @@
     justify-content: center;
   }
 }
+
+/* ── Print Optimization for RFQ Receipt ─────────────────────────────────── */
+@media print {
+  header,
+  nav,
+  footer,
+  .cookie-consent-bar,
+  #scroll-to-top,
+  .btn-scroll-to-top,
+  .print-hide {
+    display: none !important;
+  }
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .section-main {
+    padding: 0 !important;
+  }
+  .rfq-success-card {
+    border: 1px solid #CCCCCC !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 1.5rem !important;
+  }
+}

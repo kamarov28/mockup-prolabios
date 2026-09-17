@@ -9,13 +9,27 @@ export function initCatalogCart() {
   initAjaxAddToCart();
 }
 
-function setCartBadgeCount(count) {
-  document.querySelectorAll('#cart-badge-count, .nav-cart-badge').forEach(function (b) {
+export function setCartBadgeCount(count) {
+  document.querySelectorAll('.nav-cart-badge').forEach(function (b) {
     b.textContent = count;
+    b.style.display = count > 0 ? 'inline-flex' : 'none';
     b.classList.toggle('is-hidden', !(count > 0));
     if (count > 0) {
+      b.classList.remove('is-bump');
+      void b.offsetWidth;
       b.classList.add('is-bump');
-      setTimeout(function () { b.classList.remove('is-bump'); }, 250);
+
+      const parentBtn = b.closest('.nb-icon-btn');
+      if (parentBtn) {
+        parentBtn.classList.remove('is-cart-bump');
+        void parentBtn.offsetWidth;
+        parentBtn.classList.add('is-cart-bump');
+      }
+
+      setTimeout(function () {
+        b.classList.remove('is-bump');
+        if (parentBtn) parentBtn.classList.remove('is-cart-bump');
+      }, 550);
     }
   });
 }

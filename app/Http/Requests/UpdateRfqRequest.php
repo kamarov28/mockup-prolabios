@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Rfq;
+use App\Enums\RfqStatus;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -17,7 +17,7 @@ class UpdateRfqRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', Rule::in(array_keys(Rfq::statusOptions()))],
+            'status' => ['required', Rule::enum(RfqStatus::class)],
             'admin_notes' => ['nullable', 'string', 'max:5000'],
         ];
     }

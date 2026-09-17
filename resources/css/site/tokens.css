@@ -9,10 +9,32 @@
   --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
+  /* ── HIG Optical Typography Tracking & Metrics ──────────────────────── */
+  --tracking-display: -0.028em;   /* Large Hero/Display (>= 28px) */
+  --tracking-title: -0.02em;      /* Section Titles (20px - 26px) */
+  --tracking-headline: -0.012em;  /* Card Headings, Modal Titles (16px - 18px) */
+  --tracking-body: -0.005em;      /* Body Text & Form Inputs */
+  --tracking-micro: 0.04em;       /* SKU, Badges, Tabular Data, Footnotes (<= 13px) */
+
   /* Legacy typography aliases */
   --font-family-headline: var(--font-headline);
   --font-family-sans: var(--font-body);
   --font-family-mono: var(--font-mono);
+
+  /* ── HIG Spatial Rhythm System (8pt Grid / 4pt Micro-Rhythm) ────────── */
+  --space-1: 4px;     /* Micro-gap, badge inline padding */
+  --space-2: 8px;     /* Icon-text gap, form row compact spacing */
+  --space-3: 12px;    /* Compact container padding, input horizontal gap */
+  --space-4: 16px;    /* Standard card padding, mobile gutter */
+  --space-5: 20px;    /* Section intra-spacing */
+  --space-6: 24px;    /* Standard grid gap, tablet gutter */
+  --space-8: 32px;    /* Component group separation */
+  --space-10: 40px;   /* Modal / drawer padding */
+  --space-12: 48px;   /* Section vertical rhythm */
+  --space-16: 64px;   /* Major page section break */
+
+  /* ── HIG Ergonomic Touch Boundary ───────────────────────────────────── */
+  --touch-target-min: 44px; /* Minimum 44x44pt interactive hit target */
 
   /* ── Modern Flat Brand Palette ─────────────────────────────────────────── */
   --nb-bg: #F8F9FA;            /* Clean crisp neutral canvas */

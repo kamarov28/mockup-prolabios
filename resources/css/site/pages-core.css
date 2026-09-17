@@ -9,6 +9,12 @@
   border-bottom: var(--nb-border);
 }
 
+@media (max-width: 768px) {
+  .profil-hero-banner {
+    padding: 85px 0 25px !important;
+  }
+}
+
 .profil-main-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 4vw, 3rem);

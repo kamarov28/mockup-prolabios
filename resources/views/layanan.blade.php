@@ -49,6 +49,24 @@
         <!-- Main Content -->
         <div class="col-12 col-lg-8 order-1 order-lg-2">
 
+          <!-- Mobile Horizontal Service Pill Bar (d-lg-none) -->
+          <div class="d-lg-none mb-4 pb-1" id="service-mobile-nav">
+            <span class="text-muted small d-block mb-2 fw-semibold" style="font-size: 0.76rem; letter-spacing: 0.5px; text-transform: uppercase;">
+              <i data-lucide="list-tree" class="me-1" style="width: 14px; height: 14px;"></i> Pilih Layanan Teknis:
+            </span>
+            <div class="d-flex align-items-center gap-2 overflow-x-auto pb-2 mobile-pill-scroll">
+              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'maintenance' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+                <i data-lucide="wrench" class="me-1" style="width: 14px; height: 14px;"></i> Perawatan &amp; Servis
+              </a>
+              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'labdesign' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+                <i data-lucide="building" class="me-1" style="width: 14px; height: 14px;"></i> Desain Lab
+              </a>
+              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'consultation' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+                <i data-lucide="graduation-cap" class="me-1" style="width: 14px; height: 14px;"></i> Konsultasi &amp; Pelatihan
+              </a>
+            </div>
+          </div>
+
           <!-- Service Block: Maintenance & Repair -->
           <div id="service-content-maintenance" class="service-content-block {{ $activeService == 'maintenance' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-4">

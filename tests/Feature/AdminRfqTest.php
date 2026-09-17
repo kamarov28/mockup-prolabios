@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\RfqStatus;
 use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\RfqItem;
@@ -101,7 +102,7 @@ class AdminRfqTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->rfq->refresh();
-        $this->assertEquals('contacted', $this->rfq->status);
+        $this->assertEquals(RfqStatus::Contacted, $this->rfq->status);
         $this->assertEquals('Sudah WA ke klien 26 Agu.', $this->rfq->admin_notes);
     }
 
@@ -115,7 +116,7 @@ class AdminRfqTest extends TestCase
 
         $response->assertSessionHasErrors('status');
         $this->rfq->refresh();
-        $this->assertEquals('new', $this->rfq->status);
+        $this->assertEquals(RfqStatus::New, $this->rfq->status);
     }
 
     public function test_admin_can_delete_rfq(): void

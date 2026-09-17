@@ -1,5 +1,5 @@
 <!-- B2B Cookie Consent Notice (UU PDP & GDPR Compliance) -->
-<div id="cookieConsentBanner" class="position-fixed" style="display: none; z-index: 9999; bottom: 24px; right: 24px; max-width: 440px; width: calc(100% - 48px); background: #FFFFFF; border: 1px solid rgba(0, 0, 0, 0.12); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); border-radius: 12px;">
+<div id="cookieConsentBanner" class="cookie-consent-banner position-fixed" style="display: none;">
   <div style="padding: 18px 20px;">
 
     <div class="d-flex align-items-center gap-2 mb-2">

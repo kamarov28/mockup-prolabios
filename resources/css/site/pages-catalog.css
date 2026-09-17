@@ -393,6 +393,27 @@
   box-shadow: 0 0 0 2px rgba(166, 23, 28, 0.2);
 }
 
+/* ── Mobile Sticky Bar for Product Detail ────────────────────────────────── */
+.detail-mobile-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1040;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid #E5E7EB;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 767.98px) {
+  .section-main.detail-product-page {
+    padding-bottom: 85px !important;
+  }
+}
+
 /* ── Editorial Blog Cards (Informasi Page) ────────────────────────────────── */
 .blog-card {
   background: var(--nb-card) !important;
@@ -950,6 +971,12 @@ tr:hover td.table-col-catalog {
   padding: 110px 0 30px;
   background: #FFFFFF;
   border-bottom: 1px solid #E5E7EB;
+}
+
+@media (max-width: 768px) {
+  .editorial-page-header {
+    padding: 85px 0 20px !important;
+  }
 }
 .editorial-page-header .editorial-page-title {
   font-family: var(--font-display);

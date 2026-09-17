@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\RfqStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,6 +36,7 @@ class Rfq extends Model
     protected function casts(): array
     {
         return [
+            'status' => RfqStatus::class,
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
             'deleted_at' => 'datetime',
@@ -46,21 +48,29 @@ class Rfq extends Model
      */
     public static function statusOptions(): array
     {
-        return [
-            self::STATUS_NEW => 'Baru',
-            self::STATUS_CONTACTED => 'Dihubungi',
-            self::STATUS_QUOTED => 'Quoted',
-            self::STATUS_CLOSED => 'Selesai',
-        ];
+        $options = [];
+        foreach (RfqStatus::cases() as $case) {
+            $options[$case->value] = $case->label();
+        }
+
+        return $options;
     }
 
     public function getStatusLabelAttribute(): string
     {
+        if ($this->status instanceof RfqStatus) {
+            return $this->status->label();
+        }
+
         return self::statusOptions()[$this->status] ?? ($this->status ?: 'Baru');
     }
 
     public function getStatusBadgeClassAttribute(): string
     {
+        if ($this->status instanceof RfqStatus) {
+            return $this->status->badgeClass();
+        }
+
         // Pakai admin-badge-* (dark-theme aware) supaya teks selalu terbaca
         return match ($this->status) {
             self::STATUS_CONTACTED => 'admin-badge-info',

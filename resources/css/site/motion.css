@@ -320,6 +320,51 @@
   animation: nb-controls-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 
+/* ── Cart Micro-Interactions (Spring Scale Pop & Haptic Tilt) ─────────────── */
+@keyframes nb-cart-pop {
+  0% {
+    transform: scale(1);
+  }
+  28% {
+    transform: scale(1.55);
+  }
+  50% {
+    transform: scale(0.88);
+  }
+  72% {
+    transform: scale(1.16);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes nb-cart-btn-tilt {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.12) rotate(-7deg);
+  }
+  50% {
+    transform: scale(0.96) rotate(3deg);
+  }
+  75% {
+    transform: scale(1.03) rotate(-1deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.nav-cart-badge.is-bump {
+  animation: nb-cart-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+.nb-icon-btn.is-cart-bump {
+  animation: nb-cart-btn-tilt 0.45s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
 /* ── Editorial Subpage Entrance Animations ───────────────────────────────── */
 @keyframes nb-page-header-in {
   from {

@@ -12,7 +12,7 @@ Edit files in this folder, then run `npm run build`.
 | pages-core.css | Homepage, profil, layanan/sektor, kontak |
 | pages-catalog.css | Produk catalog, detail produk, filtering & search |
 | content-areas.css | Content layouts, marquee, callouts & empty states |
-| b2b-hitech.css | B2B sector grid, hero bento & technical showcase |
+| sections-home.css | Homepage hero, value pillars, principals & sector tabs |
 | cart-rfq.css | Shopping cart, RFQ checkout & submission success |
 
 *(Note: Admin dashboard styles are organized in `resources/css/admin/`)*
