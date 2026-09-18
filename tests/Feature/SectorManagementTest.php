@@ -43,6 +43,22 @@ class SectorManagementTest extends TestCase
         $response->assertSee('Paragraph 1');
     }
 
+    public function test_admin_can_view_sectors_index(): void
+    {
+        Sector::create([
+            'id' => 'clinical',
+            'name' => 'Clinical Diagnostics',
+            'description' => ['Deskripsi diagnostik klinik'],
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.sectors'));
+        $response->assertStatus(200);
+        $response->assertSee('Manajemen Sektor Industri');
+        $response->assertSee('Clinical Diagnostics');
+        $response->assertSee('#clinical');
+        $response->assertSee('0 Produk');
+    }
+
     public function test_admin_can_create_update_and_delete_sector(): void
     {
         // 1. Create

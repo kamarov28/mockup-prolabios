@@ -30,6 +30,7 @@ class AdminPostController extends Controller
     {
         $search = $request->input('s');
         $category = $request->input('category');
+        $status = $request->input('status');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $sort = $request->input('sort', 'newest');
@@ -42,6 +43,7 @@ class AdminPostController extends Controller
                 });
             })
             ->when($category, fn ($q) => $q->where('category', $category))
+            ->when($status, fn ($q) => $q->where('status', $status))
             ->when($startDate, fn ($q) => $q->whereDate('created_at', '>=', $startDate))
             ->when($endDate, fn ($q) => $q->whereDate('created_at', '<=', $endDate));
 
@@ -56,15 +58,31 @@ class AdminPostController extends Controller
         ['items' => $posts, 'currentPage' => $currentPage, 'totalPages' => $totalPages]
             = $this->paginateQuery($query->toBase(), $request, self::POSTS_PER_PAGE);
 
+        $availableCategories = Post::query()
+            ->whereNotNull('category')
+            ->where('category', '!=', '')
+            ->distinct()
+            ->pluck('category')
+            ->filter()
+            ->sort()
+            ->values();
+
+        if ($availableCategories->isEmpty()) {
+            $availableCategories = collect(['Berita', 'Event', 'Info Terkait', 'IPTEK', 'Kegiatan', 'Publikasi Ilmiah']);
+        }
+
         return view('admin.posts.index', [
             'posts' => $posts,
             'search' => $search,
             'category' => $category,
+            'status' => $status,
             'sort' => $sort,
             'start_date' => $startDate,
             'end_date' => $endDate,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
+            'totalPosts' => Post::count(),
+            'availableCategories' => $availableCategories,
         ]);
     }
 

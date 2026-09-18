@@ -24,8 +24,13 @@ class AdminSectorController extends Controller
     public function index()
     {
         $sectors = $this->sectors->getSectors();
+        $productCounts = DB::table('product_sector')
+            ->select('sector_id', DB::raw('count(*) as count'))
+            ->groupBy('sector_id')
+            ->pluck('count', 'sector_id')
+            ->all();
 
-        return view('admin.sectors.index', compact('sectors'));
+        return view('admin.sectors.index', compact('sectors', 'productCounts'));
     }
 
     public function create()
