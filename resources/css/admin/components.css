@@ -137,22 +137,40 @@
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.1px;
-  padding: 8px 16px;
+  padding: 0 16px;
+  height: 38px;
+  line-height: 36px;
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   white-space: nowrap;
   box-shadow: var(--shadow-xs);
+  box-sizing: border-box;
+}
+.admin-btn i,
+.admin-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.75px;
+  flex-shrink: 0;
 }
 .admin-btn-sm {
-  padding: 5px 12px;
+  height: 30px;
+  line-height: 28px;
+  padding: 0 12px;
   font-size: 0.78rem;
   border-radius: 6px;
+}
+.admin-btn-sm i,
+.admin-btn-sm svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* Segmented View Switcher */

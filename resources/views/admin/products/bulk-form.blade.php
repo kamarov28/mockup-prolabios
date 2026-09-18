@@ -30,11 +30,11 @@
         <p class="mb-0 text-muted" style="font-size: 0.82rem;">Gunakan impor spreadsheet Excel (.xlsx) untuk upload data produk skala besar tanpa batas form browser.</p>
       </div>
     </div>
-    <div class="d-inline-flex gap-2">
-      <a href="{{ route('admin.products.import.template') }}" class="admin-btn admin-btn-outline" style="font-size: 0.82rem;">
+    <div class="d-inline-flex gap-2 align-items-center">
+      <a href="{{ route('admin.products.import.template') }}" class="admin-btn admin-btn-outline">
         <i data-lucide="download"></i> Download Template Excel
       </a>
-      <a href="{{ route('admin.products', ['import' => 1]) }}" class="admin-btn admin-btn-primary" style="font-size: 0.82rem;">
+      <a href="{{ route('admin.products', ['import' => 1]) }}" class="admin-btn admin-btn-primary">
         <i data-lucide="cloud-upload"></i> Buka Menu Impor
       </a>
     </div>
