@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Principal;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
@@ -96,14 +97,33 @@ class ProductManagementTest extends TestCase
 
     public function test_admin_can_bulk_store_products(): void
     {
+        $principal = Principal::create([
+            'name' => 'Merck KGaA',
+        ]);
+
         $response = $this->actingAs($this->admin)->post(route('admin.products.store-bulk'), [
             'title' => ['Bulk Prod 1', 'Bulk Prod 2'],
             'catalog' => ['BP-01', 'BP-02'],
             'category' => ['microbiology', 'microbiology'],
+            'price' => ['1.500.000', '250000'],
+            'stock' => [15, 30],
+            'principal_id' => [$principal->id, null],
+            'description' => ['<p>Deskripsi bulk 1</p>', 'Deskripsi bulk 2'],
         ]);
 
         $response->assertRedirect(route('admin.products'));
-        $this->assertDatabaseHas('products', ['title' => 'Bulk Prod 1']);
-        $this->assertDatabaseHas('products', ['title' => 'Bulk Prod 2']);
+        $this->assertDatabaseHas('products', [
+            'title' => 'Bulk Prod 1',
+            'catalog' => 'BP-01',
+            'price' => 1500000,
+            'stock' => 15,
+            'principal_id' => $principal->id,
+        ]);
+        $this->assertDatabaseHas('products', [
+            'title' => 'Bulk Prod 2',
+            'catalog' => 'BP-02',
+            'price' => 250000,
+            'stock' => 30,
+        ]);
     }
 }

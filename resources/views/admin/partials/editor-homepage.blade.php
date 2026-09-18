@@ -1,17 +1,20 @@
+@php
+  $activeTab = request('tab', 'hero');
+@endphp
 <div class="admin-card">
   <div class="admin-card-header pb-0" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
     <ul class="nav nav-pills" id="homeTabs" role="tablist" style="gap: 8px; margin-bottom: 14px;">
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="image" class="me-1"></i> <span>Hero Banner</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'hero' ? 'active' : '' }}" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'hero' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="image" class="me-1"></i> <span>Hero Banner</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="layout-grid" class="me-1"></i> <span>Bento Grid Cards</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'bento' ? 'active' : '' }}" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'bento' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="layout-grid" class="me-1"></i> <span>Bento Grid Cards</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="folder-tree" class="me-1"></i> <span>Sector Finder</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'sector' ? 'active' : '' }}" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'sector' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="folder-tree" class="me-1"></i> <span>Sector Finder</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="megaphone" class="me-1"></i> <span>Banner Konversi RFQ</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'cta' ? 'active' : '' }}" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'cta' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="megaphone" class="me-1"></i> <span>Banner Konversi RFQ</span></button>
       </li>
     </ul>
   </div>
@@ -24,7 +27,7 @@
     <div class="tab-content" id="homeTabsContent">
 
       <!-- Sub-panel 1: Hero Section -->
-      <div class="tab-pane fade show active" id="hero-panel" role="tabpanel">
+      <div class="tab-pane fade {{ $activeTab === 'hero' ? 'show active' : '' }}" id="hero-panel" role="tabpanel">
         <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">HERO HEADLINE & SLIDESHOW</span>
@@ -106,7 +109,7 @@
       </div>
 
       <!-- Sub-panel 2: Bento Grid Standar -->
-      <div class="tab-pane fade" id="bento-panel" role="tabpanel">
+      <div class="tab-pane fade {{ $activeTab === 'bento' ? 'show active' : '' }}" id="bento-panel" role="tabpanel">
         <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">VALUE PILLARS & STANDARDS</span>
@@ -159,7 +162,7 @@
       </div>
 
       <!-- Sub-panel 3: Interactive Sector Finder -->
-      <div class="tab-pane fade" id="sector-panel" role="tabpanel">
+      <div class="tab-pane fade {{ $activeTab === 'sector' ? 'show active' : '' }}" id="sector-panel" role="tabpanel">
         <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">SECTOR WORKFLOWS</span>
@@ -221,7 +224,7 @@
       </div>
 
       <!-- Sub-panel 4: Bottom Conversion CTA Banner -->
-      <div class="tab-pane fade" id="cta-panel" role="tabpanel">
+      <div class="tab-pane fade {{ $activeTab === 'cta' ? 'show active' : '' }}" id="cta-panel" role="tabpanel">
         <div class="d-flex align-items-center justify-content-between mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
           <div>
             <span class="admin-card-header-label">BOTTOM CONVERSION ACTION</span>

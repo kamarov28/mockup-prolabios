@@ -440,9 +440,11 @@ class ProductService
                 'catalog' => $p['catalog'] ?? null,
                 'title' => $p['title'],
                 'description' => HtmlSanitizer::clean($p['description'] ?? null),
+                'datasheet_url' => $p['datasheet_url'] ?? null,
                 'category' => $p['category'],
                 'sub_category' => $p['sub_category'] ?? null,
                 'sector' => $p['sector'] ?? null,
+                'principal_id' => $p['principal_id'] ?? null,
                 'image' => $p['image'] ?? null,
                 'price' => $p['price'] ?? 0,
                 'stock' => $p['stock'] ?? 0,
@@ -459,7 +461,7 @@ class ProductService
             Product::upsert(
                 $rows,
                 ['title'],
-                ['catalog', 'description', 'category', 'sub_category', 'sector', 'image', 'price', 'stock', 'updated_at']
+                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'sector', 'principal_id', 'image', 'price', 'stock', 'updated_at']
             );
 
             $titles = array_column($rows, 'title');

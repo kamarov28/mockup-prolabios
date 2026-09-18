@@ -9,6 +9,7 @@ use App\Models\Principal;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\AuditLogger;
+use App\Services\ProductImportService;
 use App\Services\ProductService;
 use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
@@ -16,6 +17,7 @@ use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AdminProductController extends Controller
 {
@@ -274,8 +276,9 @@ class AdminProductController extends Controller
     {
         $sectors = $this->sectors->getSectors();
         $categoriesStructure = $this->products->getCategoriesStructure();
+        $principals = Principal::orderBy('name')->get();
 
-        return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure'));
+        return view('admin.products.bulk-form', compact('sectors', 'categoriesStructure', 'principals'));
     }
 
     public function storeBulk(Request $request)
@@ -318,8 +321,25 @@ class AdminProductController extends Controller
 
             $catalog = Str::limit(trim((string) $request->input("catalog.{$rowKey}", '')), 255, '');
             $subCategory = Str::limit(trim((string) $request->input("sub_category.{$rowKey}", '')), 255, '');
-            $sector = Str::limit(trim((string) $request->input("sector.{$rowKey}", '')), 255, '');
-            $description = Str::limit(trim((string) $request->input("description.{$rowKey}", '')), 10000, '');
+
+            $sectorsInput = $request->input("sectors.{$rowKey}", $request->input("sector.{$rowKey}"));
+            $sector = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
+            $rawPrice = $request->input("price.{$rowKey}", 0);
+            $cleanPrice = is_string($rawPrice) ? str_replace(['.', ' ', ','], ['', '', '.'], $rawPrice) : $rawPrice;
+            $price = max(0, (float) $cleanPrice);
+            $stock = max(0, (int) $request->input("stock.{$rowKey}", 0));
+
+            $principalId = $request->input("principal_id.{$rowKey}");
+            $principalId = $principalId ? (int) $principalId : null;
+
+            $description = (string) $request->input("description.{$rowKey}", '');
+
+            $datasheetUrl = $this->handlePdfUpload(
+                $request,
+                "datasheet_file.{$rowKey}",
+                "datasheet_url.{$rowKey}"
+            );
 
             $image = $this->handleImageUpload(
                 $request,
@@ -334,10 +354,12 @@ class AdminProductController extends Controller
                 'category' => $category,
                 'sub_category' => $subCategory,
                 'sector' => $sector !== '' ? $sector : null,
+                'principal_id' => $principalId,
+                'datasheet_url' => $datasheetUrl,
                 'description' => $description,
                 'image' => $image,
-                'price' => 0,
-                'stock' => 0,
+                'price' => $price,
+                'stock' => $stock,
             ];
         }
 
@@ -361,5 +383,68 @@ class AdminProductController extends Controller
         }
 
         return redirect()->back()->with('error', 'Tidak ada data produk valid yang disimpan. Pastikan judul dan kategori terisi, dan kategori terdaftar di sistem.');
+    }
+
+    public function downloadImportTemplate(ProductImportService $importService)
+    {
+        $spreadsheet = $importService->generateTemplate();
+        $writer = new Xlsx($spreadsheet);
+
+        $filename = 'template-import-produk-prolabios.xlsx';
+
+        return response()->streamDownload(function () use ($writer) {
+            $writer->save('php://output');
+        }, $filename, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Cache-Control' => 'max-age=0',
+        ]);
+    }
+
+    public function importExcel(Request $request, ProductImportService $importService)
+    {
+        $request->validate([
+            'excel_file' => 'required|file|max:10240',
+        ], [
+            'excel_file.required' => 'Pilih file Excel (.xlsx) atau CSV yang ingin diimpor.',
+            'excel_file.max' => 'Ukuran file maksimal 10MB.',
+        ]);
+
+        $file = $request->file('excel_file');
+        if (! $file || ! $file->isValid()) {
+            return redirect()->back()->with('error', 'File yang diunggah tidak valid.');
+        }
+
+        $extension = strtolower($file->getClientOriginalExtension());
+        if (! in_array($extension, ['xlsx', 'xls', 'csv'], true)) {
+            return redirect()->back()->with('error', 'Format file harus berupa .xlsx, .xls, atau .csv.');
+        }
+
+        try {
+            $result = $importService->import($file);
+
+            if ($result['imported'] > 0) {
+                AuditLogger::log('product.import_excel', 'Product', null, [
+                    'imported' => $result['imported'],
+                    'skipped' => $result['skipped'],
+                    'filename' => $file->getClientOriginalName(),
+                ]);
+
+                $msg = "Berhasil mengimpor {$result['imported']} produk dari spreadsheet!";
+                if ($result['skipped'] > 0) {
+                    $msg .= " ({$result['skipped']} baris dilewati karena format tidak sesuai.)";
+                }
+
+                return redirect()->route('admin.products')->with('success', $msg);
+            }
+
+            $errMsg = 'Tidak ada produk yang berhasil diimpor.';
+            if (! empty($result['errors'])) {
+                $errMsg .= ' '.implode(' ', array_slice($result['errors'], 0, 3));
+            }
+
+            return redirect()->back()->with('error', $errMsg);
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Gagal memproses file Excel: '.$e->getMessage());
+        }
     }
 }

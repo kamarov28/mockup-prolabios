@@ -36,3 +36,5 @@ Thumbs.db
 
 # Large static assets — host externally (Drive / CDN)
 /public/catalog.pdf
+*.xlsx
+*.csv

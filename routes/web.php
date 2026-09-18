@@ -74,6 +74,8 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
     Route::get('/products/create-bulk', [AdminProductController::class, 'createBulk'])->name('admin.products.create.bulk');
     Route::post('/products/store-bulk', [AdminProductController::class, 'storeBulk'])->name('admin.products.store-bulk');
+    Route::get('/products/import/template', [AdminProductController::class, 'downloadImportTemplate'])->name('admin.products.import.template');
+    Route::post('/products/import', [AdminProductController::class, 'importExcel'])->name('admin.products.import');
     Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
     Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');

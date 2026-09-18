@@ -14,8 +14,11 @@
       <h2 class="admin-card-header-title">Daftar Produk</h2>
     </div>
     <div class="d-inline-flex gap-2">
+      <button type="button" class="admin-btn admin-btn-outline" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+        <i data-lucide="file-spreadsheet"></i> Import Excel
+      </button>
       <a href="{{ route('admin.products.create.bulk') }}" class="admin-btn admin-btn-ghost">
-        <i data-lucide="grid"></i> Bulk
+        <i data-lucide="grid"></i> Bulk Web
       </a>
       <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
         <i data-lucide="plus"></i> Tambah
@@ -217,10 +220,72 @@
   </div>
 
 </div>
+
+{{-- Modal Import Excel / Spreadsheet --}}
+<div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border: 2px solid var(--color-border); border-radius: 12px; box-shadow: var(--shadow-md);">
+      <div class="modal-header" style="border-bottom: 1px solid var(--color-border); background: var(--color-surface-2);">
+        <div>
+          <span class="admin-badge admin-badge-accent mb-1">Spreadsheet Import</span>
+          <h5 class="modal-title fw-bold" id="importExcelModalLabel" style="color: var(--color-text-main);">Impor Produk via Excel / CSV</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ route('admin.products.import') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body p-4">
+          <div class="mb-3 p-3" style="background: #FFF5F5; border: 1px solid #FED7D7; border-radius: 8px;">
+            <div class="d-flex align-items-start gap-2">
+              <i data-lucide="info" style="color: var(--color-accent); flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;"></i>
+              <div class="small" style="color: #742A2A;">
+                <strong>Panduan Pengisian:</strong>
+                <ul class="mb-0 ps-3 mt-1" style="font-size: 0.82rem;">
+                  <li>Unduh template resmi berformat multi-sheet di bawah.</li>
+                  <li><strong>Sheet 1 (Data Produk)</strong>: Isi nama produk & kategori (wajib). Harga & stok berupa angka.</li>
+                  <li><strong>Sheet 2 (Panduan & Referensi)</strong>: Berisi daftar ID & kunci resmi Kategori, Sektor, dan Prinsipal.</li>
+                  <li>Sistem otomatis memperbarui (upsert) data jika nama produk sudah ada di database.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3 text-center">
+            <a href="{{ route('admin.products.import.template') }}" class="admin-btn admin-btn-outline w-100 justify-content-center">
+              <i data-lucide="download"></i> Unduh Template Excel (.xlsx)
+            </a>
+          </div>
+
+          <div class="mb-2">
+            <label for="excel_file" class="admin-form-label">Pilih File Spreadsheet <span style="color: var(--color-accent);">*</span></label>
+            <input class="form-control" type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls,.csv" required>
+            <div class="form-text small" style="color: var(--color-text-muted);">Mendukung format .xlsx, .xls, atau .csv (Maks. 10MB)</div>
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--color-border); background: var(--color-surface-2);">
+          <button type="button" class="admin-btn admin-btn-outline" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="admin-btn admin-btn-primary">
+            <i data-lucide="cloud-upload"></i> Upload & Proses Impor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 @endsection
 
 @section('admin_scripts')
 <script @nonce>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('import') === '1' || window.location.hash === '#import') {
+      const modalEl = document.getElementById('importExcelModal');
+      if (modalEl && window.bootstrap) {
+        bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      }
+    }
+  });
+
   const sg = document.getElementById('search-group');
   const si = document.getElementById('local-search-input');
   if (sg && si) {
