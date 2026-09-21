@@ -125,7 +125,7 @@
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
                     @foreach($allImages as $imgPath)
-                      <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" onclick="switchProductImage('{{ $imgPath }}', this)">
+                      <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" role="button" tabindex="0" aria-label="Foto produk {{ $loop->iteration }}">
                         <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async">
                       </div>
                     @endforeach
@@ -189,18 +189,18 @@
                   {{-- 3. Form Stepper & Tambah ke Keranjang RFQ --}}
                   <form action="{{ route('cart.add') }}" method="POST" id="beli-produk-form" class="mb-3">
                     @csrf
-                    <input type="hidden" name="id" value="{{ $product['id'] ?? '' }}">
-                    <input type="hidden" name="title" value="{{ $product['title'] }}">
+                    <input type="hidden" name="id" value="{{ $product['id'] ?? $product->id ?? '' }}">
+                    <input type="hidden" name="title" value="{{ $product['title'] ?? $product->title ?? '' }}">
 
                     <div class="d-flex flex-wrap align-items-end gap-2 gap-sm-3">
                       <div>
                         <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label" style="font-size: 0.72rem; color: var(--nb-muted);">Jumlah Unit</label>
                         <div class="nb-stepper-wrap">
-                          <button type="button" class="nb-stepper-btn" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
+                          <button type="button" class="nb-stepper-btn" data-step="-1" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
                             <i data-lucide="minus"></i>
                           </button>
                           <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
-                          <button type="button" class="nb-stepper-btn" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
+                          <button type="button" class="nb-stepper-btn" data-step="1" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
                             <i data-lucide="plus"></i>
                           </button>
                         </div>
@@ -249,7 +249,7 @@
                     <i data-lucide="x"></i>
                   </button>
                   <div class="modal-body text-center p-0" data-bs-dismiss="modal">
-                    <div class="lightbox-image-wrapper" onclick="event.stopPropagation();">
+                    <div class="lightbox-image-wrapper">
                       <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
                     </div>
                   </div>

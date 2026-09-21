@@ -7,7 +7,9 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProductManagementTest extends TestCase
@@ -125,5 +127,66 @@ class ProductManagementTest extends TestCase
             'price' => 250000,
             'stock' => 30,
         ]);
+    }
+
+    public function test_admin_can_create_product_without_subcategory(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Standalone Microbiology Kit',
+            'catalog' => 'SMK-10',
+            'category' => 'microbiology',
+            'sub_category' => null,
+            'price' => 250000,
+            'stock' => 5,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $this->assertDatabaseHas('products', [
+            'title' => 'Standalone Microbiology Kit',
+            'sub_category' => null,
+        ]);
+    }
+
+    public function test_admin_can_create_product_with_empty_or_null_gallery_files(): void
+    {
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Kit Without Gallery',
+            'catalog' => 'KWG-01',
+            'category' => 'microbiology',
+            'gallery_files' => [null],
+            'price' => 120000,
+            'stock' => 10,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('admin.products'));
+        $this->assertDatabaseHas('products', [
+            'title' => 'Kit Without Gallery',
+        ]);
+    }
+
+    public function test_admin_can_create_product_with_uploaded_gallery_images(): void
+    {
+        Storage::fake('public');
+
+        $img1 = UploadedFile::fake()->image('gallery1.jpg', 600, 600);
+        $img2 = UploadedFile::fake()->image('gallery2.png', 600, 600);
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Multi Gallery Device',
+            'catalog' => 'MGD-99',
+            'category' => 'microbiology',
+            'price' => 1500000,
+            'stock' => 8,
+            'gallery_files' => [$img1, $img2],
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('admin.products'));
+
+        $product = Product::where('title', 'Multi Gallery Device')->first();
+        $this->assertNotNull($product);
+        $this->assertIsArray($product->gallery_images);
+        $this->assertCount(2, $product->gallery_images);
     }
 }

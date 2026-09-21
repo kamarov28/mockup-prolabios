@@ -93,7 +93,7 @@ class PageController extends Controller
             abort(404);
         }
 
-        $canonicalSlug = is_array($product) ? ($product['slug'] ?? $slug) : ($product->slug ?? $slug);
+        $canonicalSlug = $product->slug ?: $slug;
 
         return redirect()->route('produk.detail', ['slug' => $canonicalSlug], 301);
     }

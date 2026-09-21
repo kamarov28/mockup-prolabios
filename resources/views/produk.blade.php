@@ -166,7 +166,7 @@
               </div>
             @else
               <div class="col-12 text-center p-5 card border-0" style="border: var(--nb-border) !important; border-radius: var(--nb-radius-lg);">
-                <i data-lucide="package-search" style="font-size: 2.5rem; color: var(--nb-muted); display: block; margin-bottom: 16px;"></i>
+                <i data-lucide="package-search" style="width: 48px; height: 48px; color: var(--nb-muted); display: block; margin: 0 auto 16px;"></i>
                 <h3 class="fs-5 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Produk Tidak Ditemukan</h3>
                 <p class="text-muted mb-4" style="max-width: 520px; margin-inline: auto; font-size: 0.92rem;">
                   Belum ada produk di kategori atau kata kunci pencarian ini. Butuh katalog atau reagen khusus yang belum tercantum di web?

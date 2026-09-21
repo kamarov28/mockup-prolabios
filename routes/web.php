@@ -49,7 +49,7 @@ Route::post('/kontak', [ContactController::class, 'submit'])
     ->name('contact.submit');
 
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:admin-login');
+Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:admin-login')->name('admin.login.submit');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

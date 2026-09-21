@@ -597,6 +597,37 @@
   line-height: 1.85;
 }
 
+.blog-detail-body table,
+.product-long-desc table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse !important;
+  border: 1px solid #E2E8F0 !important;
+}
+
+.blog-detail-body table th,
+.blog-detail-body table td,
+.product-long-desc table th,
+.product-long-desc table td {
+  padding: 0.65rem 1rem;
+  border: 1px solid #E2E8F0 !important;
+  vertical-align: middle;
+  font-size: 0.92rem;
+}
+
+.blog-detail-body table th,
+.product-long-desc table th {
+  background-color: var(--nb-bg-soft, #F8FAFC);
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--nb-ink);
+}
+
+.blog-detail-body table tbody tr:nth-child(even),
+.product-long-desc table tbody tr:nth-child(even) {
+  background-color: rgba(248, 250, 252, 0.6);
+}
+
 .blog-empty-icon {
   font-size: 2.5rem;
   color: var(--nb-muted);

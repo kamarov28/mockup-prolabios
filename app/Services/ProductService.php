@@ -63,9 +63,20 @@ class ProductService
      */
     protected function hydrateProducts(array $rows): Collection
     {
-        return collect($rows)->map(
-            fn (array $attrs) => (new Product)->newFromBuilder($attrs)
+        $models = array_map(
+            fn (array $attrs) => (new Product)->newFromBuilder($attrs),
+            $rows
         );
+
+        /** @var \Illuminate\Database\Eloquent\Collection<int, Product> $products */
+        $products = (new Product)->newCollection($models);
+
+        // Batch load principal relation to completely prevent N+1 queries in views
+        if ($products->isNotEmpty()) {
+            $products->load('principal');
+        }
+
+        return $products;
     }
 
     public function getCategoriesStructure(): array

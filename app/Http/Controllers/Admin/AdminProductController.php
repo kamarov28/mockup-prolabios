@@ -162,7 +162,7 @@ class AdminProductController extends Controller
             'description' => $request->input('description') ?: '',
             'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: '',
+            'sub_category' => $request->input('sub_category') ?: null,
             'sector' => $sectorCsv,
             'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
@@ -173,7 +173,7 @@ class AdminProductController extends Controller
 
         $createdProduct = $this->products->addProduct($product);
 
-        AuditLogger::log('product.create', 'Product', $createdProduct['id'] ?? null, [
+        AuditLogger::log('product.create', 'Product', $createdProduct?->id, [
             'title' => $title,
             'catalog' => $product['catalog'],
             'price' => $product['price'],
@@ -206,8 +206,7 @@ class AdminProductController extends Controller
         $newTitle = $request->input('title');
         $existing = $this->products->getProductByTitle($newTitle);
 
-        $existingId = is_object($existing) ? (int) ($existing->id ?? 0) : ($existing ? (int) ($existing['id'] ?? 0) : 0);
-        if ($existing && $existingId !== $id) {
+        if ($existing && (int) $existing->id !== $id) {
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
 
@@ -236,7 +235,7 @@ class AdminProductController extends Controller
             'description' => $request->input('description') ?: '',
             'datasheet_url' => $datasheetUrl,
             'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: '',
+            'sub_category' => $request->input('sub_category') ?: null,
             'sector' => $sectorCsv,
             'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
             'image' => $image,
@@ -259,8 +258,8 @@ class AdminProductController extends Controller
     public function destroy(int $id)
     {
         $product = $this->products->getProductById($id);
-        $title = is_object($product) ? ($product->title ?? null) : ($product['title'] ?? null);
-        $catalog = is_object($product) ? ($product->catalog ?? null) : ($product['catalog'] ?? null);
+        $title = $product?->title;
+        $catalog = $product?->catalog;
 
         $this->products->deleteProductById($id);
 

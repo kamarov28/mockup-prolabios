@@ -167,28 +167,27 @@ export function initCatalogAjax() {
     loadProductsAjax(window.location.href, false, false);
   });
 
-  const localSearch = document.getElementById('local-search-input');
-  const searchForm = document.getElementById('catalog-search-form');
   let searchDebounceTimer = null;
 
-  if (searchForm) {
-    searchForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const query = localSearch ? localSearch.value.trim() : '';
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.delete('q');
-      currentUrl.searchParams.delete('search');
-      if (query) currentUrl.searchParams.set('s', query);
-      else currentUrl.searchParams.delete('s');
-      currentUrl.searchParams.delete('page');
-      loadProductsAjax(currentUrl.toString(), true, false);
-    });
-  }
+  document.addEventListener('submit', function (e) {
+    const form = e.target.closest('#catalog-search-form');
+    if (!form) return;
+    e.preventDefault();
+    const input = form.querySelector('#local-search-input') || document.getElementById('local-search-input');
+    const query = input ? input.value.trim() : '';
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.delete('q');
+    currentUrl.searchParams.delete('search');
+    if (query) currentUrl.searchParams.set('s', query);
+    else currentUrl.searchParams.delete('s');
+    currentUrl.searchParams.delete('page');
+    loadProductsAjax(currentUrl.toString(), true, false);
+  });
 
-  if (localSearch) {
-    localSearch.addEventListener('input', function () {
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.id === 'local-search-input') {
       clearTimeout(searchDebounceTimer);
-      const query = this.value.trim();
+      const query = e.target.value.trim();
       searchDebounceTimer = setTimeout(() => {
         const currentUrl = new URL(window.location.href);
         currentUrl.searchParams.delete('q');
@@ -198,8 +197,8 @@ export function initCatalogAjax() {
         currentUrl.searchParams.delete('page');
         loadProductsAjax(currentUrl.toString(), true, true);
       }, 250);
-    });
-  }
+    }
+  });
 
   /* ── View Switcher (Grid vs Table Rapat) ────────────────────────────────── */
   function applyCatalogViewMode(mode) {

@@ -9,23 +9,45 @@ use Illuminate\Support\Facades\Cache;
 
 class PostService
 {
+    public static function getPostsCacheVersion(): int
+    {
+        return (int) Cache::get('posts_cache_version', 1);
+    }
+
+    public function clearPostsCache(): void
+    {
+        Cache::forget('blog_category_counts');
+        Cache::forget('sitemap_xml_cache');
+
+        try {
+            Cache::increment('posts_cache_version');
+        } catch (\Throwable $e) {
+            Cache::put('posts_cache_version', time());
+        }
+    }
+
     public function getPosts(?array $filters = [], int $limit = 0): array
     {
-        $query = Post::query()->orderByDesc('date')->orderByDesc('id');
+        $v = self::getPostsCacheVersion();
+        $cacheKey = 'posts_list_v1_'.$v.'_'.md5(json_encode($filters).'_'.$limit);
 
-        if (empty($filters['include_all_status'])) {
-            $query->online();
-        }
+        return Cache::remember($cacheKey, 600, function () use ($filters, $limit) {
+            $query = Post::query()->orderByDesc('date')->orderByDesc('id');
 
-        if (! empty($filters['category'])) {
-            $query->byCategory($filters['category']);
-        }
+            if (empty($filters['include_all_status'])) {
+                $query->online();
+            }
 
-        if ($limit > 0) {
-            $query->limit($limit);
-        }
+            if (! empty($filters['category'])) {
+                $query->byCategory($filters['category']);
+            }
 
-        return $query->get()->map(fn (Post $p) => $this->toArray($p))->all();
+            if ($limit > 0) {
+                $query->limit($limit);
+            }
+
+            return $query->get()->map(fn (Post $p) => $this->toArray($p))->all();
+        });
     }
 
     public function getPaginatedPosts(?array $filters = [], int $perPage = 4)
@@ -65,7 +87,7 @@ class PostService
             'content' => HtmlSanitizer::clean($post['content'] ?? null),
         ]);
 
-        Cache::forget('blog_category_counts');
+        $this->clearPostsCache();
 
         return true;
     }
@@ -88,7 +110,7 @@ class PostService
             'content' => HtmlSanitizer::clean($updatedPost['content'] ?? null),
         ]);
 
-        Cache::forget('blog_category_counts');
+        $this->clearPostsCache();
 
         return true;
     }
@@ -96,7 +118,7 @@ class PostService
     public function deletePost(string $slug): bool
     {
         $deleted = Post::query()->where('slug', $slug)->delete();
-        Cache::forget('blog_category_counts');
+        $this->clearPostsCache();
 
         return $deleted > 0;
     }

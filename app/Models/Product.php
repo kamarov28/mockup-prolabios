@@ -7,10 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property string $catalog
+ * @property string $title
+ * @property string|null $slug
+ * @property string|null $description
+ * @property string|null $datasheet_url
+ * @property string|null $category
+ * @property string|null $sub_category
+ * @property string|null $sector
+ * @property int|null $principal_id
+ * @property string|null $image
+ * @property array<string>|null $gallery_images
+ * @property float $price
+ * @property int $stock
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class Product extends Model
 {
     protected $fillable = [
@@ -77,18 +96,18 @@ class Product extends Model
         $replacements = [
             "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9C" => '–',
             "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9D" => '–',
-            "\xC3\xA2\xE2\x84\xA2"             => '™',
-            "\xC3\xA2\xE2\x80\x9E\xC2\xA2"     => '™',
-            'â€"'                              => '–',
-            'â€“'                              => '–',
-            'â€”'                              => '—',
-            'â„¢'                              => '™',
-            'â€œ'                              => '"',
-            'â€ '                              => '"',
-            'â€™'                              => "'",
-            'â€˜'                              => "'",
-            'Â®'                               => '®',
-            'â€¢'                              => '•',
+            "\xC3\xA2\xE2\x84\xA2" => '™',
+            "\xC3\xA2\xE2\x80\x9E\xC2\xA2" => '™',
+            'â€"' => '–',
+            'â€“' => '–',
+            'â€”' => '—',
+            'â„¢' => '™',
+            'â€œ' => '"',
+            'â€ ' => '"',
+            'â€™' => "'",
+            'â€˜' => "'",
+            'Â®' => '®',
+            'â€¢' => '•',
         ];
 
         return strtr($value, $replacements);

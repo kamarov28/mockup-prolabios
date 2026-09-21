@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -260,11 +261,9 @@ trait HandlesImageUploads
      * or null if GD is unavailable or encoding fails (caller should fall back to storing the
      * original file).
      *
-     * @param  \Illuminate\Http\UploadedFile  $file
      * @param  string  $folder  Target sub-folder on the public disk (already trimmed of slashes)
-     * @return string|null
      */
-    private function encodeToWebp(\Illuminate\Http\UploadedFile $file, string $folder): ?string
+    private function encodeToWebp(UploadedFile $file, string $folder): ?string
     {
         if (! function_exists('imagewebp') || ! function_exists('imagecreatefromstring')) {
             return null;

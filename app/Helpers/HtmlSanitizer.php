@@ -33,7 +33,7 @@ class HtmlSanitizer
      * - URI schemes are limited to http/https — blocks javascript:, data:, vbscript:.
      *
      * @param  string|null  $html  Raw HTML from the database / editor
-     * @return string  Sanitized HTML safe for {!! !!} raw output
+     * @return string Sanitized HTML safe for {!! !!} raw output
      */
     public static function clean(?string $html): string
     {

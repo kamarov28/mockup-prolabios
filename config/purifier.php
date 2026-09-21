@@ -17,11 +17,11 @@
  */
 
 return [
-    'encoding'         => 'UTF-8',
-    'finalize'         => true,
+    'encoding' => 'UTF-8',
+    'finalize' => true,
     'ignoreNonStrings' => false,
-    'cachePath'        => storage_path('app/purifier'),
-    'cacheFileMode'    => 0755,
+    'cachePath' => storage_path('app/purifier'),
+    'cacheFileMode' => 0755,
 
     'settings' => [
         // ------------------------------------------------------------------
@@ -34,9 +34,13 @@ return [
                 'strong', 'b', 'em', 'i', 'u', 's', 'del', 'sub', 'sup',
                 'ul', 'ol', 'li',
                 'h2', 'h3', 'h4', 'h5', 'h6',
-                'table', 'thead', 'tbody', 'tfoot', 'tr',
-                'th[scope|colspan|rowspan]',
-                'td[colspan|rowspan]',
+                'table[class|style|border|cellpadding|cellspacing]',
+                'thead[class]',
+                'tbody[class]',
+                'tfoot[class]',
+                'tr[class|style]',
+                'th[class|style|scope|colspan|rowspan]',
+                'td[class|style|colspan|rowspan]',
                 'span[style]',
                 'div[style]',
                 'blockquote', 'code', 'pre',
@@ -49,13 +53,14 @@ return [
 
             // Limit CSS properties allowed in style="" attributes
             'CSS.AllowedProperties' => implode(',', [
-                'color', 'background-color',
+                'color', 'background-color', 'background',
                 'font-size', 'font-weight', 'font-style', 'font-family',
-                'text-decoration', 'text-align',
-                'padding', 'padding-left', 'padding-right',
-                'margin', 'margin-left', 'margin-right',
-                'border', 'border-collapse',
-                'width', 'max-width', 'height',
+                'text-decoration', 'text-align', 'vertical-align',
+                'padding', 'padding-top', 'padding-bottom', 'padding-left', 'padding-right',
+                'margin', 'margin-top', 'margin-bottom', 'margin-left', 'margin-right',
+                'border', 'border-collapse', 'border-color', 'border-width', 'border-style',
+                'border-top', 'border-bottom', 'border-left', 'border-right',
+                'width', 'max-width', 'min-width', 'height',
             ]),
 
             // Only allow http/https URIs — strips javascript:, data:, vbscript:, etc.
@@ -66,7 +71,7 @@ return [
 
             // Preserve the author's structure — do not auto-wrap in <p>
             'AutoFormat.AutoParagraph' => false,
-            'AutoFormat.RemoveEmpty'   => true,
+            'AutoFormat.RemoveEmpty' => true,
 
             'HTML.Doctype' => 'HTML 4.01 Transitional',
         ],
@@ -82,8 +87,8 @@ return [
         // "Element X is not supported".
         // ------------------------------------------------------------------
         'custom_definition' => [
-            'id'    => 'prolabios-html5',
-            'rev'   => 2,
+            'id' => 'prolabios-html5',
+            'rev' => 2,
             'debug' => false,
             'elements' => [
                 ['figure',     'Block', 'Optional: (figcaption, Flow) | (Flow, figcaption) | Flow', 'Common'],

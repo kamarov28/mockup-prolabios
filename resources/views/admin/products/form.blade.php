@@ -357,7 +357,7 @@
               subcategorySelect.appendChild(opt);
             });
             block.style.display        = 'block';
-            subcategorySelect.required = true;
+            subcategorySelect.required = false;
           }
           subcategorySelect.disabled = false;
         })

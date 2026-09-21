@@ -25,6 +25,11 @@ class UpdateProductRequest extends FormRequest
                 'sector' => implode(',', array_filter($this->sectors)),
             ]);
         }
+
+        if ($this->hasFile('gallery_files')) {
+            $files = array_filter((array) $this->file('gallery_files'), fn ($f) => $f && $f->isValid());
+            $this->files->set('gallery_files', $files);
+        }
     }
 
     public function rules(): array

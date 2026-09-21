@@ -5,8 +5,15 @@
 .cart-page-bg {
   background-color: var(--nb-bg);
   min-height: 70vh;
-  padding-top: 2rem;
+  padding-top: 115px;
   padding-bottom: 5rem;
+}
+
+@media (max-width: 768px) {
+  .cart-page-bg {
+    padding-top: 95px;
+    padding-bottom: 3.5rem;
+  }
 }
 
 .cart-stepper-wrap {

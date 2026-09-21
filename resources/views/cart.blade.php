@@ -221,7 +221,7 @@
       </div>
     @else
       <div class="card cart-empty-card text-center p-5 mx-auto">
-        <i data-lucide="package-search" style="font-size: 3rem; color: var(--nb-muted); display: block; margin-bottom: 20px;"></i>
+        <i data-lucide="package-search" style="width: 56px; height: 56px; color: var(--nb-muted); display: block; margin: 0 auto 20px;"></i>
         <h2 class="profil-section-title" style="font-size: 1.6rem !important; color: var(--nb-ink);">Belum ada item dalam daftar</h2>
         <p class="profil-body-text mb-4" style="color: var(--nb-muted);">Gunakan pencarian nama produk atau masukkan nomor katalog (CAT#) untuk menambahkan item penawaran.</p>
         <div>

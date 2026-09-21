@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Helpers\HtmlSanitizer;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRfqRequest extends FormRequest
@@ -12,6 +13,19 @@ class StoreRfqRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        if ($this->has('name')) {
+            $this->merge(['name' => strip_tags((string) $this->name)]);
+        }
+        if ($this->has('company_name')) {
+            $this->merge(['company_name' => strip_tags((string) $this->company_name)]);
+        }
+        if ($this->has('notes') && is_string($this->notes)) {
+            $this->merge(['notes' => HtmlSanitizer::clean($this->notes)]);
+        }
     }
 
     /**

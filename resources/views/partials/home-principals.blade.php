@@ -2,8 +2,7 @@
 <section class="nb-principals">
   <div class="container">
     <div class="nb-principals-shell">
-      <div class="nb-principals-label d-flex align-items-center justify-content-center gap-2 flex-wrap">
-        <span class="nb-badge nb-badge-sm mb-0"><i data-lucide="badge-check" class="me-1"></i> PARTNER RESMI</span>
+      <div class="nb-principals-label d-flex align-items-center justify-content-center gap-2">
         <span class="nb-principals-text">Authorized Principal &amp; Brand Partners</span>
       </div>
 

@@ -112,4 +112,45 @@ class ProductSlugTest extends TestCase
         $response->assertSee('Disallow: /rfq/');
         $response->assertSee('sitemap.xml');
     }
+
+    public function test_product_detail_page_renders_gallery_thumbnails_and_stepper_correctly(): void
+    {
+        $product = Product::create([
+            'title' => 'Robot Analyzer Pro',
+            'catalog' => 'RAP-900',
+            'category' => 'device',
+            'sub_category' => 'microbiological-instruments',
+            'image' => '/storage/uploads/main.webp',
+            'gallery_images' => [
+                '/storage/uploads/gallery1.webp',
+                '/storage/uploads/gallery2.webp',
+            ],
+            'price' => 5000000,
+            'stock' => 12,
+        ]);
+
+        $response = $this->get(route('produk.detail', ['slug' => $product->slug]));
+        $response->assertOk();
+
+        // 1. Assert hero image & lightbox targets
+        $response->assertSee('id="main-product-image"', false);
+        $response->assertSee('/storage/uploads/main.webp', false);
+        $response->assertSee('id="lightbox-product-image"', false);
+
+        // 2. Assert gallery thumbnails with data-img attributes
+        $response->assertSee('gallery-thumb', false);
+        $response->assertSee('data-img="/storage/uploads/main.webp"', false);
+        $response->assertSee('data-img="/storage/uploads/gallery1.webp"', false);
+        $response->assertSee('data-img="/storage/uploads/gallery2.webp"', false);
+
+        // 3. Assert stepper buttons have data-step and proper input attributes
+        $response->assertSee('data-step="-1"', false);
+        $response->assertSee('data-step="1"', false);
+        $response->assertSee('id="qty-input"', false);
+        $response->assertSee('data-stock="12"', false);
+
+        // 4. Assert cart form has hidden ID and route
+        $response->assertSee(route('cart.add'), false);
+        $response->assertSee('value="'.$product->id.'"', false);
+    }
 }
