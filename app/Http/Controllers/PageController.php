@@ -198,6 +198,19 @@ class PageController extends Controller
             if (! $currentBlog) {
                 $currentBlog = $dataService->getPostBySlug(Str::slug((string) $detail));
             }
+            if (! $currentBlog) {
+                abort(404);
+            }
+
+            $isPublished = ($currentBlog['status'] ?? '') === 'online'
+                && (empty($currentBlog['date']) || $currentBlog['date'] <= date('Y-m-d'));
+
+            if (! $isPublished) {
+                $isAdmin = auth()->check() && (bool) (auth()->user()->is_admin ?? false);
+                if (! $isAdmin) {
+                    abort(404);
+                }
+            }
         }
 
         $rawKategori = $request->query('kategori');

@@ -52,11 +52,18 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('admin-login', function (Request $request) {
             $username = Str::transliterate(Str::lower(trim((string) $request->input('username', ''))));
 
-            return Limit::perMinute(5)->by($request->ip().'|'.$username)->response(function () {
-                return back()->withErrors([
-                    'login' => 'Terlalu banyak percobaan login gagal. Silakan tunggu 1 menit.',
-                ]);
-            });
+            return [
+                Limit::perMinute(5)->by($username ?: 'guest')->response(function () {
+                    return back()->withErrors([
+                        'login' => 'Terlalu banyak percobaan login gagal. Silakan tunggu 1 menit.',
+                    ]);
+                }),
+                Limit::perMinute(10)->by($request->ip())->response(function () {
+                    return back()->withErrors([
+                        'login' => 'Terlalu banyak percobaan login gagal dari koneksi ini. Silakan tunggu 1 menit.',
+                    ]);
+                }),
+            ];
         });
 
         $this->shareFrontendViewData();

@@ -44,7 +44,7 @@ class SecurityHeaders
 
         $response->headers->set('Content-Security-Policy', $csp);
 
-        if ($request->isSecure() || $request->header('X-Forwarded-Proto') === 'https') {
+        if ($request->isSecure()) {
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
 

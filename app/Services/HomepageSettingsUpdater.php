@@ -66,9 +66,21 @@ class HomepageSettingsUpdater
             'cta_banner_btn_text' => self::SHORT_TEXT_RULE,
             'cta_banner_btn_url' => self::LINK_RULE,
             'sector_link_pharma' => self::LINK_RULE,
+            'sector_title_pharma' => self::SHORT_TEXT_RULE,
+            'sector_tag_pharma' => self::SHORT_TEXT_RULE,
+            'sector_desc_pharma' => self::TEXT_RULE,
             'sector_link_fnb' => self::LINK_RULE,
+            'sector_title_fnb' => self::SHORT_TEXT_RULE,
+            'sector_tag_fnb' => self::SHORT_TEXT_RULE,
+            'sector_desc_fnb' => self::TEXT_RULE,
             'sector_link_healthcare' => self::LINK_RULE,
+            'sector_title_healthcare' => self::SHORT_TEXT_RULE,
+            'sector_tag_healthcare' => self::SHORT_TEXT_RULE,
+            'sector_desc_healthcare' => self::TEXT_RULE,
             'sector_link_brewing' => self::LINK_RULE,
+            'sector_title_brewing' => self::SHORT_TEXT_RULE,
+            'sector_tag_brewing' => self::SHORT_TEXT_RULE,
+            'sector_desc_brewing' => self::TEXT_RULE,
         ]);
     }
 
@@ -144,7 +156,7 @@ class HomepageSettingsUpdater
             $existingSector = $sectorPanels[$sKey] ?? [];
             $sectorPanels[$sKey] = [
                 'tag' => $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''),
-                'title' => $request->input("sector_title_$sKey", $existingSector['title'] ?? ''),
+                'title' => HtmlSanitizer::clean($request->input("sector_title_$sKey", $existingSector['title'] ?? '')),
                 'desc' => $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''),
                 'link' => $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
             ];

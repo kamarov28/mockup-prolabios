@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PostStatus;
 use App\Http\Middleware\ForceHttps;
 use App\Jobs\SendContactEmailJob;
+use App\Models\Post;
 use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\User;
@@ -244,5 +246,110 @@ class SecurityHardeningTest extends TestCase
 
         $response->assertSessionHasErrors('login');
         $this->assertStringContainsString('Terlalu banyak percobaan login', session('errors')->first('login'));
+    }
+
+    public function test_admin_login_rate_limiter_cannot_be_bypassed_with_spoofed_x_forwarded_for(): void
+    {
+        RateLimiter::clear('admin-login');
+
+        // Attacker rotates spoofed IP headers on each request
+        for ($i = 1; $i <= 5; $i++) {
+            $this->from(route('admin.login'))
+                ->withHeaders(['X-Forwarded-For' => "203.0.113.{$i}"])
+                ->post(route('admin.login'), [
+                    'username' => 'target-admin',
+                    'password' => 'wrong-pass',
+                ]);
+        }
+
+        // 6th attempt with another spoofed IP must still be blocked by username rate limit
+        $response = $this->from(route('admin.login'))
+            ->withHeaders(['X-Forwarded-For' => '198.51.100.99'])
+            ->post(route('admin.login'), [
+                'username' => 'target-admin',
+                'password' => 'wrong-pass',
+            ]);
+
+        $response->assertSessionHasErrors('login');
+        $this->assertStringContainsString('Terlalu banyak percobaan login', session('errors')->first('login'));
+    }
+
+    public function test_unauthenticated_user_cannot_access_draft_or_scheduled_post(): void
+    {
+        $draftPost = Post::create([
+            'slug' => 'confidential-internal-draft',
+            'title' => 'Internal Draft Announcement',
+            'date' => now()->subDay()->toDateString(),
+            'category' => 'Berita',
+            'status' => PostStatus::Draft,
+            'content' => '<p>Confidential content</p>',
+        ]);
+
+        $scheduledPost = Post::create([
+            'slug' => 'future-press-release',
+            'title' => 'Embargoed Press Release',
+            'date' => now()->addDays(5)->toDateString(),
+            'category' => 'Berita',
+            'status' => PostStatus::Online,
+            'content' => '<p>Future content</p>',
+        ]);
+
+        // Unauthenticated guest must receive 404
+        $this->get('/informasi/confidential-internal-draft')->assertStatus(404);
+        $this->get('/informasi?detail=confidential-internal-draft')->assertStatus(404);
+        $this->get('/informasi/future-press-release')->assertStatus(404);
+
+        // Authenticated admin can preview draft and scheduled posts
+        $admin = User::forceCreate([
+            'name' => 'Admin User',
+            'email' => 'admin-preview@example.com',
+            'password' => Hash::make('password'),
+            'is_admin' => true,
+        ]);
+
+        $this->actingAs($admin)->get('/informasi/confidential-internal-draft')->assertStatus(200);
+        $this->actingAs($admin)->get('/informasi/future-press-release')->assertStatus(200);
+    }
+
+    public function test_force_https_does_not_trust_untrusted_x_forwarded_proto_header(): void
+    {
+        $middleware = new ForceHttps;
+        $this->app['env'] = 'production';
+
+        // Direct request with untrusted spoofed X-Forwarded-Proto: https
+        $request = Request::create('http://localhost/admin/login', 'GET');
+        $request->headers->set('X-Forwarded-Proto', 'https');
+
+        $response = $middleware->handle($request, fn () => response('ok'));
+
+        $this->assertTrue($response->isRedirection());
+        $this->assertStringStartsWith('https://', $response->headers->get('Location'));
+    }
+
+    public function test_homepage_sector_title_is_sanitized_against_xss(): void
+    {
+        $admin = User::forceCreate([
+            'name' => 'Admin User',
+            'email' => 'admin-xss@example.com',
+            'password' => Hash::make('password'),
+            'is_admin' => true,
+        ]);
+
+        $xssPayload = '<img src=x onerror=alert(1)>Judul Sektor';
+
+        $response = $this->actingAs($admin)->post('/admin/home', [
+            'section' => 'homepage',
+            'sector_title_pharma' => $xssPayload,
+            'sector_tag_pharma' => 'FARMASI',
+            'sector_desc_pharma' => 'Deskripsi pharma',
+            'sector_link_pharma' => '/sektor',
+        ]);
+
+        $response->assertRedirect();
+
+        // Check homepage rendered output: script/img tags must not be executed unescaped
+        $homeResponse = $this->get('/');
+        $homeResponse->assertStatus(200);
+        $homeResponse->assertDontSee('<img src=x onerror=alert(1)>', false);
     }
 }

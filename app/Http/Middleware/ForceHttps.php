@@ -18,9 +18,8 @@ class ForceHttps
             return $next($request);
         }
 
-        // Check if request is already HTTPS
-        // Also check X-Forwarded-Proto for proxies/load balancers (Cloudflare, etc.)
-        if (! $request->secure() && $request->header('X-Forwarded-Proto') !== 'https') {
+        // Check if request is already HTTPS via trusted proxy resolution
+        if (! $request->secure()) {
             $uri = '/'.ltrim($request->getRequestUri(), '/\\');
 
             return redirect()->secure($uri);
