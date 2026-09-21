@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Principal;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Rfq;
 use App\Models\Sector;
 use App\Services\AuditLogger;
@@ -27,10 +29,27 @@ class AdminDashboardController extends Controller
         $postsCount = Post::query()->count('*');
         $sectorsCount = Sector::query()->count('*');
         $rfqsCount = Rfq::query()->count('*');
+        $newRfqsCount = Rfq::query()->where('status', 'new')->count('*');
+        $principalsCount = Principal::query()->count('*');
+        $categoriesCount = ProductCategory::query()->count('*');
 
-        $recentProducts = Product::query()->latest('created_at')->limit(5)->get(['id', 'catalog', 'title', 'category'])->toArray();
-        $recentPosts = Post::query()->latest('created_at')->limit(5)->get(['id', 'slug', 'title', 'category'])->toArray();
-        $recentRfqs = Rfq::query()->with('items')->latest('created_at')->limit(5)->get();
+        // RFQ pipeline breakdown by status
+        $rfqStatusRows = Rfq::query()
+            ->select('status', DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->all();
+
+        $rfqPipeline = [
+            'new' => (int) ($rfqStatusRows['new'] ?? 0),
+            'contacted' => (int) ($rfqStatusRows['contacted'] ?? 0),
+            'quoted' => (int) ($rfqStatusRows['quoted'] ?? 0),
+            'closed' => (int) ($rfqStatusRows['closed'] ?? 0),
+        ];
+
+        $recentProducts = Product::query()->latest('created_at')->limit(6)->get(['id', 'catalog', 'title', 'category', 'image'])->toArray();
+        $recentPosts = Post::query()->latest('created_at')->limit(6)->get(['id', 'slug', 'title', 'category', 'image', 'status', 'date'])->toArray();
+        $recentRfqs = Rfq::query()->with('items')->latest('created_at')->limit(6)->get();
 
         // Category distribution via GROUP BY (single query, no PHP counting)
         $categoryRows = Product::query()
@@ -53,7 +72,8 @@ class AdminDashboardController extends Controller
         }
 
         return view('admin.dashboard', compact(
-            'productsCount', 'postsCount', 'sectorsCount', 'rfqsCount',
+            'productsCount', 'postsCount', 'sectorsCount', 'rfqsCount', 'newRfqsCount',
+            'principalsCount', 'categoriesCount', 'rfqPipeline',
             'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist'
         ));
     }

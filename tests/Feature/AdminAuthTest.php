@@ -44,6 +44,16 @@ class AdminAuthTest extends TestCase
         $response = $this->actingAs($adminUser)->get(route('admin.dashboard'));
 
         $response->assertStatus(200);
+        $response->assertSee('Inquiry RFQ Terbaru');
+        $response->assertSee('Sebaran Katalog');
+        $response->assertSee('Akses Instan');
+        $response->assertSee('Pipeline Status Permintaan Penawaran (RFQ)');
+        $response->assertSee('Ekosistem &amp; Kemitraan', false);
+        $response->assertSee('data-tab="products"', false);
+        $response->assertSee('data-tab="posts"', false);
+        $response->assertSee('dash-segmented-control');
+        $response->assertSee('dash-pipeline-tooltip');
+        $response->assertSee('rfq-pipeline-bar');
         $this->assertAuthenticatedAs($adminUser);
     }
 }
