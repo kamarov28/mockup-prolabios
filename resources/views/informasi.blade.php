@@ -43,7 +43,7 @@
               </div>
 
               <div class="profil-body-text blog-detail-body">
-                {!! \App\Services\DataService::sanitizeHtml($currentBlog['content'] ?? '') !!}
+                {!! \App\Helpers\HtmlSanitizer::clean($currentBlog['content'] ?? '') !!}
               </div>
             </div>
 

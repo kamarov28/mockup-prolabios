@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Services\DataService;
+use App\Services\ProductService;
 use App\Traits\ResolvesProducts;
 use Illuminate\Http\Request;
 
@@ -11,12 +11,7 @@ class CartController extends Controller
 {
     use ResolvesProducts;
 
-    protected DataService $dataService;
-
-    public function __construct(DataService $dataService)
-    {
-        $this->dataService = $dataService;
-    }
+    public function __construct(protected ProductService $products) {}
 
     private function findCartKey(array $cart, string $id = '', string $title = ''): ?string
     {

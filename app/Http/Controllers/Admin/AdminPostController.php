@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Services\AuditLogger;
 use App\Services\PostService;
@@ -144,7 +143,7 @@ class AdminPostController extends Controller
         return view('admin.posts.form', compact('post'));
     }
 
-    public function update(UpdatePostRequest $request, string $slug)
+    public function update(StorePostRequest $request, string $slug)
     {
         $post = $this->posts->getPostBySlug($slug);
         if (! $post) {

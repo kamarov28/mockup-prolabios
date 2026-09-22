@@ -121,7 +121,7 @@
 
               <h2 class="profil-section-title mb-3">{{ $currentData['name'] }}</h2>
               @foreach($descriptionParagraphs as $desc)
-                <p class="profil-body-text mb-3" style="color: var(--nb-ink); line-height: 1.7;">{!! \App\Services\DataService::sanitizeHtml($desc) !!}</p>
+                <p class="profil-body-text mb-3" style="color: var(--nb-ink); line-height: 1.7;">{!! \App\Helpers\HtmlSanitizer::clean($desc) !!}</p>
               @endforeach
 
               <div class="pt-3 border-top d-flex flex-wrap gap-2 mt-4" style="border-color: rgba(30,30,30,0.12) !important;">

@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Product;
-use App\Services\DataService;
+use App\Services\HomepageService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
@@ -85,8 +85,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         try {
-            $dataService = app(DataService::class);
-            $siteSettings = $dataService->getHomepageData();
+            $siteSettings = app(HomepageService::class)->getHomepageData();
 
             $rawPhone = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone'] ?? '0821-8792-9433');
             $waNumber = (strpos($rawPhone, '0') === 0) ? '62'.substr($rawPhone, 1) : $rawPhone;

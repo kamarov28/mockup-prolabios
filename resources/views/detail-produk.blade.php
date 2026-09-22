@@ -150,7 +150,7 @@
                     </div>
 
                     <div class="profil-body-text mb-3 text-muted" style="line-height: 1.7; font-size: 0.92rem;">
-                      {!! \App\Services\DataService::sanitizeHtml($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
+                      {!! \App\Helpers\HtmlSanitizer::clean($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                     </div>
 
                     @if(empty($product['datasheet_url']))

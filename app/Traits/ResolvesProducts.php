@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use App\Models\Product;
-use App\Services\DataService;
 use App\Services\ProductService;
 use Illuminate\Support\Str;
 
@@ -40,16 +39,12 @@ trait ResolvesProducts
         return $service->getProductByTitle($title);
     }
 
-    private function productLookupService(): DataService|ProductService
+    private function productLookupService(): ProductService
     {
         if (isset($this->products) && $this->products instanceof ProductService) {
             return $this->products;
         }
 
-        if (isset($this->dataService)) {
-            return $this->dataService;
-        }
-
-        return app(DataService::class);
+        return app(ProductService::class);
     }
 }

@@ -9,7 +9,7 @@ use App\Models\Rfq;
 use App\Models\RfqItem;
 use App\Services\AuditLogger;
 use App\Services\CaptchaService;
-use App\Services\DataService;
+use App\Services\ProductService;
 use App\Traits\ResolvesProducts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,15 +20,10 @@ class RfqController extends Controller
 {
     use ResolvesProducts;
 
-    protected DataService $dataService;
-
     /** Character length of the random suffix appended to RFQ numbers */
     private const RFQ_SUFFIX_LENGTH = 6;
 
-    public function __construct(DataService $dataService)
-    {
-        $this->dataService = $dataService;
-    }
+    public function __construct(protected ProductService $products) {}
 
     // -------------------------------------------------------------------------
     // Actions

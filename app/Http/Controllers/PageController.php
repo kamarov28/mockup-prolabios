@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use App\Services\DataService;
+use App\Services\HomepageService;
+use App\Services\PostService;
+use App\Services\ProductService;
+use App\Services\SectorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +14,11 @@ use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
-    public function home(DataService $dataService)
+    public function home(HomepageService $homepage, PostService $posts, ProductService $products)
     {
-        $homeData = $dataService->getHomepageData();
-        $recentPosts = $dataService->getPosts([], 3);
-        $featuredProducts = $dataService->getProducts([], 4);
+        $homeData = $homepage->getHomepageData();
+        $recentPosts = $posts->getPosts([], 3);
+        $featuredProducts = $products->getProducts([], 4);
 
         return view('welcome', compact('homeData', 'recentPosts', 'featuredProducts'));
     }
@@ -25,9 +28,9 @@ class PageController extends Controller
         return view('profil');
     }
 
-    public function produk(Request $request, DataService $dataService)
+    public function produk(Request $request, ProductService $products)
     {
-        $categoriesStructure = $dataService->getCategoriesStructure();
+        $categoriesStructure = $products->getCategoriesStructure();
 
         $rawCategory = Str::slug((string) $request->query('category', 'all'));
         $activeCategory = isset($categoriesStructure[$rawCategory]) ? $rawCategory : 'all';
@@ -58,7 +61,7 @@ class PageController extends Controller
             $filters['search'] = $searchQuery;
         }
 
-        $filteredProducts = $dataService->getPaginatedProducts($filters, 12);
+        $filteredProducts = $products->getPaginatedProducts($filters, 12);
 
         return view('produk', [
             'products' => $filteredProducts,
@@ -71,9 +74,9 @@ class PageController extends Controller
     /**
      * Canonical product detail: /produk/{slug}
      */
-    public function detailProduk(string $slug, DataService $dataService)
+    public function detailProduk(string $slug, ProductService $products)
     {
-        $product = $dataService->getProductBySlug($slug);
+        $product = $products->getProductBySlug($slug);
 
         if (! $product) {
             abort(404);
@@ -85,9 +88,9 @@ class PageController extends Controller
     /**
      * Canonical buy / RFQ add redirect: /produk/{slug}/beli → /produk/{slug}
      */
-    public function beliProduk(string $slug, DataService $dataService)
+    public function beliProduk(string $slug, ProductService $products)
     {
-        $product = $dataService->getProductBySlug($slug);
+        $product = $products->getProductBySlug($slug);
 
         if (! $product) {
             abort(404);
@@ -101,9 +104,9 @@ class PageController extends Controller
     /**
      * Legacy /produk/detail?id=123 → permanent redirect to /produk/{slug}
      */
-    public function detailProdukLegacy(Request $request, DataService $dataService)
+    public function detailProdukLegacy(Request $request, ProductService $products)
     {
-        $product = $this->resolveLegacyProduct($request, $dataService);
+        $product = $this->resolveLegacyProduct($request, $products);
 
         if ($product && ! empty($product->slug)) {
             return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
@@ -115,9 +118,9 @@ class PageController extends Controller
     /**
      * Legacy /produk/beli?id=123 → permanent redirect to /produk/{slug}
      */
-    public function beliProdukLegacy(Request $request, DataService $dataService)
+    public function beliProdukLegacy(Request $request, ProductService $products)
     {
-        $product = $this->resolveLegacyProduct($request, $dataService);
+        $product = $this->resolveLegacyProduct($request, $products);
 
         if ($product && ! empty($product->slug)) {
             return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
@@ -129,7 +132,7 @@ class PageController extends Controller
     /**
      * Resolve legacy product identifier from query param (id / slug / title).
      */
-    private function resolveLegacyProduct(Request $request, DataService $dataService)
+    private function resolveLegacyProduct(Request $request, ProductService $products)
     {
         $identifier = $request->query('id');
         if ($identifier === null || $identifier === '') {
@@ -137,30 +140,35 @@ class PageController extends Controller
         }
 
         if (is_numeric($identifier)) {
-            return $dataService->getProductById((int) $identifier);
+            return $products->getProductById((int) $identifier);
         }
 
-        return $dataService->getProductBySlug(Str::slug((string) $identifier))
-            ?? $dataService->getProductByTitle((string) $identifier);
+        return $products->getProductBySlug(Str::slug((string) $identifier))
+            ?? $products->getProductByTitle((string) $identifier);
     }
 
-    public function sektor(DataService $dataService)
+    public function sektor(Request $request, SectorService $sectors, ProductService $products)
     {
-        $sectors = $dataService->getSectors();
+        $sectorList = $sectors->getSectors();
 
-        $validIds = array_column($sectors, 'id');
-        $requested = request()->get('s') ?? request()->get('kategori');
+        $validIds = array_column($sectorList, 'id');
+        $requested = $request->get('s') ?? $request->get('kategori');
 
         if ($requested && in_array($requested, $validIds, true)) {
             $activeSector = $requested;
         } else {
-            $activeSector = count($sectors) > 0 ? $sectors[0]['id'] : 'biomolecular';
+            $activeSector = count($sectorList) > 0 ? $sectorList[0]['id'] : 'biomolecular';
         }
 
-        $products = $dataService->getPaginatedProducts(['sector' => $activeSector], 24);
-        $relatedProducts = $dataService->getProducts(['sector' => $activeSector], 3);
+        $productsPaginated = $products->getPaginatedProducts(['sector' => $activeSector], 24);
+        $relatedProducts = $products->getProducts(['sector' => $activeSector], 3);
 
-        return view('sektor', compact('sectors', 'products', 'activeSector', 'relatedProducts'));
+        return view('sektor', [
+            'sectors' => $sectorList,
+            'products' => $productsPaginated,
+            'activeSector' => $activeSector,
+            'relatedProducts' => $relatedProducts,
+        ]);
     }
 
     public function layanan()
@@ -168,9 +176,9 @@ class PageController extends Controller
         return view('layanan');
     }
 
-    public function informasi(Request $request, DataService $dataService, ?string $slug = null)
+    public function informasi(Request $request, PostService $posts, ?string $slug = null)
     {
-        $recentPosts = $dataService->getPosts([], 3);
+        $recentPosts = $posts->getPosts([], 3);
 
         $categoryCounts = Cache::remember('blog_category_counts', 3600, function () {
             $rows = Post::query()
@@ -194,9 +202,9 @@ class PageController extends Controller
         $detail = $slug ?? $request->query('detail');
         $currentBlog = null;
         if ($detail) {
-            $currentBlog = $dataService->getPostBySlug((string) $detail);
+            $currentBlog = $posts->getPostBySlug((string) $detail);
             if (! $currentBlog) {
-                $currentBlog = $dataService->getPostBySlug(Str::slug((string) $detail));
+                $currentBlog = $posts->getPostBySlug(Str::slug((string) $detail));
             }
             if (! $currentBlog) {
                 abort(404);
@@ -222,7 +230,7 @@ class PageController extends Controller
             $filters['category'] = $selectedCategory;
         }
 
-        $paginatedPosts = $dataService->getPaginatedPosts($filters, 4);
+        $paginatedPosts = $posts->getPaginatedPosts($filters, 4);
 
         return view('informasi', [
             'posts' => $paginatedPosts,

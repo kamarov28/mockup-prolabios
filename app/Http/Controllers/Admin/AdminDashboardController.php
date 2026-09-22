@@ -10,7 +10,7 @@ use App\Models\ProductCategory;
 use App\Models\Rfq;
 use App\Models\Sector;
 use App\Services\AuditLogger;
-use App\Services\DataService;
+use App\Services\HomepageService;
 use App\Services\HomepageSettingsUpdater;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 class AdminDashboardController extends Controller
 {
     public function __construct(
-        protected DataService $dataService,
+        protected HomepageService $homepage,
         protected HomepageSettingsUpdater $homepageSettings
     ) {}
 
@@ -80,7 +80,7 @@ class AdminDashboardController extends Controller
 
     public function homeEdit()
     {
-        $homeData = $this->dataService->getHomepageData();
+        $homeData = $this->homepage->getHomepageData();
 
         return view('admin.home-editor', compact('homeData'));
     }
@@ -97,7 +97,7 @@ class AdminDashboardController extends Controller
         $this->homepageSettings->validate($request, $section);
 
         // Fresh DB read (no cache) so we don't merge on top of stale values
-        $homeData = $this->dataService->getHomepageDataFresh();
+        $homeData = $this->homepage->getHomepageDataFresh();
         $result = $this->homepageSettings->buildPatch($request, $section, $homeData);
 
         if ($result['error']) {
@@ -105,7 +105,7 @@ class AdminDashboardController extends Controller
         }
 
         $patch = $result['patch'];
-        $this->dataService->saveHomepageData($patch);
+        $this->homepage->saveHomepageData($patch);
 
         AuditLogger::log('settings.update', 'Settings', $section, [
             'section' => $section,
