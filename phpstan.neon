@@ -12,3 +12,5 @@ parameters:
     # as level 9 requires strict static types (e.g. array<string, mixed>)
     # and explicit DTOs for every request input.
     level: 5
+
+    treatPhpDocTypesAsCertain: false

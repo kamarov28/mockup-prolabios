@@ -24,11 +24,6 @@ class ImportOldProductsSeeder extends Seeder
         $cleanUtf8 = function (string $text): string {
             // Replace common Windows-1252 misencoded sequences in UTF-8
             $map = [
-                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9C" => '–', // en-dash
-                "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9D" => '—', // em-dash
-                "\xC3\xA2\xE2\x82\xAC\xC5\x93" => '"', // left double quote
-                "\xC3\xA2\xE2\x82\xAC\x9D" => '"', // right double quote
-                "\xC3\xA2\xE2\x82\xAC\xE2\x84\xA2" => "'", // apostrophe
                 'â€“' => '–',
                 'â€”' => '—',
                 'â€œ' => '"',
@@ -176,11 +171,11 @@ class ImportOldProductsSeeder extends Seeder
                     continue;
                 }
 
-                $productId = (int) ($tokens[0] ?? 0);
-                $channelId = (int) ($tokens[2] ?? 0);
-                $rawSector = trim($tokens[4] ?? '');
-                $title = $cleanUtf8(trim($tokens[5] ?? ''));
-                $description = $cleanUtf8(trim($tokens[8] ?? ''));
+                $productId = (int) $tokens[0];
+                $channelId = (int) $tokens[2];
+                $rawSector = trim($tokens[4]);
+                $title = $cleanUtf8(trim($tokens[5]));
+                $description = $cleanUtf8(trim($tokens[8]));
                 $imageName = trim($tokens[10] ?? '');
                 $price = (float) ($tokens[11] ?? 0);
                 $stock = (int) ($tokens[12] ?? 0);

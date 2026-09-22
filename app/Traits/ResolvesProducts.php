@@ -46,7 +46,7 @@ trait ResolvesProducts
             return $this->products;
         }
 
-        if (isset($this->dataService) && $this->dataService instanceof DataService) {
+        if (isset($this->dataService)) {
             return $this->dataService;
         }
 

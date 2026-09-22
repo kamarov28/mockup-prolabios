@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -94,10 +95,6 @@ class Product extends Model
         }
 
         $replacements = [
-            "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9C" => '–',
-            "\xC3\xA2\xE2\x82\xAC\xE2\x80\x9D" => '–',
-            "\xC3\xA2\xE2\x84\xA2" => '™',
-            "\xC3\xA2\xE2\x80\x9E\xC2\xA2" => '™',
             'â€"' => '–',
             'â€“' => '–',
             'â€”' => '—',
@@ -181,7 +178,8 @@ class Product extends Model
             return $query;
         }
 
-        $driver = $query->getConnection()->getDriverName();
+        $connection = $query->getConnection();
+        $driver = $connection instanceof Connection ? $connection->getDriverName() : '';
 
         if (in_array($driver, ['mysql', 'mariadb'], true)) {
             return $query->where(function (Builder $q) use ($term) {

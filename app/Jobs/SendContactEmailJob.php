@@ -52,7 +52,7 @@ class SendContactEmailJob implements ShouldQueue
                 throw new \Exception('Payload terkorup atau kosong.');
             }
 
-            $correlationId = is_array($data) && isset($data['correlation_id']) ? (string) $data['correlation_id'] : 'unknown';
+            $correlationId = isset($data['correlation_id']) ? (string) $data['correlation_id'] : 'unknown';
 
             Log::channel('contact')->info('Memulai pengiriman email kontak (SendContactEmailJob).', [
                 'correlation_id' => $correlationId,

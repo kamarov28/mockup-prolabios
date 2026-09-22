@@ -230,11 +230,7 @@ return new class extends Migration
     protected function hasIndex(string $table, string $indexName): bool
     {
         try {
-            $connection = Schema::getConnection();
-            $doctrineSchemaManager = $connection->getDoctrineSchemaManager();
-            $doctrineTable = $doctrineSchemaManager->introspectTable($table);
-
-            return $doctrineTable->hasIndex($indexName);
+            return Schema::hasIndex($table, $indexName);
         } catch (Exception $e) {
             // If we can't check, assume it doesn't exist and try to create
             return false;

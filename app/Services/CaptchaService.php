@@ -25,11 +25,6 @@ class CaptchaService
         $recaptchaSecret = config('services.recaptcha.secret');
         $turnstileSecret = config('services.turnstile.secret');
 
-        // If no CAPTCHA service configured, rely on Honeypot + Rate Limiter
-        if (empty($recaptchaSecret) && empty($turnstileSecret)) {
-            return true;
-        }
-
         // 1. Google reCAPTCHA v3 Verification
         if (! empty($recaptchaSecret)) {
             $token = $request->input('g-recaptcha-response');

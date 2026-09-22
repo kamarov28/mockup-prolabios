@@ -172,8 +172,8 @@ class AdminRfqController extends Controller
                     $subtotal = $price * $qty;
                     $rfqTotal += $subtotal;
 
-                    $catalogNo = $item->catalog_no ?: ($item->product?->catalog ?? '-');
-                    $productName = $item->product_title ?: ($item->product?->title ?? '-');
+                    $catalogNo = $item->catalog_no ?: ($item->product->catalog ?? '-');
+                    $productName = $item->product_title ?: ($item->product->title ?? '-');
 
                     $sheet->setCellValueExplicit("H{$currentRow}", $catalogNo, DataType::TYPE_STRING);
                     $sheet->setCellValueExplicit("I{$currentRow}", $productName, DataType::TYPE_STRING);

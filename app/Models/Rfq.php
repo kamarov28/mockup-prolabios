@@ -92,7 +92,7 @@ class Rfq extends Model
 
     public function getEstimatedGrandTotalAttribute(): float
     {
-        return (float) $this->items->sum(function (RfqItem $item) {
+        return (float) $this->items->sum(function ($item) {
             return ($item->original_price ?? 0) * ($item->quantity ?? 1);
         });
     }

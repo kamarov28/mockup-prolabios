@@ -158,7 +158,7 @@ class ProductService
             ],
         ];
 
-        return Cache::remember('categories_structure', 3600, function () use ($fallback) {
+        return Cache::remember('categories_structure', 3600, function () use ($fallback): array {
             try {
                 $categories = ProductCategory::with('children')
                     ->whereNull('parent_id')

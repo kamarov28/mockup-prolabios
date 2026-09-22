@@ -105,9 +105,9 @@ class RfqController extends Controller
 
                 RfqItem::create([
                     'rfq_id' => $rfq->id,
-                    'product_id' => $product?->id ?? ($item['id'] ?? null),
-                    'product_title' => $product?->title ?? ($item['title'] ?? ''),
-                    'catalog_no' => $product?->catalog ?? ($item['catalog'] ?? null),
+                    'product_id' => $product ? $product->id : ($item['id'] ?? null),
+                    'product_title' => $product ? $product->title : ($item['title'] ?? ''),
+                    'catalog_no' => $product ? $product->catalog : ($item['catalog'] ?? null),
                     'original_price' => $origPrice,
                     'quantity' => $qty,
                 ]);

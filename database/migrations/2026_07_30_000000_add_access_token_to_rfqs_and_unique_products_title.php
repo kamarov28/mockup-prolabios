@@ -32,17 +32,19 @@ return new class extends Migration
         // Add unique index on products.title (required for upsert() to work correctly)
         // Skip if index already exists
         try {
-            Schema::table('products', function (Blueprint $table) {
-                // Drop the old non-unique title index first if it exists, then add unique
-                $sm = Schema::getConnection()->getDoctrineSchemaManager();
-                $t = $sm->introspectTable('products');
-                if ($t->hasIndex('products_title_index')) {
-                    $table->dropIndex('products_title_index');
-                }
-                if (! $t->hasIndex('products_title_unique')) {
-                    $table->unique('title', 'products_title_unique');
-                }
-            });
+            $hasTitleIndex = Schema::hasIndex('products', 'products_title_index');
+            $hasTitleUnique = Schema::hasIndex('products', 'products_title_unique');
+
+            if ($hasTitleIndex || ! $hasTitleUnique) {
+                Schema::table('products', function (Blueprint $table) use ($hasTitleIndex, $hasTitleUnique) {
+                    if ($hasTitleIndex) {
+                        $table->dropIndex('products_title_index');
+                    }
+                    if (! $hasTitleUnique) {
+                        $table->unique('title', 'products_title_unique');
+                    }
+                });
+            }
         } catch (Exception $e) {
             Log::warning('products title unique index: '.$e->getMessage());
         }

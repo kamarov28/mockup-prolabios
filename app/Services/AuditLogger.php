@@ -19,9 +19,9 @@ class AuditLogger
 
         $payload = [
             'action' => $action,
-            'actor_id' => $user?->id ?? null,
-            'actor_name' => $user?->name ?? 'Guest/Anonymous',
-            'actor_email' => $user?->email ?? null,
+            'actor_id' => $user ? $user->id : null,
+            'actor_name' => $user ? $user->name : 'Guest/Anonymous',
+            'actor_email' => $user ? $user->email : null,
             'target_type' => $targetType,
             'target_id' => $targetId,
             'details' => $details,

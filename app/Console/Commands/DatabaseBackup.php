@@ -69,8 +69,8 @@ class DatabaseBackup extends Command
         // Compress using PHP native zlib (gzopen) — zero dependency on external gzip CLI binary
         $gzPath = "{$tempPath}.gz";
         $compressed = $this->compressWithGzip($tempPath, $gzPath);
-        if ($compressed && file_exists($tempPath)) {
-            unlink($tempPath); // Delete raw SQL, keep .gz only
+        if ($compressed) {
+            @unlink($tempPath); // Delete raw SQL, keep .gz only
         }
 
         $size = round(filesize($gzPath) / 1024 / 1024, 2); // MB
