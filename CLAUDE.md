@@ -4,9 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-### Development
+### Setup & Development
 ```bash
-# Start all dev services (web server, queue listener, log viewer, vite)
+# First-time project setup (install deps, generate key, migrate, build assets)
+composer setup
+
+# Start all dev services concurrently (web server, queue listener, log viewer, vite)
 composer dev
 
 # Run individual services
@@ -21,7 +24,7 @@ npm run build
 
 ### Testing & Code Quality
 ```bash
-# Run all tests
+# Run all tests (configured for in-memory SQLite)
 composer test
 # or
 php artisan test
@@ -30,7 +33,7 @@ php artisan test
 php artisan test tests/Feature/RfqFlowTest.php
 php artisan test --filter=test_rfq_submission_workflow
 
-# Static analysis (PHPStan / Larastan)
+# Static analysis (PHPStan / Larastan level 5)
 ./vendor/bin/phpstan analyse
 
 # Code formatting (Laravel Pint)
@@ -43,8 +46,15 @@ php artisan test --filter=test_rfq_submission_workflow
 php artisan migrate
 php artisan migrate --seed
 
-# Database backup command
+# Sync product sectors from legacy CSV column to pivot table
+php artisan products:sync-sectors
+
+# Database backup
 php artisan db:backup
+
+# Cache clear & production optimization
+php artisan optimize:clear
+php artisan optimize
 ```
 
 ---
@@ -54,25 +64,29 @@ php artisan db:backup
 **PT. Prolabios Mitra Analitika** is a B2B E-Procurement & Request for Quotation (RFQ) platform built on **Laravel 13.x**, PHP 8.3+, Tailwind CSS v4, and Vite.
 
 ### Design System & UI Guidelines
-- The UI follows **Soft Neo-Brutalism** (warm natural canvas, 2px ink borders, 0-blur directional drop shadows, tactile button physics, and clear typography).
-- See [`DESIGN.md`](./DESIGN.md) for full design specifications, color tokens, typography scales, geometry, and component standards.
+- Visual Style: **Modern Flat Precision** (see [`DESIGN.md`](./DESIGN.md)). Clean industrial laboratory aesthetic, confident typography, solid contrast planes, zero drop shadows (`box-shadow: none`), zero heavy black borders, and sharp 4px–6px corner radii.
+- Brand Tokens: Ruby Red (`#A6171C`) primary CTA/navigation, Sunny Gold (`#F1C045`) accents, clean Canvas (`#F8F9FA`), and White surfaces (`#FFFFFF`).
 
 ### Core Domain: B2B RFQ Workflow
 1. **Catalog Carting (Session)**: Buyers add products to RFQ cart (`/cart`, `CartController`).
-2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (company info, corporate email, PIC). Dispatches asynchronous jobs for receipt and admin notifications (`app/Jobs/SendRfq*Job.php`).
+2. **RFQ Submission (`RfqController`)**: Collects corporate credentials (company info, corporate email, PIC). Dispatches asynchronous jobs (`app/Jobs/SendRfq*Job.php`).
 3. **Operational Follow-up**: Primary workflow forwards RFQ to Sales via WhatsApp / Admin dashboard (`/admin/rfqs`).
-4. **Access Control**: RFQ success page restricted to submitting session. Product detail uses canonical slugs (`/produk/{slug}`) with numeric ID legacy fallback (`/produk/detail?id=12`).
+4. **Routing Gotchas**:
+   - Product buy URL (`/produk/{slug}/beli`) must be registered before product detail (`/produk/{slug}`).
+   - Canonical slugs (`/produk/{slug}`) with legacy ID fallback (`/produk/detail?id=12`).
+   - RFQ success page is restricted to the submitting session.
 
 ### Security & Upload Conventions
-- **Uploads**: Handled via `storage/app/public/uploads` (accessible via `/storage/uploads/...`). SVG blocked, images re-encoded to WebP via GD.
-- **Security Middlewares**: CSRF, rate-limiting on login/RFQ submission/contact forms, honeypot + CAPTCHA validation (`CaptchaService`), HTML sanitization for rich text.
+- **Admin Access**: `AdminAuthenticate` middleware verifies both `Auth::check()` and `$user->is_admin`.
+- **Uploads**: Handled via `storage/app/public/uploads` (accessible via `/storage/uploads/...`). SVG is blocked; images are stripped of metadata and re-encoded to WebP via GD.
+- **Security Middlewares**: CSRF, rate-limiting on login (`admin-login`), RFQ submission (`rfq-submission`), and contact forms (`contact-form`); honeypot + CAPTCHA validation (`CaptchaService`); CSP nonce via `@nonce` directive.
 
 ### Directory Structure & Conventions
-- `app/Http/Controllers/`: Public-facing controllers (`PageController`, `CartController`, `RfqController`, `ContactController`).
-- `app/Http/Controllers/Admin/`: Admin dashboard controllers (`AdminRfqController`, `AdminProductController`, `AdminProductCategoryController`, etc.).
+- `app/Http/Controllers/`: Public controllers (`PageController`, `CartController`, `RfqController`, `ContactController`).
+- `app/Http/Controllers/Admin/`: Admin controllers (`AdminRfqController`, `AdminProductController`, `AdminSectorController`, etc.).
 - `app/Models/`: Eloquent models (`Product`, `ProductCategory`, `Rfq`, `RfqItem`, `Sector`, `Post`, `ContactInquiry`, `HomepageSetting`).
-- `app/Services/`: Cross-cutting business logic (`AuditLogger`, `CaptchaService`, `DataService`).
-- `app/Jobs/` & `app/Mail/`: Asynchronous queue jobs and Mailable classes for email notifications.
+- `app/Services/`: Business logic (`AuditLogger`, `CaptchaService`, `DataService`).
+- `app/Jobs/` & `app/Mail/`: Queue jobs and Mailable classes for buyer and admin notifications.
 - `app/Http/Middleware/`: Security middlewares (`SecurityHeaders`, `AdminAuthenticate`, `ForceHttps`, `GzipCompress`).
-- `routes/web.php`: Web routes separated into public, guest, buyer RFQ signed/tracking routes, and admin group (`/admin/*`).
-- `resources/views/`: Blade templates split into layouts, public pages, admin dashboard views, and email templates.
+- `resources/views/`: Blade templates split into layouts, public catalog/RFQ views, admin cockpit, and emails.
+- `docs/`: Modular flow-by-flow operational and architectural documentation.
