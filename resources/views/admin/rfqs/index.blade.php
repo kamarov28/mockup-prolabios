@@ -5,75 +5,101 @@
 
 @section('admin_content')
 
+{{-- Page Header --}}
+<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
+  <div>
+    <span class="admin-page-label">Inquiry & Pengadaan</span>
+    <h2 class="admin-page-title mb-1">Daftar Pengajuan RFQ</h2>
+    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+      Kelola permintaan penawaran harga resmi (Request for Quotation) dari pelanggan dan instansi.
+    </p>
+  </div>
+  <div class="d-inline-flex align-items-center gap-2 flex-wrap">
+    <div class="admin-view-switcher">
+      <a href="{{ request()->fullUrlWithQuery(['view' => 'table']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'table' ? 'active' : '' }}" title="Tampilan Tabel">
+        <i data-lucide="table"></i>
+      </a>
+      <a href="{{ request()->fullUrlWithQuery(['view' => 'kanban']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'kanban' ? 'active' : '' }}" title="Tampilan Papan Kanban">
+        <i data-lucide="kanban"></i>
+      </a>
+    </div>
+    <a href="{{ route('admin.rfqs.export', request()->query()) }}" class="admin-btn admin-btn-outline" title="Download Excel/CSV sesuai filter saat ini">
+      <i data-lucide="file-spreadsheet"></i> Ekspor Excel
+    </a>
+  </div>
+</div>
+
 <div class="admin-card">
 
-  <div class="admin-card-header">
-    <div>
-      <span class="admin-card-header-label">Inquiry & Penawaran</span>
-      <h2 class="admin-card-header-title">Daftar Pengajuan Masuk</h2>
-    </div>
-    <div class="d-inline-flex gap-2 align-items-center">
-      <div class="admin-view-switcher">
-        <a href="{{ request()->fullUrlWithQuery(['view' => 'table']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'table' ? 'active' : '' }}" title="Tampilan Tabel">
-          <i data-lucide="table"></i>
-        </a>
-        <a href="{{ request()->fullUrlWithQuery(['view' => 'kanban']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'kanban' ? 'active' : '' }}" title="Tampilan Papan Kanban">
-          <i data-lucide="kanban"></i>
-        </a>
-      </div>
-      <a href="{{ route('admin.rfqs.export', request()->query()) }}" class="admin-btn admin-btn-ghost text-success" title="Download Excel/CSV sesuai filter saat ini">
-        <i data-lucide="file-spreadsheet" class="me-1"></i> Ekspor Excel
-      </a>
-      <span class="admin-badge admin-badge-muted px-3 py-2">
-        Total: {{ ($viewMode ?? 'table') === 'kanban' ? ($totalRfqs ?? 0) : ($rfqs->total() ?? 0) }} Pengajuan
-      </span>
-    </div>
-  </div>
-
-  <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
-    <form action="{{ route('admin.rfqs.index') }}" method="GET">
+  {{-- Filter Toolbar --}}
+  <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border); background: #FFFFFF;">
+    <form action="{{ route('admin.rfqs.index') }}" method="GET" id="filter-rfqs-form">
       @if(request('view') === 'kanban')
         <input type="hidden" name="view" value="kanban">
       @endif
-      <div class="row g-3 align-items-center">
-        <div class="col-md-4">
-          <input type="text" name="s" id="local-search-input" class="form-control"
-                 placeholder="Cari nomor RFQ, pemohon, instansi, WA..."
-                 value="{{ request('s') }}" aria-label="Kata kunci pencarian">
+      <div class="row g-2 align-items-center">
+
+        {{-- Search Input --}}
+        <div class="col-lg-4 col-md-12">
+          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: #FFFFFF; transition: border-color 0.2s ease;" id="search-group">
+            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: #F8FAFC; border-right: 1px solid var(--color-border);">
+              <i data-lucide="search" style="width: 15px; height: 15px;"></i>
+            </span>
+            <input type="text" name="s" id="local-search-input"
+                   style="flex: 1; background: transparent; border: none; outline: none; padding: 0 12px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem; height: 38px;"
+                   placeholder="Cari nomor RFQ, pemohon, instansi, WA..." value="{{ request('s') }}" aria-label="Kata kunci pencarian">
+            @if(request('s'))
+              <a href="{{ route('admin.rfqs.index', array_merge(request()->except('s'), request('view') === 'kanban' ? ['view' => 'kanban'] : [])) }}" style="display: flex; align-items: center; padding: 0 10px; color: var(--color-text-muted); text-decoration: none;" title="Hapus pencarian">
+                <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+              </a>
+            @endif
+          </div>
         </div>
-        <div class="col-md-3">
-          <input type="text" name="product_name" class="form-control" value="{{ request('product_name') }}" placeholder="Filter nama produk / SKU..." aria-label="Filter Produk">
+
+        {{-- Filter Product Name / Catalog --}}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          <input type="text" name="product_name" class="form-control" style="height: 38px; font-size: 0.85rem;" value="{{ request('product_name') }}" placeholder="Filter nama produk / katalog..." aria-label="Filter Produk">
         </div>
-        <div class="col-md-2">
-          <select name="status" class="form-select" aria-label="Filter Status">
-            <option value="">Semua status</option>
+
+        {{-- Filter Status --}}
+        <div class="col-lg-2 col-md-4 col-sm-6">
+          <select name="status" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Status" onchange="this.form.submit()">
+            <option value="">Semua Status</option>
             @foreach(\App\Models\Rfq::statusOptions() as $value => $label)
               <option value="{{ $value }}" @selected(request('status') === $value)>{{ $label }}</option>
             @endforeach
           </select>
         </div>
-        <div class="col-md-1">
-          <button type="button" class="admin-btn admin-btn-ghost w-100 justify-content-center"
+
+        {{-- Toggle Date Filter --}}
+        <div class="col-lg-1 col-md-2 col-sm-4">
+          <button type="button" class="admin-btn admin-btn-outline w-100 justify-content-center {{ (request('start_date') || request('end_date')) ? 'active' : '' }}"
                   data-bs-toggle="collapse" data-bs-target="#rfqDateFilterCollapse"
                   aria-expanded="{{ (request('start_date') || request('end_date')) ? 'true' : 'false' }}"
-                  aria-controls="rfqDateFilterCollapse" title="Filter Rentang Tanggal">
+                  aria-controls="rfqDateFilterCollapse" title="Filter Rentang Tanggal" style="height: 38px; font-size: 0.82rem;">
             <i data-lucide="calendar-range"></i>
+            @if(request('start_date') || request('end_date'))
+              <span class="badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 2px 5px;">•</span>
+            @endif
           </button>
         </div>
-        <div class="col-md-2 d-flex gap-1">
-          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center" title="Terapkan Filter">
-            <i data-lucide="filter" class="me-1"></i> Filter
+
+        {{-- Filter Action Buttons --}}
+        <div class="col-lg-2 col-md-2 col-sm-8 d-flex gap-1">
+          <button type="submit" class="admin-btn admin-btn-primary flex-grow-1 justify-content-center" title="Terapkan Filter" style="height: 38px; font-size: 0.85rem;">
+            <i data-lucide="filter"></i> Filter
           </button>
           @if(request('s') || request('product_name') || request('status') || request('start_date') || request('end_date'))
-            <a href="{{ route('admin.rfqs.index', request('view') === 'kanban' ? ['view' => 'kanban'] : []) }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter">
+            <a href="{{ route('admin.rfqs.index', request('view') === 'kanban' ? ['view' => 'kanban'] : []) }}" class="admin-btn admin-btn-ghost justify-content-center" title="Reset Filter" style="height: 38px;">
               <i data-lucide="x"></i>
             </a>
           @endif
         </div>
       </div>
 
+      {{-- Collapsible Date Filter --}}
       <div class="collapse {{ (request('start_date') || request('end_date')) ? 'show' : '' }} mt-3" id="rfqDateFilterCollapse">
-        <div style="border: 1px solid var(--color-border); border-radius: 8px; padding: 14px 16px; background-color: var(--color-surface-subtle);">
+        <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 16px; background: #F8FAFC;">
           <div class="row g-3 align-items-end">
             <div class="col-md-5">
               <label class="admin-form-label" for="start_date">Dari Tanggal</label>
@@ -96,42 +122,42 @@
 
   <div class="admin-card-body-flush">
     @if(($viewMode ?? 'table') === 'kanban')
-      <div style="display: flex; gap: 18px; padding: 20px; overflow-x: auto; min-height: 520px; background-color: var(--color-bg); align-items: flex-start;" class="table-responsive">
+      <div style="display: flex; gap: 16px; padding: 20px; overflow-x: auto; min-height: 520px; background-color: var(--color-bg); align-items: flex-start;" class="table-responsive">
         @foreach($kanbanColumns as $statusKey => $column)
-          <div style="flex: 0 0 310px; width: 310px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 10px; box-shadow: var(--shadow-xs); display: flex; flex-direction: column; overflow: hidden;">
-            <div style="padding: 14px 18px; border-bottom: 1px solid var(--color-border); background: var(--color-surface-subtle); display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-family: var(--font-headline); font-weight: 700; font-size: 0.92rem; color: var(--color-text-main);">
+          <div style="flex: 0 0 300px; width: 300px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 6px; display: flex; flex-direction: column; overflow: hidden;">
+            <div style="padding: 12px 16px; border-bottom: 1px solid var(--color-border); background: var(--color-surface-2); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-headline); font-weight: 700; font-size: 0.9rem; color: var(--color-text-main);">
                 {{ $column['label'] }}
               </span>
               <span class="admin-badge admin-badge-muted" style="font-size: 0.72rem; padding: 2px 8px;">
                 {{ $column['rfqs']->count() }}
               </span>
             </div>
-            <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px; max-height: 70vh; overflow-y: auto;">
+            <div style="padding: 12px; display: flex; flex-direction: column; gap: 10px; max-height: 70vh; overflow-y: auto;">
               @forelse($column['rfqs'] as $rfq)
-                <div style="background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px; padding: 14px; box-shadow: var(--shadow-xs); transition: all 0.15s ease;">
+                <div style="background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 6px; padding: 12px; transition: border-color 0.15s ease;">
                   <div class="d-flex justify-content-between align-items-start mb-2">
-                    <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C); font-size: 0.88rem;">
+                    <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C); font-family: var(--font-mono); font-size: 0.88rem;">
                       {{ $rfq->rfq_number }}
                     </a>
-                    <span style="font-size: 0.7rem; color: var(--color-text-muted);">
+                    <span style="font-size: 0.72rem; color: var(--color-text-muted);">
                       {{ $rfq->created_at ? $rfq->created_at->format('d/m H:i') : '-' }}
                     </span>
                   </div>
                   <div class="mb-2">
                     <strong class="d-block" style="font-size: 0.85rem; color: var(--color-text-main);">{{ $rfq->name }}</strong>
-                    <span class="small" style="color: var(--color-text-muted); font-size: 0.78rem;">{{ $rfq->company_name }}</span>
+                    <span class="small" style="color: var(--color-text-muted); font-size: 0.78rem;">{{ $rfq->company_name ?: '—' }}</span>
                   </div>
                   <div class="d-flex justify-content-between align-items-center pt-2 mt-2" style="border-top: 1px solid var(--color-border); font-size: 0.75rem;">
                     <span class="admin-badge admin-badge-muted">
                       {{ $rfq->items->count() }} item
                     </span>
-                    <div class="d-flex gap-2">
-                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success d-inline-flex align-items-center" title="Hubungi WA">
-                        <x-brand-icon name="whatsapp" size="14" />
+                    <div class="d-inline-flex align-items-center gap-1">
+                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="admin-action-link" style="color: #16A34A; width: 28px; height: 28px;" title="Hubungi WA">
+                        <x-brand-icon name="whatsapp" size="13" />
                       </a>
-                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="text-secondary" title="Buka Detail">
-                        <i data-lucide="arrow-up-right"></i>
+                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-action-link view" style="width: 28px; height: 28px;" title="Buka Detail">
+                        <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
                       </a>
                     </div>
                   </div>
@@ -151,19 +177,19 @@
           <table class="admin-table">
             <thead>
               <tr>
-                <th>Nomor RFQ</th>
-                <th>Status</th>
+                <th style="width: 140px;">Nomor RFQ</th>
+                <th style="width: 130px;">Status</th>
                 <th>Pemohon & Instansi</th>
                 <th>Kontak</th>
                 <th>Total Item</th>
                 <th>Tanggal Masuk</th>
-                <th style="text-align: right;">Aksi</th>
+                <th style="text-align: right; padding-right: 24px; width: 120px;">Aksi</th>
               </tr>
             </thead>
             <tbody>
               @foreach($rfqs as $rfq)
                 <tr>
-                  <td>
+                  <td class="cell-code" style="white-space: nowrap;">
                     <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C);">
                       {{ $rfq->rfq_number }}
                     </a>
@@ -174,38 +200,43 @@
                     </span>
                   </td>
                   <td>
-                    <strong class="d-block" style="color: var(--color-text-main);">{{ $rfq->name }}</strong>
-                    <span class="text-secondary small">{{ $rfq->company_name }}</span>
+                    <div class="cell-title">{{ $rfq->name }}</div>
+                    <div class="text-secondary small">{{ $rfq->company_name ?: '—' }}</div>
                   </td>
                   <td>
-                    <div>
-                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-decoration-none text-success small d-inline-flex align-items-center gap-1">
-                        <x-brand-icon name="whatsapp" size="14" /> {{ $rfq->phone_wa }}
+                    <div class="d-flex flex-column gap-1">
+                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-decoration-none small d-inline-flex align-items-center gap-1" style="color: #16A34A; font-family: var(--font-mono); font-weight: 500;">
+                        <x-brand-icon name="whatsapp" size="13" /> {{ $rfq->phone_wa }}
                       </a>
-                    </div>
-                    <div class="text-secondary small">
-                      <i data-lucide="mail" class="me-1"></i>{{ $rfq->email }}
+                      <span class="text-secondary small d-inline-flex align-items-center gap-1" style="font-size: 0.78rem;">
+                        <i data-lucide="mail" style="width: 12px; height: 12px; color: var(--color-text-muted);"></i>
+                        <span class="text-truncate" style="max-width: 180px;">{{ $rfq->email }}</span>
+                      </span>
                     </div>
                   </td>
                   <td>
-                    <span class="admin-badge admin-badge-muted">
-                      {{ $rfq->items->count() }} Produk ({{ $rfq->items->sum('quantity') }} unit)
+                    <span class="admin-badge admin-badge-muted" style="white-space: nowrap;">
+                      {{ $rfq->items->count() }} Produk <span class="text-muted fw-normal">({{ $rfq->items->sum('quantity') }} unit)</span>
                     </span>
                   </td>
-                  <td>
-                    <span class="text-secondary small">
-                      {{ $rfq->created_at ? $rfq->created_at->format('d M Y, H:i') : '-' }}
-                    </span>
+                  <td style="white-space: nowrap;">
+                    <div class="d-inline-flex align-items-center gap-1 text-secondary small" style="font-size: 0.82rem;">
+                      <i data-lucide="calendar" style="width: 13px; height: 13px; color: var(--color-text-muted);"></i>
+                      <span>{{ $rfq->created_at ? $rfq->created_at->format('d M Y, H:i') : '—' }}</span>
+                    </div>
                   </td>
-                  <td style="text-align: right;">
-                    <div class="d-inline-flex gap-2">
-                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-btn admin-btn-ghost admin-btn-sm" title="Lihat Detail">
-                        <i data-lucide="eye"></i> Detail
+                  <td style="text-align: right; padding-right: 20px; white-space: nowrap;">
+                    <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                      <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="admin-action-link view" title="Buka Detail">
+                        <i data-lucide="eye"></i>
                       </a>
-                      <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="m-0 form-delete">
+                      <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="admin-action-link" style="color: #16A34A;" title="Hubungi via WhatsApp">
+                        <x-brand-icon name="whatsapp" size="14" />
+                      </a>
+                      <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="d-inline form-delete m-0" data-name="{{ e($rfq->rfq_number) }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" title="Hapus Pengajuan">
+                        <button type="submit" class="admin-action-link delete" title="Hapus Pengajuan">
                           <i data-lucide="trash-2"></i>
                         </button>
                       </form>
@@ -217,7 +248,7 @@
           </table>
         </div>
 
-        {{-- Pagination — sama style dengan tabel produk --}}
+        {{-- Pagination --}}
         @if($rfqs->hasPages())
           <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--color-border);">
             <span style="font-size: 0.72rem; color: var(--color-text-muted); letter-spacing: 0.5px;">
@@ -246,15 +277,48 @@
         @endif
 
       @else
-        <div class="text-center py-5">
-          <i data-lucide="inbox" style="font-size: 3rem; color: var(--color-text-muted); opacity: 0.6;"></i>
-          <h4 class="h6 mt-3 mb-1" style="color: var(--color-text-main); font-weight: 700;">Belum Ada Pengajuan RFQ</h4>
-          <p class="small mb-0" style="color: var(--color-text-muted);">Pengajuan penawaran dari pelanggan akan otomatis tampil di tabel ini.</p>
-        </div>
+        <x-admin.empty-state
+          icon="inbox"
+          message="Pengajuan RFQ tidak ditemukan. Coba ubah filter atau kata kunci pencarian."
+          :action-url="route('admin.rfqs.index')"
+          action-label="Reset Filter"
+          action-class="admin-btn-ghost" />
       @endif
     @endif
   </div>
 
 </div>
 
+@endsection
+
+@section('admin_scripts')
+<script @nonce>
+  const sg = document.getElementById('search-group');
+  const si = document.getElementById('local-search-input');
+  if (sg && si) {
+    si.addEventListener('focus', () => sg.style.borderColor = 'var(--color-accent)');
+    si.addEventListener('blur',  () => sg.style.borderColor = 'var(--color-border)');
+  }
+
+  document.querySelectorAll('.form-delete').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = this.getAttribute('data-name');
+      Swal.fire({
+        title: 'Hapus Pengajuan RFQ?',
+        html: `Hapus pengajuan "<strong>${name}</strong>"? Tindakan ini tidak dapat dibatalkan.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'admin-btn admin-btn-danger mx-2',
+          cancelButton: 'admin-btn admin-btn-ghost mx-2'
+        },
+        buttonsStyling: false
+      }).then(r => { if (r.isConfirmed) this.submit(); });
+    });
+  });
+</script>
 @endsection

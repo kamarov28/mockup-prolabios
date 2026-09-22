@@ -24,9 +24,9 @@
   <div class="d-inline-flex gap-2 flex-wrap">
     <a href="{{ $rfq->whatsapp_url }}"
        target="_blank" rel="noopener" class="admin-btn admin-btn-primary d-inline-flex align-items-center gap-1" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
-      <x-brand-icon name="whatsapp" size="16" /> Hubungi Customer via WA
+      <x-brand-icon name="whatsapp" size="16" /> Hubungi via WhatsApp
     </a>
-    <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-ghost">
+    <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-outline">
       <i data-lucide="mail"></i> Kirim Email
     </a>
   </div>
@@ -51,10 +51,10 @@
           <table class="admin-table">
             <thead>
               <tr>
-                <th>No. Katalog</th>
+                <th style="width: 130px;">No. Katalog</th>
                 <th>Nama Produk</th>
                 <th>Estimasi Harga</th>
-                <th style="text-align: center;">Qty</th>
+                <th style="text-align: center; width: 90px;">Qty</th>
                 <th>Status Stok</th>
               </tr>
             </thead>
@@ -68,24 +68,18 @@
                   $isIndent = $item->product ? ($item->quantity > $stockVal) : true;
                 @endphp
                 <tr>
+                  <td class="cell-code">{{ $item->catalog_no ?: '—' }}</td>
                   <td>
-                    <span class="badge bg-light border text-secondary">
-                      {{ $item->catalog_no ?: '-' }}
-                    </span>
-                  </td>
-                  <td>
-                    <strong class="d-block" style="color: var(--color-text-main);">{{ $item->product_title }}</strong>
+                    <div class="cell-title">{{ $item->product_title }}</div>
                     @if($item->product)
                       <span class="text-secondary small">Kategori: {{ $item->product->category }}</span>
                     @endif
                   </td>
-                  <td>
-                    <span style="color: var(--color-text-main);">
-                      {{ $item->original_price > 0 ? 'Rp ' . number_format($item->original_price, 0, ',', '.') : 'Harga Katalog' }}
-                    </span>
+                  <td style="white-space: nowrap; font-family: var(--font-mono); font-size: 0.88rem; color: var(--color-text-main);">
+                    {{ $item->original_price > 0 ? 'Rp ' . number_format($item->original_price, 0, ',', '.') : 'Hubungi Kami' }}
                   </td>
-                  <td style="text-align: center;">
-                    <strong class="fs-6" style="color: var(--color-text-main);">{{ $item->quantity }}</strong> Unit
+                  <td style="text-align: center; white-space: nowrap;">
+                    <strong style="color: var(--color-text-main); font-size: 0.95rem;">{{ $item->quantity }}</strong> <span class="text-muted small">Unit</span>
                   </td>
                   <td>
                     @if(!$isIndent)
@@ -106,7 +100,7 @@
 
         <div class="p-3 border-top d-flex justify-content-between align-items-center" style="background-color: var(--color-surface-2); border-color: var(--color-border) !important;">
           <span class="text-secondary small">Estimasi Subtotal Katalog:</span>
-          <strong class="fs-5" style="color: var(--color-accent, #A6171C);">
+          <strong class="fs-5" style="color: var(--color-accent, #A6171C); font-family: var(--font-mono);">
             {{ $totalEst > 0 ? 'Rp ' . number_format($totalEst, 0, ',', '.') : 'Est. Penawaran' }}
           </strong>
         </div>
@@ -127,8 +121,8 @@
           @csrf
           @method('PUT')
           <div class="mb-3">
-            <label class="form-label text-secondary small">Status pengajuan</label>
-            <select name="status" class="form-select">
+            <label class="admin-form-label" for="rfq_status">Status Pengajuan</label>
+            <select name="status" id="rfq_status" class="form-select">
               @foreach(\App\Models\Rfq::statusOptions() as $value => $label)
                 <option value="{{ $value }}" @selected(old('status', $rfq->status ?: 'new') === $value)>{{ $label }}</option>
               @endforeach
@@ -138,8 +132,8 @@
             @enderror
           </div>
           <div class="mb-3">
-            <label class="form-label text-secondary small">Catatan internal (tidak terlihat customer)</label>
-            <textarea name="admin_notes" rows="4" class="form-control" placeholder="Mis. sudah telepon 24/08, tunggu PO, dll.">{{ old('admin_notes', $rfq->admin_notes) }}</textarea>
+            <label class="admin-form-label" for="admin_notes">Catatan Internal (Privat)</label>
+            <textarea name="admin_notes" id="admin_notes" rows="4" class="form-control" placeholder="Mis. sudah telepon 24/08, tunggu PO, dll.">{{ old('admin_notes', $rfq->admin_notes) }}</textarea>
             @error('admin_notes')
               <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
@@ -167,26 +161,26 @@
 
         <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Nama Instansi / Perusahaan:</span>
-          <span class="fw-medium" style="color: var(--color-text-main);">{{ $rfq->company_name }}</span>
+          <span class="fw-medium" style="color: var(--color-text-main);">{{ $rfq->company_name ?: '—' }}</span>
         </div>
 
         <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Email:</span>
           <a href="mailto:{{ $rfq->email }}" class="text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-text-main);">
-            <i data-lucide="mail" class="text-secondary"></i> {{ $rfq->email }}
+            <i data-lucide="mail" class="text-secondary" style="width: 14px; height: 14px;"></i> {{ $rfq->email }}
           </a>
         </div>
 
-        <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
+        <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Nomor WhatsApp:</span>
-          <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-success text-decoration-none fw-semibold d-inline-flex align-items-center gap-1">
-            <x-brand-icon name="whatsapp" size="16" /> {{ $rfq->phone_wa }}
+          <a href="{{ $rfq->whatsapp_url }}" target="_blank" rel="noopener" class="text-decoration-none fw-semibold d-inline-flex align-items-center gap-1" style="color: #16A34A; font-family: var(--font-mono);">
+            <x-brand-icon name="whatsapp" size="15" /> {{ $rfq->phone_wa }}
           </a>
         </div>
 
-        <div class="mb-3 pb-3 border-bottom border-secondary border-opacity-10">
+        <div class="mb-3 pb-3 border-bottom" style="border-color: var(--color-border) !important;">
           <span class="text-secondary small d-block mb-1">Tanggal Masuk:</span>
-          <span class="fw-medium text-dark">{{ $rfq->created_at ? $rfq->created_at->format('d F Y, H:i') : '-' }} WIB</span>
+          <span class="fw-medium" style="color: var(--color-text-main);">{{ $rfq->created_at ? $rfq->created_at->format('d F Y, H:i') : '—' }} WIB</span>
         </div>
 
         <div>
@@ -200,7 +194,7 @@
 
     <div class="admin-card">
       <div class="admin-card-body">
-        <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="form-delete">
+        <form action="{{ route('admin.rfqs.destroy', $rfq->id) }}" method="POST" class="form-delete m-0" data-name="{{ e($rfq->rfq_number) }}">
           @csrf
           @method('DELETE')
           <button type="submit" class="admin-btn admin-btn-danger w-100 justify-content-center">
@@ -213,4 +207,29 @@
 
 </div>
 
+@endsection
+
+@section('admin_scripts')
+<script @nonce>
+  document.querySelectorAll('.form-delete').forEach(form => {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = this.getAttribute('data-name');
+      Swal.fire({
+        title: 'Hapus Pengajuan RFQ?',
+        html: `Hapus pengajuan "<strong>${name}</strong>"? Tindakan ini tidak dapat dibatalkan.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'admin-btn admin-btn-danger mx-2',
+          cancelButton: 'admin-btn admin-btn-ghost mx-2'
+        },
+        buttonsStyling: false
+      }).then(r => { if (r.isConfirmed) this.submit(); });
+    });
+  });
+</script>
 @endsection
