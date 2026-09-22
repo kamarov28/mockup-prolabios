@@ -71,10 +71,10 @@
         </div>
       </div>
 
-      <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date) ? 'show' : '' }} mt-3" id="advancedProductFilterBlock">
+      <div class="collapse {{ ($sort !== 'newest' || $start_date || $end_date || $featured) ? 'show' : '' }} mt-3" id="advancedProductFilterBlock">
         <div style="border: 1px solid var(--color-border); border-radius: 6px; padding: 16px;">
           <div class="row g-3 align-items-end">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label class="admin-form-label" for="sort">Urutkan</label>
               <select name="sort" id="sort" class="form-select">
                 <option value="newest"    {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Dibuat</option>
@@ -84,10 +84,17 @@
               </select>
             </div>
             <div class="col-md-3">
+              <label class="admin-form-label" for="featured">Status Unggulan</label>
+              <select name="featured" id="featured" class="form-select">
+                <option value="">Semua Status</option>
+                <option value="1" {{ ($featured === '1' || $featured === 'true') ? 'selected' : '' }}>Hanya Produk Unggulan ⭐</option>
+              </select>
+            </div>
+            <div class="col-md-2">
               <label class="admin-form-label" for="start_date">Dari Tanggal</label>
               <input type="date" name="start_date" id="start_date" class="form-control" value="{{ $start_date }}">
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <label class="admin-form-label" for="end_date">Sampai Tanggal</label>
               <input type="date" name="end_date" id="end_date" class="form-control" value="{{ $end_date }}">
             </div>
@@ -129,7 +136,14 @@
                 </td>
                 <td class="cell-code">{{ $p['catalog'] ?: '—' }}</td>
                 <td>
-                  <div class="cell-title">{{ $p['title'] }}</div>
+                  <div class="cell-title d-flex align-items-center gap-2 flex-wrap">
+                    <span>{{ $p['title'] }}</span>
+                    @if(!empty($p['is_featured']))
+                      <span class="badge border-0" style="background-color: #FEF3C7; color: #92400E; font-size: 0.68rem; padding: 2px 6px; font-weight: 600;" title="Produk Unggulan di Beranda">
+                        <i data-lucide="star" style="width: 11px; height: 11px; display: inline-block; vertical-align: -1px; fill: #D97706; color: #D97706;"></i> Unggulan
+                      </span>
+                    @endif
+                  </div>
                 </td>
                 <td style="white-space: nowrap; font-weight: 600; color: var(--color-accent);">
                   {{ ($p['price'] ?? 0) > 0 ? 'Rp ' . number_format($p['price'], 0, ',', '.') : 'Hubungi Kami' }}
@@ -141,23 +155,31 @@
                 </td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['category'] ?? '') }}</span></td>
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>
-                <td style="text-align: right; white-space: nowrap;">
-                  <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat">
-                    <i data-lucide="eye"></i>
-                  </a>
-                  <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ $p['id'] }}" title="Salin link">
-                    <i data-lucide="clipboard"></i>
-                  </button>
-                  <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit">
-                    <i data-lucide="file-edit"></i> Edit
-                  </a>
-                  <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete" data-name="{{ e($p['title'] ?? '') }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="admin-action-link delete" title="Hapus">
-                      <i data-lucide="trash-2"></i>
+                <td style="text-align: right; padding-right: 20px; white-space: nowrap;">
+                  <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                    <form action="{{ route('admin.products.toggle-featured', ['id' => $p['id']]) }}" method="POST" class="d-inline m-0">
+                      @csrf
+                      <button type="submit" class="admin-action-link" style="color: {{ !empty($p['is_featured']) ? '#D97706' : 'var(--color-text-muted)' }};" title="{{ !empty($p['is_featured']) ? 'Hapus dari Produk Unggulan' : 'Jadikan Produk Unggulan Beranda' }}">
+                        <i data-lucide="star" style="{{ !empty($p['is_featured']) ? 'fill: #D97706;' : '' }}"></i>
+                      </button>
+                    </form>
+                    <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat di Web">
+                      <i data-lucide="eye"></i>
+                    </a>
+                    <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ $p['id'] }}" title="Salin link">
+                      <i data-lucide="clipboard"></i>
                     </button>
-                  </form>
+                    <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit Produk">
+                      <i data-lucide="file-edit"></i>
+                    </a>
+                    <form action="{{ route('admin.products.destroy', ['id' => $p['id']]) }}" method="POST" class="d-inline form-delete m-0" data-name="{{ e($p['title'] ?? '') }}">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="admin-action-link delete" title="Hapus Produk">
+                        <i data-lucide="trash-2"></i>
+                      </button>
+                    </form>
+                  </div>
                 </td>
               </tr>
             @endforeach

@@ -41,10 +41,6 @@ trait ResolvesProducts
 
     private function productLookupService(): ProductService
     {
-        if (isset($this->products) && $this->products instanceof ProductService) {
-            return $this->products;
-        }
-
-        return app(ProductService::class);
+        return isset($this->products) ? $this->products : app(ProductService::class);
     }
 }

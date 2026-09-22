@@ -28,6 +28,7 @@ use Illuminate\Support\Str;
  * @property array<string>|null $gallery_images
  * @property float $price
  * @property int $stock
+ * @property bool $is_featured
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -47,6 +48,7 @@ class Product extends Model
         'gallery_images',
         'price',
         'stock',
+        'is_featured',
     ];
 
     protected function casts(): array
@@ -54,6 +56,7 @@ class Product extends Model
         return [
             'price' => 'float',
             'stock' => 'integer',
+            'is_featured' => 'boolean',
             'gallery_images' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
@@ -142,6 +145,11 @@ class Product extends Model
     // ----------------------------------------------------
     // Query Scopes
     // ----------------------------------------------------
+    public function scopeFeatured(Builder $query): Builder
+    {
+        return $query->where('is_featured', true);
+    }
+
     public function scopeInStock(Builder $query): Builder
     {
         return $query->where('stock', '>', 0);

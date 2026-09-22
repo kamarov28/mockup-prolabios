@@ -103,6 +103,20 @@
           </div>
         </div>
         <div class="col-12">
+          <div class="p-3 rounded" style="background: #F8FAFC; border: 1px solid var(--color-border);">
+            <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
+              <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $product['is_featured'] ?? false) ? 'checked' : '' }} style="cursor: pointer; width: 2.25rem; height: 1.25rem;">
+              <div>
+                <label class="form-check-label fw-bold mb-0" for="is_featured" style="cursor: pointer; color: var(--color-text-main); font-size: 0.88rem;">
+                  <i data-lucide="star" class="me-1" style="width: 15px; height: 15px; color: #D97706; fill: #D97706;"></i>
+                  Tampilkan sebagai Produk Unggulan di Beranda
+                </label>
+                <div class="text-muted small" style="font-size: 0.78rem;">Produk unggulan akan diprioritaskan tampil pada bagian katalog di halaman utama web.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
           <div class="admin-form-group mb-0">
             <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
               <label class="admin-form-label mb-0">

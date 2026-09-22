@@ -43,6 +43,7 @@ class AdminProductController extends Controller
         'image',
         'price',
         'stock',
+        'is_featured',
         'created_at',
     ];
 
@@ -86,6 +87,11 @@ class AdminProductController extends Controller
             $query->whereDate('created_at', '<=', $endDate);
         }
 
+        $featured = $request->input('featured');
+        if ($featured === '1' || $featured === 'true') {
+            $query->where('is_featured', true);
+        }
+
         $sort = $request->input('sort', 'newest');
         match ($sort) {
             'oldest' => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
@@ -113,6 +119,7 @@ class AdminProductController extends Controller
             'sort' => $sort,
             'start_date' => $startDate,
             'end_date' => $endDate,
+            'featured' => $featured,
             'currentPage' => $currentPage,
             'totalPages' => $totalPages,
         ]);
@@ -136,6 +143,7 @@ class AdminProductController extends Controller
             'image' => '',
             'gallery_images' => [],
             'description' => '',
+            'is_featured' => false,
         ];
 
         return view('admin.products.form', compact('sectors', 'product', 'categories', 'principals'));
@@ -169,6 +177,7 @@ class AdminProductController extends Controller
             'gallery_images' => $galleryImages,
             'price' => (float) $request->input('price', 0),
             'stock' => (int) $request->input('stock', 0),
+            'is_featured' => (bool) $request->input('is_featured', false),
         ];
 
         $createdProduct = $this->products->addProduct($product);
@@ -242,6 +251,7 @@ class AdminProductController extends Controller
             'gallery_images' => $galleryImages,
             'price' => (float) $request->input('price', 0),
             'stock' => (int) $request->input('stock', 0),
+            'is_featured' => (bool) $request->input('is_featured', false),
         ];
 
         $this->products->updateProductById($id, $updatedProduct);
@@ -253,6 +263,30 @@ class AdminProductController extends Controller
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Produk berhasil diperbarui!');
+    }
+
+    public function toggleFeatured(int $id)
+    {
+        $status = $this->products->toggleFeatured($id);
+        if ($status === null) {
+            return redirect()->back()->with('error', 'Produk tidak ditemukan.');
+        }
+
+        $msg = $status ? 'Produk berhasil ditandai sebagai produk unggulan!' : 'Status produk unggulan berhasil dinonaktifkan.';
+
+        AuditLogger::log('product.toggle_featured', 'Product', $id, [
+            'is_featured' => $status,
+        ]);
+
+        if (request()->wantsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'is_featured' => $status,
+                'message' => $msg,
+            ]);
+        }
+
+        return redirect()->back()->with('success', $msg);
     }
 
     public function destroy(int $id)

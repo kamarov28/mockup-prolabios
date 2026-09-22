@@ -32,6 +32,7 @@ class ProductService
             'image',
             'price',
             'stock',
+            'is_featured',
             'created_at',
             'updated_at',
         ];
@@ -367,6 +368,62 @@ class ProductService
         return $product;
     }
 
+    public function getFeaturedProducts(int $limit = 4): Collection
+    {
+        $v = self::getProductsCacheVersion();
+        $cacheKey = "featured_products_v2_{$v}_{$limit}";
+
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached)) {
+            return $this->hydrateProducts($cached);
+        }
+
+        $featured = Product::query()
+            ->with('principal')
+            ->select($this->listColumns())
+            ->where('is_featured', true)
+            ->orderByDesc('id')
+            ->limit($limit)
+            ->get();
+
+        if ($featured->count() < $limit) {
+            $needed = $limit - $featured->count();
+            $excludeIds = $featured->pluck('id')->all();
+
+            $fallback = Product::query()
+                ->with('principal')
+                ->select($this->listColumns())
+                ->when(! empty($excludeIds), fn ($q) => $q->whereNotIn('id', $excludeIds))
+                ->orderByDesc('id')
+                ->limit($needed)
+                ->get();
+
+            $featured = $featured->concat($fallback);
+        }
+
+        Cache::put(
+            $cacheKey,
+            $featured->map(fn (Product $p) => $p->getAttributes())->all(),
+            300
+        );
+
+        return $featured;
+    }
+
+    public function toggleFeatured(int $id): ?bool
+    {
+        $product = Product::find($id);
+        if (! $product) {
+            return null;
+        }
+
+        $newVal = ! $product->is_featured;
+        $product->update(['is_featured' => $newVal]);
+        $this->clearProductsCache();
+
+        return $newVal;
+    }
+
     public function addProduct(array $product): ?Product
     {
         $created = Product::create([
@@ -382,6 +439,7 @@ class ProductService
             'gallery_images' => ! empty($product['gallery_images']) ? array_values($product['gallery_images']) : null,
             'price' => $product['price'] ?? 0,
             'stock' => $product['stock'] ?? 0,
+            'is_featured' => ! empty($product['is_featured']),
         ]);
 
         $created->syncSectorsFromCsv($created->sector);
@@ -412,6 +470,7 @@ class ProductService
             'gallery_images' => ! empty($updatedProduct['gallery_images']) ? array_values($updatedProduct['gallery_images']) : null,
             'price' => $updatedProduct['price'] ?? 0,
             'stock' => $updatedProduct['stock'] ?? 0,
+            'is_featured' => ! empty($updatedProduct['is_featured']),
         ]);
 
         $product->syncSectorsFromCsv($product->sector);

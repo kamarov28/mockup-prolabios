@@ -79,6 +79,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
     Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
+    Route::post('/products/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
     Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
 
     Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');

@@ -101,6 +101,14 @@
 .catalog-precision-table tbody tr:hover td {
   background-color: #F8FAFC !important;
 }
+.catalog-precision-table {
+  --bs-table-hover-bg: transparent;
+}
+.catalog-precision-table tbody tr:hover > * {
+  --bs-table-bg-state: transparent;
+  box-shadow: none !important;
+  background-color: #F8FAFC !important;
+}
 .catalog-table-title {
   font-family: var(--font-display);
   font-size: 0.94rem;
@@ -680,6 +688,14 @@
 
 .custom-table tr:hover td {
   background-color: rgba(241, 192, 69, 0.08);
+}
+.custom-table {
+  --bs-table-hover-bg: transparent;
+}
+.custom-table tr:hover > * {
+  --bs-table-bg-state: transparent;
+  box-shadow: none !important;
+  background-color: rgba(241, 192, 69, 0.08) !important;
 }
 
 .detail-product-img {

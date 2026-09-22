@@ -79,7 +79,7 @@
               <!-- 2. High-Density Laboratory Catalog Table -->
               <div class="catalog-table-panel d-none">
                 <div class="table-responsive card border-0 shadow-none" style="border: var(--nb-border) !important; border-radius: var(--nb-radius-lg); overflow: hidden; background: var(--nb-card);">
-                  <table class="table table-hover align-middle mb-0 catalog-precision-table">
+                  <table class="table align-middle mb-0 catalog-precision-table">
                     <thead>
                       <tr>
                         <th scope="col" style="width: 130px;" class="table-col-catalog">KODE CAT.</th>

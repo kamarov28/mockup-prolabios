@@ -30,6 +30,10 @@ class UpdateProductRequest extends FormRequest
             $files = array_filter((array) $this->file('gallery_files'), fn ($f) => $f && $f->isValid());
             $this->files->set('gallery_files', $files);
         }
+
+        $this->merge([
+            'is_featured' => $this->boolean('is_featured'),
+        ]);
     }
 
     public function rules(): array
@@ -48,6 +52,7 @@ class UpdateProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'price' => ['nullable', 'numeric', 'min:0'],
             'stock' => ['nullable', 'integer', 'min:0'],
+            'is_featured' => ['nullable', 'boolean'],
             'image_file' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'image_url' => ['nullable', 'string', 'max:2000', 'regex:/^(\/|https?:\/\/)/i'],
             'gallery_files' => ['nullable', 'array', 'max:10'],

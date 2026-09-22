@@ -18,7 +18,7 @@ class PageController extends Controller
     {
         $homeData = $homepage->getHomepageData();
         $recentPosts = $posts->getPosts([], 3);
-        $featuredProducts = $products->getProducts([], 4);
+        $featuredProducts = $products->getFeaturedProducts(4);
 
         return view('welcome', compact('homeData', 'recentPosts', 'featuredProducts'));
     }
