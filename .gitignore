@@ -39,3 +39,6 @@ Thumbs.db
 *.xlsx
 *.csv
 .worktrees/
+*.zip
+CLAUDE-SECURITY-*/
+.qodo/

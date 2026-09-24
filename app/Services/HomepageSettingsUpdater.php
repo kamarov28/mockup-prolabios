@@ -94,7 +94,7 @@ class HomepageSettingsUpdater
             'whatsapp_default_message' => 'nullable|string|max:1000',
             'contact_email' => 'nullable|email|max:255',
             'contact_address' => 'nullable|string|max:1000',
-            'catalog_pdf_url' => 'nullable|string|max:2000',
+            'catalog_pdf_url' => ['nullable', 'string', 'max:2000', 'regex:/^https?:\/\/.+/i'],
             'google_maps_embed_url' => 'nullable|string|max:3000',
         ]);
     }
