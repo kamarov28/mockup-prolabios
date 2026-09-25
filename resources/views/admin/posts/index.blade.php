@@ -172,6 +172,9 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width: 40px; text-align: center;">
+                <input type="checkbox" class="form-check-input select-all-checkbox" style="cursor: pointer;" title="Pilih Semua">
+              </th>
               <th style="width: 76px; text-align: center;">Cover</th>
               <th>Judul & Info Artikel</th>
               <th style="width: 140px;">Kategori</th>
@@ -209,6 +212,9 @@
                 }
               @endphp
               <tr>
+                <td style="text-align: center;">
+                  <input type="checkbox" value="{{ $post['id'] }}" class="form-check-input row-checkbox" style="cursor: pointer;">
+                </td>
                 {{-- Cover Thumbnail --}}
                 <td style="text-align: center; vertical-align: middle;">
                   <div class="admin-post-thumb mx-auto">
@@ -364,6 +370,8 @@
   </div>
 
 </div>
+
+<x-admin.bulk-action-bar :route="route('admin.posts.bulk-destroy')" label="artikel" />
 
 @endsection
 

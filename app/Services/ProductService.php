@@ -494,6 +494,20 @@ class ProductService
         return true;
     }
 
+    public function deleteProductsByIds(array $ids): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $count = Product::whereIn('id', $ids)->delete();
+
+        $this->clearProductsCache();
+        Product::clearCategoriesCache();
+
+        return $count;
+    }
+
     public function upsertProducts(array $products): bool
     {
         if (empty($products)) {

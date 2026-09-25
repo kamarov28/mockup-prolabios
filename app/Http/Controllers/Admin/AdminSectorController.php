@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateSectorRequest;
 use App\Services\AuditLogger;
 use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminSectorController extends Controller
@@ -131,5 +132,37 @@ class AdminSectorController extends Controller
         ]);
 
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil dihapus!');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'string',
+        ]);
+
+        $ids = $validated['ids'];
+
+        $usedSectorIds = DB::table('product_sector')->whereIn('sector_id', $ids)->pluck('sector_id')->unique();
+        if ($usedSectorIds->isNotEmpty()) {
+            $usedNames = $usedSectorIds->map(fn ($sid) => $this->sectors->getSectorById($sid)['name'] ?? $sid)->implode(', ');
+
+            return redirect()->route('admin.sectors')
+                ->with('error', "Sektor berikut masih terhubung dengan produk katalog: {$usedNames}. Silakan ubah produk terkait terlebih dahulu.");
+        }
+
+        $count = 0;
+        foreach ($ids as $id) {
+            if ($this->sectors->deleteSector($id)) {
+                $count++;
+            }
+        }
+
+        AuditLogger::log('sector.bulk_delete', 'Sector', null, [
+            'count' => $count,
+            'ids' => $ids,
+        ]);
+
+        return redirect()->route('admin.sectors')->with('success', "{$count} sektor berhasil dihapus!");
     }
 }

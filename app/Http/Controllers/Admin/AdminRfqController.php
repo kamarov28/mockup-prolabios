@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateRfqRequest;
 use App\Models\Rfq;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -329,5 +330,29 @@ class AdminRfqController extends Controller
 
         return redirect()->route('admin.rfqs.index')
             ->with('success', 'Data pengajuan RFQ berhasil dihapus.');
+    }
+
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:rfqs,id',
+        ]);
+
+        $ids = $validated['ids'];
+        $count = 0;
+
+        DB::transaction(function () use ($ids, &$count) {
+            DB::table('rfq_items')->whereIn('rfq_id', $ids)->delete();
+            $count = Rfq::whereIn('id', $ids)->delete();
+        });
+
+        AuditLogger::log('rfq.bulk_delete', 'Rfq', null, [
+            'count' => $count,
+            'ids' => $ids,
+        ]);
+
+        return redirect()->route('admin.rfqs.index')
+            ->with('success', "{$count} pengajuan RFQ berhasil dihapus.");
     }
 }

@@ -45,6 +45,9 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width: 40px; text-align: center;">
+                <input type="checkbox" class="form-check-input select-all-checkbox" style="cursor: pointer;" title="Pilih Semua">
+              </th>
               <th style="width: 50px;">No</th>
               <th>Nama Prinsipal / Brand</th>
               <th>Negara / Alamat</th>
@@ -64,6 +67,9 @@
                 }
               @endphp
               <tr>
+                <td style="text-align: center;">
+                  <input type="checkbox" value="{{ $p->id }}" class="form-check-input row-checkbox" style="cursor: pointer;">
+                </td>
                 <td>{{ $index + 1 }}</td>
                 <td>
                   <strong style="color: var(--color-text-main);">{{ $p->name }}</strong>
@@ -113,6 +119,9 @@
   </div>
 
 </div>
+
+<x-admin.bulk-action-bar :route="route('admin.principals.bulk-destroy')" label="prinsipal" />
+
 @endsection
 
 @section('admin_scripts')

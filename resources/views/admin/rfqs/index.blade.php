@@ -177,6 +177,9 @@
           <table class="admin-table">
             <thead>
               <tr>
+                <th style="width: 40px; text-align: center;">
+                  <input type="checkbox" class="form-check-input select-all-checkbox" style="cursor: pointer;" title="Pilih Semua">
+                </th>
                 <th style="width: 140px;">Nomor RFQ</th>
                 <th style="width: 130px;">Status</th>
                 <th>Pemohon & Instansi</th>
@@ -189,6 +192,9 @@
             <tbody>
               @foreach($rfqs as $rfq)
                 <tr>
+                  <td style="text-align: center;">
+                    <input type="checkbox" value="{{ $rfq->id }}" class="form-check-input row-checkbox" style="cursor: pointer;">
+                  </td>
                   <td class="cell-code" style="white-space: nowrap;">
                     <a href="{{ route('admin.rfqs.show', $rfq->id) }}" class="fw-bold text-decoration-none" style="color: var(--color-accent, #A6171C);">
                       {{ $rfq->rfq_number }}
@@ -288,6 +294,8 @@
   </div>
 
 </div>
+
+<x-admin.bulk-action-bar :route="route('admin.rfqs.bulk-destroy')" label="pengajuan RFQ" />
 
 @endsection
 

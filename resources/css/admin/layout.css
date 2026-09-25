@@ -50,13 +50,11 @@
   max-width: 100%;
 }
 .sidebar-brand img {
-  height: 38px;
+  height: 36px;
   max-width: 100%;
   width: auto;
   object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  filter: contrast(1.04) brightness(0.98);
+  display: block;
 }
 .sidebar-brand .admin-badge {
   font-family: var(--font-mono);

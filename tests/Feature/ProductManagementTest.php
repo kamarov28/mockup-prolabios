@@ -189,4 +189,39 @@ class ProductManagementTest extends TestCase
         $this->assertIsArray($product->gallery_images);
         $this->assertCount(2, $product->gallery_images);
     }
+
+    public function test_admin_can_bulk_delete_products(): void
+    {
+        $p1 = Product::create([
+            'title' => 'Bulk Product 1',
+            'catalog' => 'BP-01',
+            'category' => 'microbiology',
+            'price' => 100000,
+            'stock' => 5,
+        ]);
+        $p2 = Product::create([
+            'title' => 'Bulk Product 2',
+            'catalog' => 'BP-02',
+            'category' => 'microbiology',
+            'price' => 200000,
+            'stock' => 10,
+        ]);
+        $p3 = Product::create([
+            'title' => 'Keep Product 3',
+            'catalog' => 'KP-03',
+            'category' => 'microbiology',
+            'price' => 300000,
+            'stock' => 15,
+        ]);
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.bulk-destroy'), [
+            'ids' => [$p1->id, $p2->id],
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('admin.products'));
+        $this->assertDatabaseMissing('products', ['id' => $p1->id]);
+        $this->assertDatabaseMissing('products', ['id' => $p2->id]);
+        $this->assertDatabaseHas('products', ['id' => $p3->id]);
+    }
 }

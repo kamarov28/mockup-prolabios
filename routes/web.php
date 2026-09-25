@@ -77,6 +77,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/products/import/template', [AdminProductController::class, 'downloadImportTemplate'])->name('admin.products.import.template');
     Route::post('/products/import', [AdminProductController::class, 'importExcel'])->name('admin.products.import');
     Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+    Route::post('/products/bulk-delete', [AdminProductController::class, 'bulkDestroy'])->name('admin.products.bulk-destroy');
     Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
     Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
     Route::post('/products/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
@@ -94,6 +95,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/posts', [AdminPostController::class, 'index'])->name('admin.posts');
     Route::get('/posts/create', [AdminPostController::class, 'create'])->name('admin.posts.create');
     Route::post('/posts', [AdminPostController::class, 'store'])->name('admin.posts.store');
+    Route::post('/posts/bulk-delete', [AdminPostController::class, 'bulkDestroy'])->name('admin.posts.bulk-destroy');
     Route::get('/posts/{slug}/edit', [AdminPostController::class, 'edit'])->name('admin.posts.edit');
     Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'update'])->name('admin.posts.update');
     Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
@@ -101,6 +103,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/sectors', [AdminSectorController::class, 'index'])->name('admin.sectors');
     Route::get('/sectors/create', [AdminSectorController::class, 'create'])->name('admin.sectors.create');
     Route::post('/sectors', [AdminSectorController::class, 'store'])->name('admin.sectors.store');
+    Route::post('/sectors/bulk-delete', [AdminSectorController::class, 'bulkDestroy'])->name('admin.sectors.bulk-destroy');
     Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'edit'])->name('admin.sectors.edit');
     Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'update'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'destroy'])->name('admin.sectors.destroy');
@@ -109,12 +112,14 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/principals/list', [AdminPrincipalController::class, 'index'])->name('admin.principals');
     Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
     Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
+    Route::post('/principals/bulk-delete', [AdminPrincipalController::class, 'bulkDestroy'])->name('admin.principals.bulk-destroy');
     Route::get('/principals/{id}/edit', [AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
     Route::match(['post', 'put'], '/principals/{id}', [AdminPrincipalController::class, 'update'])->name('admin.principals.update');
     Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
 
     Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
     Route::get('/rfqs/export', [AdminRfqController::class, 'export'])->name('admin.rfqs.export');
+    Route::post('/rfqs/bulk-delete', [AdminRfqController::class, 'bulkDestroy'])->name('admin.rfqs.bulk-destroy');
     Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
     Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
     Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');

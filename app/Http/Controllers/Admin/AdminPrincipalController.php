@@ -122,4 +122,31 @@ class AdminPrincipalController extends Controller
 
         return redirect()->route('admin.principals')->with('success', 'Prinsipal berhasil dihapus!');
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:principals,id',
+        ]);
+
+        $ids = $validated['ids'];
+
+        $used = Principal::whereIn('id', $ids)->has('products')->pluck('name');
+        if ($used->isNotEmpty()) {
+            return redirect()->route('admin.principals')
+                ->with('error', "Prinsipal berikut masih terhubung dengan produk katalog: {$used->implode(', ')}. Silakan ubah produk terkait terlebih dahulu.");
+        }
+
+        $count = Principal::whereIn('id', $ids)->delete();
+
+        Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+
+        AuditLogger::log('principal.bulk_delete', 'Principal', null, [
+            'count' => $count,
+            'ids' => $ids,
+        ]);
+
+        return redirect()->route('admin.principals')->with('success', "{$count} prinsipal berhasil dihapus!");
+    }
 }

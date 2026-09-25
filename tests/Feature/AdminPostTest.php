@@ -90,4 +90,39 @@ class AdminPostTest extends TestCase
         $resStatus->assertSee('Seminar Kalibrasi Alat');
         $resStatus->assertDontSee('Berita Utama Prolabios');
     }
+
+    public function test_admin_can_bulk_delete_posts(): void
+    {
+        $post1 = Post::create([
+            'title' => 'Bulk Post 1',
+            'slug' => 'bulk-post-1',
+            'category' => 'Berita',
+            'status' => 'online',
+            'date' => now(),
+        ]);
+        $post2 = Post::create([
+            'title' => 'Bulk Post 2',
+            'slug' => 'bulk-post-2',
+            'category' => 'Berita',
+            'status' => 'online',
+            'date' => now(),
+        ]);
+        $post3 = Post::create([
+            'title' => 'Keep Post 3',
+            'slug' => 'keep-post-3',
+            'category' => 'Berita',
+            'status' => 'online',
+            'date' => now(),
+        ]);
+
+        $response = $this->actingAs($this->adminUser)->post(route('admin.posts.bulk-destroy'), [
+            'ids' => [$post1->id, $post2->id],
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('admin.posts'));
+        $this->assertDatabaseMissing('posts', ['id' => $post1->id]);
+        $this->assertDatabaseMissing('posts', ['id' => $post2->id]);
+        $this->assertDatabaseHas('posts', ['id' => $post3->id]);
+    }
 }

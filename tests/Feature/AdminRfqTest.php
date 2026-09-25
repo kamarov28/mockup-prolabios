@@ -146,4 +146,32 @@ class AdminRfqTest extends TestCase
         $response->assertOk();
         $response->assertHeader('content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
+
+    public function test_admin_can_bulk_delete_rfqs(): void
+    {
+        $rfq2 = Rfq::create([
+            'rfq_number' => 'RFQ-202608-ADMINTEST-2',
+            'name' => 'Dr. Siti',
+            'email' => 'siti@example.com',
+            'company_name' => 'PT. Sehat Selalu',
+            'phone_wa' => '081234567899',
+            'status' => 'new',
+        ]);
+        RfqItem::create([
+            'rfq_id' => $rfq2->id,
+            'product_title' => 'Centrifuge Test',
+            'quantity' => 1,
+        ]);
+
+        $response = $this->actingAs($this->adminUser)->post(route('admin.rfqs.bulk-destroy'), [
+            'ids' => [$this->rfq->id, $rfq2->id],
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $response->assertRedirect(route('admin.rfqs.index'));
+        $this->assertSoftDeleted('rfqs', ['id' => $this->rfq->id]);
+        $this->assertSoftDeleted('rfqs', ['id' => $rfq2->id]);
+        $this->assertDatabaseMissing('rfq_items', ['rfq_id' => $this->rfq->id]);
+        $this->assertDatabaseMissing('rfq_items', ['rfq_id' => $rfq2->id]);
+    }
 }

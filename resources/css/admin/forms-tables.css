@@ -31,6 +31,9 @@
 .admin-table tbody tr:hover {
   background-color: var(--color-surface-subtle);
 }
+.admin-table tbody tr.table-active td {
+  background-color: #FEF2F2 !important;
+}
 .admin-table tbody td {
   padding: 14px 20px;
   vertical-align: middle;
@@ -127,6 +130,35 @@
   box-shadow: var(--focus-ring) !important;
   background: #FFFFFF !important;
   color: var(--color-text-main) !important;
+}
+
+/* ── Form Check / Checkboxes (Modern Flat Precision) ── */
+.form-check-input {
+  width: 1.15rem !important;
+  height: 1.15rem !important;
+  margin-top: 0 !important;
+  vertical-align: middle;
+  background-color: #FFFFFF !important;
+  border: 1.75px solid #9CA3AF !important;
+  border-radius: 4px !important;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease !important;
+  box-shadow: none !important;
+}
+
+.form-check-input:hover {
+  border-color: #4B5563 !important;
+}
+
+.form-check-input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(166, 23, 28, 0.15) !important;
+}
+
+.form-check-input:checked,
+.form-check-input:indeterminate {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
 }
 
 /* ── Input Group Styling (Modern Flat) ── */

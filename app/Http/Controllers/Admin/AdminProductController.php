@@ -305,6 +305,23 @@ class AdminProductController extends Controller
         return redirect()->route('admin.products')->with('success', 'Produk berhasil dihapus!');
     }
 
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:products,id',
+        ]);
+
+        $count = $this->products->deleteProductsByIds($validated['ids']);
+
+        AuditLogger::log('product.bulk_delete', 'Product', null, [
+            'count' => $count,
+            'ids' => $validated['ids'],
+        ]);
+
+        return redirect()->route('admin.products')->with('success', "{$count} produk berhasil dihapus!");
+    }
+
     public function createBulk()
     {
         $sectors = $this->sectors->getSectors();

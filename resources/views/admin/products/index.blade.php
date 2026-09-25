@@ -115,6 +115,9 @@
         <table class="admin-table">
           <thead>
             <tr>
+              <th style="width: 40px; text-align: center;">
+                <input type="checkbox" class="form-check-input select-all-checkbox" style="cursor: pointer;" title="Pilih Semua">
+              </th>
               <th style="width: 52px;"></th>
               <th>Katalog</th>
               <th>Nama Produk</th>
@@ -128,6 +131,9 @@
           <tbody>
             @foreach($products as $p)
               <tr>
+                <td style="text-align: center;">
+                  <input type="checkbox" value="{{ $p['id'] }}" class="form-check-input row-checkbox" style="cursor: pointer;">
+                </td>
                 {{-- Icon only: no <img> network requests (was blocking navigate-away) --}}
                 <td>
                   <div style="width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px; background: #F8FAFC; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted);">
@@ -242,6 +248,8 @@
   </div>
 
 </div>
+
+<x-admin.bulk-action-bar :route="route('admin.products.bulk-destroy')" label="produk" />
 
 {{-- Modal Import Excel / Spreadsheet --}}
 <div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel" aria-hidden="true">

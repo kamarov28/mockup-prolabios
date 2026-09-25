@@ -50,6 +50,9 @@
         <table class="admin-table" id="sectors-table">
           <thead>
             <tr>
+              <th style="width: 40px; text-align: center;">
+                <input type="checkbox" class="form-check-input select-all-checkbox" style="cursor: pointer;" title="Pilih Semua">
+              </th>
               <th style="width: 76px; text-align: center;">Cover</th>
               <th style="width: 180px;">ID Sektor</th>
               <th>Nama Sektor</th>
@@ -72,6 +75,9 @@
                 $searchData = strtolower($sec['id'] . ' ' . $sec['name'] . ' ' . $descText);
               @endphp
               <tr class="sector-row" data-search="{{ e($searchData) }}">
+                <td style="text-align: center;">
+                  <input type="checkbox" value="{{ $sec['id'] }}" class="form-check-input row-checkbox" style="cursor: pointer;">
+                </td>
                 {{-- Cover Thumbnail --}}
                 <td style="text-align: center; vertical-align: middle;">
                   <div class="admin-post-thumb mx-auto">
@@ -172,6 +178,8 @@
   </div>
 
 </div>
+
+<x-admin.bulk-action-bar :route="route('admin.sectors.bulk-destroy')" label="sektor" />
 
 @endsection
 

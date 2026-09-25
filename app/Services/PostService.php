@@ -123,6 +123,18 @@ class PostService
         return $deleted > 0;
     }
 
+    public function deletePostsByIds(array $ids): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $deleted = Post::query()->whereIn('id', $ids)->delete();
+        $this->clearPostsCache();
+
+        return $deleted;
+    }
+
     /**
      * Stable array shape for Blade (keeps $post['title'] access).
      * Date cast as Y-m-d string so views tidak dapat Carbon object.

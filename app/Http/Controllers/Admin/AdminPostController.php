@@ -213,4 +213,21 @@ class AdminPostController extends Controller
 
         return redirect()->route('admin.posts')->with('success', 'Artikel berhasil dihapus!');
     }
+
+    public function bulkDestroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:posts,id',
+        ]);
+
+        $count = $this->posts->deletePostsByIds($validated['ids']);
+
+        AuditLogger::log('post.bulk_delete', 'Post', null, [
+            'count' => $count,
+            'ids' => $validated['ids'],
+        ]);
+
+        return redirect()->route('admin.posts')->with('success', "{$count} artikel berhasil dihapus!");
+    }
 }

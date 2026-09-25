@@ -188,6 +188,95 @@
       }
     });
 
+    // ── Global Bulk Actions Handler ──
+    const selectAllCb = document.querySelector('.select-all-checkbox');
+    const rowCbs = document.querySelectorAll('.row-checkbox');
+    const bulkBar = document.getElementById('bulkActionBar');
+    const bulkCountEl = document.getElementById('bulkSelectCount');
+    const bulkCancelBtn = document.getElementById('bulkCancelBtn');
+    const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+    const bulkForm = document.getElementById('bulkDeleteForm');
+
+    function updateBulkBar() {
+      if (!bulkBar || !bulkCountEl) return;
+      const checked = document.querySelectorAll('.row-checkbox:checked');
+      const count = checked.length;
+      bulkCountEl.textContent = count;
+      bulkBar.style.display = count > 0 ? 'flex' : 'none';
+
+      rowCbs.forEach(cb => {
+        const tr = cb.closest('tr');
+        if (tr) tr.classList.toggle('table-active', cb.checked);
+      });
+
+      if (selectAllCb) {
+        selectAllCb.checked = rowCbs.length > 0 && count === rowCbs.length;
+        selectAllCb.indeterminate = count > 0 && count < rowCbs.length;
+      }
+      if (typeof lucide !== 'undefined' && count > 0) {
+        lucide.createIcons();
+      }
+    }
+
+    if (selectAllCb) {
+      selectAllCb.addEventListener('change', function() {
+        rowCbs.forEach(cb => {
+          const tr = cb.closest('tr');
+          if (!tr || tr.style.display !== 'none') {
+            cb.checked = selectAllCb.checked;
+          }
+        });
+        updateBulkBar();
+      });
+    }
+
+    rowCbs.forEach(cb => {
+      cb.addEventListener('change', updateBulkBar);
+    });
+
+    if (bulkCancelBtn) {
+      bulkCancelBtn.addEventListener('click', function() {
+        if (selectAllCb) selectAllCb.checked = false;
+        rowCbs.forEach(cb => { cb.checked = false; });
+        updateBulkBar();
+      });
+    }
+
+    if (bulkDeleteBtn && bulkForm) {
+      bulkDeleteBtn.addEventListener('click', function() {
+        const checked = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+        if (checked.length === 0) return;
+
+        Swal.fire({
+          title: `Hapus ${checked.length} Data Terpilih?`,
+          text: 'Data yang dihapus tidak dapat dipulihkan.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Hapus Semua',
+          cancelButtonText: 'Batal',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'admin-btn admin-btn-danger mx-2',
+            cancelButton: 'admin-btn admin-btn-ghost mx-2'
+          },
+          buttonsStyling: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            isFormDirty = false;
+            bulkForm.querySelectorAll('input[name="ids[]"]').forEach(el => el.remove());
+            checked.forEach(id => {
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = 'ids[]';
+              input.value = id;
+              bulkForm.appendChild(input);
+            });
+            bulkForm.submit();
+          }
+        });
+      });
+    }
+
     const logoutForm = document.getElementById('logout-form');
     if (logoutForm) {
       logoutForm.addEventListener('submit', function(e) {
@@ -227,7 +316,7 @@
       const form = target.closest('form');
       if (!form) return true;
       if (form.method && form.method.toUpperCase() === 'GET') return true;
-      if (target.matches('input[name="s"], input[name="q"], input[name="search"], #local-search-input, select[name="category"], select[name="sector"], select[name="sort"], input[name="start_date"], input[name="end_date"]')) return true;
+      if (target.matches('input[name="s"], input[name="q"], input[name="search"], #local-search-input, select[name="category"], select[name="sector"], select[name="sort"], input[name="start_date"], input[name="end_date"], .select-all-checkbox, .row-checkbox')) return true;
       return false;
     }
 
