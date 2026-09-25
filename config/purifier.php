@@ -45,7 +45,7 @@ return [
                 'div[style]',
                 'blockquote', 'code', 'pre',
                 'a[href|title|target|rel]',
-                'img[src|alt|width|height|loading]',
+                'img[src|alt|width|height|loading|style|class]',
                 'figure', 'figcaption',
                 // NOTE: <iframe> is deliberately omitted — was in the old regex sanitizer
                 // but enables XSS via srcdoc and arbitrary frame embedding.
@@ -60,7 +60,8 @@ return [
                 'margin', 'margin-top', 'margin-bottom', 'margin-left', 'margin-right',
                 'border', 'border-collapse', 'border-color', 'border-width', 'border-style',
                 'border-top', 'border-bottom', 'border-left', 'border-right',
-                'width', 'max-width', 'min-width', 'height',
+                'width', 'max-width', 'min-width', 'height', 'max-height', 'min-height',
+                'float',
             ]),
 
             // Only allow http/https URIs — strips javascript:, data:, vbscript:, etc.
@@ -88,7 +89,7 @@ return [
         // ------------------------------------------------------------------
         'custom_definition' => [
             'id' => 'prolabios-html5',
-            'rev' => 2,
+            'rev' => 3,
             'debug' => false,
             'elements' => [
                 ['figure',     'Block', 'Optional: (figcaption, Flow) | (Flow, figcaption) | Flow', 'Common'],
