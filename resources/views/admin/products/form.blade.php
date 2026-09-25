@@ -467,12 +467,14 @@
           var delBtn = document.createElement('button');
           delBtn.type = 'button';
           delBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-1 d-flex align-items-center justify-content-center';
-          delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: var(--color-accent); color: #FFFFFF; border: none; border-radius: 4px; box-shadow: var(--shadow-xs);';
+          delBtn.style.cssText = 'width: 22px; height: 22px; padding: 0; background: var(--color-accent); color: #FFFFFF; border: none; border-radius: 4px; box-shadow: var(--shadow-xs); cursor: pointer; line-height: 1;';
           delBtn.title = 'Hapus dari daftar unggah';
-          delBtn.innerHTML = '<i data-lucide="x" style="font-size: 0.65rem;"></i>';
-          delBtn.onclick = function() {
+          delBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none; display: block;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          delBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             removeStagedPhoto(index);
-          };
+          });
 
           var sizeBadge = document.createElement('div');
           sizeBadge.className = 'position-absolute bottom-0 start-0 end-0 p-1 text-truncate';

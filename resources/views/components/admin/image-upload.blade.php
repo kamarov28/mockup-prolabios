@@ -32,38 +32,59 @@
     <div class="col-sm-9">
       <div class="mb-3">
         <label for="{{ $nameFile }}" class="admin-form-label">Upload File Baru</label>
-        <input class="form-control" type="file" id="{{ $nameFile }}" name="{{ $nameFile }}" accept="image/*" onchange="previewLocalImageComponent(this, '{{ $previewId }}')">
+        <input class="form-control" type="file" id="{{ $nameFile }}" name="{{ $nameFile }}" accept="image/*">
       </div>
       <div>
         <label for="{{ $nameUrl }}" class="admin-form-label">Atau Masukkan URL Gambar</label>
-        <input type="text" class="form-control" id="{{ $nameUrl }}" name="{{ $nameUrl }}" value="{{ $valueUrl }}" placeholder="https://example.com/image.jpg" oninput="previewUrlImageComponent(this.value, '{{ $previewId }}', '{{ $placeholderImage }}')">
+        <input type="text" class="form-control" id="{{ $nameUrl }}" name="{{ $nameUrl }}" value="{{ $valueUrl }}" placeholder="https://example.com/image.jpg">
       </div>
     </div>
   </div>
 </div>
 
-@once
 <script @nonce>
-  function previewLocalImageComponent(input, previewId) {
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        var el = document.getElementById(previewId);
-        if (el) el.src = e.target.result;
-      };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
+  (function() {
+    function initImagePreview_{{ str_replace('-', '_', $previewId) }}() {
+      var fileInput = document.getElementById('{{ $nameFile }}');
+      var urlInput = document.getElementById('{{ $nameUrl }}');
+      var previewEl = document.getElementById('{{ $previewId }}');
+      var defaultSrc = '{{ $currentSrc }}';
+      var fallbackSrc = '{{ $placeholderImage }}';
 
-  function previewUrlImageComponent(val, previewId, fallback) {
-    var el = document.getElementById(previewId);
-    if (!el) return;
-    var trimmed = val.trim();
-    if (!trimmed) {
-      el.src = fallback;
-    } else {
-      el.src = trimmed;
+      if (fileInput && previewEl) {
+        fileInput.addEventListener('change', function() {
+          if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              previewEl.src = e.target.result;
+            };
+            reader.readAsDataURL(this.files[0]);
+          } else if (urlInput && urlInput.value.trim() !== '') {
+            previewEl.src = urlInput.value.trim();
+          } else {
+            previewEl.src = defaultSrc || fallbackSrc;
+          }
+        });
+      }
+
+      if (urlInput && previewEl) {
+        urlInput.addEventListener('input', function() {
+          var val = this.value.trim();
+          if (val) {
+            previewEl.src = val;
+          } else if (fileInput && fileInput.files && fileInput.files[0]) {
+            // Keep current local file preview if a file is already selected
+          } else {
+            previewEl.src = defaultSrc || fallbackSrc;
+          }
+        });
+      }
     }
-  }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImagePreview_{{ str_replace('-', '_', $previewId) }});
+    } else {
+      initImagePreview_{{ str_replace('-', '_', $previewId) }}();
+    }
+  })();
 </script>
-@endonce
