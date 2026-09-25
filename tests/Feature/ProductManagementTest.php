@@ -224,4 +224,40 @@ class ProductManagementTest extends TestCase
         $this->assertDatabaseMissing('products', ['id' => $p2->id]);
         $this->assertDatabaseHas('products', ['id' => $p3->id]);
     }
+
+    public function test_admin_can_save_and_update_product_with_local_datasheet_url(): void
+    {
+        $createResponse = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Product With Local Datasheet',
+            'catalog' => 'PWL-01',
+            'category' => 'microbiology',
+            'price' => 500000,
+            'stock' => 10,
+            'datasheet_url' => '/storage/datasheets/datasheet_sample.pdf',
+        ]);
+
+        $createResponse->assertSessionHasNoErrors();
+        $createResponse->assertRedirect(route('admin.products'));
+
+        $product = Product::where('title', 'Product With Local Datasheet')->first();
+        $this->assertNotNull($product);
+        $this->assertEquals('/storage/datasheets/datasheet_sample.pdf', $product->datasheet_url);
+
+        $updateResponse = $this->actingAs($this->admin)->put(route('admin.products.update', ['id' => $product->id]), [
+            'title' => 'Product With Local Datasheet Updated',
+            'catalog' => 'PWL-01',
+            'category' => 'microbiology',
+            'price' => 550000,
+            'stock' => 12,
+            'datasheet_url' => '/storage/datasheets/datasheet_sample.pdf',
+        ]);
+
+        $updateResponse->assertSessionHasNoErrors();
+        $updateResponse->assertRedirect(route('admin.products'));
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'title' => 'Product With Local Datasheet Updated',
+            'datasheet_url' => '/storage/datasheets/datasheet_sample.pdf',
+        ]);
+    }
 }
