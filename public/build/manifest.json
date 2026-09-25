@@ -1,0 +1,51 @@
+{
+  "_lucide-icons-DZDiaAEd.js": {
+    "file": "assets/lucide-icons-DZDiaAEd.js",
+    "name": "lucide-icons"
+  },
+  "resources/css/admin.css": {
+    "file": "assets/admin-DsE3KB5s.css",
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ],
+    "src": "resources/css/admin.css",
+    "isEntry": true
+  },
+  "resources/css/site.css": {
+    "file": "assets/site-NUUAUBRm.css",
+    "name": "site",
+    "names": [
+      "site.css"
+    ],
+    "src": "resources/css/site.css",
+    "isEntry": true
+  },
+  "resources/css/style.css": {
+    "file": "assets/style-CqLr8KVv.css",
+    "name": "style",
+    "names": [
+      "style.css"
+    ],
+    "src": "resources/css/style.css",
+    "isEntry": true
+  },
+  "resources/js/admin.js": {
+    "file": "assets/admin-CudajI7J.js",
+    "name": "admin",
+    "src": "resources/js/admin.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-icons-DZDiaAEd.js"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-ChK8xrGk.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-icons-DZDiaAEd.js"
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+import{n as e,t}from"./lucide-icons-DZDiaAEd.js";window.lucide={createIcons:(n={})=>e({icons:t,attrs:{"stroke-width":1.75},...n}),icons:t},document.addEventListener(`DOMContentLoaded`,()=>{window.lucide.createIcons()});
