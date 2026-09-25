@@ -295,6 +295,10 @@ trait HandlesImageUploads
         $webpFilename = time().'_'.Str::random(16).'.webp';
         $relativePath = $folder.'/'.$webpFilename;
 
+        if (! imageistruecolor($img)) {
+            imagepalettetotruecolor($img);
+        }
+
         ob_start();
         imagewebp($img, null, 82);
         $binary = ob_get_clean();
