@@ -16,6 +16,7 @@ use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -157,38 +158,76 @@ class AdminProductController extends Controller
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
-        $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
-        $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
-
-        $sectorsInput = $request->input('sectors', $request->input('sector'));
-        $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
-
-        $product = [
-            'catalog' => $request->input('catalog') ?: '',
-            'title' => $title,
-            'description' => $request->input('description') ?: '',
-            'datasheet_url' => $datasheetUrl,
-            'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: null,
-            'sector' => $sectorCsv,
-            'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
-            'image' => $image,
-            'gallery_images' => $galleryImages,
-            'price' => (float) $request->input('price', 0),
-            'stock' => (int) $request->input('stock', 0),
-            'is_featured' => (bool) $request->input('is_featured', false),
-        ];
-
-        $createdProduct = $this->products->addProduct($product);
-
-        AuditLogger::log('product.create', 'Product', $createdProduct?->id, [
-            'title' => $title,
-            'catalog' => $product['catalog'],
-            'price' => $product['price'],
+        // Checkpoint 1: Sebelum proses upload gambar dimulai (jumlah file yang diterima)
+        $uploadedFiles = $request->allFiles();
+        Log::info('AdminProductController::store - Sebelum proses upload dimulai', [
+            'total_file_keys' => count($uploadedFiles),
+            'file_keys' => array_keys($uploadedFiles),
+            'has_image_file' => $request->hasFile('image_file'),
+            'has_gallery_files' => $request->hasFile('gallery_files'),
+            'has_datasheet_file' => $request->hasFile('datasheet_file'),
+            'raw_image_file' => $request->file('image_file') ? [
+                'name' => $request->file('image_file')->getClientOriginalName(),
+                'size' => $request->file('image_file')->getSize(),
+                'mime' => $request->file('image_file')->getClientMimeType(),
+                'error' => $request->file('image_file')->getError(),
+                'is_valid' => $request->file('image_file')->isValid(),
+            ] : null,
+            'image_url_input' => $request->input('image_url'),
         ]);
 
-        return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
+        try {
+            $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
+            $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+            $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
+
+            $sectorsInput = $request->input('sectors', $request->input('sector'));
+            $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
+            $product = [
+                'catalog' => $request->input('catalog') ?: '',
+                'title' => $title,
+                'description' => $request->input('description') ?: '',
+                'datasheet_url' => $datasheetUrl,
+                'category' => $request->input('category'),
+                'sub_category' => $request->input('sub_category') ?: null,
+                'sector' => $sectorCsv,
+                'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
+                'image' => $image,
+                'gallery_images' => $galleryImages,
+                'price' => (float) $request->input('price', 0),
+                'stock' => (int) $request->input('stock', 0),
+                'is_featured' => (bool) $request->input('is_featured', false),
+            ];
+
+            $createdProduct = $this->products->addProduct($product);
+
+            // Checkpoint 5: Setelah path gambar disimpan ke record database
+            Log::info('AdminProductController::store - Setelah path gambar disimpan ke record database', [
+                'product_id' => $createdProduct?->id,
+                'product_title' => $createdProduct?->title,
+                'saved_image_path' => $createdProduct?->image,
+                'saved_gallery_images' => $createdProduct?->gallery_images,
+                'is_placeholder' => $createdProduct?->image === '/images/placeholder.svg',
+            ]);
+
+            AuditLogger::log('product.create', 'Product', $createdProduct?->id, [
+                'title' => $title,
+                'catalog' => $product['catalog'],
+                'price' => $product['price'],
+            ]);
+
+            return redirect()->route('admin.products')->with('success', 'Produk baru berhasil ditambahkan!');
+        } catch (\Throwable $e) {
+            Log::error('AdminProductController::store - Exception saat menyimpan produk', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        }
     }
 
     public function edit(int $id)
@@ -494,6 +533,13 @@ class AdminProductController extends Controller
 
             return redirect()->back()->with('error', $errMsg);
         } catch (\Throwable $e) {
+            Log::error('AdminProductController::importExcel - Gagal memproses file Excel', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return redirect()->back()->with('error', 'Gagal memproses file Excel: '.$e->getMessage());
         }
     }
