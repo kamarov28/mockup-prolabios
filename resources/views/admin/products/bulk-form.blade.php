@@ -262,7 +262,14 @@
           ['table', ['table']],
           ['insert', ['link', 'picture']],
           ['view', ['fullscreen', 'codeview']]
-        ]
+        ],
+        callbacks: {
+          onImageUpload: function(files) {
+            for (let i = 0; i < files.length; i++) {
+              window.uploadSummernoteImage(files[i], this);
+            }
+          }
+        }
       });
     }
 

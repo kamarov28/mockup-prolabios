@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminMediaController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminPrincipalController;
 use App\Http\Controllers\Admin\AdminProductCategoryController;
@@ -123,4 +124,6 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
     Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
     Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');
+
+    Route::post('/media/upload', [AdminMediaController::class, 'upload'])->name('admin.media.upload');
 });

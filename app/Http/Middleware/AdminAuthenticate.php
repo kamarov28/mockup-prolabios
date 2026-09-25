@@ -19,6 +19,10 @@ class AdminAuthenticate
         if (! Auth::check() || ! Auth::user()?->isAdmin()) {
             Auth::logout();
 
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+
             return redirect()->route('admin.login')->with('info', 'Silakan login terlebih dahulu untuk mengakses panel admin.');
         }
 

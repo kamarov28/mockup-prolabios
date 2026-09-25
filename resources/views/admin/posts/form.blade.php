@@ -186,7 +186,14 @@
           ['table', ['table']],
           ['insert', ['link', 'picture', 'video']],
           ['view', ['fullscreen', 'codeview', 'help']]
-        ]
+        ],
+        callbacks: {
+          onImageUpload: function(files) {
+            for (let i = 0; i < files.length; i++) {
+              window.uploadSummernoteImage(files[i], this);
+            }
+          }
+        }
       });
 
       const scheduledDateInput = document.getElementById('publish_date_input');

@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title', 'Admin Panel') | PROLABIOS</title>
   {{-- Critical: prevent dark flash before admin.css (Vite) loads --}}
   <style>
@@ -443,6 +444,42 @@
         slider.scrollLeft = scrollLeft - walk;
       });
     });
+
+    window.uploadSummernoteImage = function(file, editorElement) {
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      const formData = new FormData();
+      formData.append('image', file);
+      if (token) {
+        formData.append('_token', token);
+      }
+
+      if (typeof $ !== 'undefined') {
+        $.ajax({
+          url: "{{ route('admin.media.upload') }}",
+          cache: false,
+          contentType: false,
+          processData: false,
+          data: formData,
+          type: 'POST',
+          headers: token ? { 'X-CSRF-TOKEN': token } : {},
+          success: function(response) {
+            if (response && response.url) {
+              $(editorElement).summernote('insertImage', response.url, function($image) {
+                $image.attr('loading', 'lazy');
+              });
+            }
+          },
+          error: function(xhr) {
+            const msg = xhr.responseJSON?.message || xhr.responseJSON?.error || 'Gagal mengunggah gambar ke server.';
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({ icon: 'error', title: 'Upload Gagal', text: msg });
+            } else {
+              alert(msg);
+            }
+          }
+        });
+      }
+    };
   </script>
 
   @yield('admin_scripts')
