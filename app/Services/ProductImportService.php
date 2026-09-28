@@ -338,6 +338,15 @@ class ProductImportService
             $datasheetUrl = trim((string) ($row['J'] ?? ''));
             $description = trim((string) ($row['K'] ?? ''));
 
+            if (str_starts_with($imageUrl, 'storage/')) {
+                $imageUrl = '/'.$imageUrl;
+            }
+            if (str_starts_with($datasheetUrl, 'storage/')) {
+                $datasheetUrl = '/'.$datasheetUrl;
+            }
+
+            $isUrlOrPath = fn (string $val) => $val !== '' && (preg_match('/^(\/|https?:\/\/)/i', $val) === 1);
+
             $productsToStore[] = [
                 'catalog' => Str::limit($catalog, 255, ''),
                 'title' => Str::limit($title, 255, ''),
@@ -345,9 +354,9 @@ class ProductImportService
                 'sub_category' => Str::limit($subCategory, 255, ''),
                 'sector' => $sectorCsv,
                 'principal_id' => $principalId,
-                'datasheet_url' => filter_var($datasheetUrl, FILTER_VALIDATE_URL) ? $datasheetUrl : null,
+                'datasheet_url' => $isUrlOrPath($datasheetUrl) ? $datasheetUrl : null,
                 'description' => HtmlSanitizer::clean($description),
-                'image' => filter_var($imageUrl, FILTER_VALIDATE_URL) ? $imageUrl : '/images/placeholder.svg',
+                'image' => $isUrlOrPath($imageUrl) ? $imageUrl : '/images/placeholder.svg',
                 'price' => $price,
                 'stock' => $stock,
             ];

@@ -136,4 +136,53 @@ class ProductImportTest extends TestCase
 
         $response->assertSessionHasErrors('excel_file');
     }
+
+    public function test_admin_can_import_products_with_local_storage_paths(): void
+    {
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        $sheet->fromArray([
+            'Nomor Katalog', 'Nama Produk *', 'Kategori *', 'Subkategori',
+            'Harga (Rp)', 'Stok', 'Prinsipal', 'Sektor Industri',
+            'URL Cover Gambar', 'URL Datasheet PDF', 'Deskripsi Produk',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            'LOCAL-01', 'Local Asset Product', 'microbiology', '',
+            '500000', '15', '', '',
+            '/storage/uploads/products/local-image.webp', '/storage/uploads/datasheets/local-doc.pdf', 'Deskripsi produk lokal',
+        ], null, 'A2');
+
+        $tempFile = tempnam(sys_get_temp_dir(), 'test_import_local_').'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-local-paths.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('products', [
+            'title' => 'Local Asset Product',
+            'catalog' => 'LOCAL-01',
+            'image' => '/storage/uploads/products/local-image.webp',
+            'datasheet_url' => '/storage/uploads/datasheets/local-doc.pdf',
+        ]);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
 }
