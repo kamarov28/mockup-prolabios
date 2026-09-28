@@ -13,6 +13,7 @@ Dokumen ini mendokumentasikan seluruh lapisan pertahanan keamanan (*defense-in-d
 | **HTTPS Enforcement** | `ForceHttps` & `URL::forceScheme('https')` | Man-in-the-Middle (MitM) & sniffing data sensitif (tanpa pembacaan mentah `X-Forwarded-Proto`) |
 | **Input Sanitization** | `App\Helpers\HtmlSanitizer` | Stored XSS pada rich text (strip tag berbahaya & event `on*`) |
 | **Image Sanitization** | `HandlesImageUploads` (GD WebP Re-encode) | File upload RCE, polyglot files, EXIF leak, SVG XSS |
+| **Storage Script Lockdown** | `storage/app/public/.htaccess` | Mencegah eksekusi script PHP/CGI di folder upload jika terjadi anomali/bypass |
 | **Database Backup Safety** | `App\Console\Commands\DatabaseBackup` | Mencegah kebocoran password MySQL di process list OS |
 | **Anti-Bot & Spam** | `CaptchaService` + Honeypot Field | Scraping otomatis, brute-force spam submission |
 | **Rate Limiting** | `AppServiceProvider` (Login, RFQ, Kontak) | Brute-force serangan login & denial-of-service form |

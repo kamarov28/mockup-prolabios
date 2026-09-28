@@ -43,6 +43,8 @@ Seluruh upload gambar (produk utama, galeri produk, banner sektor, dan artikel b
    Method `handleMultipleImageUploads` membatasi maksimal 10 gambar per batch dengan validasi yang identik.
 5. **Fail-Fast & Integritas Storage**:
    Upload gambar maupun PDF tidak menoleransi kegagalan diam-diam (*silent fallback*). Berkas yang gagal tersimpan atau melebihi limit PHP `upload_max_filesize` langsung melempar `ValidationException` secara eksplisit, dengan opsi `'throw' => true` aktif di `config/filesystems.php`.
+6. **Storage Script Lockdown (`storage/app/public/.htaccess`)**:
+   Folder upload publik dikunci dengan aturan Apache/LiteSpeed untuk memblokir eksekusi script (`.php`, `.phtml`, `.cgi`, dll.) serta menonaktifkan engine PHP (`php_flag engine off`).
 
 ---
 
