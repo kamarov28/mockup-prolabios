@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class SeedProductCategoriesSeeder extends Seeder
 {
     /**
-     * Seed semua kategori & sub-kategori yang sebelumnya hardcoded di DataService.
+     * Seed semua kategori & sub-kategori database.
      * Aman dijalankan berulang (upsert by key).
      */
     public function run(): void

@@ -85,7 +85,7 @@ php artisan optimize
 - `app/Http/Controllers/`: Public controllers (`PageController`, `CartController`, `RfqController`, `ContactController`).
 - `app/Http/Controllers/Admin/`: Admin controllers (`AdminRfqController`, `AdminProductController`, `AdminSectorController`, etc.).
 - `app/Models/`: Eloquent models (`Product`, `ProductCategory`, `Rfq`, `RfqItem`, `Sector`, `Post`, `ContactInquiry`, `HomepageSetting`).
-- `app/Services/`: Business logic (`AuditLogger`, `CaptchaService`, `DataService`).
+- `app/Services/`: Business logic (`AuditLogger`, `CaptchaService`, `ProductService`, `PostService`, `SectorService`, `HomepageService`, `ProductImportService`).
 - `app/Jobs/` & `app/Mail/`: Queue jobs and Mailable classes for buyer and admin notifications.
 - `app/Http/Middleware/`: Security middlewares (`SecurityHeaders`, `AdminAuthenticate`, `ForceHttps`, `GzipCompress`).
 - `resources/views/`: Blade templates split into layouts, public catalog/RFQ views, admin cockpit, and emails.

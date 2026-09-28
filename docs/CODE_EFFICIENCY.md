@@ -23,9 +23,9 @@ Tracking issue: [#13](https://github.com/kamarov28/mockup-prolabios/issues/13)
 - [x] `ResolvesProducts`: id → slug → title
 - [x] Title mutators / stock marked `@deprecated`
 
-### Phase 3 — Thin DataService (admin)
+### Phase 3 — Decommission DataService
 - [x] Product / Post / Sector admin → domain services
-- [ ] Page/Cart/Rfq still use DataService (OK)
+- [x] Page/Cart/Rfq migrated to ProductService/PostService/SectorService (DataService decommissioned)
 
 ### Phase 4 — Public CSS tokens
 - [x] Inventory in `docs/CSS_TOKENS.md`

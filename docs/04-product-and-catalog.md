@@ -10,7 +10,7 @@ Dokumen ini menjelaskan sistem katalog produk, struktur multi-level kategori, se
   - Menyimpan informasi produk: `catalog`, `title`, `slug`, `category`, `sub_category`, `sector`, `principal_id`, `price`, `stock`, `image`, `gallery_images` (JSON), `description` (HTML rich text).
 - **Kategori & Subkategori**:
   - Disimpan secara dinamis di tabel `product_categories`.
-  - Disusun hierarkis dalam struktur pohon (*tree*) melalui `DataService::getCategoriesStructure()`.
+  - Disusun hierarkis dalam struktur pohon (*tree*) melalui `ProductService::getCategoriesStructure()`.
 - **Relasi Multi-Sektor**:
   - Produk dapat berelasi dengan banyak sektor industri (misal: Farmasi, Pangan, Lingkungan) melalui tabel pivot `product_sector`.
 

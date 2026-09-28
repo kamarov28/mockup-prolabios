@@ -21,7 +21,7 @@ Codebase ini menerapkan prinsip **Thin Controllers & Rich Services** untuk menja
 [ Controller ] (Thin: Hanya handle HTTP request & response view/json)
        │
        ▼
-[ Services Layer ] (ProductService, SectorService, DataService, AuditLogger)
+[ Services Layer ] (ProductService, SectorService, PostService, AuditLogger)
        │
        ▼
 [ Eloquent Models & DB ] (Product, Rfq, Sector, Post, HomepageSetting)
