@@ -158,24 +158,6 @@ class AdminProductController extends Controller
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul tersebut sudah ada.');
         }
 
-        // Checkpoint 1: Sebelum proses upload gambar dimulai (jumlah file yang diterima)
-        $uploadedFiles = $request->allFiles();
-        Log::info('AdminProductController::store - Sebelum proses upload dimulai', [
-            'total_file_keys' => count($uploadedFiles),
-            'file_keys' => array_keys($uploadedFiles),
-            'has_image_file' => $request->hasFile('image_file'),
-            'has_gallery_files' => $request->hasFile('gallery_files'),
-            'has_datasheet_file' => $request->hasFile('datasheet_file'),
-            'raw_image_file' => $request->file('image_file') ? [
-                'name' => $request->file('image_file')->getClientOriginalName(),
-                'size' => $request->file('image_file')->getSize(),
-                'mime' => $request->file('image_file')->getClientMimeType(),
-                'error' => $request->file('image_file')->getError(),
-                'is_valid' => $request->file('image_file')->isValid(),
-            ] : null,
-            'image_url_input' => $request->input('image_url'),
-        ]);
-
         try {
             $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
             $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
@@ -201,15 +183,6 @@ class AdminProductController extends Controller
             ];
 
             $createdProduct = $this->products->addProduct($product);
-
-            // Checkpoint 5: Setelah path gambar disimpan ke record database
-            Log::info('AdminProductController::store - Setelah path gambar disimpan ke record database', [
-                'product_id' => $createdProduct?->id,
-                'product_title' => $createdProduct?->title,
-                'saved_image_path' => $createdProduct?->image,
-                'saved_gallery_images' => $createdProduct?->gallery_images,
-                'is_placeholder' => $createdProduct?->image === '/images/placeholder.svg',
-            ]);
 
             AuditLogger::log('product.create', 'Product', $createdProduct?->id, [
                 'title' => $title,
