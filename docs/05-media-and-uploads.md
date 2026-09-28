@@ -41,6 +41,8 @@ Seluruh upload gambar (produk utama, galeri produk, banner sektor, dan artikel b
    File WebP terkompresi dengan kualitas 82% menghasilkan ukuran file 60–80% lebih kecil dibanding JPEG asli, mempercepat Loading Card (LCP) pada web.
 4. **Dukungan Multiple Upload (Galeri Produk)**:
    Method `handleMultipleImageUploads` membatasi maksimal 10 gambar per batch dengan validasi yang identik.
+5. **Fail-Fast & Integritas Storage**:
+   Upload gambar maupun PDF tidak menoleransi kegagalan diam-diam (*silent fallback*). Berkas yang gagal tersimpan atau melebihi limit PHP `upload_max_filesize` langsung melempar `ValidationException` secara eksplisit, dengan opsi `'throw' => true` aktif di `config/filesystems.php`.
 
 ---
 

@@ -40,6 +40,15 @@ Ketika admin melakukan tambah, edit, atau hapus produk/kategori di dashboard, si
 
 ---
 
+## 📥 4. Import Spreadsheet Katalog (`ProductImportService`)
+
+Mendukung impor massal produk melalui format spreadsheet Excel (`.xlsx`) / CSV:
+- **Validasi Path & URL**: Kolom URL cover gambar dan URL datasheet PDF mendukung tautan publik (`https://`) maupun path penyimpanan lokal internal (`/storage/uploads/...`).
+- **Sanitasi Deskripsi**: Kolom deskripsi HTML diproses otomatis menggunakan `HtmlSanitizer::clean()`.
+- **Integritas Data**: Nilai input kosong atau gagal tidak akan merusak relasi atau mereset aset yang sudah valid secara diam-diam.
+
+---
+
 ## 🔗 Referensi Alur Terkait
 - [03. B2B RFQ & Cart Flow](03-b2b-rfq-flow.md)
 - [05. Media & Image Upload Pipeline](05-media-and-uploads.md)

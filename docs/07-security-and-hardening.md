@@ -10,7 +10,7 @@ Dokumen ini mendokumentasikan seluruh lapisan pertahanan keamanan (*defense-in-d
 |---|---|---|
 | **Security Headers** | `App\Http\Middleware\SecurityHeaders` | Clickjacking, MIME Sniffing, XSS, Unsafe Framing |
 | **Reverse Proxy IP Trust** | `bootstrap/app.php` (`trustProxies`) | Spoofing IP client, ketepatan Rate Limiting di balik Cloudflare/Nginx |
-| **HTTPS Enforcement** | `ForceHttps` & `URL::forceScheme('https')` | Man-in-the-Middle (MitM) & sniffing data sensitif |
+| **HTTPS Enforcement** | `ForceHttps` & `URL::forceScheme('https')` | Man-in-the-Middle (MitM) & sniffing data sensitif (tanpa pembacaan mentah `X-Forwarded-Proto`) |
 | **Input Sanitization** | `App\Helpers\HtmlSanitizer` | Stored XSS pada rich text (strip tag berbahaya & event `on*`) |
 | **Image Sanitization** | `HandlesImageUploads` (GD WebP Re-encode) | File upload RCE, polyglot files, EXIF leak, SVG XSS |
 | **Database Backup Safety** | `App\Console\Commands\DatabaseBackup` | Mencegah kebocoran password MySQL di process list OS |
