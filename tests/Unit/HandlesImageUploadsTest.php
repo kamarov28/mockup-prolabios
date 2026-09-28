@@ -6,6 +6,7 @@ use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class HandlesImageUploadsTest extends TestCase
@@ -38,5 +39,37 @@ class HandlesImageUploadsTest extends TestCase
 
         $relativeStoragePath = str_replace('/storage/', '', $storedPath);
         Storage::disk('public')->assertExists($relativeStoragePath);
+    }
+
+    public function test_handle_image_upload_throws_validation_exception_when_file_upload_is_invalid(): void
+    {
+        $invalidFile = new UploadedFile(
+            tempnam(sys_get_temp_dir(), 'test_err_'),
+            'corrupt.png',
+            'image/png',
+            UPLOAD_ERR_INI_SIZE,
+            false
+        );
+
+        $request = new Request([], [], [], [], ['image_file' => $invalidFile]);
+
+        $this->expectException(ValidationException::class);
+        $this->handleImageUpload($request, 'image_file');
+    }
+
+    public function test_handle_pdf_upload_throws_validation_exception_when_file_upload_is_invalid(): void
+    {
+        $invalidFile = new UploadedFile(
+            tempnam(sys_get_temp_dir(), 'test_err_pdf_'),
+            'corrupt.pdf',
+            'application/pdf',
+            UPLOAD_ERR_INI_SIZE,
+            false
+        );
+
+        $request = new Request([], [], [], [], ['datasheet_file' => $invalidFile]);
+
+        $this->expectException(ValidationException::class);
+        $this->handlePdfUpload($request, 'datasheet_file');
     }
 }

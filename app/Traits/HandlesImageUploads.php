@@ -55,6 +55,10 @@ trait HandlesImageUploads
                     'upload_max_filesize' => ini_get('upload_max_filesize'),
                     'post_max_size' => ini_get('post_max_size'),
                 ]);
+
+                throw ValidationException::withMessages([
+                    $fileKey => ['File gambar gagal diunggah: '.$rawFile->getErrorMessage()],
+                ]);
             }
         } else {
             Log::info("HandlesImageUploads::handleImageUpload - Tidak ada file terlampir untuk key [{$fileKey}]", [
@@ -152,7 +156,9 @@ trait HandlesImageUploads
                             'root_path' => config('filesystems.disks.public.root'),
                         ]);
 
-                        return $fallback;
+                        throw ValidationException::withMessages([
+                            $fileKey => ['Gagal menyimpan file gambar ke storage server.'],
+                        ]);
                     }
 
                     $fallbackPath = '/storage/'.$relativePath;
@@ -163,6 +169,9 @@ trait HandlesImageUploads
 
                     return $fallbackPath;
                 } catch (\Throwable $e) {
+                    if ($e instanceof ValidationException) {
+                        throw $e;
+                    }
                     Log::error('HandlesImageUploads::handleImageUpload - Exception saat menyimpan file fallback ke storage', [
                         'message' => $e->getMessage(),
                         'file' => $e->getFile(),
@@ -170,7 +179,9 @@ trait HandlesImageUploads
                         'trace' => $e->getTraceAsString(),
                     ]);
 
-                    return $fallback;
+                    throw ValidationException::withMessages([
+                        $fileKey => ['Terjadi kesalahan saat memproses penyimpanan gambar: '.$e->getMessage()],
+                    ]);
                 }
             }
         }
@@ -380,6 +391,13 @@ trait HandlesImageUploads
         string $folder = 'datasheets',
         int $maxSizeBytes = 10485760
     ): ?string {
+        $rawFile = $request->file($fileKey);
+        if ($rawFile !== null && ! $rawFile->isValid()) {
+            throw ValidationException::withMessages([
+                $fileKey => ['File PDF gagal diunggah: '.$rawFile->getErrorMessage()],
+            ]);
+        }
+
         if ($request->hasFile($fileKey)) {
             $file = $request->file($fileKey);
             if ($file && $file->isValid()) {
@@ -415,7 +433,9 @@ trait HandlesImageUploads
                             'exists' => $exists,
                         ]);
 
-                        return $current;
+                        throw ValidationException::withMessages([
+                            $fileKey => ['Gagal menyimpan file PDF ke storage server.'],
+                        ]);
                     }
 
                     $publicPath = '/storage/'.$relativePath;
@@ -426,6 +446,9 @@ trait HandlesImageUploads
 
                     return $publicPath;
                 } catch (\Throwable $e) {
+                    if ($e instanceof ValidationException) {
+                        throw $e;
+                    }
                     Log::error('HandlesImageUploads::handlePdfUpload - Exception saat menyimpan file PDF', [
                         'message' => $e->getMessage(),
                         'file' => $e->getFile(),
@@ -433,7 +456,9 @@ trait HandlesImageUploads
                         'trace' => $e->getTraceAsString(),
                     ]);
 
-                    return $current;
+                    throw ValidationException::withMessages([
+                        $fileKey => ['Terjadi kesalahan saat memproses penyimpanan PDF: '.$e->getMessage()],
+                    ]);
                 }
             }
         }
