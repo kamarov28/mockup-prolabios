@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePrincipalRequest;
+use App\Http\Requests\UpdatePrincipalRequest;
 use App\Models\Principal;
 use App\Services\AuditLogger;
 use App\Traits\HandlesImageUploads;
@@ -70,7 +71,7 @@ class AdminPrincipalController extends Controller
         return view('admin.principals.form', compact('principal'));
     }
 
-    public function update(StorePrincipalRequest $request, int $id)
+    public function update(UpdatePrincipalRequest $request, int $id)
     {
         $principal = Principal::find($id);
         if (! $principal) {

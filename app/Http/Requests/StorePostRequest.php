@@ -9,7 +9,7 @@ class StorePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::check() && (bool) Auth::user()?->isAdmin();
     }
 
     public function rules(): array
@@ -20,6 +20,10 @@ class StorePostRequest extends FormRequest
             'content' => 'required|string',
             'image_file' => 'nullable|image|mimes:jpg,jpeg,png,gif,webp|max:5120',
             'image_url' => 'nullable|string|max:1024',
+            'status_option' => 'nullable|string|in:online_now,scheduled,draft',
+            'publish_date' => 'nullable|date',
+            'is_featured' => 'nullable',
+            'highlight' => 'nullable',
         ];
     }
 }

@@ -9,7 +9,7 @@ class StorePrincipalRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::check() && (bool) Auth::user()?->isAdmin();
     }
 
     public function rules(): array
