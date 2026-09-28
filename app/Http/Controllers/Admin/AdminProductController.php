@@ -15,7 +15,6 @@ use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -355,8 +354,10 @@ class AdminProductController extends Controller
             return redirect()->back()->with('error', 'Maksimal '.self::MAX_BULK_PRODUCTS.' produk per sekali submit.');
         }
 
-        $allowedCategoryKeys = ProductCategory::query()->pluck('key')->filter()->all();
-        $allowedCategoryKeys = array_fill_keys($allowedCategoryKeys, true);
+        $allowedCategoryKeys = array_fill_keys(
+            ProductCategory::query()->pluck('key')->filter()->all(),
+            true
+        );
 
         $productsToStore = [];
         $skipped = 0;
@@ -366,70 +367,19 @@ class AdminProductController extends Controller
                 break;
             }
 
-            $title = Str::limit(trim((string) $title), 255, '');
-            $category = Str::limit(trim((string) $request->input("category.{$rowKey}", '')), 255, '');
-
-            if ($title === '' || $category === '') {
+            $row = $this->parseBulkProductRow($request, (string) $rowKey, (string) $title, $allowedCategoryKeys);
+            if ($row === null) {
                 $skipped++;
 
                 continue;
             }
 
-            if ($allowedCategoryKeys !== [] && ! isset($allowedCategoryKeys[$category])) {
-                $skipped++;
-
-                continue;
-            }
-
-            $catalog = Str::limit(trim((string) $request->input("catalog.{$rowKey}", '')), 255, '');
-            $subCategory = Str::limit(trim((string) $request->input("sub_category.{$rowKey}", '')), 255, '');
-
-            $sectorsInput = $request->input("sectors.{$rowKey}", $request->input("sector.{$rowKey}"));
-            $sector = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
-
-            $rawPrice = $request->input("price.{$rowKey}", 0);
-            $cleanPrice = is_string($rawPrice) ? str_replace(['.', ' ', ','], ['', '', '.'], $rawPrice) : $rawPrice;
-            $price = max(0, (float) $cleanPrice);
-            $stock = max(0, (int) $request->input("stock.{$rowKey}", 0));
-
-            $principalId = $request->input("principal_id.{$rowKey}");
-            $principalId = $principalId ? (int) $principalId : null;
-
-            $description = (string) $request->input("description.{$rowKey}", '');
-
-            $datasheetUrl = $this->handlePdfUpload(
-                $request,
-                "datasheet_file.{$rowKey}",
-                "datasheet_url.{$rowKey}"
-            );
-
-            $image = $this->handleImageUpload(
-                $request,
-                "image_file.{$rowKey}",
-                "image_url.{$rowKey}",
-                '/images/placeholder.svg'
-            );
-
-            $productsToStore[] = [
-                'catalog' => $catalog,
-                'title' => $title,
-                'category' => $category,
-                'sub_category' => $subCategory,
-                'sector' => $sector !== '' ? $sector : null,
-                'principal_id' => $principalId,
-                'datasheet_url' => $datasheetUrl,
-                'description' => $description,
-                'image' => $image,
-                'price' => $price,
-                'stock' => $stock,
-            ];
+            $productsToStore[] = $row;
         }
 
         $savedCount = count($productsToStore);
         if ($savedCount > 0) {
-            DB::transaction(function () use ($productsToStore) {
-                $this->products->upsertProducts($productsToStore);
-            });
+            $this->products->upsertProducts($productsToStore);
 
             AuditLogger::log('product.bulk_create', 'Product', null, [
                 'saved' => $savedCount,
@@ -445,6 +395,46 @@ class AdminProductController extends Controller
         }
 
         return redirect()->back()->with('error', 'Tidak ada data produk valid yang disimpan. Pastikan judul dan kategori terisi, dan kategori terdaftar di sistem.');
+    }
+
+    /**
+     * @param  array<string, bool>  $allowedCategoryKeys
+     * @return array<string, mixed>|null
+     */
+    private function parseBulkProductRow(Request $request, string $rowKey, string $title, array $allowedCategoryKeys): ?array
+    {
+        $cleanTitle = Str::limit(trim($title), 255, '');
+        $category = Str::limit(trim((string) $request->input("category.{$rowKey}", '')), 255, '');
+
+        if ($cleanTitle === '' || $category === '') {
+            return null;
+        }
+
+        if ($allowedCategoryKeys !== [] && ! isset($allowedCategoryKeys[$category])) {
+            return null;
+        }
+
+        $sectorsInput = $request->input("sectors.{$rowKey}", $request->input("sector.{$rowKey}"));
+        $sector = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
+        $rawPrice = $request->input("price.{$rowKey}", 0);
+        $cleanPrice = is_string($rawPrice) ? str_replace(['.', ' ', ','], ['', '', '.'], $rawPrice) : $rawPrice;
+
+        $principalId = $request->input("principal_id.{$rowKey}");
+
+        return [
+            'catalog' => Str::limit(trim((string) $request->input("catalog.{$rowKey}", '')), 255, ''),
+            'title' => $cleanTitle,
+            'category' => $category,
+            'sub_category' => Str::limit(trim((string) $request->input("sub_category.{$rowKey}", '')), 255, ''),
+            'sector' => $sector !== '' ? $sector : null,
+            'principal_id' => $principalId ? (int) $principalId : null,
+            'datasheet_url' => $this->handlePdfUpload($request, "datasheet_file.{$rowKey}", "datasheet_url.{$rowKey}"),
+            'description' => (string) $request->input("description.{$rowKey}", ''),
+            'image' => $this->handleImageUpload($request, "image_file.{$rowKey}", "image_url.{$rowKey}", '/images/placeholder.svg'),
+            'price' => max(0, (float) $cleanPrice),
+            'stock' => max(0, (int) $request->input("stock.{$rowKey}", 0)),
+        ];
     }
 
     public function downloadImportTemplate(ProductImportService $importService)
