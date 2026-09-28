@@ -59,8 +59,8 @@ class SitemapController extends Controller
                 ->toArray();
 
             $posts = Post::query()
+                ->online()
                 ->select('slug', 'updated_at')
-                ->where('status', 'online')
                 ->orderByDesc('id')
                 ->get()
                 ->map(function ($post) use ($baseUrl) {
