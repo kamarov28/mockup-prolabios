@@ -9,11 +9,13 @@ use App\Models\Post;
 use App\Models\Product;
 use App\Models\Rfq;
 use App\Models\User;
+use App\Providers\AppServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class SecurityHardeningTest extends TestCase
@@ -351,5 +353,22 @@ class SecurityHardeningTest extends TestCase
         $homeResponse = $this->get('/');
         $homeResponse->assertStatus(200);
         $homeResponse->assertDontSee('<img src=x onerror=alert(1)>', false);
+    }
+
+    public function test_app_service_provider_does_not_force_https_from_untrusted_header_in_non_production(): void
+    {
+        $this->app['env'] = 'local';
+        URL::forceScheme(null);
+        $_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+
+        try {
+            $provider = new AppServiceProvider($this->app);
+            $provider->boot();
+
+            $this->assertStringStartsWith('http://', url('/'));
+        } finally {
+            unset($_SERVER['HTTP_X_FORWARDED_PROTO']);
+            URL::forceScheme(null);
+        }
     }
 }

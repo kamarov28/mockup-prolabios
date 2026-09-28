@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
             return '<?php echo \'nonce="\' . (app()->bound(\'csp-nonce\') ? app(\'csp-nonce\') : \'\') . \'"\'; ?>';
         });
 
-        if ($this->app->environment('production') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
 
