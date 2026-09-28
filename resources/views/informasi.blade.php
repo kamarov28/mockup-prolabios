@@ -1,12 +1,9 @@
 @extends('layouts.app')
 
 @section('title', isset($currentBlog) && $currentBlog ? $currentBlog['title'] . ' | PROLABIOS' : 'Berita & Informasi | PROLABIOS')
-
-@if(isset($currentBlog) && $currentBlog)
-  @section('og_title', $currentBlog['title'])
-  @section('og_description', Str::limit(strip_tags($currentBlog['content']), 150))
-  @section('og_image', $currentBlog['image'])
-@endif
+@section('og_title', !empty($currentBlog['title']) ? $currentBlog['title'] : 'Berita & Informasi | PROLABIOS')
+@section('og_description', !empty($currentBlog['content']) ? Str::limit(strip_tags($currentBlog['content']), 150) : 'Pusat Informasi & Wawasan Industri')
+@section('og_image', !empty($currentBlog['image']) ? $currentBlog['image'] : asset('images/logo-prolabios.png'))
 
 @section('content')
   @if(!$currentBlog)
