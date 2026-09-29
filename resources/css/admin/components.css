@@ -307,11 +307,11 @@
   border-color: #D1D5DB;
 }
 
-/* ── 13. SweetAlert2 Modern Theme ─────────────────────────────────────── */
+/* ── 13. SweetAlert2 Modern Theme (Modern Flat Precision) ─────────────── */
 .swal2-popup {
   background: #FFFFFF !important;
   border: 1px solid var(--color-border) !important;
-  border-radius: 16px !important;
+  border-radius: 12px !important;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
   font-family: var(--font-body) !important;
   color: var(--color-text-main) !important;
@@ -319,35 +319,82 @@
 }
 .swal2-title {
   font-family: var(--font-headline) !important;
-  font-size: 1.35rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
   color: var(--color-text-main) !important;
+  margin-bottom: 8px !important;
 }
 .swal2-html-container {
-  font-size: 0.92rem !important;
+  font-size: 0.9rem !important;
   color: var(--color-text-secondary) !important;
   font-family: var(--font-body) !important;
+  line-height: 1.5 !important;
+  margin-top: 4px !important;
 }
-.swal2-confirm {
-  font-family: var(--font-body) !important;
-  font-size: 0.86rem !important;
-  font-weight: 600 !important;
-  background: var(--color-accent) !important;
-  border: none !important;
-  border-radius: 8px !important;
-  padding: 10px 22px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+.swal2-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+  margin-bottom: 0 !important;
 }
+.swal2-actions button,
+.swal2-actions .admin-btn,
+.swal2-confirm,
 .swal2-cancel {
+  min-width: 108px !important;
+  height: 38px !important;
+  line-height: 36px !important;
+  padding: 0 20px !important;
+  border-radius: 8px !important;
   font-family: var(--font-body) !important;
   font-size: 0.86rem !important;
   font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  transition: all 0.15s ease !important;
+}
+.swal2-cancel,
+.swal2-actions .admin-btn-ghost,
+.swal2-actions .admin-btn-outline {
+  background: #FFFFFF !important;
+  border: 1px solid #D1D5DB !important;
+  color: #374151 !important;
+  box-shadow: var(--shadow-xs) !important;
+}
+.swal2-cancel:hover,
+.swal2-actions .admin-btn-ghost:hover,
+.swal2-actions .admin-btn-outline:hover {
   background: #F3F4F6 !important;
-  border: 1px solid #E5E7EB !important;
-  color: var(--color-text-main) !important;
-  border-radius: 8px !important;
-  padding: 10px 22px !important;
-  box-shadow: none !important;
+  border-color: #9CA3AF !important;
+  color: #111827 !important;
+}
+.swal2-confirm.admin-btn-danger {
+  background: #DC2626 !important;
+  border: 1px solid #DC2626 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(220, 38, 38, 0.25) !important;
+}
+.swal2-confirm.admin-btn-danger:hover {
+  background: #B91C1C !important;
+  border-color: #B91C1C !important;
+  color: #FFFFFF !important;
+}
+.swal2-confirm:not(.admin-btn-danger) {
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(166, 23, 28, 0.25) !important;
+}
+.swal2-confirm:not(.admin-btn-danger):hover {
+  background: var(--color-accent-hover) !important;
+  border-color: var(--color-accent-hover) !important;
+  color: #FFFFFF !important;
 }
 .swal2-toast {
   background: #FFFFFF !important;
