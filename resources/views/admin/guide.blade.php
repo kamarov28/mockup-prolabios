@@ -8,13 +8,8 @@
 <x-admin.page-header
   label="Manual Operasional Sistem"
   title="Panduan & Dokumentasi Admin Prolabios"
-  description="Panduan komprehensif alur operasional portal B2B PT. Prolabios Mitra Analitika: penanganan RFQ korporasi, pengelolaan katalog produk, impor massal spreadsheet Excel, hierarki taksonomi, publikasi artikel berita, dan tata kelola keamanan sistem.">
-  <x-slot:actions>
-    <span class="admin-badge admin-badge-info" style="font-size: 0.8rem; padding: 6px 12px;">
-      <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i> Versi Sistem Aktif
-    </span>
-  </x-slot:actions>
-</x-admin.page-header>
+  description="Panduan komprehensif alur operasional portal B2B PT. Prolabios Mitra Analitika: penanganan RFQ korporasi, pengelolaan katalog produk, impor massal spreadsheet Excel, hierarki taksonomi, publikasi artikel berita, dan tata kelola keamanan sistem."
+/>
 
 {{-- Table of Contents (TOC) --}}
 <div class="admin-card" style="margin-bottom: 20px;">

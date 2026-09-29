@@ -7,18 +7,10 @@
 
 <div class="dash-cockpit-wrapper">
 
-  {{-- ── Header Strip & Status ────────────────────────────────────────────────── --}}
-  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-    <div>
-      <span class="admin-page-label">Ikhtisar Sistem</span>
-      <h2 class="admin-page-title mb-0" style="font-size: 1.25rem;">Command Center Prolabios</h2>
-    </div>
-    <div class="d-flex align-items-center gap-2">
-      <div class="dash-status-pill">
-        <span class="dash-status-dot"></span>
-        <span>Sistem Aktif &bull; {{ now()->translatedFormat('d M Y') }}</span>
-      </div>
-    </div>
+  {{-- ── Header Strip ────────────────────────────────────────────────────────── --}}
+  <div class="mb-4">
+    <span class="admin-page-label">Ikhtisar Sistem</span>
+    <h2 class="admin-page-title mb-0" style="font-size: 1.5rem;">Command Center Prolabios</h2>
   </div>
 
   {{-- ── 1. KPI Micro-Stat Cards ──────────────────────────────────────────────── --}}
@@ -619,33 +611,6 @@
   /* ── Dashboard Compact Viewport Styling ──────────────────────────────────── */
   .dash-cockpit-wrapper {
     max-width: 100%;
-  }
-
-  /* Status Pill with Pulsing Live Dot */
-  .dash-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 12px;
-    background: #FFFFFF;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--color-text-secondary);
-    box-shadow: var(--shadow-xs);
-  }
-  .dash-status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #10B981;
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
-    animation: dashPulse 2s infinite ease-in-out;
-  }
-  @keyframes dashPulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
   }
 
   /* Micro Stat Cards */
