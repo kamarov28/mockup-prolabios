@@ -5,19 +5,14 @@
 
 @section('admin_content')
 
-{{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Katalog & Klasifikasi</span>
-    <h2 class="admin-page-title mb-1">Manajemen Sektor Industri</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      Kelola bidang industri dan sektor pengguna produk laboratorium untuk pemetaan katalog dan penyaringan RFQ.
-    </p>
-  </div>
-  <a href="{{ route('admin.sectors.create') }}" class="admin-btn admin-btn-primary">
-    <i data-lucide="plus"></i> Tambah Sektor
-  </a>
-</div>
+<x-admin.page-header
+  label="Katalog & Klasifikasi"
+  title="Manajemen Sektor Industri"
+  description="Kelola bidang industri dan sektor pengguna produk laboratorium untuk pemetaan katalog dan penyaringan RFQ."
+  action-url="{{ route('admin.sectors.create') }}"
+  action-text="Tambah Sektor"
+  action-icon="plus"
+/>
 
 <div class="admin-card">
 

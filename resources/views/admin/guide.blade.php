@@ -5,27 +5,16 @@
 
 @section('admin_content')
 
-{{-- Hero Header --}}
-<div class="admin-card" style="margin-bottom: 20px;">
-  <div class="admin-card-body" style="padding: 28px 32px;">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-      <div>
-        <span class="admin-badge admin-badge-accent" style="margin-bottom: 12px;">Manual Operasional Sistem</span>
-        <h1 style="font-family: var(--font-headline); font-size: 1.5rem; font-weight: 700; color: var(--color-text-main); margin: 0 0 8px; letter-spacing: -0.3px;">
-          Panduan &amp; Dokumentasi Admin Prolabios
-        </h1>
-        <p style="font-size: 0.88rem; color: var(--color-text-muted); margin: 0; max-width: 680px; line-height: 1.65;">
-          Panduan komprehensif alur operasional portal B2B PT. Prolabios Mitra Analitika: penanganan RFQ korporasi, pengelolaan katalog produk, impor massal spreadsheet Excel, hierarki taksonomi, publikasi artikel berita, dan tata kelola keamanan sistem.
-        </p>
-      </div>
-      <div class="d-flex align-items-center gap-2">
-        <span class="admin-badge admin-badge-info" style="font-size: 0.8rem; padding: 6px 12px;">
-          <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i> Versi Sistem Aktif
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
+<x-admin.page-header
+  label="Manual Operasional Sistem"
+  title="Panduan & Dokumentasi Admin Prolabios"
+  description="Panduan komprehensif alur operasional portal B2B PT. Prolabios Mitra Analitika: penanganan RFQ korporasi, pengelolaan katalog produk, impor massal spreadsheet Excel, hierarki taksonomi, publikasi artikel berita, dan tata kelola keamanan sistem.">
+  <x-slot:actions>
+    <span class="admin-badge admin-badge-info" style="font-size: 0.8rem; padding: 6px 12px;">
+      <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i> Versi Sistem Aktif
+    </span>
+  </x-slot:actions>
+</x-admin.page-header>
 
 {{-- Table of Contents (TOC) --}}
 <div class="admin-card" style="margin-bottom: 20px;">

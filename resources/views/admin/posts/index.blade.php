@@ -5,21 +5,14 @@
 
 @section('admin_content')
 
-{{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Konten Publikasi</span>
-    <h2 class="admin-page-title mb-1">Manajemen Artikel & Berita</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      Kelola artikel ilmiah, rilis berita, kegiatan lab, dan dokumentasi event Prolabios.
-    </p>
-  </div>
-  <div class="d-inline-flex align-items-center gap-2">
-    <a href="{{ route('admin.posts.create') }}" class="admin-btn admin-btn-primary">
-      <i data-lucide="plus"></i> Tulis Artikel Baru
-    </a>
-  </div>
-</div>
+<x-admin.page-header
+  label="Konten Publikasi"
+  title="Manajemen Artikel & Berita"
+  description="Kelola artikel ilmiah, rilis berita, kegiatan lab, dan dokumentasi event Prolabios."
+  action-url="{{ route('admin.posts.create') }}"
+  action-text="Tulis Artikel Baru"
+  action-icon="plus"
+/>
 
 @php
   $hasActiveFilters = !empty($search) || !empty($category) || !empty($status) || !empty($start_date) || !empty($end_date) || ($sort !== 'newest' && !empty($sort));

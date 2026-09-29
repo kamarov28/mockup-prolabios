@@ -52,6 +52,8 @@ class AdminSearchPagesTest extends TestCase
             $response = $this->actingAs($this->admin)->get(route($route));
             $response->assertStatus(200);
             $response->assertSee('admin-search-input');
+            $response->assertSee('admin-page-title');
+            $response->assertSee('admin-page-label');
         }
     }
 }

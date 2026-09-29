@@ -5,26 +5,24 @@
 
 @section('admin_content')
 
-<div class="admin-card">
+<x-admin.page-header
+  label="Katalog & Inventaris"
+  title="Manajemen Katalog Produk"
+  description="Kelola seluruh katalog reagen, instrumen, dan consumable laboratorium beserta spesifikasi dan harganya.">
+  <x-slot:actions>
+    <button type="button" class="admin-btn admin-btn-outline" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+      <i data-lucide="file-spreadsheet"></i> Import Excel
+    </button>
+    <a href="{{ route('admin.products.create.bulk') }}" class="admin-btn admin-btn-ghost">
+      <i data-lucide="grid"></i> Bulk Web
+    </a>
+    <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
+      <i data-lucide="plus"></i> Tambah Produk
+    </a>
+  </x-slot:actions>
+</x-admin.page-header>
 
-  {{-- Header --}}
-  <div class="admin-card-header">
-    <div>
-      <span class="admin-card-header-label">Katalog</span>
-      <h2 class="admin-card-header-title">Daftar Produk</h2>
-    </div>
-    <div class="d-inline-flex gap-2">
-      <button type="button" class="admin-btn admin-btn-outline" data-bs-toggle="modal" data-bs-target="#importExcelModal">
-        <i data-lucide="file-spreadsheet"></i> Import Excel
-      </button>
-      <a href="{{ route('admin.products.create.bulk') }}" class="admin-btn admin-btn-ghost">
-        <i data-lucide="grid"></i> Bulk Web
-      </a>
-      <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
-        <i data-lucide="plus"></i> Tambah
-      </a>
-    </div>
-  </div>
+<div class="admin-card">
 
   {{-- Filter Form --}}
   <div class="admin-card-body p-3" style="border-bottom: 1px solid var(--color-border); background: #FFFFFF;">

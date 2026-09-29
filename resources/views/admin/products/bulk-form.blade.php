@@ -5,18 +5,13 @@
 
 @section('admin_content')
 
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Katalog</span>
-    <h2 class="admin-page-title mb-1">Input Massal Produk</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      Setiap kartu mewakili satu produk lengkap (harga, stok, kategori, prinsipal, sektor, datasheet, dan deskripsi rich text). Kolom <span style="color: var(--color-accent);">*</span> wajib diisi.
-    </p>
-  </div>
-  <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-outline">
-    <i data-lucide="arrow-left"></i> Kembali
-  </a>
-</div>
+<x-admin.page-header
+  label="Katalog"
+  title="Input Massal Produk"
+  description="Setiap kartu mewakili satu produk lengkap (harga, stok, kategori, prinsipal, sektor, datasheet, dan deskripsi rich text). Kolom <span style='color: var(--color-accent);'>*</span> wajib diisi."
+  back-url="{{ route('admin.products') }}"
+  back-text="Kembali"
+/>
 
 {{-- Banner Ajakan Impor Excel untuk Skala Besar --}}
 <div class="admin-card mb-4" style="background: linear-gradient(135deg, var(--color-surface-1) 0%, var(--color-surface-2) 100%); border-left: 4px solid var(--color-accent);">

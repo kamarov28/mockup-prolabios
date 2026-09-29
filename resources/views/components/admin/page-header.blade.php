@@ -20,28 +20,32 @@
       <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
         Mengedit: <strong style="color: var(--color-text-main);">{{ $editing }}</strong>
       </div>
-    @elseif($description || $slot->isNotEmpty())
+    @elseif($description)
+      <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+        {!! $description !!}
+      </p>
+    @elseif($slot->isNotEmpty())
       <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-        @if($description)
-          {!! $description !!}
-        @else
-          {{ $slot }}
-        @endif
+        {{ $slot }}
       </div>
     @endif
   </div>
 
-  <div class="d-flex align-items-center gap-2">
-    @if($backUrl)
-      <a href="{{ $backUrl }}" class="admin-btn admin-btn-outline">
-        <i data-lucide="arrow-left"></i> {{ $backText }}
-      </a>
-    @endif
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+    @if(isset($actions))
+      {{ $actions }}
+    @else
+      @if($backUrl)
+        <a href="{{ $backUrl }}" class="admin-btn admin-btn-outline">
+          <i data-lucide="arrow-left"></i> {{ $backText }}
+        </a>
+      @endif
 
-    @if($actionUrl && $actionText)
-      <a href="{{ $actionUrl }}" class="admin-btn admin-btn-primary">
-        <i data-lucide="{{ $actionIcon }}"></i> {{ $actionText }}
-      </a>
+      @if($actionUrl && $actionText)
+        <a href="{{ $actionUrl }}" class="admin-btn admin-btn-primary">
+          <i data-lucide="{{ $actionIcon }}"></i> {{ $actionText }}
+        </a>
+      @endif
     @endif
   </div>
 </div>

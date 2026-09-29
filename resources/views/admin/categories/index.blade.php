@@ -5,19 +5,14 @@
 
 @section('admin_content')
 
-{{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Katalog Produk</span>
-    <h2 class="admin-page-title mb-1">Manajemen Kategori & Subkategori</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      Kelola struktur hierarki katalog produk, pengurutan, dan pengelompokan. Perubahan langsung aktif di katalog publik.
-    </p>
-  </div>
-  <a href="{{ route('admin.categories.create') }}" class="admin-btn admin-btn-primary">
-    <i data-lucide="plus"></i> Tambah Kategori
-  </a>
-</div>
+<x-admin.page-header
+  label="Katalog Produk"
+  title="Manajemen Kategori & Subkategori"
+  description="Kelola struktur hierarki katalog produk, pengurutan, dan pengelompokan. Perubahan langsung aktif di katalog publik."
+  action-url="{{ route('admin.categories.create') }}"
+  action-text="Tambah Kategori"
+  action-icon="plus"
+/>
 
 @if($parents->isEmpty())
   <x-admin.empty-state

@@ -5,17 +5,16 @@
 
 @section('admin_content')
 
-<div class="admin-card">
+<x-admin.page-header
+  label="Konten & Partner"
+  title="Daftar Prinsipal / Brand Mitra"
+  description="Kelola data manufaktur prinsipal, brand instrumen, dan mitra resmi laboratorium."
+  action-url="{{ route('admin.principals.create') }}"
+  action-text="Tambah Prinsipal Baru"
+  action-icon="plus"
+/>
 
-  <div class="admin-card-header">
-    <div>
-      <span class="admin-card-header-label">Konten & Partner</span>
-      <h2 class="admin-card-header-title">Daftar Prinsipal / Brand Mitra</h2>
-    </div>
-    <a href="{{ route('admin.principals.create') }}" class="admin-btn admin-btn-primary">
-      <i data-lucide="plus"></i> Tambah Prinsipal Baru
-    </a>
-  </div>
+<div class="admin-card">
 
   <div class="admin-card-body p-3" style="border-bottom: 1px solid var(--color-border); background: #FFFFFF;">
     <form action="{{ route('admin.principals') }}" method="GET">

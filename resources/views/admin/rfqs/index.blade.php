@@ -5,16 +5,11 @@
 
 @section('admin_content')
 
-{{-- Page Header --}}
-<div class="d-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap">
-  <div>
-    <span class="admin-page-label">Inquiry & Pengadaan</span>
-    <h2 class="admin-page-title mb-1">Daftar Pengajuan RFQ</h2>
-    <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
-      Kelola permintaan penawaran harga resmi (Request for Quotation) dari pelanggan dan instansi.
-    </p>
-  </div>
-  <div class="d-inline-flex align-items-center gap-2 flex-wrap">
+<x-admin.page-header
+  label="Inquiry & Pengadaan"
+  title="Daftar Pengajuan RFQ"
+  description="Kelola permintaan penawaran harga resmi (Request for Quotation) dari pelanggan dan instansi.">
+  <x-slot:actions>
     <div class="admin-view-switcher">
       <a href="{{ request()->fullUrlWithQuery(['view' => 'table']) }}" class="admin-view-switcher-btn {{ ($viewMode ?? 'table') === 'table' ? 'active' : '' }}" title="Tampilan Tabel">
         <i data-lucide="table"></i>
@@ -26,8 +21,8 @@
     <a href="{{ route('admin.rfqs.export', request()->query()) }}" class="admin-btn admin-btn-outline" title="Download Excel/CSV sesuai filter saat ini">
       <i data-lucide="file-spreadsheet"></i> Ekspor Excel
     </a>
-  </div>
-</div>
+  </x-slot:actions>
+</x-admin.page-header>
 
 <div class="admin-card">
 

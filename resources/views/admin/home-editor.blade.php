@@ -70,13 +70,11 @@
   @endif
 
   @if(!$section)
-    <div class="mb-5">
-      <span class="admin-page-label">PENGATURAN KONTEN WEBSITE</span>
-      <h1 class="admin-page-title mb-2">Pilih Bagian yang Ingin Diatur</h1>
-      <p style="color: var(--color-text-muted); font-size: 0.88rem; max-width: 600px; line-height: 1.6; margin-bottom: 0;">
-        Silakan pilih modul di bawah untuk memperbarui teks beranda, nomor kontak, logo, atau pengaturan media sosial.
-      </p>
-    </div>
+    <x-admin.page-header
+      label="Pengaturan Konten Website"
+      title="Pilih Bagian yang Ingin Diatur"
+      description="Silakan pilih modul di bawah untuk memperbarui teks beranda, nomor kontak, logo, atau pengaturan media sosial."
+    />
 
     <div class="row g-4">
       <div class="col-md-6 col-lg-4">
