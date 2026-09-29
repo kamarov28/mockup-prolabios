@@ -91,8 +91,16 @@ export function initContactForm() {
       headers: ajaxHeaders(csrfToken),
       body: formData
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 419) {
+          alert('Sesi formulir telah kedaluwarsa. Halaman akan dimuat ulang...');
+          window.location.reload();
+          return null;
+        }
+        return res.json();
+      })
       .then(data => {
+        if (!data) return;
         if (data.success) {
           form.classList.add('is-hidden');
           if (success) {
@@ -169,8 +177,18 @@ export function initAjaxAddToCart() {
       headers: ajaxHeaders(csrfToken),
       body: formData
     })
-      .then(function (res) { return res.json(); })
+      .then(function (res) {
+        if (res.status === 419) {
+          showToast('Sesi belanja telah diperbarui. Memuat ulang halaman...', 'info');
+          setTimeout(function () {
+            window.location.reload();
+          }, 1500);
+          return null;
+        }
+        return res.json();
+      })
       .then(function (data) {
+        if (!data) return;
         if (data.success) {
           setCartBadgeCount(data.cartCount);
 

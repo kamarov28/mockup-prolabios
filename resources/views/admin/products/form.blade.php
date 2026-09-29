@@ -178,10 +178,14 @@
             <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
             <x-admin.section-box>
               <div class="mb-2">
-                <label for="datasheet_file" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">
-                  <i data-lucide="upload" class="me-1"></i>Upload File PDF (Maks. 10MB)
+                <label for="datasheet_file" class="form-label small mb-1 d-flex align-items-center justify-content-between" style="font-weight: 600; color: var(--color-text-secondary);">
+                  <span><i data-lucide="upload" class="me-1"></i>Upload File PDF (Maks. 10MB)</span>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem; font-weight: 600;">Direkomendasikan</span>
                 </label>
                 <input class="form-control" type="file" id="datasheet_file" name="datasheet_file" accept=".pdf,application/pdf">
+                <div class="form-text mt-1" style="font-size: 0.78rem; color: var(--color-text-muted);">
+                  Unggah file PDF langsung ke server lokal agar dokumen selalu aktif dan tidak rusak jika link eksternal kedaluwarsa.
+                </div>
               </div>
               <div class="mb-2">
                 <label for="datasheet_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">

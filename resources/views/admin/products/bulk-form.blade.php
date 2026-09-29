@@ -179,7 +179,7 @@
             <div class="row g-2 align-items-center">
               <div class="col-md-6">
                 <input class="form-control form-control-sm" type="file" name="datasheet_file[__INDEX__]" accept=".pdf,application/pdf">
-                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Upload PDF (Maks. 10MB)</div>
+                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Upload PDF lokal (Maks. 10MB) <span class="badge bg-success-subtle text-success border border-success-subtle ms-1" style="font-size: 0.68rem;">Direkomendasikan</span></div>
               </div>
               <div class="col-md-6">
                 <input type="text" class="form-control form-control-sm" name="datasheet_url[__INDEX__]" placeholder="Atau URL PDF Eksternal (https://...)">
