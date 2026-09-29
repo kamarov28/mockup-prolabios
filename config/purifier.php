@@ -30,10 +30,10 @@ return [
         'product_description' => [
             // HTML.Allowed uses HTML 4.01 tag names; HTML5 extras registered below.
             'HTML.Allowed' => implode(',', [
-                'p', 'br', 'hr',
-                'strong', 'b', 'em', 'i', 'u', 's', 'del', 'sub', 'sup',
-                'ul', 'ol', 'li',
-                'h2', 'h3', 'h4', 'h5', 'h6',
+                'p[class|style]', 'br', 'hr',
+                'strong[class|style]', 'b', 'em', 'i', 'u', 's', 'del', 'sub', 'sup',
+                'ul[class|style]', 'ol[class|style]', 'li[class|style]',
+                'h2[class|style]', 'h3[class|style]', 'h4[class|style]', 'h5[class|style]', 'h6[class|style]',
                 'table[class|style|border|cellpadding|cellspacing]',
                 'thead[class]',
                 'tbody[class]',
@@ -41,10 +41,10 @@ return [
                 'tr[class|style]',
                 'th[class|style|scope|colspan|rowspan]',
                 'td[class|style|colspan|rowspan]',
-                'span[style]',
-                'div[style]',
-                'blockquote', 'code', 'pre',
-                'a[href|title|target|rel]',
+                'span[class|style]',
+                'div[class|style]',
+                'blockquote[class|style]', 'code', 'pre',
+                'a[href|title|target|rel|class|style]',
                 'img[src|alt|width|height|loading|style|class]',
                 'figure', 'figcaption',
                 // NOTE: <iframe> is deliberately omitted — was in the old regex sanitizer

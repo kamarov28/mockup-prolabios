@@ -120,7 +120,8 @@
 }
 
 .nb-hero--immersive .nb-hero-title .nb-accent,
-.nb-hero--immersive .nb-hero-title .text-accent {
+.nb-hero--immersive .nb-hero-title .text-accent,
+.nb-hero--immersive .nb-hero-title span {
   color: #EF4444 !important;
   -webkit-text-fill-color: #EF4444 !important;
   text-shadow: none !important;
@@ -158,7 +159,8 @@
 }
 
 .nb-hero-title .nb-accent,
-.nb-hero-title .text-accent {
+.nb-hero-title .text-accent,
+.nb-hero-title span {
   color: var(--nb-primary) !important;
   -webkit-text-fill-color: var(--nb-primary) !important;
 }
