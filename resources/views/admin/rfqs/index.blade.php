@@ -41,19 +41,7 @@
 
         {{-- Search Input --}}
         <div class="col-lg-4 col-md-12">
-          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden; background: #FFFFFF; transition: border-color 0.2s ease;" id="search-group">
-            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted); background: #F8FAFC; border-right: 1px solid var(--color-border);">
-              <i data-lucide="search" style="width: 15px; height: 15px;"></i>
-            </span>
-            <input type="text" name="s" id="local-search-input"
-                   style="flex: 1; background: transparent; border: none; outline: none; padding: 0 12px; color: var(--color-text-main); font-family: var(--font-body); font-size: 0.88rem; height: 38px;"
-                   placeholder="Cari nomor RFQ, pemohon, instansi, WA..." value="{{ request('s') }}" aria-label="Kata kunci pencarian">
-            @if(request('s'))
-              <a href="{{ route('admin.rfqs.index', array_merge(request()->except('s'), request('view') === 'kanban' ? ['view' => 'kanban'] : [])) }}" style="display: flex; align-items: center; padding: 0 10px; color: var(--color-text-muted); text-decoration: none;" title="Hapus pencarian">
-                <i data-lucide="x" style="width: 14px; height: 14px;"></i>
-              </a>
-            @endif
-          </div>
+          <x-admin.search-input name="s" id="local-search-input" :value="request('s')" placeholder="Cari nomor RFQ, pemohon, instansi, WA..." :clear-url="route('admin.rfqs.index', array_merge(request()->except('s'), request('view') === 'kanban' ? ['view' => 'kanban'] : []))" />
         </div>
 
         {{-- Filter Product Name / Catalog --}}

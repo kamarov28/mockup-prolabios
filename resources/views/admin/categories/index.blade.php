@@ -36,13 +36,7 @@
 
       {{-- Search Input --}}
       <div class="d-flex align-items-center gap-2" style="flex: 1; min-width: 240px; max-width: 420px;">
-        <div style="position: relative; width: 100%;">
-          <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); width: 16px; height: 16px; pointer-events: none;"></i>
-          <input type="search" id="category-filter" class="form-control"
-                 placeholder="Cari nama kategori atau key..."
-                 autocomplete="off"
-                 style="padding-left: 36px; height: 38px; font-size: 0.85rem; border-radius: 8px;">
-        </div>
+        <x-admin.search-input id="category-filter" name="" placeholder="Cari nama kategori atau key..." />
       </div>
 
       {{-- Action Tools: Expand/Collapse & Quick Count --}}

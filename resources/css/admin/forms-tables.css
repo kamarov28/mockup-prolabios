@@ -104,8 +104,7 @@
   letter-spacing: 0.2px;
 }
 .admin-form-control,
-.form-control:not(.note-editor *):not(.note-popover *),
-.form-select:not(.note-editor *):not(.note-popover *) {
+.form-control:not(.note-editor *):not(.note-popover *) {
   width: 100%;
   background: #FFFFFF !important;
   border: 1px solid #D1D5DB !important;
@@ -119,17 +118,109 @@
   transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
   outline: none;
 }
+.form-select:not(.note-editor *):not(.note-popover *) {
+  width: 100%;
+  background-color: #FFFFFF !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234B5563' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.75rem center !important;
+  background-size: 16px 12px !important;
+  border: 1px solid #D1D5DB !important;
+  border-radius: 8px !important;
+  padding: 8px 2.25rem 8px 12px !important;
+  color: var(--color-text-main) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  font-weight: 400;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+}
 .admin-form-control::placeholder,
 .form-control::placeholder {
   color: #9CA3AF;
 }
 .admin-form-control:focus,
-.form-control:focus:not(.note-editor *):not(.note-popover *),
-.form-select:focus:not(.note-editor *):not(.note-popover *) {
+.form-control:focus:not(.note-editor *):not(.note-popover *) {
   border-color: var(--color-accent) !important;
   box-shadow: var(--focus-ring) !important;
   background: #FFFFFF !important;
   color: var(--color-text-main) !important;
+}
+.form-select:focus:not(.note-editor *):not(.note-popover *) {
+  border-color: var(--color-accent) !important;
+  box-shadow: var(--focus-ring) !important;
+  background-color: #FFFFFF !important;
+  color: var(--color-text-main) !important;
+}
+
+/* ── Admin Standard Search Component (Modern Flat Precision) ── */
+.admin-search-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+.admin-search-wrapper .admin-search-icon {
+  position: absolute !important;
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #9CA3AF !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  transition: color 0.15s ease !important;
+}
+.admin-search-wrapper:focus-within .admin-search-icon {
+  color: var(--color-accent) !important;
+}
+.admin-search-input {
+  width: 100% !important;
+  height: 38px !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid #D1D5DB !important;
+  border-radius: 8px !important;
+  padding-left: 38px !important;
+  padding-right: 32px !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  color: var(--color-text-main) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+  outline: none !important;
+}
+.admin-search-input::placeholder {
+  color: #9CA3AF !important;
+}
+.admin-search-input:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: var(--focus-ring) !important;
+}
+.admin-search-clear {
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  color: #9CA3AF !important;
+  text-decoration: none !important;
+  border-radius: 50% !important;
+  transition: color 0.15s ease, background-color 0.15s ease !important;
+  z-index: 2 !important;
+}
+.admin-search-clear:hover {
+  color: var(--color-text-main) !important;
+  background-color: #F3F4F6 !important;
 }
 
 /* ── Form Check / Checkboxes (Modern Flat Precision) ── */

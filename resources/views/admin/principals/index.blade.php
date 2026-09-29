@@ -17,22 +17,15 @@
     </a>
   </div>
 
-  <div class="admin-card-body" style="border-bottom: 1px solid var(--color-border);">
+  <div class="admin-card-body p-3" style="border-bottom: 1px solid var(--color-border); background: #FFFFFF;">
     <form action="{{ route('admin.principals') }}" method="GET">
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div style="display: flex; border: 1px solid var(--color-border); border-radius: 6px; overflow: hidden;" id="search-group">
-            <span style="display: flex; align-items: center; padding: 0 12px; color: var(--color-text-muted);">
-              <i data-lucide="search" style="font-size: 0.8rem;"></i>
-            </span>
-            <input type="text" name="s" id="local-search-input"
-                   style="flex: 1; background: transparent; border: none; outline: none; padding: 10px 14px; color: var(--color-text-main); font-size: 0.88rem;"
-                   placeholder="Cari nama prinsipal atau negara..." value="{{ $search }}">
-          </div>
+      <div class="row g-2 align-items-center">
+        <div class="col-md-5 col-lg-4">
+          <x-admin.search-input name="s" :value="$search" placeholder="Cari nama prinsipal atau negara..." :clear-url="route('admin.principals')" />
         </div>
-        <div class="col-md-2">
-          <button type="submit" class="admin-btn admin-btn-primary w-100 justify-content-center">
-            <i data-lucide="filter"></i> Cari
+        <div class="col-auto">
+          <button type="submit" class="admin-btn admin-btn-primary" style="height: 38px;">
+            <i data-lucide="search"></i> Cari
           </button>
         </div>
       </div>

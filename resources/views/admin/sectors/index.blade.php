@@ -24,13 +24,7 @@
   {{-- Control Toolbar: Search & Count --}}
   <div class="admin-card-body p-3 d-flex flex-wrap align-items-center justify-content-between gap-3" style="border-bottom: 1px solid var(--color-border); background: #FFFFFF;">
     <div class="d-flex align-items-center gap-2" style="flex: 1; min-width: 240px; max-width: 420px;">
-      <div style="position: relative; width: 100%;">
-        <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); width: 15px; height: 15px; pointer-events: none;"></i>
-        <input type="search" id="sector-search-input" class="form-control"
-               placeholder="Cari nama atau ID sektor..."
-               autocomplete="off"
-               style="padding-left: 36px; height: 38px; font-size: 0.85rem; border-radius: 8px;">
-      </div>
+      <x-admin.search-input id="sector-search-input" name="" placeholder="Cari nama atau ID sektor..." />
     </div>
 
     <div class="d-flex align-items-center gap-2 ms-auto">
