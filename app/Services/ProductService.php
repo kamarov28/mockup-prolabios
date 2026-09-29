@@ -532,6 +532,7 @@ class ProductService
                 'image' => $p['image'] ?? null,
                 'price' => $p['price'] ?? 0,
                 'stock' => $p['stock'] ?? 0,
+                'is_featured' => ! empty($p['is_featured']),
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
@@ -545,7 +546,7 @@ class ProductService
             Product::upsert(
                 $rows,
                 ['title'],
-                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'sector', 'principal_id', 'image', 'price', 'stock', 'updated_at']
+                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
             );
 
             $titles = array_column($rows, 'title');

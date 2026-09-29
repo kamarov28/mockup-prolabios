@@ -111,6 +111,7 @@ class ProductManagementTest extends TestCase
             'stock' => [15, 30],
             'principal_id' => [$principal->id, null],
             'description' => ['<p>Deskripsi bulk 1</p>', 'Deskripsi bulk 2'],
+            'is_featured' => ['1', '0'],
         ]);
 
         $response->assertRedirect(route('admin.products'));
@@ -120,12 +121,14 @@ class ProductManagementTest extends TestCase
             'price' => 1500000,
             'stock' => 15,
             'principal_id' => $principal->id,
+            'is_featured' => true,
         ]);
         $this->assertDatabaseHas('products', [
             'title' => 'Bulk Prod 2',
             'catalog' => 'BP-02',
             'price' => 250000,
             'stock' => 30,
+            'is_featured' => false,
         ]);
     }
 

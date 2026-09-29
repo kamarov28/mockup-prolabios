@@ -434,6 +434,7 @@ class AdminProductController extends Controller
             'image' => $this->handleImageUpload($request, "image_file.{$rowKey}", "image_url.{$rowKey}", '/images/placeholder.svg'),
             'price' => max(0, (float) $cleanPrice),
             'stock' => max(0, (int) $request->input("stock.{$rowKey}", 0)),
+            'is_featured' => $request->boolean("is_featured.{$rowKey}"),
         ];
     }
 

@@ -131,17 +131,36 @@
             </select>
           </div>
 
+          {{-- Row: Featured Switch --}}
+          <div class="col-12">
+            <div class="p-2 px-3 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
+              <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
+                <input class="form-check-input" type="checkbox" role="switch" id="is_featured___INDEX__" name="is_featured[__INDEX__]" value="1" style="cursor: pointer; width: 2.25rem; height: 1.25rem;">
+                <label class="form-check-label fw-semibold mb-0" for="is_featured___INDEX__" style="cursor: pointer; color: var(--color-text-main); font-size: 0.85rem;">
+                  <i data-lucide="star" class="me-1" style="width: 14px; height: 14px; color: #D97706; fill: #D97706;"></i>
+                  Tampilkan sebagai Produk Unggulan di Beranda
+                </label>
+              </div>
+            </div>
+          </div>
+
           {{-- Row 4: Sektor Industri Terkait (Multi-select Checkboxes) --}}
           <div class="col-12">
-            <label class="admin-form-label mb-2">
-              <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i> Sektor Industri Terkait
-            </label>
-            <div class="p-3" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 8px;">
+            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+              <label class="admin-form-label mb-0">
+                <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i> Sektor Industri Terkait
+              </label>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleCardSectors('__INDEX__', true)">Pilih Semua</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleCardSectors('__INDEX__', false)">Hapus Semua</button>
+              </div>
+            </div>
+            <div class="p-3" id="card-sectors-__INDEX__" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 8px;">
               <div class="row g-2">
                 @foreach($sectors as $sec)
                   <div class="col-6 col-sm-3">
                     <div class="form-check m-0 d-flex align-items-center gap-2">
-                      <input class="form-check-input" type="checkbox" name="sectors[__INDEX__][]" value="{{ $sec['id'] }}" id="sec___INDEX___{{ $sec['id'] }}">
+                      <input class="form-check-input sector-cb-__INDEX__" type="checkbox" name="sectors[__INDEX__][]" value="{{ $sec['id'] }}" id="sec___INDEX___{{ $sec['id'] }}">
                       <label class="form-check-label small mb-0" for="sec___INDEX___{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text-secondary);">
                         {{ $sec['name'] }}
                       </label>
@@ -329,6 +348,11 @@
         card.remove();
         updateIndexes();
       }
+    }
+
+    function toggleCardSectors(index, checked) {
+      const cbs = document.querySelectorAll('.sector-cb-' + index);
+      cbs.forEach(function(cb) { cb.checked = checked; });
     }
 
     function updateIndexes() {
