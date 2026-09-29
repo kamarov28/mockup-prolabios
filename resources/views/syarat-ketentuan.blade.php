@@ -4,11 +4,11 @@
 @section('meta_description', 'Syarat & Ketentuan Penggunaan dan Pengajuan Penawaran Pengadaan Alat Laboratorium PT. Prolabios Mitra Analitika.')
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="file-text" class="me-1"></i> LEGAL &amp; KEPATUHAN',
-    'title' => 'Syarat & Ketentuan',
-    'subtitle' => 'Ketentuan penggunaan platform dan prosedur permohonan penawaran pengadaan resmi alat laboratorium PT Prolabios Mitra Analitika.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="file-text" class="me-1"></i> LEGAL &amp; KEPATUHAN'
+    title="Syarat & Ketentuan"
+    subtitle="Ketentuan penggunaan platform dan prosedur permohonan penawaran pengadaan resmi alat laboratorium PT Prolabios Mitra Analitika."
+  />
 
   <!-- Content Section -->
   <section class="section-spacious nb-section">

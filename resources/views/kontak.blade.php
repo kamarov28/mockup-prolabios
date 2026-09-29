@@ -3,11 +3,11 @@
 @section('title', 'Kontak | PROLABIOS')
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="message-square" class="me-1"></i> HUBUNGI KAMI',
-    'title' => 'Kontak & Layanan Pelanggan',
-    'subtitle' => 'Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="message-square" class="me-1"></i> HUBUNGI KAMI'
+    title="Kontak & Layanan Pelanggan"
+    subtitle="Hubungi tim Prolabios untuk pertanyaan umum, konsultasi teknis pengujian laboratorium, atau permintaan perbaikan dan kalibrasi instrumen."
+  />
 
   <!-- Contact Content -->
   <section class="section-spacious nb-section">

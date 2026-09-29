@@ -7,11 +7,11 @@
 @endsection
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="package" class="me-1"></i> KATALOG PRODUK',
-    'title' => 'Produk & Instrumen Laboratorium',
-    'subtitle' => $siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi Prolabios.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="package" class="me-1"></i> KATALOG PRODUK'
+    title="Produk & Instrumen Laboratorium"
+    :subtitle="$siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi Prolabios.'"
+  />
 
   <!-- Product Content -->
   <section class="section-spacious nb-section" id="catalog-section">
@@ -72,7 +72,7 @@
               <!-- 1. Grid Cards View -->
               <div class="catalog-grid-panel row row-cols-1 row-cols-sm-2 g-3 g-md-4">
                 @foreach($products as $prod)
-                  @include('partials.product-card', ['prod' => $prod])
+                  <x-product-card :product="$prod" />
                 @endforeach
               </div>
 

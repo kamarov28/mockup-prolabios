@@ -4,11 +4,11 @@
 @section('meta_description', 'Profil PT. Prolabios Mitra Analitika — Distributor resmi media kultur mikrobiologi, reagen kimia analitika, dan instrumen laboratorium dengan fasilitas cold-chain di Indonesia.')
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="building" class="me-1"></i> TENTANG KAMI',
-    'title' => 'Distribusi Reagen & Alat Laboratorium Bergaransi Resmi',
-    'subtitle' => '<strong>PT. Prolabios Mitra Analitika (PMA)</strong> menyuplai media kultur mikrobiologi, reagen kimia analitik, dan instrumen uji untuk laboratorium industri pangan, farmasi, universitas, dan fasilitas riset di Indonesia.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="building" class="me-1"></i> TENTANG KAMI'
+    title="Distribusi Reagen & Alat Laboratorium Bergaransi Resmi"
+    subtitle="<strong>PT. Prolabios Mitra Analitika (PMA)</strong> menyuplai media kultur mikrobiologi, reagen kimia analitik, dan instrumen uji untuk laboratorium industri pangan, farmasi, universitas, dan fasilitas riset di Indonesia."
+  />
 
   <!-- Main Content Layout -->
   <section class="section-spacious nb-section">

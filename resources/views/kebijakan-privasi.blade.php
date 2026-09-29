@@ -4,11 +4,11 @@
 @section('meta_description', 'Kebijakan Privasi PT. Prolabios Mitra Analitika sesuai dengan UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi (UU PDP).')
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="shield-alert" class="me-1"></i> LEGAL &amp; KEPATUHAN',
-    'title' => 'Kebijakan Privasi',
-    'subtitle' => 'Komitmen kami dalam melindungi kerahasiaan dan keamanan data institusi serta pelanggan Anda sesuai UU No. 27 Tahun 2022 (UU PDP).'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="shield-alert" class="me-1"></i> LEGAL &amp; KEPATUHAN'
+    title="Kebijakan Privasi"
+    subtitle="Komitmen kami dalam melindungi kerahasiaan dan keamanan data institusi serta pelanggan Anda sesuai UU No. 27 Tahun 2022 (UU PDP)."
+  />
 
   <!-- Content Section -->
   <section class="section-spacious nb-section">

@@ -7,11 +7,11 @@
 
 @section('content')
   @if(!$currentBlog)
-    @include('partials.subpage-hero', [
-      'badge' => '<i data-lucide="newspaper" class="me-1"></i> BERITA &amp; ARTIKEL',
-      'title' => 'Pusat Informasi & Wawasan Industri',
-      'subtitle' => 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.'
-    ])
+    <x-subpage-hero
+      badge='<i data-lucide="newspaper" class="me-1"></i> BERITA &amp; ARTIKEL'
+      title="Pusat Informasi & Wawasan Industri"
+      subtitle="Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika."
+    />
   @endif
 
   <!-- Informasi Content -->

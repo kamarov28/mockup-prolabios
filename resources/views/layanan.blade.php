@@ -3,11 +3,11 @@
 @section('title', 'Layanan Kami | PROLABIOS')
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="settings" class="me-1"></i> LAYANAN TEKNIS',
-    'title' => 'Layanan Purna Jual & Rekayasa Laboratorium',
-    'subtitle' => 'Solusi komprehensif mulai dari pemeliharaan instrumen, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, hingga pelatihan terakreditasi prinsipal.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="settings" class="me-1"></i> LAYANAN TEKNIS'
+    title="Layanan Purna Jual & Rekayasa Laboratorium"
+    subtitle="Solusi komprehensif mulai dari pemeliharaan instrumen, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, hingga pelatihan terakreditasi prinsipal."
+  />
 
   <!-- Layanan Content -->
   <section class="section-spacious nb-section" id="service-nav">

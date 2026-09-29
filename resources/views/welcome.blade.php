@@ -39,7 +39,7 @@
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 align-items-stretch">
         @if(isset($featuredProducts) && count($featuredProducts) > 0)
           @foreach($featuredProducts as $idx => $prod)
-            @include('partials.product-card', ['prod' => $prod, 'vt' => 'prod-card-' . Str::slug($prod['title'])])
+            <x-product-card :product="$prod" :vt="'prod-card-' . Str::slug($prod['title'])" />
           @endforeach
         @else
           <div class="col-12 text-center py-4">

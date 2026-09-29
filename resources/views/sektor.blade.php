@@ -6,11 +6,11 @@
 @section('canonical_url', url('/sektor'))
 
 @section('content')
-  @include('partials.subpage-hero', [
-    'badge' => '<i data-lucide="folder-tree" class="me-1"></i> SEKTOR INDUSTRI',
-    'title' => 'Solusi Pengujian & Analisis Lintas Sektor',
-    'subtitle' => 'Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia.'
-  ])
+  <x-subpage-hero
+    badge='<i data-lucide="folder-tree" class="me-1"></i> SEKTOR INDUSTRI'
+    title="Solusi Pengujian & Analisis Lintas Sektor"
+    subtitle="Mendukung akurasi kendali mutu (QC/QA), riset aplikasi, dan kepatuhan regulasi di industri farmasi, makanan &amp; minuman, agrikultur, hingga pengolahan air di seluruh Indonesia."
+  />
 
   <!-- Sektor Content -->
   <section class="section-spacious nb-section" id="sektor-nav">
@@ -247,7 +247,7 @@
                   }
                 @endphp
                 @foreach($related as $prod)
-                  @include('partials.product-card', ['prod' => $prod])
+                  <x-product-card :product="$prod" />
                 @endforeach
               </div>
             </div>
