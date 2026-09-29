@@ -29,9 +29,6 @@
   @yield('admin_styles')
 </head>
 <body class="admin-panel">
-  <!-- Progress Loading Bar -->
-  <div id="page-loading-bar" style="position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--color-accent, #A6171C); z-index: 9999; transition: width 0.4s ease, opacity 0.4s ease; opacity: 0; pointer-events: none;"></div>
-
   <div id="admin-wrapper">
     <aside id="admin-sidebar">
 
@@ -367,26 +364,6 @@
     window.addEventListener('beforeunload', function(e) {
       if (isFormDirty) { e.preventDefault(); e.returnValue = ''; }
     });
-
-    const loadingBar = document.getElementById('page-loading-bar');
-    if (loadingBar) {
-      loadingBar.style.opacity = '1';
-      loadingBar.style.width = '100%';
-      setTimeout(() => {
-        loadingBar.style.opacity = '0';
-        setTimeout(() => { loadingBar.style.width = '0%'; }, 400);
-      }, 400);
-      document.addEventListener('click', function(e) {
-        const link = e.target.closest('a');
-        if (link && !isFormDirty) {
-          const href = link.getAttribute('href');
-          if (href && href !== '#' && !href.startsWith('javascript:') && link.getAttribute('target') !== '_blank') {
-            loadingBar.style.opacity = '1';
-            loadingBar.style.width = '70%';
-          }
-        }
-      });
-    }
 
     const scrollBtn = document.getElementById('scroll-to-top');
     if (scrollBtn) {

@@ -48,11 +48,10 @@ class AdminAuthTest extends TestCase
         $response->assertSee('Sebaran Katalog');
         $response->assertSee('Akses Instan');
         $response->assertSee('Pipeline Status Permintaan Penawaran (RFQ)');
-        $response->assertSee('Ekosistem &amp; Kemitraan', false);
+        $response->assertSee('Mitra &amp; Kategori', false);
         $response->assertSee('data-tab="products"', false);
         $response->assertSee('data-tab="posts"', false);
         $response->assertSee('dash-segmented-control');
-        $response->assertSee('dash-pipeline-tooltip');
         $response->assertSee('rfq-pipeline-bar');
         $this->assertAuthenticatedAs($adminUser);
     }

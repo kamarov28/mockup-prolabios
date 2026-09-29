@@ -5,12 +5,12 @@
 
 @section('admin_content')
 
-<div class="dash-cockpit-wrapper">
+<div class="dash-wrapper">
 
   {{-- ── Header Strip ────────────────────────────────────────────────────────── --}}
   <div class="mb-4">
-    <span class="admin-page-label">Ikhtisar Sistem</span>
-    <h2 class="admin-page-title mb-0" style="font-size: 1.5rem;">Command Center Prolabios</h2>
+    <span class="admin-page-label">Ikhtisar Bisnis</span>
+    <h2 class="admin-page-title mb-0" style="font-size: 1.5rem;">Dashboard Operasional</h2>
   </div>
 
   {{-- ── 1. KPI Micro-Stat Cards ──────────────────────────────────────────────── --}}
@@ -439,47 +439,29 @@
             $pClosed = round(($rfqPipeline['closed'] / $totRfq) * 100);
           @endphp
 
-          {{-- Multi-stage Visual Progress Bar with Interactive Chart.js-like Tooltip --}}
-          <div class="dash-pipeline-container position-relative mb-3 pt-4">
-            {{-- Floating Chart.js-like Tooltip --}}
-            <div id="dash-pipeline-tooltip" class="dash-chart-tooltip" role="tooltip" style="display: none; opacity: 0;">
-              <div class="dash-tooltip-body">
-                <span class="dash-tooltip-box" id="dash-tt-box"></span>
-                <span class="dash-tooltip-label" id="dash-tt-label"></span>
-                <span class="dash-tooltip-val" id="dash-tt-val"></span>
-              </div>
-              <div class="dash-tooltip-caret"></div>
-            </div>
-
+          {{-- Multi-stage Visual Progress Bar --}}
+          <div class="dash-pipeline-container position-relative mb-3">
             <div class="dash-pipeline-bar" id="rfq-pipeline-bar">
-              <div class="dash-bar-segment"
-                   style="width: {{ $pNew }}%; background: #F59E0B;"
-                   data-status="new"
-                   data-title="Baru Masuk"
-                   data-count="{{ $rfqPipeline['new'] }}"
-                   data-pct="{{ $pNew }}"
-                   data-color="#F59E0B"></div>
-              <div class="dash-bar-segment"
-                   style="width: {{ $pContacted }}%; background: #0284C7;"
-                   data-status="contacted"
-                   data-title="Dihubungi"
-                   data-count="{{ $rfqPipeline['contacted'] }}"
-                   data-pct="{{ $pContacted }}"
-                   data-color="#0284C7"></div>
-              <div class="dash-bar-segment"
-                   style="width: {{ $pQuoted }}%; background: var(--color-accent, #A6171C);"
-                   data-status="quoted"
-                   data-title="Penawaran"
-                   data-count="{{ $rfqPipeline['quoted'] }}"
-                   data-pct="{{ $pQuoted }}"
-                   data-color="#A6171C"></div>
-              <div class="dash-bar-segment"
-                   style="width: {{ $pClosed }}%; background: #10B981;"
-                   data-status="closed"
-                   data-title="Selesai"
-                   data-count="{{ $rfqPipeline['closed'] }}"
-                   data-pct="{{ $pClosed }}"
-                   data-color="#10B981"></div>
+              <a href="{{ route('admin.rfqs.index', ['status' => 'new']) }}"
+                 class="dash-bar-segment text-decoration-none"
+                 style="width: {{ $pNew }}%; background: #F59E0B;"
+                 data-status="new"
+                 title="Baru Masuk: {{ $rfqPipeline['new'] }} ({{ $pNew }}%)"></a>
+              <a href="{{ route('admin.rfqs.index', ['status' => 'contacted']) }}"
+                 class="dash-bar-segment text-decoration-none"
+                 style="width: {{ $pContacted }}%; background: #0284C7;"
+                 data-status="contacted"
+                 title="Dihubungi: {{ $rfqPipeline['contacted'] }} ({{ $pContacted }}%)"></a>
+              <a href="{{ route('admin.rfqs.index', ['status' => 'quoted']) }}"
+                 class="dash-bar-segment text-decoration-none"
+                 style="width: {{ $pQuoted }}%; background: var(--color-accent, #A6171C);"
+                 data-status="quoted"
+                 title="Penawaran: {{ $rfqPipeline['quoted'] }} ({{ $pQuoted }}%)"></a>
+              <a href="{{ route('admin.rfqs.index', ['status' => 'closed']) }}"
+                 class="dash-bar-segment text-decoration-none"
+                 style="width: {{ $pClosed }}%; background: #10B981;"
+                 data-status="closed"
+                 title="Selesai: {{ $rfqPipeline['closed'] }} ({{ $pClosed }}%)"></a>
             </div>
           </div>
 
@@ -563,10 +545,10 @@
       <div class="admin-card h-100" style="margin-bottom: 0;">
         <div class="admin-card-header py-2 px-3">
           <div class="d-flex align-items-center gap-2">
-            <i data-lucide="network" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
-            <h2 class="admin-card-header-title" style="font-size: 0.92rem;">Ekosistem &amp; Kemitraan</h2>
+            <i data-lucide="award" style="width: 16px; height: 16px; color: var(--color-accent);"></i>
+            <h2 class="admin-card-header-title" style="font-size: 0.92rem;">Mitra &amp; Kategori</h2>
           </div>
-          <span class="text-muted" style="font-size: 0.74rem;">Katalog Lab</span>
+          <span class="text-muted" style="font-size: 0.74rem;">Katalog</span>
         </div>
         <div class="admin-card-body p-3 d-flex flex-column justify-content-between">
           <div class="d-flex flex-column gap-2">
@@ -609,7 +591,7 @@
 
 <style>
   /* ── Dashboard Compact Viewport Styling ──────────────────────────────────── */
-  .dash-cockpit-wrapper {
+  .dash-wrapper {
     max-width: 100%;
   }
 
@@ -863,59 +845,6 @@
     opacity: 0.45;
   }
 
-  /* Chart.js Identical Floating Tooltip */
-  .dash-chart-tooltip {
-    position: absolute;
-    z-index: 1050;
-    pointer-events: none;
-    background: rgba(26, 26, 26, 0.94);
-    color: #FFFFFF;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-family: var(--font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-    font-size: 0.74rem;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
-    backdrop-filter: blur(4px);
-    transform: translate(-50%, -100%);
-    white-space: nowrap;
-    transition: opacity 0.12s ease, left 0.12s cubic-bezier(0.4, 0, 0.2, 1), top 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .dash-chart-tooltip.show {
-    display: block !important;
-    opacity: 1 !important;
-  }
-  .dash-tooltip-body {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-  }
-  .dash-tooltip-box {
-    width: 9px;
-    height: 9px;
-    border-radius: 2px;
-    display: inline-block;
-    flex-shrink: 0;
-  }
-  .dash-tooltip-label {
-    font-weight: 600;
-    color: #E2E8F0;
-  }
-  .dash-tooltip-val {
-    font-weight: 700;
-    color: #FFFFFF;
-  }
-  .dash-tooltip-caret {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid rgba(26, 26, 26, 0.94);
-  }
-
   .dash-funnel-card {
     display: block;
     background: var(--color-surface-2);
@@ -1039,116 +968,43 @@
       });
     }
 
-    // RFQ Pipeline Interactive Chart.js-like Tooltip & Cross-Hover
+    // RFQ Pipeline Segment & Card Cross-Hover Sync
     const pipelineBar = document.getElementById('rfq-pipeline-bar');
-    const pipelineContainer = document.querySelector('.dash-pipeline-container');
-    const tooltip = document.getElementById('dash-pipeline-tooltip');
-    const ttBox = document.getElementById('dash-tt-box');
-    const ttLabel = document.getElementById('dash-tt-label');
-    const ttVal = document.getElementById('dash-tt-val');
     const barSegments = document.querySelectorAll('.dash-bar-segment');
     const funnelCards = document.querySelectorAll('.dash-funnel-card');
-
-    function showPipelineTooltip(title, count, pct, color, targetEl) {
-      if (!tooltip || !targetEl || !pipelineContainer) return;
-      if (ttBox) ttBox.style.backgroundColor = color;
-      if (ttLabel) ttLabel.textContent = title + ':';
-      if (ttVal) ttVal.textContent = count + ' (' + pct + '%)';
-
-      tooltip.style.display = 'block';
-      tooltip.style.visibility = 'hidden';
-      const ttWidth = tooltip.offsetWidth || 130;
-      const halfWidth = ttWidth / 2;
-
-      const contRect = pipelineContainer.getBoundingClientRect();
-      const targetRect = targetEl.getBoundingClientRect();
-
-      const centerX = (targetRect.left + targetRect.width / 2) - contRect.left;
-      const topY = targetRect.top - contRect.top - 7;
-
-      // Clamp horizontal center inside container so tooltip is never clipped on left/right edges
-      const padding = 10;
-      const minCenter = halfWidth + padding;
-      const maxCenter = Math.max(minCenter, contRect.width - halfWidth - padding);
-      const clampedX = Math.max(minCenter, Math.min(centerX, maxCenter));
-
-      // Dynamically align caret to point at target segment center even when tooltip is clamped
-      const caretOffset = centerX - clampedX;
-      const caret = tooltip.querySelector('.dash-tooltip-caret');
-      if (caret) {
-        const maxShift = Math.max(0, halfWidth - 14);
-        const clampedShift = Math.max(-maxShift, Math.min(caretOffset, maxShift));
-        caret.style.left = 'calc(50% + ' + clampedShift + 'px)';
-      }
-
-      tooltip.style.left = clampedX + 'px';
-      tooltip.style.top = topY + 'px';
-      tooltip.style.visibility = 'visible';
-      void tooltip.offsetWidth;
-      tooltip.classList.add('show');
-    }
-
-    function hidePipelineTooltip() {
-      if (!tooltip) return;
-      tooltip.classList.remove('show');
-      setTimeout(function() {
-        if (!tooltip.classList.contains('show')) {
-          tooltip.style.display = 'none';
-        }
-      }, 120);
-      const caret = tooltip.querySelector('.dash-tooltip-caret');
-      if (caret) caret.style.left = '50%';
-      if (pipelineBar) pipelineBar.classList.remove('has-hover');
-      barSegments.forEach(function(s) { s.classList.remove('is-hovered'); });
-      funnelCards.forEach(function(c) { c.classList.remove('is-active-card'); });
-    }
 
     barSegments.forEach(function(segment) {
       segment.addEventListener('mouseenter', function() {
         const status = this.getAttribute('data-status');
-        const title = this.getAttribute('data-title');
-        const count = this.getAttribute('data-count');
-        const pct = this.getAttribute('data-pct');
-        const color = this.getAttribute('data-color');
-
         if (pipelineBar) pipelineBar.classList.add('has-hover');
         this.classList.add('is-hovered');
 
         const matchingCard = document.querySelector('.dash-funnel-card[data-status="' + status + '"]');
         if (matchingCard) matchingCard.classList.add('is-active-card');
-
-        showPipelineTooltip(title, count, pct, color, this);
       });
 
-      segment.addEventListener('mouseleave', hidePipelineTooltip);
-
-      segment.addEventListener('click', function() {
-        const status = this.getAttribute('data-status');
-        window.location.href = "{{ route('admin.rfqs.index') }}?status=" + encodeURIComponent(status);
+      segment.addEventListener('mouseleave', function() {
+        if (pipelineBar) pipelineBar.classList.remove('has-hover');
+        this.classList.remove('is-hovered');
+        funnelCards.forEach(function(c) { c.classList.remove('is-active-card'); });
       });
     });
 
     funnelCards.forEach(function(card) {
       card.addEventListener('mouseenter', function() {
         const status = this.getAttribute('data-status');
-        const title = this.getAttribute('data-title');
-        const count = this.getAttribute('data-count');
-        const pct = this.getAttribute('data-pct');
-        const color = this.getAttribute('data-color');
-
         this.classList.add('is-active-card');
         if (pipelineBar) pipelineBar.classList.add('has-hover');
 
         const matchingSegment = document.querySelector('.dash-bar-segment[data-status="' + status + '"]');
-        if (matchingSegment && matchingSegment.offsetWidth > 0) {
-          matchingSegment.classList.add('is-hovered');
-          showPipelineTooltip(title, count, pct, color, matchingSegment);
-        } else {
-          showPipelineTooltip(title, count, pct, color, this);
-        }
+        if (matchingSegment) matchingSegment.classList.add('is-hovered');
       });
 
-      card.addEventListener('mouseleave', hidePipelineTooltip);
+      card.addEventListener('mouseleave', function() {
+        this.classList.remove('is-active-card');
+        if (pipelineBar) pipelineBar.classList.remove('has-hover');
+        barSegments.forEach(function(s) { s.classList.remove('is-hovered'); });
+      });
     });
   });
 </script>
