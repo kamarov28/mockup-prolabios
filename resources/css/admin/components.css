@@ -339,10 +339,18 @@
   margin-top: 24px !important;
   margin-bottom: 0 !important;
 }
-.swal2-actions button,
-.swal2-actions .admin-btn,
-.swal2-confirm,
-.swal2-cancel {
+
+/* Ensure SweetAlert2 hidden buttons (e.g. deny button 'No') stay strictly hidden */
+.swal2-actions button[style*="display: none"],
+.swal2-popup [style*="display: none"],
+.swal2-deny:not([style*="display: inline"]):not([style*="display: block"]):not([style*="display: flex"]) {
+  display: none !important;
+}
+
+.swal2-actions button:not([style*="display: none"]):not([style*="display:none"]),
+.swal2-actions .admin-btn:not([style*="display: none"]),
+.swal2-confirm:not([style*="display: none"]),
+.swal2-cancel:not([style*="display: none"]) {
   min-width: 108px !important;
   height: 38px !important;
   line-height: 36px !important;
