@@ -109,8 +109,8 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'update'])->name('admin.sectors.update');
     Route::delete('/sectors/{id}', [AdminSectorController::class, 'destroy'])->name('admin.sectors.destroy');
 
-    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals.index');
-    Route::get('/principals/list', [AdminPrincipalController::class, 'index'])->name('admin.principals');
+    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
+    Route::redirect('/principals/list', '/admin/principals', 301);
     Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
     Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
     Route::post('/principals/bulk-delete', [AdminPrincipalController::class, 'bulkDestroy'])->name('admin.principals.bulk-destroy');

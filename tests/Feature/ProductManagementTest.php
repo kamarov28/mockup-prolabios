@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\Principal;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Sector;
 use App\Models\User;
+use App\Services\ProductService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
@@ -262,5 +264,35 @@ class ProductManagementTest extends TestCase
             'title' => 'Product With Local Datasheet Updated',
             'datasheet_url' => '/storage/datasheets/datasheet_sample.pdf',
         ]);
+    }
+
+    public function test_bulk_product_delete_cleans_up_product_sector_pivot(): void
+    {
+        $sector = Sector::create([
+            'id' => 'pharma',
+            'name' => 'Farmasi',
+            'description' => ['tag' => 'PHARMA'],
+        ]);
+
+        $product = Product::create([
+            'title' => 'Product For Bulk Delete',
+            'catalog' => 'PFBD-01',
+            'category' => 'microbiology',
+            'price' => 100000,
+            'stock' => 5,
+        ]);
+        $product->sectors()->attach($sector->id);
+
+        $this->assertDatabaseHas('product_sector', [
+            'product_id' => $product->id,
+            'sector_id' => $sector->id,
+        ]);
+
+        $service = app(ProductService::class);
+        $deleted = $service->deleteProductsByIds([$product->id]);
+
+        $this->assertEquals(1, $deleted);
+        $this->assertDatabaseMissing('products', ['id' => $product->id]);
+        $this->assertDatabaseMissing('product_sector', ['product_id' => $product->id]);
     }
 }

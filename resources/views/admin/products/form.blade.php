@@ -96,7 +96,7 @@
               @endforeach
             </select>
             <p class="form-text mb-0 mt-2">
-              <a href="{{ route('admin.principals.index') }}" target="_blank" style="color: var(--color-text-muted);">
+              <a href="{{ route('admin.principals') }}" target="_blank" style="color: var(--color-text-muted);">
                 <i data-lucide="building" class="me-1"></i>Kelola data prinsipal
               </a>
             </p>

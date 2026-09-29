@@ -82,7 +82,45 @@ class ProductService
 
     public function getCategoriesStructure(): array
     {
-        $fallback = [
+        return Cache::remember('categories_structure', 3600, function (): array {
+            try {
+                $categories = ProductCategory::with('children')
+                    ->whereNull('parent_id')
+                    ->orderBy('sort_order')
+                    ->orderBy('name')
+                    ->get();
+
+                if ($categories->isEmpty()) {
+                    return $this->getDefaultCategoriesStructure();
+                }
+
+                $structure = [];
+                foreach ($categories as $category) {
+                    $key = $category->key ?: Str::slug($category->name);
+                    $subs = [];
+                    foreach ($category->children as $child) {
+                        $childKey = $child->key ?: Str::slug($child->name);
+                        $subs[$childKey] = $child->name;
+                    }
+                    $structure[$key] = [
+                        'name' => $category->name,
+                        'subs' => $subs,
+                    ];
+                }
+
+                return $structure;
+            } catch (\Throwable $e) {
+                return $this->getDefaultCategoriesStructure();
+            }
+        });
+    }
+
+    /**
+     * @return array<string, array{name: string, subs: array<string, string>}>
+     */
+    private function getDefaultCategoriesStructure(): array
+    {
+        return [
             'microbiology' => [
                 'name' => 'Microbiology',
                 'subs' => [
@@ -158,38 +196,6 @@ class ProductService
                 ],
             ],
         ];
-
-        return Cache::remember('categories_structure', 3600, function () use ($fallback): array {
-            try {
-                $categories = ProductCategory::with('children')
-                    ->whereNull('parent_id')
-                    ->orderBy('sort_order')
-                    ->orderBy('name')
-                    ->get();
-
-                if ($categories->isEmpty()) {
-                    return $fallback;
-                }
-
-                $structure = [];
-                foreach ($categories as $category) {
-                    $key = $category->key ?: Str::slug($category->name);
-                    $subs = [];
-                    foreach ($category->children as $child) {
-                        $childKey = $child->key ?: Str::slug($child->name);
-                        $subs[$childKey] = $child->name;
-                    }
-                    $structure[$key] = [
-                        'name' => $category->name,
-                        'subs' => $subs,
-                    ];
-                }
-
-                return $structure;
-            } catch (\Throwable $e) {
-                return $fallback;
-            }
-        });
     }
 
     protected function applyProductFilters($query, ?array $filters = []): void
@@ -500,6 +506,7 @@ class ProductService
             return 0;
         }
 
+        DB::table('product_sector')->whereIn('product_id', $ids)->delete();
         $count = Product::whereIn('id', $ids)->delete();
 
         $this->clearProductsCache();

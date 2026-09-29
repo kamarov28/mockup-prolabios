@@ -252,7 +252,7 @@
     </div>
     <div class="d-flex align-items-center gap-2">
       <a href="{{ route('admin.posts') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola Artikel</a>
-      <a href="{{ route('admin.principals.index') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola Prinsipal</a>
+      <a href="{{ route('admin.principals') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola Prinsipal</a>
     </div>
   </div>
   <div class="admin-card-body">
