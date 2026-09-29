@@ -15,12 +15,8 @@
   <link rel="apple-touch-icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-      <!-- Industrial Precision Typography: IBM Plex Sans (Headings & Body) + IBM Plex Mono (Technical / SKU) -->
-      <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+  <!-- Self-Hosted Typography Preload (Zero External Font Dependencies) -->
+  <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/site.css'])
