@@ -253,7 +253,7 @@
 .rfq-details-box {
   background: var(--nb-bg-soft);
   border: 1px solid #E5E7EB;
-  border-radius: var(--nb-radius);
+  border-radius: 0 !important;
 }
 
 .rfq-success-card {

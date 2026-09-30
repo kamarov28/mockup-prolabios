@@ -12,7 +12,7 @@
     .body { padding: 30px; }
     .greeting { font-size: 16px; font-weight: 600; color: #1e293b; margin-bottom: 12px; }
     .intro { font-size: 14px; line-height: 1.6; color: #475569; margin-bottom: 20px; }
-    .card-info { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 16px; margin-bottom: 24px; }
+    .card-info { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0; padding: 16px; margin-bottom: 24px; }
     .card-info table { width: 100%; border-collapse: collapse; }
     .card-info td { padding: 6px 0; font-size: 13px; vertical-align: top; }
     .card-info td.label { color: #64748b; width: 35%; font-weight: 500; }
