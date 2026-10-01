@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PT Prolabios Mitra Analitika | Distributor Media Kultur, Reagen & Alat Lab')
+@section('title', 'Distributor Media Kultur, Reagen & Alat Lab | Prolabios')
 
 @section('preload')
   @php
