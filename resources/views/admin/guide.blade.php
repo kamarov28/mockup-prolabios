@@ -69,12 +69,12 @@
 
     <h3 class="guide-h3">Alur Operasional RFQ Aktif</h3>
     <ol class="guide-steps">
-      <li><strong>Penyusunan Keranjang:</strong> Customer memilih produk laboratorium dan menentukan estimasi kuantitas ke keranjang RFQ (disimpan aman di session browser).</li>
+      <li><strong>Penyusunan Keranjang:</strong> Customer memilih produk laboratorium dan menentukan estimasi kuantitas ke keranjang RFQ (disimpan aman di session browser hingga 7 hari / 10.080 menit).</li>
       <li><strong>Pengisian Kredensial Korporat:</strong> Customer memasukkan nama instansi/perusahaan, nomor kontak PIC, email kantor (atau email pribadi yang valid), dan catatan kebutuhan.</li>
-      <li><strong>Pengiriman &amp; Notifikasi:</strong> Sistem memproses RFQ secara asinkronus (queue jobs), mengirim email tanda terima ke PIC serta notifikasi ke admin internal.</li>
-      <li><strong>Tindak Lanjut Cepat (Follow-up WA):</strong> Admin membuka detail RFQ di <code>/admin/rfqs/{id}</code> dan dapat mengklik tombol <strong>Hubungi via WA</strong> untuk membuka pesan WhatsApp terformat otomatis (nomor RFQ + nama perusahaan).</li>
+      <li><strong>Pengiriman &amp; Notifikasi Asinkron:</strong> Sistem memproses RFQ secara asinkronus (queue jobs), mengirim email tanda terima ke PIC serta notifikasi ke admin internal.</li>
+      <li><strong>Tindak Lanjut Cepat (Dual-Channel Follow-up):</strong> Admin membuka detail RFQ di <code>/admin/rfqs/{id}</code> dan dapat mengklik tombol <strong>Hubungi via WA</strong> untuk membuka pesan WhatsApp terformat otomatis (nomor RFQ + nama perusahaan), atau mengirim email penawaran resmi.</li>
       <li><strong>Pembaruan Status &amp; Catatan Internal:</strong> Admin memperbarui tahapan status penawaran dan mencatat riwayat negosiasi di form Catatan Internal.</li>
-      <li><strong>Cetak Ringkasan:</strong> Gunakan tombol <strong>Cetak / Print</strong> di halaman detail untuk mencetak dokumen fisik penawaran internal.</li>
+      <li><strong>Format Dokumen Formal &amp; Cetak:</strong> Nomor pengajuan RFQ berformat dokumen formal laboratorium (<code>PRL-YYYY-XXXXX</code>) dengan kotak ringkasan berdesain flat presisi serta tombol <strong>Cetak Bukti RFQ</strong>.</li>
     </ol>
 
     <h3 class="guide-h3">Klasifikasi Status RFQ</h3>
@@ -142,20 +142,23 @@
       <div>
         <h3 class="guide-h3" style="margin-top: 0;">Pengelolaan Produk Tunggal</h3>
         <ul class="guide-list">
-          <li><strong>Identitas Unik:</strong> Judul produk, Nomor Katalog (SKU pabrikan), dan slug URL otomatis untuk SEO.</li>
-          <li><strong>Harga &amp; Stok:</strong> Harga patokan rupiah dan ketersediaan stok (Tersedia, Terbatas, Habis).</li>
-          <li><strong>Relasi Taksonomi:</strong> Hubungkan ke Kategori utama, Subkategori bersarang, dan centang multi-pilihan Sektor Industri.</li>
-          <li><strong>Optimasi Gambar:</strong> Gambar produk otomatis dikonversi dan dioptimalkan ke format WebP ringan.</li>
+          <li><strong>Identitas Unik:</strong> Judul produk, Nomor Katalog (SKU pabrikan), dan slug URL kanonikal otomatis untuk SEO.</li>
+          <li><strong>Harga &amp; Stok:</strong> Harga patokan rupiah dan ketersediaan stok riil (otomatis badge indikator hijau/merah).</li>
+          <li><strong>Relasi Taksonomi:</strong> Hubungkan ke Kategori utama, Subkategori dinamis, dan centang multi-pilihan Sektor Industri (dilengkapi tombol pintas <em>Pilih Semua / Hapus Semua</em>).</li>
+          <li><strong>Produk Unggulan:</strong> Toggle switch <em>Produk Unggulan</em> untuk menampilkan item pada 4 slot kartu prioritas beranda situs.</li>
+          <li><strong>Multi-Foto Galeri:</strong> Dilengkapi dropzone untuk mengunggah hingga 10 foto galeri pendukung selain Cover Utama.</li>
+          <li><strong>Dokumen Spesifikasi PDF:</strong> Opsi unggah file PDF langsung ke server lokal (direkomendasikan) atau tautan URL eksternal.</li>
         </ul>
       </div>
 
       <div>
         <h3 class="guide-h3" style="margin-top: 0;">Impor Spreadsheet Excel (.xlsx / .csv)</h3>
         <ul class="guide-list">
-          <li>Unduh template standar melalui tombol <strong>Template Excel</strong> di form impor katalog.</li>
-          <li>Mendukung pembersihan otomatis format angka (misal: <code>Rp 150.000</code> otomatis dibersihkan menjadi <code>150000</code>).</li>
-          <li>Pencocokan slug kategori dan sektor otomatis dengan validasi baris sebelum penyimpanan ke database.</li>
-          <li>Tersedia juga fitur <strong>Input Web Bulk</strong> untuk entry multi-baris langsung lewat browser tanpa membuka file excel.</li>
+          <li>Unduh template standar multi-sheet melalui tombol <strong>Template Excel</strong> di form impor katalog.</li>
+          <li><strong>Sheet 1 (Data Produk):</strong> Kolom pengisian data terstruktur lengkap dengan pembersihan otomatis format angka (misal: <code>Rp 1.500.000</code> otomatis menjadi <code>1500000</code>).</li>
+          <li><strong>Sheet 2 (Panduan &amp; Referensi):</strong> Daftar master data resmi Kategori, Sektor, dan Prinsipal yang disinkronkan langsung dari database aktif.</li>
+          <li><strong>Mekanisme Auto-Upsert:</strong> Jika Nama Produk sudah ada di database, data diperbarui otomatis; jika belum ada, sistem membuat produk baru.</li>
+          <li><strong>Input Web Bulk (Alternatif Browser):</strong> Formulir multi-kartu dinamis langsung di browser. Disarankan <strong>maksimal 10 produk</strong> (batas aman kritis <strong>15 produk</strong>) jika melampirkan berkas fisik cover &amp; PDF karena batasan PHP <code>max_file_uploads = 20</code>.</li>
         </ul>
       </div>
     </div>
@@ -163,9 +166,9 @@
     <div class="guide-note">
       <i data-lucide="file-spreadsheet"></i>
       <div>
-        <strong>Struktur Kolom Template Impor Excel:</strong>
+        <strong>Struktur Kolom Template Impor Excel (Sheet 1 - Data Produk):</strong>
         <div class="mt-2" style="font-size: 0.82rem; line-height: 1.6;">
-          <code>title</code> (Wajib) &bull; <code>catalog_number</code> (Wajib) &bull; <code>price</code> (Wajib, angka murni) &bull; <code>stock</code> (Wajib, angka) &bull; <code>category_slug</code> (Wajib, slug kategori induk) &bull; <code>subcategories</code> (Opsional, slug dipisahkan koma) &bull; <code>sectors</code> (Opsional, ID sektor dipisahkan koma, misal: <code>hospital,pharma</code>).
+          <code>A: Nomor Katalog</code> &bull; <code>B: Nama Produk *</code> (Wajib) &bull; <code>C: Kategori *</code> (Wajib, kode/nama kategori) &bull; <code>D: Subkategori</code> &bull; <code>E: Harga (Rp)</code> (Angka) &bull; <code>F: Stok</code> (Angka) &bull; <code>G: Prinsipal</code> (Nama/ID) &bull; <code>H: Sektor Industri</code> (Dipisahkan koma) &bull; <code>I: URL Cover Gambar</code> &bull; <code>J: URL Datasheet PDF</code> &bull; <code>K: Deskripsi Produk</code> (Mendukung teks deskripsi/HTML).
         </div>
       </div>
     </div>
@@ -209,10 +212,11 @@
           Pemetaan target bidang bisnis pengguna produk untuk filter publik dan navigasi industri:
         </p>
         <ul class="guide-list">
+          <li><strong>Bilah Pencarian Terstandar:</strong> Dilengkapi komponen <code>&lt;x-admin.search-input&gt;</code> dengan padding ikon presisi dan tombol reset instan.</li>
           <li><strong>Live Search Instan:</strong> Penyaringan real-time berdasarkan nama atau ID sektor di tabel tanpa jeda server reload.</li>
           <li><strong>Cover Thumbnail:</strong> Thumbnail visual sektor lab <code>.admin-post-thumb</code> yang rapi dan konsisten.</li>
-          <li><strong>Tautan Produk Terkait:</strong> Badge jumlah produk yang langsung menghubungkan admin ke katalog produk terfilter pada sektor tersebut.</li>
-          <li><strong>Proteksi Relasional Database:</strong> Dilengkapi proteksi SweetAlert2 yang memblokir penghapusan jika sektor masih terhubung dengan produk aktif.</li>
+          <li><strong>Integritas Relasi Pivot:</strong> Setiap penugasan sektor disinkronkan ke tabel pivot <code>product_sector</code>, dan otomatis dibersihkan saat produk dihapus massal guna mencegah orphan data.</li>
+          <li><strong>Proteksi Hapus Sektor:</strong> Dilengkapi proteksi konfirmasi SweetAlert2 yang memblokir penghapusan jika sektor masih terhubung dengan produk aktif.</li>
         </ul>
       </div>
     </div>
@@ -235,10 +239,12 @@
       Pengaturan komponen visual dan teks kredibilitas pada halaman beranda publik tanpa perlu menyentuh kode program:
     </p>
     <ul class="guide-list">
-      <li><strong>Hero Section:</strong> Badge promosi atas, headline utama perusahaan, sub-deskripsi, tombol CTA, serta gambar carousel/slideshow.</li>
-      <li><strong>Bento Grid Keunggulan:</strong> Poin nilai tambah Prolabios (distribusi cepat, keaslian sertifikasi, technical support lab).</li>
+      <li><strong>Hero Section &amp; Aksen Teks:</strong> Headline utama mendukung penyisipan tag khusus seperti <code>&lt;span class="text-accent"&gt;Kata Kunci&lt;/span&gt;</code> atau <code>&lt;span&gt;</code> agar kata tersebut otomatis menyala dengan warna merah Ruby khas Prolabios.</li>
+      <li><strong>4 Slot Produk Unggulan:</strong> Beranda menampilkan 4 produk unggulan terbaru yang dicentang (<code>is_featured = true</code>). Jika produk berbintang kurang dari 4, sistem memiliki auto-fallback cerdas yang otomatis melengkapi slot kosong dari katalog terbaru agar tampilan grid tetap simetris.</li>
+      <li><strong>Bento Grid Keunggulan:</strong> Poin nilai tambah Prolabios (distribusi rantai dingin teruji, keaslian sertifikasi COA/lot, technical support lab).</li>
       <li><strong>Statistik Performa:</strong> Jumlah klien aktif, varian katalog produk, dan jangkauan pengiriman seluruh Indonesia.</li>
       <li><strong>Integrasi Kontak WhatsApp:</strong> Konfigurasi nomor WhatsApp sales penerima lead RFQ langsung.</li>
+      <li><strong>Tipografi Mandiri (Self-Hosted):</strong> Font IBM Plex Sans &amp; Mono telah di-host secara lokal di server Prolabios, bebas dari latensi DNS Google Fonts dan memiliki masa cache 1 tahun.</li>
     </ul>
   </div>
 </div>
@@ -274,9 +280,10 @@
           <i data-lucide="award" class="me-1" style="color: var(--color-accent); width: 16px; height: 16px;"></i> Prinsipal / Mitra Manufaktur
         </h3>
         <ul class="guide-list">
-          <li>Unggah logo brand prinsipal global terpercaya (Oxoid, Merck, Thermo Scientific, dsb.).</li>
-          <li>Tampil otomatis di slider marquee mitra beranda situs dan halaman pengenalan perusahaan.</li>
+          <li>Unggah logo brand prinsipal global terpercaya (Liofilchem, Bioendo, Terragene, Scharlau, dsb.).</li>
+          <li>Tampil otomatis di slider marquee mitra beranda situs dan halaman katalog produk.</li>
           <li>Gunakan file gambar dengan rasio proporsional dan latar belakang transparan (PNG/WebP) untuk tampilan terbaik.</li>
+          <li><strong>Proteksi Integritas Katalog:</strong> Sistem menolak penghapusan prinsipal jika masih terhubung dengan data produk aktif untuk mencegah kerusakan relasi.</li>
         </ul>
       </div>
     </div>
@@ -287,21 +294,23 @@
 <div id="keamanan" class="admin-card" style="margin-bottom: 20px;">
   <div class="admin-card-header">
     <div>
-      <span class="admin-card-header-label">Modul 06 · Kepatuhan &amp; Proteksi</span>
-      <h2 class="admin-card-header-title"><i data-lucide="shield-check" class="me-2" style="color: var(--color-accent);"></i>Keamanan Sistem &amp; Audit Log</h2>
+      <span class="admin-card-header-label">Modul 06 · Kepatuhan, Infrastruktur &amp; Proteksi</span>
+      <h2 class="admin-card-header-title"><i data-lucide="shield-check" class="me-2" style="color: var(--color-accent);"></i>Keamanan Sistem, Server &amp; Audit Log</h2>
     </div>
   </div>
   <div class="admin-card-body">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <ul class="guide-list">
         <li><strong>Hak Akses Admin:</strong> Pastikan user memiliki flag <code>is_admin = true</code>. Jangan berbagi akun login antar personil.</li>
-        <li><strong>Audit Logging:</strong> Setiap tindakan kritis (pembuatan produk, perubahan status RFQ, modifikasi kategori/sektor) dicatat otomatis di log audit internal.</li>
-        <li><strong>Proteksi Rate Limit:</strong> Form login admin, formulir kontak publik, dan pengajuan RFQ dilindungi oleh rate limiter ketat terhadap serangan brute-force.</li>
+        <li><strong>Audit Logging:</strong> Setiap tindakan kritis (pembuatan produk, perubahan status RFQ, modifikasi kategori/sektor, import excel) dicatat otomatis di log audit internal.</li>
+        <li><strong>Proteksi Rate Limit:</strong> Form login admin (<code>throttle:admin-login</code>), formulir kontak publik, dan pengajuan RFQ dilindungi oleh rate limiter ketat terhadap serangan brute-force.</li>
+        <li><strong>Sanitasi HTMLPurifier:</strong> Seluruh input konten kaya (deskripsi produk &amp; artikel) dibersihkan dari tag berbahaya seperti <code>&lt;script&gt;</code> dan <code>&lt;iframe&gt;</code>.</li>
       </ul>
       <ul class="guide-list">
-        <li><strong>Validasi Berkas Unggahan:</strong> Sistem secara otomatis menolak berkas file berbahaya (.svg dengan script, .exe, dsb.) dan mengonversi aset ke format WebP terstandarisasi.</li>
-        <li><strong>Penyimpanan Publik:</strong> Pastikan symlink storage terpasang dengan benar di server melalui perintah <code>php artisan storage:link</code>.</li>
-        <li><strong>Pengarsipan Data:</strong> Hindari menghapus transaksi RFQ yang valid. Gunakan status <strong>Selesai</strong> untuk pengarsipan historis.</li>
+        <li><strong>Lockdown Folder Uploads:</strong> Folder publik (<code>storage/app/public/.htaccess</code>) dikunci ketat dengan <code>php_flag engine off</code> dan pemblokiran eksekusi skrip (.php, .phtml, .cgi) untuk mencegah ancaman web-shell.</li>
+        <li><strong>Izin Berkas Kredensial (.env):</strong> Di server hosting cPanel DomaiNesia, pastikan berkas <code>.env</code> selalu diatur dengan izin hak akses aman <code>chmod 600</code> atau <code>640</code>.</li>
+        <li><strong>Otomasi Cronjob cPanel:</strong> Pastikan cronjob cPanel <code>php artisan schedule:run</code> berjalan tiap menit untuk memproses antrean email RFQ secara otomatis serta mencadangkan basis data harian jam 02:00.</li>
+        <li><strong>Pengarsipan Data Transaksi:</strong> Hindari menghapus transaksi RFQ yang valid. Gunakan status <strong>Selesai</strong> untuk pengarsipan historis.</li>
       </ul>
     </div>
   </div>
