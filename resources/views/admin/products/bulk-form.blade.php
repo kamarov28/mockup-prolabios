@@ -36,6 +36,26 @@
   </div>
 </div>
 
+{{-- Catatan Batas Kapasitas Upload File Fisik --}}
+<div class="p-3 mb-4 rounded" style="background: #FFFBEB; border: 1px solid #FDE68A; border-left: 4px solid #D97706;">
+  <div class="d-flex align-items-start gap-3">
+    <div style="width: 32px; height: 32px; border-radius: 6px; background: #FEF3C7; display: flex; align-items: center; justify-content: center; color: #B45309; flex-shrink: 0; margin-top: 2px;">
+      <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
+    </div>
+    <div class="flex-grow-1">
+      <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+        <strong style="font-size: 0.88rem; color: #92400E;">Rekomendasi Kapasitas: Ideal Maksimal 10 Produk (Batas Aman Kritis: 15 Produk)</strong>
+        <span class="badge" style="background: #FEF3C7; color: #92400E; font-size: 0.7rem; border: 1px solid #FDE68A;">PHP max_file_uploads = 20</span>
+      </div>
+      <p class="mb-0" style="font-size: 0.82rem; line-height: 1.55; color: #78350F;">
+        <strong>Mengapa dibatasi?</strong> Setiap produk memiliki 2 slot berkas fisik (<em>Cover Gambar</em> dan <em>Datasheet PDF</em>). Server PHP membatasi maksimal 20 berkas per satu kali kirim form (<code>max_file_uploads</code>). Jika Anda mengisi lebih dari 10 produk dan semuanya melampirkan berkas fisik, berkas pada produk selebihnya berisiko diabaikan oleh server.
+        <br>
+        <span class="d-inline-block mt-1">💡 <em>Untuk upload lebih dari 15 produk sekaligus, sangat disarankan menggunakan menu <strong>Impor Spreadsheet Excel (.xlsx)</strong> di atas.</em></span>
+      </p>
+    </div>
+  </div>
+</div>
+
 <form action="{{ route('admin.products.store-bulk') }}" method="POST" enctype="multipart/form-data" id="bulk-form">
   @csrf
 
@@ -367,7 +387,13 @@
       });
 
       if (totalBadge) {
-        totalBadge.innerText = `Jumlah: ${cards.length} formulir produk`;
+        if (cards.length > 15) {
+          totalBadge.innerHTML = `Jumlah: <strong style="color: #DC2626;">${cards.length} formulir produk</strong> <span class="badge bg-danger-subtle text-danger border border-danger ms-1" style="font-size: 0.72rem;">Melebihi batas aman (15)</span>`;
+        } else if (cards.length > 10) {
+          totalBadge.innerHTML = `Jumlah: <strong style="color: #D97706;">${cards.length} formulir produk</strong> <span class="badge bg-warning-subtle text-warning border border-warning ms-1" style="font-size: 0.72rem;">Mendekati batas aman (maks 15)</span>`;
+        } else {
+          totalBadge.innerText = `Jumlah: ${cards.length} formulir produk (Batas aman: 10–15 produk)`;
+        }
       }
     }
 
