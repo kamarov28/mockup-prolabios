@@ -371,4 +371,24 @@ class SecurityHardeningTest extends TestCase
             URL::forceScheme(null);
         }
     }
+
+    public function test_all_outgoing_cookies_have_httponly_and_secure_flags_on_secure_requests(): void
+    {
+        $response = $this->get('https://localhost/');
+        $response->assertStatus(200);
+
+        $cookies = $response->headers->getCookies();
+        $this->assertNotEmpty($cookies);
+
+        foreach ($cookies as $cookie) {
+            $this->assertTrue(
+                $cookie->isHttpOnly(),
+                "Cookie '{$cookie->getName()}' must have HttpOnly flag set to prevent JavaScript access."
+            );
+            $this->assertTrue(
+                $cookie->isSecure(),
+                "Cookie '{$cookie->getName()}' must have Secure flag set on HTTPS requests."
+            );
+        }
+    }
 }

@@ -48,6 +48,21 @@ class SecurityHeaders
             $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         }
 
+        // Enforce HttpOnly and Secure flags on all outgoing cookies to prevent XSS cookie theft
+        $isSecure = $request->isSecure() || $request->header('X-Forwarded-Proto') === 'https' || app()->environment('production') || config('session.secure') === true;
+        foreach ($response->headers->getCookies() as $cookie) {
+            $newCookie = $cookie;
+            if (! $cookie->isHttpOnly()) {
+                $newCookie = $newCookie->withHttpOnly(true);
+            }
+            if (! $cookie->isSecure() && $isSecure) {
+                $newCookie = $newCookie->withSecure(true);
+            }
+            if ($newCookie !== $cookie) {
+                $response->headers->setCookie($newCookie);
+            }
+        }
+
         return $response;
     }
 }
