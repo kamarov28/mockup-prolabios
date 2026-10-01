@@ -48,14 +48,9 @@ export function initScrollAnimations() {
     threshold: 0.08
   });
 
-  const windowHeight = window.innerHeight;
+  // Native observer triggers asynchronously on the next frame with zero forced reflows
   animateElements.forEach(function (el) {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < windowHeight * 0.94 && rect.bottom >= 0) {
-      el.classList.add('is-visible');
-    } else {
-      animationObserver.observe(el);
-    }
+    animationObserver.observe(el);
   });
 }
 

@@ -117,9 +117,9 @@ class HomepageService
             'hero_cta_text' => 'Jelajahi Katalog Produk',
             'hero_cta_link' => '/produk',
             'hero_images' => [
-                'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-                'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-                'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&fm=webp&q=75&fit=crop&w=1200',
+                'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?ixlib=rb-4.0.3&fm=webp&q=75&fit=crop&w=1200',
+                'https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&fm=webp&q=75&fit=crop&w=1200',
             ],
 
             // 2. Bento Grid

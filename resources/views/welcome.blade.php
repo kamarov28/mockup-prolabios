@@ -4,14 +4,18 @@
 
 @section('preload')
   @php
-    $firstHero = $homeData['hero_images'][0] ?? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80';
+    $rawFirstHero = $homeData['hero_images'][0] ?? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+    $firstHero = $rawFirstHero;
+    if (str_contains($rawFirstHero, 'images.unsplash.com')) {
+      $firstHero = preg_replace('/&(auto=format|w=\d+|q=\d+|fm=\w+)/', '', $rawFirstHero) . '&fm=webp&q=75&fit=crop&w=1200';
+    }
     $isUnsplash = str_contains($firstHero, 'images.unsplash.com');
   @endphp
   @if($isUnsplash)
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
   @endif
-  <link rel="preload" as="image" href="{{ $firstHero }}" fetchpriority="high">
+  <link rel="preload" as="image" href="{!! $firstHero !!}" fetchpriority="high">
 @endsection
 
 @section('content')

@@ -15,16 +15,14 @@
   <link rel="apple-touch-icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
-  <!-- Self-Hosted Typography Preload (Zero External Font Dependencies) -->
+  <!-- Self-Hosted Typography & Critical Asset Preload -->
   <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+  @yield('preload')
 
   <!-- Core App Styles via Vite (Bundled Bootstrap 5 + Icons + Soft Neo-Brutalism) -->
   @vite(['resources/css/style.css', 'resources/css/site.css'])
 
   @stack('styles')
-
-  <!-- Page Preloads -->
-  @yield('preload')
 
   <!-- Open Graph / Facebook Metadata -->
   <meta property="og:site_name" content="{{ $siteSettings['company_name'] ?? 'PT. Prolabios Mitra Analitika' }}">

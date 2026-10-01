@@ -15,9 +15,15 @@
   <!-- Fullscreen Immersive Background Slideshow -->
   <div class="nb-hero-backdrop">
     @foreach($heroImages as $index => $imgUrl)
+      @php
+        $slideUrl = $imgUrl;
+        if (str_contains($imgUrl, 'images.unsplash.com')) {
+          $slideUrl = preg_replace('/&(auto=format|w=\d+|q=\d+|fm=\w+)/', '', $imgUrl) . '&fm=webp&q=75&fit=crop&w=1200';
+        }
+      @endphp
       <img
         class="nb-hero-slide @if($index === 0) is-active @endif"
-        src="{{ $imgUrl }}"
+        src="{{ $slideUrl }}"
         alt="Laboratorium Prolabios"
         decoding="async"
         @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
