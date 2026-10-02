@@ -176,11 +176,11 @@
                     <div>
                       @if($stock > 0)
                         <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                          <i data-lucide="package-check" class="me-1"></i> Ready Indefinite
+                          <i data-lucide="package-check"></i> Ready Indefinite
                         </span>
                       @else
                         <span class="nb-badge-stock nb-badge-stock--empty">
-                          <i data-lucide="clock" class="me-1"></i> Pesanan Khusus (Indent)
+                          <i data-lucide="clock"></i> Pesanan Khusus (Indent)
                         </span>
                       @endif
                     </div>
