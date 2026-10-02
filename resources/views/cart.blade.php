@@ -99,7 +99,7 @@
 
                     @if(!$isIndent)
                       <span class="nb-badge-stock">
-                        <i data-lucide="package" class="me-1"></i> Stok Siap
+                        <i data-lucide="package" class="me-1"></i> Ready Indefinite
                       </span>
                     @else
                       <span class="nb-badge-stock nb-badge-stock--empty" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">

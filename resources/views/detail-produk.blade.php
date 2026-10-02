@@ -176,7 +176,7 @@
                     <div>
                       @if($stock > 0)
                         <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                          <i data-lucide="package-check" class="me-1"></i> Stok Siap: {{ $stock }} unit
+                          <i data-lucide="package-check" class="me-1"></i> Ready Indefinite
                         </span>
                       @else
                         <span class="nb-badge-stock nb-badge-stock--empty">
@@ -325,7 +325,7 @@
                   <div class="fw-bold small text-truncate" style="color: var(--nb-ink); font-size: 0.85rem;">{{ $product['title'] }}</div>
                   <div class="text-muted" style="font-size: 0.75rem;">
                     @if($stock > 0)
-                      <span class="text-success fw-medium">Ready Stock ({{ $stock }})</span>
+                      <span class="text-success fw-medium">Ready Indefinite</span>
                     @else
                       <span class="text-warning fw-medium">Pesanan Khusus (Indent)</span>
                     @endif
