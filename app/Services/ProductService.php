@@ -439,6 +439,9 @@ class ProductService
             'datasheet_url' => $product['datasheet_url'] ?? null,
             'category' => $product['category'],
             'sub_category' => $product['sub_category'] ?? null,
+            'packaging' => $product['packaging'] ?? null,
+            'function' => ! empty($product['function']) ? HtmlSanitizer::clean($product['function']) : null,
+            'reference_method' => $product['reference_method'] ?? null,
             'sector' => $product['sector'] ?? null,
             'principal_id' => $product['principal_id'] ?? null,
             'image' => $product['image'] ?? null,
@@ -470,6 +473,9 @@ class ProductService
             'datasheet_url' => $updatedProduct['datasheet_url'] ?? null,
             'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
+            'packaging' => $updatedProduct['packaging'] ?? null,
+            'function' => ! empty($updatedProduct['function']) ? HtmlSanitizer::clean($updatedProduct['function']) : null,
+            'reference_method' => $updatedProduct['reference_method'] ?? null,
             'sector' => $updatedProduct['sector'] ?? null,
             'principal_id' => $updatedProduct['principal_id'] ?? null,
             'image' => $updatedProduct['image'] ?? null,
@@ -534,6 +540,9 @@ class ProductService
                 'datasheet_url' => $p['datasheet_url'] ?? null,
                 'category' => $p['category'],
                 'sub_category' => $p['sub_category'] ?? null,
+                'packaging' => $p['packaging'] ?? null,
+                'function' => ! empty($p['function']) ? HtmlSanitizer::clean($p['function']) : null,
+                'reference_method' => $p['reference_method'] ?? null,
                 'sector' => $p['sector'] ?? null,
                 'principal_id' => $p['principal_id'] ?? null,
                 'image' => $p['image'] ?? null,
@@ -553,7 +562,7 @@ class ProductService
             Product::upsert(
                 $rows,
                 ['title'],
-                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
+                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'packaging', 'function', 'reference_method', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
             );
 
             $titles = array_column($rows, 'title');

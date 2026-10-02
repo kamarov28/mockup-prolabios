@@ -110,34 +110,17 @@
             <input type="text" name="catalog[__INDEX__]" class="form-control" placeholder="Contoh: 610152">
           </div>
 
-          {{-- Row 2: Harga & Stok --}}
-          <div class="col-md-6">
+          {{-- Row 2: Harga, Stok & Prinsipal --}}
+          <div class="col-md-4">
             <label class="admin-form-label">Harga Produk (Rp)</label>
             <div class="input-group">
               <span class="input-group-text">Rp</span>
               <input type="text" inputmode="numeric" name="price[__INDEX__]" class="form-control bulk-price-input" placeholder="Contoh: 1.500.000">
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="admin-form-label">Stok (Unit)</label>
             <input type="number" min="0" name="stock[__INDEX__]" class="form-control" value="0" placeholder="0">
-          </div>
-
-          {{-- Row 3: Kategori, Subkategori & Prinsipal --}}
-          <div class="col-md-4">
-            <label class="admin-form-label">Kategori <span style="color: var(--color-accent);">*</span></label>
-            <select name="category[__INDEX__]" class="form-select bulk-category-select" data-id="__INDEX__" required>
-              <option value="">-- Pilih Kategori --</option>
-              @foreach($categoriesStructure as $catKey => $catData)
-                <option value="{{ $catKey }}">{{ $catData['name'] ?? $catKey }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="col-md-4" id="sub-wrapper-__INDEX__" style="display: none;">
-            <label class="admin-form-label">Subkategori <span style="color: var(--color-accent);">*</span></label>
-            <select name="sub_category[__INDEX__]" id="bulk-subcategory-select-__INDEX__" class="form-select">
-              <option value="">-- Pilih Subkategori --</option>
-            </select>
           </div>
           <div class="col-md-4">
             <label class="admin-form-label">Prinsipal / Manufaktur</label>
@@ -151,7 +134,38 @@
             </select>
           </div>
 
-          {{-- Row: Featured Switch --}}
+          {{-- Row 3: Spesifikasi Teknis (Kemasan, Kategori, Subkategori) --}}
+          <div class="col-md-4">
+            <label class="admin-form-label">1. Kemasan / Satuan</label>
+            <input type="text" name="packaging[__INDEX__]" class="form-control" placeholder="Contoh: 500 g, 100 test">
+          </div>
+          <div class="col-md-4">
+            <label class="admin-form-label">2. Kategori <span style="color: var(--color-accent);">*</span></label>
+            <select name="category[__INDEX__]" class="form-select bulk-category-select" data-id="__INDEX__" required>
+              <option value="">-- Pilih Kategori --</option>
+              @foreach($categoriesStructure as $catKey => $catData)
+                <option value="{{ $catKey }}">{{ $catData['name'] ?? $catKey }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="col-md-4" id="sub-wrapper-__INDEX__" style="display: none;">
+            <label class="admin-form-label">3. Sub-kategori</label>
+            <select name="sub_category[__INDEX__]" id="bulk-subcategory-select-__INDEX__" class="form-select">
+              <option value="">-- Pilih Subkategori --</option>
+            </select>
+          </div>
+
+          {{-- Row 4: Fungsi & Metode Referensi --}}
+          <div class="col-md-6">
+            <label class="admin-form-label">5. Fungsi / Aplikasi Produk</label>
+            <input type="text" name="function[__INDEX__]" class="form-control" placeholder="Contoh: Media selektif kultivasi Lactobacillus...">
+          </div>
+          <div class="col-md-6">
+            <label class="admin-form-label">6. Metode Referensi</label>
+            <input type="text" name="reference_method[__INDEX__]" class="form-control" placeholder="Contoh: ISO 11133, BAM Ch. 5, EP, USP">
+          </div>
+
+          {{-- Row 5: Featured Switch --}}
           <div class="col-12">
             <div class="p-2 px-3 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
               <div class="form-check form-switch m-0 d-flex align-items-center gap-2">
@@ -164,11 +178,11 @@
             </div>
           </div>
 
-          {{-- Row 4: Sektor Industri Terkait (Multi-select Checkboxes) --}}
+          {{-- Row 6: Sektor Industri Terkait (Multi-select Checkboxes) --}}
           <div class="col-12">
             <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
               <label class="admin-form-label mb-0">
-                <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i> Sektor Industri Terkait
+                <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i> 4. Sektor Industri Terkait
               </label>
               <div class="d-flex gap-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleCardSectors('__INDEX__', true)">Pilih Semua</button>

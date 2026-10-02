@@ -61,6 +61,9 @@ class ProductManagementTest extends TestCase
             'title' => 'Antimicrobial Disc Set',
             'catalog' => 'ADS-99',
             'category' => 'microbiology',
+            'packaging' => '50 cartridges / pack',
+            'function' => 'Uji sensitivitas antibiotik bakteri',
+            'reference_method' => 'CLSI M100 / EUCAST',
             'price' => 750000,
             'stock' => 20,
             'description' => 'Detailed test description',
@@ -70,6 +73,9 @@ class ProductManagementTest extends TestCase
         $this->assertDatabaseHas('products', [
             'title' => 'Antimicrobial Disc Set',
             'catalog' => 'ADS-99',
+            'packaging' => '50 cartridges / pack',
+            'function' => 'Uji sensitivitas antibiotik bakteri',
+            'reference_method' => 'CLSI M100 / EUCAST',
         ]);
 
         $product = Product::where('title', 'Antimicrobial Disc Set')->first();
@@ -80,6 +86,9 @@ class ProductManagementTest extends TestCase
             'title' => 'Antimicrobial Disc Set v2',
             'catalog' => 'ADS-100',
             'category' => 'microbiology',
+            'packaging' => '100 cartridges / pack',
+            'function' => 'Uji sensitivitas mikrobiologi mutakhir',
+            'reference_method' => 'ISO 20776-1',
             'price' => 800000,
             'stock' => 15,
             'description' => 'Updated test description',
@@ -90,6 +99,9 @@ class ProductManagementTest extends TestCase
             'id' => $product->id,
             'title' => 'Antimicrobial Disc Set v2',
             'catalog' => 'ADS-100',
+            'packaging' => '100 cartridges / pack',
+            'function' => 'Uji sensitivitas mikrobiologi mutakhir',
+            'reference_method' => 'ISO 20776-1',
             'price' => 800000,
         ]);
 
@@ -109,6 +121,9 @@ class ProductManagementTest extends TestCase
             'title' => ['Bulk Prod 1', 'Bulk Prod 2'],
             'catalog' => ['BP-01', 'BP-02'],
             'category' => ['microbiology', 'microbiology'],
+            'packaging' => ['500 g', '100 test'],
+            'function' => ['Kultur bakteri', 'Deteksi endotoksin'],
+            'reference_method' => ['ISO 11133', 'USP <85>'],
             'price' => ['1.500.000', '250000'],
             'stock' => [15, 30],
             'principal_id' => [$principal->id, null],
@@ -120,6 +135,9 @@ class ProductManagementTest extends TestCase
         $this->assertDatabaseHas('products', [
             'title' => 'Bulk Prod 1',
             'catalog' => 'BP-01',
+            'packaging' => '500 g',
+            'function' => 'Kultur bakteri',
+            'reference_method' => 'ISO 11133',
             'price' => 1500000,
             'stock' => 15,
             'principal_id' => $principal->id,
@@ -128,10 +146,55 @@ class ProductManagementTest extends TestCase
         $this->assertDatabaseHas('products', [
             'title' => 'Bulk Prod 2',
             'catalog' => 'BP-02',
+            'packaging' => '100 test',
+            'function' => 'Deteksi endotoksin',
+            'reference_method' => 'USP <85>',
             'price' => 250000,
             'stock' => 30,
             'is_featured' => false,
         ]);
+    }
+
+    public function test_product_detail_page_renders_specifications_table(): void
+    {
+        $sector = Sector::create([
+            'id' => 'pharma',
+            'name' => 'Pharmaceutical & Biotech',
+            'slug' => 'pharma',
+        ]);
+
+        $product = Product::create([
+            'title' => 'Liofilchem MRS Agar Spec Test',
+            'catalog' => 'SPEC-610025',
+            'category' => 'microbiology',
+            'packaging' => 'Botol 500 g',
+            'function' => 'Media isolasi dan enumerasi Lactobacillus',
+            'reference_method' => 'ISO 11133:2014 & BAM Ch. 5',
+            'price' => 450000,
+            'stock' => 10,
+        ]);
+        $product->sectors()->attach($sector->id);
+
+        $response = $this->get('/produk/'.$product->slug);
+        $response->assertStatus(200);
+
+        // Check 6 rows of the specification table
+        $response->assertSee('Kemasan');
+        $response->assertSee('Botol 500 g');
+
+        $response->assertSee('Kategori');
+        $response->assertSee('Microbiology');
+
+        $response->assertSee('Sub-kategori');
+
+        $response->assertSee('Sektor');
+        $response->assertSee('Pharmaceutical &amp; Biotech', false);
+
+        $response->assertSee('Fungsi');
+        $response->assertSee('Media isolasi dan enumerasi Lactobacillus');
+
+        $response->assertSee('Metode Referensi');
+        $response->assertSee('ISO 11133:2014 &amp; BAM Ch. 5', false);
     }
 
     public function test_admin_can_create_product_without_subcategory(): void

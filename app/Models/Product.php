@@ -22,6 +22,9 @@ use Illuminate\Support\Str;
  * @property string|null $datasheet_url
  * @property string|null $category
  * @property string|null $sub_category
+ * @property string|null $packaging
+ * @property string|null $function
+ * @property string|null $reference_method
  * @property string|null $sector
  * @property int|null $principal_id
  * @property string|null $image
@@ -42,6 +45,9 @@ class Product extends Model
         'datasheet_url',
         'category',
         'sub_category',
+        'packaging',
+        'function',
+        'reference_method',
         'sector',
         'principal_id',
         'image',

@@ -153,6 +153,51 @@
                       {!! \App\Helpers\HtmlSanitizer::clean($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                     </div>
 
+                    @php
+                      $catDisplay = $product->categoryRelation?->name
+                        ?? (!empty($product['category']) ? ucwords(str_replace('-', ' ', (string) $product['category'])) : '-');
+                      $subCatDisplay = $product->subCategoryRelation?->name
+                        ?? (!empty($product['sub_category']) ? ucwords(str_replace('-', ' ', (string) $product['sub_category'])) : '-');
+                      $sectorDisplay = (isset($product->sectors) && $product->sectors->isNotEmpty())
+                        ? $product->sectors->pluck('name')->implode(', ')
+                        : (!empty($product['sector']) ? ucwords(str_replace('-', ' ', (string) $product['sector'])) : '-');
+                      $packagingDisplay = !empty($product['packaging']) ? $product['packaging'] : ($product->packaging ?? '-');
+                      $functionDisplay = !empty($product['function']) ? $product['function'] : ($product->function ?? '-');
+                      $refMethodDisplay = !empty($product['reference_method']) ? $product['reference_method'] : ($product->reference_method ?? '-');
+                    @endphp
+
+                    {{-- Spesifikasi Teknis Produk (2 Kolom, 6 Baris) --}}
+                    <div class="table-responsive my-3">
+                      <table class="table table-bordered mb-0 detail-spec-table" style="border-color: #E2E8F0; font-size: 0.88rem;">
+                        <tbody>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Kemasan</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $packagingDisplay }}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Kategori</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $catDisplay }}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Sub-kategori</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $subCatDisplay }}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Sektor</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $sectorDisplay }}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Fungsi</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $functionDisplay }}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Metode Referensi</th>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $refMethodDisplay }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
                     @if(empty($product['datasheet_url']))
                       <div class="mb-1">
                         <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="d-inline-flex align-items-center gap-2 text-decoration-none text-muted small" style="font-size: 0.8rem;">

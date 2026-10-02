@@ -42,7 +42,7 @@
             <input type="text" class="form-control" id="catalog" name="catalog" value="{{ old('catalog', $product['catalog'] ?? '') }}" placeholder="Contoh: 610152">
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="admin-form-group mb-0">
             <label for="price" class="admin-form-label">Harga Produk (Rp)</label>
             <div class="input-group">
@@ -51,40 +51,13 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="admin-form-group mb-0">
             <label for="stock" class="admin-form-label">Stok (Unit)</label>
             <input type="number" min="0" class="form-control" id="stock" name="stock" value="{{ old('stock', $product['stock'] ?? 0) }}" placeholder="Contoh: 50">
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="admin-form-group mb-0">
-            <label for="admin-category-select" class="admin-form-label">Kategori <span style="color: var(--color-accent);">*</span></label>
-            <select class="form-select" id="admin-category-select" name="category" required
-                    data-api-url="{{ route('admin.api.subcategories') }}">
-              <option value="">-- Pilih Kategori --</option>
-              @foreach($categories as $cat)
-                @php
-                  $selectedCat = strtolower(trim((string) old('category', $product['category'] ?? '')));
-                  $isCatSelected = $selectedCat === strtolower(trim((string) $cat->key))
-                                || $selectedCat === strtolower(trim((string) $cat->name))
-                                || $selectedCat === (string) $cat->id;
-                @endphp
-                <option value="{{ $cat->key }}"
-                        data-id="{{ $cat->id }}"
-                        {{ $isCatSelected ? 'selected' : '' }}>
-                  {{ $cat->name }}
-                </option>
-              @endforeach
-            </select>
-            <p class="form-text mb-0 mt-2">
-              <a href="{{ route('admin.categories.index') }}" target="_blank" style="color: var(--color-text-muted);">
-                <i data-lucide="folder-tree" class="me-1"></i>Kelola kategori
-              </a>
-            </p>
-          </div>
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="admin-form-group mb-0">
             <label for="principal_id" class="admin-form-label">Prinsipal / Manufaktur Asal</label>
             <select class="form-select" id="principal_id" name="principal_id">
@@ -114,63 +87,6 @@
                 <div class="text-muted small" style="font-size: 0.78rem;">Produk unggulan akan diprioritaskan tampil pada bagian katalog di halaman utama web.</div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="admin-form-group mb-0">
-            <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
-              <label class="admin-form-label mb-0">
-                <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i>Sektor Industri Terkait
-              </label>
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(true)">Pilih Semua</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(false)">Hapus Semua</button>
-              </div>
-            </div>
-
-            @php
-              $currentSectors = [];
-              if (old('sectors')) {
-                  $currentSectors = (array) old('sectors');
-              } elseif (old('sector')) {
-                  $currentSectors = is_array(old('sector')) ? old('sector') : array_map('trim', explode(',', old('sector')));
-              } elseif (!empty($product)) {
-                  if (!empty($product['sector'])) {
-                      $currentSectors = array_map('trim', explode(',', $product['sector']));
-                  } elseif (isset($product->sectors) && is_iterable($product->sectors)) {
-                      $currentSectors = $product->sectors->pluck('id')->toArray();
-                  }
-              }
-              $normalizedCurrentSectors = array_map(function($s) {
-                  return strtolower(trim(str_replace([' ', '_'], '-', (string) $s)));
-              }, $currentSectors);
-            @endphp
-
-            <x-admin.section-box description="Pilih satu atau lebih sektor industri yang menggunakan produk atau instrumen ini.">
-              <div class="row g-2">
-                @foreach($sectors as $sec)
-                  @php
-                    $normId = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['id'] ?? ''))));
-                    $normName = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['name'] ?? ''))));
-                    $isChecked = in_array($normId, $normalizedCurrentSectors, true) 
-                              || in_array($normName, $normalizedCurrentSectors, true);
-                  @endphp
-                  <div class="col-6 col-sm-4 col-md-3">
-                    <div class="form-check m-0 d-flex align-items-center gap-2">
-                      <input class="form-check-input sector-checkbox" 
-                             type="checkbox" 
-                             name="sectors[]" 
-                             value="{{ $sec['id'] }}" 
-                             id="sec_{{ $sec['id'] }}" 
-                             {{ $isChecked ? 'checked' : '' }}>
-                      <label class="form-check-label small mb-0" for="sec_{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text-secondary);">
-                        {{ $sec['name'] }}
-                      </label>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
-            </x-admin.section-box>
           </div>
         </div>
         <div class="col-12">
@@ -206,18 +122,140 @@
         </div>
       </div>
 
-      <div id="sub-category-block" style="display: none;">
-        <x-admin.section-box
-          title="Subkategori"
-          icon="folder-tree"
-          :required="true"
-          description="Sesuaikan subkategori berdasarkan kategori yang dipilih.">
-          <select class="form-select" id="admin-subcategory-select" name="sub_category"
-                  data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
-            <option value="">-- Pilih Subkategori --</option>
-          </select>
-        </x-admin.section-box>
-      </div>
+      {{-- Card 2: Spesifikasi & Klasifikasi Produk (Tabel Halaman Detail) --}}
+      <x-admin.section-box
+        title="Spesifikasi & Klasifikasi Produk (Tabel Halaman Detail)"
+        icon="table-properties"
+        :required="true"
+        description="Atribut teknis yang tampil pada tabel 2 kolom dan 6 baris di halaman detail produk (Kemasan, Kategori, Sub-kategori, Sektor, Fungsi, Metode Referensi).">
+
+        <div class="row g-3">
+          {{-- Row 1: Kemasan, Kategori, Sub-kategori --}}
+          <div class="col-md-4">
+            <div class="admin-form-group mb-0">
+              <label for="packaging" class="admin-form-label">1. Kemasan / Satuan</label>
+              <input type="text" class="form-control" id="packaging" name="packaging" value="{{ old('packaging', $product['packaging'] ?? '') }}" placeholder="Contoh: 500 g, 100 test/kit, 1 Unit">
+              <p class="form-text mb-0 mt-2 text-muted" style="font-size: 0.78rem;">Tampil pada baris 1 tabel spesifikasi.</p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="admin-form-group mb-0">
+              <label for="admin-category-select" class="admin-form-label">2. Kategori <span style="color: var(--color-accent);">*</span></label>
+              <select class="form-select" id="admin-category-select" name="category" required
+                      data-api-url="{{ route('admin.api.subcategories') }}">
+                <option value="">-- Pilih Kategori --</option>
+                @foreach($categories as $cat)
+                  @php
+                    $selectedCat = strtolower(trim((string) old('category', $product['category'] ?? '')));
+                    $isCatSelected = $selectedCat === strtolower(trim((string) $cat->key))
+                                  || $selectedCat === strtolower(trim((string) $cat->name))
+                                  || $selectedCat === (string) $cat->id;
+                  @endphp
+                  <option value="{{ $cat->key }}"
+                          data-id="{{ $cat->id }}"
+                          {{ $isCatSelected ? 'selected' : '' }}>
+                    {{ $cat->name }}
+                  </option>
+                @endforeach
+              </select>
+              <p class="form-text mb-0 mt-2">
+                <a href="{{ route('admin.categories.index') }}" target="_blank" style="color: var(--color-text-muted); font-size: 0.78rem;">
+                  <i data-lucide="folder-tree" class="me-1"></i>Kelola kategori
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4" id="sub-category-block" style="display: none;">
+            <div class="admin-form-group mb-0">
+              <label for="admin-subcategory-select" class="admin-form-label">3. Sub-kategori</label>
+              <select class="form-select" id="admin-subcategory-select" name="sub_category"
+                      data-saved="{{ old('sub_category', $product['sub_category'] ?? '') }}">
+                <option value="">-- Pilih Subkategori --</option>
+              </select>
+              <p class="form-text mb-0 mt-2 text-muted" style="font-size: 0.78rem;">Tampil pada baris 3 tabel spesifikasi.</p>
+            </div>
+          </div>
+
+          {{-- Row 2: Fungsi & Metode Referensi --}}
+          <div class="col-md-6">
+            <div class="admin-form-group mb-0">
+              <label for="function" class="admin-form-label">5. Fungsi / Aplikasi Produk</label>
+              <input type="text" class="form-control" id="function" name="function" value="{{ old('function', $product['function'] ?? '') }}" placeholder="Contoh: Media selektif kultivasi Lactobacillus dari spesimen klinis">
+              <p class="form-text mb-0 mt-2 text-muted" style="font-size: 0.78rem;">Tampil pada baris 5 tabel spesifikasi.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="admin-form-group mb-0">
+              <label for="reference_method" class="admin-form-label">6. Metode Referensi / Kompendia</label>
+              <input type="text" class="form-control" id="reference_method" name="reference_method" value="{{ old('reference_method', $product['reference_method'] ?? '') }}" placeholder="Contoh: ISO 11133, BAM Ch. 5, EP, USP, SNI">
+              <p class="form-text mb-0 mt-2 text-muted" style="font-size: 0.78rem;">Tampil pada baris 6 tabel spesifikasi.</p>
+            </div>
+          </div>
+
+          {{-- Row 3: Sektor Industri Terkait (Baris 4 Tabel) --}}
+          <div class="col-12">
+            <div class="admin-form-group mb-0">
+              <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                <label class="admin-form-label mb-0">
+                  <i data-lucide="layers" class="me-1" style="color: var(--color-accent);"></i>4. Sektor Industri Terkait
+                </label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(true)">Pilih Semua</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;" onclick="toggleAllSectors(false)">Hapus Semua</button>
+                </div>
+              </div>
+
+              @php
+                $currentSectors = [];
+                if (old('sectors')) {
+                    $currentSectors = (array) old('sectors');
+                } elseif (old('sector')) {
+                    $currentSectors = is_array(old('sector')) ? old('sector') : array_map('trim', explode(',', old('sector')));
+                } elseif (!empty($product)) {
+                    if (!empty($product['sector'])) {
+                        $currentSectors = array_map('trim', explode(',', $product['sector']));
+                    } elseif (isset($product->sectors) && is_iterable($product->sectors)) {
+                        $currentSectors = $product->sectors->pluck('id')->toArray();
+                    }
+                }
+                $normalizedCurrentSectors = array_map(function($s) {
+                    return strtolower(trim(str_replace([' ', '_'], '-', (string) $s)));
+                }, $currentSectors);
+              @endphp
+
+              <div class="p-3 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
+                <div class="row g-2">
+                  @foreach($sectors as $sec)
+                    @php
+                      $normId = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['id'] ?? ''))));
+                      $normName = strtolower(trim(str_replace([' ', '_'], '-', (string) ($sec['name'] ?? ''))));
+                      $isChecked = in_array($normId, $normalizedCurrentSectors, true) 
+                                || in_array($normName, $normalizedCurrentSectors, true);
+                    @endphp
+                    <div class="col-6 col-sm-4 col-md-3">
+                      <div class="form-check m-0 d-flex align-items-center gap-2">
+                        <input class="form-check-input sector-checkbox" 
+                               type="checkbox" 
+                               name="sectors[]" 
+                               value="{{ $sec['id'] }}" 
+                               id="sec_{{ $sec['id'] }}" 
+                               {{ $isChecked ? 'checked' : '' }}>
+                        <label class="form-check-label small mb-0" for="sec_{{ $sec['id'] }}" style="cursor: pointer; user-select: none; color: var(--color-text-secondary);">
+                          {{ $sec['name'] }}
+                        </label>
+                      </div>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </x-admin.section-box>
 
       <div class="pt-3" style="border-top: 1px solid var(--color-border);">
         <x-admin.image-upload
