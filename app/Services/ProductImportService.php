@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Helpers\HtmlSanitizer;
 use App\Models\Principal;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Sector;
 use Illuminate\Http\UploadedFile;
@@ -272,6 +273,18 @@ class ProductImportService
             $sectorLookup[strtolower(trim($sec->name))] = $sec->id;
         }
 
+        // Cache daftar judul dan katalog yang sudah ada untuk skip duplikat secara otomatis
+        $existingTitles = array_fill_keys(
+            Product::query()->pluck('title')->map(fn ($t) => strtolower(trim((string) $t)))->filter()->all(),
+            true
+        );
+        $existingCatalogs = array_fill_keys(
+            Product::query()->whereNotNull('catalog')->where('catalog', '!=', '')->pluck('catalog')->map(fn ($c) => strtolower(trim((string) $c)))->filter()->all(),
+            true
+        );
+        $seenTitlesInBatch = [];
+        $seenCatalogsInBatch = [];
+
         // Build dynamic header column mapping from row 1 to support custom/exported sheets
         $headerRow = reset($rows);
         $colMap = [];
@@ -339,6 +352,30 @@ class ProductImportService
                 $errors[] = "Baris {$rowIndex}: Nama produk kosong.";
 
                 continue;
+            }
+
+            $normTitle = strtolower($title);
+            $normCatalog = strtolower($catalog);
+
+            // Cek duplikat judul terhadap database & file yang sedang diproses
+            if (isset($existingTitles[$normTitle]) || isset($seenTitlesInBatch[$normTitle])) {
+                $skipped++;
+                $errors[] = "Baris {$rowIndex} ('{$title}'): Dilewati karena judul produk sudah ada di database/file (duplikat).";
+
+                continue;
+            }
+
+            // Cek duplikat nomor katalog jika diisi
+            if ($catalog !== '' && (isset($existingCatalogs[$normCatalog]) || isset($seenCatalogsInBatch[$normCatalog]))) {
+                $skipped++;
+                $errors[] = "Baris {$rowIndex} ('{$title}'): Dilewati karena nomor katalog '{$catalog}' sudah ada di database/file (duplikat).";
+
+                continue;
+            }
+
+            $seenTitlesInBatch[$normTitle] = true;
+            if ($catalog !== '') {
+                $seenCatalogsInBatch[$normCatalog] = true;
             }
 
             $catKey = $categoryLookup[strtolower($rawCategory)] ?? null;

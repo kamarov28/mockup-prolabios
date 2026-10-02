@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Principal;
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Sector;
 use App\Models\User;
@@ -252,6 +253,76 @@ class ProductImportTest extends TestCase
         $this->assertDatabaseHas('product_categories', [
             'key' => 'dehydrated-culture-medium',
             'name' => 'Dehydrated Culture Medium',
+        ]);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
+
+    public function test_admin_import_skips_duplicate_products_based_on_title_and_catalog(): void
+    {
+        // 1. Existing product in DB
+        Product::create([
+            'title' => 'Existing Lab Reagent',
+            'catalog' => 'EX-99',
+            'category' => 'microbiology',
+            'price' => 100000,
+            'stock' => 5,
+        ]);
+
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        $sheet->fromArray([
+            'Nomor Katalog', 'Nama Produk *', 'Kategori *', 'Subkategori', 'Harga (Rp)', 'Stok',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            // Duplicate title (should be skipped, price should NOT be updated)
+            ['DIFF-01', 'Existing Lab Reagent', 'microbiology', '', '999000', '10'],
+            // Duplicate catalog (should be skipped)
+            ['EX-99', 'Unique Name But Duplicate Catalog', 'microbiology', '', '500000', '10'],
+            // Fresh new product (should be imported)
+            ['FRESH-01', 'Completely New Reagent Item', 'microbiology', '', '250000', '15'],
+        ], null, 'A2');
+
+        $tempFile = sys_get_temp_dir().'/test_skip_duplicates_'.time().'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-skip-dups.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $response->assertSessionHas('success');
+
+        // New product was imported
+        $this->assertDatabaseHas('products', [
+            'title' => 'Completely New Reagent Item',
+            'catalog' => 'FRESH-01',
+            'price' => 250000,
+        ]);
+
+        // Duplicate title was NOT overwritten (price remains 100000)
+        $this->assertDatabaseHas('products', [
+            'title' => 'Existing Lab Reagent',
+            'price' => 100000,
+        ]);
+
+        // Duplicate catalog was skipped
+        $this->assertDatabaseMissing('products', [
+            'title' => 'Unique Name But Duplicate Catalog',
         ]);
 
         if (file_exists($tempFile)) {

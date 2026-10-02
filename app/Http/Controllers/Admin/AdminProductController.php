@@ -493,13 +493,13 @@ class AdminProductController extends Controller
 
                 $msg = "Berhasil mengimpor {$result['imported']} produk dari spreadsheet!";
                 if ($result['skipped'] > 0) {
-                    $msg .= " ({$result['skipped']} baris dilewati karena format tidak sesuai.)";
+                    $msg .= " ({$result['skipped']} baris dilewati karena sudah ada/duplikat atau data kosong.)";
                 }
 
                 return redirect()->route('admin.products')->with('success', $msg);
             }
 
-            $errMsg = 'Tidak ada produk yang berhasil diimpor.';
+            $errMsg = 'Tidak ada produk baru yang berhasil diimpor.';
             if (! empty($result['errors'])) {
                 $errMsg .= ' '.implode(' ', array_slice($result['errors'], 0, 3));
             }
