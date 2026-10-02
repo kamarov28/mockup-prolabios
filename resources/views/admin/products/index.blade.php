@@ -265,7 +265,7 @@
                   <li>Unduh template resmi berformat multi-sheet di bawah.</li>
                   <li><strong>Sheet 1 (Data Produk)</strong>: Isi nama produk & kategori (wajib). Harga & stok berupa angka.</li>
                   <li><strong>Sheet 2 (Panduan & Referensi)</strong>: Berisi daftar ID & kunci resmi Kategori, Sektor, dan Prinsipal.</li>
-                  <li>Sistem otomatis memperbarui (upsert) data jika nama produk sudah ada di database.</li>
+                  <li>Sistem otomatis melewati (skip) produk duplikat jika judul atau nomor katalog sudah ada di database/file.</li>
                 </ul>
               </div>
             </div>
