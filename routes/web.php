@@ -70,6 +70,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
 
     Route::get('/guide', [AdminDashboardController::class, 'guide'])->name('admin.guide');
+    Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
 
     Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products');
     Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');

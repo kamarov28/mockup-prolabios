@@ -9,6 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ProductService
@@ -430,8 +431,36 @@ class ProductService
         return $newVal;
     }
 
+    /**
+     * Auto-heal database schema for shared hosting environments without terminal/SSH access.
+     */
+    public function ensureSpecificationColumnsExist(): void
+    {
+        if (! Schema::hasTable('products') || Schema::hasColumn('products', 'function')) {
+            return;
+        }
+
+        try {
+            Schema::table('products', function ($table) {
+                if (! Schema::hasColumn('products', 'packaging')) {
+                    $table->string('packaging', 255)->nullable();
+                }
+                if (! Schema::hasColumn('products', 'function')) {
+                    $table->text('function')->nullable();
+                }
+                if (! Schema::hasColumn('products', 'reference_method')) {
+                    $table->string('reference_method', 500)->nullable();
+                }
+            });
+        } catch (\Throwable $e) {
+            // Silently recover if columns were added concurrently
+        }
+    }
+
     public function addProduct(array $product): ?Product
     {
+        $this->ensureSpecificationColumnsExist();
+
         $created = Product::create([
             'catalog' => $product['catalog'] ?? null,
             'title' => $product['title'],
@@ -461,6 +490,8 @@ class ProductService
 
     public function updateProductById(int $id, array $updatedProduct): bool
     {
+        $this->ensureSpecificationColumnsExist();
+
         $product = Product::find($id);
         if (! $product) {
             return false;
@@ -526,6 +557,8 @@ class ProductService
         if (empty($products)) {
             return false;
         }
+
+        $this->ensureSpecificationColumnsExist();
 
         $now = now();
         $rows = [];

@@ -13,6 +13,7 @@ use App\Services\AuditLogger;
 use App\Services\HomepageService;
 use App\Services\HomepageSettingsUpdater;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class AdminDashboardController extends Controller
@@ -124,5 +125,19 @@ class AdminDashboardController extends Controller
     public function guide()
     {
         return view('admin.guide');
+    }
+
+    public function runMigration()
+    {
+        try {
+            Artisan::call('migrate', ['--force' => true]);
+            $output = trim(Artisan::output());
+
+            AuditLogger::log('system.migrate', 'System', null, ['output' => $output]);
+
+            return redirect()->route('admin.dashboard')->with('success', 'Migrasi skema database berhasil dijalankan: '.($output ?: 'Semua skema sudah mutakhir.'));
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.dashboard')->with('error', 'Gagal menjalankan migrasi database: '.$e->getMessage());
+        }
     }
 }
