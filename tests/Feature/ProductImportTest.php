@@ -239,7 +239,19 @@ class ProductImportTest extends TestCase
             'price' => 1493000,
             'function' => 'Uji Salmonella spp',
             'reference_method' => 'ISO 6579',
-            'category' => 'microbiology',
+            'category' => 'microbiology-culture-media',
+            'sub_category' => 'dehydrated-culture-medium',
+        ]);
+
+        $this->assertDatabaseHas('product_categories', [
+            'key' => 'microbiology-culture-media',
+            'name' => 'Microbiology Culture Media',
+            'parent_id' => null,
+        ]);
+
+        $this->assertDatabaseHas('product_categories', [
+            'key' => 'dehydrated-culture-medium',
+            'name' => 'Dehydrated Culture Medium',
         ]);
 
         if (file_exists($tempFile)) {

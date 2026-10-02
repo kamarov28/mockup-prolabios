@@ -284,7 +284,7 @@ class ProductImportService
                     $colMap['title'] = $colLetter;
                 } elseif (str_starts_with($norm, 'kategori') || $norm === 'category') {
                     $colMap['category'] = $colLetter;
-                } elseif (str_starts_with($norm, 'subkategori') || str_starts_with($norm, 'sub-kategori') || str_starts_with($norm, 'sub category') || $norm === 'subcategory') {
+                } elseif (str_starts_with($norm, 'subkategori') || str_starts_with($norm, 'sub-kategori') || str_starts_with($norm, 'sub category') || str_starts_with($norm, 'sub-category') || $norm === 'subcategory' || $norm === 'sub-category') {
                     $colMap['sub_category'] = $colLetter;
                 } elseif (in_array($norm, ['kemasan', 'packaging', 'satuan', 'package', 'pack'], true)) {
                     $colMap['packaging'] = $colLetter;
@@ -342,24 +342,80 @@ class ProductImportService
             }
 
             $catKey = $categoryLookup[strtolower($rawCategory)] ?? null;
+            $parentCat = null;
+
             if (! $catKey) {
-                // Fallback pencarian parsial (misal: "Microbiology Culture Media" memuat "microbiology")
-                foreach ($categoryLookup as $lookupName => $k) {
-                    if (str_contains(strtolower($rawCategory), $lookupName) || str_contains($lookupName, strtolower($rawCategory))) {
-                        $catKey = $k;
-                        break;
+                // Auto-create kategori baru jika belum terdaftar di database
+                $catSlug = Str::slug($rawCategory);
+                if ($catSlug === '') {
+                    $catSlug = 'kategori-'.time();
+                }
+
+                $parentCat = ProductCategory::whereNull('parent_id')
+                    ->where(function ($q) use ($rawCategory, $catSlug) {
+                        $q->where('key', $catSlug)
+                            ->orWhereRaw('LOWER(name) = ?', [strtolower($rawCategory)]);
+                    })->first();
+
+                if (! $parentCat) {
+                    $uniqueKey = $catSlug;
+                    $counter = 1;
+                    while (ProductCategory::where('key', $uniqueKey)->exists()) {
+                        $uniqueKey = $catSlug.'-'.$counter++;
+                    }
+
+                    $parentCat = ProductCategory::create([
+                        'key' => $uniqueKey,
+                        'name' => $rawCategory,
+                        'parent_id' => null,
+                        'sort_order' => (ProductCategory::whereNull('parent_id')->max('sort_order') ?? 0) + 1,
+                    ]);
+                }
+
+                $catKey = $parentCat->key;
+                $categoryLookup[strtolower($rawCategory)] = $catKey;
+                $categoryLookup[strtolower($parentCat->name)] = $catKey;
+                $categoryLookup[strtolower($parentCat->key)] = $catKey;
+            } else {
+                $parentCat = ProductCategory::whereNull('parent_id')->where('key', $catKey)->first();
+            }
+
+            // Auto-create sub-kategori jika belum ada di bawah kategori induk
+            $subCategory = trim((string) ($row[$colMap['sub_category'] ?? 'D'] ?? ''));
+            $subCategoryKey = null;
+
+            if ($subCategory !== '') {
+                $subSlug = Str::slug($subCategory);
+                if ($subSlug === '') {
+                    $subSlug = 'sub-'.time();
+                }
+
+                $childCat = null;
+                if ($parentCat) {
+                    $childCat = ProductCategory::where('parent_id', $parentCat->id)
+                        ->where(function ($q) use ($subCategory, $subSlug) {
+                            $q->where('key', $subSlug)
+                                ->orWhereRaw('LOWER(name) = ?', [strtolower($subCategory)]);
+                        })->first();
+
+                    if (! $childCat) {
+                        $uniqueSubKey = $subSlug;
+                        $counter = 1;
+                        while (ProductCategory::where('key', $uniqueSubKey)->exists()) {
+                            $uniqueSubKey = $subSlug.'-'.$counter++;
+                        }
+
+                        $childCat = ProductCategory::create([
+                            'key' => $uniqueSubKey,
+                            'name' => $subCategory,
+                            'parent_id' => $parentCat->id,
+                            'sort_order' => (ProductCategory::where('parent_id', $parentCat->id)->max('sort_order') ?? 0) + 1,
+                        ]);
                     }
                 }
+
+                $subCategoryKey = $childCat ? $childCat->key : $subSlug;
             }
-
-            if (! $catKey) {
-                $skipped++;
-                $errors[] = "Baris {$rowIndex} ('{$title}'): Kategori '{$rawCategory}' tidak dikenali.";
-
-                continue;
-            }
-
-            $subCategory = trim((string) ($row[$colMap['sub_category'] ?? 'D'] ?? ''));
 
             // Parse harga (bersihkan titik, koma, spasi, Rp)
             $rawPrice = (string) ($row[$colMap['price'] ?? 'E'] ?? '0');
@@ -430,7 +486,7 @@ class ProductImportService
                 'catalog' => Str::limit($catalog, 255, ''),
                 'title' => Str::limit($title, 255, ''),
                 'category' => $catKey,
-                'sub_category' => Str::limit($subCategory, 255, ''),
+                'sub_category' => $subCategoryKey ?: (Str::limit($subCategory, 255, '') ?: null),
                 'packaging' => Str::limit($packaging, 255, '') ?: null,
                 'function' => ! empty($function) ? HtmlSanitizer::clean($function) : null,
                 'reference_method' => Str::limit($refMethod, 500, '') ?: null,
