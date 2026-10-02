@@ -219,15 +219,9 @@
                       </strong>
                     </div>
                     <div>
-                      @if($stock > 0)
-                        <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                          <i data-lucide="package-check"></i> Ready Indefinite
-                        </span>
-                      @else
-                        <span class="nb-badge-stock nb-badge-stock--empty">
-                          <i data-lucide="clock"></i> Pesanan Khusus (Indent)
-                        </span>
-                      @endif
+                      <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
+                        <i data-lucide="package-check"></i> Stock Indefinite
+                      </span>
                     </div>
                   </div>
 
@@ -258,11 +252,6 @@
                       <a href="{{ $productWaUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost detail-wa-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" title="Konsultasi cepat via WhatsApp">
                         <i data-lucide="message-circle" class="text-success me-1"></i> Tanya Sales
                       </a>
-                    </div>
-
-                    <div id="indent-notice" class="p-3 mt-3 detail-indent-notice is-hidden">
-                      <i data-lucide="info" class="me-1"></i>
-                      Jumlah yang Anda pesan melebihi stok siap ({{ $stock }} unit). Sisa unit diproses sebagai <strong>pesanan khusus</strong> (lead time tercantum pada SPH resmi).
                     </div>
                   </form>
 
@@ -369,11 +358,7 @@
                 <div class="text-truncate">
                   <div class="fw-bold small text-truncate" style="color: var(--nb-ink); font-size: 0.85rem;">{{ $product['title'] }}</div>
                   <div class="text-muted" style="font-size: 0.75rem;">
-                    @if($stock > 0)
-                      <span class="text-success fw-medium">Ready Indefinite</span>
-                    @else
-                      <span class="text-warning fw-medium">Pesanan Khusus (Indent)</span>
-                    @endif
+                    <span class="text-success fw-medium">Stock Indefinite</span>
                   </div>
                 </div>
                 <button type="button" onclick="document.getElementById('beli-produk-form').scrollIntoView({behavior: 'smooth', block: 'center'})" class="nb-btn nb-btn-primary flex-shrink-0" style="height: 38px; padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">

@@ -92,20 +92,9 @@
                       </span>
                     @endif
 
-                    @php
-                      $stockVal = (int)($item['stock'] ?? 0);
-                      $isIndent = $item['quantity'] > $stockVal;
-                    @endphp
-
-                    @if(!$isIndent)
-                      <span class="nb-badge-stock">
-                        <i data-lucide="package"></i> Ready Indefinite
-                      </span>
-                    @else
-                      <span class="nb-badge-stock nb-badge-stock--empty" title="Stok siap {{ $stockVal }} unit. Sisa {{ $item['quantity'] - $stockVal }} unit akan diproses sebagai pesanan khusus.">
-                        <i data-lucide="history"></i> Pesanan khusus (siap: {{ $stockVal }})
-                      </span>
-                    @endif
+                    <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
+                      <i data-lucide="package-check"></i> Stock Indefinite
+                    </span>
                   </div>
                 </div>
 

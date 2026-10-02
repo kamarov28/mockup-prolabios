@@ -132,15 +132,9 @@
                             </span>
                           </td>
                           <td>
-                            @if($stockVal > 0)
-                              <span class="nb-badge-stock" title="Stok siap kirim">
-                                Siap ({{ $stockVal }})
-                              </span>
-                            @else
-                              <span class="nb-badge-stock nb-badge-stock--empty" title="Pesanan khusus / indent">
-                                Indent
-                              </span>
-                            @endif
+                            <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;" title="Ketersediaan: Stock Indefinite">
+                              <i data-lucide="package-check" style="width: 14px; height: 14px;"></i> Stock Indefinite
+                            </span>
                           </td>
                           <td class="text-end">
                             <div class="d-inline-flex align-items-center gap-1">
