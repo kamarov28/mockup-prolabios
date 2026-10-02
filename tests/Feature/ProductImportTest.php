@@ -185,4 +185,65 @@ class ProductImportTest extends TestCase
             @unlink($tempFile);
         }
     }
+
+    public function test_admin_can_import_custom_airtable_headers_with_specifications(): void
+    {
+        Principal::create(['name' => 'Liofilchem']);
+
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        // Headers exactly as shown in user's Airtable / Lark Base
+        $sheet->fromArray([
+            'Catalogue', 'Description', 'Kemasan', 'Principal', 'Price List',
+            'Category', 'Sub-Category', 'Sector', 'Function', 'Method Reference',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            '611014',
+            'Buffered Peptone Water',
+            '500 g',
+            'Liofilchem',
+            '1.493.000',
+            'Microbiology Culture Media',
+            'Dehydrated Culture Medium',
+            'Pharma & Biotech',
+            'Uji Salmonella spp',
+            'ISO 6579',
+        ], null, 'A2');
+
+        $tempFile = sys_get_temp_dir().'/test_airtable_'.time().'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-airtable.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('products', [
+            'title' => 'Buffered Peptone Water',
+            'catalog' => '611014',
+            'packaging' => '500 g',
+            'price' => 1493000,
+            'function' => 'Uji Salmonella spp',
+            'reference_method' => 'ISO 6579',
+            'category' => 'microbiology',
+        ]);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
 }

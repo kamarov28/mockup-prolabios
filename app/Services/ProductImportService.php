@@ -52,9 +52,12 @@ class ProductImportService
             'F' => ['Stok', 12],
             'G' => ['Prinsipal', 22],
             'H' => ['Sektor Industri', 25],
-            'I' => ['URL Cover Gambar', 30],
-            'J' => ['URL Datasheet PDF', 30],
-            'K' => ['Deskripsi Produk', 45],
+            'I' => ['Kemasan', 18],
+            'J' => ['Fungsi', 30],
+            'K' => ['Metode Referensi', 25],
+            'L' => ['URL Cover Gambar', 30],
+            'M' => ['URL Datasheet PDF', 30],
+            'N' => ['Deskripsi Produk', 45],
         ];
 
         foreach ($headers as $col => [$title, $width]) {
@@ -63,7 +66,7 @@ class ProductImportService
         }
 
         // Header Styling (Ruby Red accent, white text, bold)
-        $sheet->getStyle('A1:K1')->applyFromArray([
+        $sheet->getStyle('A1:N1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -91,9 +94,12 @@ class ProductImportService
                 'F' => 50,
                 'G' => 'Merck KGaA',
                 'H' => 'Pharma & Biotech, Food & Beverage',
-                'I' => '',
-                'J' => '',
-                'K' => 'Nutrient Agar digunakan untuk isolasi dan kultivasi umum mikroorganisme di laboratorium.',
+                'I' => '500 g',
+                'J' => 'Isolasi dan kultivasi umum mikroorganisme',
+                'K' => 'ISO 11133',
+                'L' => '',
+                'M' => '',
+                'N' => 'Nutrient Agar digunakan untuk isolasi dan kultivasi umum mikroorganisme di laboratorium.',
             ],
             [
                 'A' => 'PD-90',
@@ -104,9 +110,12 @@ class ProductImportService
                 'F' => 200,
                 'G' => '',
                 'H' => 'Semua Sektor',
-                'I' => '',
-                'J' => '',
-                'K' => 'Cawan petri steril diameter 90mm bahan polistiren bening berkualitas tinggi.',
+                'I' => 'Pack of 20',
+                'J' => 'Wadah pembiakan kultur mikrobiologi',
+                'K' => 'Standar ISO 9001',
+                'L' => '',
+                'M' => '',
+                'N' => 'Cawan petri steril diameter 90mm bahan polistiren bening berkualitas tinggi.',
             ],
         ];
 
@@ -263,6 +272,46 @@ class ProductImportService
             $sectorLookup[strtolower(trim($sec->name))] = $sec->id;
         }
 
+        // Build dynamic header column mapping from row 1 to support custom/exported sheets
+        $headerRow = reset($rows);
+        $colMap = [];
+        if (is_array($headerRow)) {
+            foreach ($headerRow as $colLetter => $headerText) {
+                $norm = strtolower(trim((string) $headerText));
+                if (in_array($norm, ['nomor katalog', 'katalog', 'catalog', 'catalogue', 'sku'], true)) {
+                    $colMap['catalog'] = $colLetter;
+                } elseif (in_array($norm, ['nama produk', 'nama produk *', 'title', 'nama', 'product name'], true)) {
+                    $colMap['title'] = $colLetter;
+                } elseif (str_starts_with($norm, 'kategori') || $norm === 'category') {
+                    $colMap['category'] = $colLetter;
+                } elseif (str_starts_with($norm, 'subkategori') || str_starts_with($norm, 'sub-kategori') || str_starts_with($norm, 'sub category') || $norm === 'subcategory') {
+                    $colMap['sub_category'] = $colLetter;
+                } elseif (in_array($norm, ['kemasan', 'packaging', 'satuan', 'package', 'pack'], true)) {
+                    $colMap['packaging'] = $colLetter;
+                } elseif (in_array($norm, ['fungsi', 'function', 'aplikasi', 'application'], true)) {
+                    $colMap['function'] = $colLetter;
+                } elseif (in_array($norm, ['metode referensi', 'method reference', 'metode', 'reference method', 'standard'], true)) {
+                    $colMap['reference_method'] = $colLetter;
+                } elseif (in_array($norm, ['harga', 'harga (rp)', 'price', 'price list', 'harga produk'], true)) {
+                    $colMap['price'] = $colLetter;
+                } elseif (in_array($norm, ['stok', 'stock', 'qty'], true)) {
+                    $colMap['stock'] = $colLetter;
+                } elseif (in_array($norm, ['prinsipal', 'principal', 'brand', 'manufaktur'], true)) {
+                    $colMap['principal'] = $colLetter;
+                } elseif (in_array($norm, ['sektor industri', 'sektor', 'sector'], true)) {
+                    $colMap['sector'] = $colLetter;
+                } elseif (in_array($norm, ['url cover gambar', 'cover', 'image', 'gambar', 'foto'], true)) {
+                    $colMap['image'] = $colLetter;
+                } elseif (in_array($norm, ['url datasheet pdf', 'datasheet', 'pdf', 'dokumen'], true)) {
+                    $colMap['datasheet'] = $colLetter;
+                } elseif (in_array($norm, ['deskripsi produk', 'deskripsi', 'rincian'], true)) {
+                    $colMap['description'] = $colLetter;
+                } elseif ($norm === 'description' && ! isset($colMap['title'])) {
+                    $colMap['title'] = $colLetter;
+                }
+            }
+        }
+
         $productsToStore = [];
         $skipped = 0;
         $errors = [];
@@ -276,9 +325,9 @@ class ProductImportService
             }
             $rowIndex++;
 
-            $catalog = trim((string) ($row['A'] ?? ''));
-            $title = trim((string) ($row['B'] ?? ''));
-            $rawCategory = trim((string) ($row['C'] ?? ''));
+            $catalog = trim((string) ($row[$colMap['catalog'] ?? 'A'] ?? ''));
+            $title = trim((string) ($row[$colMap['title'] ?? 'B'] ?? ''));
+            $rawCategory = trim((string) ($row[$colMap['category'] ?? 'C'] ?? ''));
 
             // Abaikan baris kosong total
             if ($title === '' && $catalog === '' && $rawCategory === '') {
@@ -294,33 +343,51 @@ class ProductImportService
 
             $catKey = $categoryLookup[strtolower($rawCategory)] ?? null;
             if (! $catKey) {
+                // Fallback pencarian parsial (misal: "Microbiology Culture Media" memuat "microbiology")
+                foreach ($categoryLookup as $lookupName => $k) {
+                    if (str_contains(strtolower($rawCategory), $lookupName) || str_contains($lookupName, strtolower($rawCategory))) {
+                        $catKey = $k;
+                        break;
+                    }
+                }
+            }
+
+            if (! $catKey) {
                 $skipped++;
                 $errors[] = "Baris {$rowIndex} ('{$title}'): Kategori '{$rawCategory}' tidak dikenali.";
 
                 continue;
             }
 
-            $subCategory = trim((string) ($row['D'] ?? ''));
+            $subCategory = trim((string) ($row[$colMap['sub_category'] ?? 'D'] ?? ''));
 
             // Parse harga (bersihkan titik, koma, spasi, Rp)
-            $rawPrice = (string) ($row['E'] ?? '0');
+            $rawPrice = (string) ($row[$colMap['price'] ?? 'E'] ?? '0');
             $cleanPrice = preg_replace('/[^\d]/', '', $rawPrice);
             $price = $cleanPrice !== '' ? (float) $cleanPrice : 0;
 
             // Parse stok
-            $rawStock = (string) ($row['F'] ?? '0');
+            $rawStock = (string) ($row[$colMap['stock'] ?? 'F'] ?? '0');
             $cleanStock = preg_replace('/[^\d]/', '', $rawStock);
             $stock = $cleanStock !== '' ? (int) $cleanStock : 0;
 
             // Parse prinsipal
-            $rawPrincipal = trim((string) ($row['G'] ?? ''));
+            $rawPrincipal = trim((string) ($row[$colMap['principal'] ?? 'G'] ?? ''));
             $principalId = null;
             if ($rawPrincipal !== '') {
                 $principalId = $principalLookup[strtolower($rawPrincipal)] ?? null;
+                if (! $principalId) {
+                    foreach ($principalLookup as $lookupKey => $pId) {
+                        if (str_contains(strtolower($rawPrincipal), $lookupKey) || str_contains($lookupKey, strtolower($rawPrincipal))) {
+                            $principalId = $pId;
+                            break;
+                        }
+                    }
+                }
             }
 
             // Parse sektor industri
-            $rawSector = trim((string) ($row['H'] ?? ''));
+            $rawSector = trim((string) ($row[$colMap['sector'] ?? 'H'] ?? ''));
             $matchedSectorIds = [];
             if ($rawSector !== '') {
                 $sectorParts = array_map('trim', explode(',', $rawSector));
@@ -328,15 +395,27 @@ class ProductImportService
                     $normPart = strtolower($part);
                     if (isset($sectorLookup[$normPart])) {
                         $matchedSectorIds[] = $sectorLookup[$normPart];
+                    } else {
+                        foreach ($sectorLookup as $lookupKey => $sectorId) {
+                            if (str_starts_with($normPart, $lookupKey) || str_starts_with($lookupKey, explode(' ', $normPart)[0])) {
+                                $matchedSectorIds[] = $sectorId;
+                                break;
+                            }
+                        }
                     }
                 }
             }
             $sectorCsv = ! empty($matchedSectorIds) ? implode(',', array_unique($matchedSectorIds)) : null;
 
+            // Spesifikasi Baru: Kemasan, Fungsi, Metode Referensi
+            $packaging = isset($colMap['packaging']) ? trim((string) ($row[$colMap['packaging']] ?? '')) : (isset($row['I']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '');
+            $function = isset($colMap['function']) ? trim((string) ($row[$colMap['function']] ?? '')) : (isset($row['J']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '');
+            $refMethod = isset($colMap['reference_method']) ? trim((string) ($row[$colMap['reference_method']] ?? '')) : (isset($row['K']) && ! str_contains(trim((string) $row['K']), '<') && strlen(trim((string) $row['K'])) < 100 ? trim((string) $row['K']) : '');
+
             // URL Cover & PDF Datasheet
-            $imageUrl = trim((string) ($row['I'] ?? ''));
-            $datasheetUrl = trim((string) ($row['J'] ?? ''));
-            $description = trim((string) ($row['K'] ?? ''));
+            $imageUrl = isset($colMap['image']) ? trim((string) ($row[$colMap['image']] ?? '')) : (isset($row['L']) ? trim((string) $row['L']) : (isset($row['I']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : ''));
+            $datasheetUrl = isset($colMap['datasheet']) ? trim((string) ($row[$colMap['datasheet']] ?? '')) : (isset($row['M']) ? trim((string) $row['M']) : (isset($row['J']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : ''));
+            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : ''));
 
             if (str_starts_with($imageUrl, 'storage/')) {
                 $imageUrl = '/'.$imageUrl;
@@ -352,6 +431,9 @@ class ProductImportService
                 'title' => Str::limit($title, 255, ''),
                 'category' => $catKey,
                 'sub_category' => Str::limit($subCategory, 255, ''),
+                'packaging' => Str::limit($packaging, 255, '') ?: null,
+                'function' => ! empty($function) ? HtmlSanitizer::clean($function) : null,
+                'reference_method' => Str::limit($refMethod, 500, '') ?: null,
                 'sector' => $sectorCsv,
                 'principal_id' => $principalId,
                 'datasheet_url' => $isUrlOrPath($datasheetUrl) ? $datasheetUrl : null,
