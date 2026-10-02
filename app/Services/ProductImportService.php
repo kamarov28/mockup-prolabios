@@ -325,6 +325,8 @@ class ProductImportService
             }
         }
 
+        $hasMappedHeaders = ! empty($colMap);
+
         $productsToStore = [];
         $skipped = 0;
         $errors = [];
@@ -455,17 +457,17 @@ class ProductImportService
             }
 
             // Parse harga (bersihkan titik, koma, spasi, Rp)
-            $rawPrice = (string) ($row[$colMap['price'] ?? 'E'] ?? '0');
+            $rawPrice = isset($colMap['price']) ? (string) ($row[$colMap['price']] ?? '0') : (! $hasMappedHeaders ? (string) ($row['E'] ?? '0') : '0');
             $cleanPrice = preg_replace('/[^\d]/', '', $rawPrice);
             $price = $cleanPrice !== '' ? (float) $cleanPrice : 0;
 
             // Parse stok
-            $rawStock = (string) ($row[$colMap['stock'] ?? 'F'] ?? '0');
+            $rawStock = isset($colMap['stock']) ? (string) ($row[$colMap['stock']] ?? '0') : (! $hasMappedHeaders ? (string) ($row['F'] ?? '0') : '0');
             $cleanStock = preg_replace('/[^\d]/', '', $rawStock);
             $stock = $cleanStock !== '' ? (int) $cleanStock : 0;
 
             // Parse prinsipal
-            $rawPrincipal = trim((string) ($row[$colMap['principal'] ?? 'G'] ?? ''));
+            $rawPrincipal = isset($colMap['principal']) ? trim((string) ($row[$colMap['principal']] ?? '')) : (! $hasMappedHeaders ? trim((string) ($row['G'] ?? '')) : '');
             $principalId = null;
             if ($rawPrincipal !== '') {
                 $principalId = $principalLookup[strtolower($rawPrincipal)] ?? null;
@@ -480,7 +482,7 @@ class ProductImportService
             }
 
             // Parse sektor industri
-            $rawSector = trim((string) ($row[$colMap['sector'] ?? 'H'] ?? ''));
+            $rawSector = isset($colMap['sector']) ? trim((string) ($row[$colMap['sector']] ?? '')) : (! $hasMappedHeaders ? trim((string) ($row['H'] ?? '')) : '');
             $matchedSectorIds = [];
             if ($rawSector !== '') {
                 $sectorParts = array_map('trim', explode(',', $rawSector));
@@ -501,14 +503,14 @@ class ProductImportService
             $sectorCsv = ! empty($matchedSectorIds) ? implode(',', array_unique($matchedSectorIds)) : null;
 
             // Spesifikasi Baru: Kemasan, Fungsi, Metode Referensi
-            $packaging = isset($colMap['packaging']) ? trim((string) ($row[$colMap['packaging']] ?? '')) : (isset($row['I']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '');
-            $function = isset($colMap['function']) ? trim((string) ($row[$colMap['function']] ?? '')) : (isset($row['J']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '');
-            $refMethod = isset($colMap['reference_method']) ? trim((string) ($row[$colMap['reference_method']] ?? '')) : (isset($row['K']) && ! str_contains(trim((string) $row['K']), '<') && strlen(trim((string) $row['K'])) < 100 ? trim((string) $row['K']) : '');
+            $packaging = isset($colMap['packaging']) ? trim((string) ($row[$colMap['packaging']] ?? '')) : (! $hasMappedHeaders && isset($row['I']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '');
+            $function = isset($colMap['function']) ? trim((string) ($row[$colMap['function']] ?? '')) : (! $hasMappedHeaders && isset($row['J']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '');
+            $refMethod = isset($colMap['reference_method']) ? trim((string) ($row[$colMap['reference_method']] ?? '')) : (! $hasMappedHeaders && isset($row['K']) && ! str_contains(trim((string) $row['K']), '<') && strlen(trim((string) $row['K'])) < 100 ? trim((string) $row['K']) : '');
 
             // URL Cover & PDF Datasheet
-            $imageUrl = isset($colMap['image']) ? trim((string) ($row[$colMap['image']] ?? '')) : (isset($row['L']) ? trim((string) $row['L']) : (isset($row['I']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : ''));
-            $datasheetUrl = isset($colMap['datasheet']) ? trim((string) ($row[$colMap['datasheet']] ?? '')) : (isset($row['M']) ? trim((string) $row['M']) : (isset($row['J']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : ''));
-            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : ''));
+            $imageUrl = isset($colMap['image']) ? trim((string) ($row[$colMap['image']] ?? '')) : (! $hasMappedHeaders ? (isset($row['L']) ? trim((string) $row['L']) : (isset($row['I']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '')) : '');
+            $datasheetUrl = isset($colMap['datasheet']) ? trim((string) ($row[$colMap['datasheet']] ?? '')) : (! $hasMappedHeaders ? (isset($row['M']) ? trim((string) $row['M']) : (isset($row['J']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '')) : '');
+            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (! $hasMappedHeaders ? (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : '')) : '');
 
             if (str_starts_with($imageUrl, 'storage/')) {
                 $imageUrl = '/'.$imageUrl;
