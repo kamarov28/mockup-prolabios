@@ -18,13 +18,13 @@ class SeedPrincipalsSeeder extends Seeder
             ['name' => 'BNF Korea', 'address' => 'South Korea', 'logo' => '/images/vendor/bnf_korea.png', 'status' => 'online'],
             ['name' => 'Leadfluid', 'address' => 'China', 'logo' => '/images/vendor/leadfluid.png', 'status' => 'online'],
             ['name' => 'Meizheng Group', 'address' => 'China', 'logo' => '/images/vendor/meizheng.png', 'status' => 'online'],
-            ['name' => 'KSL Pulse Scientific', 'address' => 'India', 'logo' => '/images/vendor/ksl_pulse.png', 'status' => 'online'],
+            ['name' => 'KSL Pulse Scientific', 'address' => 'Canada', 'logo' => '/images/vendor/ksl_pulse.png', 'status' => 'online'],
             ['name' => 'Diamidex', 'address' => 'France', 'logo' => '/images/vendor/diamidex.png', 'status' => 'online'],
-            ['name' => 'Lumeley', 'address' => 'United States', 'logo' => '/images/vendor/lumeley.png', 'status' => 'online'],
+            ['name' => 'Lumeley', 'address' => 'China', 'logo' => '/images/vendor/lumeley.png', 'status' => 'online'],
             ['name' => 'Ratel Systems', 'address' => 'South Korea', 'logo' => '/images/vendor/ratel.png', 'status' => 'online'],
             ['name' => 'Solus Scientific', 'address' => 'United Kingdom', 'logo' => '/images/vendor/solus_scientific.png', 'status' => 'online'],
-            ['name' => 'Vecverse', 'address' => 'Japan', 'logo' => '/images/vendor/vecverse.png', 'status' => 'online'],
-            ['name' => 'Vision Med', 'address' => 'Germany', 'logo' => '/images/vendor/vision_med.png', 'status' => 'online'],
+            ['name' => 'Vecverse', 'address' => 'China', 'logo' => '/images/vendor/vecverse.png', 'status' => 'online'],
+            ['name' => 'Vision Med', 'address' => 'China', 'logo' => '/images/vendor/vision_med.png', 'status' => 'online'],
         ];
 
         foreach ($principals as $p) {
