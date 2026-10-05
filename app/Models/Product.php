@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Connection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /**
@@ -192,21 +192,48 @@ class Product extends Model
             return $query;
         }
 
-        $connection = $query->getConnection();
-        $driver = $connection instanceof Connection ? $connection->getDriverName() : '';
+        $words = array_values(array_filter(explode(' ', $term), fn ($w) => trim($w) !== ''));
 
-        if (in_array($driver, ['mysql', 'mariadb'], true)) {
-            return $query->where(function (Builder $q) use ($term) {
-                $q->whereFullText(['title', 'description'], $term)
-                    ->orWhere('catalog', 'like', $term.'%')
-                    ->orWhere('title', 'like', $term.'%');
-            });
+        // Searchable columns down to substring/characters
+        $searchableColumns = ['title', 'catalog', 'description'];
+        if (Schema::hasColumn('products', 'function')) {
+            $searchableColumns[] = 'function';
+        }
+        if (Schema::hasColumn('products', 'reference_method')) {
+            $searchableColumns[] = 'reference_method';
+        }
+        if (Schema::hasColumn('products', 'packaging')) {
+            $searchableColumns[] = 'packaging';
         }
 
-        return $query->where(function (Builder $q) use ($term) {
-            $q->where('title', 'like', "%{$term}%")
-                ->orWhere('catalog', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%");
+        return $query->where(function (Builder $q) use ($term, $words, $searchableColumns) {
+            // 1. Direct character/substring match on full search term
+            $q->where(function (Builder $sub) use ($term, $searchableColumns) {
+                foreach ($searchableColumns as $i => $col) {
+                    if ($i === 0) {
+                        $sub->where($col, 'like', "%{$term}%");
+                    } else {
+                        $sub->orWhere($col, 'like', "%{$term}%");
+                    }
+                }
+            });
+
+            // 2. Multi-word search: match all individual keywords anywhere across columns
+            if (count($words) > 1) {
+                $q->orWhere(function (Builder $allWordsSub) use ($words, $searchableColumns) {
+                    foreach ($words as $word) {
+                        $allWordsSub->where(function (Builder $wordSub) use ($word, $searchableColumns) {
+                            foreach ($searchableColumns as $j => $col) {
+                                if ($j === 0) {
+                                    $wordSub->where($col, 'like', "%{$word}%");
+                                } else {
+                                    $wordSub->orWhere($col, 'like', "%{$word}%");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         });
     }
 

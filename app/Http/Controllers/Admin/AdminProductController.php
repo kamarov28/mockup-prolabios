@@ -59,12 +59,7 @@ class AdminProductController extends Controller
 
         $search = $request->input('s');
         if ($search) {
-            // Filter may use description; column itself is not selected for the list payload
-            $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('catalog', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
-            });
+            $query->search((string) $search);
         }
 
         $category = $request->input('category');
