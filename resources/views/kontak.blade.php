@@ -83,7 +83,7 @@
                   <input type="email" class="form-control kontak-form-input" id="email" name="email" required placeholder="contoh: budi@gmail.com" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Masukkan format email yang valid (contoh: nama@email.com)">
                 </div>
                 <div class="col-md-6">
-                  <label for="telepon" class="kontak-form-label">Nomor WhatsApp / Telepon Pribadi</label>
+                  <label for="telepon" class="kontak-form-label">Nomor Telepon Pribadi / HP</label>
                   <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Hanya boleh berupa angka dan karakter nomor telepon">
                 </div>
                 <div class="col-md-6">

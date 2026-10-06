@@ -64,17 +64,8 @@
         </div>
       </div>
 
-      @php
-        $waMsg = 'Halo Tim Sales Prolabios, saya telah mengajukan RFQ #' . $rfq->rfq_number . (!empty($rfq->company_name) ? ' atas nama ' . $rfq->company_name : '') . '. Mohon konfirmasi dan info penawaran resminya. Terima kasih.';
-        $targetWa = !empty($waNumber) ? $waNumber : '6282187929433';
-        $waUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($waMsg);
-      @endphp
-
       <div class="d-flex flex-wrap justify-content-center gap-3 print-hide">
-        <a href="{{ $waUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary" style="background-color: #15803D !important; border-color: #15803D !important; color: #FFFFFF !important;">
-          <i data-lucide="message-circle" class="me-2"></i> Konfirmasi Cepat via WhatsApp
-        </a>
-        <button type="button" onclick="window.print()" class="nb-btn nb-btn-ghost">
+        <button type="button" onclick="window.print()" class="nb-btn nb-btn-primary">
           <i data-lucide="printer" class="me-2"></i> Cetak Bukti RFQ
         </button>
         <a href="{{ route('home') }}" class="nb-btn nb-btn-ghost">

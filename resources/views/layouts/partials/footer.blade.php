@@ -66,13 +66,6 @@
             <span>{{ $siteSettings['operational_hours'] ?? 'Senin – Jumat : 08.00 – 17.00 WIB' }}</span>
           </li>
         </ul>
-        @if(!empty($waNumber))
-          <div class="mt-3">
-            <a href="https://wa.me/{{ $waNumber }}?text={{ $waDefaultMsg }}" target="_blank" rel="noopener noreferrer" class="footer-wa-pill d-inline-flex align-items-center gap-2" aria-label="Konsultasi WhatsApp">
-              <x-brand-icon name="whatsapp" size="18" /> Chat WhatsApp
-            </a>
-          </div>
-        @endif
       </div>
 
     </div>

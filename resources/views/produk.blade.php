@@ -167,19 +167,12 @@
                   Belum ada produk di kategori atau kata kunci pencarian ini. Butuh katalog atau reagen khusus yang belum tercantum di web?
                 </p>
 
-                @php
-                  $searchedTerm = request()->query('s') ?? request()->query('q') ?? '';
-                  $waSourcingMsg = 'Halo Tim Sales Prolabios, saya mencari produk' . ($searchedTerm ? ' "' . $searchedTerm . '"' : '') . ' tapi belum tercantum di website. Apakah bisa dibantu pengecekan ketersediaan atau pengadaan khusus? Terima kasih.';
-                  $targetWa = !empty($siteSettings['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $siteSettings['whatsapp_number']) : '6282187929433';
-                  $waSourcingUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($waSourcingMsg);
-                @endphp
-
                 <div class="d-flex flex-wrap justify-content-center gap-2">
                   <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost">
                     <i data-lucide="rotate-ccw" class="me-1"></i> Reset Pencarian &amp; Filter
                   </a>
-                  <a href="{{ $waSourcingUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-primary" style="background-color: #15803D !important; border-color: #15803D !important; color: #FFFFFF !important;">
-                    <i data-lucide="message-circle" class="me-1"></i> Tanya Pengadaan Khusus via WA
+                  <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary">
+                    <i data-lucide="phone" class="me-1"></i> Hubungi Kantor untuk Pengadaan Khusus
                   </a>
                 </div>
               </div>

@@ -86,7 +86,7 @@
     <div class="footer">
       <strong>PT. Prolabios Mitra Analitika</strong><br>
       GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914<br>
-      Email: marketing@prolabios.com | WA: 0821-8792-9433
+      Email: marketing@prolabios.com | Telepon: (021) 3874-1447
     </div>
   </div>
 </body>

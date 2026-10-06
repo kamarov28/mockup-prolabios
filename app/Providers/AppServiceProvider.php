@@ -140,9 +140,9 @@ class AppServiceProvider extends ServiceProvider
             });
 
             View::share('siteSettings', $siteSettings);
-            View::share('waNumber', $waNumber);
-            View::share('waNumberTech', $waNumberTech);
-            View::share('waDefaultMsg', $waDefaultMsg);
+            View::share('waNumber', '');
+            View::share('waNumberTech', '');
+            View::share('waDefaultMsg', '');
             View::share('searchSuggestions', $searchSuggestions);
         } catch (\Exception $e) {
             Log::warning('shareFrontendViewData failed; frontend view globals not set.', [

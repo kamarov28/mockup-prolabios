@@ -75,9 +75,6 @@
               $allImages = array_values(array_unique(array_merge([$mainImage], $galleryImages)));
               $stock = (int) ($product['stock'] ?? 0);
               $price = (float) ($product['price'] ?? 0);
-              $productWaMsg = 'Halo Tim Sales Prolabios, saya ingin konsultasi ketersediaan dan penawaran resmi untuk produk ' . $product['title'] . (!empty($product['catalog']) ? ' (Cat: ' . $product['catalog'] . ')' : '') . '. Terima kasih.';
-              $targetWa = !empty($siteSettings['whatsapp_number']) ? preg_replace('/[^0-9]/', '', $siteSettings['whatsapp_number']) : '6282187929433';
-              $productWaUrl = 'https://wa.me/' . $targetWa . '?text=' . rawurlencode($productWaMsg);
             @endphp
 
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-4 detail-header-divider">
@@ -250,8 +247,8 @@
                         <i data-lucide="shopping-cart" class="me-2"></i> Tambah ke Keranjang Penawaran
                       </button>
 
-                      <a href="{{ $productWaUrl }}" target="_blank" rel="noopener noreferrer" class="nb-btn nb-btn-ghost detail-wa-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" title="Konsultasi cepat via WhatsApp">
-                        <i data-lucide="message-circle" class="text-success me-1"></i> Tanya Sales
+                      <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '02138741447') }}" class="nb-btn nb-btn-ghost detail-wa-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" title="Hubungi Telepon Kantor">
+                        <i data-lucide="phone" class="me-1"></i> Hubungi Kantor
                       </a>
                     </div>
                   </form>

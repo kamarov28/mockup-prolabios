@@ -24,15 +24,6 @@
       'label' => 'LinkedIn',
       'iconClass' => 'profil-social-icon--linkedin',
       'url' => $siteSettings['social_linkedin'] ?? 'https://www.linkedin.com/company/pt-prolabios-mitra-analitika/posts/?feedView=all'
-    ],
-    [
-      'platform' => 'whatsapp',
-      'title' => 'WhatsApp Layanan Resmi',
-      'label' => 'WhatsApp',
-      'iconClass' => 'profil-social-icon--whatsapp',
-      'url' => !empty($siteSettings['contact_whatsapp']) 
-                ? 'https://wa.me/' . preg_replace('/[^0-9]/', '', $siteSettings['contact_whatsapp']) 
-                : 'https://wa.me/6281211118744'
     ]
   ];
 

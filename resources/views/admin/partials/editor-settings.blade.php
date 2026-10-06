@@ -13,25 +13,25 @@
       <input type="hidden" name="section" value="contacts">
 
       <div class="row g-4">
-        <!-- Nomor Telepon & WhatsApp -->
+        <!-- Nomor Telepon Kantor -->
         <div class="col-md-6">
-          <label for="contact_phone" class="admin-form-label mb-2">Nomor WhatsApp Utama (CS / Sales)</label>
+          <label for="contact_phone" class="admin-form-label mb-2">Nomor Telepon Kantor (General / CS)</label>
           <div class="input-group">
-            <span class="input-group-text text-success d-inline-flex align-items-center"><x-brand-icon name="whatsapp" size="16" /></span>
-            <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '0821-8792-9433') }}" required>
+            <span class="input-group-text"><i data-lucide="phone"></i></span>
+            <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '021-3874-1447') }}" required>
           </div>
           @error('contact_phone') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Format: 08xx / 62xx. Terhubung ke tombol floating WhatsApp dan header.</div>
+          <div class="form-text text-secondary mt-1 small">Nomor telepon kantor pusat untuk layanan umum.</div>
         </div>
 
         <div class="col-md-6">
-          <label for="contact_phone_technician" class="admin-form-label mb-2">Nomor WhatsApp Layanan Teknik (Teknisi)</label>
+          <label for="contact_phone_technician" class="admin-form-label mb-2">Nomor Telepon Layanan Teknik (Teknisi)</label>
           <div class="input-group">
             <span class="input-group-text text-info"><i data-lucide="wrench"></i></span>
-            <input type="text" class="form-control @error('contact_phone_technician') is-invalid @enderror" id="contact_phone_technician" name="contact_phone_technician" value="{{ old('contact_phone_technician', $homeData['contact_phone_technician'] ?? '0812-837-4867') }}" required>
+            <input type="text" class="form-control @error('contact_phone_technician') is-invalid @enderror" id="contact_phone_technician" name="contact_phone_technician" value="{{ old('contact_phone_technician', $homeData['contact_phone_technician'] ?? '021-3874-1447') }}" required>
           </div>
           @error('contact_phone_technician') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Kontak WhatsApp untuk konsultasi teknis pada halaman Layanan.</div>
+          <div class="form-text text-secondary mt-1 small">Nomor telepon untuk konsultasi teknis pada halaman Layanan.</div>
         </div>
 
         <div class="col-md-6">
@@ -52,14 +52,6 @@
           </div>
           @error('contact_phone_finance') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
           <div class="form-text text-secondary mt-1 small">Nomor telepon kantor operasional finance &amp; gudang.</div>
-        </div>
-
-        <!-- Template Sapaan WhatsApp Otomatis -->
-        <div class="col-12">
-          <label for="whatsapp_default_message" class="admin-form-label mb-2">Pesan Otomatis Default WhatsApp (Greeting Template)</label>
-          <input type="text" class="form-control @error('whatsapp_default_message') is-invalid @enderror" id="whatsapp_default_message" name="whatsapp_default_message" value="{{ old('whatsapp_default_message', $homeData['whatsapp_default_message'] ?? 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.') }}">
-          @error('whatsapp_default_message') <div class="invalid-feedback">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Teks pembuka yang otomatis terisi ketika pengunjung mengklik tombol WhatsApp di website.</div>
         </div>
 
         <!-- Email Resmi & Katalog PDF -->

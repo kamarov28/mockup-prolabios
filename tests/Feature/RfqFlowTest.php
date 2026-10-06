@@ -155,8 +155,8 @@ class RfqFlowTest extends TestCase
 
         $validResponse->assertStatus(200);
         $validResponse->assertSee('RFQ-202608-TEST01');
-        $validResponse->assertSee('Konfirmasi Cepat via WhatsApp');
-        $validResponse->assertSee('https://wa.me/', false);
+        $validResponse->assertSee('Cetak Bukti RFQ');
+        $validResponse->assertDontSee('https://wa.me/', false);
         $validResponse->assertSee('copyRfqNumber', false);
     }
 
@@ -186,7 +186,8 @@ class RfqFlowTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Produk Tidak Ditemukan');
         $response->assertSee('Reset Pencarian');
-        $response->assertSee('Tanya Pengadaan Khusus via WA');
+        $response->assertSee('Hubungi Kantor untuk Pengadaan Khusus');
+        $response->assertDontSee('https://wa.me/', false);
     }
 
     public function test_cart_page_has_mobile_sticky_checkout_bar(): void

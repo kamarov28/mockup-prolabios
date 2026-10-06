@@ -189,7 +189,7 @@ class RealUserSimulationTest extends TestCase
         $successPage = $this->get(route('rfq.success', ['number' => $rfq->rfq_number]));
         $successPage->assertOk();
         $successPage->assertSee($rfq->rfq_number);
-        $successPage->assertSee('https://wa.me/', false);
+        $successPage->assertDontSee('https://wa.me/', false);
 
         // Verify queued notification emails
         Queue::assertPushed(SendRfqSubmittedEmailJob::class);
