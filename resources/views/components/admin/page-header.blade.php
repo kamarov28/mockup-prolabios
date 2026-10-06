@@ -11,7 +11,7 @@
 ])
 
 <div {{ $attributes->merge(['class' => 'd-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap']) }}>
-  <div>
+  <div style="flex: 1 1 320px; min-width: 0; max-width: 680px;">
     @if($label)
       <span class="admin-page-label">{{ $label }}</span>
     @endif
@@ -21,7 +21,7 @@
         Mengedit: <strong style="color: var(--color-text-main);">{{ $editing }}</strong>
       </div>
     @elseif($description)
-      <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+      <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0; line-height: 1.5;">
         {!! $description !!}
       </p>
     @elseif($slot->isNotEmpty())
@@ -31,7 +31,7 @@
     @endif
   </div>
 
-  <div class="d-flex align-items-center gap-2 flex-wrap">
+  <div class="d-flex align-items-center gap-2 flex-wrap ms-sm-auto flex-shrink-0">
     @if(isset($actions))
       {{ $actions }}
     @else
