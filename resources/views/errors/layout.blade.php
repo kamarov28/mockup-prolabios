@@ -4,22 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
-    <title>@yield('title', 'Terjadi Kesalahan') - PT Prolabios Multi Niaga</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>@yield('title', 'Terjadi Kesalahan') - PT Prolabios Mitra Analitika</title>
+    <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
     <style>
         :root {
-            --color-primary: #C9252C;
-            --color-primary-hover: #A81B21;
-            --color-primary-light: #FDF2F2;
-            --color-slate-900: #0F172A;
-            --color-slate-700: #334155;
-            --color-slate-600: #475569;
-            --color-slate-500: #64748B;
-            --color-slate-200: #E2E8F0;
-            --color-slate-100: #F1F5F9;
-            --color-slate-50: #F8FAFC;
+            --color-primary: #A6171C;
+            --color-primary-hover: #8B1115;
+            --color-primary-light: rgba(166, 23, 28, 0.08);
+            --color-slate-900: #111827;
+            --color-slate-700: #374151;
+            --color-slate-600: #4B5563;
+            --color-slate-500: #6B7280;
+            --color-slate-200: #E5E7EB;
+            --color-slate-100: #F3F4F6;
+            --color-slate-50: #F8F9FA;
         }
         * {
             box-sizing: border-box;
@@ -27,7 +25,7 @@
             padding: 0;
         }
         body {
-            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--color-slate-50);
             color: var(--color-slate-900);
             min-height: 100vh;
@@ -41,24 +39,24 @@
         .error-card {
             background: #ffffff;
             border: 1px solid var(--color-slate-200);
-            border-radius: 1rem;
+            border-radius: 6px;
             padding: 3rem 2rem;
             max-width: 520px;
             width: 100%;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: none;
         }
         .error-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.35rem 1rem;
-            font-size: 0.8125rem;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--color-primary);
             background: var(--color-primary-light);
-            border: 1px solid #FECDD3;
-            border-radius: 9999px;
+            border: 1px solid rgba(166, 23, 28, 0.2);
+            border-radius: 4px;
             margin-bottom: 1.5rem;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -67,7 +65,7 @@
             font-size: 4.5rem;
             font-weight: 800;
             line-height: 1;
-            color: var(--color-slate-900);
+            color: var(--color-primary);
             margin-bottom: 0.75rem;
             letter-spacing: -0.03em;
         }
@@ -93,10 +91,10 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.925rem;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.88rem;
             font-weight: 600;
-            border-radius: 0.5rem;
+            border-radius: 4px;
             text-decoration: none;
             transition: all 0.15s ease;
             cursor: pointer;
@@ -146,7 +144,7 @@
     </div>
 
     <div class="brand-footer">
-        &copy; {{ date('Y') }} PT Prolabios Multi Niaga. All rights reserved.
+        &copy; {{ date('Y') }} PT Prolabios Mitra Analitika. All rights reserved.
     </div>
 </body>
 </html>

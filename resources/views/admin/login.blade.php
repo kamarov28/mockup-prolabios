@@ -6,10 +6,8 @@
   <title>Login Admin | PT Prolabios Mitra Analitika</title>
   <meta name="description" content="Portal administrasi sistem katalog, RFQ, dan manajemen konten PT Prolabios Mitra Analitika.">
 
-  <!-- Font & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Self-Hosted Typography & Preload -->
+  <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
   <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
