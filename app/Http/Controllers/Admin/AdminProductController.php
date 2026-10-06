@@ -16,6 +16,7 @@ use App\Traits\HandlesImageUploads;
 use App\Traits\PaginatesQuery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -55,7 +56,11 @@ class AdminProductController extends Controller
 
     public function index(Request $request)
     {
-        $query = Product::query()->select(self::INDEX_COLUMNS);
+        $columns = self::INDEX_COLUMNS;
+        if (Schema::hasColumn('products', 'search_hits')) {
+            $columns[] = 'search_hits';
+        }
+        $query = Product::query()->select($columns);
 
         $search = $request->input('s');
         if ($search) {
@@ -92,6 +97,9 @@ class AdminProductController extends Controller
             'oldest' => $query->orderBy('created_at', 'asc')->orderBy('id', 'asc'),
             'name_asc' => $query->orderBy('title', 'asc'),
             'name_desc' => $query->orderBy('title', 'desc'),
+            'most_searched' => Schema::hasColumn('products', 'search_hits')
+                ? $query->orderByDesc('search_hits')->orderByDesc('id')
+                : $query->orderByDesc('id'),
             default => $query->orderBy('created_at', 'desc')->orderBy('id', 'desc'),
         };
 

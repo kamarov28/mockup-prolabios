@@ -21,7 +21,7 @@ class ProductService
      */
     protected function listColumns(): array
     {
-        return [
+        $cols = [
             'id',
             'catalog',
             'title',
@@ -37,6 +37,12 @@ class ProductService
             'created_at',
             'updated_at',
         ];
+
+        if (Schema::hasColumn('products', 'search_hits')) {
+            $cols[] = 'search_hits';
+        }
+
+        return $cols;
     }
 
     public static function getProductsCacheVersion(): int
@@ -378,13 +384,16 @@ class ProductService
     public function getFeaturedProducts(int $limit = 4): Collection
     {
         $v = self::getProductsCacheVersion();
-        $cacheKey = "featured_products_v2_{$v}_{$limit}";
+        $cacheKey = "featured_products_v3_{$v}_{$limit}";
 
         $cached = Cache::get($cacheKey);
         if (is_array($cached)) {
             return $this->hydrateProducts($cached);
         }
 
+        $this->ensureSpecificationColumnsExist();
+
+        // Tier 1: Manually highlighted products (is_featured = true)
         $featured = Product::query()
             ->with('principal')
             ->select($this->listColumns())
@@ -393,6 +402,25 @@ class ProductService
             ->limit($limit)
             ->get();
 
+        // Tier 2: Fill remaining slots with Most-Searched/Popular products
+        if ($featured->count() < $limit && Schema::hasColumn('products', 'search_hits')) {
+            $needed = $limit - $featured->count();
+            $excludeIds = $featured->pluck('id')->all();
+
+            $trending = Product::query()
+                ->with('principal')
+                ->select($this->listColumns())
+                ->when(! empty($excludeIds), fn ($q) => $q->whereNotIn('id', $excludeIds))
+                ->where('search_hits', '>', 0)
+                ->orderByDesc('search_hits')
+                ->orderByDesc('id')
+                ->limit($needed)
+                ->get();
+
+            $featured = $featured->concat($trending);
+        }
+
+        // Tier 3: Fallback to latest catalog items if slots still remain
         if ($featured->count() < $limit) {
             $needed = $limit - $featured->count();
             $excludeIds = $featured->pluck('id')->all();
@@ -411,10 +439,56 @@ class ProductService
         Cache::put(
             $cacheKey,
             $featured->map(fn (Product $p) => $p->getAttributes())->all(),
-            300
+            180
         );
 
         return $featured;
+    }
+
+    /**
+     * Record search hits for products matching search keywords.
+     *
+     * @param  array<int|string>  $productIds
+     */
+    public function recordSearchHits(array $productIds): void
+    {
+        if (empty($productIds)) {
+            return;
+        }
+
+        $this->ensureSpecificationColumnsExist();
+
+        if (! Schema::hasColumn('products', 'search_hits')) {
+            return;
+        }
+
+        $validIds = array_slice(array_unique(array_filter(array_map('intval', $productIds), fn ($id) => $id > 0)), 0, 10);
+        if (! empty($validIds)) {
+            Product::whereIn('id', $validIds)->increment('search_hits');
+            $this->clearProductsCache();
+        }
+    }
+
+    /**
+     * Record a product detail view hit (session throttled).
+     */
+    public function recordViewHit(Product|int $product): void
+    {
+        $id = $product instanceof Product ? (int) $product->id : (int) $product;
+        if ($id <= 0) {
+            return;
+        }
+
+        $sessionKey = 'viewed_prod_'.$id;
+        if (! session()->has($sessionKey)) {
+            session()->put($sessionKey, true);
+            $this->ensureSpecificationColumnsExist();
+
+            if (Schema::hasColumn('products', 'search_hits')) {
+                Product::where('id', $id)->increment('search_hits');
+                $this->clearProductsCache();
+            }
+        }
     }
 
     public function toggleFeatured(int $id): ?bool
@@ -436,7 +510,7 @@ class ProductService
      */
     public function ensureSpecificationColumnsExist(): void
     {
-        if (! Schema::hasTable('products') || Schema::hasColumn('products', 'function')) {
+        if (! Schema::hasTable('products')) {
             return;
         }
 
@@ -450,6 +524,9 @@ class ProductService
                 }
                 if (! Schema::hasColumn('products', 'reference_method')) {
                     $table->string('reference_method', 500)->nullable();
+                }
+                if (! Schema::hasColumn('products', 'search_hits')) {
+                    $table->unsignedInteger('search_hits')->default(0)->index();
                 }
             });
         } catch (\Throwable $e) {

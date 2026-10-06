@@ -25,11 +25,20 @@
     </div>
     <div class="card-body p-4 d-flex flex-column">
       <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-        @if(!empty($p['catalog']))
-          <div class="product-cat-code">CAT. {{ $p['catalog'] }}</div>
-        @else
-          <div></div>
-        @endif
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+          @if(!empty($p['catalog']))
+            <div class="product-cat-code">CAT. {{ $p['catalog'] }}</div>
+          @endif
+          @if(!empty($p['is_featured']))
+            <span class="badge border-0" style="background: rgba(166, 23, 28, 0.08); color: #A6171C; font-size: 0.68rem; font-weight: 700; border-radius: 4px; padding: 2px 6px;" title="Produk Pilihan Editor">
+              <i data-lucide="star" style="width: 10px; height: 10px; display: inline-block; vertical-align: -1px; fill: #A6171C;"></i> Pilihan
+            </span>
+          @elseif(!empty($p['search_hits']) && $p['search_hits'] >= 1)
+            <span class="badge border-0" style="background: rgba(217, 119, 6, 0.1); color: #B45309; font-size: 0.68rem; font-weight: 700; border-radius: 4px; padding: 2px 6px;" title="Produk Paling Banyak Dicari">
+              <i data-lucide="trending-up" style="width: 11px; height: 11px; display: inline-block; vertical-align: -1px;"></i> Populer
+            </span>
+          @endif
+        </div>
 
         @if(!empty($p->principal))
           @if(!empty($p->principal->logo))

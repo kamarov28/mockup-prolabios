@@ -32,6 +32,7 @@ use Illuminate\Support\Str;
  * @property float $price
  * @property int $stock
  * @property bool $is_featured
+ * @property int $search_hits
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
@@ -55,6 +56,7 @@ class Product extends Model
         'price',
         'stock',
         'is_featured',
+        'search_hits',
     ];
 
     protected function casts(): array
@@ -63,6 +65,7 @@ class Product extends Model
             'price' => 'float',
             'stock' => 'integer',
             'is_featured' => 'boolean',
+            'search_hits' => 'integer',
             'gallery_images' => 'array',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

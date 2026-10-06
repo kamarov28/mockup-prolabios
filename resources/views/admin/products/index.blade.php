@@ -68,17 +68,18 @@
             <div class="col-md-3">
               <label class="admin-form-label" for="sort">Urutkan</label>
               <select name="sort" id="sort" class="form-select">
-                <option value="newest"    {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Dibuat</option>
-                <option value="oldest"    {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Dibuat</option>
-                <option value="name_asc"  {{ $sort === 'name_asc' ? 'selected' : '' }}>Nama (A–Z)</option>
-                <option value="name_desc" {{ $sort === 'name_desc' ? 'selected' : '' }}>Nama (Z–A)</option>
+                <option value="newest"        {{ $sort === 'newest' ? 'selected' : '' }}>Terbaru Dibuat</option>
+                <option value="most_searched" {{ $sort === 'most_searched' ? 'selected' : '' }}>Paling Banyak Dicari</option>
+                <option value="oldest"        {{ $sort === 'oldest' ? 'selected' : '' }}>Terlama Dibuat</option>
+                <option value="name_asc"      {{ $sort === 'name_asc' ? 'selected' : '' }}>Nama (A–Z)</option>
+                <option value="name_desc"     {{ $sort === 'name_desc' ? 'selected' : '' }}>Nama (Z–A)</option>
               </select>
             </div>
             <div class="col-md-3">
               <label class="admin-form-label" for="featured">Status Unggulan</label>
               <select name="featured" id="featured" class="form-select">
                 <option value="">Semua Status</option>
-                <option value="1" {{ ($featured === '1' || $featured === 'true') ? 'selected' : '' }}>Hanya Produk Unggulan ⭐</option>
+                <option value="1" {{ ($featured === '1' || $featured === 'true') ? 'selected' : '' }}>Hanya Produk Unggulan</option>
               </select>
             </div>
             <div class="col-md-2">
@@ -138,6 +139,11 @@
                     @if(!empty($p['is_featured']))
                       <span class="badge border-0" style="background-color: #FEF3C7; color: #92400E; font-size: 0.68rem; padding: 2px 6px; font-weight: 600;" title="Produk Unggulan di Beranda">
                         <i data-lucide="star" style="width: 11px; height: 11px; display: inline-block; vertical-align: -1px; fill: #D97706; color: #D97706;"></i> Unggulan
+                      </span>
+                    @endif
+                    @if(!empty($p['search_hits']) && $p['search_hits'] > 0)
+                      <span class="badge border-0" style="background-color: #FEF2F2; color: #991B1B; font-size: 0.68rem; padding: 2px 6px; font-weight: 600;" title="Dicari/dilihat {{ $p['search_hits'] }}x oleh pengunjung">
+                        <i data-lucide="trending-up" style="width: 11px; height: 11px; display: inline-block; vertical-align: -1px; color: #DC2626;"></i> {{ $p['search_hits'] }}x
                       </span>
                     @endif
                   </div>

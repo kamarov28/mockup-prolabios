@@ -63,6 +63,11 @@ class PageController extends Controller
 
         $filteredProducts = $products->getPaginatedProducts($filters, 12);
 
+        if ($searchQuery && trim((string) $searchQuery) !== '') {
+            $matchedIds = collect($filteredProducts->items())->pluck('id')->filter()->all();
+            $products->recordSearchHits($matchedIds);
+        }
+
         return view('produk', [
             'products' => $filteredProducts,
             'categoriesStructure' => $categoriesStructure,
@@ -81,6 +86,8 @@ class PageController extends Controller
         if (! $product) {
             abort(404);
         }
+
+        $products->recordViewHit($product);
 
         return view('detail-produk', compact('product'));
     }
