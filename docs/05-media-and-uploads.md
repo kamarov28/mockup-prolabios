@@ -48,6 +48,21 @@ Seluruh upload gambar (produk utama, galeri produk, banner sektor, dan artikel b
 
 ---
 
+## 🎬 3. Dukungan Pemutaran Video (YouTube & Instagram)
+
+Deskripsi produk (`/produk/{slug}`) dan artikel wawasan (`/informasi/{slug}`) mendukung penyematan video interaktif:
+- **Platform yang Didukung**:
+  - **YouTube**: Link reguler (`youtube.com/watch?v=...`), tautan pendek (`youtu.be/...`), atau embed (`youtube.com/embed/...`).
+  - **Instagram**: Postingan feed (`instagram.com/p/...`) dan Instagram Reels (`instagram.com/reel/...`).
+- **Normalisasi URL Otomatis**: Helper `HtmlSanitizer::clean()` secara otomatis mengonversi URL video ke format endpoint pemutar `/embed/`.
+- **Keamanan Iframe Terisolasi**:
+  - Tag `<iframe>` dikunci menggunakan `HTML.SafeIframe` dan regex domain ketat pada `config/purifier.php`. Seluruh domain asing atau iframe dengan skema `javascript:` langsung dibuang.
+  - Directive CSP `frame-src` pada `SecurityHeaders` mengizinkan origin resmi YouTube dan Instagram.
+- **Tampilan Responsif 16:9**:
+  - Diatur melalui CSS `.profil-body-text iframe` dan `.blog-detail-body iframe` dengan `aspect-ratio: 16 / 9`, lebar responsif 100%, dan sudut 4px presisi agar tidak melorot di layar seluler.
+
+---
+
 ## 🔗 Referensi Alur Terkait
 - [04. Product & Catalog Engine](04-product-and-catalog.md)
 - [07. Security & Hardening Matrix](07-security-and-hardening.md)

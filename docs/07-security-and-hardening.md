@@ -26,18 +26,20 @@ Dokumen ini mendokumentasikan seluruh lapisan pertahanan keamanan (*defense-in-d
 
 Dikonfigurasi melalui `SecurityHeaders`:
 - `default-src 'self'`: Resource hanya dimuat dari origin sendiri kecuali domain tepercaya (Google Maps, Fonts, CDN JS).
+- `frame-src 'self' ...`: Mengizinkan embedding pemutar video resmi YouTube (`youtube.com`, `youtube-nocookie.com`) dan Instagram (`instagram.com`), memblokir seluruh domain pihak ketiga yang tidak terdaftar.
 - `frame-ancestors 'self'`: Mencegah situs dibungkus dalam `<iframe>` di website asing (Anti-Clickjacking).
 - `Strict-Transport-Security (HSTS)`: Menginstruksikan browser hanya mengakses via HTTPS (`max-age=31536000`).
 
 ---
 
-## 🧼 2. Sanitasi HTML Rich-Text (`HtmlSanitizer`)
+## 🧼 2. Sanitasi HTML Rich-Text & Video (`HtmlSanitizer`)
 
 Digunakan pada konten deskripsi produk dan artikel blog sebelum disimpan:
 ```php
 $cleanHtml = HtmlSanitizer::clean($request->input('description'));
 ```
 - Mempertahankan tag semantik aman: `<p>, <br>, <strong>, <table>, <img>, <ul>, <li>, <h3>, dll`.
+- Tag `<iframe>` dikunci menggunakan `HTML.SafeIframe` dan whitelist domain resmi (YouTube & Instagram saja).
 - Menghapus paksa seluruh atribut JavaScript (misal: `onload=`, `onerror=`, `onclick=`).
 - Memblokir skema URL berbahaya seperti `javascript:`, `vbscript:`, atau `data:text/html`.
 

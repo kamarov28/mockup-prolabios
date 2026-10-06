@@ -58,6 +58,14 @@ Setelah data RFQ dan item tersimpan di database via database transaction:
 
 ---
 
+## 📞 5. Kebijakan Saluran Komunikasi B2B Resmi
+
+Untuk menjaga kredibilitas dan formalitas transaksi B2B instansi/perusahaan:
+- **Saluran Publik**: Website hanya menampilkan nomor telepon kantor resmi (Marketing: `021-3874-1447`, Keuangan: `021-8792-9433`), email resmi perusahaan, dan formulir kontak/RFQ resmi.
+- **Tindak Lanjut WhatsApp**: Website sengaja meniadakan tombol WhatsApp publik terbuka. Komunikasi via WhatsApp dilakukan secara personal oleh masing-masing sales officer yang ditugaskan menindaklanjuti nomor kontak PIC yang dicantumkan pelanggan pada form pengajuan RFQ.
+
+---
+
 ## 🔗 Referensi Alur Terkait
 - [04. Product & Catalog Engine](04-product-and-catalog.md)
 - [06. Admin Dashboard & Authentication](06-admin-and-auth.md)

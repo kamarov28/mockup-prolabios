@@ -29,7 +29,32 @@ Jika request tidak memiliki session admin yang valid, user otomatis diarahkan ke
 
 ---
 
-## 📜 3. Audit Trail Logging (`AuditLogger`)
+## 👥 3. Multi-Admin Role & Otorisasi (`Gate`)
+
+Sistem menerapkan kontrol akses berbasis peran (*Role-Based Access Control / RBAC*) dengan 4 divisi spesifik pada tabel `users`:
+- **`super_admin` (Super Administrator)**: Akses mutlak ke seluruh modul sistem, termasuk pengaturan beranda (`/admin/home`), setelan SEO, migrasi database, dan pengelolaan akun staf admin (`/admin/users`).
+- **`sales` (Sales & RFQ Admin)**: Menangani pemrosesan pengajuan penawaran harga pelanggan (`/admin/rfqs`), ekspor spreadsheet penawaran, serta melihat katalog produk secara *Read-Only*. Terkunci dari pengeditan produk dan setelan web.
+- **`catalog` (Product Specialist)**: Mengelola katalog produk, taksonomi kategori/subkategori, sektor industri, prinsipal mitra resmi, dan impor spreadsheet massal. Terkunci dari data sensitif RFQ pelanggan dan setelan sistem.
+- **`content` (Content Writer)**: Menulis dan menerbitkan artikel berita, regulasi lab, wawasan analitika, serta unggah media gambar/video. Terkunci dari modul produk, RFQ, dan setelan sistem.
+
+### Matriks Gate Otorisasi (`AppServiceProvider`):
+```php
+Gate::define('manage-system', fn (?User $u) => (bool) $u?->isSuperAdmin());
+Gate::define('manage-rfq', fn (?User $u) => (bool) $u?->canManageRfqs());
+Gate::define('manage-catalog', fn (?User $u) => (bool) $u?->canManageCatalog());
+Gate::define('view-catalog', fn (?User $u) => (bool) $u?->canViewCatalog());
+Gate::define('manage-posts', fn (?User $u) => (bool) $u?->canManagePosts());
+```
+
+### Fitur Keamanan Pengguna Admin:
+- **Anti-Mass Assignment**: Kolom `is_admin` dan `role` dijaga ketat (*Guarded / Non-Fillable*) pada Model `User`.
+- **Anti-Self Deletion**: Super Admin yang sedang login dilarang menghapus akunnya sendiri atau menurunkan jabatannya jika menjadi satu-satunya Super Admin yang tersisa.
+- **Manajemen Akun Terpusat (`/admin/users`)**: Hanya dapat diakses oleh Super Admin. Dilengkapi metrik ringkasan peran, modal pembuatan & edit akun, serta verifikasi password kuat (min. 8 karakter huruf & angka).
+- **Self-Healing Schema**: Method `User::ensureRoleColumnExists()` otomatis menambahkan kolom `role` saat runtime cPanel jika migrasi CLI belum dijalankan.
+
+---
+
+## 📜 4. Audit Trail Logging (`AuditLogger`)
 
 Setiap tindakan krusial administrator dicatat di tabel `audit_logs` melalui `AuditLogger::log()`:
 - `admin.login_success` & `admin.login_failed`

@@ -6,7 +6,7 @@ Dokumen ini menjelaskan ekosistem pengujian otomatis (*automated testing*), inte
 
 ## 🧪 1. Menjalankan Test Suite
 
-Sistem dilengkapi dengan **41 Feature Tests (174 assertions)** yang mencakup pengujian regresi end-to-end:
+Sistem dilengkapi dengan **131 Automated Tests (685 assertions)** yang mencakup 100% pengujian regresi end-to-end:
 
 ```bash
 # Menjalankan seluruh test suite
@@ -21,19 +21,21 @@ php artisan test --filter=test_rfq_submission_workflow
 
 ---
 
-## 📑 2. Daftar Cakupan Test Suite (`tests/Feature/`)
+## 📑 2. Daftar Cakupan Test Suite (`tests/Feature/` & `tests/Unit/`)
 
 | File Test | Cakupan Pengujian |
 |---|---|
-| `RfqFlowTest.php` | Alur checkout RFQ, kalkulasi total, integrasi transaksi DB, dan queue jobs. |
+| `AdminRoleAccessTest.php` | Matriks otorisasi 4 role admin (Super Admin, Sales, Product Specialist, Content Writer) dan respon 403 Forbidden. |
+| `RfqFlowTest.php` | Alur checkout RFQ, integrasi transaksi DB, notifikasi email, dan session security. |
+| `ProductSearchTest.php` | Akurasi pencarian substring karakter (`LIKE %term%`), nomor katalog, dan multi-kata. |
+| `VideoEmbedSanitizerTest.php` | Sanitasi dan preservasi video aman YouTube & Instagram serta pemblokiran iframe berbahaya. |
+| `HomepageEntityEscapingTest.php` | Pencegahan double-encoding entitas HTML (`&amp;`) pada judul alur sektor dan editor CMS. |
+| `FeaturedProductsTest.php` | Algoritma hybrid highlight 3-tier, prioritas manual `is_featured`, dan trending `search_hits`. |
+| `ProductImportTest.php` | Impor Excel, auto-create kategori & sektor baru, pemetaan spesifikasi teknis, dan skip duplikat. |
 | `CartTest.php` | Manipulasi keranjang belanja (tambah, update qty, hapus, clear session). |
-| `AdminAuthTest.php` | Login admin, proteksi user non-admin, session regeneration, rate limiter login. |
-| `ProductManagementTest.php` | CRUD produk, auto-generate slug, validasi field, dan invalidasi cache. |
-| `SectorManagementTest.php` | CRUD sektor industri dan relasi multi-sektor. |
-| `SectorPivotFilterTest.php` | Filter query pivot katalog produk terhadap sektor laboratorium. |
-| `AdminProductSectorFilterTest.php` | Filter pencarian dan pagination produk per sektor di admin. |
-| `AdminRfqTest.php` | Akses view admin RFQ, pembaruan status penawaran, dan penghapusan RFQ. |
 | `SecurityHardeningTest.php` | Verifikasi header CSP, HSTS, endpoint `/health`, rate limiting, dan anti-XSS. |
+| `RealUserSimulationTest.php` | Simulasi end-to-end lifecycle pembeli publik dan persona admin secara komprehensif. |
+| `PrincipalManagementTest.php` | Validasi CRUD prinsipal mitra dan keakuratan negara asal manufaktur resmi. |
 | `ProductSlugTest.php` | Canonical slug routing & fallback ID numeric legasi. |
 
 ---
