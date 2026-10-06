@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminProductCategoryController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminRfqController;
 use App\Http\Controllers\Admin\AdminSectorController;
+use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
@@ -64,67 +65,88 @@ Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttl
 Route::get('/rfq/success/{number}', [RfqController::class, 'success'])->middleware('throttle:20,1')->name('rfq.success');
 
 Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function () {
+    // 0. Base Dashboard & Guidelines (Accessible by all logged-in admin roles)
     Route::get('/', [AdminDashboardController::class, 'dashboard'])->name('admin.dashboard');
-
-    Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
-    Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
-
     Route::get('/guide', [AdminDashboardController::class, 'guide'])->name('admin.guide');
-    Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
 
-    Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products');
-    Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
-    Route::get('/products/create-bulk', [AdminProductController::class, 'createBulk'])->name('admin.products.create.bulk');
-    Route::post('/products/store-bulk', [AdminProductController::class, 'storeBulk'])->name('admin.products.store-bulk');
-    Route::get('/products/import/template', [AdminProductController::class, 'downloadImportTemplate'])->name('admin.products.import.template');
-    Route::post('/products/import', [AdminProductController::class, 'importExcel'])->name('admin.products.import');
-    Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
-    Route::post('/products/bulk-delete', [AdminProductController::class, 'bulkDestroy'])->name('admin.products.bulk-destroy');
-    Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
-    Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
-    Route::post('/products/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
-    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
+    // 1. Super Admin Only: System Settings, Migrations & Admin User Management
+    Route::middleware(['can:manage-system'])->group(function () {
+        Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
+        Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
+        Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
 
-    Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');
-    Route::get('/categories/create', [AdminProductCategoryController::class, 'create'])->name('admin.categories.create');
-    Route::post('/categories', [AdminProductCategoryController::class, 'store'])->name('admin.categories.store');
-    Route::get('/categories/{id}/edit', [AdminProductCategoryController::class, 'edit'])->name('admin.categories.edit');
-    Route::match(['post', 'put'], '/categories/{id}', [AdminProductCategoryController::class, 'update'])->name('admin.categories.update');
-    Route::delete('/categories/{id}', [AdminProductCategoryController::class, 'destroy'])->name('admin.categories.destroy');
+        Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');
+        Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
+        Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    });
 
-    Route::get('/api/subcategories', [AdminProductCategoryController::class, 'apiSubcategories'])->name('admin.api.subcategories');
+    // 2. RFQ & Inquiries Management (Super Admin & Sales Admin)
+    Route::middleware(['can:manage-rfq'])->group(function () {
+        Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
+        Route::get('/rfqs/export', [AdminRfqController::class, 'export'])->name('admin.rfqs.export');
+        Route::post('/rfqs/bulk-delete', [AdminRfqController::class, 'bulkDestroy'])->name('admin.rfqs.bulk-destroy');
+        Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
+        Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
+        Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');
+    });
 
-    Route::get('/posts', [AdminPostController::class, 'index'])->name('admin.posts');
-    Route::get('/posts/create', [AdminPostController::class, 'create'])->name('admin.posts.create');
-    Route::post('/posts', [AdminPostController::class, 'store'])->name('admin.posts.store');
-    Route::post('/posts/bulk-delete', [AdminPostController::class, 'bulkDestroy'])->name('admin.posts.bulk-destroy');
-    Route::get('/posts/{slug}/edit', [AdminPostController::class, 'edit'])->name('admin.posts.edit');
-    Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'update'])->name('admin.posts.update');
-    Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
+    // 3. Product Catalog: Viewing (Super Admin, Product Specialist & Sales)
+    Route::middleware(['can:view-catalog'])->group(function () {
+        Route::get('/products', [AdminProductController::class, 'index'])->name('admin.products');
+    });
 
-    Route::get('/sectors', [AdminSectorController::class, 'index'])->name('admin.sectors');
-    Route::get('/sectors/create', [AdminSectorController::class, 'create'])->name('admin.sectors.create');
-    Route::post('/sectors', [AdminSectorController::class, 'store'])->name('admin.sectors.store');
-    Route::post('/sectors/bulk-delete', [AdminSectorController::class, 'bulkDestroy'])->name('admin.sectors.bulk-destroy');
-    Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'edit'])->name('admin.sectors.edit');
-    Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'update'])->name('admin.sectors.update');
-    Route::delete('/sectors/{id}', [AdminSectorController::class, 'destroy'])->name('admin.sectors.destroy');
+    // 4. Product Catalog: Management & Editing (Super Admin & Product Specialist)
+    Route::middleware(['can:manage-catalog'])->group(function () {
+        Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
+        Route::get('/products/create-bulk', [AdminProductController::class, 'createBulk'])->name('admin.products.create.bulk');
+        Route::post('/products/store-bulk', [AdminProductController::class, 'storeBulk'])->name('admin.products.store-bulk');
+        Route::get('/products/import/template', [AdminProductController::class, 'downloadImportTemplate'])->name('admin.products.import.template');
+        Route::post('/products/import', [AdminProductController::class, 'importExcel'])->name('admin.products.import');
+        Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
+        Route::post('/products/bulk-delete', [AdminProductController::class, 'bulkDestroy'])->name('admin.products.bulk-destroy');
+        Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
+        Route::match(['post', 'put'], '/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
+        Route::post('/products/{id}/toggle-featured', [AdminProductController::class, 'toggleFeatured'])->name('admin.products.toggle-featured');
+        Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
 
-    Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
-    Route::redirect('/principals/list', '/admin/principals', 301);
-    Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
-    Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
-    Route::post('/principals/bulk-delete', [AdminPrincipalController::class, 'bulkDestroy'])->name('admin.principals.bulk-destroy');
-    Route::get('/principals/{id}/edit', [AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
-    Route::match(['post', 'put'], '/principals/{id}', [AdminPrincipalController::class, 'update'])->name('admin.principals.update');
-    Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
+        Route::get('/categories', [AdminProductCategoryController::class, 'index'])->name('admin.categories.index');
+        Route::get('/categories/create', [AdminProductCategoryController::class, 'create'])->name('admin.categories.create');
+        Route::post('/categories', [AdminProductCategoryController::class, 'store'])->name('admin.categories.store');
+        Route::get('/categories/{id}/edit', [AdminProductCategoryController::class, 'edit'])->name('admin.categories.edit');
+        Route::match(['post', 'put'], '/categories/{id}', [AdminProductCategoryController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/categories/{id}', [AdminProductCategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
-    Route::get('/rfqs', [AdminRfqController::class, 'index'])->name('admin.rfqs.index');
-    Route::get('/rfqs/export', [AdminRfqController::class, 'export'])->name('admin.rfqs.export');
-    Route::post('/rfqs/bulk-delete', [AdminRfqController::class, 'bulkDestroy'])->name('admin.rfqs.bulk-destroy');
-    Route::get('/rfqs/{id}', [AdminRfqController::class, 'show'])->name('admin.rfqs.show');
-    Route::match(['post', 'put'], '/rfqs/{id}', [AdminRfqController::class, 'update'])->name('admin.rfqs.update');
-    Route::delete('/rfqs/{id}', [AdminRfqController::class, 'destroy'])->name('admin.rfqs.destroy');
+        Route::get('/api/subcategories', [AdminProductCategoryController::class, 'apiSubcategories'])->name('admin.api.subcategories');
 
-    Route::post('/media/upload', [AdminMediaController::class, 'upload'])->name('admin.media.upload');
+        Route::get('/sectors', [AdminSectorController::class, 'index'])->name('admin.sectors');
+        Route::get('/sectors/create', [AdminSectorController::class, 'create'])->name('admin.sectors.create');
+        Route::post('/sectors', [AdminSectorController::class, 'store'])->name('admin.sectors.store');
+        Route::post('/sectors/bulk-delete', [AdminSectorController::class, 'bulkDestroy'])->name('admin.sectors.bulk-destroy');
+        Route::get('/sectors/{id}/edit', [AdminSectorController::class, 'edit'])->name('admin.sectors.edit');
+        Route::match(['post', 'put'], '/sectors/{id}', [AdminSectorController::class, 'update'])->name('admin.sectors.update');
+        Route::delete('/sectors/{id}', [AdminSectorController::class, 'destroy'])->name('admin.sectors.destroy');
+
+        Route::get('/principals', [AdminPrincipalController::class, 'index'])->name('admin.principals');
+        Route::redirect('/principals/list', '/admin/principals', 301);
+        Route::get('/principals/create', [AdminPrincipalController::class, 'create'])->name('admin.principals.create');
+        Route::post('/principals', [AdminPrincipalController::class, 'store'])->name('admin.principals.store');
+        Route::post('/principals/bulk-delete', [AdminPrincipalController::class, 'bulkDestroy'])->name('admin.principals.bulk-destroy');
+        Route::get('/principals/{id}/edit', [AdminPrincipalController::class, 'edit'])->name('admin.principals.edit');
+        Route::match(['post', 'put'], '/principals/{id}', [AdminPrincipalController::class, 'update'])->name('admin.principals.update');
+        Route::delete('/principals/{id}', [AdminPrincipalController::class, 'destroy'])->name('admin.principals.destroy');
+    });
+
+    // 5. Editorial Content & Articles (Super Admin & Content Writer)
+    Route::middleware(['can:manage-posts'])->group(function () {
+        Route::get('/posts', [AdminPostController::class, 'index'])->name('admin.posts');
+        Route::get('/posts/create', [AdminPostController::class, 'create'])->name('admin.posts.create');
+        Route::post('/posts', [AdminPostController::class, 'store'])->name('admin.posts.store');
+        Route::post('/posts/bulk-delete', [AdminPostController::class, 'bulkDestroy'])->name('admin.posts.bulk-destroy');
+        Route::get('/posts/{slug}/edit', [AdminPostController::class, 'edit'])->name('admin.posts.edit');
+        Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'update'])->name('admin.posts.update');
+        Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
+
+        Route::post('/media/upload', [AdminMediaController::class, 'upload'])->name('admin.media.upload');
+    });
 });

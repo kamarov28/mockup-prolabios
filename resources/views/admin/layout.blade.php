@@ -48,26 +48,41 @@
           </a>
         </div>
 
+        @can('manage-rfq')
         <div class="sidebar-item {{ request()->is('admin/rfqs*') ? 'active' : '' }}">
           <a href="{{ route('admin.rfqs.index') }}" class="sidebar-link">
             <i data-lucide="file-spreadsheet"></i> Pengajuan RFQ
           </a>
         </div>
+        @endcan
 
+        @can('manage-system')
         <div class="sidebar-item {{ request()->routeIs('admin.home.edit') ? 'active' : '' }}">
           <a href="{{ route('admin.home.edit') }}" class="sidebar-link">
             <i data-lucide="sliders"></i> Pengaturan Web
           </a>
         </div>
 
-        <span class="sidebar-nav-label" style="margin-top: 8px;">Konten</span>
+        <div class="sidebar-item {{ request()->is('admin/users*') ? 'active' : '' }}">
+          <a href="{{ route('admin.users.index') }}" class="sidebar-link">
+            <i data-lucide="users"></i> Kelola Admin
+          </a>
+        </div>
+        @endcan
 
+        @if(auth()->user()?->canViewCatalog() || auth()->user()?->canManagePosts())
+        <span class="sidebar-nav-label" style="margin-top: 8px;">Konten</span>
+        @endif
+
+        @can('view-catalog')
         <div class="sidebar-item {{ request()->is('admin/products*') ? 'active' : '' }}">
           <a href="{{ route('admin.products') }}" class="sidebar-link">
             <i data-lucide="package"></i> Produk
           </a>
         </div>
+        @endcan
 
+        @can('manage-catalog')
         <div class="sidebar-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
           <a href="{{ route('admin.categories.index') }}" class="sidebar-link">
             <i data-lucide="folder-tree"></i> Kategori Produk
@@ -80,17 +95,20 @@
           </a>
         </div>
 
-        <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
-          <a href="{{ route('admin.posts') }}" class="sidebar-link">
-            <i data-lucide="file-text"></i> Artikel
-          </a>
-        </div>
-
         <div class="sidebar-item {{ request()->is('admin/sectors*') ? 'active' : '' }}">
           <a href="{{ route('admin.sectors') }}" class="sidebar-link">
             <i data-lucide="layers"></i> Sektor
           </a>
         </div>
+        @endcan
+
+        @can('manage-posts')
+        <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
+          <a href="{{ route('admin.posts') }}" class="sidebar-link">
+            <i data-lucide="file-text"></i> Artikel
+          </a>
+        </div>
+        @endcan
 
         <span class="sidebar-nav-label" style="margin-top: 8px;">Bantuan</span>
 
@@ -120,7 +138,10 @@
         <div class="admin-header-actions">
           <span class="admin-header-user">
             <i data-lucide="user"></i>
-            Administrator
+            <span>{{ auth()->user()?->name ?? 'Administrator' }}</span>
+            <span class="badge ms-1" style="{{ auth()->user()?->role_badge_style ?? '' }} font-size: 0.68rem; padding: 2px 6px; border-radius: 4px;">
+              {{ auth()->user()?->role_label ?? 'Admin' }}
+            </span>
           </span>
           <a href="{{ url('/') }}" target="_blank" class="admin-header-web-link">
             <i data-lucide="external-link"></i>

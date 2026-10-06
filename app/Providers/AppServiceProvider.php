@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Product;
+use App\Models\User;
 use App\Services\HomepageService;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
@@ -31,6 +33,13 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        // Multi-role admin authorization gates
+        Gate::define('manage-system', fn (?User $user) => (bool) $user?->isSuperAdmin());
+        Gate::define('manage-rfq', fn (?User $user) => (bool) $user?->canManageRfqs());
+        Gate::define('manage-catalog', fn (?User $user) => (bool) $user?->canManageCatalog());
+        Gate::define('view-catalog', fn (?User $user) => (bool) $user?->canViewCatalog());
+        Gate::define('manage-posts', fn (?User $user) => (bool) $user?->canManagePosts());
 
         RateLimiter::for('rfq-submission', function (Request $request) {
             return Limit::perMinute(3)->by($request->ip())->response(function () {
