@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Cache;
 
 class Sector extends Model
 {
@@ -33,5 +34,12 @@ class Sector extends Model
     {
         return $this->belongsToMany(Product::class, 'product_sector', 'sector_id', 'product_id')
             ->withTimestamps();
+    }
+
+    protected static function booted(): void
+    {
+        $clear = fn () => Cache::forget('sectors_list_v2');
+        static::saved($clear);
+        static::deleted($clear);
     }
 }

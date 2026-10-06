@@ -329,4 +329,53 @@ class ProductImportTest extends TestCase
             @unlink($tempFile);
         }
     }
+
+    public function test_admin_import_auto_creates_new_sectors_if_not_existing(): void
+    {
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        $sheet->fromArray([
+            'Nomor Katalog', 'Nama Produk *', 'Kategori *', 'Subkategori', 'Harga (Rp)', 'Stok', 'Prinsipal', 'Sektor Industri',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            ['SECT-01', 'Dairy QC Broth', 'microbiology', '', '150000', '10', '', 'Dairy & Milk Processing'],
+        ], null, 'A2');
+
+        $tempFile = sys_get_temp_dir().'/test_auto_sector_'.time().'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-auto-sector.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $response->assertSessionHas('success');
+
+        // Sector was created automatically
+        $this->assertDatabaseHas('sectors', [
+            'id' => 'dairy-milk-processing',
+            'name' => 'Dairy & Milk Processing',
+        ]);
+
+        // Product was linked to the new sector via pivot
+        $product = Product::where('catalog', 'SECT-01')->first();
+        $this->assertNotNull($product);
+        $this->assertTrue($product->sectors->contains('id', 'dairy-milk-processing'));
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
 }

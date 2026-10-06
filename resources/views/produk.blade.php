@@ -111,7 +111,8 @@
                                    alt="{{ $prod['title'] }}" 
                                    class="d-none d-sm-block rounded" 
                                    style="width: 44px; height: 44px; object-fit: cover; background: var(--nb-bg-soft); border: 1px solid #E5E7EB; flex-shrink: 0;"
-                                   loading="lazy">
+                                   loading="lazy"
+                                   onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                               <div>
                                 <a href="{{ $cardUrl }}" class="catalog-table-title text-decoration-none d-block mb-1">
                                   {{ $prod['title'] }}

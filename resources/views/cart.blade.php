@@ -76,7 +76,7 @@
                 <!-- 1. Thumbnail Image -->
                 <div class="col-auto">
                   <div class="cart-img-box">
-                    <img src="{{ $item['image'] ?: asset('images/placeholder.svg') }}" alt="{{ $item['title'] }} — Item keranjang" loading="lazy" decoding="async">
+                    <img src="{{ $item['image'] ?: asset('images/placeholder.svg') }}" alt="{{ $item['title'] }} — Item keranjang" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                   </div>
                 </div>
 

@@ -21,7 +21,7 @@
 @endif
   <div class="card h-100 product-card border-0">
     <div class="img-wrap">
-      <img src="{{ $cardImage }}" alt="{{ $p['title'] }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250">
+      <img src="{{ $cardImage }}" alt="{{ $p['title'] }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
     </div>
     <div class="card-body p-4 d-flex flex-column">
       <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
@@ -36,7 +36,8 @@
             <div class="product-principal-logo" title="Prinsipal: {{ $p->principal->name }}">
               <img src="{{ str_starts_with($p->principal->logo, 'http') || str_starts_with($p->principal->logo, '/') ? $p->principal->logo : asset('storage/' . $p->principal->logo) }}"
                    alt="Logo {{ $p->principal->name }}"
-                   loading="lazy">
+                   loading="lazy"
+                   onerror="this.onerror=null;this.parentElement.style.display='none';">
             </div>
           @else
             <span class="text-muted small fw-semibold">

@@ -103,7 +103,8 @@
                   @if(!empty($product->principal->logo))
                     <div class="detail-principal-logo-box">
                       <img src="{{ str_starts_with($product->principal->logo, 'http') || str_starts_with($product->principal->logo, '/') ? $product->principal->logo : asset('storage/' . $product->principal->logo) }}"
-                           alt="Logo {{ $product->principal->name }}">
+                           alt="Logo {{ $product->principal->name }}"
+                           onerror="this.onerror=null;this.parentElement.style.display='none';">
                     </div>
                   @endif
                   <div>
@@ -120,13 +121,13 @@
             <div class="row g-5">
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" loading="lazy" decoding="async">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                 </div>
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
                     @foreach($allImages as $imgPath)
                       <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" role="button" tabindex="0" aria-label="Foto produk {{ $loop->iteration }}">
-                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async">
+                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                       </div>
                     @endforeach
                   </div>

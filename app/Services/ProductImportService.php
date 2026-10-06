@@ -489,15 +489,46 @@ class ProductImportService
             if ($rawSector !== '') {
                 $sectorParts = array_map('trim', explode(',', $rawSector));
                 foreach ($sectorParts as $part) {
+                    if ($part === '') {
+                        continue;
+                    }
                     $normPart = strtolower($part);
                     if (isset($sectorLookup[$normPart])) {
                         $matchedSectorIds[] = $sectorLookup[$normPart];
                     } else {
+                        $foundId = null;
                         foreach ($sectorLookup as $lookupKey => $sectorId) {
                             if (str_starts_with($normPart, $lookupKey) || str_starts_with($lookupKey, explode(' ', $normPart)[0])) {
-                                $matchedSectorIds[] = $sectorId;
+                                $foundId = $sectorId;
                                 break;
                             }
+                        }
+
+                        if ($foundId) {
+                            $matchedSectorIds[] = $foundId;
+                        } else {
+                            // Auto-create new sector if it does not exist in database yet
+                            $baseId = Str::slug($part);
+                            if ($baseId === '') {
+                                $baseId = 'sektor-'.time();
+                            }
+                            $sectorId = $baseId;
+                            $counter = 1;
+                            while (Sector::where('id', $sectorId)->exists()) {
+                                $sectorId = $baseId.'-'.$counter++;
+                            }
+
+                            Sector::create([
+                                'id' => $sectorId,
+                                'name' => $part,
+                                'description' => null,
+                                'image' => null,
+                            ]);
+
+                            $matchedSectorIds[] = $sectorId;
+                            $sectorLookup[$normPart] = $sectorId;
+                            $sectorLookup[strtolower($sectorId)] = $sectorId;
+                            $sectorLookup[strtolower($part)] = $sectorId;
                         }
                     }
                 }
