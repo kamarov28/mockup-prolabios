@@ -41,6 +41,27 @@ class HtmlSanitizer
             return '';
         }
 
+        // Normalize Instagram iframes so they load the interactive embed widget correctly
+        $html = (string) preg_replace_callback(
+            '#src="((?:https?:)?//(?:www\.)?instagram\.com/(?:p|reel)/[A-Za-z0-9_-]+)/?(?:embed/?)?"#i',
+            function ($m) {
+                return 'src="'.rtrim($m[1], '/').'/embed/"';
+            },
+            $html
+        );
+
+        // Normalize YouTube watch links in iframes to embed format
+        $html = (string) preg_replace(
+            '#src="(?:https?:)?//(?:www\.)?youtube\.com/watch\?v=([A-Za-z0-9_-]+)[^"]*"#i',
+            'src="https://www.youtube.com/embed/$1"',
+            $html
+        );
+        $html = (string) preg_replace(
+            '#src="(?:https?:)?//youtu\.be/([A-Za-z0-9_-]+)[^"]*"#i',
+            'src="https://www.youtube.com/embed/$1"',
+            $html
+        );
+
         return Purifier::clean($html, 'product_description');
     }
 }

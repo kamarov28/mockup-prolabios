@@ -174,6 +174,26 @@
   border-radius: var(--nb-radius, 4px);
 }
 
+.profil-body-text iframe,
+.blog-detail-body iframe {
+  max-width: 100%;
+  border-radius: var(--nb-radius, 4px);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: block;
+  border: 0;
+}
+
+.profil-body-text iframe[src*="youtube.com"],
+.profil-body-text iframe[src*="youtu.be"],
+.blog-detail-body iframe[src*="youtube.com"],
+.blog-detail-body iframe[src*="youtu.be"] {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+  min-height: 240px;
+}
+
 .profil-mission-card {
   background: var(--nb-card);
   border: var(--nb-border);

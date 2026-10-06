@@ -47,9 +47,13 @@ return [
                 'a[href|title|target|rel|class|style]',
                 'img[src|alt|width|height|loading|style|class]',
                 'figure', 'figcaption',
-                // NOTE: <iframe> is deliberately omitted — was in the old regex sanitizer
-                // but enables XSS via srcdoc and arbitrary frame embedding.
+                // Whitelisted video embed iframes (strictly restricted via HTML.SafeIframe & URI.SafeIframeRegexp)
+                'iframe[src|width|height|frameborder|allowfullscreen|style|class|loading]',
             ]),
+
+            // Safe video iframes whitelisting (YouTube & Instagram only)
+            'HTML.SafeIframe' => true,
+            'URI.SafeIframeRegexp' => '%^(https?:)?//(www\.)?(youtube(?:-nocookie)?\.com/embed/|youtu\.be/|instagram\.com/(?:p|reel)/)%',
 
             // Limit CSS properties allowed in style="" attributes
             'CSS.AllowedProperties' => implode(',', [
@@ -89,7 +93,7 @@ return [
         // ------------------------------------------------------------------
         'custom_definition' => [
             'id' => 'prolabios-html5',
-            'rev' => 3,
+            'rev' => 4,
             'debug' => false,
             'elements' => [
                 ['figure',     'Block', 'Optional: (figcaption, Flow) | (Flow, figcaption) | Flow', 'Common'],
@@ -100,9 +104,12 @@ return [
                 ['sup',        'Inline', 'Inline', 'Common'],
             ],
             'attributes' => [
-                ['a',   'target',  'Enum#_blank,_self,_top'],
-                ['a',   'rel',     'Text'],
-                ['img', 'loading', 'Enum#lazy,eager,auto'],
+                ['a',      'target',          'Enum#_blank,_self,_top'],
+                ['a',      'rel',             'Text'],
+                ['img',    'loading',         'Enum#lazy,eager,auto'],
+                ['iframe', 'allowfullscreen', 'Bool'],
+                ['iframe', 'frameborder',     'Text'],
+                ['iframe', 'loading',         'Enum#lazy,eager,auto'],
             ],
         ],
     ],
