@@ -136,7 +136,13 @@
               <div class="hitech-info-card p-4 p-md-5 rounded-3 h-100 d-flex flex-column justify-content-between">
                 <div>
                   <span class="hitech-panel-tag mb-3">{{ $sec['tag'] }}</span>
-                  <h3 class="hitech-panel-title mb-3">{{ $sec['title'] }}</h3>
+                  @php
+                    $renderedTitle = $sec['title'];
+                    while (str_contains($renderedTitle, '&amp;amp;')) {
+                      $renderedTitle = str_replace('&amp;amp;', '&amp;', $renderedTitle);
+                    }
+                  @endphp
+                  <h3 class="hitech-panel-title mb-3">{!! $renderedTitle !!}</h3>
                   <p class="hitech-panel-desc mb-4">{{ $sec['desc'] }}</p>
                 </div>
                 <div class="d-flex flex-wrap gap-3 pt-3 border-top align-items-center justify-content-between">

@@ -121,7 +121,9 @@ class HomepageSettingsUpdater
     {
         $patch = [];
         $patch['hero_badge'] = $request->input('hero_badge', $homeData['hero_badge'] ?? '');
-        $patch['hero_title'] = HtmlSanitizer::clean($request->input('hero_title', $homeData['hero_title'] ?? ''));
+        $rawHeroTitle = (string) $request->input('hero_title', $homeData['hero_title'] ?? '');
+        $normalizedHeroTitle = html_entity_decode(html_entity_decode($rawHeroTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $patch['hero_title'] = HtmlSanitizer::clean($normalizedHeroTitle);
         $patch['hero_subtitle'] = $request->input('hero_subtitle', $homeData['hero_subtitle'] ?? '');
         $patch['hero_cta_text'] = $request->input('hero_cta_text', $homeData['hero_cta_text'] ?? '');
         $patch['hero_cta_link'] = $request->input('hero_cta_link', $homeData['hero_cta_link'] ?? '');
@@ -135,30 +137,32 @@ class HomepageSettingsUpdater
         }
         $patch['hero_images'] = $heroImages;
 
-        $patch['bento_title'] = $request->input('bento_title', $homeData['bento_title'] ?? '');
+        $patch['bento_title'] = html_entity_decode(html_entity_decode((string) $request->input('bento_title', $homeData['bento_title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $patch['bento_subtitle'] = $request->input('bento_subtitle', $homeData['bento_subtitle'] ?? '');
         $bentoCards = $homeData['bento_cards'] ?? [];
         for ($i = 0; $i < 4; $i++) {
             $existingBento = $bentoCards[$i] ?? [];
             $bentoCards[$i] = [
                 'icon' => $request->input("bento_card_icon_$i", $existingBento['icon'] ?? 'bi-patch-check'),
-                'title' => $request->input("bento_card_title_$i", $existingBento['title'] ?? ''),
-                'desc' => $request->input("bento_card_desc_$i", $existingBento['desc'] ?? ''),
+                'title' => html_entity_decode(html_entity_decode((string) $request->input("bento_card_title_$i", $existingBento['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'desc' => html_entity_decode(html_entity_decode((string) $request->input("bento_card_desc_$i", $existingBento['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
             ];
         }
         $patch['bento_cards'] = $bentoCards;
 
-        $patch['sector_title'] = $request->input('sector_title', $homeData['sector_title'] ?? '');
+        $patch['sector_title'] = html_entity_decode(html_entity_decode((string) $request->input('sector_title', $homeData['sector_title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $patch['sector_subtitle'] = $request->input('sector_subtitle', $homeData['sector_subtitle'] ?? '');
         $sectorKeys = ['pharma', 'fnb', 'healthcare', 'brewing'];
         $sectorPanels = $homeData['sector_panels'] ?? [];
         foreach ($sectorKeys as $sKey) {
             $existingSector = $sectorPanels[$sKey] ?? [];
+            $rawTitle = (string) $request->input("sector_title_$sKey", $existingSector['title'] ?? '');
+            $normalizedTitle = html_entity_decode(html_entity_decode($rawTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $sectorPanels[$sKey] = [
-                'tag' => $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''),
-                'title' => HtmlSanitizer::clean($request->input("sector_title_$sKey", $existingSector['title'] ?? '')),
-                'desc' => $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''),
-                'link' => $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
+                'tag' => html_entity_decode(html_entity_decode((string) $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'title' => HtmlSanitizer::clean($normalizedTitle),
+                'desc' => html_entity_decode(html_entity_decode((string) $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'link' => (string) $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
             ];
         }
         $patch['sector_panels'] = $sectorPanels;

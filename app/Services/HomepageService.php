@@ -123,7 +123,7 @@ class HomepageService
             ],
 
             // 2. Bento Grid
-            'bento_title' => 'Standar Keandalan &amp; Kepatuhan Uji Lab',
+            'bento_title' => 'Standar Keandalan & Kepatuhan Uji Lab',
             'bento_subtitle' => 'Dirancang untuk memastikan kelancaran audit regulasi BPOM & ISO serta keandalan hasil pengujian di laboratorium Anda.',
             'bento_cards' => [
                 [

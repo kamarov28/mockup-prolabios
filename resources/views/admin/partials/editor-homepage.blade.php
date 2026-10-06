@@ -44,7 +44,7 @@
           </div>
           <div class="col-md-8">
             <label for="hero_title" class="admin-form-label mb-2">Hero Title / Slogan Utama</label>
-            <input type="text" class="form-control @error('hero_title') is-invalid @enderror" id="hero_title" name="hero_title" value="{{ old('hero_title', $homeData['hero_title'] ?? '') }}" required>
+            <input type="text" class="form-control @error('hero_title') is-invalid @enderror" id="hero_title" name="hero_title" value="{{ old('hero_title', html_entity_decode(html_entity_decode((string) ($homeData['hero_title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
             @error('hero_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
             <div class="form-text mt-2 small text-secondary lh-base">
               Bisa sisipkan styling teks khusus di judul:
@@ -121,7 +121,7 @@
         <div class="row g-3 mb-4">
           <div class="col-md-6">
             <label for="bento_title" class="admin-form-label mb-2">Judul Section Bento</label>
-            <input type="text" class="form-control @error('bento_title') is-invalid @enderror" id="bento_title" name="bento_title" value="{{ old('bento_title', $homeData['bento_title'] ?? 'Infrastructure & Reliability Standards') }}" required>
+            <input type="text" class="form-control @error('bento_title') is-invalid @enderror" id="bento_title" name="bento_title" value="{{ old('bento_title', html_entity_decode(html_entity_decode((string) ($homeData['bento_title'] ?? 'Infrastructure & Reliability Standards'), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
             @error('bento_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
           </div>
           <div class="col-md-6">
@@ -148,11 +148,11 @@
                   </div>
                   <div class="mb-2">
                     <label for="bento_card_title_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Pilar</label>
-                    <input type="text" id="bento_card_title_{{ $i }}" class="form-control form-control-sm" name="bento_card_title_{{ $i }}" value="{{ old('bento_card_title_'.$i, $bCard['title'] ?? '') }}" required>
+                    <input type="text" id="bento_card_title_{{ $i }}" class="form-control form-control-sm" name="bento_card_title_{{ $i }}" value="{{ old('bento_card_title_'.$i, html_entity_decode(html_entity_decode((string) ($bCard['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
                   </div>
                   <div>
                     <label for="bento_card_desc_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Penjelasan</label>
-                    <textarea id="bento_card_desc_{{ $i }}" class="form-control form-control-sm" name="bento_card_desc_{{ $i }}" rows="3" required>{{ old('bento_card_desc_'.$i, $bCard['desc'] ?? '') }}</textarea>
+                    <textarea id="bento_card_desc_{{ $i }}" class="form-control form-control-sm" name="bento_card_desc_{{ $i }}" rows="3" required>{{ old('bento_card_desc_'.$i, html_entity_decode(html_entity_decode((string) ($bCard['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@
         <div class="row g-3 mb-4">
           <div class="col-md-6">
             <label for="sector_title" class="admin-form-label mb-2">Judul Section Sector Finder</label>
-            <input type="text" class="form-control @error('sector_title') is-invalid @enderror" id="sector_title" name="sector_title" value="{{ old('sector_title', $homeData['sector_title'] ?? 'Interactive Sector Finder') }}" required>
+            <input type="text" class="form-control @error('sector_title') is-invalid @enderror" id="sector_title" name="sector_title" value="{{ old('sector_title', html_entity_decode(html_entity_decode((string) ($homeData['sector_title'] ?? 'Interactive Sector Finder'), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
             @error('sector_title') <div class="invalid-feedback">{{ $message }}</div> @enderror
           </div>
           <div class="col-md-6">
@@ -202,15 +202,15 @@
                   <span class="admin-badge admin-badge-info mb-2">{{ $sLabel }}</span>
                   <div class="mb-2">
                     <label for="sector_tag_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Tag Sub-kategori</label>
-                    <input type="text" id="sector_tag_{{ $sKey }}" class="form-control form-control-sm" name="sector_tag_{{ $sKey }}" value="{{ old('sector_tag_'.$sKey, $sPanel['tag'] ?? '') }}" required>
+                    <input type="text" id="sector_tag_{{ $sKey }}" class="form-control form-control-sm" name="sector_tag_{{ $sKey }}" value="{{ old('sector_tag_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
                   </div>
                   <div class="mb-2">
                     <label for="sector_title_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Alur Kerja</label>
-                    <input type="text" id="sector_title_{{ $sKey }}" class="form-control form-control-sm" name="sector_title_{{ $sKey }}" value="{{ old('sector_title_'.$sKey, $sPanel['title'] ?? '') }}" required>
+                    <input type="text" id="sector_title_{{ $sKey }}" class="form-control form-control-sm" name="sector_title_{{ $sKey }}" value="{{ old('sector_title_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
                   </div>
                   <div class="mb-2">
                     <label for="sector_desc_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Ringkas</label>
-                    <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" required>{{ old('sector_desc_'.$sKey, $sPanel['desc'] ?? '') }}</textarea>
+                    <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" required>{{ old('sector_desc_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
                   </div>
                   <div>
                     <label for="sector_link_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Link URL Tombol</label>
