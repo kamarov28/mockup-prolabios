@@ -42,8 +42,8 @@
 
   <!-- Google Analytics 4 / GTM (If configured via .env or SiteSettings) -->
   @php
-    $gaId = config('services.google_analytics_id', env('GOOGLE_ANALYTICS_ID', $siteSettings['google_analytics_id'] ?? null));
-    $gtmId = config('services.google_tag_manager_id', env('GOOGLE_TAG_MANAGER_ID', $siteSettings['google_tag_manager_id'] ?? null));
+    $gaId = config('services.google_analytics_id') ?: ($siteSettings['google_analytics_id'] ?? null);
+    $gtmId = config('services.google_tag_manager_id') ?: ($siteSettings['google_tag_manager_id'] ?? null);
   @endphp
   @if(!empty($gaId))
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ $gaId }}" @nonce></script>

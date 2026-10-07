@@ -211,10 +211,18 @@
           <div class="form-text text-secondary mt-1 small">Kata kunci dipisahkan koma (contoh: alat laboratorium, mikrobiologi, media kultur).</div>
         </div>
 
-        <div class="col-12">
+        <div class="col-md-6">
+          <label for="google_analytics_id" class="admin-form-label mb-2">Google Analytics 4 Measurement ID (Opsional)</label>
+          <input type="text" class="form-control @error('google_analytics_id') is-invalid @enderror" id="google_analytics_id" name="google_analytics_id" value="{{ old('google_analytics_id', $homeData['google_analytics_id'] ?? '') }}" placeholder="Contoh: G-GV3C1L8QVZ">
+          @error('google_analytics_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          <div class="form-text text-secondary mt-1 small">Tag ID Google Analytics 4 (format: <code>G-XXXXXXXXXX</code>) untuk melacak statistik pengunjung.</div>
+        </div>
+
+        <div class="col-md-6">
           <label for="google_search_console_id" class="admin-form-label mb-2">Google Search Console Verification Tag / Code (Opsional)</label>
           <input type="text" class="form-control @error('google_search_console_id') is-invalid @enderror" id="google_search_console_id" name="google_search_console_id" value="{{ old('google_search_console_id', $homeData['google_search_console_id'] ?? '') }}" placeholder="google-site-verification=...">
           @error('google_search_console_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          <div class="form-text text-secondary mt-1 small">Kode verifikasi kepemilikan domain di Google Search Console.</div>
         </div>
       </div>
 

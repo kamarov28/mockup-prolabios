@@ -45,4 +45,8 @@ return [
         'secret' => env('TURNSTILE_SECRET_KEY'),
     ],
 
+    // ponytail: basic GA4 & GTM tracking IDs without server-side analytics API client
+    'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+    'google_tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID'),
+
 ];

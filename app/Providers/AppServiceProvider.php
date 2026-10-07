@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -80,74 +81,66 @@ class AppServiceProvider extends ServiceProvider
 
     protected function shareFrontendViewData(): void
     {
-        if ($this->app->runningInConsole()) {
-            return;
-        }
-
-        try {
-            $request = request();
-            if ($request && $request->is('admin', 'admin/*')) {
+        View::composer('*', function ($view) {
+            try {
+                $request = request();
+                if ($request && $request->is('admin', 'admin/*')) {
+                    return;
+                }
+            } catch (\Throwable $e) {
                 return;
             }
-        } catch (\Throwable $e) {
-            return;
-        }
 
-        try {
-            $siteSettings = app(HomepageService::class)->getHomepageData();
-
-            $rawPhone = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone'] ?? '0821-8792-9433');
-            $waNumber = (strpos($rawPhone, '0') === 0) ? '62'.substr($rawPhone, 1) : $rawPhone;
-
-            $rawPhoneTech = preg_replace('/[^0-9]/', '', $siteSettings['contact_phone_technician'] ?? '0812-837-4867');
-            $waNumberTech = (strpos($rawPhoneTech, '0') === 0) ? '62'.substr($rawPhoneTech, 1) : $rawPhoneTech;
-
-            $waDefaultMsg = urlencode($siteSettings['whatsapp_default_message'] ?? 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.');
-
-            $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
-                $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
-                try {
-                    $productTitles = Product::query()
-                        ->orderByDesc('id')
-                        ->limit(200)
-                        ->pluck('title')
-                        ->toArray();
-
-                    if (! empty($productTitles)) {
-                        $wordsList = [];
-                        $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'];
-                        foreach ($productTitles as $title) {
-                            $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
-                            $words = explode(' ', $clean);
-                            foreach ($words as $word) {
-                                $word = trim($word);
-                                if (strlen($word) > 3 && ! in_array(strtolower($word), $skip, true)) {
-                                    $wordsList[] = $word;
-                                }
-                            }
-                        }
-                        if (! empty($wordsList)) {
-                            return array_slice(array_values(array_unique($wordsList)), 0, 7);
-                        }
-                    }
-                } catch (\Exception $e) {
-                    Log::warning('search_suggestions cache build failed, using defaults.', [
-                        'exception' => $e->getMessage(),
-                    ]);
+            try {
+                if (! Schema::hasTable('homepage_settings') || ! Schema::hasTable('products')) {
+                    return;
                 }
 
-                return $default;
-            });
+                $siteSettings = app(HomepageService::class)->getHomepageData();
 
-            View::share('siteSettings', $siteSettings);
-            View::share('waNumber', '');
-            View::share('waNumberTech', '');
-            View::share('waDefaultMsg', '');
-            View::share('searchSuggestions', $searchSuggestions);
-        } catch (\Exception $e) {
-            Log::warning('shareFrontendViewData failed; frontend view globals not set.', [
-                'exception' => $e->getMessage(),
-            ]);
-        }
+                $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
+                    $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
+                    try {
+                        $productTitles = Product::query()
+                            ->orderByDesc('id')
+                            ->limit(200)
+                            ->pluck('title')
+                            ->toArray();
+
+                        if (! empty($productTitles)) {
+                            $wordsList = [];
+                            $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'];
+                            foreach ($productTitles as $title) {
+                                $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
+                                $words = explode(' ', $clean);
+                                foreach ($words as $word) {
+                                    $word = trim($word);
+                                    if (strlen($word) > 3 && ! in_array(strtolower($word), $skip, true)) {
+                                        $wordsList[] = $word;
+                                    }
+                                }
+                            }
+                            if (! empty($wordsList)) {
+                                return array_slice(array_values(array_unique($wordsList)), 0, 7);
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        Log::warning('search_suggestions cache build failed, using defaults.', [
+                            'exception' => $e->getMessage(),
+                        ]);
+                    }
+
+                    return $default;
+                });
+
+                $view->with('siteSettings', $siteSettings);
+                $view->with('waNumber', '');
+                $view->with('waNumberTech', '');
+                $view->with('waDefaultMsg', '');
+                $view->with('searchSuggestions', $searchSuggestions);
+            } catch (\Exception $e) {
+                // Silently ignore if DB or schema is not ready
+            }
+        });
     }
 }
