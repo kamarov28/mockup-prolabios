@@ -10,6 +10,7 @@
   title="Manajemen Katalog Produk"
   description="Kelola seluruh katalog reagen, instrumen, dan consumable laboratorium beserta spesifikasi dan harganya.">
   <x-slot:actions>
+    @can('manage-catalog')
     <button type="button" class="admin-btn admin-btn-outline" data-bs-toggle="modal" data-bs-target="#importExcelModal">
       <i data-lucide="file-spreadsheet"></i> Import Excel
     </button>
@@ -19,6 +20,7 @@
     <a href="{{ route('admin.products.create') }}" class="admin-btn admin-btn-primary">
       <i data-lucide="plus"></i> Tambah Produk
     </a>
+    @endcan
   </x-slot:actions>
 </x-admin.page-header>
 
@@ -160,18 +162,21 @@
                 <td><span class="admin-badge admin-badge-muted text-capitalize">{{ str_replace('-', ' ', $p['sector'] ?: 'Umum') }}</span></td>
                 <td style="text-align: right; padding-right: 20px; white-space: nowrap;">
                   <div class="d-inline-flex align-items-center gap-1 justify-content-end">
+                    @can('manage-catalog')
                     <form action="{{ route('admin.products.toggle-featured', ['id' => $p['id']]) }}" method="POST" class="d-inline m-0">
                       @csrf
                       <button type="submit" class="admin-action-link" style="color: {{ !empty($p['is_featured']) ? '#D97706' : 'var(--color-text-muted)' }};" title="{{ !empty($p['is_featured']) ? 'Hapus dari Produk Unggulan' : 'Jadikan Produk Unggulan Beranda' }}">
                         <i data-lucide="star" style="{{ !empty($p['is_featured']) ? 'fill: #D97706;' : '' }}"></i>
                       </button>
                     </form>
+                    @endcan
                     <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat di Web">
                       <i data-lucide="eye"></i>
                     </a>
                     <button type="button" class="admin-action-link btn-copy-link" data-url="{{ url('/produk/detail') }}?id={{ $p['id'] }}" title="Salin link">
                       <i data-lucide="clipboard"></i>
                     </button>
+                    @can('manage-catalog')
                     <a href="{{ route('admin.products.edit', ['id' => $p['id']]) }}" class="admin-action-link edit" title="Edit Produk">
                       <i data-lucide="file-edit"></i>
                     </a>
@@ -182,6 +187,7 @@
                         <i data-lucide="trash-2"></i>
                       </button>
                     </form>
+                    @endcan
                   </div>
                 </td>
               </tr>

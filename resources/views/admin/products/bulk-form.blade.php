@@ -50,7 +50,7 @@
       <p class="mb-0" style="font-size: 0.82rem; line-height: 1.55; color: #78350F;">
         <strong>Mengapa dibatasi?</strong> Setiap produk memiliki 2 slot berkas fisik (<em>Cover Gambar</em> dan <em>Datasheet PDF</em>). Server PHP membatasi maksimal 20 berkas per satu kali kirim form (<code>max_file_uploads</code>). Jika Anda mengisi lebih dari 10 produk dan semuanya melampirkan berkas fisik, berkas pada produk selebihnya berisiko diabaikan oleh server.
         <br>
-        <span class="d-inline-block mt-1">💡 <em>Untuk upload lebih dari 15 produk sekaligus, sangat disarankan menggunakan menu <strong>Impor Spreadsheet Excel (.xlsx)</strong> di atas.</em></span>
+        <span class="d-inline-flex align-items-center gap-1 mt-1"><i data-lucide="info" style="width: 14px; height: 14px;" class="text-warning"></i> <em>Untuk upload lebih dari 15 produk sekaligus, sangat disarankan menggunakan menu <strong>Impor Spreadsheet Excel (.xlsx)</strong> di atas.</em></span>
       </p>
     </div>
   </div>

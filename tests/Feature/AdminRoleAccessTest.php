@@ -88,6 +88,17 @@ class AdminRoleAccessTest extends TestCase
         $this->get('/admin/posts')->assertForbidden();
         $this->get('/admin/home?section=homepage')->assertForbidden();
         $this->get('/admin/users')->assertForbidden();
+
+        // Dashboard and Products view are role-filtered (no create/import actions)
+        $productsView = $this->get('/admin/products');
+        $productsView->assertOk();
+        $productsView->assertDontSee(route('admin.products.create'), false);
+        $productsView->assertDontSee('#importExcelModal', false);
+
+        $dashView = $this->get('/admin');
+        $dashView->assertOk();
+        $dashView->assertSee('Inquiry RFQ Terbaru');
+        $dashView->assertDontSee(route('admin.products.create'), false);
     }
 
     public function test_catalog_admin_can_manage_products_but_forbidden_from_rfqs_and_settings(): void
@@ -107,6 +118,13 @@ class AdminRoleAccessTest extends TestCase
         $this->get('/admin/posts')->assertForbidden();
         $this->get('/admin/home?section=homepage')->assertForbidden();
         $this->get('/admin/users')->assertForbidden();
+
+        // Dashboard hides sensitive RFQs from catalog specialist
+        $dashView = $this->get('/admin');
+        $dashView->assertOk();
+        $dashView->assertDontSee('Inquiry RFQ Terbaru');
+        $dashView->assertDontSee('Pipeline Status Permintaan Penawaran');
+        $dashView->assertSee('Total Produk');
     }
 
     public function test_content_admin_can_manage_posts_but_forbidden_from_products_and_rfqs(): void
@@ -125,6 +143,15 @@ class AdminRoleAccessTest extends TestCase
         $this->get('/admin/categories')->assertForbidden();
         $this->get('/admin/home?section=homepage')->assertForbidden();
         $this->get('/admin/users')->assertForbidden();
+
+        // Dashboard hides RFQ and Products management from content writer
+        $dashView = $this->get('/admin');
+        $dashView->assertOk();
+        $dashView->assertDontSee('Inquiry RFQ Terbaru');
+        $dashView->assertDontSee('Pipeline Status Permintaan Penawaran');
+        $dashView->assertSee('Artikel Berita');
+        $dashView->assertSee(route('admin.posts.create'), false);
+        $dashView->assertDontSee(route('admin.products.create'), false);
     }
 
     public function test_super_admin_cannot_delete_own_account_or_last_super_admin(): void

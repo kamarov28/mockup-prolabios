@@ -108,7 +108,7 @@
             </div>
             <h3 class="h5 fw-bold mb-2" style="font-family: var(--font-headline); color: var(--color-text-main);">Kontak &amp; Alamat</h3>
             <p style="color: var(--color-text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 24px;">
-              Kelola nomor WhatsApp utama &amp; teknisi, telepon kantor marketing/finance, email resmi, dan peta.
+              Kelola telepon kantor resmi marketing &amp; finance, layanan teknik, email resmi, dan peta alamat.
             </p>
           </div>
           <a href="{{ route('admin.home.edit', ['section' => 'contacts']) }}" class="admin-btn admin-btn-outline text-center w-100 justify-content-center">

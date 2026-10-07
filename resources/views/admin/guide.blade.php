@@ -38,6 +38,7 @@
       <span class="admin-card-header-label">Modul 01 · Transaksi &amp; Lead</span>
       <h2 class="admin-card-header-title"><i data-lucide="receipt" class="me-2" style="color: var(--color-accent);"></i>Manajemen Pengajuan RFQ (Request for Quotation)</h2>
     </div>
+    @can('manage-rfq')
     <div class="d-flex align-items-center gap-2">
       <a href="{{ route('admin.rfqs.export') }}" class="admin-btn admin-btn-ghost admin-btn-sm" title="Unduh data RFQ ke format Excel">
         <i data-lucide="file-spreadsheet"></i> Ekspor Excel
@@ -46,6 +47,7 @@
         <i data-lucide="external-link"></i> Buka Daftar RFQ
       </a>
     </div>
+    @endcan
   </div>
   <div class="admin-card-body">
     <p class="guide-lead">
@@ -122,15 +124,19 @@
       <h2 class="admin-card-header-title"><i data-lucide="package" class="me-2" style="color: var(--color-accent);"></i>Manajemen Produk &amp; Impor Massal Excel</h2>
     </div>
     <div class="d-flex align-items-center gap-2">
+      @can('manage-catalog')
       <a href="{{ route('admin.products.import.template') }}" class="admin-btn admin-btn-ghost admin-btn-sm" title="Unduh template Excel untuk input produk">
         <i data-lucide="download"></i> Template Excel
       </a>
       <a href="{{ route('admin.products.create.bulk') }}" class="admin-btn admin-btn-ghost admin-btn-sm">
         <i data-lucide="table-properties"></i> Input Web Bulk
       </a>
+      @endcan
+      @can('view-catalog')
       <a href="{{ route('admin.products') }}" class="admin-btn admin-btn-primary admin-btn-sm">
         <i data-lucide="package"></i> Kelola Produk
       </a>
+      @endcan
     </div>
   </div>
   <div class="admin-card-body">
@@ -182,10 +188,12 @@
       <span class="admin-card-header-label">Modul 03 · Taksonomi &amp; Pemetaan</span>
       <h2 class="admin-card-header-title"><i data-lucide="folder-tree" class="me-2" style="color: var(--color-accent);"></i>Hierarki Kategori &amp; Sektor Industri</h2>
     </div>
+    @can('manage-catalog')
     <div class="d-flex align-items-center gap-2">
       <a href="{{ route('admin.categories.index') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kategori</a>
       <a href="{{ route('admin.sectors') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Sektor</a>
     </div>
+    @endcan
   </div>
   <div class="admin-card-body">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
@@ -230,9 +238,11 @@
       <span class="admin-card-header-label">Modul 04 · Visual &amp; Marketing</span>
       <h2 class="admin-card-header-title"><i data-lucide="sliders" class="me-2" style="color: var(--color-accent);"></i>Pengaturan Halaman Depan / Beranda</h2>
     </div>
+    @can('manage-system')
     <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-ghost admin-btn-sm">
       <i data-lucide="edit-3"></i> Buka Editor Beranda
     </a>
+    @endcan
   </div>
   <div class="admin-card-body">
     <p class="guide-lead">
@@ -243,7 +253,7 @@
       <li><strong>4 Slot Produk Unggulan:</strong> Beranda menampilkan 4 produk unggulan terbaru yang dicentang (<code>is_featured = true</code>). Jika produk berbintang kurang dari 4, sistem memiliki auto-fallback cerdas yang otomatis melengkapi slot kosong dari katalog terbaru agar tampilan grid tetap simetris.</li>
       <li><strong>Bento Grid Keunggulan:</strong> Poin nilai tambah Prolabios (distribusi rantai dingin teruji, keaslian sertifikasi COA/lot, technical support lab).</li>
       <li><strong>Statistik Performa:</strong> Jumlah klien aktif, varian katalog produk, dan jangkauan pengiriman seluruh Indonesia.</li>
-      <li><strong>Integrasi Kontak WhatsApp:</strong> Konfigurasi nomor WhatsApp sales penerima lead RFQ langsung.</li>
+      <li><strong>Integrasi Kontak Telepon &amp; Saluran Resmi:</strong> Konfigurasi nomor telepon kantor divisi Marketing &amp; Keuangan serta email resmi korporat.</li>
       <li><strong>Tipografi Mandiri (Self-Hosted):</strong> Font IBM Plex Sans &amp; Mono telah di-host secara lokal di server Prolabios, bebas dari latensi DNS Google Fonts dan memiliki masa cache 1 tahun.</li>
     </ul>
   </div>
@@ -257,8 +267,12 @@
       <h2 class="admin-card-header-title"><i data-lucide="file-text" class="me-2" style="color: var(--color-accent);"></i>Artikel Berita &amp; Prinsipal Laboratorium</h2>
     </div>
     <div class="d-flex align-items-center gap-2">
+      @can('manage-posts')
       <a href="{{ route('admin.posts') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola Artikel</a>
+      @endcan
+      @can('manage-catalog')
       <a href="{{ route('admin.principals') }}" class="admin-btn admin-btn-ghost admin-btn-sm">Kelola Prinsipal</a>
+      @endcan
     </div>
   </div>
   <div class="admin-card-body">
@@ -301,10 +315,10 @@
   <div class="admin-card-body">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
       <ul class="guide-list">
-        <li><strong>Hak Akses Admin:</strong> Pastikan user memiliki flag <code>is_admin = true</code>. Jangan berbagi akun login antar personil.</li>
+        <li><strong>Multi-Admin Role (4 Divisi):</strong> Sistem membagi wewenang berdasarkan divisi: Super Admin, Sales &amp; RFQ, Product Specialist, dan Content Writer. Kelola akun staf di menu <code>/admin/users</code>.</li>
         <li><strong>Audit Logging:</strong> Setiap tindakan kritis (pembuatan produk, perubahan status RFQ, modifikasi kategori/sektor, import excel) dicatat otomatis di log audit internal.</li>
         <li><strong>Proteksi Rate Limit:</strong> Form login admin (<code>throttle:admin-login</code>), formulir kontak publik, dan pengajuan RFQ dilindungi oleh rate limiter ketat terhadap serangan brute-force.</li>
-        <li><strong>Sanitasi HTMLPurifier:</strong> Seluruh input konten kaya (deskripsi produk &amp; artikel) dibersihkan dari tag berbahaya seperti <code>&lt;script&gt;</code> dan <code>&lt;iframe&gt;</code>.</li>
+        <li><strong>Sanitasi HTMLPurifier:</strong> Seluruh input konten kaya (deskripsi produk &amp; artikel) dibersihkan dari script berbahaya, dengan izin pemutar video terpercaya (YouTube &amp; Instagram).</li>
       </ul>
       <ul class="guide-list">
         <li><strong>Lockdown Folder Uploads:</strong> Folder publik (<code>storage/app/public/.htaccess</code>) dikunci ketat dengan <code>php_flag engine off</code> dan pemblokiran eksekusi skrip (.php, .phtml, .cgi) untuk mencegah ancaman web-shell.</li>

@@ -5,6 +5,16 @@
 
 @section('admin_content')
 
+@php
+  $user = auth()->user();
+  $canRfq = $user?->canManageRfqs();
+  $canViewCatalog = $user?->canViewCatalog();
+  $canManageCatalog = $user?->canManageCatalog();
+  $canPosts = $user?->canManagePosts();
+  $canSystem = $user?->isSuperAdmin();
+  $defaultTab = (!$canViewCatalog && $canPosts) ? 'posts' : 'products';
+@endphp
+
 <div class="dash-wrapper">
 
   {{-- ── Header Strip ────────────────────────────────────────────────────────── --}}
@@ -17,6 +27,7 @@
   <div class="row g-3 mb-3">
 
     {{-- RFQ Card --}}
+    @can('manage-rfq')
     <div class="col-sm-6 col-xl-3">
       <a href="{{ route('admin.rfqs.index') }}" class="dash-stat-card text-decoration-none">
         <div class="dash-stat-icon-wrap" style="background: #FEE2E2; color: var(--color-accent, #A6171C);">
@@ -38,8 +49,10 @@
         </div>
       </a>
     </div>
+    @endcan
 
     {{-- Products Card --}}
+    @can('view-catalog')
     <div class="col-sm-6 col-xl-3">
       <a href="{{ route('admin.products') }}" class="dash-stat-card text-decoration-none">
         <div class="dash-stat-icon-wrap" style="background: #E0F2FE; color: #0284C7;">
@@ -57,8 +70,10 @@
         </div>
       </a>
     </div>
+    @endcan
 
     {{-- Posts Card --}}
+    @can('manage-posts')
     <div class="col-sm-6 col-xl-3">
       <a href="{{ route('admin.posts') }}" class="dash-stat-card text-decoration-none">
         <div class="dash-stat-icon-wrap" style="background: #DCFCE7; color: #16A34A;">
@@ -76,8 +91,10 @@
         </div>
       </a>
     </div>
+    @endcan
 
     {{-- Sectors Card --}}
+    @can('manage-catalog')
     <div class="col-sm-6 col-xl-3">
       <a href="{{ route('admin.sectors') }}" class="dash-stat-card text-decoration-none">
         <div class="dash-stat-icon-wrap" style="background: #F3E8FF; color: #9333EA;">
@@ -95,6 +112,7 @@
         </div>
       </a>
     </div>
+    @endcan
 
   </div>
 
@@ -102,6 +120,7 @@
   <div class="row g-3 mb-3">
 
     {{-- Column 1: RFQ Inquiry Masuk (col-xl-5) --}}
+    @can('manage-rfq')
     <div class="col-xl-5 col-lg-6">
       <div class="admin-card h-100 d-flex flex-column" style="margin-bottom: 0;">
         <div class="admin-card-header py-2 px-3">
@@ -169,28 +188,43 @@
         </div>
       </div>
     </div>
+    @endcan
 
-    {{-- Column 2: Segmented Switcher (Produk & Artikel) (col-xl-4) --}}
-    <div class="col-xl-4 col-lg-6">
+    {{-- Column 2: Segmented Switcher (Produk & Artikel) --}}
+    <div class="{{ $canRfq ? 'col-xl-4 col-lg-6' : 'col-xl-7 col-lg-7' }}">
       <div class="admin-card h-100 d-flex flex-column" style="margin-bottom: 0;">
         <div class="admin-card-header py-2 px-3">
           {{-- Interactive Segmented Switcher --}}
+          @if($canViewCatalog && $canPosts)
           <div class="dash-segmented-control" role="tablist">
-            <button type="button" class="dash-segment-btn active" data-tab="products" id="tab-btn-products">
+            <button type="button" class="dash-segment-btn {{ $defaultTab === 'products' ? 'active' : '' }}" data-tab="products" id="tab-btn-products">
               <i data-lucide="package" style="width: 13px; height: 13px;"></i>
               <span>Produk ({{ count($recentProducts) }})</span>
             </button>
-            <button type="button" class="dash-segment-btn" data-tab="posts" id="tab-btn-posts">
+            <button type="button" class="dash-segment-btn {{ $defaultTab === 'posts' ? 'active' : '' }}" data-tab="posts" id="tab-btn-posts">
               <i data-lucide="file-text" style="width: 13px; height: 13px;"></i>
               <span>Artikel ({{ count($recentPosts) }})</span>
             </button>
           </div>
+          @elseif($canViewCatalog)
+          <div class="d-flex align-items-center gap-2">
+            <i data-lucide="package" style="width: 17px; height: 17px; color: #0284C7;"></i>
+            <h2 class="admin-card-header-title" style="font-size: 0.92rem;">Katalog Produk Terbaru</h2>
+          </div>
+          @elseif($canPosts)
+          <div class="d-flex align-items-center gap-2">
+            <i data-lucide="file-text" style="width: 17px; height: 17px; color: #16A34A;"></i>
+            <h2 class="admin-card-header-title" style="font-size: 0.92rem;">Artikel &amp; Publikasi Terbaru</h2>
+          </div>
+          @endif
 
           {{-- Quick Add Dynamic Link --}}
-          <a href="{{ route('admin.products.create') }}" id="tab-add-btn" class="dash-card-link">
+          @if(($canManageCatalog && $defaultTab === 'products') || ($canPosts && $defaultTab === 'posts'))
+          <a href="{{ $defaultTab === 'products' ? route('admin.products.create') : route('admin.posts.create') }}" id="tab-add-btn" class="dash-card-link">
             <i data-lucide="plus" style="width: 13px; height: 13px;"></i>
-            <span id="tab-add-text">Tambah</span>
+            <span id="tab-add-text">{{ $defaultTab === 'products' ? 'Tambah Produk' : 'Tambah Artikel' }}</span>
           </a>
+          @endif
         </div>
 
         <div class="admin-card-body-flush flex-grow-1">
@@ -236,9 +270,15 @@
                         {{-- Title & Info --}}
                         <td>
                           <div class="dash-text-truncate" style="max-width: 195px;" title="{{ $p['title'] }}">
+                            @can('manage-catalog')
                             <a href="{{ route('admin.products.edit', $p['id']) }}" class="dash-item-title-link">
                               {{ $p['title'] }}
                             </a>
+                            @else
+                            <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="dash-item-title-link">
+                              {{ $p['title'] }}
+                            </a>
+                            @endcan
                             <div class="d-flex align-items-center gap-1 mt-0">
                               <span class="cat-key-badge" style="font-size: 0.68rem; padding: 1px 5px;">
                                 {{ $p['catalog'] ?: 'SKU —' }}
@@ -251,9 +291,15 @@
                         </td>
                         {{-- Action --}}
                         <td style="text-align: right;">
+                          @can('manage-catalog')
                           <a href="{{ route('admin.products.edit', $p['id']) }}" class="admin-action-link edit" title="Edit Produk" style="width: 28px; height: 28px;">
                             <i data-lucide="file-edit" style="width: 13px; height: 13px;"></i>
                           </a>
+                          @else
+                          <a href="{{ url('/produk/detail') }}?id={{ $p['id'] }}" target="_blank" class="admin-action-link view" title="Lihat di Web" style="width: 28px; height: 28px;">
+                            <i data-lucide="eye" style="width: 13px; height: 13px;"></i>
+                          </a>
+                          @endcan
                         </td>
                       </tr>
                     @endforeach
@@ -268,7 +314,7 @@
           </div>
 
           {{-- Tab Content: Artikel Terbaru --}}
-          <div id="dash-panel-posts" class="dash-tab-panel" style="display: none;">
+          <div id="dash-panel-posts" class="dash-tab-panel" style="{{ $defaultTab === 'posts' ? 'display: block;' : 'display: none;' }}">
             @if(count($recentPosts) > 0)
               <div class="table-responsive">
                 <table class="admin-table dash-compact-table">
@@ -326,9 +372,15 @@
                         </td>
                         {{-- Action --}}
                         <td style="text-align: right;">
+                          @can('manage-posts')
                           <a href="{{ route('admin.posts.edit', $post['slug']) }}" class="admin-action-link edit" title="Edit Artikel" style="width: 28px; height: 28px;">
                             <i data-lucide="file-edit" style="width: 13px; height: 13px;"></i>
                           </a>
+                          @else
+                          <a href="{{ url('/informasi/' . $post['slug']) }}" target="_blank" class="admin-action-link view" title="Lihat di Web" style="width: 28px; height: 28px;">
+                            <i data-lucide="eye" style="width: 13px; height: 13px;"></i>
+                          </a>
+                          @endcan
                         </td>
                       </tr>
                     @endforeach
@@ -345,9 +397,10 @@
       </div>
     </div>
 
-    {{-- Column 3: Sebaran Kategori + Aksi Cepat (col-xl-3) --}}
-    <div class="col-xl-3 col-lg-12 d-flex flex-column gap-3">
+    {{-- Column 3: Sebaran Kategori + Aksi Cepat --}}
+    <div class="{{ $canRfq ? 'col-xl-3 col-lg-12' : 'col-xl-5 col-lg-5' }} d-flex flex-column gap-3">
 
+      @can('view-catalog')
       {{-- Sebaran Kategori Card --}}
       <div class="admin-card flex-grow-1" style="margin-bottom: 0;">
         <div class="admin-card-header py-2 px-3">
@@ -383,6 +436,7 @@
           </div>
         </div>
       </div>
+      @endcan
 
       {{-- Quick Action Launchpad --}}
       <div class="admin-card" style="margin-bottom: 0;">
@@ -392,6 +446,7 @@
         </div>
         <div class="admin-card-body p-2">
           <div class="dash-quick-actions-grid">
+            @can('manage-catalog')
             <a href="{{ route('admin.products.create') }}" class="dash-quick-btn" title="Tambah Produk Baru">
               <i data-lucide="plus-circle" style="color: #0284C7;"></i>
               <span>+ Produk</span>
@@ -400,14 +455,32 @@
               <i data-lucide="file-spreadsheet" style="color: #16A34A;"></i>
               <span>Impor Excel</span>
             </a>
+            @endcan
+
+            @can('manage-rfq')
             <a href="{{ route('admin.rfqs.export') }}" class="dash-quick-btn" title="Ekspor RFQ ke Excel">
               <i data-lucide="download" style="color: var(--color-accent);"></i>
               <span>Ekspor RFQ</span>
             </a>
+            @endcan
+
+            @can('manage-posts')
+            <a href="{{ route('admin.posts.create') }}" class="dash-quick-btn" title="Tulis Artikel Baru">
+              <i data-lucide="file-plus" style="color: #16A34A;"></i>
+              <span>+ Artikel</span>
+            </a>
+            @endcan
+
+            @can('manage-system')
             <a href="{{ route('admin.home.edit') }}" class="dash-quick-btn" title="Edit Halaman Beranda">
               <i data-lucide="sliders" style="color: #9333EA;"></i>
               <span>Edit Web</span>
             </a>
+            <a href="{{ route('admin.users.index') }}" class="dash-quick-btn" title="Kelola Akun Staf Admin">
+              <i data-lucide="users" style="color: #0369A1;"></i>
+              <span>Kelola Admin</span>
+            </a>
+            @endcan
           </div>
         </div>
       </div>
@@ -419,8 +492,9 @@
   {{-- ── 3. Bottom Row: Pipeline Status & Ecosystem Overview ─────────────────── --}}
   <div class="row g-3">
 
-    {{-- Pipeline Funnel (col-lg-8) --}}
-    <div class="col-lg-8">
+    {{-- Pipeline Funnel --}}
+    @can('manage-rfq')
+    <div class="{{ $canManageCatalog ? 'col-lg-8' : 'col-12' }}">
       <div class="admin-card h-100 dash-pipeline-card" style="margin-bottom: 0; overflow: visible;">
         <div class="admin-card-header py-2 px-3">
           <div class="d-flex align-items-center gap-2">
@@ -539,9 +613,11 @@
         </div>
       </div>
     </div>
+    @endcan
 
-    {{-- Ecosystem & Partnership Hub (col-lg-4) --}}
-    <div class="col-lg-4">
+    {{-- Ecosystem & Partnership Hub --}}
+    @can('manage-catalog')
+    <div class="{{ $canRfq ? 'col-lg-4' : 'col-12' }}">
       <div class="admin-card h-100" style="margin-bottom: 0;">
         <div class="admin-card-header py-2 px-3">
           <div class="d-flex align-items-center gap-2">
@@ -584,6 +660,7 @@
         </div>
       </div>
     </div>
+    @endcan
 
   </div>
 
@@ -914,10 +991,28 @@
     if (postBtn) postBtn.classList.toggle('active', !isProd);
 
     if (addBtn) {
-      addBtn.href = isProd ? "{{ route('admin.products.create') }}" : "{{ route('admin.posts.create') }}";
-      if (addText) {
-        addText.textContent = isProd ? 'Tambah Produk' : 'Tambah Artikel';
+      @can('manage-catalog')
+      if (isProd) {
+        addBtn.style.display = 'inline-flex';
+        addBtn.href = "{{ route('admin.products.create') }}";
+        if (addText) addText.textContent = 'Tambah Produk';
       }
+      @else
+      if (isProd) {
+        addBtn.style.display = 'none';
+      }
+      @endcan
+      @can('manage-posts')
+      if (!isProd) {
+        addBtn.style.display = 'inline-flex';
+        addBtn.href = "{{ route('admin.posts.create') }}";
+        if (addText) addText.textContent = 'Tambah Artikel';
+      }
+      @else
+      if (!isProd) {
+        addBtn.style.display = 'none';
+      }
+      @endcan
     }
 
     if (typeof lucide !== 'undefined') {
