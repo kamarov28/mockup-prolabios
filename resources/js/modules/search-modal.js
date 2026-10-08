@@ -96,14 +96,36 @@ export function initSearchOverlay() {
 
   if (!searchButtons.length || !overlay || !closeBtn || !input) return;
 
+  function focusSearchInput() {
+    if (!input) return;
+    input.focus({ preventScroll: true });
+    if (typeof input.select === 'function') {
+      input.select();
+    }
+  }
+
   function openOverlay(e) {
-    if (e) e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      if (e.currentTarget && typeof e.currentTarget.blur === 'function') {
+        e.currentTarget.blur();
+      }
+    }
     overlay.classList.add('active');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    // 1. Immediate synchronous focus for touch gesture contexts
+    focusSearchInput();
+
+    // 2. Next animation frame focus once active classes apply
     requestAnimationFrame(function () {
-      input.focus();
+      focusSearchInput();
     });
+
+    // 3. Fallback timers to ensure focus after style/layout settling
+    setTimeout(focusSearchInput, 50);
+    setTimeout(focusSearchInput, 150);
   }
 
   function closeOverlay() {
