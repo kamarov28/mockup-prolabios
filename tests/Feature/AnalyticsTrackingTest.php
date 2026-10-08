@@ -70,4 +70,36 @@ class AnalyticsTrackingTest extends TestCase
         $editResponse->assertOk();
         $editResponse->assertSee('value="G-GV3C1L8QVZ"', false);
     }
+
+    public function test_admin_can_update_ga4_property_id(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/home', [
+            'section' => 'general',
+            'ga4_property_id' => '987654321',
+            'company_name' => 'PT. Prolabios Mitra Analitika',
+        ]);
+
+        $response->assertRedirect('/admin/home?section=general');
+        $response->assertSessionHas('success');
+
+        $editResponse = $this->actingAs($this->admin)->get('/admin/home?section=general');
+        $editResponse->assertOk();
+        $editResponse->assertSee('value="987654321"', false);
+    }
+
+    public function test_super_admin_can_fetch_analytics_data_endpoint(): void
+    {
+        $response = $this->actingAs($this->admin)->getJson('/admin/analytics/data');
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'status',
+            'message',
+        ]);
+    }
+
+    public function test_guest_cannot_fetch_analytics_data(): void
+    {
+        $response = $this->getJson('/admin/analytics/data');
+        $response->assertUnauthorized();
+    }
 }

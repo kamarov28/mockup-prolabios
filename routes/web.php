@@ -74,6 +74,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
         Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
         Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
         Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
+        Route::get('/analytics/data', [AdminDashboardController::class, 'analyticsData'])->name('admin.analytics.data');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');

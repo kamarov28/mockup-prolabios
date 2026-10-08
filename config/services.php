@@ -49,4 +49,10 @@ return [
     'google_analytics_id' => env('GOOGLE_ANALYTICS_ID'),
     'google_tag_manager_id' => env('GOOGLE_TAG_MANAGER_ID'),
 
+    'google_analytics' => [
+        'id' => env('GOOGLE_ANALYTICS_ID'),
+        'property_id' => env('GA4_PROPERTY_ID'),
+        'credentials_path' => env('GA4_CREDENTIALS_PATH', storage_path('app/analytics/service-account.json')),
+    ],
+
 ];

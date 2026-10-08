@@ -107,6 +107,7 @@ class HomepageSettingsUpdater
             'meta_default_description' => 'nullable|string|max:1000',
             'meta_default_keywords' => 'nullable|string|max:1000',
             'google_analytics_id' => 'nullable|string|max:50',
+            'ga4_property_id' => 'nullable|string|max:50',
             'google_search_console_id' => 'nullable|string|max:255',
             'social_instagram' => 'nullable|string|max:500',
             'social_facebook' => 'nullable|string|max:500',
@@ -214,6 +215,7 @@ class HomepageSettingsUpdater
         $patch['meta_default_description'] = $request->input('meta_default_description', $homeData['meta_default_description'] ?? '');
         $patch['meta_default_keywords'] = $request->input('meta_default_keywords', $homeData['meta_default_keywords'] ?? '');
         $patch['google_analytics_id'] = $request->input('google_analytics_id', $homeData['google_analytics_id'] ?? '');
+        $patch['ga4_property_id'] = $request->input('ga4_property_id', $homeData['ga4_property_id'] ?? '');
         $patch['google_search_console_id'] = $request->input('google_search_console_id', $homeData['google_search_console_id'] ?? '');
         $patch['social_instagram'] = $request->input('social_instagram', $homeData['social_instagram'] ?? '');
         $patch['social_facebook'] = $request->input('social_facebook', $homeData['social_facebook'] ?? '');

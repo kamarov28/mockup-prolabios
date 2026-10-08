@@ -215,7 +215,14 @@
           <label for="google_analytics_id" class="admin-form-label mb-2">Google Analytics 4 Measurement ID (Opsional)</label>
           <input type="text" class="form-control @error('google_analytics_id') is-invalid @enderror" id="google_analytics_id" name="google_analytics_id" value="{{ old('google_analytics_id', $homeData['google_analytics_id'] ?? '') }}" placeholder="Contoh: G-GV3C1L8QVZ">
           @error('google_analytics_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Tag ID Google Analytics 4 (format: <code>G-XXXXXXXXXX</code>) untuk melacak statistik pengunjung.</div>
+          <div class="form-text text-secondary mt-1 small">Tag ID Pelacak GA4 pengunjung publik (format: <code>G-XXXXXXXXXX</code>).</div>
+        </div>
+
+        <div class="col-md-6">
+          <label for="ga4_property_id" class="admin-form-label mb-2">GA4 Property ID - API Laporan (Opsional)</label>
+          <input type="text" class="form-control @error('ga4_property_id') is-invalid @enderror" id="ga4_property_id" name="ga4_property_id" value="{{ old('ga4_property_id', $homeData['ga4_property_id'] ?? '') }}" placeholder="Contoh: 123456789">
+          @error('ga4_property_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          <div class="form-text text-secondary mt-1 small">Property ID numerik dari GA4 (Admin &gt; Property Settings) untuk sinkronisasi widget analitik ke Dashboard.</div>
         </div>
 
         <div class="col-md-6">

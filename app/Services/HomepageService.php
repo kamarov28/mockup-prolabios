@@ -211,6 +211,7 @@ class HomepageService
             'meta_default_description' => 'PROLABIOS Mitra Analitika : Professional, Robust, Offering the best. Distributor alat laboratorium, media kultur mikrobiologi, dan instrumen ilmiah di Indonesia.',
             'meta_default_keywords' => 'prolabios, alat laboratorium, mikrobiologi, instrumen lab, media kultur, bioendo, terragene',
             'google_analytics_id' => '',
+            'ga4_property_id' => '',
             'google_search_console_id' => '',
             'operational_hours' => 'Senin - Jumat: 08.00 - 17.00',
             'social_instagram' => 'https://instagram.com/prolabios',

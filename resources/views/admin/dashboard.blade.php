@@ -489,7 +489,40 @@
 
   </div>
 
-  {{-- ── 3. Bottom Row: Pipeline Status & Ecosystem Overview ─────────────────── --}}
+  @if($canSystem)
+  {{-- ── 3. Google Analytics 4: Wilayah & Halaman Terpopuler ────────────────── --}}
+  <div class="admin-card mb-3" id="ga4-analytics-card">
+    <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-2">
+        <i data-lucide="bar-chart-2" style="width: 16px; height: 16px; color: var(--color-accent, #A6171C);"></i>
+        <div class="d-flex align-items-center gap-2">
+          <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Google Analytics 4 • Sebaran Wilayah &amp; Produk Populer</h2>
+          <span class="badge bg-light text-secondary border px-2 py-1" style="font-size: 0.7rem; font-weight: 500;" id="ga4-status-badge">
+            <span class="spinner-border spinner-border-sm me-1 text-primary" role="status" style="width: 10px; height: 10px;"></span> Menghubungkan...
+          </span>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="dash-card-link" style="font-size: 0.76rem;" title="Pengaturan GA4">
+          <i data-lucide="settings" style="width: 13px; height: 13px;"></i> Setelan GA4
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-secondary py-1 px-2 d-inline-flex align-items-center gap-1" id="ga4-refresh-btn" style="font-size: 0.74rem;">
+          <i data-lucide="refresh-cw" style="width: 12px; height: 12px;"></i>
+          <span>Segarkan</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-card-body p-3" id="ga4-content-area">
+      <div class="text-center py-4 text-muted" id="ga4-loading-indicator">
+        <div class="spinner-border text-primary spinner-border-sm mb-2" role="status"></div>
+        <p class="small mb-0">Menghubungkan ke Google Analytics Data API...</p>
+      </div>
+    </div>
+  </div>
+  @endif
+
+  {{-- ── 4. Bottom Row: Pipeline Status & Ecosystem Overview ─────────────────── --}}
   <div class="row g-3">
 
     {{-- Pipeline Funnel --}}
@@ -1101,6 +1134,193 @@
         barSegments.forEach(function(s) { s.classList.remove('is-hovered'); });
       });
     });
+
+    // ── Google Analytics 4 Dashboard Integration ──────────────────────────
+    @if($canSystem)
+    const ga4Card = document.getElementById('ga4-analytics-card');
+    const ga4Content = document.getElementById('ga4-content-area');
+    const ga4Badge = document.getElementById('ga4-status-badge');
+    const ga4RefreshBtn = document.getElementById('ga4-refresh-btn');
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderGa4Prompt(msg) {
+      if (!ga4Content) return;
+      ga4Content.innerHTML = `
+        <div class="p-3 rounded text-center" style="background: var(--color-surface-2, #F8FAFC); border: 1px dashed var(--color-border, #E2E8F0);">
+          <div class="d-inline-flex p-2 rounded-circle mb-2" style="background: #FEF3C7; color: #D97706;">
+            <i data-lucide="key" style="width: 20px; height: 20px;"></i>
+          </div>
+          <h3 class="h6 fw-bold mb-1" style="color: var(--color-text-main);">Robot Service Account Siap • Membutuhkan GA4 Property ID</h3>
+          <p class="small text-muted mb-3 mx-auto" style="max-width: 580px;">
+            Kredensial robot Google Service Account (<code>analytics-reader</code>) sudah terpasang. Untuk menampilkan live grafik sebaran provinsi & produk populer, masukkan 9 digit Property ID dari Google Analytics Anda.
+          </p>
+          <div class="d-flex justify-content-center gap-2">
+            <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="btn btn-sm btn-primary d-inline-flex align-items-center gap-1">
+              <i data-lucide="settings" style="width: 14px; height: 14px;"></i>
+              <span>Isi GA4 Property ID</span>
+            </a>
+          </div>
+        </div>
+      `;
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function renderGa4Error(msg) {
+      if (!ga4Content) return;
+      ga4Content.innerHTML = `
+        <div class="p-3 rounded text-center text-danger" style="background: #FEF2F2; border: 1px solid #FEE2E2;">
+          <div class="d-inline-flex p-2 rounded-circle mb-2" style="background: #FEE2E2; color: #DC2626;">
+            <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+          </div>
+          <h3 class="h6 fw-bold mb-1">Gagal Mengambil Data Google Analytics</h3>
+          <p class="small mb-0 text-secondary">${escapeHtml(msg)}</p>
+        </div>
+      `;
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function renderGa4Data(res) {
+      if (!ga4Content) return;
+      const regions = res.regions || [];
+      const topPages = res.top_pages || [];
+      const maxUsers = Math.max(1, res.max_users || 1);
+
+      let regionsHtml = '';
+      if (regions.length === 0) {
+        regionsHtml = '<div class="text-muted small py-3 text-center">Belum ada data wilayah pengunjung dalam 30 hari terakhir.</div>';
+      } else {
+        regionsHtml = '<div class="d-flex flex-column gap-2">';
+        regions.forEach(function(r) {
+          const pct = Math.min(100, Math.round((r.users / maxUsers) * 100));
+          regionsHtml += `
+            <div>
+              <div class="d-flex justify-content-between align-items-center mb-1 small">
+                <span class="fw-semibold text-truncate" style="max-width: 180px;">${escapeHtml(r.name)}</span>
+                <span class="text-muted" style="font-size: 0.76rem;"><strong>${r.users}</strong> pengguna (${r.views} tayangan)</span>
+              </div>
+              <div class="progress" style="height: 6px; background-color: var(--color-surface-2, #E2E8F0); border-radius: 3px;">
+                <div class="progress-bar" style="width: ${pct}%; background-color: var(--color-accent, #A6171C); border-radius: 3px;"></div>
+              </div>
+            </div>
+          `;
+        });
+        regionsHtml += '</div>';
+      }
+
+      let pagesHtml = '';
+      if (topPages.length === 0) {
+        pagesHtml = '<div class="text-muted small py-3 text-center">Belum ada kunjungan halaman dalam 30 hari terakhir.</div>';
+      } else {
+        pagesHtml = '<div class="list-group list-group-flush">';
+        topPages.forEach(function(p, idx) {
+          pagesHtml += `
+            <div class="list-group-item px-0 py-2 border-bottom d-flex align-items-center justify-content-between gap-2" style="background: transparent;">
+              <div class="d-flex align-items-center gap-2 overflow-hidden">
+                <span class="badge rounded-circle bg-light text-secondary border d-flex align-items-center justify-content-center" style="width: 22px; height: 22px; font-size: 0.7rem; flex-shrink: 0;">${idx + 1}</span>
+                <div class="overflow-hidden">
+                  <div class="fw-medium text-truncate small" style="color: var(--color-text-main);">${escapeHtml(p.label)}</div>
+                  <div class="text-muted text-truncate font-monospace" style="font-size: 0.7rem;">${escapeHtml(p.path)}</div>
+                </div>
+              </div>
+              <div class="text-end flex-shrink-0" style="font-size: 0.78rem;">
+                <span class="badge bg-light text-dark border px-2 py-1"><strong>${p.views}</strong> views</span>
+              </div>
+            </div>
+          `;
+        });
+        pagesHtml += '</div>';
+      }
+
+      ga4Content.innerHTML = `
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="p-3 rounded h-100" style="background: var(--color-surface-2, #FAFAFA); border: 1px solid var(--color-border, #E5E7EB);">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <i data-lucide="map-pin" style="width: 15px; height: 15px; color: var(--color-accent, #A6171C);"></i>
+                  <h3 class="h6 mb-0 fw-bold" style="font-size: 0.86rem;">Sebaran Pengunjung per Wilayah (Provinsi)</h3>
+                </div>
+                <span class="text-muted" style="font-size: 0.72rem;">Total: ${res.total_users || 0} Pengguna</span>
+              </div>
+              ${regionsHtml}
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="p-3 rounded h-100" style="background: var(--color-surface-2, #FAFAFA); border: 1px solid var(--color-border, #E5E7EB);">
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <i data-lucide="compass" style="width: 15px; height: 15px; color: #0284C7;"></i>
+                  <h3 class="h6 mb-0 fw-bold" style="font-size: 0.86rem;">Halaman &amp; Produk Paling Populer</h3>
+                </div>
+                <span class="text-muted" style="font-size: 0.72rem;">Total: ${res.total_views || 0} Tayangan</span>
+              </div>
+              ${pagesHtml}
+            </div>
+          </div>
+        </div>
+      `;
+      if (window.lucide) { lucide.createIcons(); }
+    }
+
+    function loadGa4Analytics(forceRefresh = false) {
+      if (!ga4Content) return;
+      const url = '{{ route('admin.analytics.data') }}' + (forceRefresh ? '?refresh=1' : '');
+      if (ga4Badge) {
+        ga4Badge.innerHTML = '<span class="spinner-border spinner-border-sm me-1 text-primary" role="status" style="width: 10px; height: 10px;"></span> Memuat...';
+        ga4Badge.className = 'badge bg-light text-secondary border px-2 py-1';
+      }
+
+      fetch(url, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+        .then(function(res) { return res.json(); })
+        .then(function(res) {
+          if (res.status === 'success') {
+            if (ga4Badge) {
+              ga4Badge.textContent = 'Terhubung • ' + (res.updated_at || 'Baru saja');
+              ga4Badge.className = 'badge bg-success-subtle text-success border border-success-subtle px-2 py-1';
+            }
+            renderGa4Data(res);
+          } else if (res.status === 'needs_property_id') {
+            if (ga4Badge) {
+              ga4Badge.textContent = 'Perlu Property ID';
+              ga4Badge.className = 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-2 py-1';
+            }
+            renderGa4Prompt(res.message);
+          } else {
+            if (ga4Badge) {
+              ga4Badge.textContent = 'Koneksi Terhambat';
+              ga4Badge.className = 'badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1';
+            }
+            renderGa4Error(res.message);
+          }
+        })
+        .catch(function(err) {
+          if (ga4Badge) {
+            ga4Badge.textContent = 'Offline';
+            ga4Badge.className = 'badge bg-secondary-subtle text-secondary border px-2 py-1';
+          }
+          renderGa4Error('Gagal memuat analitik: ' + err.message);
+        });
+    }
+
+    if (ga4RefreshBtn) {
+      ga4RefreshBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadGa4Analytics(true);
+      });
+    }
+
+    // Auto-trigger GA4 loader
+    loadGa4Analytics();
+    @endif
   });
 </script>
 @endsection

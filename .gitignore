@@ -43,3 +43,7 @@ Thumbs.db
 *.zip
 CLAUDE-SECURITY-*/
 .qodo/
+
+# Private service account credentials
+/storage/app/analytics/*.json
+!/storage/app/analytics/.gitkeep
