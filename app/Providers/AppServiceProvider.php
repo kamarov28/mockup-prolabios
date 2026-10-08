@@ -91,56 +91,73 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            try {
-                if (! Schema::hasTable('homepage_settings') || ! Schema::hasTable('products')) {
-                    return;
+            static $tablesReady = null;
+            static $sharedFrontendData = null;
+
+            if ($tablesReady === null) {
+                try {
+                    $tablesReady = Schema::hasTable('homepage_settings') && Schema::hasTable('products');
+                } catch (\Throwable $e) {
+                    $tablesReady = false;
                 }
+            }
 
-                $siteSettings = app(HomepageService::class)->getHomepageData();
+            if (! $tablesReady) {
+                return;
+            }
 
-                $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
-                    $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
-                    try {
-                        $productTitles = Product::query()
-                            ->orderByDesc('id')
-                            ->limit(200)
-                            ->pluck('title')
-                            ->toArray();
+            if ($sharedFrontendData === null) {
+                try {
+                    $siteSettings = app(HomepageService::class)->getHomepageData();
 
-                        if (! empty($productTitles)) {
-                            $wordsList = [];
-                            $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'];
-                            foreach ($productTitles as $title) {
-                                $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
-                                $words = explode(' ', $clean);
-                                foreach ($words as $word) {
-                                    $word = trim($word);
-                                    if (strlen($word) > 3 && ! in_array(strtolower($word), $skip, true)) {
-                                        $wordsList[] = $word;
+                    $searchSuggestions = Cache::remember('search_suggestions_v2', 3600, function () {
+                        $default = ['Agar', 'Broth', 'Pipette', 'Bactobank', 'Sampler', 'Endotoxin', 'Petriswiss'];
+                        try {
+                            $productTitles = Product::query()
+                                ->orderByDesc('id')
+                                ->limit(200)
+                                ->pluck('title')
+                                ->toArray();
+
+                            if (! empty($productTitles)) {
+                                $wordsList = [];
+                                $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base'];
+                                foreach ($productTitles as $title) {
+                                    $clean = preg_replace('/[^a-zA-Z0-9\s]/', '', $title);
+                                    $words = explode(' ', $clean);
+                                    foreach ($words as $word) {
+                                        $word = trim($word);
+                                        if (strlen($word) > 3 && ! in_array(strtolower($word), $skip, true)) {
+                                            $wordsList[] = $word;
+                                        }
                                     }
                                 }
+                                if (! empty($wordsList)) {
+                                    return array_slice(array_values(array_unique($wordsList)), 0, 7);
+                                }
                             }
-                            if (! empty($wordsList)) {
-                                return array_slice(array_values(array_unique($wordsList)), 0, 7);
-                            }
+                        } catch (\Exception $e) {
+                            Log::warning('search_suggestions cache build failed, using defaults.', [
+                                'exception' => $e->getMessage(),
+                            ]);
                         }
-                    } catch (\Exception $e) {
-                        Log::warning('search_suggestions cache build failed, using defaults.', [
-                            'exception' => $e->getMessage(),
-                        ]);
-                    }
 
-                    return $default;
-                });
+                        return $default;
+                    });
 
-                $view->with('siteSettings', $siteSettings);
-                $view->with('waNumber', '');
-                $view->with('waNumberTech', '');
-                $view->with('waDefaultMsg', '');
-                $view->with('searchSuggestions', $searchSuggestions);
-            } catch (\Exception $e) {
-                // Silently ignore if DB or schema is not ready
+                    $sharedFrontendData = [
+                        'siteSettings' => $siteSettings,
+                        'waNumber' => '',
+                        'waNumberTech' => '',
+                        'waDefaultMsg' => '',
+                        'searchSuggestions' => $searchSuggestions,
+                    ];
+                } catch (\Exception $e) {
+                    return;
+                }
             }
+
+            $view->with($sharedFrontendData);
         });
     }
 }

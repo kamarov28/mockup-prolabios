@@ -198,15 +198,22 @@ class Product extends Model
         $words = array_values(array_filter(explode(' ', $term), fn ($w) => trim($w) !== ''));
 
         // Searchable columns down to substring/characters
-        $searchableColumns = ['title', 'catalog', 'description'];
-        if (Schema::hasColumn('products', 'function')) {
-            $searchableColumns[] = 'function';
-        }
-        if (Schema::hasColumn('products', 'reference_method')) {
-            $searchableColumns[] = 'reference_method';
-        }
-        if (Schema::hasColumn('products', 'packaging')) {
-            $searchableColumns[] = 'packaging';
+        static $searchableColumns = null;
+        if ($searchableColumns === null) {
+            $searchableColumns = ['title', 'catalog', 'description'];
+            try {
+                if (Schema::hasColumn('products', 'function')) {
+                    $searchableColumns[] = 'function';
+                }
+                if (Schema::hasColumn('products', 'reference_method')) {
+                    $searchableColumns[] = 'reference_method';
+                }
+                if (Schema::hasColumn('products', 'packaging')) {
+                    $searchableColumns[] = 'packaging';
+                }
+            } catch (\Throwable $e) {
+                // Keep base columns
+            }
         }
 
         return $query->where(function (Builder $q) use ($term, $words, $searchableColumns) {

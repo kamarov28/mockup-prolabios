@@ -38,7 +38,16 @@ class ProductService
             'updated_at',
         ];
 
-        if (Schema::hasColumn('products', 'search_hits')) {
+        static $hasSearchHits = null;
+        if ($hasSearchHits === null) {
+            try {
+                $hasSearchHits = Schema::hasColumn('products', 'search_hits');
+            } catch (\Throwable $e) {
+                $hasSearchHits = false;
+            }
+        }
+
+        if ($hasSearchHits) {
             $cols[] = 'search_hits';
         }
 

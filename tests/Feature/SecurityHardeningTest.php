@@ -398,8 +398,16 @@ class SecurityHardeningTest extends TestCase
         $this->assertFileExists($htaccessPath);
 
         $content = file_get_contents($htaccessPath);
-        $this->assertStringContainsString('wp-login|xmlrpc|wp-admin', $content);
+        $this->assertStringContainsString('wp-login', $content);
         $this->assertStringContainsString('\.env|\.git|\.svn', $content);
         $this->assertStringContainsString('[F,L]', $content);
+
+        // Verify anchored scanner regex does not false-positive on legitimate "pma" lab terms/routes
+        $pattern = '/(^|\/)(wp-login(\.php)?|xmlrpc(\.php)?|wp-admin|wp-content|wp-includes|phpmyadmin|pma|adminer(\.php)?)($|\/|\.)/i';
+        $this->assertEquals(1, preg_match($pattern, '/pma'));
+        $this->assertEquals(1, preg_match($pattern, '/pma/index.php'));
+        $this->assertEquals(1, preg_match($pattern, '/wp-login.php'));
+        $this->assertEquals(0, preg_match($pattern, '/produk/propidium-monoazide-pma'));
+        $this->assertEquals(0, preg_match($pattern, '/sektor/industri-farmasi-pma'));
     }
 }

@@ -38,16 +38,6 @@ trait HandlesImageUploads
         $rawFile = $request->file($fileKey);
 
         if ($rawFile !== null) {
-            Log::info("HandlesImageUploads::handleImageUpload - File diterima pada key [{$fileKey}]", [
-                'file_key' => $fileKey,
-                'original_name' => $rawFile->getClientOriginalName(),
-                'client_mime' => $rawFile->getClientMimeType(),
-                'size_bytes' => $rawFile->getSize(),
-                'php_upload_error_code' => $rawFile->getError(),
-                'php_upload_error_message' => $rawFile->getErrorMessage(),
-                'is_valid' => $rawFile->isValid(),
-            ]);
-
             if (! $rawFile->isValid()) {
                 Log::warning("HandlesImageUploads::handleImageUpload - File [{$fileKey}] tidak valid menurut PHP upload (kemungkinan upload_max_filesize atau post_max_size terlampaui)", [
                     'error_code' => $rawFile->getError(),
@@ -60,10 +50,6 @@ trait HandlesImageUploads
                     $fileKey => ['File gambar gagal diunggah: '.$rawFile->getErrorMessage()],
                 ]);
             }
-        } else {
-            Log::info("HandlesImageUploads::handleImageUpload - Tidak ada file terlampir untuk key [{$fileKey}]", [
-                'all_uploaded_keys' => array_keys($request->allFiles()),
-            ]);
         }
 
         if ($request->hasFile($fileKey)) {
@@ -110,21 +96,10 @@ trait HandlesImageUploads
                     ]);
                 }
 
-                Log::info("HandlesImageUploads::handleImageUpload - Validasi file [{$fileKey}] lolos", [
-                    'extension' => $extension,
-                    'mime_type' => $mimeType,
-                    'size_bytes' => $file->getSize(),
-                ]);
-
                 // Prefer WebP re-encode (resize oversized images, strip metadata)
                 try {
                     $webpPath = $this->encodeToWebp($file, $folder);
                     if ($webpPath !== null) {
-                        Log::info('HandlesImageUploads::handleImageUpload - Gambar berhasil di-encode dan disimpan via WebP', [
-                            'path' => $webpPath,
-                            'disk' => 'public',
-                        ]);
-
                         return $webpPath;
                     }
                 } catch (\Throwable $e) {
@@ -162,10 +137,6 @@ trait HandlesImageUploads
                     }
 
                     $fallbackPath = '/storage/'.$relativePath;
-                    Log::info('HandlesImageUploads::handleImageUpload - File berhasil disimpan ke storage via fallback ekstensi asli', [
-                        'path' => $fallbackPath,
-                        'size_bytes' => Storage::disk('public')->size($relativePath),
-                    ]);
 
                     return $fallbackPath;
                 } catch (\Throwable $e) {
@@ -188,8 +159,6 @@ trait HandlesImageUploads
 
         $url = trim((string) $request->input($urlKey, ''));
         if ($url !== '') {
-            Log::info("HandlesImageUploads::handleImageUpload - Mengecek input URL gambar dari key [{$urlKey}]", ['url' => $url]);
-
             // Local relative paths — legacy /uploads and new /storage/uploads
             if (
                 str_starts_with($url, '/uploads/')
@@ -199,10 +168,7 @@ trait HandlesImageUploads
                 || str_starts_with($url, '/images/')
                 || str_starts_with($url, 'images/')
             ) {
-                $resolved = str_starts_with($url, '/') ? $url : '/'.$url;
-                Log::info('HandlesImageUploads::handleImageUpload - Menggunakan path lokal dari input URL', ['resolved' => $resolved]);
-
-                return $resolved;
+                return str_starts_with($url, '/') ? $url : '/'.$url;
             }
 
             $sanitized = filter_var($url, FILTER_SANITIZE_URL);
@@ -224,8 +190,6 @@ trait HandlesImageUploads
                     return $fallback;
                 }
 
-                Log::info('HandlesImageUploads::handleImageUpload - Menggunakan URL eksternal valid', ['url' => $valid]);
-
                 return $valid;
             }
 
@@ -233,11 +197,6 @@ trait HandlesImageUploads
 
             return $fallback;
         }
-
-        Log::info('HandlesImageUploads::handleImageUpload - Tidak ada file maupun URL, memakai fallback', [
-            'fileKey' => $fileKey,
-            'fallback' => $fallback,
-        ]);
 
         return $fallback;
     }
@@ -262,16 +221,7 @@ trait HandlesImageUploads
         $folder = trim($folder, '/');
         $rawFiles = $request->file($fileKey);
 
-        if ($rawFiles !== null) {
-            $count = is_array($rawFiles) ? count($rawFiles) : 1;
-            Log::info("HandlesImageUploads::handleMultipleImageUploads - File diterima untuk key [{$fileKey}]", [
-                'count' => $count,
-            ]);
-        }
-
         if (! $request->hasFile($fileKey)) {
-            Log::info("HandlesImageUploads::handleMultipleImageUploads - Tidak ada file terlampir atau valid untuk key [{$fileKey}]");
-
             return [];
         }
 
@@ -319,12 +269,6 @@ trait HandlesImageUploads
                 ]);
             }
 
-            Log::info("HandlesImageUploads::handleMultipleImageUploads - Validasi galeri index [{$index}] lolos", [
-                'extension' => $extension,
-                'mime_type' => $mimeType,
-                'size_bytes' => $file->getSize(),
-            ]);
-
             try {
                 $storedPath = $this->encodeToWebp($file, $folder);
             } catch (\Throwable $e) {
@@ -346,9 +290,6 @@ trait HandlesImageUploads
 
                     if ($storedFallback && $exists) {
                         $storedPath = '/storage/'.$relativePath;
-                        Log::info("HandlesImageUploads::handleMultipleImageUploads - File galeri index [{$index}] disimpan via fallback ekstensi", [
-                            'path' => $storedPath,
-                        ]);
                     } else {
                         Log::error("HandlesImageUploads::handleMultipleImageUploads - Gagal menyimpan file galeri index [{$index}] ke disk public", [
                             'folder' => $folder,
@@ -371,11 +312,6 @@ trait HandlesImageUploads
                 $stored[] = $storedPath;
             }
         }
-
-        Log::info('HandlesImageUploads::handleMultipleImageUploads - Selesai memproses galeri', [
-            'total_files_stored' => count($stored),
-            'stored_paths' => $stored,
-        ]);
 
         return $stored;
     }
@@ -439,10 +375,6 @@ trait HandlesImageUploads
                     }
 
                     $publicPath = '/storage/'.$relativePath;
-                    Log::info('HandlesImageUploads::handlePdfUpload - File PDF berhasil disimpan ke storage', [
-                        'path' => $publicPath,
-                        'size_bytes' => Storage::disk('public')->size($relativePath),
-                    ]);
 
                     return $publicPath;
                 } catch (\Throwable $e) {
@@ -471,14 +403,10 @@ trait HandlesImageUploads
                 str_starts_with($urlInput, '/storage/')
                 || str_starts_with($urlInput, 'storage/')
             ) {
-                Log::info('HandlesImageUploads::handlePdfUpload - Menggunakan path lokal untuk PDF', ['path' => $urlInput]);
-
                 return $urlInput;
             }
 
             if (preg_match('/^https?:\/\//i', $urlInput)) {
-                Log::info('HandlesImageUploads::handlePdfUpload - Menggunakan URL eksternal untuk PDF', ['url' => $urlInput]);
-
                 return $urlInput;
             }
 
@@ -555,11 +483,6 @@ trait HandlesImageUploads
                 imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
                 imagedestroy($img);
                 $img = $resized;
-
-                Log::info('HandlesImageUploads::encodeToWebp - Gambar di-resize ke resolusi proporsional', [
-                    'original_dimensions' => "{$width}x{$height}",
-                    'resized_dimensions' => "{$newWidth}x{$newHeight}",
-                ]);
             }
 
             $webpFilename = time().'_'.Str::random(16).'.webp';
@@ -567,7 +490,6 @@ trait HandlesImageUploads
 
             if (! imageistruecolor($img)) {
                 imagepalettetotruecolor($img);
-                Log::info('HandlesImageUploads::encodeToWebp - Gambar palette/indexed dikonversi ke truecolor');
             }
 
             ob_start();
@@ -584,11 +506,6 @@ trait HandlesImageUploads
                 return null;
             }
 
-            Log::info('HandlesImageUploads::encodeToWebp - Setelah proses encoding ke WebP selesai', [
-                'binary_size_bytes' => strlen($binary),
-                'target_relative_path' => $relativePath,
-            ]);
-
             $stored = Storage::disk('public')->put($relativePath, $binary);
             $exists = Storage::disk('public')->exists($relativePath);
 
@@ -604,11 +521,6 @@ trait HandlesImageUploads
             }
 
             $publicUrl = '/storage/'.$relativePath;
-            Log::info('HandlesImageUploads::encodeToWebp - Setelah file berhasil disimpan ke storage', [
-                'public_url' => $publicUrl,
-                'disk' => 'public',
-                'stored_file_size' => Storage::disk('public')->size($relativePath),
-            ]);
 
             return $publicUrl;
         } catch (\Throwable $e) {

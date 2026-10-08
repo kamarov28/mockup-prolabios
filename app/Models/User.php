@@ -138,11 +138,18 @@ class User extends Authenticatable
      */
     public static function ensureRoleColumnExists(): void
     {
-        if (! Schema::hasTable('users') || Schema::hasColumn('users', 'role')) {
+        static $checked = false;
+        if ($checked) {
             return;
         }
 
         try {
+            if (! Schema::hasTable('users') || Schema::hasColumn('users', 'role')) {
+                $checked = true;
+
+                return;
+            }
+
             Schema::table('users', function ($table) {
                 if (! Schema::hasColumn('users', 'role')) {
                     $table->string('role', 30)->default('super_admin')->after('is_admin')->index();
@@ -150,6 +157,7 @@ class User extends Authenticatable
             });
 
             DB::table('users')->where('is_admin', true)->update(['role' => 'super_admin']);
+            $checked = true;
         } catch (\Throwable $e) {
             // Silently recover if column was added concurrently
         }
