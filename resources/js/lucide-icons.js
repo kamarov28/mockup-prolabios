@@ -7,6 +7,7 @@
 
 import {
   createIcons,
+  Activity,
   AlertTriangle,
   ArrowLeft,
   ArrowLeftRight,
@@ -15,6 +16,8 @@ import {
   ArrowUpRight,
   Award,
   BadgeCheck,
+  BarChart2,
+  BarChart3,
   Beaker,
   BookOpen,
   Building,
@@ -33,6 +36,7 @@ import {
   Clock,
   CloudUpload,
   Coffee,
+  Compass,
   Copy,
   CornerDownRight,
   Download,
@@ -90,6 +94,7 @@ import {
   PlusCircle,
   Printer,
   Receipt,
+  RefreshCw,
   RotateCcw,
   Save,
   Search,
@@ -122,6 +127,7 @@ import {
 } from 'lucide';
 
 export const icons = {
+  Activity,
   AlertTriangle,
   ArrowLeft,
   ArrowLeftRight,
@@ -130,6 +136,8 @@ export const icons = {
   ArrowUpRight,
   Award,
   BadgeCheck,
+  BarChart2,
+  BarChart3,
   Beaker,
   BookOpen,
   Building,
@@ -148,6 +156,7 @@ export const icons = {
   Clock,
   CloudUpload,
   Coffee,
+  Compass,
   Copy,
   CornerDownRight,
   Download,
@@ -205,6 +214,7 @@ export const icons = {
   PlusCircle,
   Printer,
   Receipt,
+  RefreshCw,
   RotateCcw,
   Save,
   Search,

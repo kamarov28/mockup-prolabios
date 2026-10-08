@@ -6,32 +6,30 @@
 @section('admin_content')
 <div class="dash-wrapper">
 
-  {{-- ── 1. Header Strip ──────────────────────────────────────────────────────── --}}
-  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-    <div>
-      <span class="admin-page-label">Laporan &amp; Intelijen Pengunjung</span>
-      <h2 class="admin-page-title mb-0" style="font-size: 1.5rem;">Google Analytics 4 • Sebaran Wilayah &amp; Produk</h2>
-    </div>
-
-    <div class="d-flex flex-wrap align-items-center gap-2">
-      {{-- Date Range Toggle --}}
-      <div class="btn-group btn-group-sm" role="group" aria-label="Filter Rentang Waktu">
-        <button type="button" class="btn btn-outline-secondary ga4-range-btn" data-days="7">7 Hari</button>
-        <button type="button" class="btn btn-outline-secondary ga4-range-btn active" data-days="30">30 Hari</button>
-        <button type="button" class="btn btn-outline-secondary ga4-range-btn" data-days="90">90 Hari</button>
+  {{-- ── 1. Page Header Standard ─────────────────────────────────────────────── --}}
+  <x-admin.page-header
+    label="Laporan &amp; Intelijen Pengunjung"
+    title="Google Analytics 4 • Sebaran Wilayah & Produk"
+    description="Statistik kunjungan pengguna live, sebaran provinsi di Indonesia, dan katalog produk terpopuler yang disinkronisasi melalui Google Analytics Data API.">
+    <x-slot:actions>
+      {{-- Range Toggle Switcher --}}
+      <div class="dash-segmented-control" role="tablist">
+        <button type="button" class="dash-segment-btn ga4-range-btn" data-days="7">7 Hari</button>
+        <button type="button" class="dash-segment-btn ga4-range-btn active" data-days="30">30 Hari</button>
+        <button type="button" class="dash-segment-btn ga4-range-btn" data-days="90">90 Hari</button>
       </div>
 
-      <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1" id="ga4-refresh-btn">
-        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+      <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="ga4-refresh-btn">
+        <i data-lucide="refresh-cw"></i>
         <span>Segarkan</span>
       </button>
 
-      <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1">
-        <i data-lucide="sliders" style="width: 14px; height: 14px;"></i>
+      <a href="{{ route('admin.home.edit', ['section' => 'general']) }}" class="admin-btn admin-btn-outline admin-btn-sm">
+        <i data-lucide="sliders"></i>
         <span>Pengaturan</span>
       </a>
-    </div>
-  </div>
+    </x-slot:actions>
+  </x-admin.page-header>
 
   {{-- ── 2. Status / In-Page Setup Notice ─────────────────────────────────────── --}}
   @if(!$status['service_ready'] || empty($status['property_id']))
@@ -69,8 +67,8 @@
                 <form action="{{ route('admin.analytics.upload-credentials') }}" method="POST" enctype="multipart/form-data" class="d-flex flex-column gap-2">
                   @csrf
                   <input type="file" name="credentials_file" class="form-control form-control-sm" accept=".json,application/json" required>
-                  <button type="submit" class="btn btn-sm btn-primary align-self-start d-inline-flex align-items-center gap-1">
-                    <i data-lucide="upload" style="width: 13px; height: 13px;"></i>
+                  <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm align-self-start">
+                    <i data-lucide="upload"></i>
                     <span>Unggah File Kunci JSON</span>
                   </button>
                 </form>
@@ -98,8 +96,8 @@
                 <form action="{{ route('admin.analytics.update-property') }}" method="POST" class="d-flex flex-column gap-2">
                   @csrf
                   <input type="text" name="ga4_property_id" class="form-control form-control-sm" placeholder="Contoh: 557886119" value="{{ $status['property_id'] ?? '' }}" required>
-                  <button type="submit" class="btn btn-sm btn-primary align-self-start d-inline-flex align-items-center gap-1">
-                    <i data-lucide="save" style="width: 13px; height: 13px;"></i>
+                  <button type="submit" class="admin-btn admin-btn-primary admin-btn-sm align-self-start">
+                    <i data-lucide="save"></i>
                     <span>Simpan Property ID</span>
                   </button>
                 </form>
