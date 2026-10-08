@@ -47,3 +47,4 @@ CLAUDE-SECURITY-*/
 # Private service account credentials
 /storage/app/analytics/*.json
 !/storage/app/analytics/.gitkeep
+!/storage/app/analytics/.htaccess
