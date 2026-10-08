@@ -221,28 +221,28 @@
       </div>
     </div>
     <div class="admin-card-body p-3">
-      <div class="row g-3 small">
-        <div class="col-md-4">
-          <div class="p-2 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
-            <span class="text-muted d-block" style="font-size: 0.72rem;">Google Service Account</span>
-            <span class="fw-semibold text-break" style="font-size: 0.8rem;">
+      <div class="row g-3 align-items-stretch">
+        <div class="col-md-4 d-flex">
+          <div class="p-3 rounded h-100 w-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); min-height: 82px;">
+            <span class="text-muted d-block mb-1" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.4px;">Google Service Account</span>
+            <span class="fw-semibold text-break" style="font-size: 0.82rem; color: var(--color-text-main);">
               {{ $status['service_email'] ?? 'Belum terpasang' }}
             </span>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="p-2 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
-            <span class="text-muted d-block" style="font-size: 0.72rem;">GA4 Property ID</span>
-            <span class="fw-semibold font-monospace" style="font-size: 0.8rem;">
+        <div class="col-md-4 d-flex">
+          <div class="p-3 rounded h-100 w-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); min-height: 82px;">
+            <span class="text-muted d-block mb-1" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.4px;">GA4 Property ID</span>
+            <span class="fw-semibold font-monospace" style="font-size: 0.88rem; color: var(--color-text-main);">
               {{ $status['property_id'] ?? 'Belum disetel' }}
             </span>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="p-2 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
-            <span class="text-muted d-block" style="font-size: 0.72rem;">Masa Berlaku Cache</span>
-            <span class="fw-semibold" style="font-size: 0.8rem;">
-              20 Menit (Gunakan tombol Segarkan untuk sinkronisasi paksa)
+        <div class="col-md-4 d-flex">
+          <div class="p-3 rounded h-100 w-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); min-height: 82px;">
+            <span class="text-muted d-block mb-1" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.4px;">Masa Berlaku Cache</span>
+            <span class="fw-semibold" style="font-size: 0.82rem; color: var(--color-text-main);">
+              20 Menit (Gunakan tombol Segarkan untuk pembaruan instan)
             </span>
           </div>
         </div>
