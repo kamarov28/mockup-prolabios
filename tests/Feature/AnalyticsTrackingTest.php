@@ -102,4 +102,25 @@ class AnalyticsTrackingTest extends TestCase
         $response = $this->getJson('/admin/analytics/data');
         $response->assertUnauthorized();
     }
+
+    public function test_super_admin_can_view_analytics_page(): void
+    {
+        $response = $this->actingAs($this->admin)->get('/admin/analytics');
+        $response->assertOk();
+        $response->assertSee('Google Analytics 4 • Sebaran Wilayah &amp; Produk', false);
+    }
+
+    public function test_super_admin_can_update_property_via_dedicated_analytics_endpoint(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/analytics/update-property', [
+            'ga4_property_id' => '557886119',
+        ]);
+
+        $response->assertRedirect('/admin/analytics');
+        $response->assertSessionHas('success');
+
+        $viewResponse = $this->actingAs($this->admin)->get('/admin/analytics');
+        $viewResponse->assertOk();
+        $viewResponse->assertSee('557886119', false);
+    }
 }

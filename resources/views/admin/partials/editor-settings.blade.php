@@ -226,6 +226,20 @@
         </div>
 
         <div class="col-md-6">
+          <label for="service_account_json_file" class="admin-form-label mb-2">Unggah File Kredensial Service Account (.json)</label>
+          <input type="file" class="form-control @error('service_account_json_file') is-invalid @enderror" id="service_account_json_file" name="service_account_json_file" accept=".json,application/json">
+          @error('service_account_json_file') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          <div class="form-text text-secondary mt-1 small">
+            @php $saEmail = app(\App\Services\GoogleAnalyticsService::class)->getServiceAccountEmail(); @endphp
+            @if($saEmail)
+              <span class="text-success fw-medium"><i data-lucide="check-circle" style="width: 13px; height: 13px; vertical-align: -2px;"></i> Kunci aktif: <code>{{ $saEmail }}</code></span>
+            @else
+              <span class="text-danger fw-medium"><i data-lucide="alert-circle" style="width: 13px; height: 13px; vertical-align: -2px;"></i> Kunci belum ada. Unggah file JSON Service Account dari Google Cloud.</span>
+            @endif
+          </div>
+        </div>
+
+        <div class="col-md-6">
           <label for="google_search_console_id" class="admin-form-label mb-2">Google Search Console Verification Tag / Code (Opsional)</label>
           <input type="text" class="form-control @error('google_search_console_id') is-invalid @enderror" id="google_search_console_id" name="google_search_console_id" value="{{ old('google_search_console_id', $homeData['google_search_console_id'] ?? '') }}" placeholder="google-site-verification=...">
           @error('google_search_console_id') <div class="invalid-feedback">{{ $message }}</div> @enderror

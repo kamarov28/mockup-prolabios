@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMediaController;
 use App\Http\Controllers\Admin\AdminPostController;
@@ -74,7 +75,10 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
         Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
         Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
         Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
-        Route::get('/analytics/data', [AdminDashboardController::class, 'analyticsData'])->name('admin.analytics.data');
+        Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('admin.analytics.index');
+        Route::get('/analytics/data', [AdminAnalyticsController::class, 'data'])->name('admin.analytics.data');
+        Route::post('/analytics/upload-credentials', [AdminAnalyticsController::class, 'uploadCredentials'])->name('admin.analytics.upload-credentials');
+        Route::post('/analytics/update-property', [AdminAnalyticsController::class, 'updateProperty'])->name('admin.analytics.update-property');
 
         Route::get('/users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::post('/users', [AdminUserController::class, 'store'])->name('admin.users.store');

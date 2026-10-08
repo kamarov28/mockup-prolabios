@@ -43,7 +43,7 @@ class HomepageSettingsUpdater
         return match ($section) {
             'homepage' => ['patch' => $this->patchHomepage($request, $homeData), 'error' => null],
             'contacts' => $this->patchContacts($request, $homeData),
-            'general' => ['patch' => $this->patchGeneral($request, $homeData), 'error' => null],
+            'general' => $this->patchGeneral($request, $homeData),
             default => ['patch' => [], 'error' => 'Section tidak valid.'],
         };
     }
@@ -108,6 +108,7 @@ class HomepageSettingsUpdater
             'meta_default_keywords' => 'nullable|string|max:1000',
             'google_analytics_id' => 'nullable|string|max:50',
             'ga4_property_id' => 'nullable|string|max:50',
+            'service_account_json_file' => 'nullable|file|max:512',
             'google_search_console_id' => 'nullable|string|max:255',
             'social_instagram' => 'nullable|string|max:500',
             'social_facebook' => 'nullable|string|max:500',
@@ -236,6 +237,13 @@ class HomepageSettingsUpdater
             $request, 'admin_login_bg_file', 'admin_login_bg_url', $existingLoginBg
         );
 
-        return $patch;
+        if ($request->hasFile('service_account_json_file')) {
+            $saveRes = app(GoogleAnalyticsService::class)->saveCredentialsFile($request->file('service_account_json_file'));
+            if (! $saveRes['success']) {
+                return ['patch' => $patch, 'error' => $saveRes['message']];
+            }
+        }
+
+        return ['patch' => $patch, 'error' => null];
     }
 }

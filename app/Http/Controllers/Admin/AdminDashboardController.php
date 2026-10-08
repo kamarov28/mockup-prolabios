@@ -24,7 +24,7 @@ class AdminDashboardController extends Controller
         protected HomepageSettingsUpdater $homepageSettings
     ) {}
 
-    public function dashboard(GoogleAnalyticsService $analytics)
+    public function dashboard()
     {
         // Use COUNT/LIMIT queries instead of loading entire tables to memory
         $productsCount = Product::query()->count('*');
@@ -73,26 +73,11 @@ class AdminDashboardController extends Controller
             $categoryDist = ['Belum Ada Produk' => 0];
         }
 
-        $analyticsStatus = [
-            'service_ready' => $analytics->isServiceAccountReady(),
-            'configured' => $analytics->isConfigured(),
-            'property_id' => $analytics->getPropertyId(),
-        ];
-
         return view('admin.dashboard', compact(
             'productsCount', 'postsCount', 'sectorsCount', 'rfqsCount', 'newRfqsCount',
             'principalsCount', 'categoriesCount', 'rfqPipeline',
-            'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist',
-            'analyticsStatus'
+            'recentProducts', 'recentPosts', 'recentRfqs', 'categoryDist'
         ));
-    }
-
-    public function analyticsData(Request $request, GoogleAnalyticsService $analytics)
-    {
-        $refresh = $request->boolean('refresh');
-        $data = $analytics->getDashboardSummary($refresh);
-
-        return response()->json($data);
     }
 
     public function homeEdit()

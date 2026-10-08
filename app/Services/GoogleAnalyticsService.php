@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
@@ -23,6 +24,67 @@ class GoogleAnalyticsService
     public function isServiceAccountReady(): bool
     {
         return file_exists($this->credentialsPath) && is_readable($this->credentialsPath);
+    }
+
+    public function getCredentialsPath(): string
+    {
+        return $this->credentialsPath;
+    }
+
+    public function getServiceAccountEmail(): ?string
+    {
+        if (! $this->isServiceAccountReady()) {
+            return null;
+        }
+
+        $raw = @file_get_contents($this->credentialsPath);
+        if (! $raw) {
+            return null;
+        }
+
+        $data = json_decode($raw, true);
+
+        return is_array($data) ? ($data['client_email'] ?? null) : null;
+    }
+
+    public function saveCredentialsFile(UploadedFile $file): array
+    {
+        if (! $file->isValid()) {
+            return ['success' => false, 'message' => 'File tidak valid atau rusak saat diunggah.'];
+        }
+
+        $raw = file_get_contents($file->getRealPath());
+        if (! $raw) {
+            return ['success' => false, 'message' => 'Gagal membaca isi file yang diunggah.'];
+        }
+
+        $data = json_decode($raw, true);
+        if (! is_array($data) || empty($data['client_email']) || empty($data['private_key'])) {
+            return [
+                'success' => false,
+                'message' => 'Format file JSON tidak valid. Pastikan file ini adalah kunci kredensial Service Account Google Cloud asli yang berisi client_email dan private_key.',
+            ];
+        }
+
+        $dir = dirname($this->credentialsPath);
+        if (! is_dir($dir)) {
+            mkdir($dir, 0750, true);
+        }
+
+        if (file_put_contents($this->credentialsPath, $raw) === false) {
+            return ['success' => false, 'message' => 'Gagal menyimpan file ke direktori storage/app/analytics. Periksa permission server.'];
+        }
+
+        @chmod($this->credentialsPath, 0600);
+
+        // Reset token cache so fresh credentials take effect immediately
+        Cache::forget('ga4_service_access_token');
+
+        return [
+            'success' => true,
+            'client_email' => $data['client_email'],
+            'project_id' => $data['project_id'] ?? null,
+        ];
     }
 
     public function getPropertyId(): ?string
@@ -178,9 +240,9 @@ class GoogleAnalyticsService
      *
      * @return array<string, mixed>
      */
-    public function getDashboardSummary(bool $forceRefresh = false): array
+    public function getDashboardSummary(bool $forceRefresh = false, int $days = 30): array
     {
-        if (!$this->isServiceAccountReady()) {
+        if (! $this->isServiceAccountReady()) {
             return [
                 'status' => 'unconfigured',
                 'message' => 'File kredensial Service Account belum terpasang di storage/app/analytics/service-account.json',
@@ -191,10 +253,10 @@ class GoogleAnalyticsService
             ];
         }
 
-        if (!$this->getPropertyId()) {
+        if (! $this->getPropertyId()) {
             return [
                 'status' => 'needs_property_id',
-                'message' => 'GA4 Property ID belum dikonfigurasi. Masukkan GA4_PROPERTY_ID di .env Anda.',
+                'message' => 'GA4 Property ID belum dikonfigurasi. Masukkan GA4 Property ID di Pengaturan Web atau .env.',
                 'regions' => [],
                 'top_pages' => [],
                 'total_users' => 0,
@@ -202,15 +264,16 @@ class GoogleAnalyticsService
             ];
         }
 
-        $cacheKey = 'ga4_admin_dashboard_summary_' . $this->getPropertyId();
+        $days = in_array($days, [7, 30, 90], true) ? $days : 30;
+        $cacheKey = 'ga4_admin_summary_' . $this->getPropertyId() . '_' . $days;
         if ($forceRefresh) {
             Cache::forget($cacheKey);
         }
 
-        return Cache::remember($cacheKey, 1200, function () {
+        return Cache::remember($cacheKey, 1200, function () use ($days) {
             // 1. Fetch Top Regions
             $regionsReport = $this->runReport([
-                'dateRanges' => [['startDate' => '30daysAgo', 'endDate' => 'today']],
+                'dateRanges' => [['startDate' => "{$days}daysAgo", 'endDate' => 'today']],
                 'dimensions' => [['name' => 'region']],
                 'metrics' => [
                     ['name' => 'activeUsers'],
@@ -219,12 +282,12 @@ class GoogleAnalyticsService
                 'orderBys' => [
                     ['metric' => ['metricName' => 'activeUsers'], 'desc' => true],
                 ],
-                'limit' => 8,
+                'limit' => 12,
             ]);
 
             // 2. Fetch Top Pages / Products
             $pagesReport = $this->runReport([
-                'dateRanges' => [['startDate' => '30daysAgo', 'endDate' => 'today']],
+                'dateRanges' => [['startDate' => "{$days}daysAgo", 'endDate' => 'today']],
                 'dimensions' => [['name' => 'pagePath']],
                 'metrics' => [
                     ['name' => 'screenPageViews'],
@@ -233,7 +296,7 @@ class GoogleAnalyticsService
                 'orderBys' => [
                     ['metric' => ['metricName' => 'screenPageViews'], 'desc' => true],
                 ],
-                'limit' => 8,
+                'limit' => 15,
             ]);
 
             if (($regionsReport['status'] ?? '') === 'error') {

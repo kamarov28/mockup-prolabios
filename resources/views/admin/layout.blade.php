@@ -46,6 +46,14 @@
           </a>
         </div>
 
+        @can('manage-system')
+        <div class="sidebar-item {{ request()->is('admin/analytics*') ? 'active' : '' }}">
+          <a href="{{ route('admin.analytics.index') }}" class="sidebar-link">
+            <i data-lucide="bar-chart-2"></i> Analitik Web
+          </a>
+        </div>
+        @endcan
+
         @can('manage-rfq')
         <div class="sidebar-item {{ request()->is('admin/rfqs*') ? 'active' : '' }}">
           <a href="{{ route('admin.rfqs.index') }}" class="sidebar-link">
