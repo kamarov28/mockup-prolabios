@@ -250,7 +250,7 @@
 
 </div>
 
-<script>
+<script @nonce>
   document.addEventListener('DOMContentLoaded', function() {
     let currentDays = 30;
 
@@ -420,7 +420,12 @@
         credentials: 'same-origin',
         headers: { 'Accept': 'application/json' }
       })
-      .then(function(res) { return res.json(); })
+      .then(function(res) {
+        if (!res.ok) {
+          throw new Error('Server mengembalikan kode status ' + res.status);
+        }
+        return res.json();
+      })
       .then(function(data) { renderAnalytics(data); })
       .catch(function(err) { renderError('Koneksi terputus: ' + err.message); });
     }

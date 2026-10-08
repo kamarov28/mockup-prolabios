@@ -162,7 +162,9 @@ class GoogleAnalyticsService
             $ch = curl_init('https://oauth2.googleapis.com/token');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
             curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion' => $jwt,
@@ -205,7 +207,9 @@ class GoogleAnalyticsService
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $token,
             'Content-Type: application/json',
@@ -299,10 +303,10 @@ class GoogleAnalyticsService
                 'limit' => 15,
             ]);
 
-            if (($regionsReport['status'] ?? '') === 'error') {
+            if (($regionsReport['status'] ?? '') !== 'success') {
                 return [
                     'status' => 'error',
-                    'message' => $regionsReport['message'] ?? 'Error fetching GA4 data',
+                    'message' => $regionsReport['message'] ?? 'Gagal mengambil data dari Google Analytics Data API (Status: ' . ($regionsReport['status'] ?? 'unknown') . ')',
                     'regions' => [],
                     'top_pages' => [],
                     'total_users' => 0,
