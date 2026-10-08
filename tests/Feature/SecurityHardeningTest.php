@@ -391,4 +391,15 @@ class SecurityHardeningTest extends TestCase
             );
         }
     }
+
+    public function test_public_htaccess_contains_bot_scanner_block_rules(): void
+    {
+        $htaccessPath = public_path('.htaccess');
+        $this->assertFileExists($htaccessPath);
+
+        $content = file_get_contents($htaccessPath);
+        $this->assertStringContainsString('wp-login|xmlrpc|wp-admin', $content);
+        $this->assertStringContainsString('\.env|\.git|\.svn', $content);
+        $this->assertStringContainsString('[F,L]', $content);
+    }
 }
