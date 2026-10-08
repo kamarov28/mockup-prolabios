@@ -708,6 +708,8 @@
   box-shadow: var(--shadow-xs);
   position: relative;
   transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 96px;
+  height: 100%;
 }
 .dash-stat-card:hover {
   border-color: #CBD5E1;

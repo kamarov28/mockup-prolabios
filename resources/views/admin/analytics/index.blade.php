@@ -111,55 +111,59 @@
   @endif
 
   {{-- ── 3. KPI Micro-Stat Cards ──────────────────────────────────────────────── --}}
-  <div class="row g-3 mb-4">
-    <div class="col-sm-6 col-xl-3">
-      <div class="dash-stat-card">
+  <div class="row g-3 mb-4 align-items-stretch">
+    {{-- Card 1: Active Users --}}
+    <div class="col-sm-6 col-xl-3 d-flex">
+      <div class="dash-stat-card w-100">
         <div class="dash-stat-icon-wrap" style="background: #FEE2E2; color: var(--color-accent, #A6171C);">
           <i data-lucide="users"></i>
         </div>
-        <div class="dash-stat-content">
-          <span class="dash-stat-label">Pengguna Aktif</span>
-          <span class="dash-stat-val" id="kpi-total-users" style="color: var(--color-accent, #A6171C);">-</span>
-          <span class="text-muted" style="font-size: 0.72rem;" id="kpi-users-sub">Rentang waktu terpilih</span>
+        <div class="dash-stat-content d-flex flex-column justify-content-center">
+          <span class="dash-stat-label text-truncate">Pengguna Aktif</span>
+          <div class="dash-stat-val text-truncate" id="kpi-total-users">-</div>
+          <span class="text-muted text-truncate" style="font-size: 0.72rem;" id="kpi-users-sub">Rentang waktu terpilih</span>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-6 col-xl-3">
-      <div class="dash-stat-card">
+    {{-- Card 2: Page Views --}}
+    <div class="col-sm-6 col-xl-3 d-flex">
+      <div class="dash-stat-card w-100">
         <div class="dash-stat-icon-wrap" style="background: #E0F2FE; color: #0284C7;">
           <i data-lucide="eye"></i>
         </div>
-        <div class="dash-stat-content">
-          <span class="dash-stat-label">Tayangan Halaman</span>
-          <span class="dash-stat-val" id="kpi-total-views" style="color: #0284C7;">-</span>
-          <span class="text-muted" style="font-size: 0.72rem;" id="kpi-views-sub">Total Page Views</span>
+        <div class="dash-stat-content d-flex flex-column justify-content-center">
+          <span class="dash-stat-label text-truncate">Tayangan Halaman</span>
+          <div class="dash-stat-val text-truncate" id="kpi-total-views" style="color: #0284C7;">-</div>
+          <span class="text-muted text-truncate" style="font-size: 0.72rem;" id="kpi-views-sub">Total Page Views</span>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-6 col-xl-3">
-      <div class="dash-stat-card">
+    {{-- Card 3: Ratio --}}
+    <div class="col-sm-6 col-xl-3 d-flex">
+      <div class="dash-stat-card w-100">
         <div class="dash-stat-icon-wrap" style="background: #FEF3C7; color: #D97706;">
           <i data-lucide="activity"></i>
         </div>
-        <div class="dash-stat-content">
-          <span class="dash-stat-label">Rasio Tayangan / User</span>
-          <span class="dash-stat-val" id="kpi-ratio" style="color: #D97706;">-</span>
-          <span class="text-muted" style="font-size: 0.72rem;">Kedalaman Interaksi</span>
+        <div class="dash-stat-content d-flex flex-column justify-content-center">
+          <span class="dash-stat-label text-truncate">Rasio Tayangan / User</span>
+          <div class="dash-stat-val text-truncate" id="kpi-ratio" style="color: #D97706;">-</div>
+          <span class="text-muted text-truncate" style="font-size: 0.72rem;">Kedalaman Interaksi</span>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-6 col-xl-3">
-      <div class="dash-stat-card">
+    {{-- Card 4: Status API --}}
+    <div class="col-sm-6 col-xl-3 d-flex">
+      <div class="dash-stat-card w-100">
         <div class="dash-stat-icon-wrap" style="background: #DCFCE7; color: #16A34A;">
           <i data-lucide="shield-check"></i>
         </div>
-        <div class="dash-stat-content">
-          <span class="dash-stat-label">Status Google API</span>
-          <span class="dash-stat-val" id="kpi-api-status" style="font-size: 1.1rem; color: #16A34A;">Menghubungkan</span>
-          <span class="text-muted" style="font-size: 0.72rem;" id="kpi-last-sync">Sinkronisasi...</span>
+        <div class="dash-stat-content d-flex flex-column justify-content-center">
+          <span class="dash-stat-label text-truncate">Status Google API</span>
+          <div class="dash-stat-val text-truncate" id="kpi-api-status" style="font-size: 1.25rem; color: #16A34A; line-height: 1.2;">Menghubungkan</div>
+          <span class="text-muted text-truncate" style="font-size: 0.72rem;" id="kpi-last-sync">Sinkronisasi...</span>
         </div>
       </div>
     </div>
