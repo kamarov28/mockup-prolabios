@@ -25,6 +25,8 @@
         class="nb-hero-slide @if($index === 0) is-active @endif"
         src="{{ $slideUrl }}"
         alt="Laboratorium Prolabios"
+        width="1920"
+        height="1080"
         decoding="async"
         @if($index === 0) fetchpriority="high" @else loading="lazy" @endif
       >

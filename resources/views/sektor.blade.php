@@ -114,7 +114,7 @@
             <div class="card p-4 p-md-5 mb-5">
               <!-- Sector Hero Image -->
               <div class="profil-hero-img mb-4">
-                <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 440px;" loading="lazy" decoding="async">
+                <img src="{{ $currentImage }}" alt="{{ $currentData['name'] }} Sector" class="w-100" width="800" height="450" style="aspect-ratio: 16/9; width: 100%; height: auto; object-fit: cover; display: block; max-height: 440px;" loading="lazy" decoding="async">
               </div>
 
 

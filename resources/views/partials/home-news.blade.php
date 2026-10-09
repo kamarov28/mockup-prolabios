@@ -40,6 +40,8 @@
                 <img
                   src="{{ $leadImage }}"
                   alt="{{ $leadPost['title'] }}"
+                  width="600"
+                  height="220"
                   loading="lazy"
                   decoding="async"
                 >
