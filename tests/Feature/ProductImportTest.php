@@ -378,4 +378,44 @@ class ProductImportTest extends TestCase
             @unlink($tempFile);
         }
     }
+
+    public function test_admin_import_skips_row_when_category_is_empty(): void
+    {
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        $sheet->fromArray([
+            'Nomor Katalog', 'Nama Produk *', 'Kategori *',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            ['NOCAT-01', 'Product Without Category', ''],
+        ], null, 'A2');
+
+        $tempFile = sys_get_temp_dir().'/test_empty_cat_'.time().'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-empty-cat.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertSessionHas('error');
+        $this->assertDatabaseMissing('products', ['catalog' => 'NOCAT-01']);
+        // Verify no blank category was created
+        $this->assertDatabaseMissing('product_categories', ['name' => '']);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
 }

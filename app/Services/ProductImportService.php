@@ -358,6 +358,13 @@ class ProductImportService
                 continue;
             }
 
+            if ($rawCategory === '') {
+                $skipped++;
+                $errors[] = "Baris {$rowIndex} ('{$title}'): Dilewati karena kolom Kategori wajib diisi.";
+
+                continue;
+            }
+
             $normTitle = strtolower($title);
             $normCatalog = strtolower($catalog);
 
