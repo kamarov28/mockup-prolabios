@@ -10,7 +10,6 @@ use App\Models\ProductCategory;
 use App\Models\Rfq;
 use App\Models\Sector;
 use App\Services\AuditLogger;
-use App\Services\GoogleAnalyticsService;
 use App\Services\HomepageService;
 use App\Services\HomepageSettingsUpdater;
 use Illuminate\Http\Request;

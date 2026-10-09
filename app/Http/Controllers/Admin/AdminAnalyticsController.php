@@ -52,7 +52,7 @@ class AdminAnalyticsController extends Controller
             'client_email' => $res['client_email'],
         ]);
 
-        return redirect()->route('admin.analytics.index')->with('success', 'File kredensial Google Service Account berhasil dipasang! Robot: ' . $res['client_email']);
+        return redirect()->route('admin.analytics.index')->with('success', 'File kredensial Google Service Account berhasil dipasang! Robot: '.$res['client_email']);
     }
 
     public function updateProperty(Request $request, HomepageService $homepage): RedirectResponse
@@ -74,6 +74,6 @@ class AdminAnalyticsController extends Controller
             'property_id' => $clean,
         ]);
 
-        return redirect()->route('admin.analytics.index')->with('success', 'GA4 Property ID berhasil disimpan: ' . $clean);
+        return redirect()->route('admin.analytics.index')->with('success', 'GA4 Property ID berhasil disimpan: '.$clean);
     }
 }
