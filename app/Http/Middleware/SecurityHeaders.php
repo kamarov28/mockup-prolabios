@@ -49,7 +49,7 @@ class SecurityHeaders
         }
 
         // Enforce HttpOnly and Secure flags on all outgoing cookies to prevent XSS cookie theft
-        $isSecure = $request->isSecure() || $request->header('X-Forwarded-Proto') === 'https' || app()->environment('production') || config('session.secure') === true;
+        $isSecure = $request->isSecure() || app()->environment('production') || config('session.secure') === true;
         foreach ($response->headers->getCookies() as $cookie) {
             $newCookie = $cookie;
             if (! $cookie->isHttpOnly()) {
