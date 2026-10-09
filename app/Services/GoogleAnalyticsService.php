@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 class GoogleAnalyticsService
 {
     private string $credentialsPath;
+
     private ?string $propertyId;
 
     public function __construct()
@@ -18,7 +19,8 @@ class GoogleAnalyticsService
             storage_path('app/analytics/service-account.json')
         );
         $this->propertyId = config('services.google_analytics.property_id')
-            ?: (env('GA4_PROPERTY_ID') ? (string) env('GA4_PROPERTY_ID') : null);
+            ? (string) config('services.google_analytics.property_id')
+            : null;
     }
 
     public function isServiceAccountReady(): bool
@@ -89,25 +91,27 @@ class GoogleAnalyticsService
 
     public function getPropertyId(): ?string
     {
-        if (!empty($this->propertyId)) {
+        if (! empty($this->propertyId)) {
             return $this->propertyId;
         }
 
         try {
             $homepageData = app(HomepageService::class)->getHomepageData();
-            if (!empty($homepageData['ga4_property_id'])) {
+            if (! empty($homepageData['ga4_property_id'])) {
                 return (string) $homepageData['ga4_property_id'];
             }
         } catch (\Throwable) {
             // Ignored during early bootstrap or test mocks
         }
 
-        return env('GA4_PROPERTY_ID') ? (string) env('GA4_PROPERTY_ID') : null;
+        $fallback = config('services.google_analytics.property_id');
+
+        return $fallback ? (string) $fallback : null;
     }
 
     public function isConfigured(): bool
     {
-        return $this->isServiceAccountReady() && !empty($this->propertyId);
+        return $this->isServiceAccountReady() && ! empty($this->propertyId);
     }
 
     /**
@@ -116,18 +120,18 @@ class GoogleAnalyticsService
      */
     public function getAccessToken(): ?string
     {
-        if (!$this->isServiceAccountReady()) {
+        if (! $this->isServiceAccountReady()) {
             return null;
         }
 
         return Cache::remember('ga4_service_access_token', 3000, function () {
             $raw = file_get_contents($this->credentialsPath);
-            if (!$raw) {
+            if (! $raw) {
                 return null;
             }
 
             $creds = json_decode($raw, true);
-            if (!is_array($creds) || empty($creds['client_email']) || empty($creds['private_key'])) {
+            if (! is_array($creds) || empty($creds['client_email']) || empty($creds['private_key'])) {
                 return null;
             }
 
@@ -143,21 +147,23 @@ class GoogleAnalyticsService
 
             $base64UrlHeader = rtrim(strtr(base64_encode(json_encode($header)), '+/', '-_'), '=');
             $base64UrlPayload = rtrim(strtr(base64_encode(json_encode($payload)), '+/', '-_'), '=');
-            $dataToSign = $base64UrlHeader . '.' . $base64UrlPayload;
+            $dataToSign = $base64UrlHeader.'.'.$base64UrlPayload;
 
             $privateKey = openssl_pkey_get_private($creds['private_key']);
-            if (!$privateKey) {
+            if (! $privateKey) {
                 Log::warning('GA4 Service Account: Private key invalid.');
+
                 return null;
             }
 
             $signature = '';
-            if (!openssl_sign($dataToSign, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
+            if (! openssl_sign($dataToSign, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
                 Log::warning('GA4 Service Account: Failed to sign JWT assertion.');
+
                 return null;
             }
 
-            $jwt = $dataToSign . '.' . rtrim(strtr(base64_encode($signature), '+/', '-_'), '=');
+            $jwt = $dataToSign.'.'.rtrim(strtr(base64_encode($signature), '+/', '-_'), '=');
 
             $ch = curl_init('https://oauth2.googleapis.com/token');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -174,11 +180,13 @@ class GoogleAnalyticsService
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
             if ($response === false || $httpCode !== 200) {
-                Log::warning('GA4 Service Account: Token exchange failed (' . $httpCode . '): ' . $response);
+                Log::warning('GA4 Service Account: Token exchange failed ('.$httpCode.'): '.$response);
+
                 return null;
             }
 
             $tokenData = json_decode($response, true);
+
             return $tokenData['access_token'] ?? null;
         });
     }
@@ -186,18 +194,18 @@ class GoogleAnalyticsService
     /**
      * Run a Google Analytics Data API v1beta report.
      *
-     * @param array<string, mixed> $body
+     * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      */
     public function runReport(array $body): array
     {
         $propertyId = $this->getPropertyId();
-        if (!$propertyId) {
+        if (! $propertyId) {
             return ['status' => 'missing_property_id', 'rows' => []];
         }
 
         $token = $this->getAccessToken();
-        if (!$token) {
+        if (! $token) {
             return ['status' => 'auth_failed', 'rows' => []];
         }
 
@@ -211,7 +219,7 @@ class GoogleAnalyticsService
         curl_setopt($ch, CURLOPT_TIMEOUT, 10);
         curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $token,
+            'Authorization: Bearer '.$token,
             'Content-Type: application/json',
         ]);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
@@ -220,8 +228,9 @@ class GoogleAnalyticsService
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         if ($response === false || $httpCode !== 200) {
-            Log::warning("GA4 Report query failed ({$httpCode}): " . $response);
+            Log::warning("GA4 Report query failed ({$httpCode}): ".$response);
             $err = json_decode((string) $response, true);
+
             return [
                 'status' => 'error',
                 'http_code' => $httpCode,
@@ -231,6 +240,7 @@ class GoogleAnalyticsService
         }
 
         $data = json_decode($response, true);
+
         return [
             'status' => 'success',
             'data' => $data,
@@ -269,7 +279,7 @@ class GoogleAnalyticsService
         }
 
         $days = in_array($days, [7, 30, 90], true) ? $days : 30;
-        $cacheKey = 'ga4_admin_summary_' . $this->getPropertyId() . '_' . $days;
+        $cacheKey = 'ga4_admin_summary_'.$this->getPropertyId().'_'.$days;
         if ($forceRefresh) {
             Cache::forget($cacheKey);
         }
@@ -306,7 +316,7 @@ class GoogleAnalyticsService
             if (($regionsReport['status'] ?? '') !== 'success') {
                 return [
                     'status' => 'error',
-                    'message' => $regionsReport['message'] ?? 'Gagal mengambil data dari Google Analytics Data API (Status: ' . ($regionsReport['status'] ?? 'unknown') . ')',
+                    'message' => $regionsReport['message'] ?? 'Gagal mengambil data dari Google Analytics Data API (Status: '.($regionsReport['status'] ?? 'unknown').')',
                     'regions' => [],
                     'top_pages' => [],
                     'total_users' => 0,
@@ -351,12 +361,12 @@ class GoogleAnalyticsService
                     $label = 'Beranda (Homepage)';
                 } elseif (str_starts_with($path, '/produk/')) {
                     $slug = substr($path, 8);
-                    $label = 'Produk: ' . ucwords(str_replace('-', ' ', $slug));
+                    $label = 'Produk: '.ucwords(str_replace('-', ' ', $slug));
                 } elseif ($path === '/produk') {
                     $label = 'Katalog Semua Produk';
                 } elseif (str_starts_with($path, '/artikel/')) {
                     $slug = substr($path, 9);
-                    $label = 'Artikel: ' . ucwords(str_replace('-', ' ', $slug));
+                    $label = 'Artikel: '.ucwords(str_replace('-', ' ', $slug));
                 }
 
                 $topPages[] = [
