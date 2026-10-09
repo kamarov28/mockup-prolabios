@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 
 class ProductService
 {
+    public const PRINCIPALS_MAP_CACHE = 'all_principals_map_v1';
+
     /**
      * Columns for public catalog / sector / home cards.
      * Intentionally excludes description & gallery_images (heavy HTML / JSON).
@@ -68,12 +70,31 @@ class ProductService
         Cache::forget('search_suggestions_v2');
         Cache::forget('search_suggestions');
         Cache::forget('sitemap_xml_cache');
+        Cache::forget(self::PRINCIPALS_MAP_CACHE);
 
         try {
             Cache::increment('products_cache_version');
         } catch (\Throwable $e) {
             Cache::put('products_cache_version', time());
         }
+    }
+
+    /**
+     * @return array<int|string, array<string, mixed>>
+     */
+    protected function getCachedPrincipalsMap(): array
+    {
+        $cached = Cache::get(self::PRINCIPALS_MAP_CACHE);
+        if (is_array($cached)) {
+            /** @var array<int|string, array<string, mixed>> $cached */
+            return $cached;
+        }
+
+        $principals = Principal::all()->keyBy('id')->map->getAttributes()->all();
+        Cache::put(self::PRINCIPALS_MAP_CACHE, $principals, 3600);
+
+        /** @var array<int|string, array<string, mixed>> $principals */
+        return $principals;
     }
 
     /**
@@ -90,9 +111,13 @@ class ProductService
         /** @var \Illuminate\Database\Eloquent\Collection<int, Product> $products */
         $products = (new Product)->newCollection($models);
 
-        // Batch load principal relation to completely prevent N+1 queries in views
         if ($products->isNotEmpty()) {
-            $products->load('principal');
+            $principalsMap = $this->getCachedPrincipalsMap();
+            foreach ($products as $product) {
+                if ($product->principal_id && isset($principalsMap[$product->principal_id])) {
+                    $product->setRelation('principal', (new Principal)->newFromBuilder($principalsMap[$product->principal_id]));
+                }
+            }
         }
 
         return $products;

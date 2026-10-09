@@ -7,6 +7,7 @@ use App\Http\Requests\StorePrincipalRequest;
 use App\Http\Requests\UpdatePrincipalRequest;
 use App\Models\Principal;
 use App\Services\AuditLogger;
+use App\Services\ProductService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -52,6 +53,7 @@ class AdminPrincipalController extends Controller
         ]);
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+        Cache::forget(ProductService::PRINCIPALS_MAP_CACHE);
 
         AuditLogger::log('principal.create', 'Principal', $principal->id, [
             'name' => $principal->name,
@@ -90,6 +92,7 @@ class AdminPrincipalController extends Controller
         ]);
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+        Cache::forget(ProductService::PRINCIPALS_MAP_CACHE);
 
         AuditLogger::log('principal.update', 'Principal', $principal->id, [
             'old_name' => $oldName,
@@ -116,6 +119,7 @@ class AdminPrincipalController extends Controller
         $principal->delete();
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+        Cache::forget(ProductService::PRINCIPALS_MAP_CACHE);
 
         AuditLogger::log('principal.delete', 'Principal', $id, [
             'name' => $name,
@@ -142,6 +146,7 @@ class AdminPrincipalController extends Controller
         $count = Principal::whereIn('id', $ids)->delete();
 
         Cache::forget(self::ACTIVE_PRINCIPALS_CACHE);
+        Cache::forget(ProductService::PRINCIPALS_MAP_CACHE);
 
         AuditLogger::log('principal.bulk_delete', 'Principal', null, [
             'count' => $count,
