@@ -28,7 +28,7 @@ class HtmlSanitizer
      * config/purifier.php ('product_description' profile).
      *
      * Notable security decisions vs. the old regex sanitizer:
-     * - <iframe> is NOT in the whitelist (was previously allowed; enables XSS via srcdoc).
+     * - <iframe> is strictly restricted to safe YouTube and Instagram video embeds via HTML.SafeIframe.
      * - All event attributes (onXxx) are stripped by HTMLPurifier's parser by design.
      * - URI schemes are limited to http/https — blocks javascript:, data:, vbscript:.
      *

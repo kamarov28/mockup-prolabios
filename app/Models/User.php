@@ -100,11 +100,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user can publish news, articles, and media uploads.
+     * Check if user can publish news and blog articles.
      */
     public function canManagePosts(): bool
     {
         return $this->isSuperAdmin() || $this->role === self::ROLE_CONTENT;
+    }
+
+    /**
+     * Check if user can upload media assets for articles or product descriptions.
+     */
+    public function canManageMedia(): bool
+    {
+        return $this->canManagePosts() || $this->canManageCatalog();
     }
 
     /**
