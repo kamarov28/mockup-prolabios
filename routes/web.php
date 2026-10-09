@@ -151,7 +151,10 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
         Route::get('/posts/{slug}/edit', [AdminPostController::class, 'edit'])->name('admin.posts.edit');
         Route::match(['post', 'put'], '/posts/{slug}', [AdminPostController::class, 'update'])->name('admin.posts.update');
         Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
-
-        Route::post('/media/upload', [AdminMediaController::class, 'upload'])->name('admin.media.upload');
     });
+
+    // 6. Media Asset Uploads (Super Admin, Content Writer & Product Specialist)
+    Route::post('/media/upload', [AdminMediaController::class, 'upload'])
+        ->middleware('can:manage-media')
+        ->name('admin.media.upload');
 });

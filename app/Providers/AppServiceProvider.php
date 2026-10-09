@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-catalog', fn (?User $user) => (bool) $user?->canManageCatalog());
         Gate::define('view-catalog', fn (?User $user) => (bool) $user?->canViewCatalog());
         Gate::define('manage-posts', fn (?User $user) => (bool) $user?->canManagePosts());
+        Gate::define('manage-media', fn (?User $user) => (bool) ($user?->canManagePosts() || $user?->canManageCatalog()));
 
         RateLimiter::for('rfq-submission', function (Request $request) {
             return Limit::perMinute(3)->by($request->ip())->response(function () {

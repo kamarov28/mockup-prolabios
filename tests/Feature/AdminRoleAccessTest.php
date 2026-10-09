@@ -190,4 +190,23 @@ class AdminRoleAccessTest extends TestCase
             'is_admin' => true,
         ]);
     }
+
+    public function test_media_upload_authorization_allows_catalog_and_content_admins(): void
+    {
+        // 1. Product Specialist is allowed (not 403)
+        $this->actingAs($this->catalogAdmin);
+        $resCatalog = $this->postJson(route('admin.media.upload'), []);
+        // Should not be forbidden; 422 indicates request reached controller validation
+        $this->assertEquals(422, $resCatalog->status());
+
+        // 2. Content Writer is allowed (not 403)
+        $this->actingAs($this->contentAdmin);
+        $resContent = $this->postJson(route('admin.media.upload'), []);
+        $this->assertEquals(422, $resContent->status());
+
+        // 3. Sales Admin is forbidden (403)
+        $this->actingAs($this->salesAdmin);
+        $resSales = $this->postJson(route('admin.media.upload'), []);
+        $resSales->assertForbidden();
+    }
 }
