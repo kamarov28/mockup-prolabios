@@ -53,7 +53,7 @@ class AdminUserController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:users,email'],
             'role' => ['required', 'string', Rule::in(User::ALL_ROLES)],
             'password' => ['required', 'string', Password::min(8)->letters()->numbers()],
         ], [
@@ -86,7 +86,7 @@ class AdminUserController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
+            'email' => ['required', 'string', 'email:rfc', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'role' => ['required', 'string', Rule::in(User::ALL_ROLES)],
             'password' => ['nullable', 'string', Password::min(8)->letters()->numbers()],
         ], [
