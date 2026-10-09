@@ -125,16 +125,25 @@ class Product extends Model
     // ----------------------------------------------------
     // Relationships
     // ----------------------------------------------------
+    /**
+     * @return BelongsTo<ProductCategory, $this>
+     */
     public function categoryRelation(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'category', 'key');
     }
 
+    /**
+     * @return BelongsTo<ProductCategory, $this>
+     */
     public function subCategoryRelation(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class, 'sub_category', 'key');
     }
 
+    /**
+     * @return BelongsTo<Principal, $this>
+     */
     public function principal(): BelongsTo
     {
         return $this->belongsTo(Principal::class, 'principal_id');

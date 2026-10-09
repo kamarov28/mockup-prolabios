@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Helpers\HtmlSanitizer;
+use App\Models\Principal;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Sector;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -375,6 +377,25 @@ class ProductService
         $cached = Cache::get($cacheKey);
 
         if (is_array($cached)) {
+            if (isset($cached['attributes']) && is_array($cached['attributes'])) {
+                /** @var Product $product */
+                $product = (new Product)->newFromBuilder($cached['attributes']);
+                if (! empty($cached['principal'])) {
+                    $product->setRelation('principal', (new Principal)->newFromBuilder($cached['principal']));
+                }
+                if (! empty($cached['sectors']) && is_array($cached['sectors'])) {
+                    $product->setRelation('sectors', collect($cached['sectors'])->map(fn ($s) => (new Sector)->newFromBuilder($s)));
+                }
+                if (! empty($cached['category'])) {
+                    $product->setRelation('categoryRelation', (new ProductCategory)->newFromBuilder($cached['category']));
+                }
+                if (! empty($cached['sub_category'])) {
+                    $product->setRelation('subCategoryRelation', (new ProductCategory)->newFromBuilder($cached['sub_category']));
+                }
+
+                return $product;
+            }
+
             return (new Product)->newFromBuilder($cached);
         }
 
@@ -382,9 +403,19 @@ class ProductService
             return $cached;
         }
 
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::with(['principal', 'sectors', 'categoryRelation', 'subCategoryRelation'])
+            ->where('slug', $slug)
+            ->first();
+
         if ($product) {
-            Cache::put($cacheKey, $product->getAttributes(), 600);
+            $cachePayload = [
+                'attributes' => $product->getAttributes(),
+                'principal' => $product->principal?->getAttributes(),
+                'sectors' => $product->sectors->map->getAttributes()->all(),
+                'category' => $product->categoryRelation?->getAttributes(),
+                'sub_category' => $product->subCategoryRelation?->getAttributes(),
+            ];
+            Cache::put($cacheKey, $cachePayload, 600);
         }
 
         return $product;

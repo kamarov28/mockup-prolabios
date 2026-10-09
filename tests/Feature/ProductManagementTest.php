@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\ProductService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -411,5 +412,40 @@ class ProductManagementTest extends TestCase
         ]);
 
         $okResponse->assertSessionHasNoErrors();
+    }
+
+    public function test_get_product_by_slug_reconstitutes_relations_from_cache(): void
+    {
+        $principal = Principal::create(['name' => 'Difco Labs']);
+        $sector = Sector::create(['id' => 'food', 'name' => 'Food & Beverage']);
+        $product = Product::create([
+            'title' => 'Cached Relation Agar',
+            'slug' => 'cached-relation-agar',
+            'catalog' => 'CRA-99',
+            'category' => 'microbiology',
+            'principal_id' => $principal->id,
+            'price' => 150000,
+            'stock' => 10,
+        ]);
+        $product->sectors()->attach('food');
+
+        $service = app(ProductService::class);
+
+        // First call populates cache
+        $loaded1 = $service->getProductBySlug('cached-relation-agar');
+        $this->assertNotNull($loaded1);
+        $this->assertEquals('Difco Labs', $loaded1->principal?->name);
+        $this->assertTrue($loaded1->sectors->contains('id', 'food'));
+
+        // Second call retrieves from cache without DB relation queries
+        DB::flushQueryLog();
+        DB::enableQueryLog();
+
+        $loaded2 = $service->getProductBySlug('cached-relation-agar');
+        $this->assertNotNull($loaded2);
+        $this->assertEquals('Difco Labs', $loaded2->principal?->name);
+        $this->assertTrue($loaded2->sectors->contains('id', 'food'));
+
+        $this->assertCount(0, DB::getQueryLog());
     }
 }
