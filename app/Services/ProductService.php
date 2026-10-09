@@ -474,7 +474,6 @@ class ProductService
         $validIds = array_slice(array_unique(array_filter(array_map('intval', $productIds), fn ($id) => $id > 0)), 0, 10);
         if (! empty($validIds)) {
             Product::whereIn('id', $validIds)->increment('search_hits');
-            $this->clearProductsCache();
         }
     }
 
@@ -495,7 +494,6 @@ class ProductService
 
             if (Schema::hasColumn('products', 'search_hits')) {
                 Product::where('id', $id)->increment('search_hits');
-                $this->clearProductsCache();
             }
         }
     }

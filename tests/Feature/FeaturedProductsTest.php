@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Services\ProductService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class FeaturedProductsTest extends TestCase
@@ -145,5 +146,29 @@ class FeaturedProductsTest extends TestCase
         // View detail page
         $this->get('/produk/bismuth-sulfite-agar');
         $this->assertEquals(2, $product->fresh()->search_hits);
+    }
+
+    public function test_searching_and_viewing_product_does_not_bust_global_catalog_cache(): void
+    {
+        $product = Product::create([
+            'title' => 'Stable Cache Agar',
+            'slug' => 'stable-cache-agar',
+            'catalog' => 'SCA-01',
+            'category' => 'microbiology',
+            'search_hits' => 0,
+        ]);
+
+        Cache::put('categories_structure', ['dummy' => 'cached'], 3600);
+        $vBefore = ProductService::getProductsCacheVersion();
+
+        // Search catalog
+        $this->get('/produk?s=stable');
+        $this->assertEquals($vBefore, ProductService::getProductsCacheVersion());
+        $this->assertEquals(['dummy' => 'cached'], Cache::get('categories_structure'));
+
+        // View detail page
+        $this->get('/produk/stable-cache-agar');
+        $this->assertEquals($vBefore, ProductService::getProductsCacheVersion());
+        $this->assertEquals(['dummy' => 'cached'], Cache::get('categories_structure'));
     }
 }
