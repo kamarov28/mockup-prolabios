@@ -8,7 +8,7 @@
     # Block Common Vulnerability Scanners & Probes at Webserver Level (Zero PHP Overhead)
     RewriteCond %{REQUEST_URI} (\.env|\.git|\.svn|\.htaccess|composer\.(json|lock)|package\.(json|lock))$ [NC,OR]
     RewriteCond %{REQUEST_URI} (^|/)(wp-login(\.php)?|xmlrpc(\.php)?|wp-admin|wp-content|wp-includes|phpmyadmin|pma|adminer(\.php)?)($|/|\.) [NC,OR]
-    RewriteCond %{REQUEST_URI} \.(sql|bak|backup|dump)$ [NC]
+    RewriteCond %{REQUEST_URI} \.(sql(\.gz)?|bak|backup|dump|tar\.gz)$ [NC]
     RewriteRule .* - [F,L]
 
     # Handle Authorization Header
