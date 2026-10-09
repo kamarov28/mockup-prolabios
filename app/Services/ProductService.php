@@ -519,6 +519,11 @@ class ProductService
      */
     public function ensureSpecificationColumnsExist(): void
     {
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+
         if (! Schema::hasTable('products')) {
             return;
         }
@@ -538,6 +543,7 @@ class ProductService
                     $table->unsignedInteger('search_hits')->default(0)->index();
                 }
             });
+            $checked = true;
         } catch (\Throwable $e) {
             // Silently recover if columns were added concurrently
         }
