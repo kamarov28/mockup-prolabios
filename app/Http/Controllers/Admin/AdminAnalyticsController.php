@@ -39,7 +39,11 @@ class AdminAnalyticsController extends Controller
     public function uploadCredentials(Request $request, GoogleAnalyticsService $analytics): RedirectResponse
     {
         $request->validate([
-            'credentials_file' => 'required|file|max:512',
+            'credentials_file' => 'required|file|extensions:json|max:512',
+        ], [
+            'credentials_file.required' => 'Pilih file JSON kredensial Google Service Account.',
+            'credentials_file.extensions' => 'File harus berupa format .json.',
+            'credentials_file.max' => 'Ukuran file maksimal 512KB.',
         ]);
 
         $res = $analytics->saveCredentialsFile($request->file('credentials_file'));

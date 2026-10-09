@@ -108,7 +108,7 @@ class HomepageSettingsUpdater
             'meta_default_keywords' => 'nullable|string|max:1000',
             'google_analytics_id' => 'nullable|string|max:50',
             'ga4_property_id' => 'nullable|string|max:50',
-            'service_account_json_file' => 'nullable|file|max:512',
+            'service_account_json_file' => 'nullable|file|extensions:json|max:512',
             'google_search_console_id' => 'nullable|string|max:255',
             'social_instagram' => 'nullable|string|max:500',
             'social_facebook' => 'nullable|string|max:500',

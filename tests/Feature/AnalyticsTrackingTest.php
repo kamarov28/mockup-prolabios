@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -122,5 +123,16 @@ class AnalyticsTrackingTest extends TestCase
         $viewResponse = $this->actingAs($this->admin)->get('/admin/analytics');
         $viewResponse->assertOk();
         $viewResponse->assertSee('557886119', false);
+    }
+
+    public function test_upload_credentials_rejects_non_json_files(): void
+    {
+        $fakeFile = UploadedFile::fake()->create('malicious.php', 10);
+
+        $response = $this->actingAs($this->admin)->post('/admin/analytics/upload-credentials', [
+            'credentials_file' => $fakeFile,
+        ]);
+
+        $response->assertSessionHasErrors(['credentials_file']);
     }
 }
