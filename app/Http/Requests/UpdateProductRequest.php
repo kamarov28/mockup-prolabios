@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -38,8 +39,15 @@ class UpdateProductRequest extends FormRequest
 
     public function rules(): array
     {
+        $id = $this->route('id');
+
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('products', 'title')->ignore($id),
+            ],
             'category' => ['required', 'string', 'max:255'],
             'sub_category' => ['nullable', 'string', 'max:255'],
             'packaging' => ['nullable', 'string', 'max:255'],
@@ -78,6 +86,13 @@ class UpdateProductRequest extends FormRequest
             'stock' => 'Stok',
             'image_file' => 'Berkas Gambar',
             'image_url' => 'URL Gambar',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.unique' => 'Nama produk ini sudah digunakan. Gunakan nama yang berbeda.',
         ];
     }
 }

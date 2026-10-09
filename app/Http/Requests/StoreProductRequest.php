@@ -39,7 +39,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', 'unique:products,title'],
             'category' => ['required', 'string', 'max:255'],
             'sub_category' => ['nullable', 'string', 'max:255'],
             'packaging' => ['nullable', 'string', 'max:255'],
@@ -76,6 +76,13 @@ class StoreProductRequest extends FormRequest
             'stock' => 'Stok',
             'image_file' => 'Berkas Gambar',
             'image_url' => 'URL Gambar',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'title.unique' => 'Nama produk ini sudah digunakan. Gunakan nama yang berbeda.',
         ];
     }
 }

@@ -358,4 +358,58 @@ class ProductManagementTest extends TestCase
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
         $this->assertDatabaseMissing('product_sector', ['product_id' => $product->id]);
     }
+
+    public function test_creating_product_with_duplicate_title_fails_validation(): void
+    {
+        Product::create([
+            'title' => 'Unique Lab Reagent',
+            'catalog' => 'ULR-01',
+            'category' => 'microbiology',
+            'price' => 500000,
+            'stock' => 10,
+        ]);
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Unique Lab Reagent',
+            'catalog' => 'ULR-02',
+            'category' => 'microbiology',
+        ]);
+
+        $response->assertSessionHasErrors(['title']);
+    }
+
+    public function test_updating_product_with_another_product_title_fails_validation(): void
+    {
+        $p1 = Product::create([
+            'title' => 'First Product Alpha',
+            'catalog' => 'FPA-01',
+            'category' => 'microbiology',
+            'price' => 100000,
+            'stock' => 5,
+        ]);
+
+        $p2 = Product::create([
+            'title' => 'Second Product Beta',
+            'catalog' => 'SPB-02',
+            'category' => 'microbiology',
+            'price' => 200000,
+            'stock' => 10,
+        ]);
+
+        // Attempt to rename p2 to p1's title
+        $response = $this->actingAs($this->admin)->put(route('admin.products.update', ['id' => $p2->id]), [
+            'title' => 'First Product Alpha',
+            'category' => 'microbiology',
+        ]);
+
+        $response->assertSessionHasErrors(['title']);
+
+        // Keeping own title succeeds
+        $okResponse = $this->actingAs($this->admin)->put(route('admin.products.update', ['id' => $p2->id]), [
+            'title' => 'Second Product Beta',
+            'category' => 'microbiology',
+        ]);
+
+        $okResponse->assertSessionHasNoErrors();
+    }
 }
