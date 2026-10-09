@@ -45,5 +45,8 @@ class AdminGuideTest extends TestCase
         $response->assertSee('Hierarki Kategori &amp; Sektor Industri', false);
         $response->assertSee('Live Search Instan');
         $response->assertSee('Artikel Berita &amp; Prinsipal Laboratorium', false);
+        $response->assertSee('Integrasi Google Analytics 4 &amp; Intelijen Wilayah', false);
+        $response->assertSee('Sebaran Wilayah / Provinsi');
+        $response->assertSee('Halaman &amp; Produk Terpopuler', false);
     }
 }

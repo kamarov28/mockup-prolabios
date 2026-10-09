@@ -26,7 +26,8 @@
       <a href="#kategori" class="guide-toc-link"><i data-lucide="folder-tree"></i> 3. Kategori &amp; Sektor</a>
       <a href="#konten" class="guide-toc-link"><i data-lucide="sliders"></i> 4. Beranda &amp; Konten</a>
       <a href="#artikel" class="guide-toc-link"><i data-lucide="file-text"></i> 5. Artikel &amp; Prinsipal</a>
-      <a href="#keamanan" class="guide-toc-link"><i data-lucide="shield-check"></i> 6. Keamanan &amp; Audit Log</a>
+      <a href="#analytics" class="guide-toc-link"><i data-lucide="bar-chart-2"></i> 6. Analitik Web GA4</a>
+      <a href="#keamanan" class="guide-toc-link"><i data-lucide="shield-check"></i> 7. Keamanan &amp; Audit Log</a>
     </div>
   </div>
 </div>
@@ -304,11 +305,56 @@
   </div>
 </div>
 
-{{-- 6. Modul Keamanan & Tips --}}
+{{-- 6. Modul Analitik Web GA4 --}}
+<div id="analytics" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <div>
+      <span class="admin-card-header-label">Modul 06 · Intelijen Bisnis &amp; Pengunjung</span>
+      <h2 class="admin-card-header-title"><i data-lucide="bar-chart-2" class="me-2" style="color: var(--color-accent);"></i>Integrasi Google Analytics 4 &amp; Intelijen Wilayah</h2>
+    </div>
+    @can('manage-system')
+    <a href="{{ route('admin.analytics.index') }}" class="admin-btn admin-btn-ghost admin-btn-sm">
+      <i data-lucide="external-link"></i> Buka Analitik Web
+    </a>
+    @endcan
+  </div>
+  <div class="admin-card-body">
+    <p class="guide-lead">
+      Sistem analitik terintegrasi dua arah dengan <strong>Google Analytics 4 (GA4)</strong>: pelacakan pengunjung publik di frontend dan penarikan live data laporan ke panel admin via <strong>Google Analytics Data API</strong> tanpa perlu membuka antarmuka GA4 eksternal yang rumit.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+      <div class="guide-feature-box">
+        <h4 class="guide-feature-title"><i data-lucide="map-pin" style="color: var(--color-accent);"></i> Sebaran Wilayah / Provinsi</h4>
+        <p class="guide-feature-desc">
+          Mendeteksi asal provinsi pengunjung website di Indonesia secara akurat (DKI Jakarta, Jawa Barat, Jawa Timur, dsb.) lengkap dengan persentase proporsional, jumlah pengguna aktif, serta total tayangan halaman.
+        </p>
+      </div>
+      <div class="guide-feature-box">
+        <h4 class="guide-feature-title"><i data-lucide="compass" style="color: #0284C7;"></i> Halaman &amp; Produk Terpopuler</h4>
+        <p class="guide-feature-desc">
+          Merekam dan mengurutkan katalog alat laboratorium, media kultur, reagen, atau artikel berita yang paling banyak diakses oleh calon pembeli dalam rentang waktu 7, 30, atau 90 hari terakhir.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="guide-h3">Arsitektur &amp; Konfigurasi Google Service Account</h3>
+    <ol class="guide-steps">
+      <li><strong>Tag Pelacak Publik (Frontend):</strong> Masukkan GA4 Measurement ID (format: <code>G-XXXXXXXXXX</code>) di menu <em>Pengaturan Web &gt; SEO</em>. Script pelacak dirender otomatis dengan dukungan header keamanan CSP nonce.</li>
+      <li><strong>Kunci Robot Service Account (Backend API):</strong> Sistem menggunakan autentikasi OAuth2 berbasis penandatanganan JWT (RS256) via OpenSSL native PHP (tanpa dependensi eksternal berat). Unggah file kunci <code>.json</code> Service Account langsung dari browser di halaman <code>/admin/analytics</code>.</li>
+      <li><strong>GA4 Property ID Numerik:</strong> Masukkan 9 digit Property ID dari Google Analytics (tersedia di <em>Admin &gt; Property Settings</em> atau URL browser: <code>.../p557886119/...</code>) ke form konfigurasi analitik.</li>
+      <li><strong>Izin Akses Robot Google:</strong> Pastikan alamat email Service Account (contoh: <code>analytics-reader@prolabios-analytics.iam.gserviceaccount.com</code>) telah ditambahkan sebagai <strong>Viewer</strong> pada menu <em>Google Analytics &gt; Admin &gt; Property Access Management</em>.</li>
+      <li><strong>Performa Cepat &amp; Cache 20 Menit:</strong> Hasil penarikan API disimpan di cache server selama 20 menit guna menghemat kuota gratis Google dan menjamin kecepatan buka halaman tetap instan. Gunakan tombol <strong>Segarkan</strong> untuk pembaruan data seketika.</li>
+      <li><strong>Keamanan Kunci Privat:</strong> Direktori <code>storage/app/analytics/</code> dilindungi oleh instruksi server <code>Require all denied</code> (.htaccess), izin berkas ketat <code>chmod 600</code>, dan diabaikan otomatis oleh <code>.gitignore</code> demi mencegah kebocoran kredensial ke publik.</li>
+    </ol>
+  </div>
+</div>
+
+{{-- 7. Modul Keamanan & Tips --}}
 <div id="keamanan" class="admin-card" style="margin-bottom: 20px;">
   <div class="admin-card-header">
     <div>
-      <span class="admin-card-header-label">Modul 06 · Kepatuhan, Infrastruktur &amp; Proteksi</span>
+      <span class="admin-card-header-label">Modul 07 · Kepatuhan, Infrastruktur &amp; Proteksi</span>
       <h2 class="admin-card-header-title"><i data-lucide="shield-check" class="me-2" style="color: var(--color-accent);"></i>Keamanan Sistem, Server &amp; Audit Log</h2>
     </div>
   </div>
