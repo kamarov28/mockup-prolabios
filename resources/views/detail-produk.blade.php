@@ -118,13 +118,13 @@
             <div class="row g-5">
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" width="500" height="350" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                 </div>
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
                     @foreach($allImages as $imgPath)
                       <div class="gallery-thumb {{ $loop->first ? 'active' : '' }}" data-img="{{ $imgPath }}" role="button" tabindex="0" aria-label="Foto produk {{ $loop->iteration }}">
-                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
+                        <img src="{{ $imgPath }}" alt="Foto produk {{ $loop->iteration }}" width="60" height="60" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                       </div>
                     @endforeach
                   </div>
@@ -281,8 +281,8 @@
                     <i data-lucide="x"></i>
                   </button>
                   <div class="modal-body text-center p-0" data-bs-dismiss="modal">
-                    <div class="lightbox-image-wrapper">
-                      <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" loading="lazy" decoding="async">
+                    <div class="lightbox-img-wrap text-center">
+                      <img id="lightbox-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }}" class="lightbox-img" width="800" height="800" loading="lazy" decoding="async">
                     </div>
                   </div>
                 </div>
