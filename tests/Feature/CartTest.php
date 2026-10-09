@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\Controllers\CartController;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -128,5 +129,26 @@ class CartTest extends TestCase
             ]);
 
         $response->assertSessionMissing('cart.'.$id);
+    }
+
+    public function test_cart_quantity_is_safely_clamped_to_prevent_overflow(): void
+    {
+        $id = $this->product->id;
+
+        $response = $this->postJson(route('cart.add'), [
+            'id' => $id,
+            'quantity' => 1000000000,
+        ]);
+
+        $response->assertOk();
+        $response->assertSessionHas('cart.'.$id.'.quantity', CartController::MAX_ITEM_QUANTITY);
+
+        $updateResponse = $this->postJson(route('cart.update'), [
+            'id' => $id,
+            'quantity' => 9999999999,
+        ]);
+
+        $updateResponse->assertOk();
+        $updateResponse->assertSessionHas('cart.'.$id.'.quantity', CartController::MAX_ITEM_QUANTITY);
     }
 }

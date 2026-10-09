@@ -11,6 +11,8 @@ class CartController extends Controller
 {
     use ResolvesProducts;
 
+    public const MAX_ITEM_QUANTITY = 99999;
+
     public function __construct(protected ProductService $products) {}
 
     private function findCartKey(array $cart, string $id = '', string $title = ''): ?string
@@ -97,7 +99,7 @@ class CartController extends Controller
     {
         $id = $request->input('id');
         $title = $request->input('title');
-        $qty = max(1, (int) $request->input('quantity', 1));
+        $qty = max(1, min(self::MAX_ITEM_QUANTITY, (int) $request->input('quantity', 1)));
 
         $product = $this->resolveProduct($id, $title);
 
@@ -118,7 +120,7 @@ class CartController extends Controller
         }
 
         $currentQty = (int) ($cart[$cartKey]['quantity'] ?? 0);
-        $newQty = $currentQty + $qty;
+        $newQty = min(self::MAX_ITEM_QUANTITY, $currentQty + $qty);
         $stock = (int) ($product->stock ?? 0);
         $isIndent = ($stock > 0 && $newQty > $stock) || ($stock === 0);
 
@@ -149,7 +151,7 @@ class CartController extends Controller
     {
         $id = (string) $request->input('id', '');
         $title = (string) $request->input('title', '');
-        $qty = max(1, (int) $request->input('quantity', 1));
+        $qty = max(1, min(self::MAX_ITEM_QUANTITY, (int) $request->input('quantity', 1)));
         $cart = session()->get('cart', []);
         $cartKey = $this->findCartKey($cart, $id, $title);
 
