@@ -168,7 +168,7 @@ class PageController extends Controller
         }
 
         $productsPaginated = $products->getPaginatedProducts(['sector' => $activeSector], 24);
-        $relatedProducts = $products->getProducts(['sector' => $activeSector], 3);
+        $relatedProducts = collect($productsPaginated->items())->take(3);
 
         return view('sektor', [
             'sectors' => $sectorList,
