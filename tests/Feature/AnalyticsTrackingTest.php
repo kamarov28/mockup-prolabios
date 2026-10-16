@@ -97,6 +97,7 @@ class AnalyticsTrackingTest extends TestCase
             'message',
             'regions',
             'top_pages',
+            'top_products',
             'sources',
             'devices',
             'trends',
@@ -115,6 +116,8 @@ class AnalyticsTrackingTest extends TestCase
         $response->assertOk();
         $response->assertSee('Google Analytics 4 • Sebaran Wilayah &amp; Produk', false);
         $response->assertSee('Tren Kunjungan Harian (Pengguna &amp; Tayangan Halaman)', false);
+        $response->assertSee('Katalog Produk Terpopuler', false);
+        $response->assertSee('Halaman Web', false);
         $response->assertSee('Kanal Sumber Trafik (Acquisition)', false);
         $response->assertSee('Kategori Perangkat Pengunjung', false);
         $response->assertSee('Ekspor CSV', false);

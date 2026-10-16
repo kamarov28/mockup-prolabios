@@ -228,20 +228,28 @@
       </div>
     </div>
 
-    {{-- Right Column: Top Halaman & Detail Produk Terpopuler --}}
+    {{-- Right Column: Top Produk vs Halaman Web --}}
     <div class="col-lg-6">
       <div class="admin-card h-100">
-        <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+        <div class="admin-card-header py-2 px-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
           <div class="d-flex align-items-center gap-2">
-            <i data-lucide="compass" style="width: 16px; height: 16px; color: #0284C7;"></i>
-            <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Halaman &amp; Produk Paling Populer</h2>
+            <i data-lucide="package" id="content-card-icon" style="width: 16px; height: 16px; color: #0284C7;"></i>
+            <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;" id="content-card-title">Katalog Produk Terpopuler</h2>
           </div>
-          <span class="text-muted" style="font-size: 0.74rem;" id="pages-count-badge">URL Teratas</span>
+          {{-- Tab Switcher: Produk vs Halaman Web --}}
+          <div class="dash-segmented-control" role="tablist">
+            <button type="button" class="dash-segment-btn ga4-content-tab active" data-type="products">
+              <span>Produk (<span id="badge-products-count">0</span>)</span>
+            </button>
+            <button type="button" class="dash-segment-btn ga4-content-tab" data-type="pages">
+              <span>Halaman Web (<span id="badge-pages-count">0</span>)</span>
+            </button>
+          </div>
         </div>
         <div class="admin-card-body p-3" id="pages-container">
           <div class="text-center py-5 text-muted">
             <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
-            <p class="small mb-0">Memuat data halaman terpopuler...</p>
+            <p class="small mb-0">Memuat data produk &amp; halaman...</p>
           </div>
         </div>
       </div>
@@ -335,6 +343,7 @@
 <script @nonce>
   document.addEventListener('DOMContentLoaded', function() {
     let currentDays = 30;
+    let currentContentType = 'products';
     let lastLoadedData = null;
 
     const kpiUsers = document.getElementById('kpi-total-users');
@@ -351,6 +360,11 @@
     const refreshBtn = document.getElementById('ga4-refresh-btn');
     const exportCsvBtn = document.getElementById('ga4-export-csv-btn');
     const rangeBtns = document.querySelectorAll('.ga4-range-btn');
+    const contentTabs = document.querySelectorAll('.ga4-content-tab');
+    const contentCardTitle = document.getElementById('content-card-title');
+    const contentCardIcon = document.getElementById('content-card-icon');
+    const badgeProductsCount = document.getElementById('badge-products-count');
+    const badgePagesCount = document.getElementById('badge-pages-count');
 
     function escapeHtml(str) {
       if (!str) return '';
@@ -671,47 +685,74 @@
         regionsContainer.innerHTML = rHtml;
       }
 
-      // 3. Render Top Pages
-      const topPages = data.top_pages || [];
-      if (topPages.length === 0) {
-        pagesContainer.innerHTML = `
-          <div class="text-center py-5 text-muted">
-            <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 text-secondary"></i>
-            <p class="small mb-0">Belum ada kunjungan halaman tercatat dalam rentang waktu ini.</p>
-          </div>
-        `;
-      } else {
-        let pHtml = '<div class="list-group list-group-flush">';
-        topPages.forEach(function(p, idx) {
-          pHtml += `
-            <div class="list-group-item px-0 py-2 border-bottom d-flex align-items-center justify-content-between gap-3" style="background: transparent;">
-              <div class="d-flex align-items-center gap-2 overflow-hidden">
-                <span class="badge rounded-circle bg-light text-secondary border d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 0.72rem; flex-shrink: 0;">
-                  ${idx + 1}
-                </span>
-                <div class="overflow-hidden">
-                  <div class="fw-medium text-truncate small" style="color: var(--color-text-main);">
-                    ${escapeHtml(p.label)}
-                  </div>
-                  <div class="text-muted text-truncate font-monospace" style="font-size: 0.72rem;">
-                    ${escapeHtml(p.path)}
-                  </div>
-                </div>
-              </div>
-              <div class="text-end flex-shrink-0">
-                <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.76rem;">
-                  <strong>${p.views}</strong> views
-                </span>
-                <span class="text-muted d-block mt-1" style="font-size: 0.68rem;">
-                  ${p.users} users
-                </span>
-              </div>
+      // 3. Render Top Products & Top Pages (Separated with Tabs)
+      function renderContentList() {
+        if (!pagesContainer || !lastLoadedData) return;
+        const isProducts = currentContentType === 'products';
+        const items = isProducts ? (lastLoadedData.top_products || []) : (lastLoadedData.top_pages || []);
+
+        if (contentCardTitle) {
+          contentCardTitle.textContent = isProducts ? 'Katalog Produk Terpopuler' : 'Halaman Web & Navigasi';
+        }
+        if (contentCardIcon) {
+          contentCardIcon.setAttribute('data-lucide', isProducts ? 'package' : 'compass');
+          contentCardIcon.style.color = isProducts ? '#0284C7' : '#D97706';
+        }
+
+        if (items.length === 0) {
+          pagesContainer.innerHTML = `
+            <div class="text-center py-5 text-muted">
+              <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 text-secondary"></i>
+              <p class="small mb-0">${isProducts ? 'Belum ada kunjungan detail produk spesifik dalam rentang ini.' : 'Belum ada kunjungan halaman navigasi tercatat.'}</p>
             </div>
           `;
-        });
-        pHtml += '</div>';
-        pagesContainer.innerHTML = pHtml;
+        } else {
+          let pHtml = '<div class="list-group list-group-flush">';
+          items.forEach(function(p, idx) {
+            pHtml += `
+              <div class="list-group-item px-0 py-2 border-bottom d-flex align-items-center justify-content-between gap-3" style="background: transparent;">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                  <span class="badge rounded-circle bg-light text-secondary border d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 0.72rem; flex-shrink: 0;">
+                    ${idx + 1}
+                  </span>
+                  <div class="overflow-hidden">
+                    <div class="fw-medium text-truncate small" style="color: var(--color-text-main);">
+                      ${escapeHtml(p.label)}
+                    </div>
+                    <div class="text-muted text-truncate font-monospace d-flex align-items-center gap-1" style="font-size: 0.72rem;">
+                      <a href="${escapeHtml(p.path)}" target="_blank" class="text-muted text-decoration-none d-inline-flex align-items-center gap-1 hover-underline" title="Buka tautan ini di tab baru">
+                        <span>${escapeHtml(p.path)}</span>
+                        <i data-lucide="external-link" style="width: 10px; height: 10px;"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-end flex-shrink-0">
+                  <span class="badge bg-light text-dark border px-2 py-1" style="font-size: 0.76rem;">
+                    <strong>${p.views}</strong> views
+                  </span>
+                  <span class="text-muted d-block mt-1" style="font-size: 0.68rem;">
+                    ${p.users} users
+                  </span>
+                </div>
+              </div>
+            `;
+          });
+          pHtml += '</div>';
+          pagesContainer.innerHTML = pHtml;
+        }
+
+        if (window.lucide) { lucide.createIcons(); }
       }
+
+      if (badgeProductsCount) {
+        badgeProductsCount.textContent = (data.top_products || []).length;
+      }
+      if (badgePagesCount) {
+        badgePagesCount.textContent = (data.top_pages || []).length;
+      }
+
+      renderContentList();
 
       // 4. Render Traffic Sources
       if (sourcesContainer) {
@@ -909,9 +950,17 @@
         });
         csv += '\r\n';
 
-        // 3. Produk & Halaman Terpopuler
-        csv += '=== HALAMAN & PRODUK PALING POPULER ===\r\n';
-        csv += 'No,Judul Halaman / Produk,URL Path,Tayangan Halaman,Pengguna Aktif\r\n';
+        // 3. Produk Terpopuler
+        csv += '=== KATALOG PRODUK TERPOPULER ===\r\n';
+        csv += 'No,Nama Produk,URL Path,Tayangan Halaman,Pengguna Aktif\r\n';
+        (lastLoadedData.top_products || []).forEach(function(p, idx) {
+          csv += (idx + 1) + ',"' + p.label.replace(/"/g, '""') + '","' + p.path.replace(/"/g, '""') + '",' + p.views + ',' + p.users + '\r\n';
+        });
+        csv += '\r\n';
+
+        // 3.5. Halaman Web & Navigasi
+        csv += '=== HALAMAN WEB LAINNYA ===\r\n';
+        csv += 'No,Judul Halaman,URL Path,Tayangan Halaman,Pengguna Aktif\r\n';
         (lastLoadedData.top_pages || []).forEach(function(p, idx) {
           csv += (idx + 1) + ',"' + p.label.replace(/"/g, '""') + '","' + p.path.replace(/"/g, '""') + '",' + p.views + ',' + p.users + '\r\n';
         });
@@ -953,6 +1002,18 @@
         this.classList.add('active');
         currentDays = parseInt(this.getAttribute('data-days'), 10) || 30;
         loadData(false);
+      });
+    });
+
+    contentTabs.forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        contentTabs.forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        currentContentType = this.getAttribute('data-type') || 'products';
+        if (lastLoadedData) {
+          renderAnalytics(lastLoadedData);
+        }
       });
     });
 

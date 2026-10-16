@@ -262,6 +262,7 @@ class GoogleAnalyticsService
                 'message' => 'File kredensial Service Account belum terpasang di storage/app/analytics/service-account.json',
                 'regions' => [],
                 'top_pages' => [],
+                'top_products' => [],
                 'sources' => [],
                 'devices' => [],
                 'trends' => [],
@@ -276,6 +277,7 @@ class GoogleAnalyticsService
                 'message' => 'GA4 Property ID belum dikonfigurasi. Masukkan GA4 Property ID di Pengaturan Web atau .env.',
                 'regions' => [],
                 'top_pages' => [],
+                'top_products' => [],
                 'sources' => [],
                 'devices' => [],
                 'trends' => [],
@@ -367,6 +369,7 @@ class GoogleAnalyticsService
                     'message' => $regionsReport['message'] ?? 'Gagal mengambil data dari Google Analytics Data API (Status: '.($regionsReport['status'] ?? 'unknown').')',
                     'regions' => [],
                     'top_pages' => [],
+                    'top_products' => [],
                     'sources' => [],
                     'devices' => [],
                     'trends' => [],
@@ -397,8 +400,9 @@ class GoogleAnalyticsService
                 ];
             }
 
-            // Process Pages
+            // Process Pages & Separate Products
             $topPages = [];
+            $topProducts = [];
             $totalViews = 0;
             foreach ($pagesReport['rows'] ?? [] as $row) {
                 $path = $row['dimensionValues'][0]['value'] ?? '/';
@@ -406,26 +410,46 @@ class GoogleAnalyticsService
                 $users = (int) ($row['metricValues'][1]['value'] ?? 0);
                 $totalViews += $views;
 
+                // Determine if it's a specific product detail page
+                $isProduct = str_starts_with($path, '/produk/') && strlen($path) > 8;
+
                 // Format friendly title
                 $label = $path;
                 if ($path === '/') {
                     $label = 'Beranda (Homepage)';
-                } elseif (str_starts_with($path, '/produk/')) {
+                } elseif ($isProduct) {
                     $slug = substr($path, 8);
-                    $label = 'Produk: '.ucwords(str_replace('-', ' ', $slug));
+                    $label = ucwords(str_replace('-', ' ', $slug));
                 } elseif ($path === '/produk') {
                     $label = 'Katalog Semua Produk';
                 } elseif (str_starts_with($path, '/artikel/')) {
                     $slug = substr($path, 9);
                     $label = 'Artikel: '.ucwords(str_replace('-', ' ', $slug));
+                } elseif ($path === '/layanan') {
+                    $label = 'Layanan & Kalibrasi';
+                } elseif ($path === '/profil') {
+                    $label = 'Profil Perusahaan';
+                } elseif ($path === '/kontak') {
+                    $label = 'Kontak Kami';
+                } elseif ($path === '/cart') {
+                    $label = 'Keranjang RFQ';
+                } elseif (str_starts_with($path, '/sektor')) {
+                    $label = 'Sektor Industri';
                 }
 
-                $topPages[] = [
+                $item = [
                     'path' => $path,
                     'label' => $label,
+                    'is_product' => $isProduct,
                     'views' => $views,
                     'users' => $users,
                 ];
+
+                if ($isProduct) {
+                    $topProducts[] = $item;
+                } else {
+                    $topPages[] = $item;
+                }
             }
 
             // Process Traffic Sources
@@ -513,6 +537,7 @@ class GoogleAnalyticsService
                 'message' => 'OK',
                 'regions' => $regions,
                 'top_pages' => $topPages,
+                'top_products' => $topProducts,
                 'sources' => $sources,
                 'devices' => $devices,
                 'trends' => $trends,
