@@ -264,6 +264,7 @@ class GoogleAnalyticsService
                 'top_pages' => [],
                 'sources' => [],
                 'devices' => [],
+                'trends' => [],
                 'total_users' => 0,
                 'total_views' => 0,
             ];
@@ -277,6 +278,7 @@ class GoogleAnalyticsService
                 'top_pages' => [],
                 'sources' => [],
                 'devices' => [],
+                'trends' => [],
                 'total_users' => 0,
                 'total_views' => 0,
             ];
@@ -345,6 +347,20 @@ class GoogleAnalyticsService
                 'limit' => 5,
             ]);
 
+            // 5. Fetch Daily Visit Trend (Time-Series)
+            $trendReport = $this->runReport([
+                'dateRanges' => [['startDate' => "{$days}daysAgo", 'endDate' => 'today']],
+                'dimensions' => [['name' => 'date']],
+                'metrics' => [
+                    ['name' => 'activeUsers'],
+                    ['name' => 'screenPageViews'],
+                ],
+                'orderBys' => [
+                    ['dimension' => ['dimensionName' => 'date'], 'desc' => false],
+                ],
+                'limit' => 100,
+            ]);
+
             if (($regionsReport['status'] ?? '') !== 'success') {
                 return [
                     'status' => 'error',
@@ -353,6 +369,7 @@ class GoogleAnalyticsService
                     'top_pages' => [],
                     'sources' => [],
                     'devices' => [],
+                    'trends' => [],
                     'total_users' => 0,
                     'total_views' => 0,
                 ];
@@ -463,6 +480,34 @@ class GoogleAnalyticsService
                 ];
             }
 
+            // Process Daily Trends
+            $trends = [];
+            foreach ($trendReport['rows'] ?? [] as $row) {
+                $rawDate = (string) ($row['dimensionValues'][0]['value'] ?? '');
+                $users = (int) ($row['metricValues'][0]['value'] ?? 0);
+                $views = (int) ($row['metricValues'][1]['value'] ?? 0);
+
+                // Format YYYYMMDD -> DD Mon (e.g. 20261014 -> 14 Okt)
+                $label = $rawDate;
+                if (strlen($rawDate) === 8) {
+                    $month = substr($rawDate, 4, 2);
+                    $day = substr($rawDate, 6, 2);
+                    $months = [
+                        '01' => 'Jan', '02' => 'Feb', '03' => 'Mar', '04' => 'Apr',
+                        '05' => 'Mei', '06' => 'Jun', '07' => 'Jul', '08' => 'Agu',
+                        '09' => 'Sep', '10' => 'Okt', '11' => 'Nov', '12' => 'Des',
+                    ];
+                    $label = ltrim($day, '0').' '.($months[$month] ?? $month);
+                }
+
+                $trends[] = [
+                    'date' => $rawDate,
+                    'label' => $label,
+                    'users' => $users,
+                    'views' => $views,
+                ];
+            }
+
             return [
                 'status' => 'success',
                 'message' => 'OK',
@@ -470,6 +515,7 @@ class GoogleAnalyticsService
                 'top_pages' => $topPages,
                 'sources' => $sources,
                 'devices' => $devices,
+                'trends' => $trends,
                 'total_users' => $totalUsers,
                 'total_views' => $totalViews,
                 'max_users' => $maxUsers,

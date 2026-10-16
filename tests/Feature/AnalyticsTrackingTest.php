@@ -99,6 +99,7 @@ class AnalyticsTrackingTest extends TestCase
             'top_pages',
             'sources',
             'devices',
+            'trends',
         ]);
     }
 
@@ -113,6 +114,7 @@ class AnalyticsTrackingTest extends TestCase
         $response = $this->actingAs($this->admin)->get('/admin/analytics');
         $response->assertOk();
         $response->assertSee('Google Analytics 4 • Sebaran Wilayah &amp; Produk', false);
+        $response->assertSee('Tren Kunjungan Harian (Pengguna &amp; Tayangan Halaman)', false);
         $response->assertSee('Kanal Sumber Trafik (Acquisition)', false);
         $response->assertSee('Kategori Perangkat Pengunjung', false);
         $response->assertSee('Ekspor CSV', false);

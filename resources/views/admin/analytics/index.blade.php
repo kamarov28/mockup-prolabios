@@ -179,6 +179,32 @@
     </div>
   </div>
 
+  {{-- ── 3.5. Daily Visit Trends Chart ────────────────────────────────────── --}}
+  <div class="admin-card mb-4">
+    <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <i data-lucide="trending-up" style="width: 16px; height: 16px; color: var(--color-accent, #A6171C);"></i>
+        <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Tren Kunjungan Harian (Pengguna &amp; Tayangan Halaman)</h2>
+      </div>
+      <div class="d-flex align-items-center gap-3" style="font-size: 0.74rem;">
+        <span class="d-flex align-items-center gap-1">
+          <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-accent, #A6171C);"></span>
+          <span class="text-muted">Pengguna Aktif</span>
+        </span>
+        <span class="d-flex align-items-center gap-1">
+          <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #0284C7;"></span>
+          <span class="text-muted">Tayangan Halaman</span>
+        </span>
+      </div>
+    </div>
+    <div class="admin-card-body p-3" id="trend-container">
+      <div class="text-center py-5 text-muted">
+        <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+        <p class="small mb-0">Memuat grafik tren kunjungan harian...</p>
+      </div>
+    </div>
+  </div>
+
   {{-- ── 4. Main Two-Column Analytics Details ──────────────────────────────────── --}}
   <div class="row g-3 mb-4">
 
@@ -316,6 +342,7 @@
     const kpiStatus = document.getElementById('kpi-api-status');
     const kpiSync = document.getElementById('kpi-last-sync');
 
+    const trendContainer = document.getElementById('trend-container');
     const regionsContainer = document.getElementById('regions-container');
     const pagesContainer = document.getElementById('pages-container');
     const sourcesContainer = document.getElementById('sources-container');
@@ -344,6 +371,7 @@
           <p class="small text-muted mb-0">${escapeHtml(msg)}</p>
         </div>
       `;
+      if (trendContainer) trendContainer.innerHTML = errHtml;
       regionsContainer.innerHTML = errHtml;
       pagesContainer.innerHTML = errHtml;
       if (sourcesContainer) sourcesContainer.innerHTML = errHtml;
@@ -377,6 +405,106 @@
       }
       if (kpiSync) {
         kpiSync.textContent = 'Update: ' + (data.updated_at || 'Baru saja');
+      }
+
+      // 1.5. Render Daily Trends Chart
+      if (trendContainer) {
+        const trends = data.trends || [];
+        if (trends.length === 0) {
+          trendContainer.innerHTML = `
+            <div class="text-center py-5 text-muted">
+              <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 text-secondary"></i>
+              <p class="small mb-0">Belum ada tren kunjungan harian tercatat dalam rentang waktu ini.</p>
+            </div>
+          `;
+        } else {
+          const maxVal = Math.max(1, ...trends.map(function(t) { return Math.max(t.users, t.views); }));
+          const width = 940;
+          const height = 180;
+          const padL = 40;
+          const padR = 20;
+          const padT = 20;
+          const padB = 30;
+          const plotW = width - padL - padR;
+          const plotH = height - padT - padB;
+          const count = trends.length;
+
+          function getX(i) {
+            return count <= 1 ? (padL + plotW / 2) : (padL + (i / (count - 1)) * plotW);
+          }
+          function getY(val) {
+            return padT + plotH - (val / maxVal) * plotH;
+          }
+
+          // Points
+          const viewsPoints = trends.map(function(t, i) { return getX(i).toFixed(1) + ',' + getY(t.views).toFixed(1); }).join(' ');
+          const usersPoints = trends.map(function(t, i) { return getX(i).toFixed(1) + ',' + getY(t.users).toFixed(1); }).join(' ');
+
+          // Area path for views
+          const firstX = getX(0).toFixed(1);
+          const lastX = getX(count - 1).toFixed(1);
+          const baseY = (padT + plotH).toFixed(1);
+          const viewsArea = 'M ' + firstX + ',' + baseY + ' L ' + viewsPoints.replace(/ /g, ' L ') + ' L ' + lastX + ',' + baseY + ' Z';
+
+          // Gridlines
+          let gridSvg = '';
+          const gridSteps = 3;
+          for (let g = 0; g <= gridSteps; g++) {
+            const gVal = Math.round((maxVal / gridSteps) * g);
+            const gY = (padT + plotH - (g / gridSteps) * plotH).toFixed(1);
+            gridSvg += `
+              <line x1="${padL}" y1="${gY}" x2="${width - padR}" y2="${gY}" stroke="var(--color-border, #E2E8F0)" stroke-dasharray="3 3" stroke-width="1" />
+              <text x="${padL - 8}" y="${parseFloat(gY) + 3}" text-anchor="end" font-size="10" fill="var(--color-text-secondary, #64748B)">${gVal}</text>
+            `;
+          }
+
+          // X-Axis Date Labels
+          let datesSvg = '';
+          const step = Math.max(1, Math.ceil(count / 8));
+          trends.forEach(function(t, i) {
+            if (i % step === 0 || i === count - 1) {
+              const dx = getX(i).toFixed(1);
+              datesSvg += `
+                <text x="${dx}" y="${height - 6}" text-anchor="middle" font-size="10" fill="var(--color-text-secondary, #64748B)">${escapeHtml(t.label)}</text>
+              `;
+            }
+          });
+
+          // Circles / Dots with Tooltips
+          let dotsSvg = '';
+          trends.forEach(function(t, i) {
+            const x = getX(i).toFixed(1);
+            const yUsers = getY(t.users).toFixed(1);
+            const yViews = getY(t.views).toFixed(1);
+            dotsSvg += `
+              <circle cx="${x}" cy="${yViews}" r="3.5" fill="#0284C7" stroke="#FFFFFF" stroke-width="1.5">
+                <title>${escapeHtml(t.label)}: ${t.views} tayangan halaman</title>
+              </circle>
+              <circle cx="${x}" cy="${yUsers}" r="3.5" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="1.5">
+                <title>${escapeHtml(t.label)}: ${t.users} pengguna aktif</title>
+              </circle>
+            `;
+          });
+
+          trendContainer.innerHTML = `
+            <div class="w-100 overflow-x-auto">
+              <svg viewBox="0 0 ${width} ${height}" class="w-100" style="min-width: 600px; height: auto; display: block;" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0284C7" stop-opacity="0.25" />
+                    <stop offset="100%" stop-color="#0284C7" stop-opacity="0.0" />
+                  </linearGradient>
+                </defs>
+                ${gridSvg}
+                <path d="${viewsArea}" fill="url(#viewsGradient)" />
+                <polyline fill="none" stroke="#0284C7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${viewsPoints}" />
+                <polyline fill="none" stroke="var(--color-accent, #A6171C)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${usersPoints}" />
+                ${dotsSvg}
+                ${datesSvg}
+              </svg>
+            </div>
+          `;
+        }
       }
 
       // 2. Render Regions
@@ -552,6 +680,14 @@
     }
 
     function loadData(forceRefresh = false) {
+      if (trendContainer) {
+        trendContainer.innerHTML = `
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+            <p class="small mb-0">Memuat grafik tren kunjungan harian (${currentDays} hari)...</p>
+          </div>
+        `;
+      }
       regionsContainer.innerHTML = `
         <div class="text-center py-5 text-muted">
           <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
@@ -627,6 +763,14 @@
         csv += 'Pengguna Aktif,' + (lastLoadedData.total_users || 0) + '\r\n';
         csv += 'Total Tayangan Halaman,' + (lastLoadedData.total_views || 0) + '\r\n';
         csv += 'Rasio Tayangan per User,' + ((lastLoadedData.total_users || 0) > 0 ? (lastLoadedData.total_views / lastLoadedData.total_users).toFixed(2) : 0) + '\r\n\r\n';
+
+        // 1.5. Tren Kunjungan Harian
+        csv += '=== TREN KUNJUNGAN HARIAN ===\r\n';
+        csv += 'Tanggal,Label,Pengguna Aktif,Tayangan Halaman\r\n';
+        (lastLoadedData.trends || []).forEach(function(t) {
+          csv += '"' + t.date + '","' + t.label + '",' + t.users + ',' + t.views + '\r\n';
+        });
+        csv += '\r\n';
 
         // 2. Wilayah
         csv += '=== SEBARAN WILAYAH (PROVINSI) ===\r\n';
