@@ -133,8 +133,8 @@
                             </span>
                           </td>
                           <td>
-                            <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;" title="Ketersediaan: Stock Indefinite">
-                              <i data-lucide="package-check" style="width: 14px; height: 14px;"></i> Stock Indefinite
+                            <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;" title="Ketersediaan: Ready Indefinite">
+                              <i data-lucide="package-check" style="width: 14px; height: 14px;"></i> Ready Indefinite
                             </span>
                           </td>
                           <td class="text-end">

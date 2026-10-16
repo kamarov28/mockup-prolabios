@@ -93,7 +93,7 @@
                     @endif
 
                     <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                      <i data-lucide="package-check"></i> Stock Indefinite
+                      <i data-lucide="package-check"></i> Ready Indefinite
                     </span>
                   </div>
                 </div>

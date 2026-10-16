@@ -305,15 +305,17 @@
   .print-hide {
     display: none !important;
   }
-  body {
+  body,
+  .cart-page-bg {
     background: #FFFFFF !important;
     color: #000000 !important;
+    padding: 0 !important;
   }
   .section-main {
     padding: 0 !important;
   }
   .rfq-success-card {
-    border: 1px solid #CCCCCC !important;
+    border: 1px solid #CBD5E1 !important;
     box-shadow: none !important;
     max-width: 100% !important;
     margin: 0 auto !important;

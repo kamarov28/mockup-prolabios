@@ -26,6 +26,9 @@
        target="_blank" rel="noopener" class="admin-btn admin-btn-primary d-inline-flex align-items-center gap-1" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
       <x-brand-icon name="whatsapp" size="16" /> Hubungi via WhatsApp
     </a>
+    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1" onclick="copyWaDraft(this)" id="btn-copy-wa-draft" title="Salin draf rincian pengadaan untuk dikirim via WhatsApp">
+      <i data-lucide="copy"></i> <span class="copy-label">Salin Draf WA</span>
+    </button>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-outline">
       <i data-lucide="mail"></i> Kirim Email
     </a>
@@ -207,10 +210,27 @@
 
 </div>
 
+<textarea id="rfq-wa-draft-content" class="d-none" readonly aria-hidden="true">{{ $rfq->whatsapp_followup_text }}</textarea>
+
 @endsection
 
 @section('admin_scripts')
 <script @nonce>
+  function copyWaDraft(btn) {
+    const el = document.getElementById('rfq-wa-draft-content');
+    if (!el) return;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(el.value).then(function() {
+        const label = btn.querySelector('.copy-label');
+        if (label) {
+          const original = label.textContent;
+          label.textContent = 'Draf Tersalin!';
+          setTimeout(function() { label.textContent = original; }, 2000);
+        }
+      });
+    }
+  }
+
   document.querySelectorAll('.form-delete').forEach(form => {
     form.addEventListener('submit', function(e) {
       e.preventDefault();

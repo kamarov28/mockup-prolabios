@@ -153,15 +153,15 @@
 
                     @php
                       $catDisplay = $product->categoryRelation?->name
-                        ?? (!empty($product['category']) ? ucwords(str_replace('-', ' ', (string) $product['category'])) : '-');
+                        ?? (!empty($product['category']) ? ucwords(str_replace('-', ' ', (string) $product['category'])) : '—');
                       $subCatDisplay = $product->subCategoryRelation?->name
-                        ?? (!empty($product['sub_category']) ? ucwords(str_replace('-', ' ', (string) $product['sub_category'])) : '-');
+                        ?? (!empty($product['sub_category']) ? ucwords(str_replace('-', ' ', (string) $product['sub_category'])) : '—');
                       $sectorDisplay = (isset($product->sectors) && $product->sectors->isNotEmpty())
                         ? $product->sectors->pluck('name')->implode(', ')
-                        : (!empty($product['sector']) ? ucwords(str_replace('-', ' ', (string) $product['sector'])) : '-');
-                      $packagingDisplay = !empty($product['packaging']) ? $product['packaging'] : ($product->packaging ?? '-');
-                      $functionDisplay = !empty($product['function']) ? $product['function'] : ($product->function ?? '-');
-                      $refMethodDisplay = !empty($product['reference_method']) ? $product['reference_method'] : ($product->reference_method ?? '-');
+                        : (!empty($product['sector']) ? ucwords(str_replace('-', ' ', (string) $product['sector'])) : '—');
+                      $packagingDisplay = !empty($product['packaging']) ? $product['packaging'] : ($product->packaging ?? '—');
+                      $functionDisplay = !empty($product['function']) ? $product['function'] : ($product->function ?? '—');
+                      $refMethodDisplay = !empty($product['reference_method']) ? $product['reference_method'] : ($product->reference_method ?? '—');
                     @endphp
 
                     {{-- Spesifikasi Teknis Produk (2 Kolom, 6 Baris) --}}
@@ -218,7 +218,7 @@
                     </div>
                     <div>
                       <span class="nb-badge-stock" style="background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0;">
-                        <i data-lucide="package-check"></i> Stock Indefinite
+                        <i data-lucide="package-check"></i> Ready Indefinite
                       </span>
                     </div>
                   </div>
@@ -356,7 +356,7 @@
                 <div class="text-truncate">
                   <div class="fw-bold small text-truncate" style="color: var(--nb-ink); font-size: 0.85rem;">{{ $product['title'] }}</div>
                   <div class="text-muted" style="font-size: 0.75rem;">
-                    <span class="text-success fw-medium">Stock Indefinite</span>
+                    <span class="text-success fw-medium">Ready Indefinite</span>
                   </div>
                 </div>
                 <button type="button" onclick="document.getElementById('beli-produk-form').scrollIntoView({behavior: 'smooth', block: 'center'})" class="nb-btn nb-btn-primary flex-shrink-0" style="height: 38px; padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">

@@ -7,17 +7,34 @@
   <div class="container py-4 text-center">
     <div class="card rfq-success-card mx-auto p-4 p-md-5">
 
+      <!-- Formal Letterhead (Visible Only When Printing) -->
+      <div class="d-none d-print-block text-start border-bottom pb-3 mb-4" style="border-bottom: 2px solid #0F172A !important;">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h2 class="h5 fw-bold mb-1" style="color: #0F172A; letter-spacing: 0.5px;">PT. PROLABIOS MITRA ANALITIKA</h2>
+            <p class="small mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;">
+              Distributor Resmi Media Mikrobiologi, Reagen Analitika &amp; Instrumen Laboratorium<br>
+              Telp: 021-3874-1447 / 021-8792-9433 &bull; Email: marketing@prolabios.com &bull; Web: www.prolabios.com
+            </p>
+          </div>
+          <div class="text-end">
+            <span class="badge border border-dark text-dark px-2 py-1" style="font-size: 0.75rem;">BUKTI PENGAJUAN RFQ</span>
+            <div class="small text-muted mt-1" style="font-size: 0.75rem;">Tgl: {{ $rfq->created_at ? $rfq->created_at->format('d/m/Y H:i') : date('d/m/Y') }} WIB</div>
+          </div>
+        </div>
+      </div>
+
       <!-- Icon Check Circle -->
-      <div class="nb-status-icon-box mb-3 mx-auto">
+      <div class="nb-status-icon-box mb-3 mx-auto d-print-none">
         <i data-lucide="check-circle-2"></i>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3 d-print-none">
         <span class="nb-badge" style="font-size: 0.72rem;">PENGAJUAN BERHASIL DIKIRIM</span>
       </div>
 
-      <h1 class="profil-section-title mb-2" style="font-size: 2rem !important; color: var(--nb-ink);">Terima Kasih, {{ $rfq->name }}!</h1>
-      <p class="profil-body-text mb-4" style="font-size: 0.92rem; line-height: 1.6; color: var(--nb-muted);">
+      <h1 class="profil-section-title mb-2 d-print-none" style="font-size: 2rem !important; color: var(--nb-ink);">Terima Kasih, {{ $rfq->name }}!</h1>
+      <p class="profil-body-text mb-4 d-print-none" style="font-size: 0.92rem; line-height: 1.6; color: var(--nb-muted);">
         Pengajuan penawaran harga Anda dengan nomor pengajuan <strong style="color: var(--nb-primary);">{{ $rfq->rfq_number }}</strong> telah berhasil kami terima. Tim sales kami akan segera menghubungi Anda via Email atau WhatsApp.
       </p>
 
@@ -61,6 +78,19 @@
               </li>
             @endforeach
           </ul>
+        </div>
+      </div>
+
+      <!-- Formal Footer (Visible Only When Printing) -->
+      <div class="d-none d-print-block text-start pt-3 mt-4 border-top small text-muted" style="border-top: 1px dashed #CCCCCC !important; font-size: 0.75rem;">
+        <div class="row">
+          <div class="col-8">
+            <em>Dokumen ini merupakan bukti resmi permohonan pengajuan penawaran harga (RFQ) yang diterbitkan secara elektronik melalui sistem katalog resmi PT Prolabios Mitra Analitika. Surat penawaran harga resmi (Quotation) bertanda tangan dan bermeterai akan dikirimkan oleh Tim Sales melalui email terdaftar.</em>
+          </div>
+          <div class="col-4 text-end">
+            <div style="height: 40px;"></div>
+            <strong class="d-block" style="color: #0F172A;">PT. Prolabios Mitra Analitika</strong>
+          </div>
         </div>
       </div>
 

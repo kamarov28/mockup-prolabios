@@ -174,4 +174,28 @@ class AdminRfqTest extends TestCase
         $this->assertDatabaseMissing('rfq_items', ['rfq_id' => $this->rfq->id]);
         $this->assertDatabaseMissing('rfq_items', ['rfq_id' => $rfq2->id]);
     }
+
+    public function test_rfq_normalizes_indonesian_phone_to_whatsapp_format(): void
+    {
+        $this->rfq->phone_wa = '0812-9998-8877';
+        $this->assertEquals('6281299988877', $this->rfq->normalized_whatsapp_number);
+        $this->assertStringContainsString('https://wa.me/6281299988877', $this->rfq->whatsapp_url);
+
+        $this->rfq->phone_wa = '+62 812-3333-4444';
+        $this->assertEquals('6281233334444', $this->rfq->normalized_whatsapp_number);
+
+        $this->rfq->phone_wa = '85712345678';
+        $this->assertEquals('6285712345678', $this->rfq->normalized_whatsapp_number);
+    }
+
+    public function test_rfq_detail_page_has_whatsapp_draft_copy_and_items(): void
+    {
+        $response = $this->actingAs($this->adminUser)->get(route('admin.rfqs.show', $this->rfq->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('btn-copy-wa-draft');
+        $response->assertSee('copyWaDraft', false);
+        $response->assertSee('rfq-wa-draft-content');
+        $this->assertStringContainsString('Test Media (Cat. TM-01) - 4 Unit', $this->rfq->whatsapp_followup_text);
+    }
 }
