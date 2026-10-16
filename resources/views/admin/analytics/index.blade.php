@@ -421,10 +421,10 @@
         } else {
           const maxVal = Math.max(1, ...trends.map(function(t) { return Math.max(t.users, t.views); }));
           const width = 940;
-          const height = 180;
+          const height = 195;
           const padL = 40;
           const padR = 20;
-          const padT = 20;
+          const padT = 32;
           const padB = 30;
           const plotW = width - padL - padR;
           const plotH = height - padT - padB;
@@ -496,14 +496,14 @@
           });
 
           trendContainer.innerHTML = `
-            <div class="w-100 overflow-x-auto position-relative" style="min-height: ${height}px;">
-              <div id="trend-tooltip" style="position: absolute; display: none; pointer-events: none; z-index: 25; background: #0F172A; color: #FFFFFF; padding: 6px 10px; border-radius: 6px; font-size: 0.72rem; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transform: translate(-50%, -125%); white-space: nowrap;">
-                <div id="trend-tooltip-date" class="fw-bold mb-1" style="font-size: 0.74rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 2px;"></div>
-                <div class="d-flex align-items-center gap-2">
-                  <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 7px; height: 7px; border-radius: 2px; background: #F87171;"></span><span id="trend-tooltip-users"></span> user</span>
-                  <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 7px; height: 7px; border-radius: 2px; background: #38BDF8;"></span><span id="trend-tooltip-views"></span> views</span>
-                </div>
+            <div id="trend-tooltip" style="position: absolute; opacity: 0; pointer-events: none; z-index: 50; background: #0F172A; color: #FFFFFF; padding: 7px 12px; border-radius: 6px; font-size: 0.74rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transform: translate(-50%, -125%) scale(0.92); white-space: nowrap; transition: left 0.14s cubic-bezier(0.16, 1, 0.3, 1), top 0.14s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, transform 0.18s cubic-bezier(0.16, 1, 0.3, 1); will-change: left, top, opacity, transform;">
+              <div id="trend-tooltip-date" class="fw-bold mb-1" style="font-size: 0.76rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 3px;"></div>
+              <div class="d-flex align-items-center gap-3">
+                <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 8px; height: 8px; border-radius: 2px; background: #F87171;"></span><span id="trend-tooltip-users" class="fw-bold"></span> user</span>
+                <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 8px; height: 8px; border-radius: 2px; background: #38BDF8;"></span><span id="trend-tooltip-views" class="fw-bold"></span> views</span>
               </div>
+            </div>
+            <div class="w-100 overflow-x-auto" style="min-height: ${height}px;">
               <svg id="trend-svg" viewBox="0 0 ${width} ${height}" class="w-100" style="min-width: 600px; height: auto; display: block;" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
@@ -517,9 +517,9 @@
                 <polyline fill="none" stroke="var(--color-accent, #A6171C)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${usersPoints}" />
                 ${dotsSvg}
                 ${datesSvg}
-                <line id="trend-hover-line" y1="${padT}" y2="${height - padB}" stroke="#64748B" stroke-width="1.5" stroke-dasharray="3 3" style="display: none; pointer-events: none;"></line>
-                <circle id="trend-hover-views-dot" r="5.5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" style="display: none; pointer-events: none;"></circle>
-                <circle id="trend-hover-users-dot" r="5.5" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="2" style="display: none; pointer-events: none;"></circle>
+                <line id="trend-hover-line" y1="${padT}" y2="${height - padB}" stroke="#64748B" stroke-width="1.5" stroke-dasharray="3 3" style="opacity: 0; pointer-events: none; transition: x1 0.14s cubic-bezier(0.16, 1, 0.3, 1), x2 0.14s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;"></line>
+                <circle id="trend-hover-views-dot" r="6" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" style="opacity: 0; pointer-events: none; transition: cx 0.14s cubic-bezier(0.16, 1, 0.3, 1), cy 0.14s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;"></circle>
+                <circle id="trend-hover-users-dot" r="6" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="2" style="opacity: 0; pointer-events: none; transition: cx 0.14s cubic-bezier(0.16, 1, 0.3, 1), cy 0.14s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;"></circle>
                 ${hitboxesSvg}
               </svg>
             </div>
@@ -546,34 +546,43 @@
             if (hoverLine) {
               hoverLine.setAttribute('x1', x.toFixed(1));
               hoverLine.setAttribute('x2', x.toFixed(1));
-              hoverLine.style.display = 'block';
+              hoverLine.style.opacity = '1';
             }
 
             if (hoverViewsDot) {
               hoverViewsDot.setAttribute('cx', x.toFixed(1));
               hoverViewsDot.setAttribute('cy', yViews.toFixed(1));
-              hoverViewsDot.style.display = 'block';
+              hoverViewsDot.style.opacity = '1';
             }
 
             if (hoverUsersDot) {
               hoverUsersDot.setAttribute('cx', x.toFixed(1));
               hoverUsersDot.setAttribute('cy', yUsers.toFixed(1));
-              hoverUsersDot.style.display = 'block';
+              hoverUsersDot.style.opacity = '1';
             }
 
-            if (tooltip && trendSvg) {
+            if (tooltip && trendSvg && trendContainer) {
+              const cardRect = trendContainer.getBoundingClientRect();
               const svgRect = trendSvg.getBoundingClientRect();
               const scaleX = svgRect.width / width;
               const scaleY = svgRect.height / height;
-              const posX = x * scaleX;
-              const posY = Math.min(yUsers, yViews) * scaleY;
 
-              tooltip.style.left = posX + 'px';
-              tooltip.style.top = posY + 'px';
+              // Calculate coordinates relative to trendContainer
+              const rawLeft = (svgRect.left - cardRect.left) + (x * scaleX);
+              const rawTop = (svgRect.top - cardRect.top) + (Math.min(yUsers, yViews) * scaleY);
+
+              // Clamping to avoid clipping at left/right edges
+              const tipW = tooltip.offsetWidth || 150;
+              const clampedLeft = Math.max(tipW / 2 + 12, Math.min(cardRect.width - tipW / 2 - 12, rawLeft));
+              const clampedTop = Math.max(26, rawTop);
+
+              tooltip.style.left = clampedLeft + 'px';
+              tooltip.style.top = clampedTop + 'px';
               if (tooltipDate) tooltipDate.textContent = t.label + ' (' + t.date + ')';
               if (tooltipUsers) tooltipUsers.textContent = t.users;
               if (tooltipViews) tooltipViews.textContent = t.views;
-              tooltip.style.display = 'block';
+              tooltip.style.opacity = '1';
+              tooltip.style.transform = 'translate(-50%, -125%) scale(1)';
             }
 
             if (hoverIndicator) {
@@ -583,10 +592,13 @@
           }
 
           function hidePoint() {
-            if (hoverLine) hoverLine.style.display = 'none';
-            if (hoverViewsDot) hoverViewsDot.style.display = 'none';
-            if (hoverUsersDot) hoverUsersDot.style.display = 'none';
-            if (tooltip) tooltip.style.display = 'none';
+            if (hoverLine) hoverLine.style.opacity = '0';
+            if (hoverViewsDot) hoverViewsDot.style.opacity = '0';
+            if (hoverUsersDot) hoverUsersDot.style.opacity = '0';
+            if (tooltip) {
+              tooltip.style.opacity = '0';
+              tooltip.style.transform = 'translate(-50%, -115%) scale(0.92)';
+            }
             if (hoverIndicator) hoverIndicator.style.display = 'none';
           }
 
