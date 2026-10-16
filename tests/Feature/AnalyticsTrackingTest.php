@@ -95,6 +95,10 @@ class AnalyticsTrackingTest extends TestCase
         $response->assertJsonStructure([
             'status',
             'message',
+            'regions',
+            'top_pages',
+            'sources',
+            'devices',
         ]);
     }
 
@@ -109,6 +113,9 @@ class AnalyticsTrackingTest extends TestCase
         $response = $this->actingAs($this->admin)->get('/admin/analytics');
         $response->assertOk();
         $response->assertSee('Google Analytics 4 • Sebaran Wilayah &amp; Produk', false);
+        $response->assertSee('Kanal Sumber Trafik (Acquisition)', false);
+        $response->assertSee('Kategori Perangkat Pengunjung', false);
+        $response->assertSee('Ekspor CSV', false);
     }
 
     public function test_super_admin_can_update_property_via_dedicated_analytics_endpoint(): void

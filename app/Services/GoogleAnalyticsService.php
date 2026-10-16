@@ -262,6 +262,8 @@ class GoogleAnalyticsService
                 'message' => 'File kredensial Service Account belum terpasang di storage/app/analytics/service-account.json',
                 'regions' => [],
                 'top_pages' => [],
+                'sources' => [],
+                'devices' => [],
                 'total_users' => 0,
                 'total_views' => 0,
             ];
@@ -273,6 +275,8 @@ class GoogleAnalyticsService
                 'message' => 'GA4 Property ID belum dikonfigurasi. Masukkan GA4 Property ID di Pengaturan Web atau .env.',
                 'regions' => [],
                 'top_pages' => [],
+                'sources' => [],
+                'devices' => [],
                 'total_users' => 0,
                 'total_views' => 0,
             ];
@@ -313,12 +317,42 @@ class GoogleAnalyticsService
                 'limit' => 15,
             ]);
 
+            // 3. Fetch Traffic Sources (Acquisition Channels)
+            $sourcesReport = $this->runReport([
+                'dateRanges' => [['startDate' => "{$days}daysAgo", 'endDate' => 'today']],
+                'dimensions' => [['name' => 'sessionSourceMedium']],
+                'metrics' => [
+                    ['name' => 'activeUsers'],
+                    ['name' => 'sessions'],
+                ],
+                'orderBys' => [
+                    ['metric' => ['metricName' => 'activeUsers'], 'desc' => true],
+                ],
+                'limit' => 10,
+            ]);
+
+            // 4. Fetch Devices (Desktop vs Mobile vs Tablet)
+            $devicesReport = $this->runReport([
+                'dateRanges' => [['startDate' => "{$days}daysAgo", 'endDate' => 'today']],
+                'dimensions' => [['name' => 'deviceCategory']],
+                'metrics' => [
+                    ['name' => 'activeUsers'],
+                    ['name' => 'screenPageViews'],
+                ],
+                'orderBys' => [
+                    ['metric' => ['metricName' => 'activeUsers'], 'desc' => true],
+                ],
+                'limit' => 5,
+            ]);
+
             if (($regionsReport['status'] ?? '') !== 'success') {
                 return [
                     'status' => 'error',
                     'message' => $regionsReport['message'] ?? 'Gagal mengambil data dari Google Analytics Data API (Status: '.($regionsReport['status'] ?? 'unknown').')',
                     'regions' => [],
                     'top_pages' => [],
+                    'sources' => [],
+                    'devices' => [],
                     'total_users' => 0,
                     'total_views' => 0,
                 ];
@@ -377,11 +411,65 @@ class GoogleAnalyticsService
                 ];
             }
 
+            // Process Traffic Sources
+            $sources = [];
+            foreach ($sourcesReport['rows'] ?? [] as $row) {
+                $rawSource = trim((string) ($row['dimensionValues'][0]['value'] ?? ''));
+                if ($rawSource === '' || $rawSource === '(not set)') {
+                    $rawSource = 'Direct / Tidak Terlacak';
+                }
+                $users = (int) ($row['metricValues'][0]['value'] ?? 0);
+                $sessions = (int) ($row['metricValues'][1]['value'] ?? 0);
+
+                // Format friendly source label
+                $friendlyName = $rawSource;
+                if ($rawSource === '(direct) / (none)') {
+                    $friendlyName = 'Direct (URL Langsung / Bookmark)';
+                } elseif (str_contains(strtolower($rawSource), 'google / organic')) {
+                    $friendlyName = 'Google Search (Organik)';
+                } elseif (str_contains(strtolower($rawSource), 'bing / organic')) {
+                    $friendlyName = 'Bing Search (Organik)';
+                } elseif (str_contains(strtolower($rawSource), 'whatsapp')) {
+                    $friendlyName = 'WhatsApp Chat / Proposal';
+                }
+
+                $sources[] = [
+                    'source' => $rawSource,
+                    'label' => $friendlyName,
+                    'users' => $users,
+                    'sessions' => $sessions,
+                ];
+            }
+
+            // Process Device Categories
+            $devices = [];
+            foreach ($devicesReport['rows'] ?? [] as $row) {
+                $category = strtolower(trim((string) ($row['dimensionValues'][0]['value'] ?? 'desktop')));
+                $users = (int) ($row['metricValues'][0]['value'] ?? 0);
+                $views = (int) ($row['metricValues'][1]['value'] ?? 0);
+
+                $label = match ($category) {
+                    'desktop' => 'Komputer / Laptop (Desktop)',
+                    'mobile' => 'Ponsel Pintar (Mobile)',
+                    'tablet' => 'Tablet',
+                    default => ucfirst($category),
+                };
+
+                $devices[] = [
+                    'category' => $category,
+                    'label' => $label,
+                    'users' => $users,
+                    'views' => $views,
+                ];
+            }
+
             return [
                 'status' => 'success',
                 'message' => 'OK',
                 'regions' => $regions,
                 'top_pages' => $topPages,
+                'sources' => $sources,
+                'devices' => $devices,
                 'total_users' => $totalUsers,
                 'total_views' => $totalViews,
                 'max_users' => $maxUsers,

@@ -19,6 +19,16 @@
         <button type="button" class="dash-segment-btn ga4-range-btn" data-days="90">90 Hari</button>
       </div>
 
+      <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="ga4-export-csv-btn">
+        <i data-lucide="download"></i>
+        <span>Ekspor CSV</span>
+      </button>
+
+      <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" onclick="window.print()">
+        <i data-lucide="printer"></i>
+        <span>Cetak</span>
+      </button>
+
       <button type="button" class="admin-btn admin-btn-outline admin-btn-sm" id="ga4-refresh-btn">
         <i data-lucide="refresh-cw"></i>
         <span>Segarkan</span>
@@ -212,7 +222,50 @@
 
   </div>
 
-  {{-- ── 5. Technical Diagnostics & Credentials Info ─────────────────────────── --}}
+  {{-- ── 5. Secondary Details: Sumber Trafik & Kategori Perangkat ────────────── --}}
+  <div class="row g-3 mb-4">
+
+    {{-- Left Column: Kanal Sumber Trafik --}}
+    <div class="col-lg-6">
+      <div class="admin-card h-100">
+        <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <i data-lucide="share-2" style="width: 16px; height: 16px; color: #D97706;"></i>
+            <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Kanal Sumber Trafik (Acquisition)</h2>
+          </div>
+          <span class="text-muted" style="font-size: 0.74rem;" id="sources-count-badge">Sumber Terdeteksi</span>
+        </div>
+        <div class="admin-card-body p-3" id="sources-container">
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+            <p class="small mb-0">Memuat data kanal sumber trafik...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{-- Right Column: Kategori Perangkat --}}
+    <div class="col-lg-6">
+      <div class="admin-card h-100">
+        <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center gap-2">
+            <i data-lucide="monitor" style="width: 16px; height: 16px; color: #16A34A;"></i>
+            <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Kategori Perangkat Pengunjung</h2>
+          </div>
+          <span class="text-muted" style="font-size: 0.74rem;" id="devices-count-badge">Platform Pembeli</span>
+        </div>
+        <div class="admin-card-body p-3" id="devices-container">
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+            <p class="small mb-0">Memuat data kategori perangkat...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {{-- ── 6. Technical Diagnostics & Credentials Info ─────────────────────────── --}}
   <div class="admin-card">
     <div class="admin-card-header py-2 px-3">
       <div class="d-flex align-items-center gap-2">
@@ -255,6 +308,7 @@
 <script @nonce>
   document.addEventListener('DOMContentLoaded', function() {
     let currentDays = 30;
+    let lastLoadedData = null;
 
     const kpiUsers = document.getElementById('kpi-total-users');
     const kpiViews = document.getElementById('kpi-total-views');
@@ -264,7 +318,10 @@
 
     const regionsContainer = document.getElementById('regions-container');
     const pagesContainer = document.getElementById('pages-container');
+    const sourcesContainer = document.getElementById('sources-container');
+    const devicesContainer = document.getElementById('devices-container');
     const refreshBtn = document.getElementById('ga4-refresh-btn');
+    const exportCsvBtn = document.getElementById('ga4-export-csv-btn');
     const rangeBtns = document.querySelectorAll('.ga4-range-btn');
 
     function escapeHtml(str) {
@@ -289,6 +346,8 @@
       `;
       regionsContainer.innerHTML = errHtml;
       pagesContainer.innerHTML = errHtml;
+      if (sourcesContainer) sourcesContainer.innerHTML = errHtml;
+      if (devicesContainer) devicesContainer.innerHTML = errHtml;
       if (kpiStatus) {
         kpiStatus.textContent = 'Terhambat';
         kpiStatus.style.color = '#DC2626';
@@ -301,6 +360,8 @@
         renderError(data.message || 'Respons tidak valid dari server.');
         return;
       }
+
+      lastLoadedData = data;
 
       // 1. Update KPIs
       const totalUsers = data.total_users || 0;
@@ -396,6 +457,97 @@
         pagesContainer.innerHTML = pHtml;
       }
 
+      // 4. Render Traffic Sources
+      if (sourcesContainer) {
+        const sources = data.sources || [];
+        const sourcesBadge = document.getElementById('sources-count-badge');
+        if (sourcesBadge) {
+          sourcesBadge.textContent = sources.length + ' Sumber Terdeteksi';
+        }
+
+        if (sources.length === 0) {
+          sourcesContainer.innerHTML = `
+            <div class="text-center py-5 text-muted">
+              <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 text-secondary"></i>
+              <p class="small mb-0">Belum ada kanal sumber trafik tercatat dalam rentang waktu ini.</p>
+            </div>
+          `;
+        } else {
+          let sHtml = '<div class="d-flex flex-column gap-3">';
+          const maxSourceUsers = Math.max(1, ...sources.map(function(s) { return s.users; }));
+          sources.forEach(function(s) {
+            const pct = Math.min(100, Math.round((s.users / maxSourceUsers) * 100));
+            const share = totalUsers > 0 ? Math.round((s.users / totalUsers) * 100) : 0;
+            sHtml += `
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1 small">
+                  <span class="fw-semibold text-truncate" style="max-width: 240px; color: var(--color-text-main);">
+                    ${escapeHtml(s.label)}
+                  </span>
+                  <span class="text-muted" style="font-size: 0.76rem;">
+                    <strong>${s.users}</strong> pengunjung (${share}%) • ${s.sessions} sesi
+                  </span>
+                </div>
+                <div class="progress" style="height: 7px; background-color: var(--color-surface-2, #E2E8F0); border-radius: 4px;">
+                  <div class="progress-bar" style="width: ${pct}%; background-color: #D97706; border-radius: 4px;"></div>
+                </div>
+              </div>
+            `;
+          });
+          sHtml += '</div>';
+          sourcesContainer.innerHTML = sHtml;
+        }
+      }
+
+      // 5. Render Device Categories
+      if (devicesContainer) {
+        const devices = data.devices || [];
+        if (devices.length === 0) {
+          devicesContainer.innerHTML = `
+            <div class="text-center py-5 text-muted">
+              <i data-lucide="inbox" style="width: 28px; height: 28px;" class="mb-2 text-secondary"></i>
+              <p class="small mb-0">Belum ada data perangkat tercatat dalam rentang waktu ini.</p>
+            </div>
+          `;
+        } else {
+          let dHtml = '<div class="row g-3">';
+          devices.forEach(function(d) {
+            const share = totalUsers > 0 ? Math.round((d.users / totalUsers) * 100) : 0;
+            let icon = 'monitor';
+            let iconBg = '#E0F2FE';
+            let iconColor = '#0284C7';
+            if (d.category === 'mobile') {
+              icon = 'smartphone';
+              iconBg = '#DCFCE7';
+              iconColor = '#16A34A';
+            } else if (d.category === 'tablet') {
+              icon = 'tablet';
+              iconBg = '#FEF3C7';
+              iconColor = '#D97706';
+            }
+
+            dHtml += `
+              <div class="col-sm-6 col-md-4">
+                <div class="p-3 rounded border text-center h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2, #F8FAFC);">
+                  <div>
+                    <div class="rounded-circle mx-auto d-inline-flex p-2 mb-2" style="background: ${iconBg}; color: ${iconColor};">
+                      <i data-lucide="${icon}" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="fw-semibold small" style="color: var(--color-text-main);">${escapeHtml(d.label)}</div>
+                  </div>
+                  <div class="mt-3">
+                    <div class="h5 fw-bold mb-0" style="color: var(--color-text-main);">${d.users.toLocaleString('id-ID')}</div>
+                    <span class="text-muted" style="font-size: 0.72rem;">${share}% dari total (${d.views} tayangan)</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          dHtml += '</div>';
+          devicesContainer.innerHTML = dHtml;
+        }
+      }
+
       if (window.lucide) { lucide.createIcons(); }
     }
 
@@ -412,6 +564,22 @@
           <p class="small mb-0">Memuat data halaman terpopuler (${currentDays} hari)...</p>
         </div>
       `;
+      if (sourcesContainer) {
+        sourcesContainer.innerHTML = `
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+            <p class="small mb-0">Memuat data kanal sumber trafik (${currentDays} hari)...</p>
+          </div>
+        `;
+      }
+      if (devicesContainer) {
+        devicesContainer.innerHTML = `
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+            <p class="small mb-0">Memuat data kategori perangkat (${currentDays} hari)...</p>
+          </div>
+        `;
+      }
 
       const params = new URLSearchParams({
         days: currentDays,
@@ -437,6 +605,72 @@
       refreshBtn.addEventListener('click', function(e) {
         e.preventDefault();
         loadData(true);
+      });
+    }
+
+    if (exportCsvBtn) {
+      exportCsvBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!lastLoadedData || lastLoadedData.status !== 'success') {
+          alert('Data analitik belum selesai dimuat. Tunggu hingga data tampil di layar.');
+          return;
+        }
+
+        let csv = '\uFEFF'; // BOM for Excel UTF-8 recognition
+        csv += 'LAPORAN ANALITIK GOOGLE ANALYTICS 4 - PT PROLABIOS MITRA ANALITIKA\r\n';
+        csv += 'Rentang Waktu: ' + currentDays + ' Hari Terakhir\r\n';
+        csv += 'Diekspor Pada: ' + new Date().toLocaleString('id-ID') + '\r\n\r\n';
+
+        // 1. KPI
+        csv += '=== RINGKASAN METRIK ===\r\n';
+        csv += 'Metrik,Nilai\r\n';
+        csv += 'Pengguna Aktif,' + (lastLoadedData.total_users || 0) + '\r\n';
+        csv += 'Total Tayangan Halaman,' + (lastLoadedData.total_views || 0) + '\r\n';
+        csv += 'Rasio Tayangan per User,' + ((lastLoadedData.total_users || 0) > 0 ? (lastLoadedData.total_views / lastLoadedData.total_users).toFixed(2) : 0) + '\r\n\r\n';
+
+        // 2. Wilayah
+        csv += '=== SEBARAN WILAYAH (PROVINSI) ===\r\n';
+        csv += 'No,Nama Wilayah,Pengguna Aktif,Tayangan Halaman,Persentase Share (%)\r\n';
+        (lastLoadedData.regions || []).forEach(function(r, idx) {
+          const share = lastLoadedData.total_users > 0 ? ((r.users / lastLoadedData.total_users) * 100).toFixed(1) : '0';
+          csv += (idx + 1) + ',"' + r.name.replace(/"/g, '""') + '",' + r.users + ',' + r.views + ',' + share + '%\r\n';
+        });
+        csv += '\r\n';
+
+        // 3. Produk & Halaman Terpopuler
+        csv += '=== HALAMAN & PRODUK PALING POPULER ===\r\n';
+        csv += 'No,Judul Halaman / Produk,URL Path,Tayangan Halaman,Pengguna Aktif\r\n';
+        (lastLoadedData.top_pages || []).forEach(function(p, idx) {
+          csv += (idx + 1) + ',"' + p.label.replace(/"/g, '""') + '","' + p.path.replace(/"/g, '""') + '",' + p.views + ',' + p.users + '\r\n';
+        });
+        csv += '\r\n';
+
+        // 4. Kanal Sumber Trafik
+        csv += '=== KANAL SUMBER TRAFIK ===\r\n';
+        csv += 'No,Kanal / Sumber,Pengguna Aktif,Total Sesi\r\n';
+        (lastLoadedData.sources || []).forEach(function(s, idx) {
+          csv += (idx + 1) + ',"' + s.label.replace(/"/g, '""') + '",' + s.users + ',' + s.sessions + '\r\n';
+        });
+        csv += '\r\n';
+
+        // 5. Perangkat
+        csv += '=== KATEGORI PERANGKAT ===\r\n';
+        csv += 'No,Kategori Perangkat,Pengguna Aktif,Tayangan Halaman\r\n';
+        (lastLoadedData.devices || []).forEach(function(d, idx) {
+          csv += (idx + 1) + ',"' + d.label.replace(/"/g, '""') + '",' + d.users + ',' + d.views + '\r\n';
+        });
+
+        // Trigger Download
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateStr = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = 'prolabios-analitik-' + currentDays + 'hari-' + dateStr + '.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
       });
     }
 
