@@ -390,8 +390,12 @@ function initCartPage() {
 
   window.confirmClearCart = function (e, form) {
     e.preventDefault();
+    function submitClear() {
+      try { localStorage.removeItem('prolabios_cart_backup'); } catch(err) {}
+      form.submit();
+    }
     if (typeof window.Swal === 'undefined') {
-      if (confirm('Kosongkan semua item di keranjang?')) form.submit();
+      if (confirm('Kosongkan semua item di keranjang?')) submitClear();
       return;
     }
     window.Swal.fire({
@@ -409,7 +413,7 @@ function initCartPage() {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        form.submit();
+        submitClear();
       }
     });
   };

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Kontak | PROLABIOS')
+@section('canonical', url('/kontak'))
+@section('meta_description', 'Hubungi kantor resmi PT Prolabios Mitra Analitika melalui telepon (021-3874-1447, 021-8792-9433) atau email (marketing@prolabios.com) untuk konsultasi instrumen dan reagen lab.')
 
 @section('content')
   <x-subpage-hero

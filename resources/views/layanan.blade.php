@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', 'Layanan Kami | PROLABIOS')
+@section('canonical', url('/layanan'))
+@section('meta_description', 'Layanan purna jual, pemeliharaan instrumen analitika, kalibrasi internal, perancangan layout lab berstandar ISO/GLP, dan pelatihan terakreditasi prinsipal PT Prolabios Mitra Analitika.')
 
 @section('content')
   <x-subpage-hero

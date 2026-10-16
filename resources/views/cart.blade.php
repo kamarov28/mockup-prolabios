@@ -48,6 +48,26 @@
       <p class="profil-body-text mb-0">Pastikan item, kemasan, dan jumlah unit sudah sesuai spesifikasi kebutuhan lab Anda.</p>
     </div>
 
+    <!-- Recovery Banner (When server cart is empty but browser localStorage has backup) -->
+    <div id="cart-recovery-banner" class="alert alert-info border-0 rounded-0 mb-4 d-none" style="background: rgba(14, 116, 144, 0.08); border-left: 4px solid #0891b2 !important; color: #0e7490;">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-2">
+          <i data-lucide="history" style="width: 20px; height: 20px;" class="flex-shrink-0"></i>
+          <div class="small">
+            <strong>Ditemukan draf pengajuan sebelumnya!</strong> Sesi Anda sempat berakhir, namun daftar pengajuan (<span id="recovery-item-count">0</span> item) masih tersimpan di peramban ini.
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-sm btn-primary rounded-0 py-1 px-3 d-inline-flex align-items-center gap-1" id="btn-restore-cart" onclick="restoreCartFromBackup()">
+            <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Pulihkan Item
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-secondary rounded-0 py-1 px-2" onclick="dismissCartBackup()">
+            Abaikan
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Alerts -->
     @if(session('success'))
       <div class="alert alert-success bg-success bg-opacity-10 text-success border-success border-opacity-20 alert-dismissible fade show rounded-0 mb-4" role="alert">
@@ -221,4 +241,82 @@
 
   </div>
 </section>
+
+@if(!empty($cart) && count($cart) > 0)
+@php
+  $backupCartItems = array_values(array_map(function ($item) {
+      return [
+          'id' => $item['id'] ?? null,
+          'title' => $item['title'] ?? '',
+          'catalog' => $item['catalog'] ?? '',
+          'quantity' => (int) ($item['quantity'] ?? 1),
+          'price' => (float) ($item['price'] ?? 0),
+          'image' => $item['image'] ?? '',
+      ];
+  }, $cart));
+@endphp
+<script @nonce>
+  try {
+    localStorage.setItem('prolabios_cart_backup', JSON.stringify({!! json_encode($backupCartItems) !!}));
+  } catch(e) {}
+</script>
+@else
+<script @nonce>
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const raw = localStorage.getItem('prolabios_cart_backup');
+      if (raw) {
+        const items = JSON.parse(raw);
+        if (Array.isArray(items) && items.length > 0) {
+          const banner = document.getElementById('cart-recovery-banner');
+          const countEl = document.getElementById('recovery-item-count');
+          if (banner && countEl) {
+            countEl.textContent = items.length;
+            banner.classList.remove('d-none');
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }
+      }
+    } catch(e) {}
+  });
+
+  function dismissCartBackup() {
+    try { localStorage.removeItem('prolabios_cart_backup'); } catch(e) {}
+    const banner = document.getElementById('cart-recovery-banner');
+    if (banner) banner.remove();
+  }
+
+  function restoreCartFromBackup() {
+    try {
+      const raw = localStorage.getItem('prolabios_cart_backup');
+      if (!raw) return;
+      const btn = document.getElementById('btn-restore-cart');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = 'Memulihkan...';
+      }
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '{{ route('cart.restore') }}';
+      const csrf = document.createElement('input');
+      csrf.type = 'hidden';
+      csrf.name = '_token';
+      csrf.value = '{{ csrf_token() }}';
+      form.appendChild(csrf);
+
+      const itemsInput = document.createElement('input');
+      itemsInput.type = 'hidden';
+      itemsInput.name = 'items';
+      itemsInput.value = raw;
+      form.appendChild(itemsInput);
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch(e) {
+      console.error('Error restoring cart backup', e);
+    }
+  }
+</script>
+@endif
 @endsection

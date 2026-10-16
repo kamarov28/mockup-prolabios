@@ -3,7 +3,7 @@
 @section('title', 'Sektor Industri | PROLABIOS')
 @section('meta_description', 'Sektor industri yang dilayani Prolabios - Farmasi, Food & Beverage, Mikrobiologi, dan berbagai industri lain dengan solusi laboratorium terpercaya.')
 @section('meta_keywords', 'sektor industri, farmasi, food beverage, mikrobiologi, industri, solusi laboratorium, prolabios')
-@section('canonical_url', url('/sektor'))
+@section('canonical', url('/sektor'))
 
 @section('content')
   <x-subpage-hero

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('title', isset($currentBlog) && $currentBlog ? $currentBlog['title'] . ' | PROLABIOS' : 'Berita & Informasi | PROLABIOS')
+@section('canonical', isset($currentBlog) && $currentBlog ? url('/informasi/' . $currentBlog['slug']) : url('/informasi'))
+@section('meta_description', isset($currentBlog) && $currentBlog ? Str::limit(strip_tags($currentBlog['content'] ?? ''), 155) : 'Update rilis regulasi laboratorium, wawasan analitika pengujian, inovasi teknologi instrumen, dan agenda kegiatan PT Prolabios Mitra Analitika.')
 @section('og_title', !empty($currentBlog['title']) ? $currentBlog['title'] : 'Berita & Informasi | PROLABIOS')
 @section('og_description', !empty($currentBlog['content']) ? Str::limit(strip_tags($currentBlog['content']), 150) : 'Pusat Informasi & Wawasan Industri')
 @section('og_image', !empty($currentBlog['image']) ? $currentBlog['image'] : asset('images/logo-prolabios.png'))

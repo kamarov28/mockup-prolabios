@@ -60,6 +60,7 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::post('/cart/restore', [CartController::class, 'restore'])->name('cart.restore');
 
 Route::get('/rfq/checkout', [RfqController::class, 'checkout'])->name('rfq.checkout');
 Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:rfq-submission')->name('rfq.store');

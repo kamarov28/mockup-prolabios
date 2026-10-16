@@ -223,4 +223,69 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('success', 'Keranjang belanja telah dikosongkan.');
     }
+
+    /**
+     * Restore items from client-side backup (e.g. after expired session).
+     */
+    public function restore(Request $request)
+    {
+        $items = $request->input('items', []);
+        if (is_string($items)) {
+            $decoded = json_decode($items, true);
+            $items = is_array($decoded) ? $decoded : [];
+        }
+
+        if (! is_array($items) || empty($items)) {
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => 'Tidak ada item yang dapat dipulihkan.'], 422);
+            }
+
+            return redirect()->route('cart.index')->with('error', 'Tidak ada item yang dapat dipulihkan.');
+        }
+
+        $cart = session()->get('cart', []);
+        $restoredCount = 0;
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $id = $item['id'] ?? null;
+            $title = $item['title'] ?? null;
+            $qty = max(1, min(self::MAX_ITEM_QUANTITY, (int) ($item['quantity'] ?? 1)));
+
+            $product = $this->resolveProduct($id, $title);
+            if ($product) {
+                $cartKey = (string) $product->id;
+                $cart[$cartKey] = $this->productToCartRow($product, $qty);
+                $restoredCount++;
+            } elseif (! empty($title)) {
+                $cartKey = (string) ($id ?? $title);
+                $cart[$cartKey] = [
+                    'id' => $id,
+                    'slug' => $item['slug'] ?? '',
+                    'title' => $title,
+                    'catalog' => $item['catalog'] ?? '',
+                    'image' => $item['image'] ?? '',
+                    'price' => (float) ($item['price'] ?? 0),
+                    'stock' => (int) ($item['stock'] ?? 0),
+                    'quantity' => $qty,
+                ];
+                $restoredCount++;
+            }
+        }
+
+        session()->put('cart', $cart);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Berhasil memulihkan {$restoredCount} item ke keranjang.",
+                'cartCount' => array_sum(array_column($cart, 'quantity')),
+            ]);
+        }
+
+        return redirect()->route('cart.index')->with('success', "Berhasil memulihkan {$restoredCount} item ke keranjang.");
+    }
 }

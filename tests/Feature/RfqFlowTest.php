@@ -212,4 +212,52 @@ class RfqFlowTest extends TestCase
         $response->assertSee('mobile-total-estimate', false);
         $response->assertSee('Lanjut RFQ');
     }
+
+    public function test_cart_restore_populates_session_cart_from_client_backup(): void
+    {
+        $payload = [
+            [
+                'id' => $this->product->id,
+                'title' => 'Nutrient Agar 500g',
+                'quantity' => 5,
+            ],
+        ];
+
+        $response = $this->post(route('cart.restore'), [
+            'items' => json_encode($payload),
+        ]);
+
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('success');
+
+        $cart = session('cart');
+        $this->assertIsArray($cart);
+        $this->assertArrayHasKey((string) $this->product->id, $cart);
+        $this->assertEquals(5, $cart[(string) $this->product->id]['quantity']);
+    }
+
+    public function test_cart_restore_handles_empty_or_invalid_payload(): void
+    {
+        $response = $this->post(route('cart.restore'), [
+            'items' => '',
+        ]);
+
+        $response->assertRedirect(route('cart.index'));
+        $response->assertSessionHas('error');
+    }
+
+    public function test_canonical_and_meta_tags_render_correctly_on_subpages(): void
+    {
+        $sektorResp = $this->get('/sektor');
+        $sektorResp->assertStatus(200);
+        $sektorResp->assertSee('<link rel="canonical" href="'.url('/sektor').'">', false);
+
+        $layananResp = $this->get('/layanan');
+        $layananResp->assertStatus(200);
+        $layananResp->assertSee('<link rel="canonical" href="'.url('/layanan').'">', false);
+
+        $kontakResp = $this->get('/kontak');
+        $kontakResp->assertStatus(200);
+        $kontakResp->assertSee('<link rel="canonical" href="'.url('/kontak').'">', false);
+    }
 }

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Katalog Produk | PROLABIOS')
+@section('meta_description', $siteSettings['products_subtitle'] ?? 'Katalog lengkap instrumen analitika, media kultur mikrobiologi, dan perlengkapan pengujian bersertifikasi resmi PT Prolabios Mitra Analitika.')
 
 @section('preload')
   <link rel="preload" href="{{ $siteSettings['products_banner_image'] ?? 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&q=80' }}" as="image">

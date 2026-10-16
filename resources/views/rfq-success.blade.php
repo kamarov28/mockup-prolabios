@@ -111,6 +111,10 @@
 </section>
 
 <script @nonce>
+  try {
+    localStorage.removeItem('prolabios_cart_backup');
+  } catch(e) {}
+
   function copyRfqNumber(text, btn) {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(function() {

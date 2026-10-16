@@ -75,9 +75,9 @@
       <li><strong>Penyusunan Keranjang:</strong> Customer memilih produk laboratorium dan menentukan estimasi kuantitas ke keranjang RFQ (disimpan aman di session browser hingga 7 hari / 10.080 menit).</li>
       <li><strong>Pengisian Kredensial Korporat:</strong> Customer memasukkan nama instansi/perusahaan, nomor kontak PIC, email kantor (atau email pribadi yang valid), dan catatan kebutuhan.</li>
       <li><strong>Pengiriman &amp; Notifikasi Asinkron:</strong> Sistem memproses RFQ secara asinkronus (queue jobs), mengirim email tanda terima ke PIC serta notifikasi ke admin internal.</li>
-      <li><strong>Tindak Lanjut Cepat (Dual-Channel Follow-up):</strong> Admin membuka detail RFQ di <code>/admin/rfqs/{id}</code> dan dapat mengklik tombol <strong>Hubungi via WA</strong> untuk membuka pesan WhatsApp terformat otomatis (nomor RFQ + nama perusahaan), atau mengirim email penawaran resmi.</li>
+      <li><strong>Tindak Lanjut Cepat (Dual-Channel Follow-up):</strong> Admin membuka detail RFQ di <code>/admin/rfqs/{id}</code> dan dapat mengklik tombol <strong>Hubungi via WhatsApp</strong> atau <strong>Salin Draf WA</strong> untuk membuka atau menyalin draf pesan WhatsApp terformat otomatis (nomor RFQ, nama perusahaan, dan rincian produk), atau mengirim email penawaran resmi.</li>
       <li><strong>Pembaruan Status &amp; Catatan Internal:</strong> Admin memperbarui tahapan status penawaran dan mencatat riwayat negosiasi di form Catatan Internal.</li>
-      <li><strong>Format Dokumen Formal &amp; Cetak:</strong> Nomor pengajuan RFQ berformat dokumen formal laboratorium (<code>PRL-YYYY-XXXXX</code>) dengan kotak ringkasan berdesain flat presisi serta tombol <strong>Cetak Bukti RFQ</strong>.</li>
+      <li><strong>Format Dokumen Formal &amp; Cetak:</strong> Nomor pengajuan RFQ berformat dokumen formal laboratorium (<code>RFQ-YYYYMM-XXXXXX</code>) dengan kotak ringkasan berdesain flat presisi serta tombol <strong>Cetak Bukti RFQ</strong> lengkap dengan Kop Surat resmi.</li>
     </ol>
 
     <h3 class="guide-h3">Klasifikasi Status RFQ</h3>
