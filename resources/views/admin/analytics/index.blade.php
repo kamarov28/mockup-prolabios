@@ -180,13 +180,13 @@
   </div>
 
   {{-- ── 3.5. Daily Visit Trends Chart ────────────────────────────────────── --}}
-  <div class="admin-card mb-4">
-    <div class="admin-card-header py-2 px-3 d-flex align-items-center justify-content-between">
+  <div class="admin-card mb-4 position-relative">
+    <div class="admin-card-header py-2 px-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
       <div class="d-flex align-items-center gap-2">
         <i data-lucide="trending-up" style="width: 16px; height: 16px; color: var(--color-accent, #A6171C);"></i>
         <h2 class="admin-card-header-title mb-0" style="font-size: 0.92rem;">Tren Kunjungan Harian (Pengguna &amp; Tayangan Halaman)</h2>
       </div>
-      <div class="d-flex align-items-center gap-3" style="font-size: 0.74rem;">
+      <div class="d-flex align-items-center gap-3 ms-auto" style="font-size: 0.74rem;">
         <span class="d-flex align-items-center gap-1">
           <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--color-accent, #A6171C);"></span>
           <span class="text-muted">Pengguna Aktif</span>
@@ -195,9 +195,10 @@
           <span style="display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: #0284C7;"></span>
           <span class="text-muted">Tayangan Halaman</span>
         </span>
+        <span id="trend-hover-indicator" class="badge bg-light text-dark border px-2 py-1 ms-1" style="font-size: 0.74rem; display: none;"></span>
       </div>
     </div>
-    <div class="admin-card-body p-3" id="trend-container">
+    <div class="admin-card-body p-3 position-relative" id="trend-container">
       <div class="text-center py-5 text-muted">
         <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
         <p class="small mb-0">Memuat grafik tren kunjungan harian...</p>
@@ -477,18 +478,33 @@
             const yUsers = getY(t.users).toFixed(1);
             const yViews = getY(t.views).toFixed(1);
             dotsSvg += `
-              <circle cx="${x}" cy="${yViews}" r="3.5" fill="#0284C7" stroke="#FFFFFF" stroke-width="1.5">
-                <title>${escapeHtml(t.label)}: ${t.views} tayangan halaman</title>
-              </circle>
-              <circle cx="${x}" cy="${yUsers}" r="3.5" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="1.5">
-                <title>${escapeHtml(t.label)}: ${t.users} pengguna aktif</title>
-              </circle>
+              <circle cx="${x}" cy="${yViews}" r="3" fill="#0284C7" stroke="#FFFFFF" stroke-width="1.5"></circle>
+              <circle cx="${x}" cy="${yUsers}" r="3" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="1.5"></circle>
+            `;
+          });
+
+          // Hitboxes for hover & touch
+          let hitboxesSvg = '';
+          const slotW = count > 1 ? (plotW / (count - 1)) : plotW;
+          trends.forEach(function(t, i) {
+            const x = getX(i);
+            const xLeft = count === 1 ? padL : (i === 0 ? padL : x - slotW / 2);
+            const w = count === 1 ? plotW : (i === 0 || i === count - 1 ? slotW / 2 : slotW);
+            hitboxesSvg += `
+              <rect x="${xLeft.toFixed(1)}" y="0" width="${w.toFixed(1)}" height="${height}" fill="transparent" class="trend-hitbox" data-idx="${i}" style="cursor: pointer;"></rect>
             `;
           });
 
           trendContainer.innerHTML = `
-            <div class="w-100 overflow-x-auto">
-              <svg viewBox="0 0 ${width} ${height}" class="w-100" style="min-width: 600px; height: auto; display: block;" preserveAspectRatio="xMidYMid meet">
+            <div class="w-100 overflow-x-auto position-relative" style="min-height: ${height}px;">
+              <div id="trend-tooltip" style="position: absolute; display: none; pointer-events: none; z-index: 25; background: #0F172A; color: #FFFFFF; padding: 6px 10px; border-radius: 6px; font-size: 0.72rem; box-shadow: 0 4px 14px rgba(0,0,0,0.25); transform: translate(-50%, -125%); white-space: nowrap;">
+                <div id="trend-tooltip-date" class="fw-bold mb-1" style="font-size: 0.74rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 2px;"></div>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 7px; height: 7px; border-radius: 2px; background: #F87171;"></span><span id="trend-tooltip-users"></span> user</span>
+                  <span class="d-flex align-items-center gap-1"><span style="display:inline-block; width: 7px; height: 7px; border-radius: 2px; background: #38BDF8;"></span><span id="trend-tooltip-views"></span> views</span>
+                </div>
+              </div>
+              <svg id="trend-svg" viewBox="0 0 ${width} ${height}" class="w-100" style="min-width: 600px; height: auto; display: block;" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="viewsGradient" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="#0284C7" stop-opacity="0.25" />
@@ -501,9 +517,109 @@
                 <polyline fill="none" stroke="var(--color-accent, #A6171C)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${usersPoints}" />
                 ${dotsSvg}
                 ${datesSvg}
+                <line id="trend-hover-line" y1="${padT}" y2="${height - padB}" stroke="#64748B" stroke-width="1.5" stroke-dasharray="3 3" style="display: none; pointer-events: none;"></line>
+                <circle id="trend-hover-views-dot" r="5.5" fill="#0284C7" stroke="#FFFFFF" stroke-width="2" style="display: none; pointer-events: none;"></circle>
+                <circle id="trend-hover-users-dot" r="5.5" fill="var(--color-accent, #A6171C)" stroke="#FFFFFF" stroke-width="2" style="display: none; pointer-events: none;"></circle>
+                ${hitboxesSvg}
               </svg>
             </div>
           `;
+
+          // Attach Hover & Touch Handlers
+          const trendSvg = document.getElementById('trend-svg');
+          const hoverLine = document.getElementById('trend-hover-line');
+          const hoverViewsDot = document.getElementById('trend-hover-views-dot');
+          const hoverUsersDot = document.getElementById('trend-hover-users-dot');
+          const tooltip = document.getElementById('trend-tooltip');
+          const tooltipDate = document.getElementById('trend-tooltip-date');
+          const tooltipUsers = document.getElementById('trend-tooltip-users');
+          const tooltipViews = document.getElementById('trend-tooltip-views');
+          const hoverIndicator = document.getElementById('trend-hover-indicator');
+
+          function showPoint(idx) {
+            const t = trends[idx];
+            if (!t) return;
+            const x = getX(idx);
+            const yUsers = getY(t.users);
+            const yViews = getY(t.views);
+
+            if (hoverLine) {
+              hoverLine.setAttribute('x1', x.toFixed(1));
+              hoverLine.setAttribute('x2', x.toFixed(1));
+              hoverLine.style.display = 'block';
+            }
+
+            if (hoverViewsDot) {
+              hoverViewsDot.setAttribute('cx', x.toFixed(1));
+              hoverViewsDot.setAttribute('cy', yViews.toFixed(1));
+              hoverViewsDot.style.display = 'block';
+            }
+
+            if (hoverUsersDot) {
+              hoverUsersDot.setAttribute('cx', x.toFixed(1));
+              hoverUsersDot.setAttribute('cy', yUsers.toFixed(1));
+              hoverUsersDot.style.display = 'block';
+            }
+
+            if (tooltip && trendSvg) {
+              const svgRect = trendSvg.getBoundingClientRect();
+              const scaleX = svgRect.width / width;
+              const scaleY = svgRect.height / height;
+              const posX = x * scaleX;
+              const posY = Math.min(yUsers, yViews) * scaleY;
+
+              tooltip.style.left = posX + 'px';
+              tooltip.style.top = posY + 'px';
+              if (tooltipDate) tooltipDate.textContent = t.label + ' (' + t.date + ')';
+              if (tooltipUsers) tooltipUsers.textContent = t.users;
+              if (tooltipViews) tooltipViews.textContent = t.views;
+              tooltip.style.display = 'block';
+            }
+
+            if (hoverIndicator) {
+              hoverIndicator.textContent = t.label + ': ' + t.users + ' User • ' + t.views + ' Views';
+              hoverIndicator.style.display = 'inline-block';
+            }
+          }
+
+          function hidePoint() {
+            if (hoverLine) hoverLine.style.display = 'none';
+            if (hoverViewsDot) hoverViewsDot.style.display = 'none';
+            if (hoverUsersDot) hoverUsersDot.style.display = 'none';
+            if (tooltip) tooltip.style.display = 'none';
+            if (hoverIndicator) hoverIndicator.style.display = 'none';
+          }
+
+          if (trendSvg) {
+            trendSvg.addEventListener('mousemove', function(e) {
+              const rect = e.target.closest('.trend-hitbox');
+              if (rect && rect.dataset.idx !== undefined) {
+                showPoint(parseInt(rect.dataset.idx, 10));
+              }
+            });
+
+            trendSvg.addEventListener('mouseleave', function() {
+              hidePoint();
+            });
+
+            trendSvg.addEventListener('touchstart', function(e) {
+              const touch = e.touches[0];
+              const target = document.elementFromPoint(touch.clientX, touch.clientY);
+              const rect = target ? target.closest('.trend-hitbox') : null;
+              if (rect && rect.dataset.idx !== undefined) {
+                showPoint(parseInt(rect.dataset.idx, 10));
+              }
+            }, { passive: true });
+
+            trendSvg.addEventListener('touchmove', function(e) {
+              const touch = e.touches[0];
+              const target = document.elementFromPoint(touch.clientX, touch.clientY);
+              const rect = target ? target.closest('.trend-hitbox') : null;
+              if (rect && rect.dataset.idx !== undefined) {
+                showPoint(parseInt(rect.dataset.idx, 10));
+              }
+            }, { passive: true });
+          }
         }
       }
 
