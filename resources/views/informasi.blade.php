@@ -137,12 +137,14 @@
               </div>
 
             @else
-              <div class="col-12 text-center p-5 card">
-                <i data-lucide="newspaper" class="blog-empty-icon"></i>
-                <h3 class="fs-5 fw-bold blog-empty-title">Belum Ada Artikel</h3>
-                <p class="blog-empty-text">Tidak ada artikel untuk kategori yang Anda pilih.</p>
-                <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-primary d-inline-flex mx-auto">
-                  Lihat Semua Artikel <i data-lucide="arrow-right" class="ms-1"></i>
+              <div class="card p-5 d-flex flex-column align-items-center justify-content-center text-center">
+                <div class="mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 50%; background: var(--nb-bg-soft, #F8FAFC); border: 1px solid #E2E8F0;">
+                  <i data-lucide="newspaper" class="blog-empty-icon" style="width: 28px; height: 28px; color: var(--nb-muted, #94A3B8); stroke-width: 1.5;"></i>
+                </div>
+                <h3 class="fs-5 fw-bold blog-empty-title mb-2">Belum Ada Artikel</h3>
+                <p class="blog-empty-text mb-4" style="max-width: 420px; margin-left: auto; margin-right: auto;">Tidak ada artikel untuk kategori yang Anda pilih.</p>
+                <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2 mx-auto">
+                  <span>Lihat Semua Artikel</span> <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
                 </a>
               </div>
             @endif
@@ -174,7 +176,7 @@
                     elseif ($catName === 'Kegiatan') $catSlug = 'kegiatan';
                   @endphp
                   <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
-                     class="profil-social-link justify-content-between {{ $selectedCategory == $catSlug ? 'is-active' : '' }}">
+                     class="layanan-sidebar-link justify-content-between mb-0 {{ $selectedCategory == $catSlug ? 'is-active' : '' }}">
                     <span>{{ $catName }}</span>
                     <span class="blog-cat-count {{ (int)$count === 0 ? 'is-zero' : '' }}">{{ $count }}</span>
                   </a>
