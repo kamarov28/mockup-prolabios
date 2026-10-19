@@ -176,7 +176,7 @@
                   <a href="{{ url('/informasi') }}?kategori={{ $catSlug }}"
                      class="profil-social-link justify-content-between {{ $selectedCategory == $catSlug ? 'is-active' : '' }}">
                     <span>{{ $catName }}</span>
-                    <span class="blog-cat-count">{{ $count }}</span>
+                    <span class="blog-cat-count {{ (int)$count === 0 ? 'is-zero' : '' }}">{{ $count }}</span>
                   </a>
                 @endforeach
               </nav>
