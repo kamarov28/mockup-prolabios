@@ -8,7 +8,40 @@
 @section('og_image', !empty($currentBlog['image']) ? $currentBlog['image'] : asset('images/logo-prolabios.png'))
 
 @section('content')
-  @if(!$currentBlog)
+  @if($currentBlog)
+    {{-- Editorial Page Header (Top Spacing to clear fixed navbar & standard layout) --}}
+    <div class="editorial-page-header">
+      <div class="container">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <a href="{{ url('/informasi') }}" class="nb-mono small text-muted text-decoration-none">
+            <i data-lucide="arrow-left" style="width: 14px; height: 14px; vertical-align: -2px;"></i> Berita &amp; Artikel
+          </a>
+          @if(!empty($currentBlog['category']))
+            <span class="text-muted small">/</span>
+            <span class="nb-mono small text-muted text-capitalize">{{ $currentBlog['category'] }}</span>
+          @endif
+        </div>
+        <h1 class="editorial-page-title" style="text-wrap: balance;">{{ $currentBlog['title'] }}</h1>
+        <div class="d-flex align-items-center gap-3 mt-2 flex-wrap text-muted small">
+          <span class="badge" style="background: rgba(166, 23, 28, 0.08); color: #A6171C; font-weight: 600; font-size: 0.75rem; padding: 4px 8px;">
+            {{ $currentBlog['category'] }}
+          </span>
+          <span class="d-inline-flex align-items-center gap-1">
+            <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> {{ $currentBlog['date'] }}
+          </span>
+          <span>&bull;</span>
+          <span class="d-inline-flex align-items-center gap-1">
+            <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+            {{ max(1, (int) round(str_word_count(strip_tags($currentBlog['content'] ?? '')) / 200)) }} menit baca
+          </span>
+          <span>&bull;</span>
+          <span class="d-inline-flex align-items-center gap-1">
+            <i data-lucide="building" style="width: 14px; height: 14px;"></i> PT. Prolabios Mitra Analitika
+          </span>
+        </div>
+      </div>
+    </div>
+  @else
     <x-subpage-hero
       badge='<i data-lucide="newspaper" class="me-1"></i> BERITA &amp; ARTIKEL'
       title="Pusat Informasi & Wawasan Industri"
@@ -16,50 +49,70 @@
     />
   @endif
 
-  <!-- Informasi Content -->
-  <section class="section-spacious nb-section {{ $currentBlog ? 'blog-detail-section' : '' }}" @if($currentBlog) style="padding-top: 130px !important;" @endif>
+  <!-- Informasi Content (Full 2-Column Responsive Layout) -->
+  <section class="section-spacious nb-section">
     <div class="container">
       <div class="row g-4 g-lg-5">
 
-        <!-- Main Content -->
-        <div class="{{ $currentBlog ? 'col-lg-10 col-xl-8 mx-auto' : 'col-lg-8 col-md-7 order-1' }}">
+        <!-- Main Content (Left: col-12 col-lg-8) -->
+        <div class="col-12 col-lg-8 order-1">
           @if($currentBlog)
             <!-- Detail View -->
-            <div class="card p-4 p-md-5">
-              <a href="{{ url('/informasi') }}{{ $selectedCategory ? '?kategori=' . $selectedCategory : '' }}" class="nb-btn nb-btn-ghost mb-4 d-inline-flex blog-back-btn">
-                <i data-lucide="arrow-left" class="me-1"></i> Kembali ke Informasi
-              </a>
-
-              <div class="d-flex align-items-center gap-3 mb-3">
-                <span class="blog-card-category mb-0">{{ $currentBlog['category'] }}</span>
-                <span class="blog-card-date-inline"><i data-lucide="calendar" class="me-1"></i>{{ $currentBlog['date'] }}</span>
-              </div>
-
-              <h1 class="profil-main-title blog-detail-title">{{ $currentBlog['title'] }}</h1>
-
-              <div class="profil-hero-img mb-4">
-                <img src="{{ $currentBlog['image'] }}" class="w-100 blog-detail-img" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
-              </div>
+            <article class="card p-4 p-md-5 blog-detail-card">
+              @if(!empty($currentBlog['image']))
+                <div class="profil-hero-img mb-4">
+                  <img src="{{ $currentBlog['image'] }}" class="w-100 blog-detail-img" alt="{{ $currentBlog['title'] }}" loading="lazy" decoding="async">
+                </div>
+              @endif
 
               <div class="profil-body-text blog-detail-body">
                 {!! \App\Helpers\HtmlSanitizer::clean($currentBlog['content'] ?? '') !!}
               </div>
-            </div>
+
+              {{-- Social Share & Quick Back bar --}}
+              <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-4 mt-5 border-top" style="border-color: #E5E7EB !important;">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="small fw-semibold text-muted">Bagikan:</span>
+                  <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 rounded py-1 px-2" style="font-size: 0.78rem;" onclick="copyArticleUrl(this)">
+                    <i data-lucide="copy" style="width: 13px; height: 13px;"></i> <span class="copy-label">Salin Tautan</span>
+                  </button>
+                </div>
+                <a href="{{ url('/informasi') }}" class="small fw-semibold text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-accent, #A6171C);">
+                  <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Semua Artikel
+                </a>
+              </div>
+
+              {{-- Recommendation / Procurement CTA Box --}}
+              <div class="p-4 mt-4 rounded" style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 4px solid var(--color-accent, #A6171C);">
+                <div class="d-flex align-items-start gap-3">
+                  <i data-lucide="beaker" class="flex-shrink-0 mt-1" style="color: var(--color-accent, #A6171C); width: 22px; height: 22px;"></i>
+                  <div>
+                    <strong class="d-block mb-1" style="font-family: var(--font-display); color: var(--nb-ink); font-size: 0.98rem;">Dukungan Pengadaan &amp; Instrumen Laboratorium</strong>
+                    <p class="small text-muted mb-3" style="line-height: 1.6;">
+                      PT. Prolabios Mitra Analitika melayani suplai media mikrobiologi siap pakai, reagen analitika (USP/EP), indikator sterilisasi, serta instrumen preparasi lab bergaransi resmi prinsipal dengan fasilitas cold-chain di Indonesia.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                      <a href="{{ url('/produk') }}" class="nb-btn nb-btn-primary py-1 px-3 text-decoration-none" style="font-size: 0.8rem; border-radius: 4px;">
+                        <i data-lucide="package" style="width: 13px; height: 13px;"></i> Jelajahi Katalog Produk
+                      </a>
+                      <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-ghost py-1 px-3 text-decoration-none" style="font-size: 0.8rem; border-radius: 4px;">
+                        <i data-lucide="phone" style="width: 13px; height: 13px;"></i> Kontak Dukungan Teknis
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
 
           @else
             <!-- List View -->
             @if(count($posts) > 0)
               <div class="row row-cols-1 row-cols-md-2 g-4">
                 @foreach($posts as $post)
-                  @php
-                    $dateParts = explode(' ', $post['date']);
-                    $day = isset($dateParts[0]) ? $dateParts[0] : '';
-                    $month = isset($dateParts[1]) ? $dateParts[1] : '';
-                  @endphp
                   <div class="col">
                     <div class="card h-100 blog-card">
                       <div class="blog-card-img-wrap">
-                        <img src="{{ $post['image'] }}" class="card-img-top" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
+                        <img src="{{ $post['image'] ?: asset('images/placeholder.svg') }}" class="card-img-top" alt="{{ $post['title'] }}" loading="lazy" decoding="async">
                       </div>
                       <div class="blog-card-body">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -69,7 +122,7 @@
                           </span>
                         </div>
                         <h3 class="blog-card-title">
-                          <a href="{{ url('/informasi') }}?detail={{ $post['slug'] }}{{ $selectedCategory ? '&kategori=' . $selectedCategory : '' }}">{{ $post['title'] }}</a>
+                          <a href="{{ url('/informasi/' . $post['slug']) }}">{{ $post['title'] }}</a>
                         </h3>
                         <p class="blog-card-text">{{ Str::limit(strip_tags(html_entity_decode($post['content'])), 120) }}</p>
                       </div>
@@ -96,9 +149,9 @@
           @endif
         </div>
 
-        @if(!$currentBlog)
-          <!-- Sidebar (Right) -->
-          <div class="col-lg-4 col-md-5 order-2">
+        <!-- Sidebar Column (Right: col-12 col-lg-4 order-2 - Always present for visual balance) -->
+        <div class="col-12 col-lg-4 order-2">
+          <div class="blog-sidebar-sticky">
 
             <!-- Category Filter -->
             <div class="card p-4 mb-4">
@@ -130,17 +183,19 @@
             </div>
 
             <!-- Recent Posts -->
-            <div class="profil-trust-box">
+            <div class="profil-trust-box mb-4">
               <h3 class="profil-sidebar-title"><i data-lucide="history" class="me-2"></i>Berita Terbaru</h3>
               @if(count($recentPosts) > 0)
                 <div class="blog-recent-list">
                   @foreach($recentPosts as $index => $rPost)
-                    <a href="{{ url('/informasi') }}?detail={{ $rPost['slug'] }}" class="blog-recent-item">
-                      <div class="blog-recent-date">
-                        <i data-lucide="calendar"></i> {{ $rPost['date'] }}
-                      </div>
-                      <h4 class="blog-recent-title">{{ $rPost['title'] }}</h4>
-                    </a>
+                    @if(!isset($currentBlog) || $currentBlog['slug'] !== $rPost['slug'])
+                      <a href="{{ url('/informasi/' . $rPost['slug']) }}" class="blog-recent-item">
+                        <div class="blog-recent-date">
+                          <i data-lucide="calendar"></i> {{ $rPost['date'] }}
+                        </div>
+                        <h4 class="blog-recent-title">{{ $rPost['title'] }}</h4>
+                      </a>
+                    @endif
                   @endforeach
                 </div>
               @else
@@ -148,9 +203,51 @@
               @endif
             </div>
 
+            <!-- Official Office Landline Info Box (Corporate Policy Compliance) -->
+            <div class="card p-4 border-0" style="background: #FFFFFF; border: 1px solid #E5E7EB !important; border-radius: var(--nb-radius-lg);">
+              <h3 class="profil-sidebar-title mb-2" style="font-size: 0.95rem;">
+                <i data-lucide="headphones" class="me-2 text-primary"></i>Layanan Resmi Kantor
+              </h3>
+              <p class="small text-muted mb-3" style="font-size: 0.8rem; line-height: 1.5;">
+                Hubungi saluran resmi telepon kantor atau email marketing untuk permohonan katalog dan penawaran teknis.
+              </p>
+              <div class="d-flex flex-column gap-2 small">
+                <div class="d-flex align-items-center gap-2">
+                  <i data-lucide="phone" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
+                  <span class="fw-semibold">021-3874-1447</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i data-lucide="phone" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
+                  <span class="fw-semibold">021-8792-9433</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <i data-lucide="mail" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
+                  <a href="mailto:marketing@prolabios.com" class="text-decoration-none" style="color: var(--nb-ink);">marketing@prolabios.com</a>
+                </div>
+              </div>
+            </div>
+
           </div>
-        @endif
+        </div>
+
       </div>
     </div>
   </section>
+
+  @if($currentBlog)
+    <script @nonce>
+      function copyArticleUrl(btn) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(window.location.href).then(function() {
+            var label = btn.querySelector('.copy-label');
+            if (label) {
+              var orig = label.textContent;
+              label.textContent = 'Tersalin!';
+              setTimeout(function() { label.textContent = orig; }, 2000);
+            }
+          });
+        }
+      }
+    </script>
+  @endif
 @endsection
