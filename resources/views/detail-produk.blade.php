@@ -365,11 +365,15 @@
               </div>
             </div>
           @else
-            <div class="empty-state-card">
-              <i data-lucide="package" class="detail-empty-icon"></i>
-              <h2 class="profil-section-title detail-empty-title">Produk Tidak Ditemukan</h2>
-              <p class="profil-body-text mb-4">Maaf, produk yang Anda cari tidak tersedia.</p>
-              <a href="{{ url('/produk') }}" class="profil-cta-btn">Kembali ke Daftar Produk <i data-lucide="arrow-right"></i></a>
+            <div class="empty-state-card d-flex flex-column align-items-center justify-content-center text-center">
+              <div class="mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 50%; background: var(--nb-bg-soft, #F8FAFC); border: 1px solid #E2E8F0;">
+                <i data-lucide="package" style="width: 28px; height: 28px; color: var(--nb-muted, #94A3B8); stroke-width: 1.5;"></i>
+              </div>
+              <h2 class="profil-section-title detail-empty-title mb-2">Produk Tidak Ditemukan</h2>
+              <p class="profil-body-text mb-4" style="max-width: 440px; margin-left: auto; margin-right: auto;">Maaf, produk yang Anda cari tidak tersedia atau telah diperbarui.</p>
+              <a href="{{ url('/produk') }}" class="profil-cta-btn d-inline-flex align-items-center gap-2">
+                <span>Kembali ke Daftar Produk</span> <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+              </a>
             </div>
           @endif
         </div>

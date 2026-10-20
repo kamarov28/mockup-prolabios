@@ -205,13 +205,15 @@
 
               <div id="sektor-pagination-or-empty">
                 @if(!$hasProducts)
-                  <div class="text-center p-5 card mt-3" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-sm);">
-                    <i data-lucide="inbox" class="fs-1 text-muted mb-2"></i>
-                    <p class="mb-2 fw-semibold" style="color: var(--nb-ink);">Belum ada produk terdaftar untuk sektor ini.</p>
-                    <p class="text-muted small mb-3">Silakan hubungi tim kami untuk ketersediaan katalog indent atau jelajahi katalog utama.</p>
+                  <div class="card p-5 d-flex flex-column align-items-center justify-content-center text-center mt-3" style="background: var(--nb-card); border: var(--nb-border); border-radius: var(--nb-radius-lg); box-shadow: var(--nb-shadow-sm);">
+                    <div class="mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px; border-radius: 50%; background: var(--nb-bg-soft, #F8FAFC); border: 1px solid #E2E8F0;">
+                      <i data-lucide="inbox" style="width: 28px; height: 28px; color: var(--nb-muted, #94A3B8); stroke-width: 1.5;"></i>
+                    </div>
+                    <p class="mb-2 fw-semibold" style="color: var(--nb-ink); font-size: 1rem;">Belum ada produk terdaftar untuk sektor ini.</p>
+                    <p class="text-muted small mb-3" style="max-width: 440px; margin-left: auto; margin-right: auto;">Silakan hubungi tim kami untuk ketersediaan katalog indent atau jelajahi katalog utama.</p>
                     <div>
-                      <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost" style="font-size: 0.82rem;">
-                        <i data-lucide="package" class="me-1"></i> Buka Katalog Utama
+                      <a href="{{ url('/produk') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-1.5" style="font-size: 0.82rem;">
+                        <i data-lucide="package" style="width: 14px; height: 14px;"></i> <span>Buka Katalog Utama</span>
                       </a>
                     </div>
                   </div>

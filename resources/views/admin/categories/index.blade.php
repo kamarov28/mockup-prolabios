@@ -183,7 +183,7 @@
   </div>
 
   <p id="category-empty-filter" class="text-center py-5" style="color: var(--color-text-muted); font-size: 0.88rem; display: none;">
-    <i data-lucide="search-x" style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>
+    <i data-lucide="search-x" style="font-size: 2rem; display: block; margin: 0 auto 8px; opacity: 0.4;"></i>
     Tidak ada kategori atau sub-kategori yang cocok dengan kata kunci pencarian.
   </p>
 @endif

@@ -978,11 +978,12 @@
 }
 
 .detail-empty-icon {
-  font-size: 3rem;
+  width: 28px;
+  height: 28px;
   color: var(--nb-muted);
-  opacity: 0.4;
+  opacity: 0.6;
   display: block;
-  margin-bottom: 20px;
+  margin: 0 auto 16px;
 }
 .detail-empty-title {
   font-size: 1.4rem;
