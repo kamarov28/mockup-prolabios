@@ -1157,12 +1157,12 @@ tr:hover td.table-col-catalog {
 }
 
 .editorial-page-header.detail-breadcrumb-header {
-  padding: 88px 0 14px !important;
+  padding: 106px 0 18px !important;
   background: #FAFAFA;
 }
 
 .section-main.detail-product-page {
-  padding-top: 32px !important;
+  padding-top: 36px !important;
 }
 
 @media (max-width: 768px) {
@@ -1170,10 +1170,10 @@ tr:hover td.table-col-catalog {
     padding: 85px 0 20px !important;
   }
   .editorial-page-header.detail-breadcrumb-header {
-    padding: 78px 0 12px !important;
+    padding: 88px 0 14px !important;
   }
   .section-main.detail-product-page {
-    padding-top: 20px !important;
+    padding-top: 24px !important;
   }
 }
 .editorial-page-header .editorial-page-title {
