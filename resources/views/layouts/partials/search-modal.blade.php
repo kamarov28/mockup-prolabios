@@ -15,6 +15,7 @@
         <div class="search-input-box">
           <i data-lucide="search" class="search-modal-icon"></i>
           <input type="search" name="q" id="search-overlay-input" placeholder="Cari produk, reagen, atau kode katalog..." autocomplete="off" enterkeyhint="search">
+          <kbd class="search-modal-kbd d-none d-sm-inline-flex">ESC</kbd>
         </div>
       </form>
     </div>

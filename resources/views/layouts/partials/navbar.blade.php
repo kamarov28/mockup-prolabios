@@ -65,8 +65,9 @@
                 {{ $cartCount }}
               </span>
             </a>
-            <button type="button" id="nav-search-open" class="nb-icon-btn" title="Cari produk (Ctrl+K atau /)" aria-label="Cari produk (Ctrl+K atau /)" aria-haspopup="dialog" aria-controls="search-overlay">
+            <button type="button" id="nav-search-open" class="nb-icon-btn nb-search-trigger" title="Cari produk (Ctrl+K atau /)" aria-label="Cari produk (Ctrl+K atau /)" aria-haspopup="dialog" aria-controls="search-overlay">
               <i data-lucide="search"></i>
+              <span class="nb-search-kbd d-none d-xl-inline-flex">Ctrl K</span>
             </button>
           </li>
         </ul>
