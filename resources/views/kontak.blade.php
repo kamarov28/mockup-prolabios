@@ -52,7 +52,6 @@
         <!-- Contact Form -->
         <div class="col-12 col-lg-8 order-1 order-lg-2">
           <div class="card p-4 p-md-5">
-            <span class="nb-badge mb-2"><i data-lucide="mail" class="me-1"></i> TINGGALKAN PESAN</span>
             <h2 class="profil-section-title mb-3">Kirim Pesan & Pertanyaan</h2>
 
             {{-- RFQ Redirection Notice --}}
