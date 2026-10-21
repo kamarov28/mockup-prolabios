@@ -69,18 +69,26 @@ class HomepageSettingsUpdater
             'sector_title_pharma' => self::SHORT_TEXT_RULE,
             'sector_tag_pharma' => self::SHORT_TEXT_RULE,
             'sector_desc_pharma' => self::TEXT_RULE,
+            'sector_id_pharma' => 'nullable|string|max:100',
+            'sector_image_pharma' => 'nullable|string|max:1000',
             'sector_link_fnb' => self::LINK_RULE,
             'sector_title_fnb' => self::SHORT_TEXT_RULE,
             'sector_tag_fnb' => self::SHORT_TEXT_RULE,
             'sector_desc_fnb' => self::TEXT_RULE,
+            'sector_id_fnb' => 'nullable|string|max:100',
+            'sector_image_fnb' => 'nullable|string|max:1000',
             'sector_link_healthcare' => self::LINK_RULE,
             'sector_title_healthcare' => self::SHORT_TEXT_RULE,
             'sector_tag_healthcare' => self::SHORT_TEXT_RULE,
             'sector_desc_healthcare' => self::TEXT_RULE,
+            'sector_id_healthcare' => 'nullable|string|max:100',
+            'sector_image_healthcare' => 'nullable|string|max:1000',
             'sector_link_brewing' => self::LINK_RULE,
             'sector_title_brewing' => self::SHORT_TEXT_RULE,
             'sector_tag_brewing' => self::SHORT_TEXT_RULE,
             'sector_desc_brewing' => self::TEXT_RULE,
+            'sector_id_brewing' => 'nullable|string|max:100',
+            'sector_image_brewing' => 'nullable|string|max:1000',
         ]);
     }
 
@@ -155,17 +163,30 @@ class HomepageSettingsUpdater
 
         $patch['sector_title'] = html_entity_decode(html_entity_decode((string) $request->input('sector_title', $homeData['sector_title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $patch['sector_subtitle'] = $request->input('sector_subtitle', $homeData['sector_subtitle'] ?? '');
+        $defaultSectorMap = [
+            'pharma' => 'pharmaceutical',
+            'fnb' => 'food',
+            'healthcare' => 'hospital-clinic',
+            'brewing' => 'brewing',
+        ];
         $sectorKeys = ['pharma', 'fnb', 'healthcare', 'brewing'];
         $sectorPanels = $homeData['sector_panels'] ?? [];
         foreach ($sectorKeys as $sKey) {
             $existingSector = $sectorPanels[$sKey] ?? [];
             $rawTitle = (string) $request->input("sector_title_$sKey", $existingSector['title'] ?? '');
             $normalizedTitle = html_entity_decode(html_entity_decode($rawTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $secId = (string) $request->input("sector_id_$sKey", $existingSector['sector_id'] ?? $defaultSectorMap[$sKey] ?? '');
+            $rawLink = (string) $request->input("sector_link_$sKey", $existingSector['link'] ?? '');
+            if (empty($rawLink) || $rawLink === '/sektor' || ! str_contains($rawLink, '?s=')) {
+                $rawLink = '/sektor?s='.$secId.'#sektor-nav';
+            }
             $sectorPanels[$sKey] = [
+                'sector_id' => $secId,
                 'tag' => html_entity_decode(html_entity_decode((string) $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
                 'title' => HtmlSanitizer::clean($normalizedTitle),
                 'desc' => html_entity_decode(html_entity_decode((string) $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
-                'link' => (string) $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
+                'image' => (string) $request->input("sector_image_$sKey", $existingSector['image'] ?? ''),
+                'link' => $rawLink,
             ];
         }
         $patch['sector_panels'] = $sectorPanels;

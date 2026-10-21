@@ -12,6 +12,7 @@ use App\Models\Sector;
 use App\Services\AuditLogger;
 use App\Services\HomepageService;
 use App\Services\HomepageSettingsUpdater;
+use App\Services\SectorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
@@ -82,8 +83,9 @@ class AdminDashboardController extends Controller
     public function homeEdit()
     {
         $homeData = $this->homepage->getHomepageData();
+        $sectors = app(SectorService::class)->getSectors();
 
-        return view('admin.home-editor', compact('homeData'));
+        return view('admin.home-editor', compact('homeData', 'sectors'));
     }
 
     public function homeUpdate(Request $request)

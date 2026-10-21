@@ -113,4 +113,22 @@ class HomepageEntityEscapingTest extends TestCase
         $homeResponse->assertDontSee('CAT. BIO-TAL01'); // Ensure fake product catalog card is completely gone
         $homeResponse->assertDontSee('Tambah RFQ');
     }
+
+    public function test_sector_link_automatically_resolves_to_specific_sector_even_if_bare_link_is_provided(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/home', [
+            'section' => 'homepage',
+            'sector_id_fnb' => 'food',
+            'sector_title_fnb' => 'Pangan & Minuman Higienis',
+            'sector_tag_fnb' => 'FOOD',
+            'sector_desc_fnb' => 'Deskripsi industri pangan.',
+            'sector_link_fnb' => '/sektor', // Bare link
+        ]);
+
+        $response->assertRedirect();
+
+        $homeResponse = $this->get('/');
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('/sektor?s=food#sektor-nav');
+    }
 }

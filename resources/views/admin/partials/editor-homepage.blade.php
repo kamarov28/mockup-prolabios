@@ -201,20 +201,50 @@
                 <div>
                   <span class="admin-badge admin-badge-info mb-2">{{ $sLabel }}</span>
                   <div class="mb-2">
+                    <label for="sector_id_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Pilih Sektor Terkait</label>
+                    @php
+                      $defaultSecMap = [
+                        'pharma' => 'pharmaceutical',
+                        'fnb' => 'food',
+                        'healthcare' => 'hospital-clinic',
+                        'brewing' => 'brewing',
+                      ];
+                      $selectedSecId = old('sector_id_'.$sKey, $sPanel['sector_id'] ?? $defaultSecMap[$sKey] ?? '');
+                    @endphp
+                    <select id="sector_id_{{ $sKey }}" class="form-select form-select-sm" name="sector_id_{{ $sKey }}">
+                      @if(isset($sectors) && count($sectors) > 0)
+                        @foreach($sectors as $secItem)
+                          <option value="{{ $secItem['id'] }}" {{ $selectedSecId === $secItem['id'] ? 'selected' : '' }}>
+                            {{ $secItem['name'] }} ({{ $secItem['id'] }})
+                          </option>
+                        @endforeach
+                      @else
+                        <option value="pharmaceutical" {{ $selectedSecId === 'pharmaceutical' ? 'selected' : '' }}>Pharmaceutical</option>
+                        <option value="food" {{ $selectedSecId === 'food' ? 'selected' : '' }}>Food &amp; Beverage</option>
+                        <option value="hospital-clinic" {{ $selectedSecId === 'hospital-clinic' ? 'selected' : '' }}>Clinical</option>
+                        <option value="brewing" {{ $selectedSecId === 'brewing' ? 'selected' : '' }}>Brewing</option>
+                      @endif
+                    </select>
+                  </div>
+                  <div class="mb-2">
                     <label for="sector_tag_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Tag Sub-kategori</label>
                     <input type="text" id="sector_tag_{{ $sKey }}" class="form-control form-control-sm" name="sector_tag_{{ $sKey }}" value="{{ old('sector_tag_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
                   </div>
                   <div class="mb-2">
-                    <label for="sector_title_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Alur Kerja</label>
+                    <label for="sector_title_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Sektor</label>
                     <input type="text" id="sector_title_{{ $sKey }}" class="form-control form-control-sm" name="sector_title_{{ $sKey }}" value="{{ old('sector_title_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
                   </div>
                   <div class="mb-2">
                     <label for="sector_desc_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Ringkas Sektor</label>
                     <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" required>{{ old('sector_desc_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
                   </div>
+                  <div class="mb-2">
+                    <label for="sector_image_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Custom Foto Sektor (Opsional)</label>
+                    <input type="text" id="sector_image_{{ $sKey }}" class="form-control form-control-sm" name="sector_image_{{ $sKey }}" value="{{ old('sector_image_'.$sKey, $sPanel['image'] ?? '') }}" placeholder="Contoh: /images/sectors/pharmaceutical.jpg">
+                  </div>
                   <div>
-                    <label for="sector_link_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Link URL Tombol</label>
-                    <input type="text" id="sector_link_{{ $sKey }}" class="form-control form-control-sm" name="sector_link_{{ $sKey }}" value="{{ old('sector_link_'.$sKey, $sPanel['link'] ?? '') }}" required>
+                    <label for="sector_link_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Link URL Tombol (Otomatis: /sektor?s={id}#sektor-nav)</label>
+                    <input type="text" id="sector_link_{{ $sKey }}" class="form-control form-control-sm" name="sector_link_{{ $sKey }}" value="{{ old('sector_link_'.$sKey, $sPanel['link'] ?? '') }}" placeholder="/sektor?s={{ $selectedSecId }}#sektor-nav" required>
                   </div>
                 </div>
               </div>
