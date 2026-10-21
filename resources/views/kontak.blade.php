@@ -56,12 +56,9 @@
             <h2 class="profil-section-title mb-3">Kirim Pesan & Pertanyaan</h2>
 
             {{-- RFQ Redirection Notice --}}
-            <div class="mb-4 p-3 d-flex align-items-start gap-3 rfq-redirect-box">
-              <i data-lucide="info" class="text-primary mt-1 flex-shrink-0" style="font-size: 1.25rem;"></i>
-              <div class="small" style="color: var(--nb-ink); line-height: 1.5;">
-                <strong class="d-block mb-1" style="font-family: var(--font-display); font-size: 0.88rem;">Informasi Permintaan Penawaran Harga (RFQ):</strong>
-                Formulir kontak ini khusus untuk pertanyaan umum, bantuan teknis, dan layanan servis. Pengajuan penawaran harga resmi (RFQ) institusi dilakukan melalui <a href="{{ url('/produk') }}" class="fw-bold text-decoration-underline" style="color: var(--nb-primary);">Katalog Produk</a> dengan menambahkan produk ke dalam Keranjang RFQ.
-              </div>
+            <div class="mb-4 px-3 py-2.5 d-flex align-items-center gap-2 rounded-2" style="background: rgba(166, 23, 28, 0.05); border: 1px solid rgba(166, 23, 28, 0.15); font-size: 0.84rem; color: var(--nb-ink);">
+              <i data-lucide="info" style="width: 16px; height: 16px; color: var(--nb-primary);" class="flex-shrink-0"></i>
+              <span>Untuk permintaan penawaran harga resmi institusi (RFQ), ajukan langsung melalui <a href="{{ url('/produk') }}" class="fw-semibold text-decoration-underline" style="color: var(--nb-primary);">Katalog Produk</a>.</span>
             </div>
 
             <form id="contactForm" class="contact-form" action="{{ route('contact.submit', [], false) }}" method="POST" data-recaptcha-key="{{ config('services.recaptcha.site_key') ?? '' }}">

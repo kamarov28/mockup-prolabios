@@ -243,8 +243,10 @@
                         </div>
                       </div>
 
-                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran">
-                        <i data-lucide="shopping-cart" class="me-2"></i> Tambah ke Keranjang Penawaran
+                      <button type="submit" class="nb-btn nb-btn-primary flex-grow-1 detail-add-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" aria-label="Tambah {{ $product['title'] }} ke keranjang penawaran" title="Tambah ke Keranjang Penawaran">
+                        <i data-lucide="shopping-cart" class="me-2"></i>
+                        <span class="d-none d-xxl-inline">Tambah ke Keranjang Penawaran</span>
+                        <span class="d-inline d-xxl-none">Tambah ke RFQ</span>
                       </button>
 
                       <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '02138741447') }}" class="nb-btn nb-btn-ghost detail-wa-btn" style="height: 48px; border-radius: 8px; font-weight: 600;" title="Hubungi Telepon Kantor">
