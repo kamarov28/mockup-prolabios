@@ -1156,9 +1156,24 @@ tr:hover td.table-col-catalog {
   border-bottom: 1px solid #E5E7EB;
 }
 
+.editorial-page-header.detail-breadcrumb-header {
+  padding: 88px 0 14px !important;
+  background: #FAFAFA;
+}
+
+.section-main.detail-product-page {
+  padding-top: 32px !important;
+}
+
 @media (max-width: 768px) {
   .editorial-page-header {
     padding: 85px 0 20px !important;
+  }
+  .editorial-page-header.detail-breadcrumb-header {
+    padding: 78px 0 12px !important;
+  }
+  .section-main.detail-product-page {
+    padding-top: 20px !important;
   }
 }
 .editorial-page-header .editorial-page-title {

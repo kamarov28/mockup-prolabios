@@ -40,19 +40,23 @@
 @section('og_image', $seoImage)
 
 @section('content')
-  <div class="editorial-page-header">
+  <div class="editorial-page-header detail-breadcrumb-header">
     <div class="container">
-      <div class="d-flex align-items-center gap-2 mb-2">
+      <nav aria-label="breadcrumb" class="d-flex align-items-center gap-2">
         <a href="{{ url('/produk') }}" class="nb-mono small text-muted text-decoration-none">
           <i data-lucide="arrow-left" style="width: 14px; height: 14px; vertical-align: -2px;"></i> Katalog Produk
         </a>
         @if(!empty($product['category']))
           <span class="text-muted small">/</span>
-          <span class="nb-mono small text-muted text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
+          <a href="{{ url('/produk?kategori=' . ($product['category_slug'] ?? $product['category'])) }}" class="nb-mono small text-muted text-capitalize text-decoration-none">
+            {{ str_replace('-', ' ', $product['category']) }}
+          </a>
         @endif
-      </div>
-      <p class="editorial-page-title">{{ $product['title'] ?? 'Detail Produk' }}</p>
-      <p class="editorial-page-subtitle">Spesifikasi teknis, ketersediaan lot stok, dan pengajuan penawaran resmi</p>
+        @if(!empty($product['title']))
+          <span class="text-muted small">/</span>
+          <span class="nb-mono small text-dark fw-semibold text-truncate" style="max-width: 380px;">{{ $product['title'] }}</span>
+        @endif
+      </nav>
     </div>
   </div>
 
