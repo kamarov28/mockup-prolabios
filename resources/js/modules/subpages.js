@@ -125,6 +125,14 @@ function initSektorAjax() {
           curMobileNav.innerHTML = newMobileNav.innerHTML;
         }
 
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+          window.lucide.createIcons();
+        }
+
+        if (doc.title) {
+          document.title = doc.title;
+        }
+
         if (updateHistory) {
           window.history.pushState({ url: url }, '', url);
         }
