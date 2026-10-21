@@ -92,25 +92,25 @@ class HomepageEntityEscapingTest extends TestCase
         $homeResponse->assertSee('<span class="text-accent">Validasi Sterilisasi</span>', false);
     }
 
-    public function test_sector_scope_and_compliance_can_be_saved_and_rendered_on_homepage(): void
+    public function test_sector_single_card_renders_concise_description_and_image_without_fake_catalog(): void
     {
         $response = $this->actingAs($this->admin)->post('/admin/home', [
             'section' => 'homepage',
             'sector_title_pharma' => 'Kendali Mutu Farmasi',
             'sector_tag_pharma' => 'FARMASI & BIOTEK',
             'sector_desc_pharma' => 'Layanan pengujian terpadu untuk industri farmasi nasional.',
-            'sector_scope_pharma' => "Uji Endotoksin Gel Clot\nValidasi Autoclave Steril",
-            'sector_compliance_pharma' => 'USP/CPOB Certified',
-            'sector_link_pharma' => '/sektor?s=pharmaceutical',
+            'sector_link_pharma' => '/sektor?s=pharmaceutical#sektor-nav',
         ]);
 
         $response->assertRedirect();
 
         $homeResponse = $this->get('/');
         $homeResponse->assertOk();
-        $homeResponse->assertSee('Uji Endotoksin Gel Clot');
-        $homeResponse->assertSee('Validasi Autoclave Steril');
-        $homeResponse->assertSee('USP/CPOB Certified');
-        $homeResponse->assertDontSee('CAT. BIO-TAL01'); // Ensure fake product catalog card is removed
+        $homeResponse->assertSee('Kendali Mutu Farmasi');
+        $homeResponse->assertSee('FARMASI &amp; BIOTEK', false);
+        $homeResponse->assertSee('Layanan pengujian terpadu untuk industri farmasi nasional.');
+        $homeResponse->assertSee('/images/sectors/pharmaceutical.jpg');
+        $homeResponse->assertDontSee('CAT. BIO-TAL01'); // Ensure fake product catalog card is completely gone
+        $homeResponse->assertDontSee('Tambah RFQ');
     }
 }
