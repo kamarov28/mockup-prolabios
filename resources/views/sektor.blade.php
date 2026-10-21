@@ -30,16 +30,14 @@
               @if(isset($sectors) && count($sectors) > 0)
                 @foreach($sectors as $sec)
                   <a href="{{ url('/sektor') }}?s={{ $sec['id'] }}#sektor-nav"
-                     class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeSector == $sec['id'] ? 'is-active' : '' }}"
+                     class="layanan-sidebar-link d-flex align-items-center {{ $activeSector == $sec['id'] ? 'is-active' : '' }}"
                      data-sector-id="{{ $sec['id'] }}">
                     <span>{{ $sec['name'] }}</span>
-                    <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
                   </a>
                 @endforeach
               @else
-                <a href="#" class="layanan-sidebar-link d-flex align-items-center justify-content-between is-active">
+                <a href="#" class="layanan-sidebar-link d-flex align-items-center is-active">
                   <span>Brewing</span>
-                  <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
                 </a>
               @endif
             </nav>
