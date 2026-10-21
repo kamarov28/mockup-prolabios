@@ -316,7 +316,7 @@
 .detail-product-img-wrap {
   border: 1px solid #E5E7EB;
   background-color: #FFFFFF;
-  border-radius: var(--nb-radius-lg);
+  border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   padding: 14px;
   cursor: pointer;
@@ -325,6 +325,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.detail-spec-card {
+  border: 1px solid #E5E7EB !important;
+  border-radius: 12px !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 .detail-product-img-wrap img {
   transition: transform 0.2s ease;

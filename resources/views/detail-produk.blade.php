@@ -136,7 +136,7 @@
               </div>
 
               <div class="col-md-7">
-                <div class="card p-4 p-lg-5" style="border: none !important; border-radius: 12px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+                <div class="card detail-spec-card p-4 p-lg-5">
 
                   {{-- 1. Deskripsi & Spesifikasi Produk (At the top per user requirement) --}}
                   <div>
