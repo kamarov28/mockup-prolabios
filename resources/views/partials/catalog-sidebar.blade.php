@@ -20,6 +20,15 @@
         <i data-lucide="search"></i>
       </button>
       <input type="text" id="local-search-input" name="s" placeholder="Cari produk, reagen, atau katalog..." aria-label="Cari produk" value="{{ request()->query('s') ?? request()->query('q') }}">
+      @if(request()->filled('s') || request()->filled('q'))
+        @php
+          $clearParams = request()->except(['s', 'q', 'page']);
+          $clearUrl = url('/produk') . (!empty($clearParams) ? '?' . http_build_query($clearParams) : '');
+        @endphp
+        <a href="{{ $clearUrl }}#catalog-section" class="produk-search-clear-btn" title="Hapus pencarian" aria-label="Hapus pencarian">
+          <i data-lucide="x"></i>
+        </a>
+      @endif
     </form>
 
     <!-- Categories Card -->

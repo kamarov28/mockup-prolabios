@@ -134,7 +134,7 @@
   color: var(--nb-ink);
   font-family: var(--font-body);
   font-size: 0.92rem;
-  padding: 12px 18px 12px 44px;
+  padding: 12px 42px 12px 44px;
   transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
   box-shadow: var(--nb-shadow-sm);
   width: 100%;
@@ -166,6 +166,40 @@
 
 .produk-search-btn:hover {
   color: var(--nb-primary);
+}
+
+.produk-search-clear-btn {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nb-muted, #64748B);
+  cursor: pointer;
+  z-index: 2;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.produk-search-clear-btn:hover {
+  background: var(--nb-primary, #A6171C);
+  color: #FFFFFF;
+  border-color: var(--nb-primary, #A6171C);
+}
+
+.produk-search-clear-btn i,
+.produk-search-clear-btn svg {
+  width: 12px;
+  height: 12px;
 }
 
 .produk-search-btn svg,
