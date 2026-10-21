@@ -23,17 +23,14 @@
           <div class="card p-4 mb-4">
             <h3 class="profil-sidebar-title"><i data-lucide="list-tree" class="me-2"></i>Pilih Layanan</h3>
             <nav class="layanan-sidebar-nav d-flex flex-column gap-2">
-              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'maintenance' ? 'is-active' : '' }}">
+              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link d-flex align-items-center {{ $activeService == 'maintenance' ? 'is-active' : '' }}">
                 <span><i data-lucide="wrench" class="text-danger me-2"></i>Perawatan &amp; Perbaikan</span>
-                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
-              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'labdesign' ? 'is-active' : '' }}">
+              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link d-flex align-items-center {{ $activeService == 'labdesign' ? 'is-active' : '' }}">
                 <span><i data-lucide="building" class="text-primary me-2"></i>Desain &amp; Pembangunan Lab</span>
-                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
-              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $activeService == 'consultation' ? 'is-active' : '' }}">
+              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link d-flex align-items-center {{ $activeService == 'consultation' ? 'is-active' : '' }}">
                 <span><i data-lucide="graduation-cap" class="text-success me-2"></i>Konsultasi &amp; Pelatihan</span>
-                <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
               </a>
             </nav>
           </div>
