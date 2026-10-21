@@ -105,14 +105,6 @@
                   <textarea class="form-control kontak-form-input" id="pesan" name="pesan" rows="5" required placeholder="Tuliskan pertanyaan, konsultasi, atau pesan yang ingin disampaikan..."></textarea>
                 </div>
                 <div class="col-12 mt-3">
-                  <div class="p-3 d-flex align-items-center gap-2 rfq-redirect-box">
-                    <i data-lucide="clock" class="text-primary flex-shrink-0" style="font-size: 1.1rem;"></i>
-                    <span class="small" style="font-size: 0.82rem; color: var(--nb-ink); line-height: 1.4;">
-                      <strong>Waktu Respon:</strong> Pertanyaan teknis, ketersediaan lot reagen, atau jadwal kalibrasi ditindaklanjuti tim teknis maksimal 1–2 jam di jam operasional kantor.
-                    </span>
-                  </div>
-                </div>
-                <div class="col-12 mt-3">
                   <button type="submit" class="kontak-submit-btn">
                     <i data-lucide="send" class="me-1"></i> Kirim Pesan
                   </button>
