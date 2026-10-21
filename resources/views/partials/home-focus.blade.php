@@ -10,112 +10,71 @@
 
     @php
       $sp = $homeData['sector_panels'] ?? [];
+      $defaultScopes = [
+        'pharma' => "Pengujian Endotoksin Bakteri (Metode Gel Clot, Turbidimetri & Kromogenik)\nValidasi Siklus Sterilisasi Uap, EtO & Indikator Biologi SCBI\nMedia Uji Batas Mikroba & Monitoring Ruang Bersih (Cleanroom)",
+        'fnb' => "Deteksi Cepat Patogen Kritis (Salmonella, Listeria, E. coli, Coliform)\nMonitoring Higiene Permukaan & Uji Cepat Sanitasi ATP Swab\nMedia Kultur Kromogenik & Analisis Kapang Khamir Pangan",
+        'healthcare' => "Monitoring Efektivitas Sterilisasi CSSD (Steam, VH2O2, EO Plasma)\nMedia Kultur Diagnostik & Uji Kepekaan Antibiotik (MIC)\nReagen Pewarnaan & Bahan Habis Pakai Laboratorium Klinik",
+        'brewing' => "Deteksi Selektif Bakteri Pembusuk Bir (Lactobacillus & Pediococcus)\nMonitoring Kemurnian Ragi & Deteksi Kontaminasi Mikroba Liar\nPengujian Mikrobiologi Air Proses & Sanitasi Jalur Produksi",
+      ];
+      $defaultCompliance = [
+        'pharma' => 'USP / EP / BP / CPOB Compliant',
+        'fnb' => 'HACCP & Standar BPOM',
+        'healthcare' => 'Izin Edar AKL Kemenkes RI',
+        'brewing' => 'Standar QC Brewing & ISO',
+      ];
+
       $sectors = [
         'pharma' => [
           'label' => 'Farmasi & Biotech',
           'icon' => 'pill',
-          'tag' => $sp['pharma']['tag'] ?? 'FARMASI & KOSMETIK',
-          'title' => $sp['pharma']['title'] ?? 'Pengujian Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>',
-          'desc' => $sp['pharma']['desc'] ?? 'Kit Uji Endotoksin LAL (Bioendo), Indikator Biologi SCBI (Terragene), serta media kultur standar farmakope untuk kepatuhan QC obat & kosmetik.',
-          'link' => $sp['pharma']['link'] ?? '/sektor?s=pharmaceutical#sektor-nav',
-          'linkText' => 'Jelajahi Solusi Farmasi',
-          'compliance' => 'USP / EP / BP Compliant',
-          'cat' => 'CAT. BIO-TAL01',
-          'brand' => 'Bioendo Reagents',
-          'badge' => 'Ready Stock',
-          'badgeIcon' => 'check',
-          'prodTitle' => 'Gel Clot Lyophilized Amebocyte Lysate (TAL/LAL)',
-          'prodDesc' => 'Reagen sensitivitas tinggi (0.03 – 0.25 EU/ml) untuk deteksi cepat endotoksin bakteri pada sediaan farmasi injeksi, air WFI, dan alat kesehatan steril.',
-          'stat1_label' => 'Sensitivitas',
-          'stat1_val' => '0.03 EU/mL',
-          'stat1_class' => 'fw-bold small nb-mono',
-          'stat2_label' => 'Kemasan',
-          'stat2_val' => '5.2 mL / Vial',
-          'stat2_class' => 'fw-bold small nb-mono',
-          'certIcon' => 'file-check',
-          'cert' => 'Sertifikat COA per batch',
-          'rfqLink' => url('/produk?q=endotoxin'),
-          'rfqAria' => 'Ajukan RFQ produk reagen endotoksin',
+          'tag' => !empty($sp['pharma']['tag']) ? $sp['pharma']['tag'] : 'FARMASI & KOSMETIK',
+          'title' => !empty($sp['pharma']['title']) ? $sp['pharma']['title'] : 'Uji Endotoksin & <span class="text-accent">Validasi Sterilisasi</span>',
+          'desc' => !empty($sp['pharma']['desc']) ? $sp['pharma']['desc'] : 'Solusi pengujian pirogenitas, kit uji endotoksin bakteri LAL/TAL, indikator biologi SCBI, dan media kultur terstandarisasi untuk kendali mutu CPOB/GMP.',
+          'link' => !empty($sp['pharma']['link']) ? $sp['pharma']['link'] : '/sektor?s=pharmaceutical#sektor-nav',
+          'scope' => !empty($sp['pharma']['scope']) ? $sp['pharma']['scope'] : $defaultScopes['pharma'],
+          'compliance' => !empty($sp['pharma']['compliance']) ? $sp['pharma']['compliance'] : $defaultCompliance['pharma'],
         ],
         'fnb' => [
           'label' => 'Makanan & Minuman',
           'icon' => 'coffee',
-          'tag' => $sp['fnb']['tag'] ?? 'INDUSTRI MAKANAN & MINUMAN',
-          'title' => $sp['fnb']['title'] ?? 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>',
-          'desc' => $sp['fnb']['desc'] ?? 'Deteksi cepat patogen pangan (Salmonella, Listeria, E. coli) dan indikator higiene ATP untuk memastikan kepatuhan standar HACCP & BPOM.',
-          'link' => $sp['fnb']['link'] ?? '/sektor?s=food#sektor-nav',
-          'linkText' => 'Jelajahi Solusi F&B',
-          'compliance' => 'HACCP & ISO 22000',
-          'cat' => 'CAT. SCH-MEDIA02',
-          'brand' => 'Scharlau Microbiology',
-          'badge' => 'Ready Stock',
-          'badgeIcon' => 'check',
-          'prodTitle' => 'Chromogenic Media for Salmonella & E. coli',
-          'prodDesc' => 'Media kultur selektif diferensiasi warna spesifik untuk identifikasi koloni patogen makanan dalam 24 jam dengan akurasi isolasi tinggi.',
-          'stat1_label' => 'Inkubasi',
-          'stat1_val' => '24 Jam (37°C)',
-          'stat1_class' => 'fw-bold small nb-mono',
-          'stat2_label' => 'Bentuk',
-          'stat2_val' => 'Dehydrated / Ready Plate',
-          'stat2_class' => 'fw-bold small',
-          'certIcon' => 'shield-check',
-          'cert' => 'BPOM Food Standard',
-          'rfqLink' => url('/produk?q=salmonella'),
-          'rfqAria' => 'Ajukan RFQ media kromogenik salmonella',
+          'tag' => !empty($sp['fnb']['tag']) ? $sp['fnb']['tag'] : 'INDUSTRI MAKANAN & MINUMAN',
+          'title' => !empty($sp['fnb']['title']) ? $sp['fnb']['title'] : 'Deteksi Cepat Patogen & <span class="text-accent">Monitoring Higiene</span>',
+          'desc' => !empty($sp['fnb']['desc']) ? $sp['fnb']['desc'] : 'Deteksi cepat patogen pangan dan sistem pemantauan sanitasi permukaan untuk memastikan keamanan rantai produksi pangan sesuai standar HACCP & BPOM.',
+          'link' => !empty($sp['fnb']['link']) ? $sp['fnb']['link'] : '/sektor?s=food#sektor-nav',
+          'scope' => !empty($sp['fnb']['scope']) ? $sp['fnb']['scope'] : $defaultScopes['fnb'],
+          'compliance' => !empty($sp['fnb']['compliance']) ? $sp['fnb']['compliance'] : $defaultCompliance['fnb'],
         ],
         'healthcare' => [
           'label' => 'Kesehatan & Klinis',
           'icon' => 'hospital',
-          'tag' => $sp['healthcare']['tag'] ?? 'KESEHATAN & CSSD RUMAH SAKIT',
-          'title' => $sp['healthcare']['title'] ?? 'Diagnostik & <span class="text-accent">Indikator Sterilisasi</span>',
-          'desc' => $sp['healthcare']['desc'] ?? 'Identifikasi mikroba, uji sensitivitas antibiotik MIC, serta indikator kimia & biologi untuk sterilisator CSSD rumah sakit.',
-          'link' => $sp['healthcare']['link'] ?? '/sektor?s=hospital-clinic#sektor-nav',
-          'linkText' => 'Jelajahi Solusi Kesehatan',
-          'compliance' => 'AKL Kemenkes RI',
-          'cat' => 'CAT. TER-BT20',
-          'brand' => 'Terragene Bionova',
-          'badge' => 'AKL Certified',
-          'badgeIcon' => 'badge-check',
-          'prodTitle' => 'Self-Contained Biological Indicator (SCBI) Steam',
-          'prodDesc' => 'Indikator biologi Geobacillus stearothermophilus untuk monitoring sterilisasi uap CSSD rumah sakit dengan pembacaan cepat 24 jam.',
-          'stat1_label' => 'Organisme',
-          'stat1_val' => 'G. stearothermophilus',
-          'stat1_class' => 'fw-bold small fst-italic',
-          'stat2_label' => 'Populasi Spora',
-          'stat2_val' => '> 10^6 CFU',
-          'stat2_class' => 'fw-bold small nb-mono',
-          'certIcon' => 'badge-check',
-          'cert' => 'Kemenkes AKL Resmi',
-          'rfqLink' => url('/produk?q=indicator'),
-          'rfqAria' => 'Ajukan RFQ indikator biologi SCBI',
+          'tag' => !empty($sp['healthcare']['tag']) ? $sp['healthcare']['tag'] : 'KESEHATAN & CSSD RUMAH SAKIT',
+          'title' => !empty($sp['healthcare']['title']) ? $sp['healthcare']['title'] : 'Diagnostik Mikrobiologi & <span class="text-accent">Indikator Sterilisasi</span>',
+          'desc' => !empty($sp['healthcare']['desc']) ? $sp['healthcare']['desc'] : 'Reagen identifikasi mikroba, uji sensitivitas antibiotik, serta indikator sterilisasi instalasi CSSD rumah sakit berizin edar resmi Kemenkes RI.',
+          'link' => !empty($sp['healthcare']['link']) ? $sp['healthcare']['link'] : '/sektor?s=hospital-clinic#sektor-nav',
+          'scope' => !empty($sp['healthcare']['scope']) ? $sp['healthcare']['scope'] : $defaultScopes['healthcare'],
+          'compliance' => !empty($sp['healthcare']['compliance']) ? $sp['healthcare']['compliance'] : $defaultCompliance['healthcare'],
         ],
         'brewing' => [
           'label' => 'Brewing & Riset',
           'icon' => 'beaker',
-          'tag' => $sp['brewing']['tag'] ?? 'INDUSTRI BREWING & RISET',
-          'title' => $sp['brewing']['title'] ?? 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>',
-          'desc' => $sp['brewing']['desc'] ?? 'Media spesifik bakteri pembusuk bir (Lactobacillus, Pediococcus) dan penanganan cairan presisi untuk riset biologi molekuler.',
-          'link' => $sp['brewing']['link'] ?? '/sektor?s=brewing#sektor-nav',
-          'linkText' => 'Jelajahi Solusi Brewing',
-          'compliance' => 'R&D Quality Control',
-          'cat' => 'CAT. DOH-NBB01',
-          'brand' => 'Döhler NBB Diagnostics',
-          'badge' => 'Ready Stock',
-          'badgeIcon' => 'check',
-          'prodTitle' => 'NBB®-A Agar for Spoilage Microorganisms',
-          'prodDesc' => 'Media deteksi selektif spesifik untuk isolasi bakteri pembusuk bir dan fermentasi (Lactobacillus & Pediococcus) tanpa gangguan ragi kultur.',
-          'stat1_label' => 'Deteksi Target',
-          'stat1_val' => 'Lactobacillus / Pediococcus',
-          'stat1_class' => 'fw-bold small',
-          'stat2_label' => 'Format',
-          'stat2_val' => 'Solid Ready Agar',
-          'stat2_class' => 'fw-bold small',
-          'certIcon' => 'file-check',
-          'cert' => 'Brewing Lab Protocol',
-          'rfqLink' => url('/produk?q=nbb'),
-          'rfqAria' => 'Ajukan RFQ media NBB agar brewing',
+          'tag' => !empty($sp['brewing']['tag']) ? $sp['brewing']['tag'] : 'INDUSTRI BREWING & RISET',
+          'title' => !empty($sp['brewing']['title']) ? $sp['brewing']['title'] : 'Kontrol Pembusukan & <span class="text-accent">Kualitas Fermentasi</span>',
+          'desc' => !empty($sp['brewing']['desc']) ? $sp['brewing']['desc'] : 'Media selektif bakteri pembusuk bir dan analisis mikrobiologi presisi untuk menjaga stabilitas organoleptik dan kualitas fermentasi industri.',
+          'link' => !empty($sp['brewing']['link']) ? $sp['brewing']['link'] : '/sektor?s=brewing#sektor-nav',
+          'scope' => !empty($sp['brewing']['scope']) ? $sp['brewing']['scope'] : $defaultScopes['brewing'],
+          'compliance' => !empty($sp['brewing']['compliance']) ? $sp['brewing']['compliance'] : $defaultCompliance['brewing'],
         ],
       ];
+
+      foreach ($sectors as $id => &$sec) {
+        $rawItems = array_filter(array_map('trim', explode("\n", (string) $sec['scope'])));
+        $sec['scope_items'] = !empty($rawItems) ? $rawItems : [
+          'Prosedur kendali mutu terstandarisasi',
+          'Pengujian akurasi analitik & kepatuhan regulasi',
+          'Dukungan dokumentasi teknis & sertifikat'
+        ];
+      }
+      unset($sec);
     @endphp
 
     <!-- Sector Tabs Bar (Responsive) -->
@@ -127,11 +86,12 @@
       @endforeach
     </div>
 
-    <!-- Tab Content Panels (Interactive Spec Cards) -->
+    <!-- Tab Content Panels (Sector Overview & Capabilities) -->
     <div class="hitech-tab-panels">
       @foreach($sectors as $id => $sec)
         <div class="hitech-tab-panel {{ $loop->first ? 'active' : '' }}" id="panel-{{ $id }}" role="tabpanel" aria-labelledby="tab-{{ $id }}" tabindex="0">
           <div class="row g-4 align-items-stretch">
+            {{-- Left Column: Sector Overview --}}
             <div class="col-lg-6">
               <div class="hitech-info-card p-4 p-md-5 rounded-3 h-100 d-flex flex-column justify-content-between">
                 <div>
@@ -146,47 +106,43 @@
                   <p class="hitech-panel-desc mb-4">{{ $sec['desc'] }}</p>
                 </div>
                 <div class="d-flex flex-wrap gap-3 pt-3 border-top align-items-center justify-content-between">
-                  <a href="{{ url($sec['link']) }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-2">
-                    {{ $sec['linkText'] }} <i data-lucide="arrow-right"></i>
+                  <a href="{{ url($sec['link']) }}" class="nb-btn nb-btn-primary d-inline-flex align-items-center gap-2">
+                    Jelajahi Solusi Sektor <i data-lucide="arrow-right"></i>
                   </a>
-                  <span class="nb-badge-sm"><i data-lucide="badge-check" class="text-primary me-1"></i> {{ $sec['compliance'] }}</span>
+                  <span class="nb-badge-sm"><i data-lucide="shield-check" class="text-primary me-1"></i> Jaminan Mutu Industri</span>
                 </div>
               </div>
             </div>
 
-            <!-- Interactive Spec Card Preview -->
+            {{-- Right Column: Testing Scope & Compliance --}}
             <div class="col-lg-6">
               <div class="hitech-spec-card p-4 p-md-5 rounded-3 h-100 d-flex flex-column justify-content-between">
                 <div>
-                  <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider">
-                    <div class="d-flex align-items-center gap-2">
-                      <span class="product-cat-code">{{ $sec['cat'] }}</span>
-                      <span class="text-muted small">{{ $sec['brand'] }}</span>
-                    </div>
-                    <span class="nb-badge-sm"><i data-lucide="{{ $sec['badgeIcon'] }}" class="me-1 text-primary"></i> {{ $sec['badge'] }}</span>
+                  <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom hitech-spec-divider flex-wrap gap-2">
+                    <h4 class="fs-6 fw-bold text-uppercase tracking-wider text-dark mb-0 d-flex align-items-center gap-2" style="font-family: var(--font-display); letter-spacing: 0.5px;">
+                      <i data-lucide="check-circle-2" style="width: 16px; height: 16px; color: var(--nb-primary);"></i> Cakupan Pengujian &amp; Alur Kerja
+                    </h4>
+                    <span class="nb-badge-sm"><i data-lucide="badge-check" class="me-1 text-primary"></i> {{ $sec['compliance'] }}</span>
                   </div>
 
-                  <h4 class="fs-5 fw-bold mb-2">{{ $sec['prodTitle'] }}</h4>
-                  <p class="text-muted mb-4" style="font-size: 0.88rem; line-height: 1.6;">
-                    {{ $sec['prodDesc'] }}
+                  <p class="text-muted mb-3" style="font-size: 0.88rem; line-height: 1.6;">
+                    Prosedur kendali mutu dan pengujian analitik terstandarisasi yang didukung Prolabios untuk sektor ini:
                   </p>
 
-                  <div class="d-flex align-items-center gap-4 py-2 mb-3">
-                    <div>
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">{{ $sec['stat1_label'] }}</div>
-                      <div class="{{ $sec['stat1_class'] }} text-dark mt-1">{{ $sec['stat1_val'] }}</div>
-                    </div>
-                    <div class="border-start ps-4">
-                      <div class="text-muted" style="font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">{{ $sec['stat2_label'] }}</div>
-                      <div class="{{ $sec['stat2_class'] }} text-dark mt-1">{{ $sec['stat2_val'] }}</div>
-                    </div>
-                  </div>
+                  <ul class="list-unstyled my-3 d-flex flex-column gap-2.5">
+                    @foreach($sec['scope_items'] as $item)
+                      <li class="d-flex align-items-start gap-2">
+                        <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--nb-primary); margin-top: 3px;" class="flex-shrink-0"></i>
+                        <span style="font-size: 0.88rem; color: var(--nb-ink); line-height: 1.5;">{{ $item }}</span>
+                      </li>
+                    @endforeach
+                  </ul>
                 </div>
 
-                <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider">
-                  <span class="text-muted small"><i data-lucide="{{ $sec['certIcon'] }}" class="text-primary me-1"></i> {{ $sec['cert'] }}</span>
-                  <a href="{{ $sec['rfqLink'] }}" class="nb-btn nb-btn-primary" aria-label="{{ $sec['rfqAria'] }}">
-                    <i data-lucide="shopping-cart"></i> Tambah RFQ
+                <div class="d-flex align-items-center justify-content-between pt-3 border-top hitech-spec-divider flex-wrap gap-2">
+                  <span class="text-muted small"><i data-lucide="file-check" class="text-primary me-1"></i> Dokumentasi &amp; COA Lengkap</span>
+                  <a href="{{ url('/kontak?subjek=consultation') }}" class="nb-btn nb-btn-ghost d-inline-flex align-items-center gap-1.5" style="font-size: 0.84rem;">
+                    Konsultasi Tim Teknis <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
                   </a>
                 </div>
               </div>

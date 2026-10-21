@@ -212,6 +212,14 @@
                     <label for="sector_desc_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Ringkas</label>
                     <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" required>{{ old('sector_desc_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
                   </div>
+                  <div class="mb-2">
+                    <label for="sector_scope_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Cakupan Pengujian &amp; Alur Kerja (1 baris per poin)</label>
+                    <textarea id="sector_scope_{{ $sKey }}" class="form-control form-control-sm" name="sector_scope_{{ $sKey }}" rows="3" placeholder="Poin 1...&#10;Poin 2...&#10;Poin 3...">{{ old('sector_scope_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['scope'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
+                  </div>
+                  <div class="mb-2">
+                    <label for="sector_compliance_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Standar Regulasi / Kepatuhan</label>
+                    <input type="text" id="sector_compliance_{{ $sKey }}" class="form-control form-control-sm" name="sector_compliance_{{ $sKey }}" value="{{ old('sector_compliance_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['compliance'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" placeholder="Contoh: USP / EP / BP / CPOB Compliant">
+                  </div>
                   <div>
                     <label for="sector_link_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Link URL Tombol</label>
                     <input type="text" id="sector_link_{{ $sKey }}" class="form-control form-control-sm" name="sector_link_{{ $sKey }}" value="{{ old('sector_link_'.$sKey, $sPanel['link'] ?? '') }}" required>

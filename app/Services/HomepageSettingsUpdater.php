@@ -69,18 +69,26 @@ class HomepageSettingsUpdater
             'sector_title_pharma' => self::SHORT_TEXT_RULE,
             'sector_tag_pharma' => self::SHORT_TEXT_RULE,
             'sector_desc_pharma' => self::TEXT_RULE,
+            'sector_scope_pharma' => 'nullable|string|max:1000',
+            'sector_compliance_pharma' => 'nullable|string|max:255',
             'sector_link_fnb' => self::LINK_RULE,
             'sector_title_fnb' => self::SHORT_TEXT_RULE,
             'sector_tag_fnb' => self::SHORT_TEXT_RULE,
             'sector_desc_fnb' => self::TEXT_RULE,
+            'sector_scope_fnb' => 'nullable|string|max:1000',
+            'sector_compliance_fnb' => 'nullable|string|max:255',
             'sector_link_healthcare' => self::LINK_RULE,
             'sector_title_healthcare' => self::SHORT_TEXT_RULE,
             'sector_tag_healthcare' => self::SHORT_TEXT_RULE,
             'sector_desc_healthcare' => self::TEXT_RULE,
+            'sector_scope_healthcare' => 'nullable|string|max:1000',
+            'sector_compliance_healthcare' => 'nullable|string|max:255',
             'sector_link_brewing' => self::LINK_RULE,
             'sector_title_brewing' => self::SHORT_TEXT_RULE,
             'sector_tag_brewing' => self::SHORT_TEXT_RULE,
             'sector_desc_brewing' => self::TEXT_RULE,
+            'sector_scope_brewing' => 'nullable|string|max:1000',
+            'sector_compliance_brewing' => 'nullable|string|max:255',
         ]);
     }
 
@@ -165,6 +173,8 @@ class HomepageSettingsUpdater
                 'tag' => html_entity_decode(html_entity_decode((string) $request->input("sector_tag_$sKey", $existingSector['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
                 'title' => HtmlSanitizer::clean($normalizedTitle),
                 'desc' => html_entity_decode(html_entity_decode((string) $request->input("sector_desc_$sKey", $existingSector['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'scope' => html_entity_decode(html_entity_decode((string) $request->input("sector_scope_$sKey", $existingSector['scope'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+                'compliance' => html_entity_decode(html_entity_decode((string) $request->input("sector_compliance_$sKey", $existingSector['compliance'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
                 'link' => (string) $request->input("sector_link_$sKey", $existingSector['link'] ?? ''),
             ];
         }
