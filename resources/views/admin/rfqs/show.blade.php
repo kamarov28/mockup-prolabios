@@ -8,10 +8,15 @@
   .hover-primary:hover {
     color: var(--color-accent, #A6171C) !important;
   }
+  @page {
+    size: auto;
+    margin: 12mm 15mm;
+  }
   @media print {
+    .admin-header,
     #admin-sidebar,
     .sidebar-backdrop,
-    #admin-topbar,
+    #scroll-to-top,
     .print-hide,
     .admin-btn,
     .alert {
@@ -27,11 +32,15 @@
       padding: 0 !important;
       background: #FFFFFF !important;
     }
+    .admin-body {
+      padding: 0 !important;
+    }
     .admin-card {
       box-shadow: none !important;
       border: 1px solid #CBD5E1 !important;
       break-inside: avoid;
       margin-bottom: 20px !important;
+      background: #FFFFFF !important;
     }
     .col-lg-8, .col-lg-4 {
       width: 100% !important;
