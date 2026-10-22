@@ -176,8 +176,8 @@ class HomepageSettingsUpdater
             $rawTitle = (string) $request->input("sector_title_$sKey", $existingSector['title'] ?? '');
             $normalizedTitle = html_entity_decode(html_entity_decode($rawTitle, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $secId = (string) $request->input("sector_id_$sKey", $existingSector['sector_id'] ?? $defaultSectorMap[$sKey] ?? '');
-            $rawLink = (string) $request->input("sector_link_$sKey", $existingSector['link'] ?? '');
-            if (empty($rawLink) || $rawLink === '/sektor' || ! str_contains($rawLink, '?s=')) {
+            $rawLink = (string) $request->input("sector_link_$sKey", '');
+            if (empty($rawLink) || $rawLink === '/sektor' || ! str_contains($rawLink, '?s=') || $request->has("sector_id_$sKey")) {
                 $rawLink = '/sektor?s='.$secId.'#sektor-nav';
             }
             $sectorPanels[$sKey] = [

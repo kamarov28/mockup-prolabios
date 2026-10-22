@@ -15,48 +15,43 @@
 
     @php
       $sp = $homeData['sector_panels'] ?? [];
-      $sectors = [
-        'pharma' => [
-          'label' => 'Farmasi & Biotech',
-          'icon' => 'pill',
-          'sector_id' => $sp['pharma']['sector_id'] ?? 'pharmaceutical',
-          'tag' => !empty($sp['pharma']['tag']) ? $sp['pharma']['tag'] : 'SEKTOR FARMASI & KOSMETIK',
-          'title' => !empty($sp['pharma']['title']) ? $sp['pharma']['title'] : 'Solusi Pengujian & Kendali Mutu Farmasi',
-          'desc' => !empty($sp['pharma']['desc']) ? $sp['pharma']['desc'] : 'Mendukung pengujian mikrobiologi dan kendali mutu industri farmasi serta kosmetik. Kami menyediakan media kultur standar farmakope, reagen pengujian sterilitas, dan instrumen analitik untuk memastikan kepatuhan regulasi CPOB dan farmakope internasional.',
-          'link' => !empty($sp['pharma']['link']) && str_contains($sp['pharma']['link'], '?s=') ? $sp['pharma']['link'] : '/sektor?s=' . ($sp['pharma']['sector_id'] ?? 'pharmaceutical') . '#sektor-nav',
-          'image' => !empty($sp['pharma']['image']) ? $sp['pharma']['image'] : '/images/sectors/pharmaceutical.jpg',
-        ],
-        'fnb' => [
-          'label' => 'Makanan & Minuman',
-          'icon' => 'coffee',
-          'sector_id' => $sp['fnb']['sector_id'] ?? 'food',
-          'tag' => !empty($sp['fnb']['tag']) ? $sp['fnb']['tag'] : 'SEKTOR FOOD & BEVERAGE',
-          'title' => !empty($sp['fnb']['title']) ? $sp['fnb']['title'] : 'Keamanan Pangan & Pengujian Mikrobiologi',
-          'desc' => !empty($sp['fnb']['desc']) ? $sp['fnb']['desc'] : 'Mendukung pengawasan mutu seluruh rantai produksi industri makanan dan minuman. Kami menyediakan media kultur deteksi patogen, sistem monitoring higiene sanitasi, serta reagen uji analitik untuk kepatuhan standar BPOM dan HACCP.',
-          'link' => !empty($sp['fnb']['link']) && str_contains($sp['fnb']['link'], '?s=') ? $sp['fnb']['link'] : '/sektor?s=' . ($sp['fnb']['sector_id'] ?? 'food') . '#sektor-nav',
-          'image' => !empty($sp['fnb']['image']) ? $sp['fnb']['image'] : '/images/sectors/food.jpg',
-        ],
-        'healthcare' => [
-          'label' => 'Kesehatan & Klinis',
-          'icon' => 'hospital',
-          'sector_id' => $sp['healthcare']['sector_id'] ?? 'hospital-clinic',
-          'tag' => !empty($sp['healthcare']['tag']) ? $sp['healthcare']['tag'] : 'SEKTOR KESEHATAN & KLINIS',
-          'title' => !empty($sp['healthcare']['title']) ? $sp['healthcare']['title'] : 'Dukungan Diagnostik & Pemantauan Sterilisasi',
-          'desc' => !empty($sp['healthcare']['desc']) ? $sp['healthcare']['desc'] : 'Menyediakan media kultur mikrobiologi klinis, reagen identifikasi patogen, serta indikator sterilisasi instalasi CSSD rumah sakit dengan dukungan sertifikasi dan izin edar resmi Kemenkes RI.',
-          'link' => !empty($sp['healthcare']['link']) && str_contains($sp['healthcare']['link'], '?s=') ? $sp['healthcare']['link'] : '/sektor?s=' . ($sp['healthcare']['sector_id'] ?? 'hospital-clinic') . '#sektor-nav',
-          'image' => !empty($sp['healthcare']['image']) ? $sp['healthcare']['image'] : '/images/sectors/hospital-clinic.jpg',
-        ],
-        'brewing' => [
-          'label' => 'Brewing & Riset',
-          'icon' => 'beaker',
-          'sector_id' => $sp['brewing']['sector_id'] ?? 'brewing',
-          'tag' => !empty($sp['brewing']['tag']) ? $sp['brewing']['tag'] : 'SEKTOR BREWING & FERMENTASI',
-          'title' => !empty($sp['brewing']['title']) ? $sp['brewing']['title'] : 'Kendali Mutu Fermentasi & Riset Biologi',
-          'desc' => !empty($sp['brewing']['desc']) ? $sp['brewing']['desc'] : 'Solusi deteksi mikroorganisme pembusuk dan pemantauan aktivitas fermentasi untuk industri minuman dan riset mikrobiologi guna menjaga kemurnian kultur dan stabilitas kualitas produk.',
-          'link' => !empty($sp['brewing']['link']) && str_contains($sp['brewing']['link'], '?s=') ? $sp['brewing']['link'] : '/sektor?s=' . ($sp['brewing']['sector_id'] ?? 'brewing') . '#sektor-nav',
-          'image' => !empty($sp['brewing']['image']) ? $sp['brewing']['image'] : '/images/sectors/brewing.jpg',
-        ],
+      $masterSectors = collect(app(\App\Services\SectorService::class)->getSectors())->keyBy('id');
+      $defaultSectorMap = [
+        'pharma' => 'pharmaceutical',
+        'fnb' => 'food',
+        'healthcare' => 'hospital-clinic',
+        'brewing' => 'brewing',
       ];
+      $defaultIcons = [
+        'pharma' => 'pill',
+        'fnb' => 'coffee',
+        'healthcare' => 'hospital',
+        'brewing' => 'beaker',
+      ];
+
+      $sectors = [];
+      foreach ($defaultSectorMap as $sKey => $defaultId) {
+        $secConfig = $sp[$sKey] ?? [];
+        $secId = !empty($secConfig['sector_id']) ? $secConfig['sector_id'] : $defaultId;
+        $master = $masterSectors->get($secId);
+
+        $name = $master['name'] ?? ucwords(str_replace('-', ' ', $secId));
+        $descFromMaster = '';
+        if ($master && !empty($master['description'])) {
+            $descFromMaster = is_array($master['description']) ? ($master['description'][0] ?? '') : $master['description'];
+        }
+
+        $sectors[$sKey] = [
+          'label' => $name,
+          'icon' => $defaultIcons[$sKey] ?? 'folder-tree',
+          'sector_id' => $secId,
+          'tag' => !empty($secConfig['tag']) ? $secConfig['tag'] : 'SEKTOR ' . strtoupper($name),
+          'title' => !empty($secConfig['title']) ? $secConfig['title'] : 'Solusi Pengujian & Kendali Mutu ' . $name,
+          'desc' => !empty($secConfig['desc']) ? $secConfig['desc'] : ($descFromMaster ?: 'Solusi laboratorium, instrumen analitik, dan reagen pendukung pengujian industri ' . $name . '.'),
+          'link' => !empty($secConfig['link']) && str_contains($secConfig['link'], '?s=') ? $secConfig['link'] : '/sektor?s=' . $secId . '#sektor-nav',
+          'image' => !empty($secConfig['image']) ? $secConfig['image'] : ($master['image'] ?? '/images/sectors/' . $secId . '.jpg'),
+        ];
+      }
     @endphp
 
     <!-- Sector Tabs Bar (Responsive) -->

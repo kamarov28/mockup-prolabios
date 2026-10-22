@@ -131,4 +131,21 @@ class HomepageEntityEscapingTest extends TestCase
         $homeResponse->assertOk();
         $homeResponse->assertSee('/sektor?s=food#sektor-nav');
     }
+
+    public function test_sector_falls_back_to_master_data_when_custom_fields_are_empty(): void
+    {
+        $response = $this->actingAs($this->admin)->post('/admin/home', [
+            'section' => 'homepage',
+            'sector_id_pharma' => 'biomolecular',
+            'sector_title_pharma' => '',
+            'sector_desc_pharma' => '',
+        ]);
+
+        $response->assertRedirect();
+
+        $homeResponse = $this->get('/');
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('Biomolecular');
+        $homeResponse->assertSee('/sektor?s=biomolecular#sektor-nav');
+    }
 }

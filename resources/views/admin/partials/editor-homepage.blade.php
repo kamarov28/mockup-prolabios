@@ -199,9 +199,13 @@
             <div class="col-md-6">
               <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
-                  <span class="admin-badge admin-badge-info mb-2">{{ $sLabel }}</span>
-                  <div class="mb-2">
-                    <label for="sector_id_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Pilih Sektor Terkait</label>
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="admin-badge admin-badge-info">{{ $sLabel }}</span>
+                    <span class="text-secondary small fw-medium">Slot {{ $loop->iteration }}</span>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="sector_id_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Pilih Sektor dari Master</label>
                     @php
                       $defaultSecMap = [
                         'pharma' => 'pharmaceutical',
@@ -225,26 +229,19 @@
                         <option value="brewing" {{ $selectedSecId === 'brewing' ? 'selected' : '' }}>Brewing</option>
                       @endif
                     </select>
+                    <div class="form-text small text-secondary mt-1">
+                      Foto resmi &amp; tautan halaman sektor otomatis terhubung dari Master Sektor.
+                    </div>
                   </div>
+
                   <div class="mb-2">
-                    <label for="sector_tag_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Tag Sub-kategori</label>
-                    <input type="text" id="sector_tag_{{ $sKey }}" class="form-control form-control-sm" name="sector_tag_{{ $sKey }}" value="{{ old('sector_tag_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['tag'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
+                    <label for="sector_title_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Sektor di Beranda</label>
+                    <input type="text" id="sector_title_{{ $sKey }}" class="form-control form-control-sm" name="sector_title_{{ $sKey }}" value="{{ old('sector_title_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" placeholder="Kosongkan untuk otomatis memakai nama sektor">
                   </div>
-                  <div class="mb-2">
-                    <label for="sector_title_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Sektor</label>
-                    <input type="text" id="sector_title_{{ $sKey }}" class="form-control form-control-sm" name="sector_title_{{ $sKey }}" value="{{ old('sector_title_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>
-                  </div>
-                  <div class="mb-2">
-                    <label for="sector_desc_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Ringkas Sektor</label>
-                    <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" required>{{ old('sector_desc_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
-                  </div>
-                  <div class="mb-2">
-                    <label for="sector_image_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Custom Foto Sektor (Opsional)</label>
-                    <input type="text" id="sector_image_{{ $sKey }}" class="form-control form-control-sm" name="sector_image_{{ $sKey }}" value="{{ old('sector_image_'.$sKey, $sPanel['image'] ?? '') }}" placeholder="Contoh: /images/sectors/pharmaceutical.jpg">
-                  </div>
+
                   <div>
-                    <label for="sector_link_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Link URL Tombol (Otomatis: /sektor?s={id}#sektor-nav)</label>
-                    <input type="text" id="sector_link_{{ $sKey }}" class="form-control form-control-sm" name="sector_link_{{ $sKey }}" value="{{ old('sector_link_'.$sKey, $sPanel['link'] ?? '') }}" placeholder="/sektor?s={{ $selectedSecId }}#sektor-nav" required>
+                    <label for="sector_desc_{{ $sKey }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Deskripsi Singkat di Beranda</label>
+                    <textarea id="sector_desc_{{ $sKey }}" class="form-control form-control-sm" name="sector_desc_{{ $sKey }}" rows="3" placeholder="Kosongkan untuk otomatis mengambil ringkasan dari Master Sektor">{{ old('sector_desc_'.$sKey, html_entity_decode(html_entity_decode((string) ($sPanel['desc'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}</textarea>
                   </div>
                 </div>
               </div>
