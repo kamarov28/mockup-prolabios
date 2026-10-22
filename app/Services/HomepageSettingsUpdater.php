@@ -207,11 +207,15 @@ class HomepageSettingsUpdater
     private function patchContacts(Request $request, array $homeData): array
     {
         $patch = [];
-        $patch['contact_phone'] = $request->input('contact_phone', $homeData['contact_phone'] ?? '');
-        $patch['contact_phone_marketing'] = $request->input('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '');
-        $patch['contact_phone_finance'] = $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '');
-        $patch['contact_phone_technician'] = $request->input('contact_phone_technician', $homeData['contact_phone_technician'] ?? '');
-        $patch['whatsapp_default_message'] = $request->input('whatsapp_default_message', $homeData['whatsapp_default_message'] ?? '');
+        $marketingPhone = (string) $request->input('contact_phone_marketing', $request->input('contact_phone', $homeData['contact_phone_marketing'] ?? '021-3874-1447'));
+        $financePhone = (string) $request->input('contact_phone_finance', $homeData['contact_phone_finance'] ?? '021-8792-9433');
+
+        $patch['contact_phone_marketing'] = $marketingPhone;
+        $patch['contact_phone_finance'] = $financePhone;
+        // Keep legacy keys synchronized for backwards compatibility
+        $patch['contact_phone'] = $marketingPhone;
+        $patch['contact_phone_technician'] = $marketingPhone;
+
         $patch['contact_email'] = $request->input('contact_email', $homeData['contact_email'] ?? '');
         $patch['contact_address'] = $request->input('contact_address', $homeData['contact_address'] ?? '');
         $patch['catalog_pdf_url'] = $request->input('catalog_pdf_url', $homeData['catalog_pdf_url'] ?? '');
@@ -251,11 +255,6 @@ class HomepageSettingsUpdater
         $existingFavicon = $homeData['site_favicon'] ?? '';
         $patch['site_favicon'] = $this->handleImageUpload(
             $request, 'site_favicon_file', 'site_favicon_url', $existingFavicon
-        );
-
-        $existingLoginBg = $homeData['admin_login_bg'] ?? '';
-        $patch['admin_login_bg'] = $this->handleImageUpload(
-            $request, 'admin_login_bg_file', 'admin_login_bg_url', $existingLoginBg
         );
 
         if ($request->hasFile('service_account_json_file')) {

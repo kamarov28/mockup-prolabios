@@ -13,45 +13,25 @@
       <input type="hidden" name="section" value="contacts">
 
       <div class="row g-4">
-        <!-- Nomor Telepon Kantor -->
+        <!-- Nomor Telepon Resmi Kantor (Sesuai Kebijakan Komunikasi Korporat) -->
         <div class="col-md-6">
-          <label for="contact_phone" class="admin-form-label mb-2">Nomor Telepon Kantor (General / CS)</label>
-          <div class="input-group">
-            <span class="input-group-text"><i data-lucide="phone"></i></span>
-            <input type="text" class="form-control @error('contact_phone') is-invalid @enderror" id="contact_phone" name="contact_phone" value="{{ old('contact_phone', $homeData['contact_phone'] ?? '021-3874-1447') }}" required>
-          </div>
-          @error('contact_phone') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Nomor telepon kantor pusat untuk layanan umum.</div>
-        </div>
-
-        <div class="col-md-6">
-          <label for="contact_phone_technician" class="admin-form-label mb-2">Nomor Telepon Layanan Teknik (Teknisi)</label>
-          <div class="input-group">
-            <span class="input-group-text text-info"><i data-lucide="wrench"></i></span>
-            <input type="text" class="form-control @error('contact_phone_technician') is-invalid @enderror" id="contact_phone_technician" name="contact_phone_technician" value="{{ old('contact_phone_technician', $homeData['contact_phone_technician'] ?? '021-3874-1447') }}" required>
-          </div>
-          @error('contact_phone_technician') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Nomor telepon untuk konsultasi teknis pada halaman Layanan.</div>
-        </div>
-
-        <div class="col-md-6">
-          <label for="contact_phone_marketing" class="admin-form-label mb-2">Telepon Kantor - Head Office (Marketing)</label>
+          <label for="contact_phone_marketing" class="admin-form-label mb-2">Telepon Kantor — Head Office &amp; Marketing</label>
           <div class="input-group">
             <span class="input-group-text"><i data-lucide="phone"></i></span>
             <input type="text" class="form-control @error('contact_phone_marketing') is-invalid @enderror" id="contact_phone_marketing" name="contact_phone_marketing" value="{{ old('contact_phone_marketing', $homeData['contact_phone_marketing'] ?? '021-3874-1447') }}" required>
           </div>
           @error('contact_phone_marketing') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Nomor telepon kantor pusat (PMA HOPMA) divisi marketing.</div>
+          <div class="form-text text-secondary mt-1 small">Saluran resmi kantor pusat (PMA HOPMA) untuk pemasaran dan layanan umum.</div>
         </div>
 
         <div class="col-md-6">
-          <label for="contact_phone_finance" class="admin-form-label mb-2">Telepon Kantor - Finance &amp; Warehouse</label>
+          <label for="contact_phone_finance" class="admin-form-label mb-2">Telepon Kantor — Finance &amp; Gudang Operasional</label>
           <div class="input-group">
             <span class="input-group-text"><i data-lucide="building"></i></span>
             <input type="text" class="form-control @error('contact_phone_finance') is-invalid @enderror" id="contact_phone_finance" name="contact_phone_finance" value="{{ old('contact_phone_finance', $homeData['contact_phone_finance'] ?? '021-8792-9433') }}" required>
           </div>
           @error('contact_phone_finance') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-          <div class="form-text text-secondary mt-1 small">Nomor telepon kantor operasional finance &amp; gudang.</div>
+          <div class="form-text text-secondary mt-1 small">Saluran resmi kantor operasional pergudangan, logistik, dan administrasi keuangan.</div>
         </div>
 
         <!-- Email Resmi & Katalog PDF -->
@@ -167,28 +147,6 @@
                 <label for="site_favicon_url" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Atau URL Favicon</label>
                 <input type="text" class="form-control form-control-sm" id="site_favicon_url" name="site_favicon_url" value="{{ old('site_favicon_url', $homeData['site_favicon'] ?? '') }}" placeholder="https://...">
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12">
-          <label class="admin-form-label mb-2">Background Banner Login Admin (Kolom Kanan)</label>
-          <div class="row g-3 align-items-center p-3" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
-            <div class="col-sm-3 text-center">
-              <div class="p-2 mx-auto d-flex align-items-center justify-content-center overflow-hidden" style="width: 160px; height: 90px; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
-                <img id="admin_login_bg_preview" src="{{ !empty($homeData['admin_login_bg']) ? $homeData['admin_login_bg'] : 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' }}" alt="Preview Login Background" class="w-100 h-100" style="object-fit: cover;">
-              </div>
-            </div>
-            <div class="col-sm-9">
-              <div class="mb-2">
-                <label for="admin_login_bg_file" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Upload Background Baru</label>
-                <input class="form-control form-control-sm" type="file" id="admin_login_bg_file" name="admin_login_bg_file" accept="image/*">
-              </div>
-              <div>
-                <label for="admin_login_bg_url" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Atau Gunakan URL Gambar</label>
-                <input type="text" class="form-control form-control-sm" id="admin_login_bg_url" name="admin_login_bg_url" value="{{ old('admin_login_bg_url', $homeData['admin_login_bg'] ?? '') }}" placeholder="https://images.unsplash.com/...">
-              </div>
-              <p class="form-text text-secondary mb-0 mt-1 small">Foto laboratorium beresolusi tinggi untuk kolom visual pada halaman /admin/login.</p>
             </div>
           </div>
         </div>

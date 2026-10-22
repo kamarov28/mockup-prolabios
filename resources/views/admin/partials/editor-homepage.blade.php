@@ -139,13 +139,23 @@
               <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
                   <span class="admin-badge admin-badge-accent mb-2">Kartu Bento #{{ $i + 1 }}</span>
-                  <div class="mb-2">
-                    <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Lucide (<a href="https://lucide.dev/icons" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i data-lucide="external-link"></i></a>)</label>
-                    <div class="input-group input-group-sm">
-                      <span class="input-group-text"><i data-lucide="{{ $bCard['icon'] ?? 'badge-check' }}"></i></span>
-                      <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'badge-check') }}" placeholder="badge-check / wrench / package / thermometer-snowflake" required>
+                  @if($i > 0)
+                    <div class="mb-2">
+                      <label for="bento_card_icon_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Icon Lucide (<a href="https://lucide.dev/icons" target="_blank" style="color: var(--color-accent); text-decoration: none; font-weight: 700;">Cari Icon <i data-lucide="external-link"></i></a>)</label>
+                      <div class="input-group input-group-sm">
+                        <span class="input-group-text"><i data-lucide="{{ $bCard['icon'] ?? 'badge-check' }}"></i></span>
+                        <input type="text" id="bento_card_icon_{{ $i }}" class="form-control" name="bento_card_icon_{{ $i }}" value="{{ old('bento_card_icon_'.$i, $bCard['icon'] ?? 'badge-check') }}" placeholder="badge-check / wrench / package / thermometer-snowflake" required>
+                      </div>
                     </div>
-                  </div>
+                  @else
+                    <input type="hidden" name="bento_card_icon_0" value="{{ $bCard['icon'] ?? 'shield-check' }}">
+                    <div class="mb-2">
+                      <span class="form-label small fw-bold mb-1 d-block" style="color: var(--color-text-main);">Badge Kepatuhan Resmi</span>
+                      <div class="small text-secondary py-1 px-2.5 rounded d-inline-flex align-items-center" style="background: var(--color-surface); border: 1px solid var(--color-border); font-size: 0.78rem;">
+                        <i data-lucide="shield-check" class="text-primary me-1.5"></i> ISO 17025 &bull; BPOM &bull; AKL (Kartu Utama)
+                      </div>
+                    </div>
+                  @endif
                   <div class="mb-2">
                     <label for="bento_card_title_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Judul Pilar</label>
                     <input type="text" id="bento_card_title_{{ $i }}" class="form-control form-control-sm" name="bento_card_title_{{ $i }}" value="{{ old('bento_card_title_'.$i, html_entity_decode(html_entity_decode((string) ($bCard['title'] ?? ''), ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8')) }}" required>

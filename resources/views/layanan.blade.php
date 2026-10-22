@@ -41,7 +41,7 @@
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary d-flex justify-content-center mb-3">
               Formulir Kontak <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
-            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> 021-3874-1447</a>
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '02138741447') }}" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> {{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }}</a>
           </div>
         </div>
 
@@ -199,7 +199,7 @@
             <a href="{{ url('/kontak') }}" class="nb-btn nb-btn-primary w-100 justify-content-center mb-3">
               Formulir Kontak <i data-lucide="arrow-right" class="ms-2"></i>
             </a>
-            <a href="tel:02138741447" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> 021-3874-1447</a>
+            <a href="tel:{{ preg_replace('/[^0-9+]/', '', $siteSettings['contact_phone_marketing'] ?? '02138741447') }}" class="profil-social-link justify-content-center"><i data-lucide="phone" class="me-2"></i> {{ $siteSettings['contact_phone_marketing'] ?? '021-3874-1447' }}</a>
           </div>
         </div>
       </div>

@@ -187,18 +187,12 @@ class HomepageService
 
             'focus_title' => 'Interactive Sector Finder',
             'focus_cards' => [],
-            'about_title' => 'Tentang Prolabios',
-            'about_description' => 'Prolabios Mitra Analitika (PMA) dibangun untuk menjadi distributor terkemuka produk mikrobiologi di Indonesia.',
-            'hotline_label' => 'Layanan Pelanggan 24/7',
-            'hotline_number' => '0821-8792-9433',
-            'hotline_description' => 'Hubungi kami via telepon atau WhatsApp untuk konsultasi produk.',
 
-            // Contact
-            'contact_phone' => '0821-8792-9433',
+            // Official Corporate Contacts
             'contact_phone_marketing' => '021-3874-1447',
             'contact_phone_finance' => '021-8792-9433',
-            'contact_phone_technician' => '0812-837-4867',
-            'whatsapp_default_message' => 'Halo Prolabios, saya ingin berkonsultasi mengenai produk dan penawaran alat laboratorium.',
+            'contact_phone' => '021-3874-1447',
+            'contact_phone_technician' => '021-3874-1447',
             'contact_email' => 'marketing@prolabios.com',
             'contact_address' => 'GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914',
             'catalog_pdf_url' => 'https://drive.google.com/open?id=1ijNKezGnKAa8JlQs2L8NFJjeHDjfd3YC&usp=drive_fs',
