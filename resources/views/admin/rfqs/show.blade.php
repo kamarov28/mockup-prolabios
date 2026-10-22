@@ -10,9 +10,14 @@
   }
   @page {
     size: auto;
-    margin: 12mm 15mm;
+    margin: 0; /* Menghilangkan URL dan header/footer otomatis dari browser */
   }
   @media print {
+    body, body.admin-panel {
+      padding: 14mm 16mm !important;
+      background: #FFFFFF !important;
+      margin: 0 !important;
+    }
     .admin-header,
     #admin-sidebar,
     .sidebar-backdrop,
@@ -25,6 +30,8 @@
     #admin-wrapper {
       display: block !important;
       min-height: auto !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
     #admin-content {
       margin-left: 0 !important;
