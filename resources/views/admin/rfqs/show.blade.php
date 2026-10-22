@@ -92,7 +92,7 @@
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5">
       <i data-lucide="mail"></i> Kirim Email
     </a>
-    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5" onclick="window.print()" title="Cetak Lembar Disposisi RFQ">
+    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5 btn-print-rfq" onclick="window.print()" title="Cetak Lembar Disposisi RFQ">
       <i data-lucide="printer"></i> Cetak RFQ
     </button>
   </div>
@@ -289,7 +289,7 @@
         <p class="text-secondary small mb-3" style="line-height: 1.55;">
           Cetak berkas disposisi RFQ ini untuk arsip fisik pengadaan atau lampiran verifikasi ketersediaan lot reagen.
         </p>
-        <button type="button" class="admin-btn admin-btn-outline w-100 justify-content-center" onclick="window.print()">
+        <button type="button" class="admin-btn admin-btn-outline w-100 justify-content-center btn-print-rfq" onclick="window.print()">
           <i data-lucide="printer" class="me-1"></i> Cetak Lembar RFQ
         </button>
       </div>
@@ -320,36 +320,91 @@
   function copyWaDraft(btn) {
     const el = document.getElementById('rfq-wa-draft-content');
     if (!el) return;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(el.value).then(function() {
-        const label = btn.querySelector('.copy-label');
-        if (label) {
-          const original = label.textContent;
-          label.textContent = 'Draf Tersalin!';
-          setTimeout(function() { label.textContent = original; }, 2000);
-        }
+    const text = el.value || el.textContent || '';
+
+    function showCopied() {
+      const targetBtn = btn || document.getElementById('btn-copy-wa-draft');
+      if (!targetBtn) return;
+      const label = targetBtn.querySelector('.copy-label') || targetBtn;
+      const original = label.textContent;
+      label.textContent = 'Draf Tersalin!';
+      targetBtn.style.borderColor = '#16A34A';
+      targetBtn.style.color = '#16A34A';
+      setTimeout(function() {
+        label.textContent = original;
+        targetBtn.style.borderColor = '';
+        targetBtn.style.color = '';
+      }, 2000);
+    }
+
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(showCopied).catch(function() {
+        fallbackCopy(text);
       });
+    } else {
+      fallbackCopy(text);
+    }
+
+    function fallbackCopy(str) {
+      const temp = document.createElement('textarea');
+      temp.value = str;
+      temp.setAttribute('readonly', '');
+      temp.style.position = 'fixed';
+      temp.style.top = '-9999px';
+      temp.style.left = '-9999px';
+      document.body.appendChild(temp);
+      temp.focus();
+      temp.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showCopied();
+        } else {
+          prompt('Salin teks draf berikut secara manual:', str);
+        }
+      } catch (err) {
+        prompt('Salin teks draf berikut secara manual:', str);
+      }
+      document.body.removeChild(temp);
     }
   }
 
-  document.querySelectorAll('.form-delete').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = this.getAttribute('data-name');
-      Swal.fire({
-        title: 'Hapus Pengajuan RFQ?',
-        html: `Hapus pengajuan "<strong>${name}</strong>"? Tindakan ini tidak dapat dibatalkan.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Hapus',
-        cancelButtonText: 'Batal',
-        reverseButtons: true,
-        customClass: {
-          confirmButton: 'admin-btn admin-btn-danger mx-2',
-          cancelButton: 'admin-btn admin-btn-ghost mx-2'
-        },
-        buttonsStyling: false
-      }).then(r => { if (r.isConfirmed) this.submit(); });
+  // Nonced Event Listeners to ensure flawless execution under strict Content Security Policy (CSP)
+  document.addEventListener('DOMContentLoaded', function() {
+    const copyBtn = document.getElementById('btn-copy-wa-draft');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        copyWaDraft(this);
+      });
+    }
+
+    document.querySelectorAll('.btn-print-rfq').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.print();
+      });
+    });
+
+    document.querySelectorAll('.form-delete').forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = this.getAttribute('data-name');
+        Swal.fire({
+          title: 'Hapus Pengajuan RFQ?',
+          html: `Hapus pengajuan "<strong>${name}</strong>"? Tindakan ini tidak dapat dibatalkan.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Hapus',
+          cancelButtonText: 'Batal',
+          reverseButtons: true,
+          customClass: {
+            confirmButton: 'admin-btn admin-btn-danger mx-2',
+            cancelButton: 'admin-btn admin-btn-ghost mx-2'
+          },
+          buttonsStyling: false
+        }).then(r => { if (r.isConfirmed) this.submit(); });
+      });
     });
   });
 </script>
