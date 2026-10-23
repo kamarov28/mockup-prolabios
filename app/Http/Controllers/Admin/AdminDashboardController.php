@@ -135,6 +135,18 @@ class AdminDashboardController extends Controller
             Artisan::call('migrate', ['--force' => true]);
             $output = trim(Artisan::output());
 
+            if (! file_exists(public_path('storage'))) {
+                try {
+                    Artisan::call('storage:link');
+                    $linkOutput = trim(Artisan::output());
+                    if ($linkOutput) {
+                        $output .= ' | '.ltrim($linkOutput, 'INFO ');
+                    }
+                } catch (\Throwable $e) {
+                    // Ignore if environment prohibits symlinks
+                }
+            }
+
             AuditLogger::log('system.migrate', 'System', null, ['output' => $output]);
 
             return redirect()->route('admin.dashboard')->with('success', 'Migrasi skema database berhasil dijalankan: '.($output ?: 'Semua skema sudah mutakhir.'));
