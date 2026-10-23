@@ -626,8 +626,6 @@ class ProductService
             'is_featured' => ! empty($product['is_featured']),
         ]);
 
-        $created->syncSectorsFromCsv($created->sector);
-
         Product::clearCategoriesCache();
         $this->clearProductsCache();
 
@@ -661,8 +659,6 @@ class ProductService
             'stock' => $updatedProduct['stock'] ?? 0,
             'is_featured' => ! empty($updatedProduct['is_featured']),
         ]);
-
-        $product->syncSectorsFromCsv($product->sector);
 
         Product::clearCategoriesCache();
         $this->clearProductsCache();

@@ -96,7 +96,7 @@ class RfqController extends Controller
 
                 // Use fresh DB price when available; fall back to session-cached value
                 $origPrice = $product ? (float) ($product->price ?? 0) : (float) ($item['price'] ?? 0);
-                $qty = max(1, (int) ($item['quantity'] ?? 1));
+                $qty = max(1, min(99999, (int) ($item['quantity'] ?? 1)));
 
                 RfqItem::create([
                     'rfq_id' => $rfq->id,

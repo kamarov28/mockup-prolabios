@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /**
@@ -207,23 +206,7 @@ class Product extends Model
         $words = array_values(array_filter(explode(' ', $term), fn ($w) => trim($w) !== ''));
 
         // Searchable columns down to substring/characters
-        static $searchableColumns = null;
-        if ($searchableColumns === null) {
-            $searchableColumns = ['title', 'catalog', 'description'];
-            try {
-                if (Schema::hasColumn('products', 'function')) {
-                    $searchableColumns[] = 'function';
-                }
-                if (Schema::hasColumn('products', 'reference_method')) {
-                    $searchableColumns[] = 'reference_method';
-                }
-                if (Schema::hasColumn('products', 'packaging')) {
-                    $searchableColumns[] = 'packaging';
-                }
-            } catch (\Throwable $e) {
-                // Keep base columns
-            }
-        }
+        $searchableColumns = ['title', 'catalog', 'description', 'function', 'reference_method', 'packaging'];
 
         return $query->where(function (Builder $q) use ($term, $words, $searchableColumns) {
             // 1. Direct character/substring match on full search term
