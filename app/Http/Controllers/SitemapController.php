@@ -32,12 +32,12 @@ class SitemapController extends Controller
                 ->orderByDesc('id')
                 ->get()
                 ->map(function (Product $product) use ($baseUrl) {
-                    $path = ! empty($product->slug)
-                        ? '/produk/'.$product->slug
-                        : '/produk/detail?id='.$product->id;
+                    $slug = ! empty($product->slug)
+                        ? $product->slug
+                        : Product::uniqueSlugFrom((string) $product->title, $product->id);
 
                     return [
-                        'loc' => $baseUrl.$path,
+                        'loc' => $baseUrl.'/produk/'.$slug,
                         'lastmod' => $product->updated_at ? $product->updated_at->toAtomString() : date('c'),
                         'priority' => '0.8',
                         'changefreq' => 'weekly',

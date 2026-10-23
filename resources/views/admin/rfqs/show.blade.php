@@ -102,13 +102,13 @@
        target="_blank" rel="noopener" class="admin-btn admin-btn-primary d-inline-flex align-items-center gap-1.5" style="background: #16A34A; border-color: #16A34A; color: #FFFFFF !important;">
       <x-brand-icon name="whatsapp" size="16" /> Hubungi via WhatsApp
     </a>
-    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5" onclick="copyWaDraft(this)" id="btn-copy-wa-draft" title="Salin draf rincian pengadaan untuk dikirim via WhatsApp">
+    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5" id="btn-copy-wa-draft" title="Salin draf rincian pengadaan untuk dikirim via WhatsApp">
       <i data-lucide="copy"></i> <span class="copy-label">Salin Draf WA</span>
     </button>
     <a href="mailto:{{ $rfq->email }}?subject=Penawaran%20Resmi%20Prolabios%20-%20{{ $rfq->rfq_number }}" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5">
       <i data-lucide="mail"></i> Kirim Email
     </a>
-    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5 btn-print-rfq" onclick="window.print()" title="Cetak Lembar Disposisi RFQ">
+    <button type="button" class="admin-btn admin-btn-outline d-inline-flex align-items-center gap-1.5 btn-print-rfq" title="Cetak Lembar Disposisi RFQ">
       <i data-lucide="printer"></i> Cetak RFQ
     </button>
   </div>
