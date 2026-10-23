@@ -83,6 +83,13 @@ class PageController extends Controller
     {
         $product = $products->getProductBySlug($slug);
 
+        if (! $product && is_numeric($slug)) {
+            $product = $products->getProductById((int) $slug);
+            if ($product && ! empty($product->slug)) {
+                return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
+            }
+        }
+
         if (! $product) {
             abort(404);
         }

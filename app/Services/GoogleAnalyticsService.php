@@ -422,6 +422,9 @@ class GoogleAnalyticsService
                     $label = ucwords(str_replace('-', ' ', $slug));
                 } elseif ($path === '/produk') {
                     $label = 'Katalog Semua Produk';
+                } elseif (str_starts_with($path, '/informasi/')) {
+                    $slug = substr($path, 11);
+                    $label = 'Artikel: '.ucwords(str_replace('-', ' ', $slug));
                 } elseif (str_starts_with($path, '/artikel/')) {
                     $slug = substr($path, 9);
                     $label = 'Artikel: '.ucwords(str_replace('-', ' ', $slug));

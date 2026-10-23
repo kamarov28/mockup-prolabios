@@ -79,7 +79,9 @@ class RfqController extends Controller
 
         $validated = $request->validated();
 
-        $rfqNumber = 'RFQ-'.date('Ym').'-'.strtoupper(Str::random(self::RFQ_SUFFIX_LENGTH));
+        do {
+            $rfqNumber = 'RFQ-'.date('Ym').'-'.strtoupper(Str::random(self::RFQ_SUFFIX_LENGTH));
+        } while (Rfq::where('rfq_number', $rfqNumber)->exists());
 
         $rfq = DB::transaction(function () use ($rfqNumber, $validated, $cart) {
             $rfq = Rfq::create([

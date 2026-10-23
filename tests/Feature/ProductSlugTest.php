@@ -65,6 +65,22 @@ class ProductSlugTest extends TestCase
         $response->assertStatus(301);
     }
 
+    public function test_numeric_id_path_redirects_to_canonical_slug(): void
+    {
+        $product = Product::create([
+            'title' => 'Eosin Methylene Blue Agar',
+            'catalog' => 'EMB-01',
+            'category' => 'Culture Media',
+            'price' => 250000,
+            'stock' => 5,
+        ]);
+
+        $response = $this->get('/produk/'.$product->id);
+
+        $response->assertRedirect(route('produk.detail', ['slug' => $product->slug]));
+        $response->assertStatus(301);
+    }
+
     public function test_product_url_helper_prefers_slug(): void
     {
         $product = Product::create([

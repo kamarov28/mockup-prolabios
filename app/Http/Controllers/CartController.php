@@ -243,6 +243,8 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tidak ada item yang dapat dipulihkan.');
         }
 
+        $items = array_slice($items, 0, 50);
+
         $cart = session()->get('cart', []);
         $restoredCount = 0;
 
