@@ -1,6 +1,0 @@
-{
-  "statusLine": {
-    "type": "command",
-    "command": "bash C:/laragon/www/mockup-prolabios/.claude/statusline-command.sh"
-  }
-}
