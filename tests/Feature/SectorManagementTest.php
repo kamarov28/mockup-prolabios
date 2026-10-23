@@ -82,12 +82,14 @@ class SectorManagementTest extends TestCase
         $updateResponse = $this->actingAs($this->admin)->put(route('admin.sectors.update', ['id' => 'biotech']), [
             'name' => 'Biotechnology & Genomics',
             'description' => 'Updated description line',
+            'image_url' => '/images/sectors/biotech.jpg',
         ]);
 
         $updateResponse->assertRedirect(route('admin.sectors'));
         $this->assertDatabaseHas('sectors', [
             'id' => 'biotech',
             'name' => 'Biotechnology & Genomics',
+            'image' => '/images/sectors/biotech.jpg',
         ]);
 
         // 3. Delete

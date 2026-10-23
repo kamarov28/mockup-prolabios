@@ -17,7 +17,7 @@ class StoreProductCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:150',
-            'key' => 'nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key',
+            'key' => ['nullable', 'string', 'max:100', 'regex:/^[a-z0-9\-]+$/', 'unique:product_categories,key'],
             'parent_id' => [
                 'nullable',
                 'exists:product_categories,id',

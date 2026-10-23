@@ -19,7 +19,7 @@ class UpdateProductCategoryRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:150',
-            'key' => "nullable|string|max:100|regex:/^[a-z0-9\-]+$/|unique:product_categories,key,{$id}",
+            'key' => ['nullable', 'string', 'max:100', 'regex:/^[a-z0-9\-]+$/', "unique:product_categories,key,{$id}"],
             'parent_id' => [
                 'nullable',
                 'exists:product_categories,id',
