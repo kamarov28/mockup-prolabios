@@ -27,7 +27,7 @@ Local Indonesian distributor with curated technical products across microbiology
 
 ## Capabilities and Constraints
 
-- Laravel 13 + Blade templating; Bootstrap 5 as CSS framework base; Tailwind CSS v4 + Vite for custom styles.
+- Laravel 13 + Blade templating; Bootstrap 5 layout foundation; Custom Modern Flat Design System, Lucide Icons, and Vite.
 - Product images are re-encoded to WebP; SVG uploads blocked.
 - Email and WhatsApp notifications are async via Laravel queues.
 - Docker deployment for production.

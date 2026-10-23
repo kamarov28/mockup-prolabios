@@ -47,18 +47,20 @@ app/
 └── Traits/                 # Reusable logic across controllers (HandlesImageUploads, PaginatesQuery)
 
 resources/
-├── css/                    # Tailwind CSS v4 & custom theme styles
-├── js/                     # Client scripts & Vite entry points
+├── css/                    # Modular Design System (site/, admin/, style.css, site.css)
+├── js/                     # Client scripts, Lucide icons & Vite entry points
 └── views/                  # Blade templates
-    ├── admin/              # Dashboard view components
-    ├── layouts/            # Base layouts (app.blade.php)
+    ├── admin/              # Dashboard view components & editors
+    ├── components/         # Reusable Blade components (x-product-card, x-admin.*)
+    ├── layouts/            # Base layouts (app.blade.php, admin/layout.blade.php)
     └── partials/           # Reusable UI fragments (navbar, footer, search-modal)
 
 routes/
 └── web.php                 # Web routes (public, buyer flow, admin protected group)
 
 tests/
-└── Feature/                # Automated integration & feature tests (38+ tests)
+├── Feature/                # Automated integration & feature tests (150+ tests)
+└── Unit/                   # Unit test suite
 ```
 
 ---

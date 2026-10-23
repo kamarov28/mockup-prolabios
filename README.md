@@ -1,6 +1,6 @@
 # 📚 Dokumentasi Arsitektur & Panduan Sistem PROLABIOS
 
-Selamat datang di repositori resmi **PT. Prolabios Mitra Analitika** — Platform B2B E-Procurement & Request for Quotation (RFQ) berbasis Laravel 13.x, Tailwind CSS v4, dan Vite.
+Selamat datang di repositori resmi **PT. Prolabios Mitra Analitika** — Platform B2B E-Procurement & Request for Quotation (RFQ) berbasis Laravel 13.x, Bootstrap 5, Custom Modern Flat Design System, dan Vite.
 
 Dokumentasi ini dirancang modular per alur kerja (*flow-by-flow*) agar mudah dipelajari oleh developer maupun maintainer baru.
 
