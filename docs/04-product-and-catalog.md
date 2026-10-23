@@ -68,7 +68,7 @@ Mendukung impor massal produk melalui format spreadsheet Excel (`.xlsx`) / CSV:
 - **Auto-Creation Sektor Industri**: Jika kolom sektor memuat nama sektor baru, sistem otomatis mendaftarkannya ke tabel `sectors` dan menghubungkannya via pivot `product_sector`.
 - **Skip Duplikat Aman**: Jika judul atau nomor katalog sudah ada di database, baris tersebut otomatis dilewati (*skipped*) tanpa menimpa data master yang telah diubah manual.
 - **Sanitasi Deskripsi & Ekstensi URL**: Kolom deskripsi HTML disanitasi dengan `HtmlSanitizer::clean()`. URL gambar mendukung link eksternal (`https://`) maupun path lokal (`/storage/uploads/...`).
-- **Self-Healing Schema**: Method `ProductService::ensureSpecificationColumnsExist()` memeriksa dan mengeksekusi `ALTER TABLE` kolom `packaging`, `function`, `reference_method`, dan `search_hits` secara otomatis saat runtime web jika migrasi SSH belum dijalankan.
+- **Skema Spesifikasi Standar**: Kolom `packaging`, `function`, `reference_method`, dan `search_hits` terdaftar permanen pada skema database dan otomatis terisi saat impor.
 
 ---
 

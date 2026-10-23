@@ -11,7 +11,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class ProductService
@@ -25,7 +24,7 @@ class ProductService
      */
     protected function listColumns(): array
     {
-        $cols = [
+        return [
             'id',
             'catalog',
             'title',
@@ -38,24 +37,10 @@ class ProductService
             'price',
             'stock',
             'is_featured',
+            'search_hits',
             'created_at',
             'updated_at',
         ];
-
-        static $hasSearchHits = null;
-        if ($hasSearchHits === null) {
-            try {
-                $hasSearchHits = Schema::hasColumn('products', 'search_hits');
-            } catch (\Throwable $e) {
-                $hasSearchHits = false;
-            }
-        }
-
-        if ($hasSearchHits) {
-            $cols[] = 'search_hits';
-        }
-
-        return $cols;
     }
 
     public static function getProductsCacheVersion(): int
@@ -456,8 +441,6 @@ class ProductService
             return $this->hydrateProducts($cached);
         }
 
-        $this->ensureSpecificationColumnsExist();
-
         // Tier 1: Manually highlighted products (is_featured = true)
         $featured = Product::query()
             ->with('principal')
@@ -468,7 +451,7 @@ class ProductService
             ->get();
 
         // Tier 2: Fill remaining slots with Most-Searched/Popular products
-        if ($featured->count() < $limit && Schema::hasColumn('products', 'search_hits')) {
+        if ($featured->count() < $limit) {
             $needed = $limit - $featured->count();
             $excludeIds = $featured->pluck('id')->all();
 
@@ -521,12 +504,6 @@ class ProductService
             return;
         }
 
-        $this->ensureSpecificationColumnsExist();
-
-        if (! Schema::hasColumn('products', 'search_hits')) {
-            return;
-        }
-
         $validIds = array_slice(array_unique(array_filter(array_map('intval', $productIds), fn ($id) => $id > 0)), 0, 10);
         if (! empty($validIds)) {
             Product::whereIn('id', $validIds)->increment('search_hits');
@@ -546,11 +523,7 @@ class ProductService
         $sessionKey = 'viewed_prod_'.$id;
         if (! session()->has($sessionKey)) {
             session()->put($sessionKey, true);
-            $this->ensureSpecificationColumnsExist();
-
-            if (Schema::hasColumn('products', 'search_hits')) {
-                Product::where('id', $id)->increment('search_hits');
-            }
+            Product::where('id', $id)->increment('search_hits');
         }
     }
 
@@ -568,45 +541,8 @@ class ProductService
         return $newVal;
     }
 
-    /**
-     * Auto-heal database schema for shared hosting environments without terminal/SSH access.
-     */
-    public function ensureSpecificationColumnsExist(): void
-    {
-        static $checked = false;
-        if ($checked) {
-            return;
-        }
-
-        if (! Schema::hasTable('products')) {
-            return;
-        }
-
-        try {
-            Schema::table('products', function ($table) {
-                if (! Schema::hasColumn('products', 'packaging')) {
-                    $table->string('packaging', 255)->nullable();
-                }
-                if (! Schema::hasColumn('products', 'function')) {
-                    $table->text('function')->nullable();
-                }
-                if (! Schema::hasColumn('products', 'reference_method')) {
-                    $table->string('reference_method', 500)->nullable();
-                }
-                if (! Schema::hasColumn('products', 'search_hits')) {
-                    $table->unsignedInteger('search_hits')->default(0)->index();
-                }
-            });
-            $checked = true;
-        } catch (\Throwable $e) {
-            // Silently recover if columns were added concurrently
-        }
-    }
-
     public function addProduct(array $product): ?Product
     {
-        $this->ensureSpecificationColumnsExist();
-
         $created = Product::create([
             'catalog' => $product['catalog'] ?? null,
             'title' => $product['title'],
@@ -634,8 +570,6 @@ class ProductService
 
     public function updateProductById(int $id, array $updatedProduct): bool
     {
-        $this->ensureSpecificationColumnsExist();
-
         $product = Product::find($id);
         if (! $product) {
             return false;
@@ -699,8 +633,6 @@ class ProductService
         if (empty($products)) {
             return false;
         }
-
-        $this->ensureSpecificationColumnsExist();
 
         $now = now();
         $rows = [];

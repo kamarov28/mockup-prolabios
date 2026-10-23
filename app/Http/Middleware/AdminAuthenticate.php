@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +16,6 @@ class AdminAuthenticate
      */
     public function handle(Request $request, Closure $next): Response
     {
-        User::ensureRoleColumnExists();
-
         if (! Auth::check() || ! Auth::user()?->isAdmin()) {
             Auth::logout();
 

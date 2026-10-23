@@ -241,8 +241,6 @@ class ProductImportService
      */
     public function import(UploadedFile $file): array
     {
-        $this->productService->ensureSpecificationColumnsExist();
-
         $spreadsheet = IOFactory::load($file->getRealPath());
         $sheet = $spreadsheet->getActiveSheet();
         $rows = $sheet->toArray(null, true, true, true);

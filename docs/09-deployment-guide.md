@@ -60,10 +60,9 @@ php artisan view:cache
 Pada hosting cPanel yang **tidak memiliki akses Terminal / SSH**:
 1. Masuk ke cPanel $\rightarrow$ menu **Git™ Versioning**.
 2. Klik tombol **Update from Remote** pada repositori `mockup-prolabios` (branch `main`).
-3. **Mekanisme Self-Healing Database Tanpa SSH**:
-   - Sistem dilengkapi logika deteksi skema runtime otomatis (`User::ensureRoleColumnExists()`, `ProductService::ensureSpecificationColumnsExist()`).
-   - Jika ada kolom baru (`role`, `packaging`, `function`, `reference_method`, `search_hits`), sistem otomatis mengeksekusi penambahan kolom secara aman di latar belakang saat request web diproses.
-   - Alternatif manual via browser (khusus Super Admin): Akses URL darurat `https://dev.prolabios.com/admin/system/migrate` untuk mengeksekusi migrasi artisan langsung lewat browser.
+3. **Mekanisme Migrasi Database di cPanel**:
+   - Skema database dikelola melalui migrasi standar Laravel.
+   - Untuk shared hosting tanpa terminal SSH, Super Admin dapat menjalankan migrasi langsung melalui tombol resmi di dashboard atau rute aman `https://dev.prolabios.com/admin/system/migrate`.
 
 ---
 
