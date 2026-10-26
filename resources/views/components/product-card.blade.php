@@ -62,8 +62,8 @@
         @endif
       </div>
 
-      <h3 class="card-title mb-2">
-        <a href="{{ $cardUrl }}" class="product-card-link" {!! $vtTarget !!} title="{{ $cleanTitle }}">{{ $cleanTitle }}</a>
+      <h3 class="card-title mb-2" title="{{ $cleanTitle }}">
+        {{ $cleanTitle }}
       </h3>
 
       <p class="product-card-desc mb-3 text-muted">
