@@ -418,4 +418,74 @@ class ProductImportTest extends TestCase
             @unlink($tempFile);
         }
     }
+
+    public function test_admin_import_auto_creates_principal_and_avoids_conflict_with_existing_principal(): void
+    {
+        // 1. Existing principal created beforehand
+        $existing = Principal::create(['name' => 'Liofilchem', 'status' => 'online']);
+        $initialPrincipalCount = Principal::count();
+
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Produk');
+
+        $sheet->fromArray([
+            'Nomor Katalog', 'Nama Produk *', 'Kategori *', 'Subkategori', 'Harga (Rp)', 'Stok', 'Prinsipal / Brand',
+        ], null, 'A1');
+
+        $sheet->fromArray([
+            'PRIN-01', 'Test Reagent 1', 'microbiology', '', '100000', '5', '  liofilchem  ',
+        ], null, 'A2');
+
+        $sheet->fromArray([
+            'PRIN-02', 'Test Reagent 2', 'microbiology', '', '200000', '10', 'Oxoid Diagnostics',
+        ], null, 'A3');
+
+        $sheet->fromArray([
+            'PRIN-03', 'Test Reagent 3', 'microbiology', '', '300000', '15', 'Oxoid Diagnostics',
+        ], null, 'A4');
+
+        $tempFile = sys_get_temp_dir().'/test_auto_principal_'.time().'.xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($tempFile);
+
+        $uploadedFile = new UploadedFile(
+            $tempFile,
+            'test-auto-principal.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->admin)->post(route('admin.products.import'), [
+            'excel_file' => $uploadedFile,
+        ]);
+
+        $response->assertRedirect(route('admin.products'));
+        $response->assertSessionHas('success');
+
+        // Only ONE new principal should be created ('Oxoid Diagnostics')
+        $this->assertEquals($initialPrincipalCount + 1, Principal::count());
+
+        // Existing principal was matched without conflict or duplication
+        $p1 = Product::where('catalog', 'PRIN-01')->first();
+        $this->assertNotNull($p1);
+        $this->assertEquals($existing->id, $p1->principal_id);
+
+        // New principal was created and assigned to both products
+        $newPrincipal = Principal::where('name', 'Oxoid Diagnostics')->first();
+        $this->assertNotNull($newPrincipal);
+
+        $p2 = Product::where('catalog', 'PRIN-02')->first();
+        $this->assertNotNull($p2);
+        $this->assertEquals($newPrincipal->id, $p2->principal_id);
+
+        $p3 = Product::where('catalog', 'PRIN-03')->first();
+        $this->assertNotNull($p3);
+        $this->assertEquals($newPrincipal->id, $p3->principal_id);
+
+        if (file_exists($tempFile)) {
+            @unlink($tempFile);
+        }
+    }
 }

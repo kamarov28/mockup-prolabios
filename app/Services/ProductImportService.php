@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Sector;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -261,10 +262,16 @@ class ProductImportService
             $categoryLookup[strtolower(trim($cat->name))] = $cat->key;
         }
 
-        $principalLookup = [];
+        $principalIdLookup = [];
+        $principalNameLookup = [];
+        $principalSlugLookup = [];
         foreach (Principal::all() as $pr) {
-            $principalLookup[(string) $pr->id] = $pr->id;
-            $principalLookup[strtolower(trim($pr->name))] = $pr->id;
+            $principalIdLookup[(string) $pr->id] = $pr->id;
+            $principalNameLookup[strtolower(trim($pr->name))] = $pr->id;
+            $slug = Str::slug($pr->name);
+            if ($slug !== '') {
+                $principalSlugLookup[$slug] = $pr->id;
+            }
         }
 
         $sectorLookup = [];
@@ -309,7 +316,15 @@ class ProductImportService
                     $colMap['price'] = $colLetter;
                 } elseif (in_array($norm, ['stok', 'stock', 'qty'], true)) {
                     $colMap['stock'] = $colLetter;
-                } elseif (in_array($norm, ['prinsipal', 'principal', 'brand', 'manufaktur'], true)) {
+                } elseif (
+                    in_array($norm, ['prinsipal', 'principal', 'brand', 'manufaktur', 'manufacturer', 'merk', 'merek', 'pabrikan', 'nama prinsipal', 'nama principal', 'vendor'], true)
+                    || str_contains($norm, 'principal')
+                    || str_contains($norm, 'prinsipal')
+                    || str_contains($norm, 'brand')
+                    || str_contains($norm, 'manufaktur')
+                    || str_contains($norm, 'manufacturer')
+                    || str_contains($norm, 'pabrikan')
+                ) {
                     $colMap['principal'] = $colLetter;
                 } elseif (in_array($norm, ['sektor industri', 'sektor', 'sector'], true)) {
                     $colMap['sector'] = $colLetter;
@@ -477,13 +492,57 @@ class ProductImportService
             $rawPrincipal = isset($colMap['principal']) ? trim((string) ($row[$colMap['principal']] ?? '')) : (! $hasMappedHeaders ? trim((string) ($row['G'] ?? '')) : '');
             $principalId = null;
             if ($rawPrincipal !== '') {
-                $principalId = $principalLookup[strtolower($rawPrincipal)] ?? null;
-                if (! $principalId) {
-                    foreach ($principalLookup as $lookupKey => $pId) {
-                        if (str_contains(strtolower($rawPrincipal), $lookupKey) || str_contains($lookupKey, strtolower($rawPrincipal))) {
-                            $principalId = $pId;
-                            break;
+                $normPrincipal = strtolower($rawPrincipal);
+                $slugPrincipal = Str::slug($rawPrincipal);
+
+                // 1. Direct ID match jika cell berupa numeric ID prinsipal
+                if (ctype_digit($rawPrincipal) && isset($principalIdLookup[$rawPrincipal])) {
+                    $principalId = $principalIdLookup[$rawPrincipal];
+                }
+                // 2. Direct exact name match (case-insensitive di memory)
+                elseif (isset($principalNameLookup[$normPrincipal])) {
+                    $principalId = $principalNameLookup[$normPrincipal];
+                }
+                // 3. Slug match (menghindari conflict perbedaan aksen / simbol seperti bioMérieux vs biomerieux)
+                elseif ($slugPrincipal !== '' && isset($principalSlugLookup[$slugPrincipal])) {
+                    $principalId = $principalSlugLookup[$slugPrincipal];
+                }
+                // 4. Cek langsung ke database (mencegah duplikasi jika prinsipal baru ditambahkan di tab lain)
+                elseif ($existingPr = Principal::whereRaw('LOWER(TRIM(name)) = ?', [$normPrincipal])->first()) {
+                    $principalId = $existingPr->id;
+                    $principalIdLookup[(string) $existingPr->id] = $existingPr->id;
+                    $principalNameLookup[$normPrincipal] = $existingPr->id;
+                    $principalNameLookup[strtolower(trim($existingPr->name))] = $existingPr->id;
+                    if ($slugPrincipal !== '') {
+                        $principalSlugLookup[$slugPrincipal] = $existingPr->id;
+                    }
+                }
+                // 5. Fuzzy prefix match terhadap prinsipal yang sudah ada (min 3 huruf agar tidak salah cocok)
+                else {
+                    if (strlen($normPrincipal) >= 3) {
+                        foreach ($principalNameLookup as $existingName => $pId) {
+                            if (strlen($existingName) >= 3 && (str_starts_with($normPrincipal, $existingName) || str_starts_with($existingName, $normPrincipal))) {
+                                $principalId = $pId;
+                                break;
+                            }
                         }
+                    }
+
+                    // 6. Jika benar-benar belum ada, otomatis buat prinsipal baru tanpa duplikasi/conflict
+                    if (! $principalId) {
+                        $newPr = Principal::firstOrCreate(
+                            ['name' => $rawPrincipal],
+                            ['status' => 'online']
+                        );
+                        $principalId = $newPr->id;
+                        $principalIdLookup[(string) $newPr->id] = $newPr->id;
+                        $principalNameLookup[$normPrincipal] = $newPr->id;
+                        $principalNameLookup[strtolower(trim($newPr->name))] = $newPr->id;
+                        if ($slugPrincipal !== '') {
+                            $principalSlugLookup[$slugPrincipal] = $newPr->id;
+                        }
+
+                        Cache::forget(ProductService::PRINCIPALS_MAP_CACHE);
                     }
                 }
             }
