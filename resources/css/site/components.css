@@ -262,7 +262,7 @@
 .sector-choice-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.88) 100%);
   border-radius: 8.5px;
   transition: background 0.2s ease;
   z-index: 0;
@@ -275,7 +275,7 @@
 }
 
 .sector-choice-card:hover .sector-choice-overlay {
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.35) 0%, rgba(15, 23, 42, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.92) 100%);
 }
 
 .sector-choice-card:has(.sector-choice-input:checked) {
@@ -284,25 +284,27 @@
 }
 
 .sector-choice-card:has(.sector-choice-input:checked) .sector-choice-overlay {
-  background: linear-gradient(180deg, rgba(166, 23, 28, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(166, 23, 28, 0.35) 0%, rgba(15, 23, 42, 0.92) 100%);
 }
 
 .sector-choice-input {
-  width: 20px !important;
-  height: 20px !important;
-  min-width: 20px !important;
-  border: 2px solid #FFFFFF !important;
-  border-radius: 4px !important;
-  background-color: rgba(255, 255, 255, 0.2) !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  border: 2px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 5px !important;
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
   accent-color: var(--nb-primary);
   margin: 0 !important;
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
   transition: all 0.15s ease;
 }
 
 .sector-choice-input:checked {
   background-color: var(--nb-primary) !important;
-  border-color: var(--nb-primary) !important;
+  border-color: #FFFFFF !important;
 }
 
 .navbar .nb-icon-btn,
