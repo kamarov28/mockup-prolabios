@@ -245,6 +245,54 @@
   color: #FFFFFF;
 }
 
+/* ── B2B Sector Choice Cards (Newsletter & Preference Center) ─────────────── */
+.sector-choice-card {
+  background: #FFFFFF !important;
+  border: 1px solid #CBD5E1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+  padding: 14px 16px !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  user-select: none;
+}
+
+.sector-choice-card:hover {
+  background: #F8FAFC !important;
+  border-color: #94A3B8 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06) !important;
+}
+
+.sector-choice-card:has(.sector-choice-input:checked) {
+  background: #FEF2F2 !important;
+  border-color: var(--nb-primary) !important;
+  box-shadow: 0 0 0 1px var(--nb-primary), 0 2px 8px rgba(166, 23, 28, 0.08) !important;
+}
+
+.sector-choice-card:has(.sector-choice-input:checked) .sector-choice-icon {
+  color: var(--nb-primary) !important;
+}
+
+.sector-choice-card:has(.sector-choice-input:checked) strong {
+  color: var(--nb-primary-dark) !important;
+}
+
+.sector-choice-input {
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  border: 1.5px solid #94A3B8 !important;
+  border-radius: 4px !important;
+  accent-color: var(--nb-primary);
+  margin: 0 !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sector-choice-input:checked {
+  background-color: var(--nb-primary) !important;
+  border-color: var(--nb-primary) !important;
+}
+
 .navbar .nb-icon-btn,
 .nb-icon-btn {
   width: 38px !important;

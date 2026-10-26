@@ -79,15 +79,27 @@
             Pilih minimal satu sektor. Anda hanya akan menerima notifikasi email teknis yang berkaitan dengan sektor yang Anda centang:
           </p>
 
-          <div class="row row-cols-1 row-cols-sm-2 g-2">
+          <div class="row row-cols-1 row-cols-sm-2 g-3">
             @foreach($sectors as $sec)
-              @php $checked = is_array(old('sectors')) && in_array($sec->id, old('sectors')); @endphp
+              @php 
+                $checked = is_array(old('sectors')) && in_array($sec->id, old('sectors')); 
+                $secIcon = match(strtolower($sec->id)) {
+                  'pharma', 'biopharma', 'pharmaceutical' => 'pill',
+                  'food', 'fnb', 'food-beverage' => 'coffee',
+                  'clinical', 'hospital-clinic', 'healthcare' => 'hospital',
+                  'brewing' => 'beaker',
+                  default => 'layers',
+                };
+              @endphp
               <div class="col">
-                <label class="d-flex align-items-center gap-2.5 p-3 rounded border h-100" style="cursor: pointer; background: #F8FAFC; border-color: #E2E8F0; transition: all 0.15s ease;">
-                  <input type="checkbox" name="sectors[]" value="{{ $sec->id }}" class="form-check-input mt-0" {{ $checked ? 'checked' : '' }} style="cursor: pointer;">
-                  <div>
-                    <strong class="d-block text-dark small" style="font-size: 0.85rem;">{{ $sec->name }}</strong>
-                    <span class="text-muted" style="font-size: 0.74rem;">Pembaruan teknis &amp; reagen {{ strtolower($sec->name) }}</span>
+                <label class="sector-choice-card d-flex align-items-start gap-3 p-3.5 rounded-3 h-100 position-relative" style="cursor: pointer;">
+                  <input type="checkbox" name="sectors[]" value="{{ $sec->id }}" class="form-check-input sector-choice-input flex-shrink-0" {{ $checked ? 'checked' : '' }} style="cursor: pointer; width: 1.25rem; height: 1.25rem; margin-top: 2px;">
+                  <div class="flex-grow-1 min-w-0 pe-2">
+                    <div class="d-flex align-items-center gap-1.5 mb-1">
+                      <i data-lucide="{{ $secIcon }}" class="sector-choice-icon" style="width: 15px; height: 15px; flex-shrink: 0; color: #64748B;"></i>
+                      <strong class="d-block text-dark small text-truncate fw-semibold" style="font-size: 0.88rem;">{{ $sec->name }}</strong>
+                    </div>
+                    <span class="text-muted d-block small lh-sm" style="font-size: 0.76rem;">Pembaruan teknis &amp; reagen sektor {{ strtolower($sec->name) }}</span>
                   </div>
                 </label>
               </div>
