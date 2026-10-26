@@ -1,8 +1,9 @@
 @extends('admin.layout')
 
 @section('title', 'Kirim Siaran Email Baru')
+@section('page_title', 'Buletin & Siaran Sektor')
 
-@section('content')
+@section('admin_content')
 <div class="admin-content-wrap">
 
   <x-admin.page-header
