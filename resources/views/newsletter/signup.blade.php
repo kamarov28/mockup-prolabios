@@ -82,24 +82,23 @@
           <div class="row row-cols-1 row-cols-sm-2 g-3">
             @foreach($sectors as $sec)
               @php 
-                $checked = is_array(old('sectors')) && in_array($sec->id, old('sectors')); 
-                $secIcon = match(strtolower($sec->id)) {
-                  'pharma', 'biopharma', 'pharmaceutical' => 'pill',
-                  'food', 'fnb', 'food-beverage' => 'coffee',
-                  'clinical', 'hospital-clinic', 'healthcare' => 'hospital',
-                  'brewing' => 'beaker',
-                  default => 'layers',
-                };
+                $checked = is_array(old('sectors')) && in_array($sec->id, old('sectors'));
+                $secImage = !empty($sec->image) ? $sec->image : (file_exists(public_path('images/sectors/' . $sec->id . '.jpg')) ? 'images/sectors/' . $sec->id . '.jpg' : 'images/sectors/general-purpose.jpg');
               @endphp
               <div class="col">
-                <label class="sector-choice-card d-flex align-items-start gap-3 p-3.5 rounded-3 h-100 position-relative" style="cursor: pointer;">
-                  <input type="checkbox" name="sectors[]" value="{{ $sec->id }}" class="form-check-input sector-choice-input flex-shrink-0" {{ $checked ? 'checked' : '' }} style="cursor: pointer; width: 1.25rem; height: 1.25rem; margin-top: 2px;">
-                  <div class="flex-grow-1 min-w-0 pe-2">
-                    <div class="d-flex align-items-center gap-1.5 mb-1">
-                      <i data-lucide="{{ $secIcon }}" class="sector-choice-icon" style="width: 15px; height: 15px; flex-shrink: 0; color: #64748B;"></i>
-                      <strong class="d-block text-dark small text-truncate fw-semibold" style="font-size: 0.88rem;">{{ $sec->name }}</strong>
+                <label class="sector-choice-card d-flex flex-column justify-content-end p-3.5 rounded-3 h-100 position-relative overflow-hidden" 
+                       style="cursor: pointer; min-height: 110px; background-image: url('{{ asset($secImage) }}');">
+                  <div class="sector-choice-overlay"></div>
+                  <div class="position-relative z-1 d-flex align-items-center justify-content-between gap-3 w-100">
+                    <div class="min-w-0 pe-2">
+                      <strong class="d-block text-white small text-truncate fw-bold mb-0.5" style="font-size: 0.92rem; text-shadow: 0 1px 3px rgba(0,0,0,0.6);">
+                        {{ $sec->name }}
+                      </strong>
+                      <span class="d-block small lh-sm text-white-50" style="font-size: 0.74rem;">
+                        Pembaruan reagen &amp; standar {{ strtolower($sec->name) }}
+                      </span>
                     </div>
-                    <span class="text-muted d-block small lh-sm" style="font-size: 0.76rem;">Pembaruan teknis &amp; reagen sektor {{ strtolower($sec->name) }}</span>
+                    <input type="checkbox" name="sectors[]" value="{{ $sec->id }}" class="form-check-input sector-choice-input flex-shrink-0" {{ $checked ? 'checked' : '' }} style="cursor: pointer; width: 1.35rem; height: 1.35rem; margin: 0;">
                   </div>
                 </label>
               </div>
