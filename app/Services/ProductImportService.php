@@ -59,7 +59,8 @@ class ProductImportService
             'K' => ['Metode Referensi', 25],
             'L' => ['URL Cover Gambar', 30],
             'M' => ['URL Datasheet PDF', 30],
-            'N' => ['Deskripsi Produk', 45],
+            'N' => ['URL MSDS PDF', 30],
+            'O' => ['Deskripsi Produk', 45],
         ];
 
         foreach ($headers as $col => [$title, $width]) {
@@ -68,7 +69,7 @@ class ProductImportService
         }
 
         // Header Styling (Ruby Red accent, white text, bold)
-        $sheet->getStyle('A1:N1')->applyFromArray([
+        $sheet->getStyle('A1:O1')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'color' => ['rgb' => 'FFFFFF'],
@@ -330,8 +331,10 @@ class ProductImportService
                     $colMap['sector'] = $colLetter;
                 } elseif (in_array($norm, ['url cover gambar', 'cover', 'image', 'gambar', 'foto'], true)) {
                     $colMap['image'] = $colLetter;
-                } elseif (in_array($norm, ['url datasheet pdf', 'datasheet', 'pdf', 'dokumen'], true)) {
+                } elseif (in_array($norm, ['url datasheet pdf', 'datasheet', 'pdf', 'dokumen', 'spesifikasi pdf'], true)) {
                     $colMap['datasheet'] = $colLetter;
+                } elseif (in_array($norm, ['url msds pdf', 'url msds', 'msds', 'sds', 'safety data sheet', 'lembar data keselamatan'], true) || str_contains($norm, 'msds') || str_contains($norm, 'sds')) {
+                    $colMap['msds'] = $colLetter;
                 } elseif (in_array($norm, ['deskripsi produk', 'deskripsi', 'rincian'], true)) {
                     $colMap['description'] = $colLetter;
                 } elseif ($norm === 'description' && ! isset($colMap['title'])) {
@@ -604,16 +607,20 @@ class ProductImportService
             $function = isset($colMap['function']) ? trim((string) ($row[$colMap['function']] ?? '')) : (! $hasMappedHeaders && isset($row['J']) && ! preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '');
             $refMethod = isset($colMap['reference_method']) ? trim((string) ($row[$colMap['reference_method']] ?? '')) : (! $hasMappedHeaders && isset($row['K']) && ! str_contains(trim((string) $row['K']), '<') && strlen(trim((string) $row['K'])) < 100 ? trim((string) $row['K']) : '');
 
-            // URL Cover & PDF Datasheet
+            // URL Cover, PDF Datasheet, & PDF MSDS
             $imageUrl = isset($colMap['image']) ? trim((string) ($row[$colMap['image']] ?? '')) : (! $hasMappedHeaders ? (isset($row['L']) ? trim((string) $row['L']) : (isset($row['I']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '')) : '');
             $datasheetUrl = isset($colMap['datasheet']) ? trim((string) ($row[$colMap['datasheet']] ?? '')) : (! $hasMappedHeaders ? (isset($row['M']) ? trim((string) $row['M']) : (isset($row['J']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '')) : '');
-            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (! $hasMappedHeaders ? (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : '')) : '');
+            $msdsUrl = isset($colMap['msds']) ? trim((string) ($row[$colMap['msds']] ?? '')) : (! $hasMappedHeaders && isset($row['N']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['N'])) ? trim((string) $row['N']) : '');
+            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (! $hasMappedHeaders ? (isset($row['O']) ? trim((string) $row['O']) : (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : ''))) : '');
 
             if (str_starts_with($imageUrl, 'storage/')) {
                 $imageUrl = '/'.$imageUrl;
             }
             if (str_starts_with($datasheetUrl, 'storage/')) {
                 $datasheetUrl = '/'.$datasheetUrl;
+            }
+            if (str_starts_with($msdsUrl, 'storage/')) {
+                $msdsUrl = '/'.$msdsUrl;
             }
 
             $isUrlOrPath = fn (string $val) => $val !== '' && (preg_match('/^(\/|https?:\/\/)/i', $val) === 1);
@@ -629,6 +636,7 @@ class ProductImportService
                 'sector' => $sectorCsv,
                 'principal_id' => $principalId,
                 'datasheet_url' => $isUrlOrPath($datasheetUrl) ? $datasheetUrl : null,
+                'msds_url' => $isUrlOrPath($msdsUrl) ? $msdsUrl : null,
                 'description' => HtmlSanitizer::clean($description),
                 'image' => $isUrlOrPath($imageUrl) ? $imageUrl : '/images/placeholder.svg',
                 'price' => $price,

@@ -144,11 +144,18 @@
                       <h2 class="fs-6 fw-bold text-uppercase tracking-wider text-dark mb-0 d-flex align-items-center gap-2" style="font-family: var(--font-display); letter-spacing: 0.5px;">
                         <i data-lucide="file-text" style="width: 16px; height: 16px; color: var(--nb-primary);"></i> Deskripsi &amp; Spesifikasi Produk
                       </h2>
-                      @if(!empty($product['datasheet_url']))
-                        <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold small" style="color: var(--nb-primary); font-size: 0.82rem;">
-                          <i data-lucide="download" style="width: 14px; height: 14px;"></i> Unduh Spesifikasi (PDF) <i data-lucide="external-link" style="width: 11px; height: 11px;" class="ms-1"></i>
-                        </a>
-                      @endif
+                      <div class="d-flex align-items-center gap-3 flex-wrap">
+                        @if(!empty($product['datasheet_url']))
+                          <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold small" style="color: var(--nb-primary); font-size: 0.82rem;">
+                            <i data-lucide="download" style="width: 14px; height: 14px;"></i> Unduh Spesifikasi (PDF) <i data-lucide="external-link" style="width: 11px; height: 11px;" class="ms-1"></i>
+                          </a>
+                        @endif
+                        @if(!empty($product['msds_url']))
+                          <a href="{{ $product['msds_url'] }}" target="_blank" rel="noopener noreferrer" class="d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold small" style="color: #B45309; font-size: 0.82rem;">
+                            <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Unduh MSDS (PDF) <i data-lucide="external-link" style="width: 11px; height: 11px;" class="ms-1"></i>
+                          </a>
+                        @endif
+                      </div>
                     </div>
 
                     <div class="profil-body-text mb-3 text-muted" style="line-height: 1.7; font-size: 0.92rem;">
@@ -200,10 +207,10 @@
                       </table>
                     </div>
 
-                    @if(empty($product['datasheet_url']))
+                    @if(empty($product['datasheet_url']) || empty($product['msds_url']))
                       <div class="mb-1">
                         <a href="{{ url('/kontak') }}?subjek=consultation&pesan={{ urlencode('Permintaan lembar data teknis / MSDS / CoA resmi untuk produk: ' . $product['title'] . (!empty($product['catalog']) ? ' (CAT. ' . $product['catalog'] . ')' : '')) }}" class="d-inline-flex align-items-center gap-2 text-decoration-none text-muted small" style="font-size: 0.8rem;">
-                          <i data-lucide="mail" style="width: 13px; height: 13px;"></i> Request Lembar Data Resmi / COA ke Sales &rarr;
+                          <i data-lucide="mail" style="width: 13px; height: 13px;"></i> Request Lembar Data Resmi / MSDS / COA ke Sales &rarr;
                         </a>
                       </div>
                     @endif

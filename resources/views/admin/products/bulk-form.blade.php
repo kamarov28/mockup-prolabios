@@ -206,18 +206,35 @@
           </div>
 
           {{-- Row 5: Dokumen Spesifikasi Teknis (PDF / Datasheet) --}}
-          <div class="col-12">
+          <div class="col-md-6">
             <label class="admin-form-label mb-1">
-              <i data-lucide="file-text" class="me-1" style="color: var(--color-accent);"></i> Dokumen Spesifikasi Teknis (PDF)
+              <i data-lucide="file-text" class="me-1" style="color: var(--color-accent);"></i> Spesifikasi Teknis (Datasheet PDF)
             </label>
             <div class="row g-2 align-items-center">
-              <div class="col-md-6">
+              <div class="col-sm-6">
                 <input class="form-control form-control-sm" type="file" name="datasheet_file[__INDEX__]" accept=".pdf,application/pdf">
-                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Upload PDF lokal (Maks. 10MB) <span class="badge bg-success-subtle text-success border border-success-subtle ms-1" style="font-size: 0.68rem;">Direkomendasikan</span></div>
+                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Upload PDF lokal (Maks. 10MB)</div>
               </div>
-              <div class="col-md-6">
-                <input type="text" class="form-control form-control-sm" name="datasheet_url[__INDEX__]" placeholder="Atau URL PDF Eksternal (https://...)">
-                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Link PDF publik eksternal</div>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" name="datasheet_url[__INDEX__]" placeholder="Atau URL Datasheet (https://...)">
+                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Link PDF eksternal</div>
+              </div>
+            </div>
+          </div>
+
+          {{-- Row 5b: Dokumen Keselamatan Kerja (MSDS / SDS PDF) --}}
+          <div class="col-md-6">
+            <label class="admin-form-label mb-1">
+              <i data-lucide="shield-alert" class="me-1" style="color: #D97706;"></i> Keselamatan Kerja (MSDS / SDS PDF)
+            </label>
+            <div class="row g-2 align-items-center">
+              <div class="col-sm-6">
+                <input class="form-control form-control-sm" type="file" name="msds_file[__INDEX__]" accept=".pdf,application/pdf">
+                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Upload MSDS lokal (Maks. 10MB)</div>
+              </div>
+              <div class="col-sm-6">
+                <input type="text" class="form-control form-control-sm" name="msds_url[__INDEX__]" placeholder="Atau URL MSDS (https://...)">
+                <div class="form-text mt-1 small" style="color: var(--color-text-muted);">Link PDF eksternal</div>
               </div>
             </div>
           </div>

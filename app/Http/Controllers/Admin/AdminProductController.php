@@ -143,6 +143,7 @@ class AdminProductController extends Controller
             'sector' => '',
             'principal_id' => '',
             'datasheet_url' => '',
+            'msds_url' => '',
             'image' => '',
             'gallery_images' => [],
             'description' => '',
@@ -164,6 +165,7 @@ class AdminProductController extends Controller
             $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
             $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
             $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
+            $msdsUrl = $this->handlePdfUpload($request, 'msds_file', 'msds_url', null, 'msds');
 
             $sectorsInput = $request->input('sectors', $request->input('sector'));
             $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
@@ -173,6 +175,7 @@ class AdminProductController extends Controller
                 'title' => $title,
                 'description' => $request->input('description') ?: '',
                 'datasheet_url' => $datasheetUrl,
+                'msds_url' => $msdsUrl,
                 'category' => $request->input('category'),
                 'sub_category' => $request->input('sub_category') ?: null,
                 'packaging' => $request->input('packaging') ?: null,
@@ -238,6 +241,7 @@ class AdminProductController extends Controller
 
         $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image'] ?? $product->image ?? null);
         $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url', $product['datasheet_url'] ?? $product->datasheet_url ?? null);
+        $msdsUrl = $this->handlePdfUpload($request, 'msds_file', 'msds_url', $product['msds_url'] ?? $product->msds_url ?? null, 'msds');
 
         $existingGallery = $product['gallery_images'] ?? $product->gallery_images ?? [];
         if (! is_array($existingGallery)) {
@@ -260,6 +264,7 @@ class AdminProductController extends Controller
             'title' => $newTitle,
             'description' => $request->input('description') ?: '',
             'datasheet_url' => $datasheetUrl,
+            'msds_url' => $msdsUrl,
             'category' => $request->input('category'),
             'sub_category' => $request->input('sub_category') ?: null,
             'packaging' => $request->input('packaging') ?: null,
@@ -442,6 +447,7 @@ class AdminProductController extends Controller
             'sector' => $sector !== '' ? $sector : null,
             'principal_id' => $principalId ? (int) $principalId : null,
             'datasheet_url' => $this->handlePdfUpload($request, "datasheet_file.{$rowKey}", "datasheet_url.{$rowKey}"),
+            'msds_url' => $this->handlePdfUpload($request, "msds_file.{$rowKey}", "msds_url.{$rowKey}", null, 'msds'),
             'description' => (string) $request->input("description.{$rowKey}", ''),
             'image' => $this->handleImageUpload($request, "image_file.{$rowKey}", "image_url.{$rowKey}", '/images/placeholder.svg'),
             'price' => max(0, (float) $cleanPrice),

@@ -548,6 +548,7 @@ class ProductService
             'title' => $product['title'],
             'description' => HtmlSanitizer::clean($product['description'] ?? null),
             'datasheet_url' => $product['datasheet_url'] ?? null,
+            'msds_url' => $product['msds_url'] ?? null,
             'category' => $product['category'],
             'sub_category' => $product['sub_category'] ?? null,
             'packaging' => $product['packaging'] ?? null,
@@ -580,6 +581,7 @@ class ProductService
             'title' => $updatedProduct['title'],
             'description' => HtmlSanitizer::clean($updatedProduct['description'] ?? null),
             'datasheet_url' => $updatedProduct['datasheet_url'] ?? null,
+            'msds_url' => $updatedProduct['msds_url'] ?? null,
             'category' => $updatedProduct['category'],
             'sub_category' => $updatedProduct['sub_category'] ?? null,
             'packaging' => $updatedProduct['packaging'] ?? null,
@@ -645,6 +647,7 @@ class ProductService
                 'title' => $p['title'],
                 'description' => HtmlSanitizer::clean($p['description'] ?? null),
                 'datasheet_url' => $p['datasheet_url'] ?? null,
+                'msds_url' => $p['msds_url'] ?? null,
                 'category' => $p['category'],
                 'sub_category' => $p['sub_category'] ?? null,
                 'packaging' => $p['packaging'] ?? null,
@@ -669,7 +672,7 @@ class ProductService
             Product::upsert(
                 $rows,
                 ['title'],
-                ['catalog', 'description', 'datasheet_url', 'category', 'sub_category', 'packaging', 'function', 'reference_method', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
+                ['catalog', 'description', 'datasheet_url', 'msds_url', 'category', 'sub_category', 'packaging', 'function', 'reference_method', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
             );
 
             $titles = array_column($rows, 'title');

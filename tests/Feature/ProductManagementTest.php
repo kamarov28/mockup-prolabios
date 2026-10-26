@@ -330,6 +330,44 @@ class ProductManagementTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_save_and_update_product_with_msds_document(): void
+    {
+        $createResponse = $this->actingAs($this->admin)->post(route('admin.products.store'), [
+            'title' => 'Product With MSDS Document',
+            'catalog' => 'MSDS-01',
+            'category' => 'microbiology',
+            'price' => 750000,
+            'stock' => 20,
+            'datasheet_url' => '/storage/datasheets/spec_sample.pdf',
+            'msds_url' => '/storage/msds/msds_sample.pdf',
+        ]);
+
+        $createResponse->assertSessionHasNoErrors();
+        $createResponse->assertRedirect(route('admin.products'));
+
+        $product = Product::where('title', 'Product With MSDS Document')->first();
+        $this->assertNotNull($product);
+        $this->assertEquals('/storage/msds/msds_sample.pdf', $product->msds_url);
+
+        $updateResponse = $this->actingAs($this->admin)->put(route('admin.products.update', ['id' => $product->id]), [
+            'title' => 'Product With MSDS Document Updated',
+            'catalog' => 'MSDS-01',
+            'category' => 'microbiology',
+            'price' => 800000,
+            'stock' => 25,
+            'datasheet_url' => '/storage/datasheets/spec_sample.pdf',
+            'msds_url' => 'https://external-lab.com/msds.pdf',
+        ]);
+
+        $updateResponse->assertSessionHasNoErrors();
+        $updateResponse->assertRedirect(route('admin.products'));
+        $this->assertDatabaseHas('products', [
+            'id' => $product->id,
+            'title' => 'Product With MSDS Document Updated',
+            'msds_url' => 'https://external-lab.com/msds.pdf',
+        ]);
+    }
+
     public function test_bulk_product_delete_cleans_up_product_sector_pivot(): void
     {
         $sector = Sector::create([

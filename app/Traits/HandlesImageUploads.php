@@ -356,7 +356,8 @@ trait HandlesImageUploads
                 }
 
                 try {
-                    $filename = 'datasheet_'.time().'_'.Str::random(12).'.pdf';
+                    $prefix = trim($folder, '/') === 'msds' ? 'msds_' : 'datasheet_';
+                    $filename = $prefix.time().'_'.Str::random(12).'.pdf';
                     $relativePath = trim($folder, '/').'/'.$filename;
                     $stored = Storage::disk('public')->putFileAs(trim($folder, '/'), $file, $filename);
                     $exists = Storage::disk('public')->exists($relativePath);

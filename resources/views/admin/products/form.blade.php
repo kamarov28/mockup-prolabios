@@ -89,9 +89,9 @@
             </div>
           </div>
         </div>
-        <div class="col-12">
+        <div class="col-md-6">
           <div class="admin-form-group mb-0">
-            <label class="admin-form-label">Dokumen Spesifikasi Teknis (PDF)</label>
+            <label class="admin-form-label">Dokumen Spesifikasi Teknis (Datasheet PDF)</label>
             <x-admin.section-box>
               <div class="mb-2">
                 <label for="datasheet_file" class="form-label small mb-1 d-flex align-items-center justify-content-between" style="font-weight: 600; color: var(--color-text-secondary);">
@@ -100,7 +100,7 @@
                 </label>
                 <input class="form-control" type="file" id="datasheet_file" name="datasheet_file" accept=".pdf,application/pdf">
                 <div class="form-text mt-1" style="font-size: 0.78rem; color: var(--color-text-muted);">
-                  Unggah file PDF langsung ke server lokal agar dokumen selalu aktif dan tidak rusak jika link eksternal kedaluwarsa.
+                  Unggah file PDF langsung ke server lokal agar dokumen selalu aktif.
                 </div>
               </div>
               <div class="mb-2">
@@ -114,6 +114,38 @@
                   <i data-lucide="file-text" class="text-danger"></i>
                   <a href="{{ $product['datasheet_url'] }}" target="_blank" rel="noopener noreferrer" class="small fw-bold text-decoration-underline" style="color: var(--color-accent, #A6171C);">
                     Lihat Dokumen Terpasang <i data-lucide="external-link" class="ms-1"></i>
+                  </a>
+                </div>
+              @endif
+            </x-admin.section-box>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="admin-form-group mb-0">
+            <label class="admin-form-label">Dokumen Keselamatan Kerja (MSDS / SDS PDF)</label>
+            <x-admin.section-box>
+              <div class="mb-2">
+                <label for="msds_file" class="form-label small mb-1 d-flex align-items-center justify-content-between" style="font-weight: 600; color: var(--color-text-secondary);">
+                  <span><i data-lucide="upload" class="me-1"></i>Upload File MSDS (Maks. 10MB)</span>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 0.7rem; font-weight: 600;">Direkomendasikan</span>
+                </label>
+                <input class="form-control" type="file" id="msds_file" name="msds_file" accept=".pdf,application/pdf">
+                <div class="form-text mt-1" style="font-size: 0.78rem; color: var(--color-text-muted);">
+                  Lembar data keselamatan bahan kimia/biologis untuk standar K3 laboratorium.
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="msds_url" class="form-label small mb-1" style="font-weight: 600; color: var(--color-text-secondary);">
+                  <i data-lucide="link" class="me-1"></i>Atau Masukkan URL MSDS Eksternal
+                </label>
+                <input type="text" class="form-control" id="msds_url" name="msds_url" value="{{ old('msds_url', $product['msds_url'] ?? '') }}" placeholder="https://principal.com/msds.pdf">
+              </div>
+              @if(!empty($product['msds_url']))
+                <div class="d-flex align-items-center gap-2 pt-2 border-top" style="border-color: var(--color-border) !important;">
+                  <i data-lucide="shield-alert" class="text-warning"></i>
+                  <a href="{{ $product['msds_url'] }}" target="_blank" rel="noopener noreferrer" class="small fw-bold text-decoration-underline" style="color: var(--color-accent, #A6171C);">
+                    Lihat Dokumen MSDS Terpasang <i data-lucide="external-link" class="ms-1"></i>
                   </a>
                 </div>
               @endif

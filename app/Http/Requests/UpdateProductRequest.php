@@ -57,6 +57,8 @@ class UpdateProductRequest extends FormRequest
             'principal_id' => ['nullable', 'integer', 'exists:principals,id'],
             'datasheet_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
             'datasheet_url' => ['nullable', 'string', 'max:500', 'regex:/^(\/|https?:\/\/)/i'],
+            'msds_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'msds_url' => ['nullable', 'string', 'max:500', 'regex:/^(\/|https?:\/\/)/i'],
             'sector' => ['nullable'],
             'sectors' => ['nullable', 'array'],
             'sectors.*' => ['string'],

@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
  * @property string|null $slug
  * @property string|null $description
  * @property string|null $datasheet_url
+ * @property string|null $msds_url
  * @property string|null $category
  * @property string|null $sub_category
  * @property string|null $packaging
@@ -43,6 +44,7 @@ class Product extends Model
         'slug',
         'description',
         'datasheet_url',
+        'msds_url',
         'category',
         'sub_category',
         'packaging',
