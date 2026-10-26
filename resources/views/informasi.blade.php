@@ -155,6 +155,37 @@
         <div class="col-12 col-lg-4 order-2">
           <div class="blog-sidebar-sticky">
 
+            <!-- Sector Newsletter / Reserved Area Prompt (Liofilchem Style) -->
+            <div class="card p-4 mb-4 border-0" style="background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid #E2E8F0 !important; border-top: 3px solid var(--nb-primary) !important; border-radius: var(--nb-radius-lg); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge" style="background: rgba(166, 23, 28, 0.08); color: var(--nb-primary); font-size: 0.7rem; font-weight: 700; border-radius: 4px; padding: 3px 8px;">
+                  <i data-lucide="mail" style="width: 12px; height: 12px; vertical-align: -1px;"></i> SECTOR BUZZ
+                </span>
+                <span class="text-muted small" style="font-size: 0.75rem;">Buletin Teknis</span>
+              </div>
+              <h3 class="fs-6 fw-bold text-dark mb-1" style="font-family: var(--font-display);">Pembaruan Sesuai Sektor</h3>
+              <p class="small text-muted mb-3" style="font-size: 0.8rem; line-height: 1.5;">
+                Dapatkan notifikasi email langsung saat ada rilis metode ISO, regulasi BPOM, atau katalog produk baru yang sesuai spesialisasi lab Anda.
+              </p>
+              @if(auth('subscriber')->check())
+                <div class="p-2.5 rounded mb-3" style="background: #ECFDF5; border: 1px solid #A7F3D0; font-size: 0.78rem; color: #065F46;">
+                  <i data-lucide="check-circle-2" style="width: 13px; height: 13px; vertical-align: -2px;"></i> Anda masuk sebagai <strong>{{ auth('subscriber')->user()->full_name }}</strong>.
+                </div>
+                <a href="{{ route('newsletter.account') }}" class="nb-btn nb-btn-outline w-100 justify-content-center py-2" style="font-size: 0.8rem;">
+                  <i data-lucide="sliders"></i> Atur Sektor Minat
+                </a>
+              @else
+                <div class="d-flex flex-column gap-2">
+                  <a href="{{ route('newsletter.signup') }}" class="nb-btn nb-btn-primary w-100 justify-content-center py-2 text-uppercase fw-bold" style="font-size: 0.78rem; letter-spacing: 0.5px;">
+                    <i data-lucide="mail"></i> Sign Up Newsletter
+                  </a>
+                  <a href="{{ route('newsletter.login') }}" class="nb-btn nb-btn-ghost w-100 justify-content-center py-1.5" style="font-size: 0.78rem;">
+                    Masuk ke Akun Buletin &rarr;
+                  </a>
+                </div>
+              @endif
+            </div>
+
             <!-- Category Filter -->
             <div class="card p-4 mb-4">
               <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom blog-sidebar-head">

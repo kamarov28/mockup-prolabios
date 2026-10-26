@@ -111,7 +111,12 @@
         @can('manage-posts')
         <div class="sidebar-item {{ request()->is('admin/posts*') ? 'active' : '' }}">
           <a href="{{ route('admin.posts') }}" class="sidebar-link">
-            <i data-lucide="file-text"></i> Artikel
+            <i data-lucide="newspaper"></i> Artikel &amp; Berita
+          </a>
+        </div>
+        <div class="sidebar-item {{ request()->is('admin/newsletter*') ? 'active' : '' }}">
+          <a href="{{ route('admin.newsletter.index') }}" class="sidebar-link">
+            <i data-lucide="mail"></i> Buletin &amp; Siaran Sektor
           </a>
         </div>
         @endcan
