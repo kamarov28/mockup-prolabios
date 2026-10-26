@@ -336,10 +336,6 @@ a.editorial-side-card:hover {
   animation: nb-hero-actions-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nb-hero-arrow {
-  opacity: 0.9;
-}
-
 /* ── Cart Micro-Interactions (Spring Scale Pop & Haptic Tilt) ─────────────── */
 @keyframes nb-cart-pop {
   0% {

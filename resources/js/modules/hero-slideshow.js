@@ -13,10 +13,6 @@ export function initHeroBgSlideshow() {
   const slides = document.querySelectorAll('.nb-hero-slide, .hero-bg-slide');
   if (slides.length <= 1) return;
 
-  const prevBtn = document.getElementById('hero-prev');
-  const nextBtn = document.getElementById('hero-next');
-  const heroSection = document.querySelector('.nb-hero, .typo-hero');
-
   const SLIDE_DURATION = 5;
   const ACTIVE = slides[0].classList.contains('is-active') || slides[0].classList.contains('nb-hero-slide')
     ? 'is-active'
@@ -71,19 +67,6 @@ export function initHeroBgSlideshow() {
   function resetAutoTimer() {
     if (autoTimer) clearInterval(autoTimer);
     autoTimer = setInterval(advance, SLIDE_DURATION * 1000);
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      goTo((current - 1 + slides.length) % slides.length);
-    });
-  }
-  if (nextBtn) {
-    nextBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      goTo((current + 1) % slides.length);
-    });
   }
 
   resetAutoTimer();

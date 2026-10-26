@@ -58,13 +58,4 @@
       </div>
     </div>
   </div>
-
-  @if(count($heroImages) > 1)
-    <button type="button" id="hero-prev" class="nb-hero-arrow nb-hero-arrow--prev" aria-label="Slide sebelumnya">
-      <i data-lucide="chevron-left"></i>
-    </button>
-    <button type="button" id="hero-next" class="nb-hero-arrow nb-hero-arrow--next" aria-label="Slide berikutnya">
-      <i data-lucide="chevron-right"></i>
-    </button>
-  @endif
 </section>
