@@ -10,17 +10,29 @@
   border-radius: var(--nb-radius-lg);
   box-shadow: var(--nb-shadow);
   overflow: hidden;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: border-color var(--transition-fast);
+  cursor: default;
 }
 
 .editorial-featured-card:hover,
 .editorial-side-card:hover {
+  border-color: #CBD5E1;
+}
+
+a.editorial-featured-card,
+a.editorial-side-card {
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+a.editorial-featured-card:hover,
+a.editorial-side-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 
-.editorial-featured-card:active,
-.editorial-side-card:active {
+a.editorial-featured-card:active,
+a.editorial-side-card:active {
   transform: none;
 }
 

@@ -156,9 +156,67 @@ a {
   color: var(--nb-ink);
   text-decoration: none;
   transition: color var(--transition-fast);
+  cursor: pointer;
 }
 a:hover {
   color: var(--nb-primary);
+}
+
+/* ── Universal Affordance Standards (Interactive vs Static) ──────────────── */
+button,
+[role="button"],
+[role="tab"],
+input[type="submit"],
+input[type="button"],
+select {
+  cursor: pointer;
+}
+
+button:disabled,
+.btn:disabled,
+.nb-btn:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed !important;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+/* Static read-only elements maintain default arrow cursor */
+h1, h2, h3, h4, h5, h6,
+p,
+th, td,
+label:not([for]),
+.badge,
+.nb-badge,
+.nb-badge-sm,
+.nb-badge-stock {
+  cursor: default;
+  user-select: text;
+}
+
+/* Tactile button depress feedback */
+button:active:not(:disabled),
+.nb-btn:active:not(:disabled),
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Inline body text links must have clear affordance (not masquerading as plain text) */
+p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editorial-read-link),
+.prose a:not(.nb-btn):not(.btn):not([class*="btn"]),
+.article-body a:not(.nb-btn):not(.btn):not([class*="btn"]) {
+  color: var(--nb-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editorial-read-link):hover,
+.prose a:not(.nb-btn):not(.btn):not([class*="btn"]):hover,
+.article-body a:not(.nb-btn):not(.btn):not([class*="btn"]):hover {
+  color: var(--nb-primary-dark);
+  text-decoration-thickness: 2px;
 }
 
 .text-muted, .text-black-50, .text-secondary, .nb-muted {

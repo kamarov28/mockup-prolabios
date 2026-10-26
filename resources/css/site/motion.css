@@ -21,17 +21,25 @@
   transition: background-color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast), color var(--transition-fast);
 }
 
-/* Hover: subtle ambient elevation */
-.card:hover,
-.product-card:hover,
+/* Hover: elevation only for truly clickable cards */
+a.card:hover,
 .blog-card:hover,
+a.nb-card:hover,
+a.hitech-bento-card:hover,
+a.b2b-usecase-card:hover,
+a.editorial-featured-card:hover,
+a.editorial-side-card:hover {
+  box-shadow: var(--nb-shadow-elevated);
+  border-color: #CBD5E1;
+}
+
+/* Static structural containers maintain neutral border on hover without false elevation */
+.product-card:hover,
 .hitech-bento-card:hover,
 .b2b-usecase-card:hover,
 .profil-vm-card:hover,
 .editorial-featured-card:hover,
-.editorial-side-card:hover,
-.nb-card:hover {
-  box-shadow: var(--nb-shadow-elevated);
+.editorial-side-card:hover {
   border-color: #CBD5E1;
 }
 
