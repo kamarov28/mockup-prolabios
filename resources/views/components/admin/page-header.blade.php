@@ -15,7 +15,7 @@
     @if($label)
       <span class="admin-page-label">{{ $label }}</span>
     @endif
-    <h2 class="admin-page-title mb-1">{{ $title }}</h2>
+    <h2 class="admin-page-title mb-1">{!! $title !!}</h2>
     @if($editing)
       <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
         Mengedit: <strong style="color: var(--color-text-main);">{{ $editing }}</strong>

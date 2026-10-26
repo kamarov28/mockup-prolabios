@@ -56,7 +56,7 @@
           <select class="form-select" id="type" name="type" required>
             <option value="announcement" {{ old('type') === 'announcement' ? 'selected' : '' }}>Pengumuman Umum</option>
             <option value="product_release" {{ old('type') === 'product_release' ? 'selected' : '' }}>Rilis Produk / Reagen Baru</option>
-            <option value="regulatory_update" {{ old('type') === 'regulatory_update' ? 'selected' : '' }}>Pembaruan Regulasi / Standar ISO &amp; BPOM</option>
+            <option value="regulatory_update" {{ old('type') === 'regulatory_update' ? 'selected' : '' }}>Pembaruan Regulasi / Standar ISO & BPOM</option>
             <option value="event" {{ old('type') === 'event' ? 'selected' : '' }}>Undangan Webinar / Event Ilmiah</option>
           </select>
         </div>

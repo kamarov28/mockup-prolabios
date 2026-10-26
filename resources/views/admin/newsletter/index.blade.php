@@ -7,7 +7,7 @@
 <div class="admin-content-wrap">
 
   <x-admin.page-header
-    title="Manajemen Buletin &amp; Siaran Sektor"
+    title="Manajemen Buletin & Siaran Sektor"
     subtitle="Kelola basis data pelanggan institusi laboratorium dan kirimkan pembaruan produk / regulasi tersegmentasi per sektor industri."
     badge="Communication Hub">
     <x-slot:actions>
@@ -23,7 +23,7 @@
       <div class="card p-3 border-0" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 8px;">
         <span class="small text-muted fw-bold text-uppercase" style="font-size: 0.72rem;">Pelanggan Aktif</span>
         <div class="h3 fw-bold mb-0 mt-1" style="color: var(--color-accent, #A6171C);">{{ $totalSubscribers }}</div>
-        <span class="small text-muted" style="font-size: 0.76rem;">Institusi &amp; analis lab</span>
+        <span class="small text-muted" style="font-size: 0.76rem;">Institusi & analis lab</span>
       </div>
     </div>
     <div class="col-sm-6 col-xl-3">
@@ -58,7 +58,7 @@
       <table class="table align-middle mb-0" style="font-size: 0.84rem;">
         <thead class="table-light">
           <tr>
-            <th>NAMA &amp; EMAIL</th>
+            <th>NAMA & EMAIL</th>
             <th>PERUSAHAAN / INSTANSI</th>
             <th>KOTA</th>
             <th>SEKTOR MINAT</th>
