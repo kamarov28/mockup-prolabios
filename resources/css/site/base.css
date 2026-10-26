@@ -321,15 +321,23 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
 
 .navbar-brand img {
   filter: none !important;
-  max-width: 210px !important;
-  height: 48px !important;
+  max-width: 440px !important;
+  height: 58px !important;
   width: auto !important;
   object-fit: contain !important;
+  transition: transform var(--transition-fast);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991.98px) {
   .navbar-brand img {
-    max-width: 175px !important;
+    max-width: 320px !important;
+    height: 48px !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand img {
+    max-width: 250px !important;
     height: 40px !important;
   }
 }

@@ -1,8 +1,8 @@
 <!-- Header / Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light py-3">
+<nav class="navbar navbar-expand-lg navbar-light py-2 py-lg-2.5">
   <div class="container-fluid px-3 px-lg-4">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url('/') }}">
-        <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="54" width="auto" decoding="async" fetchpriority="high">
+      <a class="navbar-brand d-flex align-items-center" href="{{ url('/') }}">
+        <img src="{{ !empty($siteSettings['site_logo']) ? $siteSettings['site_logo'] : asset('images/logo-prolabios.png') }}" alt="{{ $siteSettings['company_name'] ?? 'Prolabios' }}" height="60" width="auto" decoding="async" fetchpriority="high">
       </a>
     
     <!-- Mobile Actions (Cart, Search, and Hamburger Navigation) -->
