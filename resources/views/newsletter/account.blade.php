@@ -82,21 +82,21 @@
                 $secImage = !empty($sec->image) ? $sec->image : (file_exists(public_path('images/sectors/' . $sec->id . '.jpg')) ? 'images/sectors/' . $sec->id . '.jpg' : 'images/sectors/general-purpose.jpg');
               @endphp
               <div class="col">
-                <label class="sector-choice-card d-flex flex-column justify-content-between p-3.5 rounded-3 h-100 position-relative overflow-hidden" 
-                       style="cursor: pointer; min-height: 125px; background-image: url('{{ asset($secImage) }}');">
+                <label class="sector-choice-card d-flex flex-column justify-content-between rounded-3 h-100 position-relative overflow-hidden" 
+                       style="cursor: pointer; background-image: url('{{ asset($secImage) }}');">
                   <div class="sector-choice-overlay"></div>
                   
                   {{-- Checkbox pinned cleanly at Top-Right --}}
-                  <div class="position-relative z-1 d-flex justify-content-end w-100 mb-2">
+                  <div class="position-relative z-1 d-flex justify-content-end w-100">
                     <input type="checkbox" name="sectors[]" value="{{ $sec->id }}" class="form-check-input sector-choice-input" {{ $checked ? 'checked' : '' }} style="cursor: pointer;">
                   </div>
 
                   {{-- Text pinned at Bottom-Left across full width --}}
-                  <div class="position-relative z-1 w-100">
-                    <strong class="d-block text-white fw-bold mb-1" style="font-size: 0.95rem; text-shadow: 0 1px 4px rgba(0,0,0,0.8); line-height: 1.25;">
+                  <div class="position-relative z-1 w-100 pt-3">
+                    <strong class="d-block text-white fw-bold mb-1" style="font-size: 0.98rem; text-shadow: 0 1px 4px rgba(0,0,0,0.85); line-height: 1.25;">
                       {{ $sec->name }}
                     </strong>
-                    <span class="d-block small lh-sm text-white-50" style="font-size: 0.76rem; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">
+                    <span class="d-block small lh-sm text-white-50" style="font-size: 0.78rem; text-shadow: 0 1px 2px rgba(0,0,0,0.7);">
                       Pembaruan reagen &amp; standar {{ strtolower($sec->name) }}
                     </span>
                   </div>
