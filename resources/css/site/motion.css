@@ -328,9 +328,8 @@
   animation: nb-hero-actions-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.nb-hero-controls--immersive {
-  opacity: 1;
-  animation: nb-controls-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.nb-hero-arrow {
+  opacity: 0.9;
 }
 
 /* ── Cart Micro-Interactions (Spring Scale Pop & Haptic Tilt) ─────────────── */

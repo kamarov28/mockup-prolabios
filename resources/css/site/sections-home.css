@@ -202,112 +202,72 @@
   }
 }
 
-.nb-hero-controls--immersive {
-  position: relative;
-  right: auto;
-  bottom: auto;
-  z-index: 10;
-  display: flex;
+/* ── Immersive Hero Navigation Arrows (Left & Right) ─────────────────────── */
+.nb-hero-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  width: 50px;
+  height: 50px;
+  display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  background: rgba(15, 23, 42, 0.75);
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  box-shadow: none;
-  padding: 0.45rem 0.85rem;
-  width: 100%;
-  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
 }
 
-.nb-hero-controls--immersive .nb-hero-counter,
-.nb-hero-controls--immersive .nb-hero-counter span {
-  color: #FFFFFF !important;
+.nb-hero-arrow:hover {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #FFFFFF;
+  transform: translateY(-50%) scale(1.08);
 }
 
-.nb-hero-controls--immersive .nb-hero-counter .nb-muted {
-  color: rgba(255, 255, 255, 0.5) !important;
+.nb-hero-arrow:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
-.nb-hero-controls--immersive .nb-hero-progress {
-  background: rgba(255, 255, 255, 0.2) !important;
-}
-
-.nb-hero-controls--immersive .nb-icon-btn {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #FFFFFF !important;
-  border-radius: 6px !important;
-}
-
-.nb-hero-controls--immersive .nb-icon-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  color: #FFFFFF !important;
-}
-
-.nb-hero-controls--immersive .nb-icon-btn svg,
-.nb-hero-controls--immersive .nb-icon-btn i {
+.nb-hero-arrow svg,
+.nb-hero-arrow i {
+  width: 26px;
+  height: 26px;
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
 
+.nb-hero-arrow--prev {
+  left: 2rem;
+}
 
-@media (max-width: 767.98px) {
-  .nb-hero-controls--immersive {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    margin-top: 0.5rem;
-    width: 100%;
-    padding: 0.65rem 1rem;
-    min-height: 52px;
+.nb-hero-arrow--next {
+  right: 2rem;
+}
+
+@media (max-width: 768px) {
+  .nb-hero-arrow {
+    width: 42px;
+    height: 42px;
   }
-  .nb-hero-arrows .nb-icon-btn {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    font-size: 1.05rem !important;
+  .nb-hero-arrow svg,
+  .nb-hero-arrow i {
+    width: 22px;
+    height: 22px;
+  }
+  .nb-hero-arrow--prev {
+    left: 0.75rem;
+  }
+  .nb-hero-arrow--next {
+    right: 0.75rem;
   }
 }
-
-.nb-hero-counter {
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-  white-space: nowrap;
-  color: var(--nb-ink);
-  font-weight: 700;
-}
-
-.nb-hero-progress {
-  flex: 1;
-  height: 4px;
-  background: #E2E8F0;
-  border-radius: 999px;
-  overflow: hidden;
-  position: relative;
-}
-
-.nb-hero-progress-fill {
-  height: 100%;
-  width: 100%;
-  background: var(--nb-primary);
-  border-radius: 999px;
-  transform-origin: left center;
-  transform: scaleX(0);
-}
-
-.nb-hero-progress-fill.running {
-  animation: nb-progress 5s linear forwards;
-}
-
-@keyframes nb-progress {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-
-.nb-hero-arrows { display: flex; gap: 0.35rem; }
 
 /* ── Principals Strip (Curved Canopy Sheet Transition) ──────────────────── */
 .nb-principals {

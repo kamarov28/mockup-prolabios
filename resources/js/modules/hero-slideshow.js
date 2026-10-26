@@ -16,33 +16,11 @@ export function initHeroBgSlideshow() {
   const prevBtn = document.getElementById('hero-prev');
   const nextBtn = document.getElementById('hero-next');
   const heroSection = document.querySelector('.nb-hero, .typo-hero');
-  const slideNumEl = document.getElementById('hero-slide-current');
-  const slideTotalEl = document.getElementById('hero-slide-total');
-  const progressFill = document.getElementById('hero-progress-fill');
 
   const SLIDE_DURATION = 5;
   const ACTIVE = slides[0].classList.contains('is-active') || slides[0].classList.contains('nb-hero-slide')
     ? 'is-active'
     : 'active';
-
-  if (slideTotalEl) {
-    slideTotalEl.textContent = slides.length < 10 ? '0' + slides.length : String(slides.length);
-  }
-
-  function updateCounter(idx) {
-    if (slideNumEl) {
-      slideNumEl.textContent = idx + 1 < 10 ? '0' + (idx + 1) : String(idx + 1);
-    }
-  }
-
-  function startProgressAnim() {
-    if (!progressFill) return;
-    progressFill.classList.remove('running');
-    progressFill.style.transform = 'scaleX(0)';
-    void progressFill.offsetWidth;
-    progressFill.style.transform = '';
-    progressFill.classList.add('running');
-  }
 
   const prefersReduced = prefersReducedMotion();
   const motionOff = document.documentElement.classList.contains('no-motion');
@@ -81,8 +59,6 @@ export function initHeroBgSlideshow() {
     }, 850);
 
     current = next;
-    updateCounter(current);
-    startProgressAnim();
     resetAutoTimer();
   }
 
@@ -110,8 +86,6 @@ export function initHeroBgSlideshow() {
     });
   }
 
-  updateCounter(0);
-  startProgressAnim();
   resetAutoTimer();
 }
 

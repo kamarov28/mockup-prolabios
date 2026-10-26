@@ -44,7 +44,7 @@
           {{ $homeData['hero_subtitle'] ?? 'Kami menyediakan media kultur berkualitas tinggi, instrumen laboratorium presisi, dan perlengkapan uji standar industri di Indonesia.' }}
         </p>
         <div class="nb-hero-cta-group">
-          <div class="nb-hero-actions d-flex align-items-center gap-3 flex-wrap mb-3">
+          <div class="nb-hero-actions d-flex align-items-center gap-3 flex-wrap">
             <a href="{{ url($homeData['hero_cta_link'] ?? '/produk') }}" class="nb-btn nb-btn-primary">
               <i data-lucide="layers"></i>
               <span>{{ $homeData['hero_cta_text'] ?? 'Jelajahi Katalog Produk' }}</span>
@@ -54,24 +54,17 @@
               <span>Hubungi Sales</span>
             </a>
           </div>
-
-          <!-- Slide Controls grouped directly beneath action buttons on the left -->
-          @if(count($heroImages) > 1)
-            <div class="nb-hero-controls nb-hero-controls--immersive">
-              <span class="nb-hero-counter">
-                <span id="hero-slide-current" class="nb-mono">01</span>
-                <span class="nb-muted">/</span>
-                <span id="hero-slide-total" class="nb-mono">{{ count($heroImages) < 10 ? '0'.count($heroImages) : count($heroImages) }}</span>
-              </span>
-              <div class="nb-hero-progress"><div id="hero-progress-fill" class="nb-hero-progress-fill"></div></div>
-              <div class="nb-hero-arrows">
-                <button type="button" id="hero-prev" class="nb-icon-btn" aria-label="Slide sebelumnya"><i data-lucide="arrow-left"></i></button>
-                <button type="button" id="hero-next" class="nb-icon-btn" aria-label="Slide berikutnya"><i data-lucide="arrow-right"></i></button>
-              </div>
-            </div>
-          @endif
         </div>
       </div>
     </div>
   </div>
+
+  @if(count($heroImages) > 1)
+    <button type="button" id="hero-prev" class="nb-hero-arrow nb-hero-arrow--prev" aria-label="Slide sebelumnya">
+      <i data-lucide="chevron-left"></i>
+    </button>
+    <button type="button" id="hero-next" class="nb-hero-arrow nb-hero-arrow--next" aria-label="Slide berikutnya">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  @endif
 </section>
