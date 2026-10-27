@@ -109,8 +109,8 @@
                     </div>
                   @endif
                   <div>
-                    <span class="d-block text-muted text-uppercase fw-bold detail-principal-label">Prinsipal Resmi</span>
-                    <strong class="d-block text-dark detail-principal-name">{{ $product->principal->name }}</strong>
+                    <span class="d-block text-uppercase detail-principal-label">Prinsipal Resmi</span>
+                    <strong class="d-block detail-principal-name">{{ $product->principal->name }}</strong>
                     @if(!empty($product->principal->address))
                       <span class="text-muted small detail-principal-address"><i data-lucide="map-pin" class="me-1"></i>{{ $product->principal->address }}</span>
                     @endif
@@ -141,8 +141,9 @@
                   {{-- 1. Deskripsi & Spesifikasi Produk (At the top per user requirement) --}}
                   <div>
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                      <h2 class="fs-6 fw-bold text-uppercase tracking-wider text-dark mb-0 d-flex align-items-center gap-2" style="font-family: var(--font-display); letter-spacing: 0.5px;">
-                        <i data-lucide="file-text" style="width: 16px; height: 16px; color: var(--nb-primary);"></i> Deskripsi &amp; Spesifikasi Produk
+                      <h2 class="detail-spec-title mb-0 d-flex align-items-center gap-2">
+                        <i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--nb-primary);"></i>
+                        <span>Deskripsi &amp; Spesifikasi Produk</span>
                       </h2>
                       <div class="d-flex align-items-center gap-3 flex-wrap">
                         @if(!empty($product['datasheet_url']))

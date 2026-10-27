@@ -9,6 +9,17 @@
   --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
+  /* ── Typographic Scale Tokens (Mathematical Ratio 1.333 - Perfect Fourth) ── */
+  --type-display: clamp(2.25rem, 4.5vw, 3.4rem); /* 36px - 54px */
+  --type-h1: clamp(1.85rem, 3.5vw, 2.5rem);      /* 30px - 40px */
+  --type-h2: clamp(1.45rem, 2.5vw, 1.95rem);     /* 23px - 31px */
+  --type-h3: clamp(1.15rem, 1.8vw, 1.35rem);     /* 18px - 22px */
+  --type-h4: 1.05rem;                             /* ~16.8px */
+  --type-body: 0.95rem;                           /* ~15.2px Baseline */
+  --type-sub: 0.88rem;                            /* ~14px Secondary info */
+  --type-caption: 0.76rem;                        /* ~12px Meta / Badges */
+  --type-micro: 0.68rem;                          /* ~10.8px Micro tags */
+
   /* ── HIG Optical Typography Tracking & Metrics ──────────────────────── */
   --tracking-display: -0.028em;   /* Large Hero/Display (>= 28px) */
   --tracking-title: -0.02em;      /* Section Titles (20px - 26px) */

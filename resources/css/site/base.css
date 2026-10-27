@@ -134,6 +134,33 @@ h4, h5, h6,
   line-height: 1.35;
 }
 
+/* ── Typographic Section Headers & Content Hierarchy ─────────────────────── */
+.typo-section-head {
+  margin-bottom: var(--space-6);
+}
+
+.typo-section-title {
+  font-family: var(--font-display) !important;
+  font-size: var(--type-h2);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: var(--tracking-title);
+  color: var(--nb-ink);
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+}
+
+.typo-section-sub {
+  font-family: var(--font-body) !important;
+  font-size: var(--type-sub);
+  line-height: 1.6;
+  color: var(--nb-muted) !important;
+  margin-top: 0;
+  margin-bottom: 0;
+  max-width: 62ch;
+  font-weight: 400;
+}
+
 /* Paragraph and typography inheritance */
 p {
   color: var(--nb-ink);

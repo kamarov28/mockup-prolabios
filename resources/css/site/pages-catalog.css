@@ -1053,19 +1053,32 @@
   object-fit: contain;
 }
 .detail-principal-label {
-  font-size: 0.65rem;
-  letter-spacing: 0.5px;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 600;
+  color: var(--nb-muted);
 }
 .detail-principal-name {
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--nb-ink);
 }
-.detail-principal-address { font-size: 0.75rem; }
+.detail-principal-address { font-size: 0.76rem; }
+
+.detail-spec-title {
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  text-transform: uppercase;
+  color: var(--nb-ink);
+  line-height: 1.3;
+}
 
 .detail-section-heading {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-family: var(--font-display);
   font-weight: 700;
   color: var(--nb-ink);
