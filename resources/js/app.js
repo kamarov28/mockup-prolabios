@@ -40,6 +40,20 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initCatalogCart', initCatalogCart);
   safeInit('initSubpages', initSubpages);
   safeInit('initCatalogAjax', initCatalogAjax);
+  safeInit('initProductWatermarks', function () {
+    document.querySelectorAll('.detail-product-desc img, .detail-product-page .profil-body-text img').forEach(function (img) {
+      if (!img.closest('.product-watermark-wrap')) {
+        const wrap = document.createElement('span');
+        wrap.className = 'product-watermark-wrap';
+        img.parentNode.insertBefore(wrap, img);
+        wrap.appendChild(img);
+        const overlay = document.createElement('span');
+        overlay.className = 'product-watermark-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        wrap.appendChild(overlay);
+      }
+    });
+  });
   safeInit('lucide', () => window.lucide.createIcons());
 
   // Bacteria swarm prototype: active on homepage

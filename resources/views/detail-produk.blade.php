@@ -174,8 +174,8 @@
                       </div>
                     </div>
 
-                    <div class="profil-body-text mb-3 text-muted" style="line-height: 1.7; font-size: 0.92rem;">
-                      {!! \App\Helpers\HtmlSanitizer::clean($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
+                    <div class="profil-body-text mb-3 text-muted detail-product-desc" style="line-height: 1.7; font-size: 0.92rem;">
+                      {!! \App\Helpers\HtmlSanitizer::cleanWithProductWatermark($product['description'] ?? 'Tidak ada deskripsi spesifik yang tersedia untuk produk ini.') !!}
                     </div>
 
                     @php

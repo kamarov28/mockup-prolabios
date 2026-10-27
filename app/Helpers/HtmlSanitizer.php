@@ -64,4 +64,26 @@ class HtmlSanitizer
 
         return Purifier::clean($html, 'product_description');
     }
+
+    /**
+     * Clean and wrap all embedded product description images with Prolabios watermark protection.
+     */
+    public static function cleanWithProductWatermark(?string $html): string
+    {
+        $sanitized = self::clean($html);
+        if (empty($sanitized) || !str_contains($sanitized, '<img')) {
+            return $sanitized;
+        }
+
+        // Wrap non-watermarked <img> tags in a protective watermark container
+        return (string) preg_replace_callback(
+            '#<img\b([^>]*)/?>#i',
+            function ($matches) {
+                $imgTag = $matches[0];
+
+                return '<span class="product-watermark-wrap">'.$imgTag.'<span class="product-watermark-overlay" aria-hidden="true"></span></span>';
+            },
+            $sanitized
+        );
+    }
 }
