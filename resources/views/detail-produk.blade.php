@@ -90,7 +90,22 @@
                   @endif
                   @if(!empty($product['category']))
                     <span class="text-muted small">·</span>
-                    <span class="text-muted small text-capitalize">{{ str_replace('-', ' ', $product['category']) }}</span>
+                    <a href="{{ url('/produk?kategori=' . ($product['category_slug'] ?? $product['category'])) }}" class="text-muted small text-capitalize text-decoration-none" title="Filter kategori {{ $product['category'] }}">
+                      {{ str_replace('-', ' ', $product['category']) }}
+                    </a>
+                  @endif
+                  @if(isset($product->sectors) && $product->sectors->isNotEmpty())
+                    @foreach($product->sectors as $sec)
+                      <span class="text-muted small">·</span>
+                      <a href="{{ url('/sektor?s=' . $sec->id) }}" class="text-muted small text-decoration-none" title="Lihat solusi sektor {{ $sec->name }}">
+                        {{ $sec->name }}
+                      </a>
+                    @endforeach
+                  @elseif(!empty($product['sector']))
+                    <span class="text-muted small">·</span>
+                    <a href="{{ url('/sektor?s=' . \Illuminate\Support\Str::slug($product['sector'])) }}" class="text-muted small text-decoration-none" title="Lihat solusi sektor {{ $product['sector'] }}">
+                      {{ $product['sector'] }}
+                    </a>
                   @endif
                   @if(!empty($product->principal))
                     <span class="text-muted small">·</span>
@@ -186,7 +201,13 @@
                           </tr>
                           <tr>
                             <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Kategori</th>
-                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $catDisplay }}</td>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">
+                              @if(!empty($product['category']))
+                                <a href="{{ url('/produk?kategori=' . ($product['category_slug'] ?? $product['category'])) }}" class="text-decoration-underline text-dark" title="Filter kategori {{ $catDisplay }}">{{ $catDisplay }}</a>
+                              @else
+                                {{ $catDisplay }}
+                              @endif
+                            </td>
                           </tr>
                           <tr>
                             <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Sub-kategori</th>
@@ -194,7 +215,17 @@
                           </tr>
                           <tr>
                             <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Sektor</th>
-                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">{{ $sectorDisplay }}</td>
+                            <td style="color: var(--nb-ink); padding: 9px 14px; vertical-align: middle;">
+                              @if(isset($product->sectors) && $product->sectors->isNotEmpty())
+                                @foreach($product->sectors as $sec)
+                                  <a href="{{ url('/sektor?s=' . $sec->id) }}" class="text-decoration-underline text-dark me-2" title="Jelajahi solusi sektor {{ $sec->name }}">{{ $sec->name }}</a>@if(!$loop->last), @endif
+                                @endforeach
+                              @elseif(!empty($product['sector']))
+                                <a href="{{ url('/sektor?s=' . \Illuminate\Support\Str::slug($product['sector'])) }}" class="text-decoration-underline text-dark" title="Jelajahi solusi sektor {{ $product['sector'] }}">{{ ucwords(str_replace('-', ' ', (string) $product['sector'])) }}</a>
+                              @else
+                                —
+                              @endif
+                            </td>
                           </tr>
                           <tr>
                             <th scope="row" style="width: 32%; background: #F8FAFC; color: #475569; font-weight: 600; padding: 9px 14px; vertical-align: middle;">Fungsi</th>

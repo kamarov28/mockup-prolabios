@@ -30,6 +30,7 @@
           <li><a href="{{ url('/produk') }}">Katalog Produk</a></li>
           <li><a href="{{ url('/sektor') }}">Sektor Industri</a></li>
           <li><a href="{{ url('/layanan') }}">Layanan Teknis</a></li>
+          <li><a href="{{ route('newsletter.signup') }}">Buletin Sektor</a></li>
           <li><a href="{{ url('/cart') }}">Pengajuan RFQ</a></li>
         </ul>
       </div>
