@@ -75,9 +75,9 @@
         </div>
         <div class="col-md-6 col-12 text-md-end">
           <div class="footer-legal-links d-inline-flex flex-wrap align-items-center gap-3">
-            <a href="{{ route('privacy') }}">Kebijakan Privasi</a>
+            <a href="{{ url('/legal?tab=privacy') }}">Kebijakan Privasi</a>
             <span class="sep" aria-hidden="true">&bull;</span>
-            <a href="{{ route('terms') }}">Syarat &amp; Ketentuan</a>
+            <a href="{{ url('/legal?tab=terms') }}">Syarat &amp; Ketentuan</a>
           </div>
         </div>
       </div>

@@ -38,6 +38,7 @@ class PublicViewsComponentTest extends TestCase
             '/sektor',
             '/profil',
             '/layanan',
+            '/legal',
             '/kebijakan-privasi',
             '/syarat-ketentuan',
             '/kontak',

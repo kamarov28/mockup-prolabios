@@ -260,13 +260,27 @@ class PageController extends Controller
         return view('kontak');
     }
 
+    public function legal(Request $request)
+    {
+        $activeTab = $request->query('tab', 'privacy');
+        if (!in_array($activeTab, ['privacy', 'terms'])) {
+            $activeTab = 'privacy';
+        }
+
+        return view('legal', compact('activeTab'));
+    }
+
     public function privacy()
     {
-        return view('kebijakan-privasi');
+        $activeTab = 'privacy';
+
+        return view('legal', compact('activeTab'));
     }
 
     public function terms()
     {
-        return view('syarat-ketentuan');
+        $activeTab = 'terms';
+
+        return view('legal', compact('activeTab'));
     }
 }
