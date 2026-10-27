@@ -16,10 +16,6 @@
         <p class="footer-address mb-3">
           {!! nl2br(e($siteSettings['contact_address'] ?? 'GRGC+V7V, Jl. KSR Dadi Kusmayadi, Tengah, Kec. Cibinong, Kabupaten Bogor, Jawa Barat 16914')) !!}
         </p>
-        <div class="footer-status-pill mb-3">
-          <span class="status-dot"></span>
-          <span>Pengusaha Kena Pajak (PKP) Terdaftar</span>
-        </div>
         <x-social-links variant="pills" class="mb-3" />
       </div>
 
