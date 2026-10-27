@@ -11,6 +11,9 @@
     subtitle="Kelola basis data pelanggan institusi laboratorium dan kirimkan pembaruan produk / regulasi tersegmentasi per sektor industri."
     badge="Communication Hub">
     <x-slot:actions>
+      <button type="button" class="admin-btn admin-btn-outline" data-bs-toggle="modal" data-bs-target="#importNewsletterModal">
+        <i data-lucide="file-spreadsheet"></i> Impor Excel
+      </button>
       <a href="{{ route('admin.newsletter.create') }}" class="admin-btn admin-btn-primary">
         <i data-lucide="send"></i> Buat Siaran Pesan Baru
       </a>
@@ -163,5 +166,57 @@
     @endif
   </div>
 
+</div>
+
+{{-- Modal Import Excel / Spreadsheet Pelanggan Buletin --}}
+<div class="modal fade" id="importNewsletterModal" tabindex="-1" aria-labelledby="importNewsletterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border: 2px solid var(--color-border); border-radius: 12px; box-shadow: var(--shadow-md);">
+      <div class="modal-header" style="border-bottom: 1px solid var(--color-border); background: var(--color-surface-2);">
+        <div>
+          <span class="admin-badge admin-badge-accent mb-1">Subscriber Ingestion</span>
+          <h5 class="modal-title fw-bold" id="importNewsletterModalLabel" style="color: var(--color-text-main);">Impor Pelanggan via Excel / CSV</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ route('admin.newsletter.import') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-body p-4">
+          <div class="mb-3 p-3" style="background: #FFF5F5; border: 1px solid #FED7D7; border-radius: 8px;">
+            <div class="d-flex align-items-start gap-2">
+              <i data-lucide="info" style="color: var(--color-accent); flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;"></i>
+              <div class="small" style="color: #742A2A;">
+                <strong>Panduan Pengisian:</strong>
+                <ul class="mb-0 ps-3 mt-1" style="font-size: 0.82rem;">
+                  <li>Unduh template resmi berformat multi-sheet di bawah.</li>
+                  <li><strong>Sheet 1 (Data Pelanggan)</strong>: Email & Nama Depan wajib diisi. Sektor minat dapat diisi lebih dari satu (pisahkan koma).</li>
+                  <li><strong>Sheet 2 (Panduan & Referensi)</strong>: Berisi daftar resmi ID & nama Sektor Industri laboratorium Prolabios.</li>
+                  <li>Email yang sudah terdaftar akan otomatis dilewati (anti-duplikasi).</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3 text-center">
+            <a href="{{ route('admin.newsletter.import.template') }}" class="admin-btn admin-btn-outline w-100 justify-content-center">
+              <i data-lucide="download"></i> Unduh Template Excel (.xlsx)
+            </a>
+          </div>
+
+          <div class="mb-2">
+            <label for="excel_file" class="admin-form-label">Pilih File Spreadsheet <span style="color: var(--color-accent);">*</span></label>
+            <input class="form-control" type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls,.csv" required>
+            <div class="form-text small" style="color: var(--color-text-muted);">Mendukung format .xlsx, .xls, atau .csv (Maks. 10MB)</div>
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--color-border); background: var(--color-surface-2);">
+          <button type="button" class="admin-btn admin-btn-outline" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="admin-btn admin-btn-primary">
+            <i data-lucide="cloud-upload"></i> Upload & Proses Impor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 @endsection

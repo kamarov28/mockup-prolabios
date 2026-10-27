@@ -27,7 +27,8 @@
       <a href="#konten" class="guide-toc-link"><i data-lucide="sliders"></i> 4. Beranda &amp; Konten</a>
       <a href="#artikel" class="guide-toc-link"><i data-lucide="file-text"></i> 5. Artikel &amp; Prinsipal</a>
       <a href="#analytics" class="guide-toc-link"><i data-lucide="bar-chart-2"></i> 6. Analitik Web GA4</a>
-      <a href="#keamanan" class="guide-toc-link"><i data-lucide="shield-check"></i> 7. Keamanan &amp; Audit Log</a>
+      <a href="#buletin" class="guide-toc-link"><i data-lucide="mail"></i> 7. Buletin &amp; Siaran Sektor</a>
+      <a href="#keamanan" class="guide-toc-link"><i data-lucide="shield-check"></i> 8. Keamanan &amp; Audit Log</a>
     </div>
   </div>
 </div>
@@ -350,7 +351,35 @@
   </div>
 </div>
 
-{{-- 7. Modul Keamanan & Tips --}}
+{{-- 7. Modul Buletin & Siaran Sektor --}}
+<div id="buletin" class="admin-card" style="margin-bottom: 20px;">
+  <div class="admin-card-header">
+    <span class="guide-badge">Modul 7</span>
+    <h2 class="admin-card-title">Manajemen Buletin &amp; Siaran Sektor</h2>
+  </div>
+  <div class="admin-card-body">
+    <p class="guide-lead">
+      Pusat komunikasi resmi untuk mengelola basis data pelanggan institusi laboratorium dan mendistribusikan email teknis (rilis produk baru, revisi regulasi BPOM/ISO) tersegmentasi per sektor industri.
+    </p>
+
+    <div class="guide-feature-grid" style="margin-bottom: 24px;">
+      <div class="guide-feature-box">
+        <h4 class="guide-feature-title"><i data-lucide="file-spreadsheet" style="color: #059669;"></i> Impor Pelanggan via Excel</h4>
+        <p class="guide-feature-desc">
+          Mendukung penambahan kontak massal via template Excel multi-sheet. Sistem otomatis memetakan sektor minat institusi dan mengeliminasi data email duplikat.
+        </p>
+      </div>
+      <div class="guide-feature-box">
+        <h4 class="guide-feature-title"><i data-lucide="send" style="color: var(--color-accent);"></i> Siaran Email Tersegmentasi</h4>
+        <p class="guide-feature-desc">
+          Kirim siaran email resmi ke seluruh pelanggan atau target sektor spesifik (Food &amp; Beverage, Clinical, Farmasi) via Background Queue Job.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- 8. Modul Keamanan & Tips --}}
 <div id="keamanan" class="admin-card" style="margin-bottom: 20px;">
   <div class="admin-card-header">
     <div>

@@ -169,6 +169,8 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
         Route::get('/newsletter', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'index'])->name('admin.newsletter.index');
         Route::get('/newsletter/broadcast', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'createBroadcast'])->name('admin.newsletter.create');
         Route::post('/newsletter/broadcast', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'sendBroadcast'])->name('admin.newsletter.send');
+        Route::get('/newsletter/import/template', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'downloadTemplate'])->name('admin.newsletter.import.template');
+        Route::post('/newsletter/import', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'import'])->name('admin.newsletter.import');
     });
 
     // 6. Media Asset Uploads (Super Admin, Content Writer & Product Specialist)
