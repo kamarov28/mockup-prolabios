@@ -49,17 +49,26 @@
 
             return $items;
         });
+
+        // Agar marquee selalu padat dan animasi loop -50% berjalan mulus tanpa celah kosong,
+        // lipat gandakan daftar prinsipal hingga minimal terisi 12 item.
+        $displayPrincipals = $activePrincipals;
+        if (!empty($displayPrincipals)) {
+            while (count($displayPrincipals) < 12) {
+                $displayPrincipals = array_merge($displayPrincipals, $activePrincipals);
+            }
+        }
       @endphp
 
-      @if(!empty($activePrincipals))
+      @if(!empty($displayPrincipals))
         <div class="marquee-container nb-principals-track">
           <div class="marquee-content">
-            @foreach($activePrincipals as $pr)
+            @foreach($displayPrincipals as $pr)
               <div class="marquee-logo-box nb-logo-cell">
                 <img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Logo prinsipal resmi" loading="lazy" decoding="async">
               </div>
             @endforeach
-            @foreach($activePrincipals as $pr)
+            @foreach($displayPrincipals as $pr)
               <div class="marquee-logo-box nb-logo-cell">
                 <img src="{{ asset($pr['logo']) }}" alt="{{ $pr['name'] }} — Logo prinsipal resmi" loading="lazy" decoding="async">
               </div>

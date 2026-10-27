@@ -36,7 +36,7 @@ class AdminGuideTest extends TestCase
         $response = $this->actingAs($this->adminUser)->get(route('admin.guide'));
 
         $response->assertStatus(200);
-        $response->assertSee('Panduan &amp; Dokumentasi Admin Prolabios', false);
+        $response->assertSee('Panduan & Dokumentasi Admin Prolabios', false);
         $response->assertSee('Manajemen Pengajuan RFQ');
         $response->assertSee('Tampilan Kanban &amp; Tabel', false);
         $response->assertSee('Ekspor Spreadsheet (.xlsx)');

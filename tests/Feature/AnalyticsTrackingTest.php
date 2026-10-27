@@ -114,7 +114,7 @@ class AnalyticsTrackingTest extends TestCase
     {
         $response = $this->actingAs($this->admin)->get('/admin/analytics');
         $response->assertOk();
-        $response->assertSee('Google Analytics 4 • Sebaran Wilayah &amp; Produk', false);
+        $response->assertSee('Google Analytics 4 • Sebaran Wilayah & Produk', false);
         $response->assertSee('Tren Kunjungan Harian (Pengguna &amp; Tayangan Halaman)', false);
         $response->assertSee('Katalog Produk Terpopuler', false);
         $response->assertSee('Halaman Web', false);
