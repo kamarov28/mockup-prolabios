@@ -42,8 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
   safeInit('initCatalogAjax', initCatalogAjax);
   safeInit('initProductWatermarks', function () {
     document.querySelectorAll('.detail-product-desc img, .detail-product-page .profil-body-text img').forEach(function (img) {
-      if (!img.closest('.product-watermark-wrap')) {
-        const wrap = document.createElement('span');
+      let wrap = img.closest('.product-watermark-wrap');
+      if (!wrap) {
+        wrap = document.createElement('span');
         wrap.className = 'product-watermark-wrap';
         img.parentNode.insertBefore(wrap, img);
         wrap.appendChild(img);
@@ -52,6 +53,21 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.setAttribute('aria-hidden', 'true');
         wrap.appendChild(overlay);
       }
+
+      // Constrain wrapper strictly to image dimensions
+      if (img.style.width && img.style.width !== '100%') {
+        wrap.style.width = img.style.width;
+        img.style.width = '100%';
+      }
+      if (img.style.float) {
+        wrap.style.float = img.style.float;
+      }
+      wrap.style.display = 'inline-block';
+      wrap.style.overflow = 'hidden';
+      wrap.style.lineHeight = '0';
+      wrap.style.maxWidth = '100%';
+      wrap.style.position = 'relative';
+      wrap.style.borderRadius = '8px';
     });
   });
   safeInit('lucide', () => window.lucide.createIcons());

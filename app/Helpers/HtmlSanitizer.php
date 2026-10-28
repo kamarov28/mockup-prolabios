@@ -75,13 +75,38 @@ class HtmlSanitizer
             return $sanitized;
         }
 
-        // Wrap non-watermarked <img> tags in a protective watermark container
+        // Wrap non-watermarked <img> tags in a protective watermark container strictly sized to the image
         return (string) preg_replace_callback(
             '#<img\b([^>]*)/?>#i',
             function ($matches) {
                 $imgTag = $matches[0];
+                $attrs = $matches[1];
 
-                return '<span class="product-watermark-wrap">'.$imgTag.'<span class="product-watermark-overlay" aria-hidden="true"></span></span>';
+                $wrapStyles = [
+                    'display: inline-block',
+                    'position: relative',
+                    'overflow: hidden',
+                    'max-width: 100%',
+                    'vertical-align: middle',
+                    'line-height: 0',
+                    'border-radius: 8px',
+                    'margin: 8px 0',
+                ];
+
+                // If image has inline width percentage or pixels (e.g. from Summernote resize), transfer to container
+                $updatedImg = $imgTag;
+                if (preg_match('/width\s*:\s*([^;]+);?/i', $attrs, $widthMatch)) {
+                    $widthVal = trim($widthMatch[1]);
+                    $wrapStyles[] = 'width: ' . $widthVal;
+                    $updatedImg = (string) preg_replace('/width\s*:\s*[^;]+;?/i', 'width: 100%;', $imgTag);
+                }
+                if (preg_match('/float\s*:\s*([^;]+);?/i', $attrs, $floatMatch)) {
+                    $wrapStyles[] = 'float: ' . trim($floatMatch[1]);
+                }
+
+                $styleAttr = implode('; ', $wrapStyles) . ';';
+
+                return '<span class="product-watermark-wrap" style="' . e($styleAttr) . '">' . $updatedImg . '<span class="product-watermark-overlay" aria-hidden="true"></span></span>';
             },
             $sanitized
         );

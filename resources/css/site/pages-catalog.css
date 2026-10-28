@@ -242,9 +242,7 @@
 /* ── Prolabios Diagonal Corporate Watermark System ──────────────────────── */
 .product-card .img-wrap::before,
 .detail-product-img-wrap::before,
-.lightbox-img-wrap::before,
-.product-watermark-wrap::before,
-.product-watermark-overlay {
+.lightbox-img-wrap::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -284,28 +282,43 @@
 
 /* Watermark wrapper for images inside product rich-text descriptions */
 .product-watermark-wrap {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  max-width: 100%;
-  margin: 12px 0;
-  border-radius: var(--nb-radius, 6px);
+  position: relative !important;
+  display: inline-block !important;
+  overflow: hidden !important;
+  max-width: 100% !important;
+  margin: 10px 0;
+  border-radius: var(--nb-radius, 8px);
   vertical-align: middle;
+  line-height: 0;
 }
 
 .product-watermark-wrap img {
   display: block;
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--nb-radius, 6px);
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border-radius: var(--nb-radius, 8px);
 }
 
-.product-watermark-wrap::before,
 .product-watermark-wrap .product-watermark-overlay {
-  height: 25%;
-  min-height: 42px;
-  max-height: 85px;
-  width: 120%;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 115%;
+  height: 30%;
+  min-height: 32px;
+  max-height: 75px;
+  background-image: url('/images/logo-prolabios.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.20;
+  transform: translate(-50%, -50%) rotate(-22deg);
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+  filter: contrast(1.15) brightness(0.95);
 }
 
 .product-card .img-wrap img {
