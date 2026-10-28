@@ -243,8 +243,8 @@
               <p class="small text-muted mb-3" style="font-size: 0.8rem; line-height: 1.5;">
                 Hubungi saluran resmi telepon kantor atau email marketing untuk permohonan katalog dan penawaran teknis.
               </p>
-              <div class="d-flex flex-column gap-2.5">
-                <a href="tel:02138741447" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+              <div class="d-flex flex-column gap-2">
+                <a href="tel:02138741447" class="d-flex align-items-center gap-3 text-decoration-none py-1.5 px-1">
                   <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #FEF2F2; color: #DC2626;">
                     <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
                   </div>
@@ -254,7 +254,7 @@
                   </div>
                 </a>
 
-                <a href="tel:02187929433" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+                <a href="tel:02187929433" class="d-flex align-items-center gap-3 text-decoration-none py-1.5 px-1">
                   <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #EFF6FF; color: #2563EB;">
                     <i data-lucide="building" style="width: 16px; height: 16px;"></i>
                   </div>
@@ -264,7 +264,7 @@
                   </div>
                 </a>
 
-                <a href="mailto:marketing@prolabios.com" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+                <a href="mailto:marketing@prolabios.com" class="d-flex align-items-center gap-3 text-decoration-none py-1.5 px-1">
                   <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #F0FDF4; color: #16A34A;">
                     <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
                   </div>
