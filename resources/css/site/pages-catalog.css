@@ -230,13 +230,16 @@
 
 .product-card .img-wrap {
   position: relative;
-  background-color: var(--nb-bg-soft) !important;
+  background-color: #FFFFFF !important;
   border-bottom: 1px solid #E2E8F0 !important;
   border-top-left-radius: var(--nb-radius-lg, 12px) !important;
   border-top-right-radius: var(--nb-radius-lg, 12px) !important;
-  padding: 0 !important;
-  height: 180px !important;
+  padding: 10px !important;
+  height: 195px !important;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ── Prolabios Diagonal Corporate Watermark System ──────────────────────── */
@@ -326,15 +329,14 @@
   height: 100%;
   max-width: 100%;
   max-height: 100%;
-  object-fit: cover;
-  border-radius: 0px;
-  filter: grayscale(15%);
-  transition: filter 0.2s ease, transform 0.3s ease;
+  object-fit: contain !important;
+  border-radius: 4px;
+  filter: none;
+  transition: transform 0.25s ease;
 }
 
 .product-card:hover .img-wrap img {
-  filter: grayscale(0%);
-  transform: scale(1.02);
+  transform: scale(1.04);
 }
 
 .product-badge {
@@ -561,11 +563,12 @@
 
 /* ── Detail Produk Page & Lightbox ───────────────────────────────────────── */
 .detail-product-img-wrap {
-  border: none !important;
-  background-color: transparent !important;
+  border: 1px solid #E5E7EB !important;
+  background-color: #FFFFFF !important;
   border-radius: 12px;
-  box-shadow: none !important;
-  padding: 0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  padding: 16px !important;
+  height: 420px !important;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -1088,11 +1091,19 @@
 }
 
 .detail-product-img {
-  object-fit: cover;
-  width: 100%;
-  max-height: 420px;
+  object-fit: contain !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
   display: block;
-  border-radius: 12px;
+  border-radius: 8px;
+  margin: 0 auto;
+  transition: transform 0.25s ease;
+}
+
+.detail-product-img-wrap:hover .detail-product-img {
+  transform: scale(1.02);
 }
 
 /* ── Detail Produk helpers ───────────────────────────────────────────────── */

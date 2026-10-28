@@ -137,7 +137,7 @@
             <div class="row g-5">
               <div class="col-md-5">
                 <div class="detail-product-img-wrap" data-bs-toggle="modal" data-bs-target="#imageLightboxModal" title="Klik untuk memperbesar gambar">
-                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="w-100 detail-product-img" width="500" height="350" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
+                  <img id="main-product-image" src="{{ $mainImage }}" alt="{{ $product['title'] }} — Instrumen & Reagen Laboratorium" class="detail-product-img" width="500" height="350" fetchpriority="high" decoding="async" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
                 </div>
                 @if(count($allImages) > 1)
                   <div class="d-flex gap-2 mt-3 flex-wrap product-gallery-thumbs">
