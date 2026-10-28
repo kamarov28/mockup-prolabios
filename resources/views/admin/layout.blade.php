@@ -170,46 +170,97 @@
   </button>
 
   <script @nonce>
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 4000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
+    // ── Global Summernote Image Uploader (Defined immediately on window) ──
+    window.uploadSummernoteImage = function(file, editorElement) {
+      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+      const formData = new FormData();
+      formData.append('image', file);
+      if (token) {
+        formData.append('_token', token);
       }
-    });
 
-    @if(session('success'))
-      Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
-    @endif
-    @if(session('error'))
-      Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
-    @endif
+      fetch("{{ route('admin.media.upload') }}", {
+        method: 'POST',
+        body: formData,
+        headers: token ? { 'X-CSRF-TOKEN': token, 'Accept': 'application/json' } : { 'Accept': 'application/json' }
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => {
+            throw new Error(err.message || err.error || 'Gagal mengunggah gambar ke server.');
+          }).catch(e => {
+            throw new Error(e.message || 'Gagal mengunggah gambar (Status: ' + response.status + ')');
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data && data.url) {
+          if (window.jQuery && $(editorElement).data('summernote')) {
+            $(editorElement).summernote('insertImage', data.url, function($image) {
+              $image.attr('loading', 'lazy');
+            });
+          }
+        }
+      })
+      .catch(err => {
+        const msg = err.message || 'Gagal mengunggah gambar ke server.';
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({ icon: 'error', title: 'Upload Gagal', text: msg });
+        } else {
+          alert(msg);
+        }
+      });
+    };
 
-    document.addEventListener('submit', function(e) {
-      const form = e.target;
-      const methodInput = form.querySelector('input[name="_method"]');
-      if (methodInput && methodInput.value.toUpperCase() === 'DELETE') {
-        e.preventDefault();
-        Swal.fire({
-          title: 'Hapus Data?',
-          text: 'Data yang dihapus tidak dapat dipulihkan.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, Hapus',
-          cancelButtonText: 'Batal',
-          reverseButtons: true,
-          customClass: {
-            confirmButton: 'admin-btn admin-btn-danger mx-2',
-            cancelButton: 'admin-btn admin-btn-ghost mx-2',
-            popup: ''
-          },
-          buttonsStyling: false
-        }).then((result) => { if (result.isConfirmed) form.submit(); });
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof Swal !== 'undefined') {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 4000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          }
+        });
+
+        @if(session('success'))
+          Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
+        @endif
+        @if(session('error'))
+          Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
+        @endif
       }
+
+      document.addEventListener('submit', function(e) {
+        const form = e.target;
+        const methodInput = form.querySelector('input[name="_method"]');
+        if (methodInput && methodInput.value.toUpperCase() === 'DELETE') {
+          e.preventDefault();
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              title: 'Hapus Data?',
+              text: 'Data yang dihapus tidak dapat dipulihkan.',
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Ya, Hapus',
+              cancelButtonText: 'Batal',
+              reverseButtons: true,
+              customClass: {
+                confirmButton: 'admin-btn admin-btn-danger mx-2',
+                cancelButton: 'admin-btn admin-btn-ghost mx-2',
+                popup: ''
+              },
+              buttonsStyling: false
+            }).then((result) => { if (result.isConfirmed) form.submit(); });
+          } else if (confirm('Hapus data? Tindakan ini tidak dapat dipulihkan.')) {
+            form.submit();
+          }
+        }
+      });
     });
 
     // ── Global Bulk Actions Handler ──
@@ -447,42 +498,6 @@
         slider.scrollLeft = scrollLeft - walk;
       });
     });
-
-    window.uploadSummernoteImage = function(file, editorElement) {
-      const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-      const formData = new FormData();
-      formData.append('image', file);
-      if (token) {
-        formData.append('_token', token);
-      }
-
-      if (typeof $ !== 'undefined') {
-        $.ajax({
-          url: "{{ route('admin.media.upload') }}",
-          cache: false,
-          contentType: false,
-          processData: false,
-          data: formData,
-          type: 'POST',
-          headers: token ? { 'X-CSRF-TOKEN': token } : {},
-          success: function(response) {
-            if (response && response.url) {
-              $(editorElement).summernote('insertImage', response.url, function($image) {
-                $image.attr('loading', 'lazy');
-              });
-            }
-          },
-          error: function(xhr) {
-            const msg = xhr.responseJSON?.message || xhr.responseJSON?.error || 'Gagal mengunggah gambar ke server.';
-            if (typeof Swal !== 'undefined') {
-              Swal.fire({ icon: 'error', title: 'Upload Gagal', text: msg });
-            } else {
-              alert(msg);
-            }
-          }
-        });
-      }
-    };
   </script>
 
   @yield('admin_scripts')
