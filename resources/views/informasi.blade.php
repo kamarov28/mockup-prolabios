@@ -231,26 +231,48 @@
             </div>
 
             <!-- Official Office Landline Info Box (Corporate Policy Compliance) -->
-            <div class="card p-4 border-0" style="background: #FFFFFF; border: 1px solid #E5E7EB !important; border-radius: var(--nb-radius-lg);">
-              <h3 class="profil-sidebar-title mb-2" style="font-size: 0.95rem;">
-                <i data-lucide="headphones" class="me-2 text-primary"></i>Layanan Resmi Kantor
-              </h3>
+            <div class="card p-4 border-0" style="background: #FFFFFF; border: 1px solid #E2E8F0 !important; border-radius: var(--nb-radius-lg); box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);">
+              <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom" style="border-color: #F1F5F9 !important;">
+                <div class="d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; border-radius: 6px; background: rgba(166, 23, 28, 0.08); color: var(--nb-primary, #A6171C);">
+                  <i data-lucide="headphones" style="width: 15px; height: 15px;"></i>
+                </div>
+                <h3 class="mb-0 fw-bold" style="font-size: 0.92rem; font-family: var(--font-display); color: var(--nb-ink);">
+                  Layanan Resmi Kantor
+                </h3>
+              </div>
               <p class="small text-muted mb-3" style="font-size: 0.8rem; line-height: 1.5;">
                 Hubungi saluran resmi telepon kantor atau email marketing untuk permohonan katalog dan penawaran teknis.
               </p>
-              <div class="d-flex flex-column gap-2 small">
-                <div class="d-flex align-items-center gap-2">
-                  <i data-lucide="phone" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
-                  <span class="fw-semibold">021-3874-1447</span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <i data-lucide="phone" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
-                  <span class="fw-semibold">021-8792-9433</span>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <i data-lucide="mail" style="width: 14px; height: 14px; color: var(--color-accent, #A6171C);"></i>
-                  <a href="mailto:marketing@prolabios.com" class="text-decoration-none" style="color: var(--nb-ink);">marketing@prolabios.com</a>
-                </div>
+              <div class="d-flex flex-column gap-2.5">
+                <a href="tel:02138741447" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+                  <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #FEF2F2; color: #DC2626;">
+                    <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div class="overflow-hidden">
+                    <div class="text-muted text-uppercase fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.04em;">Marketing &amp; Sales</div>
+                    <div class="fw-bold text-dark text-truncate" style="font-size: 0.88rem; font-family: var(--font-mono, monospace);">021-3874-1447</div>
+                  </div>
+                </a>
+
+                <a href="tel:02187929433" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+                  <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #EFF6FF; color: #2563EB;">
+                    <i data-lucide="building" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div class="overflow-hidden">
+                    <div class="text-muted text-uppercase fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.04em;">Kantor &amp; Operasional</div>
+                    <div class="fw-bold text-dark text-truncate" style="font-size: 0.88rem; font-family: var(--font-mono, monospace);">021-8792-9433</div>
+                  </div>
+                </a>
+
+                <a href="mailto:marketing@prolabios.com" class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded" style="background: var(--nb-bg, #F8FAFC); border: 1px solid #E2E8F0; transition: border-color 0.15s ease;">
+                  <div class="d-flex align-items-center justify-content-center flex-shrink-0" style="width: 34px; height: 34px; border-radius: 6px; background: #F0FDF4; color: #16A34A;">
+                    <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                  </div>
+                  <div class="overflow-hidden">
+                    <div class="text-muted text-uppercase fw-semibold" style="font-size: 0.65rem; letter-spacing: 0.04em;">Email Resmi</div>
+                    <div class="fw-bold text-dark text-truncate" style="font-size: 0.82rem;">marketing@prolabios.com</div>
+                  </div>
+                </a>
               </div>
             </div>
 
