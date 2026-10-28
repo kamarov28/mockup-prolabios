@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->boolean('is_featured')->default(false)->after('status');
+            if (! Schema::hasColumn('posts', 'is_featured')) {
+                $table->boolean('is_featured')->default(false)->after('status');
+            }
         });
     }
 

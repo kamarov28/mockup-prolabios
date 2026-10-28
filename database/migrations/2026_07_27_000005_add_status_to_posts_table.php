@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->string('status')->default('online')->after('category'); // online, draft, offline
+            if (! Schema::hasColumn('posts', 'status')) {
+                $table->string('status')->default('online')->after('category');
+            }
         });
     }
 
