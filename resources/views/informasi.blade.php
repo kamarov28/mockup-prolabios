@@ -69,16 +69,10 @@
                 {!! \App\Helpers\HtmlSanitizer::clean($currentBlog['content'] ?? '') !!}
               </div>
 
-              {{-- Social Share & Quick Back bar --}}
+              {{-- Quick Back bar --}}
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-4 mt-5 border-top" style="border-color: #E5E7EB !important;">
-                <div class="d-flex align-items-center gap-2">
-                  <span class="small fw-semibold text-muted">Bagikan:</span>
-                  <button type="button" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 rounded py-1 px-2" style="font-size: 0.78rem;" onclick="copyArticleUrl(this)">
-                    <i data-lucide="copy" style="width: 13px; height: 13px;"></i> <span class="copy-label">Salin Tautan</span>
-                  </button>
-                </div>
                 <a href="{{ url('/informasi') }}" class="small fw-semibold text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-accent, #A6171C);">
-                  <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Semua Artikel
+                  <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Kembali ke Semua Artikel
                 </a>
               </div>
 
@@ -266,21 +260,4 @@
       </div>
     </div>
   </section>
-
-  @if($currentBlog)
-    <script @nonce>
-      function copyArticleUrl(btn) {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(window.location.href).then(function() {
-            var label = btn.querySelector('.copy-label');
-            if (label) {
-              var orig = label.textContent;
-              label.textContent = 'Tersalin!';
-              setTimeout(function() { label.textContent = orig; }, 2000);
-            }
-          });
-        }
-      }
-    </script>
-  @endif
 @endsection
