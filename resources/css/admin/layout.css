@@ -223,9 +223,9 @@
 
 .admin-page-label {
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--type-micro, 0.68rem);
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: var(--tracking-micro, 0.04em);
   text-transform: uppercase;
   color: var(--color-accent);
   display: block;
@@ -233,12 +233,21 @@
 }
 .admin-page-title {
   font-family: var(--font-headline);
-  font-size: 1.65rem;
+  font-size: var(--type-h1, 1.65rem);
   font-weight: 700;
   color: var(--color-text-main);
-  letter-spacing: -0.02em;
-  margin: 0 0 24px;
+  letter-spacing: var(--tracking-title, -0.018em);
+  margin: 0 0 6px;
   line-height: 1.25;
+}
+
+.admin-page-desc {
+  color: var(--color-text-muted);
+  font-size: var(--type-body, 0.88rem);
+  line-height: 1.55;
+  letter-spacing: var(--tracking-body, -0.005em);
+  margin: 0;
+  max-width: 68ch;
 }
 
 /* ── 16. Mobile Responsiveness ────────────────────────────────────────── */

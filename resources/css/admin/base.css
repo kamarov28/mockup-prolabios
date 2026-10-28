@@ -53,11 +53,60 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, .admin-h1 {
   font-family: var(--font-headline) !important;
-  color: var(--color-text-main) !important;
+  font-size: var(--type-h1);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.25;
+  color: var(--color-text-main) !important;
+  margin-top: 0;
+}
+
+h2, .admin-h2 {
+  font-family: var(--font-headline) !important;
+  font-size: var(--type-h2);
+  font-weight: 700;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.3;
+  color: var(--color-text-main) !important;
+  margin-top: 0;
+}
+
+h3, .admin-h3 {
+  font-family: var(--font-headline) !important;
+  font-size: var(--type-h3);
+  font-weight: 600;
+  letter-spacing: var(--tracking-headline);
+  line-height: 1.35;
+  color: var(--color-text-main) !important;
+  margin-top: 0;
+}
+
+h4, .admin-h4 {
+  font-family: var(--font-headline) !important;
+  font-size: var(--type-h4);
+  font-weight: 600;
+  letter-spacing: var(--tracking-headline);
+  line-height: 1.35;
+  color: var(--color-text-main) !important;
+  margin-top: 0;
+}
+
+h5, h6 {
+  font-family: var(--font-headline) !important;
+  font-size: var(--type-body);
+  font-weight: 600;
+  letter-spacing: var(--tracking-body);
+  color: var(--color-text-main) !important;
+  margin-top: 0;
+}
+
+p, .admin-p {
+  color: var(--color-text-secondary);
+  font-size: var(--type-body);
+  line-height: 1.6;
+  letter-spacing: var(--tracking-body);
 }
 
 a {

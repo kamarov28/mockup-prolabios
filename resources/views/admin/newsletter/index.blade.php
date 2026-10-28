@@ -23,29 +23,32 @@
   <!-- Metric Badges -->
   <div class="row g-3 mb-4">
     <div class="col-sm-6 col-xl-3">
-      <div class="card p-3 border-0" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 8px;">
-        <span class="small text-muted fw-bold text-uppercase" style="font-size: 0.72rem;">Pelanggan Aktif</span>
-        <div class="h3 fw-bold mb-0 mt-1" style="color: var(--color-accent, #A6171C);">{{ $totalSubscribers }}</div>
-        <span class="small text-muted" style="font-size: 0.76rem;">Institusi & analis lab</span>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Pelanggan Aktif</span>
+        <div class="admin-stat-value" style="color: var(--color-accent, #A6171C);">{{ $totalSubscribers }}</div>
+        <span class="text-muted" style="font-size: 0.78rem;">Institusi &amp; analis lab</span>
       </div>
     </div>
     <div class="col-sm-6 col-xl-3">
-      <div class="card p-3 border-0" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 8px;">
-        <span class="small text-muted fw-bold text-uppercase" style="font-size: 0.72rem;">Total Siaran Terkirim</span>
-        <div class="h3 fw-bold mb-0 mt-1" style="color: #0F172A;">{{ $totalBroadcasts }}</div>
-        <span class="small text-muted" style="font-size: 0.76rem;">Kampanye email resmi</span>
+      <div class="admin-stat-card">
+        <span class="admin-stat-label">Total Siaran Terkirim</span>
+        <div class="admin-stat-value" style="color: #0F172A;">{{ $totalBroadcasts }}</div>
+        <span class="text-muted" style="font-size: 0.78rem;">Kampanye email resmi</span>
       </div>
     </div>
   </div>
 
   <!-- Subscribers Table -->
-  <div class="card border-0 mb-4" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 10px; overflow: hidden;">
-    <div class="p-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: var(--color-surface-2);">
-      <h2 class="fs-6 fw-bold mb-0 text-dark">Daftar Pelanggan Terdaftar</h2>
+  <div class="admin-card mb-4">
+    <div class="admin-card-header flex-wrap">
+      <div>
+        <span class="admin-card-header-label">DATABASE SUBSCRIBER</span>
+        <h2 class="admin-card-header-title">Daftar Pelanggan Terdaftar</h2>
+      </div>
       
       <!-- Sector Filter Form -->
       <form action="{{ route('admin.newsletter.index') }}" method="GET" class="d-flex align-items-center gap-2 m-0">
-        <select name="sector" class="form-select form-select-sm" onchange="this.form.submit()" style="font-size: 0.8rem; width: 190px;">
+        <select name="sector" class="form-select form-select-sm" onchange="this.form.submit()" style="font-size: 0.82rem; width: 190px;">
           <option value="">-- Semua Sektor --</option>
           @foreach($sectors as $sec)
             <option value="{{ $sec->id }}" {{ $sectorFilter === $sec->id ? 'selected' : '' }}>{{ $sec->name }}</option>
@@ -58,10 +61,10 @@
     </div>
 
     <div class="table-responsive">
-      <table class="table align-middle mb-0" style="font-size: 0.84rem;">
-        <thead class="table-light">
+      <table class="admin-table align-middle mb-0">
+        <thead>
           <tr>
-            <th>NAMA & EMAIL</th>
+            <th>NAMA &amp; EMAIL</th>
             <th>PERUSAHAAN / INSTANSI</th>
             <th>KOTA</th>
             <th>SEKTOR MINAT</th>
@@ -81,7 +84,7 @@
               <td>
                 <div class="d-flex flex-wrap gap-1">
                   @foreach($sub->sectors as $s)
-                    <span class="badge bg-light text-dark border" style="font-size: 0.68rem; font-weight: 500;">
+                    <span class="admin-badge admin-badge-neutral" style="font-size: 0.72rem;">
                       {{ $s->name }}
                     </span>
                   @endforeach
@@ -89,9 +92,9 @@
               </td>
               <td>
                 @if($sub->is_active)
-                  <span class="badge bg-success-subtle text-success" style="font-size: 0.72rem;">Aktif</span>
+                  <span class="admin-badge admin-badge-success" style="font-size: 0.72rem;">Aktif</span>
                 @else
-                  <span class="badge bg-secondary-subtle text-muted" style="font-size: 0.72rem;">Unsubscribed</span>
+                  <span class="admin-badge admin-badge-neutral" style="font-size: 0.72rem;">Unsubscribed</span>
                 @endif
               </td>
               <td class="text-muted small">{{ $sub->created_at->format('d/m/Y') }}</td>
@@ -113,14 +116,17 @@
   </div>
 
   <!-- Recent Broadcasts History -->
-  <div class="card border-0" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 10px; overflow: hidden;">
-    <div class="p-3 border-bottom" style="background: var(--color-surface-2);">
-      <h2 class="fs-6 fw-bold mb-0 text-dark">Riwayat Siaran Email (Broadcasts)</h2>
+  <div class="admin-card">
+    <div class="admin-card-header">
+      <div>
+        <span class="admin-card-header-label">LOG BROADCAST</span>
+        <h2 class="admin-card-header-title">Riwayat Siaran Email (Broadcasts)</h2>
+      </div>
     </div>
 
     <div class="table-responsive">
-      <table class="table align-middle mb-0" style="font-size: 0.84rem;">
-        <thead class="table-light">
+      <table class="admin-table align-middle mb-0">
+        <thead>
           <tr>
             <th>SUBJEK PESAN</th>
             <th>TARGET SEKTOR</th>
@@ -138,13 +144,13 @@
               </td>
               <td>
                 @if($bc->targetSector)
-                  <span class="badge bg-primary-subtle text-danger border" style="font-size: 0.72rem;">{{ $bc->targetSector->name }}</span>
+                  <span class="admin-badge admin-badge-accent" style="font-size: 0.72rem;">{{ $bc->targetSector->name }}</span>
                 @else
-                  <span class="badge bg-secondary-subtle text-muted" style="font-size: 0.72rem;">Semua Sektor</span>
+                  <span class="admin-badge admin-badge-neutral" style="font-size: 0.72rem;">Semua Sektor</span>
                 @endif
               </td>
               <td>
-                <span class="badge bg-light text-dark border" style="font-size: 0.72rem;">{{ strtoupper(str_replace('_', ' ', $bc->type)) }}</span>
+                <span class="admin-badge admin-badge-neutral" style="font-size: 0.72rem;">{{ strtoupper(str_replace('_', ' ', $bc->type)) }}</span>
               </td>
               <td><span class="fw-semibold">{{ $bc->recipients_count }}</span> kontak</td>
               <td>{{ $bc->sender?->name ?? 'Sistem' }}</td>

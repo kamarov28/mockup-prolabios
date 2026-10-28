@@ -7,6 +7,24 @@
   --font-body: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
 
+  /* ── Typographic Scale Tokens (Mathematical Ratio 1.25 / 1.333 for Admin UI) ── */
+  --type-display: clamp(1.8rem, 3.2vw, 2.2rem);
+  --type-h1: 1.65rem;             /* ~24px - 26px Page Title */
+  --type-h2: 1.28rem;             /* ~18.5px - 20px Major Section / Group Header */
+  --type-h3: 1.12rem;             /* ~16px - 17px Card Header Titles / Modals */
+  --type-h4: 0.98rem;             /* ~14.2px Subsections / Table Group */
+  --type-body: 0.88rem;           /* ~12.8px - 13.5px Standard Body / Table Cell */
+  --type-sub: 0.82rem;            /* ~12px Secondary Meta / Help Text */
+  --type-caption: 0.75rem;        /* ~11px Badges / Table Header Columns */
+  --type-micro: 0.68rem;          /* ~10px Micro Overline Labels & Code */
+
+  /* ── HIG Optical Typography Tracking & Metrics ──────────────────────── */
+  --tracking-display: -0.025em;
+  --tracking-title: -0.018em;
+  --tracking-headline: -0.01em;
+  --tracking-body: -0.005em;
+  --tracking-micro: 0.04em;
+
   /* Modern Flat Canvas & Surfaces */
   --color-bg: #F8F9FA;
   --color-surface: #FFFFFF;

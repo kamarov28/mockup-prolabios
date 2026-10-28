@@ -92,7 +92,7 @@
     <a href="{{ route('admin.rfqs.index') }}" class="admin-btn admin-btn-ghost mb-2">
       <i data-lucide="arrow-left"></i> Kembali ke Daftar RFQ
     </a>
-    <h1 class="h3 fw-bold mb-0 d-flex align-items-center gap-2 flex-wrap" style="font-family: var(--font-headline); color: var(--color-text-main);">
+    <h1 class="admin-page-title mb-0 d-flex align-items-center gap-2 flex-wrap">
       <span>{{ $rfq->rfq_number }}</span>
       <span class="admin-badge {{ $rfq->status_badge_class }}" style="font-size: 0.75rem;">{{ $rfq->status_label }}</span>
     </h1>

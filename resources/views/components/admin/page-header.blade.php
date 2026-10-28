@@ -1,7 +1,9 @@
 @props([
   'label' => '',
+  'badge' => '',
   'title' => '',
   'description' => '',
+  'subtitle' => '',
   'editing' => null,
   'backUrl' => null,
   'backText' => 'Kembali',
@@ -10,22 +12,27 @@
   'actionIcon' => 'plus'
 ])
 
-<div {{ $attributes->merge(['class' => 'd-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap']) }}>
-  <div style="flex: 1 1 320px; min-width: 0; max-width: 680px;">
-    @if($label)
-      <span class="admin-page-label">{{ $label }}</span>
+@php
+  $headerLabel = $label ?: $badge;
+  $headerDesc = $description ?: $subtitle;
+@endphp
+
+<div {{ $attributes->merge(['class' => 'd-flex justify-content-between align-items-start mb-4 gap-3 flex-wrap admin-page-header-wrap']) }}>
+  <div style="flex: 1 1 320px; min-width: 0; max-width: 720px;">
+    @if($headerLabel)
+      <span class="admin-page-label">{{ $headerLabel }}</span>
     @endif
-    <h2 class="admin-page-title mb-1">{!! $title !!}</h2>
+    <h1 class="admin-page-title mb-1">{!! $title !!}</h1>
     @if($editing)
-      <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+      <div class="admin-page-desc">
         Mengedit: <strong style="color: var(--color-text-main);">{{ $editing }}</strong>
       </div>
-    @elseif($description)
-      <p style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0; line-height: 1.5;">
-        {!! $description !!}
+    @elseif($headerDesc)
+      <p class="admin-page-desc">
+        {!! $headerDesc !!}
       </p>
     @elseif($slot->isNotEmpty())
-      <div style="color: var(--color-text-muted); font-size: 0.88rem; margin: 0;">
+      <div class="admin-page-desc">
         {{ $slot }}
       </div>
     @endif

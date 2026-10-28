@@ -17,7 +17,8 @@
     </x-slot:actions>
   </x-admin.page-header>
 
-  <div class="card p-4 border-0" style="background: #FFFFFF; border: 1px solid var(--color-border) !important; border-radius: 10px; max-width: 860px;">
+  <div class="admin-card" style="max-width: 860px;">
+    <div class="admin-card-body">
 
     @if($errors->any())
       <div class="alert alert-danger mb-4" style="font-size: 0.85rem;">
@@ -79,6 +80,7 @@
 
     </form>
 
+    </div>
   </div>
 
 </div>

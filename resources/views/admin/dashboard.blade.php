@@ -17,11 +17,12 @@
 
 <div class="dash-wrapper">
 
-  {{-- ── Header Strip ────────────────────────────────────────────────────────── --}}
-  <div class="mb-4">
-    <span class="admin-page-label">Ikhtisar Bisnis</span>
-    <h2 class="admin-page-title mb-0" style="font-size: 1.5rem;">Dashboard Operasional</h2>
-  </div>
+  {{-- ── Standardized Header Strip ─────────────────────────────────────────────── --}}
+  <x-admin.page-header
+    label="Ikhtisar Bisnis"
+    title="Dashboard Operasional"
+    description="Ringkasan aktivitas pengajuan RFQ, pembaruan katalog produk, dan analitik operasional laboratorium."
+  />
 
   {{-- ── 1. KPI Micro-Stat Cards ──────────────────────────────────────────────── --}}
   <div class="row g-3 mb-3">
