@@ -2,6 +2,7 @@
    PT Prolabios Mitra Analitika — Admin Panel (Soft Neo-Brutalism Theme)
    Hard shadows · thick charcoal borders · warm Natural canvas · press UI
    ========================================================================== */
+@import "bootstrap/dist/css/bootstrap.min.css";
 @import './admin/tokens.css';
 @import './admin/base.css';
 @import './admin/layout.css';

@@ -1,10 +1,10 @@
 {
-  "_lucide-icons-BpnBaYDn.js": {
-    "file": "assets/lucide-icons-BpnBaYDn.js",
+  "_lucide-icons-Lq6trHgR.js": {
+    "file": "assets/lucide-icons-Lq6trHgR.js",
     "name": "lucide-icons"
   },
   "resources/css/admin.css": {
-    "file": "assets/admin-BN0BY_RA.css",
+    "file": "assets/admin-DNE1GmTo.css",
     "name": "admin",
     "names": [
       "admin.css"
@@ -31,21 +31,21 @@
     "isEntry": true
   },
   "resources/js/admin.js": {
-    "file": "assets/admin-C0547JKI.js",
+    "file": "assets/admin-C8eTedrC.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,
     "imports": [
-      "_lucide-icons-BpnBaYDn.js"
+      "_lucide-icons-Lq6trHgR.js"
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DjkpJnG1.js",
+    "file": "assets/app-BzRl-USR.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_lucide-icons-BpnBaYDn.js"
+      "_lucide-icons-Lq6trHgR.js"
     ]
   }
 }

@@ -18,10 +18,7 @@
   <!-- Self-Hosted Typography & Preload -->
   <link rel="preload" href="{{ asset('fonts/ibm-plex-sans-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
 
-  <!-- Bootstrap 5 CSS (Layout utilities only — visual system = admin.css) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
-  <!-- Admin Design System & Scripts (Vite) -->
+  <!-- Admin Design System & Scripts via Vite (Bundled Bootstrap 5 + SweetAlert2 + Lucide) -->
   @vite(['resources/css/admin.css', 'resources/js/admin.js'])
 
   @yield('admin_styles')
@@ -171,9 +168,6 @@
   <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; background: var(--color-surface, #FFFFFF); border: 1px solid var(--color-border, #E5E7EB); border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); color: var(--color-text-main, #111827); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1050;">
     <i data-lucide="arrow-up" style="font-size: 1rem; font-weight: 600;"></i>
   </button>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" @nonce></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" @nonce></script>
 
   <script @nonce>
     const Toast = Swal.mixin({
