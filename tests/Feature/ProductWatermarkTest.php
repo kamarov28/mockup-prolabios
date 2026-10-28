@@ -18,7 +18,6 @@ class ProductWatermarkTest extends TestCase
         $output = HtmlSanitizer::cleanWithProductWatermark($rawHtml);
 
         $this->assertStringContainsString('product-watermark-wrap', $output);
-        $this->assertStringContainsString('product-watermark-overlay', $output);
         $this->assertStringContainsString('src="/storage/products/test-agar.jpg"', $output);
         $this->assertStringContainsString('alt="Test Agar"', $output);
     }
@@ -31,6 +30,31 @@ class ProductWatermarkTest extends TestCase
 
         $this->assertStringNotContainsString('product-watermark-wrap', $output);
         $this->assertStringContainsString('Reagen kultur mikrobiologi', $output);
+    }
+
+    public function test_image_watermark_service_bakes_watermark_onto_gd_image(): void
+    {
+        $img = imagecreatetruecolor(400, 400);
+        $white = imagecolorallocate($img, 255, 255, 255);
+        imagefill($img, 0, 0, $white);
+
+        \App\Services\ImageWatermarkService::apply($img);
+
+        // Assert that pixels are no longer purely 100% white because watermark was baked
+        $differentPixels = 0;
+        for ($x = 100; $x < 300; $x += 10) {
+            for ($y = 100; $y < 300; $y += 10) {
+                $color = imagecolorat($img, $x, $y);
+                $rgba = imagecolorsforindex($img, $color);
+                if ($rgba['red'] < 255 || $rgba['green'] < 255 || $rgba['blue'] < 255) {
+                    $differentPixels++;
+                }
+            }
+        }
+
+        imagedestroy($img);
+
+        $this->assertGreaterThan(0, $differentPixels, 'Watermark should have colored pixels on the destination image');
     }
 
     public function test_product_detail_page_renders_watermark_elements(): void
@@ -48,6 +72,5 @@ class ProductWatermarkTest extends TestCase
         $response->assertOk();
         $response->assertSee('detail-product-img-wrap');
         $response->assertSee('product-watermark-wrap');
-        $response->assertSee('product-watermark-overlay');
     }
 }

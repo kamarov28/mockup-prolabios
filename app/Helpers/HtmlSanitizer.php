@@ -106,7 +106,7 @@ class HtmlSanitizer
 
                 $styleAttr = implode('; ', $wrapStyles) . ';';
 
-                return '<span class="product-watermark-wrap" style="' . e($styleAttr) . '">' . $updatedImg . '<span class="product-watermark-overlay" aria-hidden="true"></span></span>';
+                return '<span class="product-watermark-wrap" style="' . e($styleAttr) . '">' . $updatedImg . '</span>';
             },
             $sanitized
         );

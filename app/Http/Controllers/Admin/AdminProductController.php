@@ -162,8 +162,8 @@ class AdminProductController extends Controller
         }
 
         try {
-            $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg');
-            $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+            $image = $this->handleImageUpload($request, 'image_file', 'image_url', '/images/placeholder.svg', 'uploads', 5242880, true);
+            $galleryImages = $this->handleMultipleImageUploads($request, 'gallery_files', 'uploads', 5242880, 10, true);
             $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
             $msdsUrl = $this->handlePdfUpload($request, 'msds_file', 'msds_url', null, 'msds');
 
@@ -239,7 +239,7 @@ class AdminProductController extends Controller
             return redirect()->back()->withInput()->with('error', 'Produk dengan judul baru tersebut sudah ada.');
         }
 
-        $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image'] ?? $product->image ?? null);
+        $image = $this->handleImageUpload($request, 'image_file', 'image_url', $product['image'] ?? $product->image ?? null, 'uploads', 5242880, true);
         $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url', $product['datasheet_url'] ?? $product->datasheet_url ?? null);
         $msdsUrl = $this->handlePdfUpload($request, 'msds_file', 'msds_url', $product['msds_url'] ?? $product->msds_url ?? null, 'msds');
 
@@ -251,7 +251,7 @@ class AdminProductController extends Controller
         if (! empty($toRemove)) {
             $existingGallery = array_values(array_diff($existingGallery, $toRemove));
         }
-        $newGalleryImages = $this->handleMultipleImageUploads($request, 'gallery_files');
+        $newGalleryImages = $this->handleMultipleImageUploads($request, 'gallery_files', 'uploads', 5242880, 10, true);
         $galleryImages = array_values(
             array_slice(array_merge($existingGallery, $newGalleryImages), 0, self::MAX_GALLERY_IMAGES)
         );
@@ -449,7 +449,7 @@ class AdminProductController extends Controller
             'datasheet_url' => $this->handlePdfUpload($request, "datasheet_file.{$rowKey}", "datasheet_url.{$rowKey}"),
             'msds_url' => $this->handlePdfUpload($request, "msds_file.{$rowKey}", "msds_url.{$rowKey}", null, 'msds'),
             'description' => (string) $request->input("description.{$rowKey}", ''),
-            'image' => $this->handleImageUpload($request, "image_file.{$rowKey}", "image_url.{$rowKey}", '/images/placeholder.svg'),
+            'image' => $this->handleImageUpload($request, "image_file.{$rowKey}", "image_url.{$rowKey}", '/images/placeholder.svg', 'uploads', 5242880, true),
             'price' => max(0, (float) $cleanPrice),
             'stock' => max(0, (int) $request->input("stock.{$rowKey}", 0)),
             'is_featured' => $request->boolean("is_featured.{$rowKey}"),

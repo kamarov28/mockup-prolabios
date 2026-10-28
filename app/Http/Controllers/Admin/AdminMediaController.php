@@ -27,7 +27,9 @@ class AdminMediaController extends Controller
             'image',
             'image_url',
             null,
-            'uploads/editor'
+            'uploads/editor',
+            5242880,
+            true
         );
 
         if (! $path) {

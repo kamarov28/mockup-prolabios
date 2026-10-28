@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Services\ImageWatermarkService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
@@ -32,7 +33,8 @@ trait HandlesImageUploads
         string $urlKey = 'image_url',
         ?string $fallback = null,
         string $folder = 'uploads',
-        int $maxSizeBytes = 5242880
+        int $maxSizeBytes = 5242880,
+        bool $watermark = false
     ): ?string {
         $folder = trim($folder, '/');
         $rawFile = $request->file($fileKey);
@@ -96,9 +98,9 @@ trait HandlesImageUploads
                     ]);
                 }
 
-                // Prefer WebP re-encode (resize oversized images, strip metadata)
+                // Prefer WebP re-encode (resize oversized images, strip metadata, optional watermark)
                 try {
-                    $webpPath = $this->encodeToWebp($file, $folder);
+                    $webpPath = $this->encodeToWebp($file, $folder, $watermark);
                     if ($webpPath !== null) {
                         return $webpPath;
                     }
@@ -134,6 +136,10 @@ trait HandlesImageUploads
                         throw ValidationException::withMessages([
                             $fileKey => ['Gagal menyimpan file gambar ke storage server.'],
                         ]);
+                    }
+
+                    if ($watermark) {
+                        ImageWatermarkService::applyToFile(public_path('storage/'.$relativePath));
                     }
 
                     $fallbackPath = '/storage/'.$relativePath;
@@ -216,7 +222,8 @@ trait HandlesImageUploads
         string $fileKey = 'gallery_files',
         string $folder = 'uploads',
         int $maxSizeBytes = 5242880,
-        int $maxFiles = 10
+        int $maxFiles = 10,
+        bool $watermark = false
     ): array {
         $folder = trim($folder, '/');
         $rawFiles = $request->file($fileKey);
@@ -270,7 +277,7 @@ trait HandlesImageUploads
             }
 
             try {
-                $storedPath = $this->encodeToWebp($file, $folder);
+                $storedPath = $this->encodeToWebp($file, $folder, $watermark);
             } catch (\Throwable $e) {
                 Log::error("HandlesImageUploads::handleMultipleImageUploads - Exception saat encodeToWebp galeri index [{$index}]", [
                     'message' => $e->getMessage(),
@@ -289,6 +296,9 @@ trait HandlesImageUploads
                     $exists = Storage::disk('public')->exists($relativePath);
 
                     if ($storedFallback && $exists) {
+                        if ($watermark) {
+                            ImageWatermarkService::applyToFile(public_path('storage/'.$relativePath));
+                        }
                         $storedPath = '/storage/'.$relativePath;
                     } else {
                         Log::error("HandlesImageUploads::handleMultipleImageUploads - Gagal menyimpan file galeri index [{$index}] ke disk public", [
@@ -429,7 +439,7 @@ trait HandlesImageUploads
      *
      * @param  string  $folder  Target sub-folder on the public disk (already trimmed of slashes)
      */
-    private function encodeToWebp(UploadedFile $file, string $folder): ?string
+    private function encodeToWebp(UploadedFile $file, string $folder, bool $watermark = false): ?string
     {
         try {
             if (! function_exists('imagewebp') || ! function_exists('imagecreatefromstring')) {
@@ -484,6 +494,11 @@ trait HandlesImageUploads
                 imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
                 imagedestroy($img);
                 $img = $resized;
+            }
+
+            // Bake permanent Prolabios logo watermark directly into image pixels
+            if ($watermark) {
+                ImageWatermarkService::apply($img);
             }
 
             $webpFilename = time().'_'.Str::random(16).'.webp';

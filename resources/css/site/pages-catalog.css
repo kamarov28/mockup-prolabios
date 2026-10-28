@@ -242,45 +242,20 @@
   justify-content: center;
 }
 
-/* ── Prolabios Diagonal Corporate Watermark System ──────────────────────── */
-.product-card .img-wrap::before,
-.detail-product-img-wrap::before,
-.lightbox-img-wrap::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 130%;
-  height: 46px;
-  background-image: url('/images/logo-prolabios.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  opacity: 0.20;
-  transform: translate(-50%, -50%) rotate(-25deg);
-  pointer-events: none;
-  user-select: none;
-  z-index: 2;
-  filter: contrast(1.15) brightness(0.95);
-}
-
-.detail-product-img-wrap::before {
-  height: 72px;
-  width: 125%;
-  transform: translate(-50%, -50%) rotate(-22deg);
+/* ── Prolabios Product Image Protection & Direct Raster Watermark ───────── */
+.product-card .img-wrap img,
+.detail-product-img-wrap img,
+.lightbox-img-wrap img,
+.product-watermark-wrap img {
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+  -webkit-touch-callout: none !important;
 }
 
 .lightbox-img-wrap {
   position: relative;
   display: inline-block;
   overflow: hidden;
-}
-
-.lightbox-img-wrap::before {
-  height: 100px;
-  width: 115%;
-  transform: translate(-50%, -50%) rotate(-22deg);
-  z-index: 10;
 }
 
 /* Watermark wrapper for images inside product rich-text descriptions */
@@ -301,27 +276,6 @@
   max-width: 100% !important;
   height: auto !important;
   border-radius: var(--nb-radius, 8px);
-}
-
-.product-watermark-wrap .product-watermark-overlay {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 115%;
-  height: 30%;
-  min-height: 32px;
-  max-height: 75px;
-  background-image: url('/images/logo-prolabios.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  opacity: 0.20;
-  transform: translate(-50%, -50%) rotate(-22deg);
-  pointer-events: none;
-  user-select: none;
-  z-index: 3;
-  filter: contrast(1.15) brightness(0.95);
 }
 
 .product-card .img-wrap img {

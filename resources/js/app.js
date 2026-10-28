@@ -48,10 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
         wrap.className = 'product-watermark-wrap';
         img.parentNode.insertBefore(wrap, img);
         wrap.appendChild(img);
-        const overlay = document.createElement('span');
-        overlay.className = 'product-watermark-overlay';
-        overlay.setAttribute('aria-hidden', 'true');
-        wrap.appendChild(overlay);
       }
 
       // Constrain wrapper strictly to image dimensions
@@ -68,6 +64,18 @@ document.addEventListener('DOMContentLoaded', function () {
       wrap.style.maxWidth = '100%';
       wrap.style.position = 'relative';
       wrap.style.borderRadius = '8px';
+    });
+
+    // Disable right-click and dragging on all product images
+    document.addEventListener('contextmenu', function (e) {
+      if (e.target && e.target.matches('.product-card img, .detail-product-img, .lightbox-img, .product-watermark-wrap img')) {
+        e.preventDefault();
+      }
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (e.target && e.target.matches('.product-card img, .detail-product-img, .lightbox-img, .product-watermark-wrap img')) {
+        e.preventDefault();
+      }
     });
   });
   safeInit('lucide', () => window.lucide.createIcons());
