@@ -71,12 +71,12 @@ class Post extends Model
     // ----------------------------------------------------
     public function scopeOnline(Builder $query): Builder
     {
-        $today = date('Y-m-d');
+        $todayEnd = date('Y-m-d 23:59:59');
 
         return $query->where('status', PostStatus::Online)
-            ->where(function (Builder $q) use ($today) {
+            ->where(function (Builder $q) use ($todayEnd) {
                 $q->whereNull('date')
-                    ->orWhere('date', '<=', $today);
+                    ->orWhere('date', '<=', $todayEnd);
             });
     }
 

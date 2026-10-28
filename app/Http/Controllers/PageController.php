@@ -225,7 +225,7 @@ class PageController extends Controller
             }
 
             $isPublished = ($currentBlog['status'] ?? '') === 'online'
-                && (empty($currentBlog['date']) || $currentBlog['date'] <= date('Y-m-d'));
+                && (empty($currentBlog['date']) || substr((string) $currentBlog['date'], 0, 10) <= date('Y-m-d'));
 
             if (! $isPublished) {
                 $isAdmin = auth()->check() && (bool) (auth()->user()->is_admin ?? false);
