@@ -493,6 +493,10 @@ trait HandlesImageUploads
                 imagepalettetotruecolor($img);
             }
 
+            // Always preserve alpha transparency channel for PNG/WebP cutouts
+            imagealphablending($img, false);
+            imagesavealpha($img, true);
+
             ob_start();
             $encodeOk = imagewebp($img, null, 82);
             $binary = ob_get_clean();
