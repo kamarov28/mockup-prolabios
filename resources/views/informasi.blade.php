@@ -71,7 +71,7 @@
 
               {{-- Quick Back bar --}}
               <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 pt-4 mt-5 border-top" style="border-color: #E5E7EB !important;">
-                <a href="{{ url('/informasi') }}" class="small fw-semibold text-decoration-none d-inline-flex align-items-center gap-1" style="color: var(--color-accent, #A6171C);">
+                <a href="{{ url('/informasi') }}" class="nb-btn nb-btn-outline d-inline-flex align-items-center gap-2 text-decoration-none" style="font-size: 0.84rem; padding: 6px 14px;">
                   <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Kembali ke Semua Artikel
                 </a>
               </div>
