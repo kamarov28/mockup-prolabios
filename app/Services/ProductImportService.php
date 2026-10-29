@@ -359,20 +359,40 @@ class ProductImportService
             $rowIndex++;
 
             $catalog = trim((string) ($row[$colMap['catalog'] ?? 'A'] ?? ''));
-            $title = trim((string) ($row[$colMap['title'] ?? 'B'] ?? ''));
+            $rawTitle = trim((string) ($row[$colMap['title'] ?? 'B'] ?? ''));
             $rawCategory = trim((string) ($row[$colMap['category'] ?? 'C'] ?? ''));
 
             // Abaikan baris kosong total
-            if ($title === '' && $catalog === '' && $rawCategory === '') {
+            if ($rawTitle === '' && $catalog === '' && $rawCategory === '') {
                 continue;
             }
 
-            if ($title === '') {
+            if ($rawTitle === '') {
                 $skipped++;
                 $errors[] = "Baris {$rowIndex}: Nama produk kosong.";
 
                 continue;
             }
+
+            // Ekstrak baris pertama sebagai Judul Produk resmi jika di sel Excel ada deskripsi/daftar komposisi multiline
+            $titleLines = array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $rawTitle)), fn ($l) => $l !== ''));
+            $extractedTitle = $titleLines[0] ?? $rawTitle;
+            // Bersihkan koma atau titik dua yang menggantung di akhir baris judul (misal: "Listeria System 18 R - REAGENT,")
+            $extractedTitle = rtrim($extractedTitle, " ,:\t\n\r\0\x0B");
+
+            $titleAppendedDesc = '';
+            if (count($titleLines) > 1) {
+                // Sisa baris dari sel nama produk otomatis dipindahkan menjadi deskripsi terstruktur (HTML list)
+                $descLines = array_values(array_filter(array_slice($titleLines, 1), fn ($l) => ! str_starts_with(strtolower($l), 'consist of')));
+                $titleAppendedDesc = '<div class="product-composition-list"><p><strong>Komposisi / Rincian:</strong></p><ul>';
+                foreach ($descLines as $dLine) {
+                    $cleanDLine = preg_replace('/^\d+[\.\)]\s*/', '', $dLine); // buang nomor urut jika ada
+                    $titleAppendedDesc .= '<li>'.e($cleanDLine).'</li>';
+                }
+                $titleAppendedDesc .= '</ul></div>';
+            }
+
+            $title = $extractedTitle !== '' ? $extractedTitle : $rawTitle;
 
             if ($rawCategory === '') {
                 $skipped++;
@@ -611,7 +631,12 @@ class ProductImportService
             $imageUrl = isset($colMap['image']) ? trim((string) ($row[$colMap['image']] ?? '')) : (! $hasMappedHeaders ? (isset($row['L']) ? trim((string) $row['L']) : (isset($row['I']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['I'])) ? trim((string) $row['I']) : '')) : '');
             $datasheetUrl = isset($colMap['datasheet']) ? trim((string) ($row[$colMap['datasheet']] ?? '')) : (! $hasMappedHeaders ? (isset($row['M']) ? trim((string) $row['M']) : (isset($row['J']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['J'])) ? trim((string) $row['J']) : '')) : '');
             $msdsUrl = isset($colMap['msds']) ? trim((string) ($row[$colMap['msds']] ?? '')) : (! $hasMappedHeaders && isset($row['N']) && preg_match('/^(\/|https?:\/\/|storage)/i', trim((string) $row['N'])) ? trim((string) $row['N']) : '');
-            $description = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (! $hasMappedHeaders ? (isset($row['O']) ? trim((string) $row['O']) : (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : ''))) : '');
+            $rawDescription = isset($colMap['description']) ? trim((string) ($row[$colMap['description']] ?? '')) : (! $hasMappedHeaders ? (isset($row['O']) ? trim((string) $row['O']) : (isset($row['N']) ? trim((string) $row['N']) : (isset($row['K']) ? trim((string) $row['K']) : ''))) : '');
+
+            $description = $rawDescription;
+            if ($titleAppendedDesc !== '') {
+                $description = $description !== '' ? $description . '<br><br>' . $titleAppendedDesc : $titleAppendedDesc;
+            }
 
             if (str_starts_with($imageUrl, 'storage/')) {
                 $imageUrl = '/'.$imageUrl;
