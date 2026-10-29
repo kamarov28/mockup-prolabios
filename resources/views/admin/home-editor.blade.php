@@ -27,7 +27,7 @@
 <div class="container-fluid px-0">
 
   @if($section)
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 admin-card">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4 p-3 admin-card position-sticky top-0 shadow-sm" style="z-index: 1020; backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.95); border-top: 3px solid var(--color-accent);">
       <div class="d-flex flex-wrap align-items-center gap-2">
         <a href="{{ route('admin.home.edit') }}" class="admin-btn admin-btn-outline me-1" style="padding: 6px 14px; font-size: 0.78rem;">
           <i data-lucide="grid" class="me-1"></i> <span>Semua Modul</span>
@@ -50,6 +50,9 @@
         <a href="{{ url('/') }}" target="_blank" class="admin-btn admin-btn-ghost" style="padding: 6px 14px; font-size: 0.78rem;" title="Lihat Website Publik">
           <i data-lucide="external-link" class="me-1"></i> <span>Live Preview</span>
         </a>
+        <button type="button" class="admin-btn admin-btn-accent px-3 py-1.5 shadow-sm js-trigger-save-settings" style="font-size: 0.78rem; font-weight: 700;">
+          <i data-lucide="save" class="me-1"></i> <span>Simpan Perubahan</span>
+        </button>
       </div>
     </div>
   @endif
@@ -205,6 +208,23 @@
         });
       });
 
+      // Auto-switch to tab containing validation errors if any invalid input exists
+      const firstInvalid = document.querySelector('.is-invalid, [aria-invalid="true"]');
+      if (firstInvalid) {
+        const pane = firstInvalid.closest('.tab-pane');
+        if (pane) {
+          const tabBtn = document.querySelector(`button[data-bs-target="#${pane.id}"]`);
+          if (tabBtn) {
+            const tabInstance = new bootstrap.Tab(tabBtn);
+            tabInstance.show();
+            setTimeout(() => {
+              firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              firstInvalid.focus();
+            }, 150);
+          }
+        }
+      }
+
       @if($section === 'homepage')
         for (let i = 0; i < 4; i++) {
           bindPreviewListener(`hero_image_file_${i}`, `hero_image_preview_${i}`);
@@ -218,6 +238,21 @@
         bindPreviewListener('site_favicon_file', 'site_favicon_preview');
         bindUrlListener('site_favicon_url', 'site_favicon_preview');
       @endif
+
+      // Sticky Save Button Trigger: auto-submit the active form
+      const saveBtn = document.querySelector('.js-trigger-save-settings');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+          const form = document.querySelector('form[action="{{ route('admin.home.update') }}"]');
+          if (form) {
+            if (form.reportValidity()) {
+              saveBtn.disabled = true;
+              saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...';
+              form.submit();
+            }
+          }
+        });
+      }
     });
   </script>
   @endif

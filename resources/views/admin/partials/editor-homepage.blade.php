@@ -5,16 +5,16 @@
   <div class="admin-card-header pb-0" style="background: var(--color-surface); border-bottom: 1px solid var(--color-border);">
     <ul class="nav nav-pills" id="homeTabs" role="tablist" style="gap: 8px; margin-bottom: 14px;">
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline {{ $activeTab === 'hero' ? 'active' : '' }}" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'hero' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="image" class="me-1"></i> <span>Hero Banner</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'hero' ? 'active' : '' }}" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'hero' ? 'true' : 'false' }}" style="font-size: 0.8rem; padding: 7px 18px; border-radius: 6px;"><i data-lucide="image" class="me-1"></i> <span>1. Hero Banner</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline {{ $activeTab === 'bento' ? 'active' : '' }}" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'bento' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="layout-grid" class="me-1"></i> <span>Bento Grid Cards</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'bento' ? 'active' : '' }}" id="bento-tab" data-bs-toggle="tab" data-bs-target="#bento-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'bento' ? 'true' : 'false' }}" style="font-size: 0.8rem; padding: 7px 18px; border-radius: 6px;"><i data-lucide="layout-grid" class="me-1"></i> <span>2. Bento Grid Cards</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline {{ $activeTab === 'sector' ? 'active' : '' }}" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'sector' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="folder-tree" class="me-1"></i> <span>Sector Finder</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'sector' ? 'active' : '' }}" id="sector-tab" data-bs-toggle="tab" data-bs-target="#sector-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'sector' ? 'true' : 'false' }}" style="font-size: 0.8rem; padding: 7px 18px; border-radius: 6px;"><i data-lucide="folder-tree" class="me-1"></i> <span>3. Sector Finder</span></button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="admin-btn admin-btn-outline {{ $activeTab === 'cta' ? 'active' : '' }}" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'cta' ? 'true' : 'false' }}" style="font-size: 0.78rem; padding: 7px 16px;"><i data-lucide="megaphone" class="me-1"></i> <span>Banner Konversi RFQ</span></button>
+        <button class="admin-btn admin-btn-outline {{ $activeTab === 'cta' ? 'active' : '' }}" id="cta-tab" data-bs-toggle="tab" data-bs-target="#cta-panel" type="button" role="tab" aria-selected="{{ $activeTab === 'cta' ? 'true' : 'false' }}" style="font-size: 0.8rem; padding: 7px 18px; border-radius: 6px;"><i data-lucide="megaphone" class="me-1"></i> <span>4. Banner Konversi RFQ</span></button>
       </li>
     </ul>
   </div>
@@ -132,10 +132,63 @@
         </div>
 
         <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);">4 Kartu Pilar Nilai (Bento Cards)</h3>
+
+        {{-- Interactive Visual Bento Map (Wireframe Preview) --}}
+        <div class="mb-4 p-3 rounded" style="background: var(--color-surface-2); border: 1px dashed var(--color-border);">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="small fw-bold text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+              <i data-lucide="layout" class="me-1" style="width: 13px; height: 13px; vertical-align: -2px;"></i> Peta Tata Letak Asimetris di Halaman Beranda (Klik untuk Langsung Lompat ke Form)
+            </span>
+            <span class="badge" style="background: rgba(166, 23, 28, 0.08); color: var(--color-accent); font-size: 0.68rem;">Live Grid Preview</span>
+          </div>
+          <div class="row g-2">
+            <div class="col-md-7">
+              <a href="#bento-card-slot-0" class="d-block p-2.5 rounded text-decoration-none text-dark transition-all" style="background: #FFFFFF; border: 1.5px solid var(--color-accent); box-shadow: 0 2px 6px rgba(166, 23, 28, 0.05);">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="badge bg-danger text-white" style="font-size: 0.65rem;">Pilar #1 &bull; Kartu Utama Besar (7/12)</span>
+                  <i data-lucide="shield-check" class="text-danger" style="width: 14px; height: 14px;"></i>
+                </div>
+                <div class="small fw-bold text-truncate">{{ $homeData['bento_cards'][0]['title'] ?? 'Dokumentasi COA, MSDS & Sertifikasi' }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.72rem;">Sertifikasi ISO 17025, BPOM, AKL &amp; download COA batch</div>
+              </a>
+            </div>
+            <div class="col-md-5">
+              <a href="#bento-card-slot-1" class="d-block p-2.5 rounded text-decoration-none text-dark transition-all" style="background: #FFFFFF; border: 1px solid var(--color-border);">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">Pilar #2 &bull; Cold-Chain (5/12)</span>
+                  <i data-lucide="thermometer-snowflake" class="text-primary" style="width: 14px; height: 14px;"></i>
+                </div>
+                <div class="small fw-bold text-truncate">{{ $homeData['bento_cards'][1]['title'] ?? 'Logistik Cold-Chain Terkontrol' }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.72rem;">Termal 2°C – 8°C &amp; monitoring suhu pengiriman</div>
+              </a>
+            </div>
+            <div class="col-md-5">
+              <a href="#bento-card-slot-2" class="d-block p-2.5 rounded text-decoration-none text-dark transition-all" style="background: #FFFFFF; border: 1px solid var(--color-border);">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">Pilar #3 &bull; Layanan Teknis (5/12)</span>
+                  <i data-lucide="wrench" class="text-warning" style="width: 14px; height: 14px;"></i>
+                </div>
+                <div class="small fw-bold text-truncate">{{ $homeData['bento_cards'][2]['title'] ?? 'Layanan Teknis IQ/OQ/PQ & Kalibrasi' }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.72rem;">Instalasi, kalibrasi rutin, dan kualifikasi instrumen</div>
+              </a>
+            </div>
+            <div class="col-md-7">
+              <a href="#bento-card-slot-3" class="d-block p-2.5 rounded text-decoration-none text-dark transition-all" style="background: #FFFFFF; border: 1px solid var(--color-border);">
+                <div class="d-flex align-items-center justify-content-between mb-1">
+                  <span class="badge bg-secondary text-white" style="font-size: 0.65rem;">Pilar #4 &bull; Katalog Luas (7/12)</span>
+                  <i data-lucide="package" class="text-success" style="width: 14px; height: 14px;"></i>
+                </div>
+                <div class="small fw-bold text-truncate">{{ $homeData['bento_cards'][3]['title'] ?? 'Akses Cepat 1.000+ Produk & Reagen' }}</div>
+                <div class="text-muted text-truncate" style="font-size: 0.72rem;">Multi-brand resmi, ketersediaan ready stock SKU</div>
+              </a>
+            </div>
+          </div>
+        </div>
+
         <div class="row g-3">
           @for($i = 0; $i < 4; $i++)
             @php $bCard = $homeData['bento_cards'][$i] ?? []; @endphp
-            <div class="col-md-6">
+            <div class="col-md-6" id="bento-card-slot-{{ $i }}">
               <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
                 <div>
                   <span class="admin-badge admin-badge-accent mb-2">Kartu Bento #{{ $i + 1 }}</span>
