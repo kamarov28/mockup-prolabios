@@ -348,24 +348,31 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
 
 .navbar-brand img {
   filter: none !important;
-  max-width: 440px !important;
-  height: 58px !important;
+  max-width: 360px !important;
+  height: 50px !important;
   width: auto !important;
   object-fit: contain !important;
   transition: transform var(--transition-fast);
 }
 
+@media (max-width: 1200px) {
+  .navbar-brand img {
+    max-width: 290px !important;
+    height: 44px !important;
+  }
+}
+
 @media (max-width: 991.98px) {
   .navbar-brand img {
-    max-width: 320px !important;
-    height: 48px !important;
+    max-width: 260px !important;
+    height: 42px !important;
   }
 }
 
 @media (max-width: 575.98px) {
   .navbar-brand img {
-    max-width: 250px !important;
-    height: 40px !important;
+    max-width: 210px !important;
+    height: 38px !important;
   }
 }
 
@@ -380,8 +387,9 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 11px;
-  margin: 0 1.5px;
+  padding: 0 9px;
+  margin: 0 1px;
+  white-space: nowrap;
   background: transparent;
   border: none;
   border-radius: 20px;
@@ -467,7 +475,7 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
 .btn-outline-danger,
 .navbar-cta-btn {
   height: 40px !important;
-  padding: 0.5rem 1.2rem !important;
+  padding: 0.5rem 1.25rem !important;
   background: var(--nb-primary) !important;
   border: none !important;
   color: #FFFFFF !important;
@@ -476,6 +484,8 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
   font-size: 0.88rem !important;
   border-radius: 20px !important;
   box-shadow: none !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
   transition: background-color var(--transition-fast), opacity var(--transition-fast), transform var(--transition-fast) !important;
 }
 .navbar .btn-outline-danger:hover,

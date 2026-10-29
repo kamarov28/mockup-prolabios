@@ -215,6 +215,15 @@
 .nb-btn:active,
 .btn:active,
 .navbar-cta-btn:active,
+.navbar-cta-btn:focus,
+.navbar-cta-btn {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: auto !important;
+}
 .cart-clear-btn:active,
 .nb-icon-btn:active {
   transform: scale(0.98);
