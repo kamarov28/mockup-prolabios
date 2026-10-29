@@ -15,9 +15,10 @@
         : (!empty($p['category']) ? str_replace('-', ' ', $p['category']) : (!empty($p['description']) ? strip_tags(html_entity_decode($p['description'])) : 'Produk laboratorium'));
     $vtTarget = !empty($vt) ? 'data-vt-target="' . e($vt) . '"' : '';
 
-    // Strip newlines / multi-line lists from titles to prevent card height blowout
+    // Format title into continuous clean string (replace line breaks with spaces)
     $rawTitle = (string)($p['title'] ?? '');
-    $cleanTitle = trim(preg_split('/\r\n|\r|\n/', $rawTitle)[0] ?? $rawTitle);
+    $cleanTitle = trim(preg_replace('/\s+/', ' ', $rawTitle));
+    $firstLineTitle = trim(preg_split('/\r\n|\r|\n/', $rawTitle)[0] ?? $cleanTitle);
 @endphp
 
 @if($wrapInCol)
@@ -25,7 +26,7 @@
 @endif
   <div class="card h-100 product-card border-0">
     <div class="img-wrap position-relative">
-      <img src="{{ $cardImage }}" alt="{{ $cleanTitle }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
+      <img src="{{ $cardImage }}" alt="{{ $firstLineTitle }} — Produk Laboratorium" loading="lazy" decoding="async" width="400" height="250" onerror="this.onerror=null;this.src='{{ asset('images/placeholder.svg') }}';">
       @if(!empty($p['is_featured']))
         <span class="product-badge product-badge--featured" title="Produk Pilihan Editor">
           <i data-lucide="star"></i>
@@ -71,16 +72,15 @@
       </p>
 
       <div class="mt-auto pt-3 nb-card-foot">
-        <a href="{{ $cardUrl }}" class="nb-card-btn nb-card-btn--detail nb-btn-ghost" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $cleanTitle }}">
+        <a href="{{ $cardUrl }}" class="nb-card-btn nb-card-btn--detail nb-btn-ghost" {!! $vtTarget !!} aria-label="Detail dan spesifikasi {{ $firstLineTitle }}">
           <span>Detail</span>
           <i data-lucide="arrow-right"></i>
         </a>
         <form action="{{ route('cart.add') }}" method="POST" class="nb-card-form">
           @csrf
           <input type="hidden" name="id" value="{{ $p['id'] ?? '' }}">
-          <input type="hidden" name="title" value="{{ $cleanTitle }}">
-          <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="nb-card-btn nb-card-btn--rfq nb-btn-primary" title="Tambahkan ke Pengajuan Penawaran" aria-label="Tambah {{ $cleanTitle }} ke keranjang">
+          <input type="hidden" name="title" value="{{ $firstLineTitle }}">
+          <button type="submit" class="nb-card-btn nb-card-btn--rfq nb-btn-primary" title="Tambahkan ke Pengajuan Penawaran" aria-label="Tambah {{ $firstLineTitle }} ke keranjang">
             <i data-lucide="plus"></i>
             <span>RFQ</span>
           </button>
