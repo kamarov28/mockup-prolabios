@@ -468,7 +468,7 @@ p a:not(.nb-btn):not(.btn):not([class*="btn"]):not(.dash-item-link):not(.editori
     margin-top: 0 !important;
     padding: 16px 20px 24px !important;
     border-radius: 0 0 16px 16px !important;
-    box-shadow: 0 20px 40px -4px rgba(15, 23, 42, 0.2), 0 0 0 9999px rgba(15, 23, 42, 0.45) !important;
+    box-shadow: 0 24px 48px -6px rgba(15, 23, 42, 0.22), 0 12px 24px -4px rgba(15, 23, 42, 0.12) !important;
     max-height: calc(100vh - 72px) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
