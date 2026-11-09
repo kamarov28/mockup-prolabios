@@ -339,19 +339,22 @@ a.editorial-side-card:hover {
 /* ── Cart Micro-Interactions (Spring Scale Pop & Haptic Tilt) ─────────────── */
 @keyframes nb-cart-pop {
   0% {
-    transform: scale(1);
+    transform: scale(0.6);
+    box-shadow: 0 0 0 0 rgba(158, 27, 34, 0.6);
   }
-  28% {
-    transform: scale(1.55);
+  35% {
+    transform: scale(1.45);
+    box-shadow: 0 0 0 8px rgba(158, 27, 34, 0);
   }
-  50% {
-    transform: scale(0.88);
+  60% {
+    transform: scale(0.9);
   }
-  72% {
-    transform: scale(1.16);
+  80% {
+    transform: scale(1.08);
   }
   100% {
     transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(158, 27, 34, 0);
   }
 }
 
@@ -359,26 +362,50 @@ a.editorial-side-card:hover {
   0% {
     transform: scale(1) rotate(0deg);
   }
-  25% {
-    transform: scale(1.12) rotate(-7deg);
+  20% {
+    transform: scale(1.15) rotate(-8deg);
   }
-  50% {
-    transform: scale(0.96) rotate(3deg);
+  45% {
+    transform: scale(0.95) rotate(4deg);
   }
-  75% {
-    transform: scale(1.03) rotate(-1deg);
+  70% {
+    transform: scale(1.04) rotate(-2deg);
   }
   100% {
     transform: scale(1) rotate(0deg);
   }
 }
 
+@keyframes rfq-spring-success {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.94);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  75% {
+    transform: scale(0.98);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .nav-cart-badge.is-bump {
-  animation: nb-cart-pop 0.45s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  animation: nb-cart-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
 .nb-icon-btn.is-cart-bump {
-  animation: nb-cart-btn-tilt 0.45s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+  animation: nb-cart-btn-tilt 0.5s cubic-bezier(0.16, 1, 0.3, 1) both !important;
+}
+
+.nb-card-btn--rfq.is-success,
+.btn-rfq.is-success,
+.beli-produk-btn.is-success {
+  animation: rfq-spring-success 0.45s cubic-bezier(0.16, 1, 0.3, 1) both !important;
 }
 
 /* ── Editorial Subpage Entrance Animations ───────────────────────────────── */

@@ -52,6 +52,8 @@ export function initBacteriaSwarm() {
     const svgSrc = svgSources[Math.floor(Math.random() * svgSources.length)];
     el.src = svgSrc;
     el.alt = '';
+    el.setAttribute('aria-hidden', 'true');
+    el.setAttribute('role', 'presentation');
     el.loading = 'eager';
 
     const size = Math.floor(Math.random() * 36) + 38; // 38px - 74px

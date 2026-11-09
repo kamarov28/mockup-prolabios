@@ -7,7 +7,7 @@ import{a as e,i as t,n,r,t as i}from"./lucide-icons-Lq6trHgR.js";var a=e(r(),1);
     pointer-events: none;
     z-index: -1;
     overflow: hidden;
-  `,document.body.appendChild(n);let r=[],i=window.innerWidth,a=window.innerHeight,o=window.innerWidth<768?2:3,s=Math.ceil(t/o),c=i/o,l=a/s;for(let i=0;i<t;i++){let t=document.createElement(`img`);t.src=e[Math.floor(Math.random()*e.length)],t.alt=``,t.loading=`eager`;let a=Math.floor(Math.random()*36)+38,s=(Math.random()*.25+.65).toFixed(2);t.style.cssText=`
+  `,document.body.appendChild(n);let r=[],i=window.innerWidth,a=window.innerHeight,o=window.innerWidth<768?2:3,s=Math.ceil(t/o),c=i/o,l=a/s;for(let i=0;i<t;i++){let t=document.createElement(`img`);t.src=e[Math.floor(Math.random()*e.length)],t.alt=``,t.setAttribute(`aria-hidden`,`true`),t.setAttribute(`role`,`presentation`),t.loading=`eager`;let a=Math.floor(Math.random()*36)+38,s=(Math.random()*.25+.65).toFixed(2);t.style.cssText=`
       position: absolute;
       top: 0;
       left: 0;
