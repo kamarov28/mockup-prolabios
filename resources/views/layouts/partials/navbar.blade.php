@@ -6,7 +6,7 @@
       </a>
     
     <!-- Mobile Actions (Cart, Search, and Hamburger Navigation) -->
-    <div class="d-flex align-items-center gap-2 ms-auto d-lg-none">
+    <div class="d-flex align-items-center gap-2 ms-auto d-lg-none flex-shrink-0">
       @php $cartCount = array_sum(array_column(session('cart', []), 'quantity')); @endphp
       <a href="{{ route('cart.index') }}" class="nb-icon-btn position-relative text-decoration-none" title="Keranjang pengajuan penawaran" aria-label="Keranjang pengajuan penawaran">
         <i data-lucide="shopping-cart"></i>

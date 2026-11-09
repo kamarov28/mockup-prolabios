@@ -351,10 +351,11 @@
 
 @media (max-width: 991.98px) {
   .navbar .nb-icon-btn {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+    flex-shrink: 0 !important;
   }
   .navbar,
   .navbar-collapse,

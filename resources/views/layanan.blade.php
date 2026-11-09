@@ -53,14 +53,14 @@
             <span class="text-muted small d-block mb-2 fw-semibold" style="font-size: 0.76rem; letter-spacing: 0.5px; text-transform: uppercase;">
               <i data-lucide="list-tree" class="me-1" style="width: 14px; height: 14px;"></i> Pilih Layanan Teknis:
             </span>
-            <div class="d-flex align-items-center gap-2 overflow-x-auto pb-2 mobile-pill-scroll">
-              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'maintenance' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+            <div class="d-flex align-items-center gap-2 overflow-x-auto pb-2 pe-3 mobile-pill-scroll">
+              <a href="{{ url('/layanan') }}?s=maintenance#service-nav" class="nb-btn {{ $activeService == 'maintenance' ? 'nb-btn-primary text-white' : 'bg-white text-dark' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0; border: 1px solid {{ $activeService == 'maintenance' ? 'var(--nb-primary)' : '#CBD5E1' }} !important; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
                 <i data-lucide="wrench" class="me-1" style="width: 14px; height: 14px;"></i> Perawatan &amp; Servis
               </a>
-              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'labdesign' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+              <a href="{{ url('/layanan') }}?s=labdesign#service-nav" class="nb-btn {{ $activeService == 'labdesign' ? 'nb-btn-primary text-white' : 'bg-white text-dark' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0; border: 1px solid {{ $activeService == 'labdesign' ? 'var(--nb-primary)' : '#CBD5E1' }} !important; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
                 <i data-lucide="building" class="me-1" style="width: 14px; height: 14px;"></i> Desain Lab
               </a>
-              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="layanan-sidebar-link nb-btn {{ $activeService == 'consultation' ? 'nb-btn-primary is-active' : 'nb-btn-ghost' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0;">
+              <a href="{{ url('/layanan') }}?s=consultation#service-nav" class="nb-btn {{ $activeService == 'consultation' ? 'nb-btn-primary text-white' : 'bg-white text-dark' }} text-nowrap py-2 px-3" style="font-size: 0.82rem; border-radius: 20px; flex-shrink: 0; border: 1px solid {{ $activeService == 'consultation' ? 'var(--nb-primary)' : '#CBD5E1' }} !important; box-shadow: 0 1px 2px rgba(0,0,0,0.04);">
                 <i data-lucide="graduation-cap" class="me-1" style="width: 14px; height: 14px;"></i> Konsultasi &amp; Pelatihan
               </a>
             </div>
@@ -69,7 +69,7 @@
           <!-- Service Block: Maintenance & Repair -->
           <div id="service-content-maintenance" class="service-content-block {{ $activeService == 'maintenance' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-4">
-              <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Layanan Perawatan" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
+              <img src="https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Layanan Perawatan" class="w-100" loading="lazy" decoding="async">
             </div>
             <span class="profil-section-label"><i data-lucide="wrench" class="me-1"></i> Layanan 01</span>
             <h2 class="profil-section-title">Perawatan &amp; Perbaikan Instrumen</h2>
@@ -111,7 +111,7 @@
           <!-- Service Block: Lab Design & Build -->
           <div id="service-content-labdesign" class="service-content-block {{ $activeService == 'labdesign' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-4">
-              <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Lab Design & Build" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
+              <img src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Lab Design & Build" class="w-100" loading="lazy" decoding="async">
             </div>
             <span class="profil-section-label"><i data-lucide="layout" class="me-1"></i> Layanan 02</span>
             <h2 class="profil-section-title">Desain &amp; Pembangunan Laboratorium</h2>
@@ -150,12 +150,12 @@
             </div>
           </div>
 
-          <!-- Service Block: Konsultasi & Pelatihan -->
+          <!-- Service Block: Consultation & Training -->
           <div id="service-content-consultation" class="service-content-block {{ $activeService == 'consultation' ? '' : 'd-none' }}">
             <div class="profil-hero-img mb-4">
-              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Konsultasi & Pelatihan" class="w-100" style="object-fit: cover; height: 340px; display: block;" loading="lazy" decoding="async">
+              <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Konsultasi &amp; Pelatihan" class="w-100" loading="lazy" decoding="async">
             </div>
-            <span class="profil-section-label"><i data-lucide="award" class="me-1"></i> Layanan 03</span>
+            <span class="profil-section-label"><i data-lucide="graduation-cap" class="me-1"></i> Layanan 03</span>
             <h2 class="profil-section-title">Konsultasi Metode &amp; Pelatihan Analis</h2>
             <p class="profil-body-text">Tingkatkan kompetensi analis laboratorium Anda melalui pelatihan pengoperasian instrumen, interpretasi data spektrum/kromatografi, serta optimasi pemilihan metode uji analitika.</p>
 

@@ -42,19 +42,19 @@
 @section('content')
   <div class="editorial-page-header detail-breadcrumb-header">
     <div class="container">
-      <nav aria-label="breadcrumb" class="d-flex align-items-center gap-2">
-        <a href="{{ url('/produk') }}" class="nb-mono small text-muted text-decoration-none">
+      <nav aria-label="breadcrumb" class="d-flex align-items-center gap-2 flex-nowrap overflow-x-auto mobile-pill-scroll py-1" style="scrollbar-width: none; -webkit-overflow-scrolling: touch;">
+        <a href="{{ url('/produk') }}" class="small text-muted text-decoration-none text-nowrap flex-shrink-0">
           <i data-lucide="arrow-left" style="width: 14px; height: 14px; vertical-align: -2px;"></i> Katalog Produk
         </a>
         @if(!empty($product['category']))
-          <span class="text-muted small">/</span>
-          <a href="{{ url('/produk?kategori=' . ($product['category_slug'] ?? $product['category'])) }}" class="nb-mono small text-muted text-capitalize text-decoration-none">
+          <span class="text-muted small flex-shrink-0">/</span>
+          <a href="{{ url('/produk?kategori=' . ($product['category_slug'] ?? $product['category'])) }}" class="small text-muted text-capitalize text-decoration-none text-nowrap flex-shrink-0">
             {{ str_replace('-', ' ', $product['category']) }}
           </a>
         @endif
         @if(!empty($product['title']))
-          <span class="text-muted small">/</span>
-          <span class="nb-mono small text-dark fw-semibold text-truncate" style="max-width: 380px;">{{ $product['title'] }}</span>
+          <span class="text-muted small flex-shrink-0">/</span>
+          <span class="small text-dark fw-semibold text-truncate flex-shrink-1" style="max-width: 260px;">{{ $product['title'] }}</span>
         @endif
       </nav>
     </div>
