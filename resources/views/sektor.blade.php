@@ -36,8 +36,8 @@
                   </a>
                 @endforeach
               @else
-                <a href="#" class="layanan-sidebar-link d-flex align-items-center is-active">
-                  <span>Brewing</span>
+                <a href="{{ url('/sektor') }}" class="layanan-sidebar-link d-flex align-items-center is-active">
+                  <span>Semua Sektor</span>
                 </a>
               @endif
             </nav>

@@ -45,15 +45,14 @@
         @foreach($categoriesStructure as $catKey => $catData)
           @if(!empty($catData['subs']))
             <!-- Category with subcategories: acts as accordion toggle -->
-            <a href="#"
-               class="layanan-sidebar-link d-flex justify-content-between align-items-center category-accordion-btn {{ ($activeCategory ?? '') === $catKey ? 'is-active' : '' }}"
-               role="button"
+            <button type="button"
+               class="layanan-sidebar-link d-flex justify-content-between align-items-center category-accordion-btn w-100 text-start {{ ($activeCategory ?? '') === $catKey ? 'is-active' : '' }}"
                aria-expanded="{{ ($activeCategory ?? '') === $catKey ? 'true' : 'false' }}"
                aria-controls="sub-group-{{ $catKey }}"
                data-target="sub-group-{{ $catKey }}">
               <span>{{ $catData['name'] }}</span>
               <i data-lucide="{{ ($activeCategory ?? '') === $catKey ? 'chevron-down' : 'chevron-right' }}" class="chevron-icon" style="font-size: 0.75rem;"></i>
-            </a>
+            </button>
 
             <!-- Subcategories container -->
             <div id="sub-group-{{ $catKey }}" class="sub-category-group {{ ($activeCategory ?? '') === $catKey ? '' : 'd-none' }}">
