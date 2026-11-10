@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('body_class', 'page-product-detail')
+
 @php
   $seoTitle = $product
     ? ($product['title'] . (!empty($product['catalog']) ? ' (' . $product['catalog'] . ')' : '') . ' | PROLABIOS')

@@ -689,7 +689,14 @@
 
 @media (max-width: 767.98px) {
   .section-main.detail-product-page {
-    padding-bottom: 85px !important;
+    padding-bottom: 95px !important;
+  }
+
+  body:has(.detail-mobile-sticky-bar) #scroll-to-top,
+  body:has(.detail-mobile-sticky-bar) .btn-scroll-to-top,
+  .page-product-detail #scroll-to-top,
+  .page-product-detail .btn-scroll-to-top {
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
