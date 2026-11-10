@@ -257,6 +257,15 @@ class ProductService
         if (! empty($filters['sector'])) {
             $query->bySector($filters['sector']);
         }
+
+        if (! empty($filters['principal'])) {
+            $p = $filters['principal'];
+            $query->whereHas('principal', function ($q) use ($p) {
+                $q->where('name', $p)
+                    ->orWhereRaw('LOWER(name) = ?', [strtolower(str_replace('-', ' ', $p))])
+                    ->orWhereRaw('LOWER(REPLACE(name, " ", "-")) = ?', [strtolower($p)]);
+            });
+        }
     }
 
     public function getProducts(?array $filters = [], int $limit = 0): Collection

@@ -16,6 +16,9 @@
       @if(request()->query('subcategory'))
         <input type="hidden" name="subcategory" value="{{ request()->query('subcategory') }}">
       @endif
+      @if(request()->query('principal'))
+        <input type="hidden" name="principal" value="{{ request()->query('principal') }}">
+      @endif
       <button type="submit" class="produk-search-btn" aria-label="Cari Produk">
         <i data-lucide="search"></i>
       </button>
@@ -37,7 +40,11 @@
         <i data-lucide="grid" class="me-2 text-primary"></i> Kategori Produk
       </h3>
       <nav class="layanan-sidebar-nav" id="produk-sidebar">
-        <a href="{{ url('/produk') }}?category=all#catalog-section"
+        @php
+          $catBaseParams = request()->except(['category', 'subcategory', 'page']);
+          $catBaseUrl = url('/produk') . (!empty($catBaseParams) ? '?' . http_build_query($catBaseParams) . '&' : '?');
+        @endphp
+        <a href="{{ $catBaseUrl }}category=all#catalog-section"
            class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ ($activeCategory ?? 'all') === 'all' ? 'is-active' : '' }}">
           <span>Semua Kategori</span>
           <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
@@ -56,13 +63,13 @@
 
             <!-- Subcategories container -->
             <div id="sub-group-{{ $catKey }}" class="sub-category-group {{ ($activeCategory ?? '') === $catKey ? '' : 'd-none' }}">
-              <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory=all#catalog-section"
+              <a href="{{ $catBaseUrl }}category={{ $catKey }}&subcategory=all#catalog-section"
                  class="sub-category-link {{ ($activeCategory ?? '') === $catKey && (!($activeSubCategory ?? null) || $activeSubCategory === 'all') ? 'is-active' : '' }}">
                 <span>Semua {{ $catData['name'] }}</span>
                 <i data-lucide="chevron-right" class="sub-category-icon"></i>
               </a>
               @foreach($catData['subs'] as $subKey => $subName)
-                <a href="{{ url('/produk') }}?category={{ $catKey }}&subcategory={{ $subKey }}#catalog-section"
+                <a href="{{ $catBaseUrl }}category={{ $catKey }}&subcategory={{ $subKey }}#catalog-section"
                    class="sub-category-link {{ ($activeCategory ?? '') === $catKey && ($activeSubCategory ?? '') === $subKey ? 'is-active' : '' }}">
                   <span>{{ $subName }}</span>
                   <i data-lucide="chevron-right" class="sub-category-icon"></i>
@@ -71,7 +78,7 @@
             </div>
           @else
             <!-- Category without subcategories: direct filter link -->
-            <a href="{{ url('/produk') }}?category={{ $catKey }}#catalog-section"
+            <a href="{{ $catBaseUrl }}category={{ $catKey }}#catalog-section"
                class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ ($activeCategory ?? '') === $catKey ? 'is-active' : '' }}">
               <span>{{ $catData['name'] }}</span>
               <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
@@ -80,6 +87,37 @@
         @endforeach
       </nav>
     </div>
+
+    <!-- Principals Filter Card -->
+    @if(isset($principals) && $principals->count() > 0)
+      <div class="card p-4 mb-4">
+        <h3 class="profil-sidebar-title mb-3">
+          <i data-lucide="award" class="me-2 text-primary"></i> Prinsipal Resmi
+        </h3>
+        <nav class="layanan-sidebar-nav" id="principal-sidebar">
+          @php
+            $principalBaseParams = request()->except(['principal', 'prinsipal', 'page']);
+            $principalBaseUrl = url('/produk') . (!empty($principalBaseParams) ? '?' . http_build_query($principalBaseParams) . '&' : '?');
+          @endphp
+          <a href="{{ $principalBaseUrl }}principal=all#catalog-section"
+             class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ empty($activePrincipal) || $activePrincipal === 'all' ? 'is-active' : '' }}">
+            <span>Semua Prinsipal</span>
+            <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
+          </a>
+          @foreach($principals as $pr)
+            @php
+              $isPrActive = !empty($activePrincipal) && (strtolower($activePrincipal) === strtolower($pr->name) || strtolower($activePrincipal) === \Illuminate\Support\Str::slug($pr->name));
+            @endphp
+            <a href="{{ $principalBaseUrl }}principal={{ urlencode($pr->name) }}#catalog-section"
+               class="layanan-sidebar-link d-flex align-items-center justify-content-between {{ $isPrActive ? 'is-active' : '' }}"
+               title="Filter produk dari {{ $pr->name }}">
+              <span>{{ $pr->name }}</span>
+              <i data-lucide="chevron-right" class="fs-5 ms-auto"></i>
+            </a>
+          @endforeach
+        </nav>
+      </div>
+    @endif
 
     <!-- Sidebar Card 2: Butuh Bantuan CTA -->
     @include('partials.sidebar-cta', [

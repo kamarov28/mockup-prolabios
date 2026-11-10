@@ -49,6 +49,8 @@ class PageController extends Controller
         }
 
         $searchQuery = $request->query('search') ?? $request->query('s') ?? $request->query('q');
+        $rawPrincipal = $request->query('principal') ?? $request->query('prinsipal');
+        $activePrincipal = $rawPrincipal ? trim((string) $rawPrincipal) : null;
 
         $filters = [];
         if ($activeCategory !== 'all') {
@@ -60,6 +62,9 @@ class PageController extends Controller
         if ($searchQuery) {
             $filters['search'] = $searchQuery;
         }
+        if ($activePrincipal) {
+            $filters['principal'] = $activePrincipal;
+        }
 
         $filteredProducts = $products->getPaginatedProducts($filters, 12);
 
@@ -68,11 +73,15 @@ class PageController extends Controller
             $products->recordSearchHits($matchedIds);
         }
 
+        $principals = \App\Models\Principal::online()->orderBy('name')->get();
+
         return view('produk', [
             'products' => $filteredProducts,
             'categoriesStructure' => $categoriesStructure,
             'activeCategory' => $activeCategory,
             'activeSubCategory' => $activeSubCategory,
+            'principals' => $principals,
+            'activePrincipal' => $activePrincipal,
         ]);
     }
 

@@ -111,13 +111,19 @@
                   @endif
                   @if(!empty($product->principal))
                     <span class="text-muted small">·</span>
-                    <span class="text-dark small fw-semibold">{{ $product->principal->name }}</span>
+                    <a href="{{ url('/produk?principal=' . urlencode($product->principal->name)) }}#catalog-section" class="text-dark small fw-semibold text-decoration-none" title="Lihat produk {{ $product->principal->name }}">
+                      {{ $product->principal->name }}
+                    </a>
                   @endif
                 </div>
               </div>
 
               @if(!empty($product->principal))
-                <div class="detail-principal-card">
+                @php
+                  $principalSlug = \Illuminate\Support\Str::slug($product->principal->name);
+                  $principalCatalogUrl = url('/produk?principal=' . urlencode($product->principal->name)) . '#catalog-section';
+                @endphp
+                <a href="{{ $principalCatalogUrl }}" class="detail-principal-card text-decoration-none" title="Lihat semua produk dari {{ $product->principal->name }}">
                   @if(!empty($product->principal->logo))
                     <div class="detail-principal-logo-box">
                       <img src="{{ str_starts_with($product->principal->logo, 'http') || str_starts_with($product->principal->logo, '/') ? $product->principal->logo : asset('storage/' . $product->principal->logo) }}"
@@ -127,12 +133,16 @@
                   @endif
                   <div>
                     <span class="d-block text-uppercase detail-principal-label">Prinsipal Resmi</span>
-                    <strong class="d-block detail-principal-name">{{ $product->principal->name }}</strong>
+                    <strong class="d-block detail-principal-name text-dark">{{ $product->principal->name }}</strong>
                     @if(!empty($product->principal->address))
                       <span class="text-muted small detail-principal-address"><i data-lucide="map-pin" class="me-1"></i>{{ $product->principal->address }}</span>
                     @endif
                   </div>
-                </div>
+                  <div class="ms-auto d-flex align-items-center text-muted small pe-1">
+                    <span class="d-none d-sm-inline me-1" style="font-size: 0.76rem;">Lihat Produk</span>
+                    <i data-lucide="arrow-right" style="width: 15px; height: 15px;"></i>
+                  </div>
+                </a>
               @endif
             </div>
 

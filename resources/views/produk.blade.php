@@ -30,7 +30,9 @@
             <div class="d-flex align-items-start justify-content-between flex-wrap gap-3">
               <div>
                 <h2 class="produk-category-title mb-1" id="category-title">
-                  @if($activeCategory === 'all')
+                  @if(!empty($activePrincipal) && $activePrincipal !== 'all')
+                    Produk {{ $activePrincipal }}
+                  @elseif($activeCategory === 'all')
                     Semua Produk
                   @else
                     {{ $categoriesStructure[$activeCategory]['name'] }}
@@ -40,7 +42,12 @@
                   @endif
                 </h2>
                 <span class="produk-category-subtitle d-block" id="category-subtitle">
-                  @if($activeCategory === 'all')
+                  @if(!empty($activePrincipal) && $activePrincipal !== 'all')
+                    Menampilkan produk resmi dari {{ $activePrincipal }}
+                    <a href="{{ url('/produk') }}#catalog-section" class="ms-2 text-decoration-none text-danger small">
+                      <i data-lucide="x" style="width: 12px; height: 12px; vertical-align: -2px;"></i> Reset Filter
+                    </a>
+                  @elseif($activeCategory === 'all')
                       Menampilkan seluruh katalog produk
                   @else
                     Menampilkan hasil untuk {{ $categoriesStructure[$activeCategory]['name'] }}

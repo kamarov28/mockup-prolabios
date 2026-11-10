@@ -1116,6 +1116,16 @@
   border-radius: var(--nb-radius);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   min-width: 220px;
+  transition: all var(--transition-fast);
+}
+.detail-principal-card:hover {
+  border-color: var(--nb-primary);
+  background: #FDF8F8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(166, 23, 28, 0.08);
+}
+.detail-principal-card:hover .detail-principal-name {
+  color: var(--nb-primary) !important;
 }
 .detail-principal-logo-box {
   width: 58px;

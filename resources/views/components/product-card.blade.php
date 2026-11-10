@@ -50,15 +50,17 @@
         @if(!empty($p->principal))
           @if(!empty($p->principal->logo))
             <div class="product-principal-logo flex-shrink-0 ms-auto" title="Prinsipal: {{ $p->principal->name }}">
-              <img src="{{ str_starts_with($p->principal->logo, 'http') || str_starts_with($p->principal->logo, '/') ? $p->principal->logo : asset('storage/' . $p->principal->logo) }}"
-                   alt="Logo {{ $p->principal->name }}"
-                   loading="lazy"
-                   onerror="this.onerror=null;this.parentElement.style.display='none';">
+              <a href="{{ url('/produk?principal=' . urlencode($p->principal->name)) }}#catalog-section" class="d-inline-block text-decoration-none" title="Lihat semua produk {{ $p->principal->name }}">
+                <img src="{{ str_starts_with($p->principal->logo, 'http') || str_starts_with($p->principal->logo, '/') ? $p->principal->logo : asset('storage/' . $p->principal->logo) }}"
+                     alt="Logo {{ $p->principal->name }}"
+                     loading="lazy"
+                     onerror="this.onerror=null;this.parentElement.style.display='none';">
+              </a>
             </div>
           @else
-            <span class="product-principal-name text-muted ms-auto">
+            <a href="{{ url('/produk?principal=' . urlencode($p->principal->name)) }}#catalog-section" class="product-principal-name text-muted ms-auto text-decoration-none" title="Lihat semua produk {{ $p->principal->name }}">
               {{ $p->principal->name }}
-            </span>
+            </a>
           @endif
         @endif
       </div>
