@@ -202,6 +202,12 @@
   border-color: var(--color-accent) !important;
   box-shadow: var(--focus-ring) !important;
 }
+
+.admin-search-wrapper:focus-within .admin-search-kbd,
+.admin-search-wrapper:has(.admin-search-clear) .admin-search-kbd {
+  display: none !important;
+}
+
 .admin-search-clear {
   position: absolute !important;
   right: 10px !important;

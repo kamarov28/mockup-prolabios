@@ -23,6 +23,7 @@
     class="admin-search-input"
     aria-label="{{ $placeholder }}"
   >
+  <kbd class="admin-search-kbd d-none d-md-inline-flex" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); padding: 1px 6px; font-size: 0.68rem; font-family: var(--font-mono); color: #9CA3AF; background: #F3F4F6; border: 1px solid #E5E7EB; border-radius: 4px; pointer-events: none; transition: opacity 0.15s ease;">/</kbd>
   @if(!empty($value) && $clearUrl)
     <a href="{{ $clearUrl }}" class="admin-search-clear" title="Hapus pencarian">
       <i data-lucide="x" style="width: 14px; height: 14px;"></i>

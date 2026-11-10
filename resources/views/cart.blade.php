@@ -92,7 +92,7 @@
           @foreach($cart as $title => $item)
             <div class="cart-item-card">
               <div class="row align-items-center g-3">
-                
+
                 <!-- 1. Thumbnail Image -->
                 <div class="col-auto">
                   <div class="cart-img-box">

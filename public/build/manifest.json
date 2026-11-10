@@ -4,7 +4,7 @@
     "name": "lucide-icons"
   },
   "resources/css/admin.css": {
-    "file": "assets/admin-DNE1GmTo.css",
+    "file": "assets/admin-g-iLdoL5.css",
     "name": "admin",
     "names": [
       "admin.css"
@@ -31,7 +31,7 @@
     "isEntry": true
   },
   "resources/js/admin.js": {
-    "file": "assets/admin-C8eTedrC.js",
+    "file": "assets/admin-jNSF43ul.js",
     "name": "admin",
     "src": "resources/js/admin.js",
     "isEntry": true,

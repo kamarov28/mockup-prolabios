@@ -18,4 +18,19 @@ window.lucide = {
 
 document.addEventListener('DOMContentLoaded', () => {
   window.lucide.createIcons();
+
+  // Keyboard shortcut '/' to focus admin search input
+  document.addEventListener('keydown', (e) => {
+    const activeEl = document.activeElement;
+    const isTyping = activeEl && (['INPUT', 'TEXTAREA', 'SELECT'].includes(activeEl.tagName) || activeEl.isContentEditable);
+
+    if (e.key === '/' && !isTyping && !e.ctrlKey && !e.metaKey) {
+      const searchInput = document.querySelector('.admin-search-input');
+      if (searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+        if (typeof searchInput.select === 'function') searchInput.select();
+      }
+    }
+  });
 });
