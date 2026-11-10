@@ -258,7 +258,7 @@ class ProductService
             $query->bySector($filters['sector']);
         }
 
-        if (! empty($filters['principal'])) {
+        if (! empty($filters['principal']) && $filters['principal'] !== 'all') {
             $p = $filters['principal'];
             $query->whereHas('principal', function ($q) use ($p) {
                 $q->where('name', $p)

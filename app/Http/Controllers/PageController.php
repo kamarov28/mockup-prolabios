@@ -50,7 +50,7 @@ class PageController extends Controller
 
         $searchQuery = $request->query('search') ?? $request->query('s') ?? $request->query('q');
         $rawPrincipal = $request->query('principal') ?? $request->query('prinsipal');
-        $activePrincipal = $rawPrincipal ? trim((string) $rawPrincipal) : null;
+        $activePrincipal = ($rawPrincipal && strtolower(trim((string) $rawPrincipal)) !== 'all') ? trim((string) $rawPrincipal) : null;
 
         $filters = [];
         if ($activeCategory !== 'all') {
