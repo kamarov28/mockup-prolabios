@@ -165,8 +165,8 @@
     </div>
   </div>
 
-  <button type="button" id="scroll-to-top" aria-label="Scroll ke atas" style="position: fixed; bottom: 32px; right: 32px; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; background: var(--color-surface, #FFFFFF); border: 1px solid var(--color-border, #E5E7EB); border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); color: var(--color-text-main, #111827); cursor: pointer; opacity: 0; visibility: hidden; transition: all 0.2s ease; z-index: 1050;">
-    <i data-lucide="arrow-up" style="font-size: 1rem; font-weight: 600;"></i>
+  <button type="button" id="scroll-to-top" class="admin-scroll-to-top" aria-label="Kembali ke atas" style="opacity: 0; visibility: hidden;">
+    <i data-lucide="arrow-up"></i>
   </button>
 
   <script @nonce>

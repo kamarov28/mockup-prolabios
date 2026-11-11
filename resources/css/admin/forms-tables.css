@@ -337,3 +337,35 @@ select.form-select option {
   color: var(--color-text-muted) !important;
   font-size: 0.78rem;
 }
+
+/* ── Admin Back to Top Button (Unified Flat Ruby Circle) ── */
+.admin-scroll-to-top {
+  position: fixed !important;
+  bottom: 30px !important;
+  right: 30px !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  background: var(--color-accent, #9E1B22) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #FFFFFF !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 1050 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease, opacity 0.2s ease, transform 0.15s ease, visibility 0.2s ease !important;
+}
+.admin-scroll-to-top:hover {
+  background: #7F151B !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px) !important;
+}
+.admin-scroll-to-top svg,
+.admin-scroll-to-top i {
+  width: 20px !important;
+  height: 20px !important;
+  color: #FFFFFF !important;
+  stroke-width: 2.2 !important;
+}
