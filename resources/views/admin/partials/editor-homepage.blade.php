@@ -75,36 +75,55 @@
           </div>
         </div>
 
-        <h3 class="h6 fw-bold mb-3 pb-2" style="font-family: var(--font-headline); color: var(--color-text-main); border-bottom: 1px solid var(--color-border);">Gambar Background Carousel Hero (Maks. 4 Gambar)</h3>
-        <div class="row g-3">
-          @for($i = 0; $i < 4; $i++)
-            @php $imgUrl = $homeData['hero_images'][$i] ?? ''; @endphp
-            <div class="col-md-6 col-lg-3">
-              <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface-2); border: 1px solid var(--color-border); border-radius: 10px;">
-                <div>
-                  <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span class="admin-badge admin-badge-accent">Slide #{{ $i + 1 }}</span>
-                    @if($imgUrl)
-                      <span class="admin-badge admin-badge-success">Terisi</span>
-                    @else
-                      <span class="admin-badge admin-badge-muted">Kosong</span>
-                    @endif
-                  </div>
-                  <div class="overflow-hidden mb-3" style="aspect-ratio: 16/9; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 8px;">
-                    <img id="hero_image_preview_{{ $i }}" src="{{ $imgUrl ?: asset('images/placeholder.svg') }}" alt="Slide {{ $i + 1 }}" class="w-100 h-100" style="object-fit: cover;">
-                  </div>
-                  <div class="mb-2">
-                    <label for="hero_image_file_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Upload File Gambar</label>
-                    <input type="file" id="hero_image_file_{{ $i }}" class="form-control form-control-sm" name="hero_image_file_{{ $i }}" accept="image/*">
-                  </div>
-                  <div>
-                    <label for="hero_image_url_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Atau URL Gambar</label>
-                    <input type="text" id="hero_image_url_{{ $i }}" class="form-control form-control-sm" name="hero_image_url_{{ $i }}" value="{{ $imgUrl }}" placeholder="https://...">
-                  </div>
-                </div>
+        <!-- Collapsible Hero Carousel Images (Progressive Disclosure) -->
+        <div class="p-3 mb-3 rounded" style="background: var(--color-surface-2); border: 1px solid var(--color-border);">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-2">
+              <div class="d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; border-radius: 8px; background: #FEE2E2; color: var(--color-accent);">
+                <i data-lucide="images" style="width: 17px; height: 17px;"></i>
+              </div>
+              <div>
+                <strong class="d-block" style="font-size: 0.9rem; color: var(--color-text-main);">Background Carousel Hero</strong>
+                <span class="text-muted small">Kelola 4 gambar background slideshow beranda</span>
               </div>
             </div>
-          @endfor
+            <button class="admin-btn admin-btn-outline admin-btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#heroImagesCollapse" aria-expanded="false" aria-controls="heroImagesCollapse">
+              <i data-lucide="sliders-horizontal" class="me-1"></i> Buka / Atur Gambar
+            </button>
+          </div>
+
+          <div class="collapse mt-3 pt-3" id="heroImagesCollapse" style="border-top: 1px solid var(--color-border);">
+            <div class="row g-3">
+              @for($i = 0; $i < 4; $i++)
+                @php $imgUrl = $homeData['hero_images'][$i] ?? ''; @endphp
+                <div class="col-md-6 col-lg-3">
+                  <div class="p-3 h-100 d-flex flex-column justify-content-between" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px;">
+                    <div>
+                      <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="admin-badge admin-badge-accent">Slide #{{ $i + 1 }}</span>
+                        @if($imgUrl)
+                          <span class="admin-badge admin-badge-success">Terisi</span>
+                        @else
+                          <span class="admin-badge admin-badge-muted">Kosong</span>
+                        @endif
+                      </div>
+                      <div class="overflow-hidden mb-3" style="aspect-ratio: 16/9; background: #FFFFFF; border: 1px solid var(--color-border); border-radius: 6px;">
+                        <img id="hero_image_preview_{{ $i }}" src="{{ $imgUrl ?: asset('images/placeholder.svg') }}" alt="Slide {{ $i + 1 }}" class="w-100 h-100" style="object-fit: cover;">
+                      </div>
+                      <div class="mb-2">
+                        <label for="hero_image_file_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Upload File Gambar</label>
+                        <input type="file" id="hero_image_file_{{ $i }}" class="form-control form-control-sm" name="hero_image_file_{{ $i }}" accept="image/*">
+                      </div>
+                      <div>
+                        <label for="hero_image_url_{{ $i }}" class="form-label small fw-bold mb-1" style="color: var(--color-text-main);">Atau URL Gambar</label>
+                        <input type="text" id="hero_image_url_{{ $i }}" class="form-control form-control-sm" name="hero_image_url_{{ $i }}" value="{{ $imgUrl }}" placeholder="https://...">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              @endfor
+            </div>
+          </div>
         </div>
       </div>
 
