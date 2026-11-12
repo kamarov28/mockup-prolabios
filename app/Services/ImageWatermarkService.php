@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Log;
-
 class ImageWatermarkService
 {
     /**
@@ -27,12 +25,6 @@ class ImageWatermarkService
         $dh = imagesy($destImg);
         $lw = imagesx($logo);
         $lh = imagesy($logo);
-
-        if ($dw <= 0 || $dh <= 0 || $lw <= 0 || $lh <= 0) {
-            imagedestroy($logo);
-
-            return;
-        }
 
         // Calculate proportional watermark target width to span nicely across destination
         $targetW = max(180, min(1400, (int) round(max($dw, $dh) * 0.90)));

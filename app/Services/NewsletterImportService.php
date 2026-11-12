@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\NewsletterSubscriber;
 use App\Models\Sector;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
@@ -71,8 +70,10 @@ class NewsletterImportService
 
         // Fetch registered sectors from DB for sample data
         $sectors = Sector::orderBy('name')->get();
-        $sampleSector1 = $sectors->first()?->name ?? 'Food & Beverage';
-        $sampleSector2 = $sectors->skip(1)->first()?->name ?? 'Clinical Diagnostics';
+        $firstSector = $sectors->first();
+        $secondSector = $sectors->skip(1)->first();
+        $sampleSector1 = $firstSector ? $firstSector->name : 'Food & Beverage';
+        $sampleSector2 = $secondSector ? $secondSector->name : 'Clinical Diagnostics';
 
         // Sample Rows
         $samples = [
@@ -210,14 +211,16 @@ class NewsletterImportService
             $normEmail = strtolower($email);
 
             // Validation: Email format
-            if (!filter_var($normEmail, FILTER_VALIDATE_EMAIL)) {
+            if (! filter_var($normEmail, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = "Baris {$rowIndex}: Format email '{$email}' tidak valid.";
+
                 continue;
             }
 
             // Duplicate detection: Already in DB or duplicate within same sheet
             if (isset($existingEmails[$normEmail]) || isset($batchEmailsInFile[$normEmail])) {
                 $skipped++;
+
                 continue;
             }
 
@@ -232,7 +235,7 @@ class NewsletterImportService
             $country = trim((string) ($row[$colMap['country'] ?? 'F'] ?? '')) ?: 'Indonesia';
 
             $rawStatus = strtolower(trim((string) ($row[$colMap['status'] ?? 'H'] ?? '')));
-            $isActive = !in_array($rawStatus, ['0', 'false', 'nonaktif', 'unsubscribed', 'tidak', 'off']);
+            $isActive = ! in_array($rawStatus, ['0', 'false', 'nonaktif', 'unsubscribed', 'tidak', 'off']);
 
             // Parse sectors
             $rawSectors = trim((string) ($row[$colMap['sectors'] ?? 'G'] ?? ''));
@@ -252,7 +255,7 @@ class NewsletterImportService
                 'unsubscribe_token' => Str::random(40),
             ]);
 
-            if (!empty($matchedSectorIds)) {
+            if (! empty($matchedSectorIds)) {
                 $subscriber->sectors()->sync($matchedSectorIds);
             }
 
@@ -286,7 +289,9 @@ class NewsletterImportService
 
         foreach ($headerRow as $colLetter => $rawHeader) {
             $header = strtolower(trim((string) $rawHeader));
-            if ($header === '') continue;
+            if ($header === '') {
+                continue;
+            }
 
             if (str_contains($header, 'email') || str_contains($header, 'surel') || $header === 'mail') {
                 $map['email'] ??= $colLetter;
@@ -334,7 +339,9 @@ class NewsletterImportService
 
         foreach ($tokens as $token) {
             $t = trim($token);
-            if ($t === '') continue;
+            if ($t === '') {
+                continue;
+            }
 
             $norm = strtolower($t);
             $slug = Str::slug($t);
@@ -342,10 +349,12 @@ class NewsletterImportService
             // Direct map lookup
             if (isset($sectorMap[$norm])) {
                 $resolved[$sectorMap[$norm]->id] = true;
+
                 continue;
             }
             if (isset($sectorMap[$slug])) {
                 $resolved[$sectorMap[$slug]->id] = true;
+
                 continue;
             }
 

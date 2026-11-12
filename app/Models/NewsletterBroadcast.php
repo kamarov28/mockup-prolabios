@@ -25,11 +25,17 @@ class NewsletterBroadcast extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<Sector, $this>
+     */
     public function targetSector(): BelongsTo
     {
         return $this->belongsTo(Sector::class, 'target_sector_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function sender(): BelongsTo
     {
         return $this->belongsTo(User::class, 'sent_by_user_id');

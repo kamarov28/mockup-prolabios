@@ -19,6 +19,7 @@ class AdminNewsletterController extends Controller
     public function __construct(
         protected NewsletterImportService $importService
     ) {}
+
     public function index(Request $request)
     {
         $sectors = Sector::orderBy('name')->get();
@@ -76,7 +77,7 @@ class AdminNewsletterController extends Controller
         // Dispatch background queue job for safe email sending
         SendNewsletterBroadcastJob::dispatch($broadcast);
 
-        $sectorLabel = $broadcast->targetSector?->name ?? 'Seluruh Sektor';
+        $sectorLabel = $broadcast->targetSector ? $broadcast->targetSector->name : 'Seluruh Sektor';
 
         return redirect()->route('admin.newsletter.index')->with('success', "Pesan siaran '{$broadcast->subject}' sedang dikirim ke pelanggan sektor {$sectorLabel} via background queue.");
     }
@@ -115,13 +116,13 @@ class AdminNewsletterController extends Controller
             $result = $this->importService->import($request->file('excel_file'));
 
             $msg = "Impor selesai: {$result['imported']} pelanggan berhasil ditambahkan, {$result['skipped']} data dilewati (duplikat).";
-            if (!empty($result['errors'])) {
-                $msg .= ' Beberapa baris bermasalah: ' . implode(' ', array_slice($result['errors'], 0, 3));
+            if (! empty($result['errors'])) {
+                $msg .= ' Beberapa baris bermasalah: '.implode(' ', array_slice($result['errors'], 0, 3));
             }
 
             return redirect()->route('admin.newsletter.index')->with('success', $msg);
         } catch (\Throwable $e) {
-            return redirect()->route('admin.newsletter.index')->with('error', 'Gagal memproses file spreadsheet: ' . $e->getMessage());
+            return redirect()->route('admin.newsletter.index')->with('error', 'Gagal memproses file spreadsheet: '.$e->getMessage());
         }
     }
 }
