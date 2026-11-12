@@ -14,7 +14,7 @@
           <i data-lucide="mail" style="width: 13px; height: 13px; vertical-align: -2px;"></i> SECTOR-BASED NEWSLETTER
         </span>
       </div>
-      <h1 class="h3 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Sign Up to Stay in Touch!</h1>
+      <h1 class="h3 fw-bold" style="color: var(--nb-ink); font-family: var(--font-display);">Berlangganan Buletin Teknis Laboratorium</h1>
       <p class="text-muted small mx-auto" style="max-width: 540px; line-height: 1.6;">
         Daftarkan akun institusi Anda untuk menerima pembaruan rilis reagen, instrumen analitika, serta panduan regulasi mutu (ISO &amp; BPOM) sesuai dengan sektor spesialisasi laboratorium Anda.
       </p>
