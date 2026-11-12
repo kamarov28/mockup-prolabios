@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAnalyticsController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminMediaController;
+use App\Http\Controllers\Admin\AdminNewsletterController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\AdminPrincipalController;
 use App\Http\Controllers\Admin\AdminProductCategoryController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HealthController;
+use App\Http\Controllers\NewsletterAuthController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RfqController;
 use App\Http\Controllers\SitemapController;
@@ -54,14 +56,14 @@ Route::post('/kontak', [ContactController::class, 'submit'])
 
 // Newsletter Subscriber Portal (Liofilchem-style Sector Broadcasts)
 Route::prefix('newsletter')->name('newsletter.')->group(function () {
-    Route::get('/signup', [\App\Http\Controllers\NewsletterAuthController::class, 'showSignup'])->name('signup');
-    Route::post('/signup', [\App\Http\Controllers\NewsletterAuthController::class, 'signup'])->middleware('throttle:10,1')->name('signup.submit');
-    Route::get('/login', [\App\Http\Controllers\NewsletterAuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [\App\Http\Controllers\NewsletterAuthController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
-    Route::post('/logout', [\App\Http\Controllers\NewsletterAuthController::class, 'logout'])->name('logout');
-    Route::get('/account', [\App\Http\Controllers\NewsletterAuthController::class, 'account'])->name('account');
-    Route::post('/account', [\App\Http\Controllers\NewsletterAuthController::class, 'updatePreferences'])->name('account.update');
-    Route::get('/unsubscribe/{token}', [\App\Http\Controllers\NewsletterAuthController::class, 'unsubscribe'])->name('unsubscribe');
+    Route::get('/signup', [NewsletterAuthController::class, 'showSignup'])->name('signup');
+    Route::post('/signup', [NewsletterAuthController::class, 'signup'])->middleware('throttle:10,1')->name('signup.submit');
+    Route::get('/login', [NewsletterAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [NewsletterAuthController::class, 'login'])->middleware('throttle:10,1')->name('login.submit');
+    Route::post('/logout', [NewsletterAuthController::class, 'logout'])->name('logout');
+    Route::get('/account', [NewsletterAuthController::class, 'account'])->name('account');
+    Route::post('/account', [NewsletterAuthController::class, 'updatePreferences'])->name('account.update');
+    Route::get('/unsubscribe/{token}', [NewsletterAuthController::class, 'unsubscribe'])->name('unsubscribe');
 });
 
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
@@ -88,7 +90,7 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
     Route::middleware(['can:manage-system'])->group(function () {
         Route::get('/home', [AdminDashboardController::class, 'homeEdit'])->name('admin.home.edit');
         Route::post('/home', [AdminDashboardController::class, 'homeUpdate'])->name('admin.home.update');
-        Route::get('/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
+        Route::match(['get', 'post'], '/system/migrate', [AdminDashboardController::class, 'runMigration'])->name('admin.migrate');
         Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('admin.analytics.index');
         Route::get('/analytics/data', [AdminAnalyticsController::class, 'data'])->name('admin.analytics.data');
         Route::post('/analytics/upload-credentials', [AdminAnalyticsController::class, 'uploadCredentials'])->name('admin.analytics.upload-credentials');
@@ -167,11 +169,11 @@ Route::middleware([AdminAuthenticate::class])->prefix('admin')->group(function (
         Route::delete('/posts/{slug}', [AdminPostController::class, 'destroy'])->name('admin.posts.destroy');
 
         // Newsletter subscriber management & sector broadcasts
-        Route::get('/newsletter', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'index'])->name('admin.newsletter.index');
-        Route::get('/newsletter/broadcast', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'createBroadcast'])->name('admin.newsletter.create');
-        Route::post('/newsletter/broadcast', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'sendBroadcast'])->name('admin.newsletter.send');
-        Route::get('/newsletter/import/template', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'downloadTemplate'])->name('admin.newsletter.import.template');
-        Route::post('/newsletter/import', [\App\Http\Controllers\Admin\AdminNewsletterController::class, 'import'])->name('admin.newsletter.import');
+        Route::get('/newsletter', [AdminNewsletterController::class, 'index'])->name('admin.newsletter.index');
+        Route::get('/newsletter/broadcast', [AdminNewsletterController::class, 'createBroadcast'])->name('admin.newsletter.create');
+        Route::post('/newsletter/broadcast', [AdminNewsletterController::class, 'sendBroadcast'])->name('admin.newsletter.send');
+        Route::get('/newsletter/import/template', [AdminNewsletterController::class, 'downloadTemplate'])->name('admin.newsletter.import.template');
+        Route::post('/newsletter/import', [AdminNewsletterController::class, 'import'])->name('admin.newsletter.import');
     });
 
     // 6. Media Asset Uploads (Super Admin, Content Writer & Product Specialist)

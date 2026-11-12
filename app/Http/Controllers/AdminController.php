@@ -25,8 +25,16 @@ class AdminController extends Controller
 
     public function login(Request $request)
     {
-        $loginInput = trim($request->input('username', ''));
-        $password = $request->input('password', '');
+        $validated = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ], [
+            'username.required' => 'Username atau email wajib diisi.',
+            'password.required' => 'Kata sandi wajib diisi.',
+        ]);
+
+        $loginInput = trim($validated['username']);
+        $password = $validated['password'];
 
         // Attempt Native Laravel Auth via User model (email or name)
         $field = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';

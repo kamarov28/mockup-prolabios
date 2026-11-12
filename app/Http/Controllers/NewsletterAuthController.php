@@ -25,7 +25,7 @@ class NewsletterAuthController extends Controller
     public function signup(Request $request)
     {
         $validated = $request->validate([
-            'email' => ['required', 'string', 'email:rfc,dns', 'max:255', 'unique:newsletter_subscribers,email'],
+            'email' => ['required', 'string', 'email:rfc', 'max:255', 'unique:newsletter_subscribers,email'],
             'first_name' => ['required', 'string', 'max:100'],
             'last_name' => ['nullable', 'string', 'max:100'],
             'company' => ['required', 'string', 'max:255'],

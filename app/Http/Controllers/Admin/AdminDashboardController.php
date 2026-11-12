@@ -129,8 +129,12 @@ class AdminDashboardController extends Controller
         return view('admin.guide');
     }
 
-    public function runMigration()
+    public function runMigration(Request $request)
     {
+        if ($request->isMethod('get') && ! $request->boolean('confirm')) {
+            return redirect()->route('admin.dashboard')->with('info', 'Migrasi database memerlukan konfirmasi eksplisit (?confirm=1) atau pengiriman formulir via POST.');
+        }
+
         try {
             Artisan::call('migrate', ['--force' => true]);
             $output = trim(Artisan::output());
