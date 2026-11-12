@@ -46,7 +46,7 @@
 
         {{-- Filter Status --}}
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <select name="status" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Status" onchange="this.form.submit()">
+          <select name="status" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Status" data-auto-submit>
             <option value="">Semua Status</option>
             @foreach(\App\Models\Rfq::statusOptions() as $value => $label)
               <option value="{{ $value }}" @selected(request('status') === $value)>{{ $label }}</option>

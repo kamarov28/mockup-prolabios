@@ -235,6 +235,12 @@
         @endif
       }
 
+      document.addEventListener('change', function(e) {
+        if (e.target && e.target.matches('select[data-auto-submit], select.auto-submit, .admin-filter-bar select')) {
+          e.target.form?.submit();
+        }
+      });
+
       document.addEventListener('submit', function(e) {
         const form = e.target;
         const methodInput = form.querySelector('input[name="_method"]');

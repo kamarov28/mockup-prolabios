@@ -48,7 +48,7 @@
           <div class="col-sm-4" style="color: var(--nb-muted);">Nomor Pengajuan:</div>
           <div class="col-sm-8 d-flex align-items-center gap-2">
             <strong style="color: var(--nb-primary); font-family: var(--font-mono); font-size: 1.05rem;">{{ $rfq->rfq_number }}</strong>
-            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 d-inline-flex align-items-center gap-1 copy-rfq-btn" onclick="copyRfqNumber('{{ $rfq->rfq_number }}', this)" title="Salin nomor pengajuan RFQ" style="font-size: 0.75rem; border-radius: 0;">
+            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2 d-inline-flex align-items-center gap-1 copy-rfq-btn" data-rfq="{{ $rfq->rfq_number }}" title="Salin nomor pengajuan RFQ" style="font-size: 0.75rem; border-radius: 0;">
               <i data-lucide="copy" style="width: 12px; height: 12px;"></i> <span class="copy-label">Salin</span>
             </button>
           </div>
@@ -95,7 +95,7 @@
       </div>
 
       <div class="d-flex flex-wrap justify-content-center gap-3 print-hide">
-        <button type="button" onclick="window.print()" class="nb-btn nb-btn-primary">
+        <button type="button" id="btn-print-rfq" class="nb-btn nb-btn-primary">
           <i data-lucide="printer" class="me-2"></i> Cetak Bukti RFQ
         </button>
         <a href="{{ route('home') }}" class="nb-btn nb-btn-ghost">
@@ -114,6 +114,14 @@
   try {
     localStorage.removeItem('prolabios_cart_backup');
   } catch(e) {}
+
+  document.getElementById('btn-print-rfq')?.addEventListener('click', function() {
+    window.print();
+  });
+
+  document.querySelector('.copy-rfq-btn')?.addEventListener('click', function() {
+    copyRfqNumber(this.getAttribute('data-rfq'), this);
+  });
 
   function copyRfqNumber(text, btn) {
     if (navigator.clipboard) {

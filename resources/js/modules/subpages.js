@@ -297,10 +297,22 @@ function initCartPage() {
   });
 
   document.addEventListener('submit', function (e) {
+    const clearForm = e.target.closest('#cart-clear-form, form[action*="/cart/clear"]');
+    if (clearForm) {
+      window.confirmClearCart(e, clearForm);
+      return;
+    }
+
     const removeForm = e.target.closest('form[action*="/cart/remove"]');
     if (removeForm) {
       e.preventDefault();
       window.removeCartItemAjax(removeForm);
+    }
+  });
+
+  document.addEventListener('input', function (e) {
+    if (e.target && (e.target.id === 'telepon' || e.target.id === 'phone_wa')) {
+      e.target.value = e.target.value.replace(/[^0-9+\-\s]/g, '');
     }
   });
 

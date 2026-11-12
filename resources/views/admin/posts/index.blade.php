@@ -32,7 +32,7 @@
 
         {{-- Category Dropdown --}}
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <select name="category" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Kategori" onchange="this.form.submit()">
+          <select name="category" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Kategori" data-auto-submit>
             <option value="">Semua Kategori</option>
             @foreach($availableCategories as $cat)
               <option value="{{ $cat }}" {{ $category === $cat ? 'selected' : '' }}>{{ $cat }}</option>
@@ -42,7 +42,7 @@
 
         {{-- Status Dropdown --}}
         <div class="col-lg-2 col-md-4 col-sm-6">
-          <select name="status" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Status" onchange="this.form.submit()">
+          <select name="status" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Status" data-auto-submit>
             <option value="">Semua Status</option>
             <option value="online" {{ $status === 'online' ? 'selected' : '' }}>Published</option>
             <option value="draft" {{ $status === 'draft' ? 'selected' : '' }}>Draft / Offline</option>

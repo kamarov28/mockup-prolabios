@@ -31,7 +31,7 @@
 
         @if(!empty($cart) && count($cart) > 0)
           <div>
-            <form action="{{ route('cart.clear') }}" method="POST" onsubmit="confirmClearCart(event, this);" class="m-0">
+            <form action="{{ route('cart.clear') }}" method="POST" id="cart-clear-form" class="m-0">
               @csrf
               <button type="submit" class="cart-clear-btn">
                 <i data-lucide="trash-2" class="me-1"></i> Kosongkan Keranjang
@@ -58,10 +58,10 @@
           </div>
         </div>
         <div class="d-flex gap-2">
-          <button type="button" class="btn btn-sm btn-primary rounded-0 py-1 px-3 d-inline-flex align-items-center gap-1" id="btn-restore-cart" onclick="restoreCartFromBackup()">
+          <button type="button" class="btn btn-sm btn-primary rounded-0 py-1 px-3 d-inline-flex align-items-center gap-1" id="btn-restore-cart">
             <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Pulihkan Item
           </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary rounded-0 py-1 px-2" onclick="dismissCartBackup()">
+          <button type="button" class="btn btn-sm btn-outline-secondary rounded-0 py-1 px-2" id="btn-dismiss-cart">
             Abaikan
           </button>
         </div>
@@ -120,16 +120,16 @@
 
                 <!-- 3. Quantity Stepper -->
                 <div class="col-12 col-sm-auto">
-                  <form action="{{ route('cart.update') }}" method="POST" class="m-0 cart-update-form" onsubmit="event.preventDefault(); updateCartItemAjax(this);">
+                  <form action="{{ route('cart.update') }}" method="POST" class="m-0 cart-update-form">
                     @csrf
                     <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                     <input type="hidden" name="title" value="{{ $item['title'] }}">
                     <div class="nb-stepper-wrap" style="height: 38px;">
-                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Kurangi Jumlah" onclick="stepCartQty(this, -1)">
+                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Kurangi Jumlah">
                         <i data-lucide="minus"></i>
                       </button>
-                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="nb-stepper-input cart-qty-input hide-spinner" style="width: 46px; font-size: 0.95rem;" onchange="updateCartItemAjax(this.form)">
-                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Tambah Jumlah" onclick="stepCartQty(this, 1)">
+                      <input type="text" inputmode="numeric" pattern="[0-9]*" name="quantity" value="{{ $item['quantity'] }}" aria-label="Jumlah Qty" class="nb-stepper-input cart-qty-input hide-spinner" style="width: 46px; font-size: 0.95rem;">
+                      <button type="button" class="nb-stepper-btn" style="width: 34px; font-size: 0.95rem;" aria-label="Tambah Jumlah">
                         <i data-lucide="plus"></i>
                       </button>
                     </div>
@@ -145,7 +145,7 @@
                       </span>
                     </div>
 
-                    <form action="{{ route('cart.remove') }}" method="POST" class="m-0" onsubmit="event.preventDefault(); removeCartItemAjax(this);">
+                    <form action="{{ route('cart.remove') }}" method="POST" class="m-0 cart-remove-form">
                       @csrf
                       <input type="hidden" name="id" value="{{ $item['id'] ?? '' }}">
                       <input type="hidden" name="title" value="{{ $item['title'] }}">
@@ -278,6 +278,9 @@
         }
       }
     } catch(e) {}
+
+    document.getElementById('btn-restore-cart')?.addEventListener('click', restoreCartFromBackup);
+    document.getElementById('btn-dismiss-cart')?.addEventListener('click', dismissCartBackup);
   });
 
   function dismissCartBackup() {

@@ -88,7 +88,7 @@
           <x-admin.search-input name="s" :value="$search" placeholder="Cari nama atau email admin..." :clear-url="route('admin.users.index')" />
         </div>
         <div class="col-md-4 col-lg-3">
-          <select name="role" class="form-select form-select-sm" onchange="this.form.submit()" style="height: 38px;">
+          <select name="role" class="form-select form-select-sm" data-auto-submit style="height: 38px;">
             <option value="">Semua Peran Otorisasi</option>
             <option value="super_admin" {{ $roleFilter === 'super_admin' ? 'selected' : '' }}>Super Admin (Penuh)</option>
             <option value="sales" {{ $roleFilter === 'sales' ? 'selected' : '' }}>Sales & RFQ Admin</option>

@@ -48,7 +48,7 @@
       
       <!-- Sector Filter Form -->
       <form action="{{ route('admin.newsletter.index') }}" method="GET" class="d-flex align-items-center gap-2 m-0">
-        <select name="sector" class="form-select form-select-sm" onchange="this.form.submit()" style="font-size: 0.82rem; width: 190px;">
+        <select name="sector" class="form-select form-select-sm" data-auto-submit style="font-size: 0.82rem; width: 190px;">
           <option value="">-- Semua Sektor --</option>
           @foreach($sectors as $sec)
             <option value="{{ $sec->id }}" {{ $sectorFilter === $sec->id ? 'selected' : '' }}>{{ $sec->name }}</option>

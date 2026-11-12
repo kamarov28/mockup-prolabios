@@ -73,7 +73,7 @@
               <!-- Nomor WhatsApp -->
               <div class="mb-3">
                 <label for="phone_wa" class="kontak-form-label">Nomor WhatsApp <span style="color: var(--nb-primary);">*</span></label>
-                <input type="tel" class="form-control rfq-input @error('phone_wa') is-invalid @enderror" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
+                <input type="tel" class="form-control rfq-input @error('phone_wa') is-invalid @enderror" id="phone_wa" name="phone_wa" value="{{ old('phone_wa') }}" required placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" title="Nomor WhatsApp hanya boleh berupa angka (minimal 8 digit)">
                 @error('phone_wa')
                   <div class="invalid-feedback d-block">{{ $message }}</div>
                 @else

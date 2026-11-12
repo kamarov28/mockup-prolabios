@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-md-6">
                   <label for="telepon" class="kontak-form-label">Nomor Telepon Pribadi / HP</label>
-                  <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" oninput="this.value = this.value.replace(/[^0-9+\-\s]/g, '')" title="Hanya boleh berupa angka dan karakter nomor telepon">
+                  <input type="tel" class="form-control kontak-form-input" id="telepon" name="telepon" placeholder="Contoh: 081234567890" inputmode="numeric" pattern="^[0-9+\-\s]{8,20}$" title="Hanya boleh berupa angka dan karakter nomor telepon">
                 </div>
                 <div class="col-md-6">
                   <label for="perusahaan" class="kontak-form-label">Asal Instansi / Perusahaan <span class="text-danger">*</span></label>

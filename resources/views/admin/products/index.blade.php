@@ -34,7 +34,7 @@
           <x-admin.search-input name="s" id="local-search-input" :value="$search" placeholder="Cari nama atau nomor katalog..." :clear-url="route('admin.products', request()->except('s'))" />
         </div>
         <div class="col-md-2">
-          <select name="category" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Kategori" onchange="this.form.submit()">
+          <select name="category" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Kategori" data-auto-submit>
             <option value="">Semua Kategori</option>
             @foreach($categories as $cat)
               <option value="{{ $cat->key }}" {{ $category === $cat->key ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -42,7 +42,7 @@
           </select>
         </div>
         <div class="col-md-2">
-          <select name="sector" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Sektor" onchange="this.form.submit()">
+          <select name="sector" class="form-select" style="height: 38px; font-size: 0.85rem;" aria-label="Filter Sektor" data-auto-submit>
             <option value="">Semua Sektor</option>
             @foreach($sectors as $sec)
               <option value="{{ $sec['id'] }}" {{ $sector === $sec['id'] ? 'selected' : '' }}>{{ $sec['name'] }}</option>

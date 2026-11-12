@@ -288,11 +288,11 @@
                       <div>
                         <label class="d-block text-uppercase fw-bold mb-2 detail-qty-label" style="font-size: 0.72rem; color: var(--nb-muted);">Jumlah Unit</label>
                         <div class="nb-stepper-wrap">
-                          <button type="button" class="nb-stepper-btn" data-step="-1" aria-label="Kurangi jumlah unit" onclick="stepQty(-1)">
+                          <button type="button" class="nb-stepper-btn" data-step="-1" data-step-action="stepQty" aria-label="Kurangi jumlah unit">
                             <i data-lucide="minus"></i>
                           </button>
                           <input type="number" id="qty-input" name="quantity" min="1" max="9999" value="1" class="nb-stepper-input hide-spinner" data-stock="{{ $stock }}">
-                          <button type="button" class="nb-stepper-btn" data-step="1" aria-label="Tambah jumlah unit" onclick="stepQty(1)">
+                          <button type="button" class="nb-stepper-btn" data-step="1" data-step-action="stepQty" aria-label="Tambah jumlah unit">
                             <i data-lucide="plus"></i>
                           </button>
                         </div>
@@ -416,7 +416,7 @@
                     <span class="text-success fw-medium">Ready Indefinite</span>
                   </div>
                 </div>
-                <button type="button" onclick="document.getElementById('beli-produk-form').scrollIntoView({behavior: 'smooth', block: 'center'})" class="nb-btn nb-btn-primary flex-shrink-0" style="height: 38px; padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">
+                <button type="button" id="btn-sticky-add-cart" class="nb-btn nb-btn-primary flex-shrink-0" style="height: 38px; padding: 0.35rem 0.85rem; font-size: 0.82rem; border-radius: 6px;">
                   <i data-lucide="shopping-cart"></i> Tambah
                 </button>
               </div>
@@ -437,4 +437,10 @@
       </div>
     </div>
   </section>
+
+  <script @nonce>
+    document.getElementById('btn-sticky-add-cart')?.addEventListener('click', function() {
+      document.getElementById('beli-produk-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  </script>
 @endsection
