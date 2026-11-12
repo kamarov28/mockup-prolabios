@@ -120,25 +120,25 @@ class AppServiceProvider extends ServiceProvider
                                 ->pluck('title')
                                 ->toArray();
 
-                                if (! empty($productTitles)) {
-                                    $wordsList = [];
-                                    $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base', 'plus', 'modified', 'test'];
-                                    foreach ($productTitles as $title) {
-                                        // Ganti simbol/slash dengan SPASI agar w/Chloramphenicol terpisah menjadi 'w' dan 'Chloramphenicol'
-                                        $clean = preg_replace('/[^a-zA-Z0-9]/', ' ', $title);
-                                        $words = explode(' ', $clean);
-                                        foreach ($words as $word) {
-                                            $word = trim($word);
-                                            // Abaikan kata <= 3 huruf (seperti 'w'), abaikan angka, dan abaikan kata sambung
-                                            if (strlen($word) > 3 && ! is_numeric($word) && ! in_array(strtolower($word), $skip, true)) {
-                                                $wordsList[] = ucfirst(strtolower($word));
-                                            }
+                            if (! empty($productTitles)) {
+                                $wordsList = [];
+                                $skip = ['smart', 'digital', 'microbial', 'system', 'recombinant', 'based', 'automatic', 'with', 'without', 'medium', 'base', 'plus', 'modified', 'test'];
+                                foreach ($productTitles as $title) {
+                                    // Ganti simbol/slash dengan SPASI agar w/Chloramphenicol terpisah menjadi 'w' dan 'Chloramphenicol'
+                                    $clean = preg_replace('/[^a-zA-Z0-9]/', ' ', $title);
+                                    $words = explode(' ', $clean);
+                                    foreach ($words as $word) {
+                                        $word = trim($word);
+                                        // Abaikan kata <= 3 huruf (seperti 'w'), abaikan angka, dan abaikan kata sambung
+                                        if (strlen($word) > 3 && ! is_numeric($word) && ! in_array(strtolower($word), $skip, true)) {
+                                            $wordsList[] = ucfirst(strtolower($word));
                                         }
                                     }
-                                    if (! empty($wordsList)) {
-                                        return array_slice(array_values(array_unique($wordsList)), 0, 7);
-                                    }
                                 }
+                                if (! empty($wordsList)) {
+                                    return array_slice(array_values(array_unique($wordsList)), 0, 7);
+                                }
+                            }
                         } catch (\Exception $e) {
                             Log::warning('search_suggestions cache build failed, using defaults.', [
                                 'exception' => $e->getMessage(),

@@ -71,7 +71,7 @@ class HtmlSanitizer
     public static function cleanWithProductWatermark(?string $html): string
     {
         $sanitized = self::clean($html);
-        if (empty($sanitized) || !str_contains($sanitized, '<img')) {
+        if (empty($sanitized) || ! str_contains($sanitized, '<img')) {
             return $sanitized;
         }
 
@@ -97,16 +97,16 @@ class HtmlSanitizer
                 $updatedImg = $imgTag;
                 if (preg_match('/width\s*:\s*([^;]+);?/i', $attrs, $widthMatch)) {
                     $widthVal = trim($widthMatch[1]);
-                    $wrapStyles[] = 'width: ' . $widthVal;
+                    $wrapStyles[] = 'width: '.$widthVal;
                     $updatedImg = (string) preg_replace('/width\s*:\s*[^;]+;?/i', 'width: 100%;', $imgTag);
                 }
                 if (preg_match('/float\s*:\s*([^;]+);?/i', $attrs, $floatMatch)) {
-                    $wrapStyles[] = 'float: ' . trim($floatMatch[1]);
+                    $wrapStyles[] = 'float: '.trim($floatMatch[1]);
                 }
 
-                $styleAttr = implode('; ', $wrapStyles) . ';';
+                $styleAttr = implode('; ', $wrapStyles).';';
 
-                return '<span class="product-watermark-wrap" style="' . e($styleAttr) . '">' . $updatedImg . '</span>';
+                return '<span class="product-watermark-wrap" style="'.e($styleAttr).'">'.$updatedImg.'</span>';
             },
             $sanitized
         );

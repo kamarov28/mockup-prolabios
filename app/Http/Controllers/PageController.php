@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Principal;
 use App\Services\HomepageService;
 use App\Services\PostService;
 use App\Services\ProductService;
@@ -73,7 +74,7 @@ class PageController extends Controller
             $products->recordSearchHits($matchedIds);
         }
 
-        $principals = \App\Models\Principal::online()->orderBy('name')->get();
+        $principals = Principal::online()->orderBy('name')->get();
 
         return view('produk', [
             'products' => $filteredProducts,
@@ -272,7 +273,7 @@ class PageController extends Controller
     public function legal(Request $request)
     {
         $activeTab = $request->query('tab', 'privacy');
-        if (!in_array($activeTab, ['privacy', 'terms'])) {
+        if (! in_array($activeTab, ['privacy', 'terms'])) {
             $activeTab = 'privacy';
         }
 

@@ -20,7 +20,9 @@ class NewsletterSectorBroadcastTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Sector $clinical;
+
     private Sector $pharma;
 
     protected function setUp(): void

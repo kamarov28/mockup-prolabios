@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\NewsletterSubscriber;
 use App\Models\Sector;
 use App\Models\User;
-use App\Services\NewsletterImportService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -17,7 +16,9 @@ class NewsletterImportTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+
     protected Sector $sectorFood;
+
     protected Sector $sectorClinical;
 
     protected function setUp(): void
@@ -52,7 +53,7 @@ class NewsletterImportTest extends TestCase
     public function test_can_import_subscribers_from_excel_file(): void
     {
         // 1. Build in-memory spreadsheet
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet;
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Data Pelanggan');
 
@@ -63,7 +64,7 @@ class NewsletterImportTest extends TestCase
             ['invalid-email-format', 'John', 'Doe', 'Dummy Corp', 'Jakarta', 'Indonesia', '', 'Aktif'],
         ]);
 
-        $tempPath = tempnam(sys_get_temp_dir(), 'newsletter_import_test_') . '.xlsx';
+        $tempPath = tempnam(sys_get_temp_dir(), 'newsletter_import_test_').'.xlsx';
         $writer = new Xlsx($spreadsheet);
         $writer->save($tempPath);
 

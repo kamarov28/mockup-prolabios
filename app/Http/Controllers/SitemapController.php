@@ -107,6 +107,7 @@ class SitemapController extends Controller
         $content .= "Disallow: /admin/\n";
         $content .= "Disallow: /cart\n";
         $content .= "Disallow: /rfq/\n";
+        $content .= "Disallow: /newsletter/\n";
         $content .= "Allow: /\n\n";
         $content .= "Sitemap: {$baseUrl}/sitemap.xml\n";
 

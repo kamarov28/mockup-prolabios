@@ -40,10 +40,10 @@ class BakeWatermarkCommand extends Command
                 if (file_exists($filePath) && is_file($filePath)) {
                     if (ImageWatermarkService::applyToFile($filePath)) {
                         $processed++;
-                        $this->line(" <info>[OK]</info> Watermark baked: " . basename($filePath));
+                        $this->line(' <info>[OK]</info> Watermark baked: '.basename($filePath));
                     } else {
                         $failed++;
-                        $this->warn(" [FAIL] Gagal watermark: " . basename($filePath));
+                        $this->warn(' [FAIL] Gagal watermark: '.basename($filePath));
                     }
                 }
             }
@@ -52,11 +52,11 @@ class BakeWatermarkCommand extends Command
         // 2. Process all images in storage/app/public/uploads/editor
         $editorDir = storage_path('app/public/uploads/editor');
         if (is_dir($editorDir)) {
-            $editorFiles = glob($editorDir . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: [];
+            $editorFiles = glob($editorDir.'/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: [];
             foreach ($editorFiles as $eFile) {
                 if (ImageWatermarkService::applyToFile($eFile)) {
                     $processed++;
-                    $this->line(" <info>[OK Editor]</info> Watermark baked: " . basename($eFile));
+                    $this->line(' <info>[OK Editor]</info> Watermark baked: '.basename($eFile));
                 }
             }
         }

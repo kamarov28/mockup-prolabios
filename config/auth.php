@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\NewsletterSubscriber;
 use App\Models\User;
 
 return [
@@ -72,7 +73,7 @@ return [
         ],
         'subscribers' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\NewsletterSubscriber::class,
+            'model' => NewsletterSubscriber::class,
         ],
     ],
 

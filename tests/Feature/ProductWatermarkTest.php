@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Helpers\HtmlSanitizer;
 use App\Models\Product;
+use App\Services\ImageWatermarkService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -38,7 +39,7 @@ class ProductWatermarkTest extends TestCase
         $white = imagecolorallocate($img, 255, 255, 255);
         imagefill($img, 0, 0, $white);
 
-        \App\Services\ImageWatermarkService::apply($img);
+        ImageWatermarkService::apply($img);
 
         // Assert that pixels are no longer purely 100% white because watermark was baked
         $differentPixels = 0;
@@ -67,7 +68,7 @@ class ProductWatermarkTest extends TestCase
             'description' => '<p>Deskripsi dengan <img src="/storage/products/sample.jpg" alt="Sample"></p>',
         ]);
 
-        $response = $this->get('/produk/' . $product->slug);
+        $response = $this->get('/produk/'.$product->slug);
 
         $response->assertOk();
         $response->assertSee('detail-product-img-wrap');
