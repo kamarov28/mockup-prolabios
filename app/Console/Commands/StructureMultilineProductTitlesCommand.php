@@ -38,11 +38,11 @@ class StructureMultilineProductTitlesCommand extends Command
             $extraHtml = '<div class="product-composition-list"><p><strong>Komposisi / Rincian:</strong></p><ul>';
             foreach ($descLines as $d) {
                 $cleanD = preg_replace('/^\d+[\.\)]\s*/', '', $d);
-                $extraHtml .= '<li>' . e($cleanD) . '</li>';
+                $extraHtml .= '<li>'.e($cleanD).'</li>';
             }
             $extraHtml .= '</ul></div>';
 
-            $newDescription = $extraHtml;
+            $newDescription = ! empty($p->description) ? $p->description.'<br><br>'.$extraHtml : $extraHtml;
 
             $p->title = $firstLine;
             $p->description = $newDescription;

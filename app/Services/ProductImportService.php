@@ -102,7 +102,8 @@ class ProductImportService
                 'K' => 'ISO 11133',
                 'L' => '',
                 'M' => '',
-                'N' => 'Nutrient Agar digunakan untuk isolasi dan kultivasi umum mikroorganisme di laboratorium.',
+                'N' => '',
+                'O' => 'Nutrient Agar digunakan untuk isolasi dan kultivasi umum mikroorganisme di laboratorium.',
             ],
             [
                 'A' => 'PD-90',
@@ -118,7 +119,8 @@ class ProductImportService
                 'K' => 'Standar ISO 9001',
                 'L' => '',
                 'M' => '',
-                'N' => 'Cawan petri steril diameter 90mm bahan polistiren bening berkualitas tinggi.',
+                'N' => '',
+                'O' => 'Cawan petri steril diameter 90mm bahan polistiren bening berkualitas tinggi.',
             ],
         ];
 
@@ -140,7 +142,7 @@ class ProductImportService
         $sheet->getStyle('A2:A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Border halus pada baris contoh
-        $sheet->getStyle('A2:K3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E5E7EB');
+        $sheet->getStyle('A2:O3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->getColor()->setRGB('E5E7EB');
 
         // -------------------------------------------------------------
         // Sheet 2: Panduan & Referensi
@@ -635,7 +637,7 @@ class ProductImportService
 
             $description = $rawDescription;
             if ($titleAppendedDesc !== '') {
-                $description = $description !== '' ? $description . '<br><br>' . $titleAppendedDesc : $titleAppendedDesc;
+                $description = $description !== '' ? $description.'<br><br>'.$titleAppendedDesc : $titleAppendedDesc;
             }
 
             if (str_starts_with($imageUrl, 'storage/')) {
