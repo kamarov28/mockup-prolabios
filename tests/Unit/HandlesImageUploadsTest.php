@@ -24,7 +24,7 @@ class HandlesImageUploadsTest extends TestCase
 
         $tmpFile = tempnam(sys_get_temp_dir(), 'palette_test_').'.png';
         imagepng($paletteImg, $tmpFile);
-        imagedestroy($paletteImg);
+        unset($paletteImg);
 
         $uploadedFile = new UploadedFile($tmpFile, 'palette.png', 'image/png', null, true);
 

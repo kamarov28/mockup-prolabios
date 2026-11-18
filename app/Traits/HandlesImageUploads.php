@@ -512,7 +512,7 @@ trait HandlesImageUploads
                 imagesavealpha($resized, true);
 
                 imagecopyresampled($resized, $img, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
-                imagedestroy($img);
+                unset($img);
                 $img = $resized;
             }
 
@@ -535,7 +535,7 @@ trait HandlesImageUploads
             ob_start();
             $encodeOk = imagewebp($img, null, 82);
             $binary = ob_get_clean();
-            imagedestroy($img);
+            unset($img);
 
             if (! $encodeOk || $binary === false || $binary === '') {
                 Log::warning('HandlesImageUploads::encodeToWebp - imagewebp() gagal memproduksi binary WebP', [

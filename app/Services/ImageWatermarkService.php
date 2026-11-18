@@ -36,7 +36,7 @@ class ImageWatermarkService
         $trans = imagecolorallocatealpha($scaled, 0, 0, 0, 127);
         imagefill($scaled, 0, 0, $trans);
         imagecopyresampled($scaled, $logo, 0, 0, 0, 0, $targetW, $targetH, $lw, $lh);
-        imagedestroy($logo);
+        unset($logo);
 
         // Adjust alpha channel of every non-transparent pixel to specified opacity (0.20)
         for ($x = 0; $x < $targetW; $x++) {
@@ -58,7 +58,7 @@ class ImageWatermarkService
         $rotated = imagerotate($scaled, $angle, $trans);
         imagealphablending($rotated, false);
         imagesavealpha($rotated, true);
-        imagedestroy($scaled);
+        unset($scaled);
 
         $rw = imagesx($rotated);
         $rh = imagesy($rotated);
@@ -68,7 +68,7 @@ class ImageWatermarkService
         // Merge onto destination preserving alpha blending
         imagealphablending($destImg, true);
         imagecopy($destImg, $rotated, $dstX, $dstY, 0, 0, $rw, $rh);
-        imagedestroy($rotated);
+        unset($rotated);
     }
 
     /**
@@ -106,7 +106,7 @@ class ImageWatermarkService
             $success = imagejpeg($img, $absolutePath, 85);
         }
 
-        imagedestroy($img);
+        unset($img);
 
         return $success;
     }

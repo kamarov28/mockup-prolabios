@@ -53,7 +53,7 @@ class ProductWatermarkTest extends TestCase
             }
         }
 
-        imagedestroy($img);
+        unset($img);
 
         $this->assertGreaterThan(0, $differentPixels, 'Watermark should have colored pixels on the destination image');
     }
