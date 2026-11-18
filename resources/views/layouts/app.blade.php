@@ -10,9 +10,23 @@
   @if(!empty($siteSettings['google_search_console_id']))
     <meta name="google-site-verification" content="{{ $siteSettings['google_search_console_id'] }}">
   @endif
-  <link rel="shortcut icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('favicon.ico') }}">
-  <link rel="icon" type="image/png" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
-  <link rel="apple-touch-icon" href="{{ !empty($siteSettings['site_favicon']) ? $siteSettings['site_favicon'] : asset('images/favicon.png') }}">
+  @php
+      $rawFavicon = trim((string) ($siteSettings['site_favicon'] ?? ''));
+      $resolvedFavicon = null;
+      if ($rawFavicon !== '') {
+          if (str_starts_with($rawFavicon, 'http://') || str_starts_with($rawFavicon, 'https://')) {
+              $resolvedFavicon = $rawFavicon;
+          } else {
+              $relPath = ltrim($rawFavicon, '/');
+              if (file_exists(public_path($relPath))) {
+                  $resolvedFavicon = asset($relPath);
+              }
+          }
+      }
+  @endphp
+  <link rel="shortcut icon" href="{{ $resolvedFavicon ?: asset('favicon.ico') }}">
+  <link rel="icon" type="image/png" href="{{ $resolvedFavicon ?: asset('images/favicon.png') }}">
+  <link rel="apple-touch-icon" href="{{ $resolvedFavicon ?: asset('images/favicon.png') }}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
   <!-- Self-Hosted Typography & Critical Asset Preload -->
