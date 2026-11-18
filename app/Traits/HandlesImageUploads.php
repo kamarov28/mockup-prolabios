@@ -461,6 +461,26 @@ trait HandlesImageUploads
                 return null;
             }
 
+            $imgInfo = @getimagesize($realPath);
+            if (is_array($imgInfo) && ($imgInfo[0] > 6000 || $imgInfo[1] > 6000)) {
+                Log::warning('HandlesImageUploads::encodeToWebp - Dimensi gambar melebihi batas aman (6000px)', [
+                    'width' => $imgInfo[0],
+                    'height' => $imgInfo[1],
+                ]);
+
+                return null;
+            }
+
+            $imgInfo = @getimagesize($realPath);
+            if (is_array($imgInfo) && ($imgInfo[0] > 6000 || $imgInfo[1] > 6000)) {
+                Log::warning('HandlesImageUploads::encodeToWebp - Dimensi gambar melebihi batas aman (6000px)', [
+                    'width' => $imgInfo[0],
+                    'height' => $imgInfo[1],
+                ]);
+
+                return null;
+            }
+
             $rawContent = file_get_contents($realPath);
             if ($rawContent === false || $rawContent === '') {
                 Log::warning('HandlesImageUploads::encodeToWebp - file_get_contents mengembalikan konten kosong dari temporary file', [

@@ -136,6 +136,10 @@ class PageController extends Controller
             return redirect()->route('produk.detail', ['slug' => $product->slug], 301);
         }
 
+        if (! $product) {
+            abort(404);
+        }
+
         return view('detail-produk', compact('product'));
     }
 

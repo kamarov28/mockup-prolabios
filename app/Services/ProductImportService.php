@@ -159,7 +159,7 @@ class ProductImportService
             '1. Kolom Nama Produk (*) dan Kategori (*) adalah kolom wajib diisi. Baris tanpa nama atau kategori akan otomatis dilewati.',
             '2. Format Harga: Tulis hanya angka murni (contoh: 1500000). Jangan menambahkan teks "Rp", titik, atau spasi.',
             '3. Format Stok: Tulis angka bulat (contoh: 25). Jika kosong, otomatis bernilai 0.',
-            '4. Penimpaan Data (Upsert): Jika Nama Produk sudah ada di database katalog, produk tersebut akan otomatis diperbarui datanya.',
+            '4. Duplikasi Data: Jika Nama Produk atau Nomor Katalog sudah ada di database, baris tersebut akan otomatis dilewati (skip).',
             '5. Kolom Kategori dapat diisi dengan Kunci Kategori (contoh: microbiology) atau Nama Kategori (contoh: Microbiology).',
             '6. Kolom Sektor dapat diisi dengan nama sektor dipisah koma (contoh: Pharma & Biotech, Food & Beverage).',
         ];
@@ -503,10 +503,17 @@ class ProductImportService
                 $subCategoryKey = $childCat ? $childCat->key : $subSlug;
             }
 
-            // Parse harga (bersihkan titik, koma, spasi, Rp)
-            $rawPrice = isset($colMap['price']) ? (string) ($row[$colMap['price']] ?? '0') : (! $hasMappedHeaders ? (string) ($row['E'] ?? '0') : '0');
-            $cleanPrice = preg_replace('/[^\d]/', '', $rawPrice);
-            $price = $cleanPrice !== '' ? (float) $cleanPrice : 0;
+            // Parse harga (dukung float/numeric asli Excel maupun string berformat Rp / titik ribuan)
+            $rawPriceVal = isset($colMap['price']) ? ($row[$colMap['price']] ?? 0) : (! $hasMappedHeaders ? ($row['E'] ?? 0) : 0);
+            if (is_int($rawPriceVal) || is_float($rawPriceVal)) {
+                $price = max(0.0, (float) $rawPriceVal);
+            } else {
+                $rawPrice = trim((string) $rawPriceVal);
+                // Hapus desimal .00 atau ,00 di ujung jika ada sebelum membersihkan pemisah ribuan
+                $rawPrice = preg_replace('/[.,]00$/', '', $rawPrice);
+                $cleanPrice = preg_replace('/[^\d]/', '', $rawPrice);
+                $price = $cleanPrice !== '' ? (float) $cleanPrice : 0.0;
+            }
 
             // Parse stok
             $rawStock = isset($colMap['stock']) ? (string) ($row[$colMap['stock']] ?? '0') : (! $hasMappedHeaders ? (string) ($row['F'] ?? '0') : '0');
@@ -587,7 +594,7 @@ class ProductImportService
                     } else {
                         $foundId = null;
                         foreach ($sectorLookup as $lookupKey => $sectorId) {
-                            if (str_starts_with($normPart, $lookupKey) || str_starts_with($lookupKey, explode(' ', $normPart)[0])) {
+                            if (strlen($lookupKey) >= 5 && (str_starts_with($normPart, $lookupKey) || str_starts_with($lookupKey, $normPart))) {
                                 $foundId = $sectorId;
                                 break;
                             }

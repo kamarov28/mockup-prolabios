@@ -52,6 +52,7 @@ class ProductService
     {
         Cache::forget('categories_structure');
         Cache::forget('products_list_global');
+        Cache::forget('search_suggestions_v3');
         Cache::forget('search_suggestions_v2');
         Cache::forget('search_suggestions');
         Cache::forget('sitemap_xml_cache');
@@ -229,24 +230,26 @@ class ProductService
     protected function applyProductFilters($query, ?array $filters = []): void
     {
         if (! empty($filters['category'])) {
-            $cat = $filters['category'];
+            $cat = (string) $filters['category'];
             $catSlug = Str::slug($cat);
             if ($catSlug === 'culture-media') {
-                $query->where(function ($q) use ($cat) {
-                    $q->where('category', $cat)
+                $query->where(function ($q) use ($cat, $catSlug) {
+                    $q->whereIn('category', [$cat, $catSlug])
                         ->orWhere('category', 'LIKE', '%Culture Media%')
                         ->orWhere('sub_category', 'LIKE', '%Culture Media%');
                 });
             } else {
-                $query->where('category', $cat);
+                $query->whereIn('category', array_unique([$cat, $catSlug]));
             }
         }
 
         if (! empty($filters['sub_category'])) {
-            $subCat = $filters['sub_category'];
-            $query->where(function ($q) use ($subCat) {
-                $q->where('sub_category', $subCat)
-                    ->orWhere('sub_category', 'LIKE', $subCat.'%');
+            $subCat = (string) $filters['sub_category'];
+            $subSlug = Str::slug($subCat);
+            $query->where(function ($q) use ($subCat, $subSlug) {
+                $q->whereIn('sub_category', array_unique([$subCat, $subSlug]))
+                    ->orWhere('sub_category', 'LIKE', $subCat.'%')
+                    ->orWhere('sub_category', 'LIKE', $subSlug.'%');
             });
         }
 
@@ -678,22 +681,24 @@ class ProductService
         }
 
         DB::transaction(function () use ($rows) {
-            Product::upsert(
-                $rows,
-                ['title'],
-                ['catalog', 'description', 'datasheet_url', 'msds_url', 'category', 'sub_category', 'packaging', 'function', 'reference_method', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
-            );
+            foreach (array_chunk($rows, 200) as $rowChunk) {
+                Product::upsert(
+                    $rowChunk,
+                    ['title'],
+                    ['catalog', 'description', 'datasheet_url', 'msds_url', 'category', 'sub_category', 'packaging', 'function', 'reference_method', 'sector', 'principal_id', 'image', 'price', 'stock', 'is_featured', 'updated_at']
+                );
 
-            $titles = array_column($rows, 'title');
-            Product::whereIn('title', $titles)->orderBy('id')->chunkById(100, function ($chunk) {
-                foreach ($chunk as $product) {
-                    if (empty($product->slug)) {
-                        $product->slug = Product::uniqueSlugFrom((string) $product->title, $product->id);
-                        $product->saveQuietly();
+                $titles = array_column($rowChunk, 'title');
+                Product::whereIn('title', $titles)->orderBy('id')->chunkById(100, function ($chunk) {
+                    foreach ($chunk as $product) {
+                        if (empty($product->slug)) {
+                            $product->slug = Product::uniqueSlugFrom((string) $product->title, $product->id);
+                            $product->saveQuietly();
+                        }
+                        $product->syncSectorsFromCsv($product->sector);
                     }
-                    $product->syncSectorsFromCsv($product->sector);
-                }
-            });
+                });
+            }
         });
 
         Product::clearCategoriesCache();

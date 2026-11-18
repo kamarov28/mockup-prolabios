@@ -79,7 +79,11 @@ export function initCatalogAjax() {
         }
 
         if (updateHistory) {
-          window.history.replaceState({ url: url }, '', url);
+          if (isLiveSearch) {
+            window.history.replaceState({ url: url }, '', url);
+          } else {
+            window.history.pushState({ url: url }, '', url);
+          }
         }
 
         if (!isLiveSearch) {

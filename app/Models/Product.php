@@ -205,7 +205,7 @@ class Product extends Model
             return $query;
         }
 
-        $words = array_values(array_filter(explode(' ', $term), fn ($w) => trim($w) !== ''));
+        $words = array_slice(array_values(array_filter(explode(' ', $term), fn ($w) => trim($w) !== '')), 0, 6);
 
         // Searchable columns down to substring/characters
         $searchableColumns = ['title', 'catalog', 'description', 'function', 'reference_method', 'packaging'];

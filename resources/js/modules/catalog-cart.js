@@ -126,31 +126,32 @@ export function initContactForm() {
 }
 
 export function initCopyCatalogCode() {
-  const codes = document.querySelectorAll('.product-cat-code');
-  if (!codes.length) return;
-
-  codes.forEach(function (el) {
+  document.querySelectorAll('.product-cat-code').forEach(function (el) {
     el.classList.add('is-copyable');
-    el.setAttribute('title', 'Click to copy catalog code');
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const fullText = el.textContent.trim().replace(/^CAT\.\s*/i, '');
-      if (!fullText) return;
+    if (!el.getAttribute('title')) el.setAttribute('title', 'Click to copy catalog code');
+  });
 
-      navigator.clipboard.writeText(fullText).then(function () {
-        const originalText = el.textContent;
-        el.innerHTML = '<i data-lucide="check" class="text-success me-1"></i> Copied!';
-        el.classList.add('is-copied');
-        if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+  document.addEventListener('click', function (e) {
+    const el = e.target.closest('.product-cat-code');
+    if (!el || el.classList.contains('is-copied')) return;
 
-        setTimeout(function () {
-          el.textContent = originalText;
-          el.classList.remove('is-copied');
-        }, 1800);
-      }).catch(function () {
-        // Fallback
-      });
+    e.preventDefault();
+    e.stopPropagation();
+    const fullText = el.textContent.trim().replace(/^CAT\.\s*/i, '');
+    if (!fullText) return;
+
+    const originalText = el.textContent;
+    navigator.clipboard.writeText(fullText).then(function () {
+      el.innerHTML = '<i data-lucide="check" class="text-success me-1"></i> Copied!';
+      el.classList.add('is-copied');
+      if (window.lucide && window.lucide.createIcons) window.lucide.createIcons();
+
+      setTimeout(function () {
+        el.textContent = originalText;
+        el.classList.remove('is-copied');
+      }, 1800);
+    }).catch(function () {
+      // Fallback
     });
   });
 }
