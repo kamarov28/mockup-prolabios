@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageCleaner;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -338,8 +339,40 @@ class Product extends Model
             }
         });
 
+        static::updated(function (Product $product) {
+            foreach (['image', 'datasheet_url', 'msds_url'] as $field) {
+                if ($product->wasChanged($field)) {
+                    StorageCleaner::deleteIfUnreferenced($product->getOriginal($field));
+                }
+            }
+
+            if ($product->wasChanged('gallery_images')) {
+                $oldGallery = $product->getOriginal('gallery_images');
+                if (is_string($oldGallery)) {
+                    $oldGallery = json_decode($oldGallery, true) ?: [];
+                }
+                $newGallery = is_array($product->gallery_images) ? $product->gallery_images : [];
+                foreach (array_diff((array) $oldGallery, $newGallery) as $removedImg) {
+                    if (is_string($removedImg)) {
+                        StorageCleaner::deleteIfUnreferenced($removedImg);
+                    }
+                }
+            }
+        });
+
         static::deleted(function (Product $product) {
             $product->sectors()->detach();
+
+            StorageCleaner::deleteIfUnreferenced($product->image);
+            StorageCleaner::deleteIfUnreferenced($product->datasheet_url);
+            StorageCleaner::deleteIfUnreferenced($product->msds_url);
+            if (is_array($product->gallery_images)) {
+                foreach ($product->gallery_images as $img) {
+                    if (is_string($img)) {
+                        StorageCleaner::deleteIfUnreferenced($img);
+                    }
+                }
+            }
 
             Cache::forget('categories_structure');
             try {

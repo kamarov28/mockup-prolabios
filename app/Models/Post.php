@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\PostStatus;
+use App\Services\StorageCleaner;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -95,5 +96,18 @@ class Post extends Model
         }
 
         return $query->whereRaw('LOWER(category) = ?', [$cat]);
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (Post $post) {
+            if ($post->wasChanged('image')) {
+                StorageCleaner::deleteIfUnreferenced($post->getOriginal('image'));
+            }
+        });
+
+        static::deleted(function (Post $post) {
+            StorageCleaner::deleteIfUnreferenced($post->image);
+        });
     }
 }

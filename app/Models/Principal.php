@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageCleaner;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,5 +32,18 @@ class Principal extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class, 'principal_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (Principal $principal) {
+            if ($principal->wasChanged('logo')) {
+                StorageCleaner::deleteIfUnreferenced($principal->getOriginal('logo'));
+            }
+        });
+
+        static::deleted(function (Principal $principal) {
+            StorageCleaner::deleteIfUnreferenced($principal->logo);
+        });
     }
 }

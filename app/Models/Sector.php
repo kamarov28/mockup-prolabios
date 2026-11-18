@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\StorageCleaner;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Cache;
@@ -40,6 +41,14 @@ class Sector extends Model
     {
         $clear = fn () => Cache::forget('sectors_list_v2');
         static::saved($clear);
-        static::deleted($clear);
+        static::updated(function (Sector $sector) {
+            if ($sector->wasChanged('image')) {
+                StorageCleaner::deleteIfUnreferenced($sector->getOriginal('image'));
+            }
+        });
+        static::deleted(function (Sector $sector) use ($clear) {
+            $clear();
+            StorageCleaner::deleteIfUnreferenced($sector->image);
+        });
     }
 }
