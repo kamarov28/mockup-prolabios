@@ -136,9 +136,9 @@ class AppServiceProvider extends ServiceProvider
 
                     $sharedFrontendData = [
                         'siteSettings' => $siteSettings,
-                        'waNumber' => '',
-                        'waNumberTech' => '',
-                        'waDefaultMsg' => '',
+                        'waNumber' => (string) ($siteSettings['wa_number'] ?? $siteSettings['whatsapp_number'] ?? ''),
+                        'waNumberTech' => (string) ($siteSettings['wa_number_tech'] ?? $siteSettings['whatsapp_tech'] ?? ''),
+                        'waDefaultMsg' => (string) ($siteSettings['wa_default_msg'] ?? $siteSettings['whatsapp_message'] ?? ''),
                         'searchSuggestions' => $searchSuggestions,
                     ];
                 } catch (\Exception $e) {

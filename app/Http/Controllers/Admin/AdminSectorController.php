@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSectorRequest;
 use App\Http\Requests\UpdateSectorRequest;
 use App\Services\AuditLogger;
+use App\Services\ProductService;
 use App\Services\SectorService;
 use App\Traits\HandlesImageUploads;
 use Illuminate\Http\Request;
@@ -66,6 +67,8 @@ class AdminSectorController extends Controller
             'id' => $id,
         ]);
 
+        app(ProductService::class)->clearProductsCache();
+
         return redirect()->route('admin.sectors')->with('success', 'Sektor industri baru berhasil ditambahkan!');
     }
 
@@ -108,6 +111,8 @@ class AdminSectorController extends Controller
             'id' => $id,
         ]);
 
+        app(ProductService::class)->clearProductsCache();
+
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil diperbarui!');
     }
 
@@ -130,6 +135,8 @@ class AdminSectorController extends Controller
             'name' => $name,
             'id' => $id,
         ]);
+
+        app(ProductService::class)->clearProductsCache();
 
         return redirect()->route('admin.sectors')->with('success', 'Sektor berhasil dihapus!');
     }
@@ -162,6 +169,8 @@ class AdminSectorController extends Controller
             'count' => $count,
             'ids' => $ids,
         ]);
+
+        app(ProductService::class)->clearProductsCache();
 
         return redirect()->route('admin.sectors')->with('success', "{$count} sektor berhasil dihapus!");
     }

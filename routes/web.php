@@ -29,7 +29,7 @@ Route::get('/health', [HealthController::class, 'check'])->middleware('throttle:
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/profil', [PageController::class, 'profil']);
-Route::get('/produk', [PageController::class, 'produk'])->name('produk.index');
+Route::get('/produk', [PageController::class, 'produk'])->middleware('throttle:90,1')->name('produk.index');
 
 Route::get('/produk/detail', [PageController::class, 'detailProdukLegacy'])->name('produk.detail.legacy');
 Route::get('/produk/beli', [PageController::class, 'beliProdukLegacy'])->name('produk.beli.legacy');
@@ -70,12 +70,14 @@ Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.l
 Route::post('/admin/login', [AdminController::class, 'login'])->middleware('throttle:admin-login')->name('admin.login.submit');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-Route::post('/cart/restore', [CartController::class, 'restore'])->name('cart.restore');
+Route::middleware('throttle:60,1')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/cart/restore', [CartController::class, 'restore'])->name('cart.restore');
+});
 
 Route::get('/rfq/checkout', [RfqController::class, 'checkout'])->name('rfq.checkout');
 Route::post('/rfq/submit', [RfqController::class, 'store'])->middleware('throttle:rfq-submission')->name('rfq.store');

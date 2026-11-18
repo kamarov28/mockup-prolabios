@@ -271,11 +271,25 @@ class ProductService
         }
     }
 
+    /**
+     * @param  array<string, mixed>|null  $filters
+     */
+    protected function buildFiltersCacheHash(?array $filters): string
+    {
+        $normalized = array_filter(
+            $filters ?? [],
+            fn ($v) => $v !== null && $v !== '' && $v !== []
+        );
+        ksort($normalized);
+
+        return md5((string) json_encode($normalized));
+    }
+
     public function getProducts(?array $filters = [], int $limit = 0): Collection
     {
         $v = self::getProductsCacheVersion();
         // Bump key suffix so old cache entries that still hold description are ignored
-        $cacheKey = 'products_list_v2_'.$v.'_'.md5(json_encode($filters).'_'.$limit);
+        $cacheKey = 'products_list_v2_'.$v.'_'.$this->buildFiltersCacheHash($filters).'_'.$limit;
 
         $cached = Cache::get($cacheKey);
         if (is_array($cached)) {
@@ -308,7 +322,7 @@ class ProductService
     {
         $v = self::getProductsCacheVersion();
         $page = max(1, (int) request()->input('page', 1));
-        $cacheKey = 'products_paginated_v2_'.$v.'_'.md5(json_encode($filters).'_'.$perPage.'_p'.$page);
+        $cacheKey = 'products_paginated_v2_'.$v.'_'.$this->buildFiltersCacheHash($filters).'_'.$perPage.'_p'.$page;
 
         $cached = Cache::get($cacheKey);
         if (is_array($cached) && isset($cached['total'], $cached['items']) && is_array($cached['items'])) {
