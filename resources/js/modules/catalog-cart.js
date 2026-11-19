@@ -186,6 +186,13 @@ export function initAjaxAddToCart() {
           }, 1500);
           return null;
         }
+        if (res.status === 429) {
+          showToast('Terlalu banyak permintaan dalam waktu singkat. Silakan tunggu beberapa detik.', 'warning');
+          return null;
+        }
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
         return res.json();
       })
       .then(function (data) {

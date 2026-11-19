@@ -3,12 +3,8 @@
  */
 import { isProductPath, debounce } from './utils.js';
 
-let cachedProductCards = null;
 function getProductCards() {
-  if (!cachedProductCards) {
-    cachedProductCards = Array.from(document.querySelectorAll('.product-card'));
-  }
-  return cachedProductCards;
+  return Array.from(document.querySelectorAll('.product-card'));
 }
 
 export function initSearchModal() {

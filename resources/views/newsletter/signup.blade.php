@@ -126,7 +126,7 @@
         <div class="form-check mb-4">
           <input class="form-check-input" type="checkbox" name="privacy_consent" id="privacy_consent" value="1" required {{ old('privacy_consent', 1) ? 'checked' : '' }} style="cursor: pointer;">
           <label class="form-check-label small" for="privacy_consent" style="cursor: pointer; color: #475569; font-size: 0.82rem;">
-            Saya telah membaca dan menyetujui <a href="{{ route('privacy') }}" target="_blank" class="fw-semibold text-decoration-underline" style="color: var(--nb-primary);">Kebijakan Privasi</a> PT. Prolabios Mitra Analitika.
+            Saya telah membaca dan menyetujui <a href="{{ route('privacy') }}" target="_blank" rel="noopener noreferrer" class="fw-semibold text-decoration-underline" style="color: var(--nb-primary);">Kebijakan Privasi</a> PT. Prolabios Mitra Analitika.
           </label>
         </div>
 

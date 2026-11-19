@@ -35,7 +35,12 @@ export function initCatalogAjax() {
       signal: currentFetchController.signal,
       headers: ajaxHeaders(null, 'text/html')
     })
-      .then(response => response.text())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
+        return response.text();
+      })
       .then(html => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
@@ -145,9 +150,13 @@ export function initCatalogAjax() {
             }
           }
         });
+        document.querySelectorAll('.category-accordion-btn').forEach(otherBtn => {
+          if (otherBtn !== btn) otherBtn.setAttribute('aria-expanded', 'false');
+        });
         if (isHidden) {
           targetGroup.classList.remove('d-none');
           btn.classList.add('is-active');
+          btn.setAttribute('aria-expanded', 'true');
           const chevron = btn.querySelector('.chevron-icon');
           if (chevron) {
             chevron.setAttribute('data-lucide', 'chevron-down');
@@ -155,6 +164,7 @@ export function initCatalogAjax() {
         } else {
           targetGroup.classList.add('d-none');
           btn.classList.remove('is-active');
+          btn.setAttribute('aria-expanded', 'false');
           const chevron = btn.querySelector('.chevron-icon');
           if (chevron) {
             chevron.setAttribute('data-lucide', 'chevron-right');

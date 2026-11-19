@@ -161,28 +161,7 @@ class AdminProductController extends Controller
             $datasheetUrl = $this->handlePdfUpload($request, 'datasheet_file', 'datasheet_url');
             $msdsUrl = $this->handlePdfUpload($request, 'msds_file', 'msds_url', null, 'msds');
 
-            $sectorsInput = $request->input('sectors', $request->input('sector'));
-            $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
-
-            $product = [
-                'catalog' => $request->input('catalog') ?: '',
-                'title' => $title,
-                'description' => $request->input('description') ?: '',
-                'datasheet_url' => $datasheetUrl,
-                'msds_url' => $msdsUrl,
-                'category' => $request->input('category'),
-                'sub_category' => $request->input('sub_category') ?: null,
-                'packaging' => $request->input('packaging') ?: null,
-                'function' => $request->input('function') ?: null,
-                'reference_method' => $request->input('reference_method') ?: null,
-                'sector' => $sectorCsv,
-                'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
-                'image' => $image,
-                'gallery_images' => $galleryImages,
-                'price' => (float) $request->input('price', 0),
-                'stock' => (int) $request->input('stock', 0),
-                'is_featured' => (bool) $request->input('is_featured', false),
-            ];
+            $product = $this->buildProductPayload($request, $title, $image, $datasheetUrl, $msdsUrl, $galleryImages);
 
             $createdProduct = $this->products->addProduct($product);
 
@@ -250,28 +229,7 @@ class AdminProductController extends Controller
             array_slice(array_merge($existingGallery, $newGalleryImages), 0, self::MAX_GALLERY_IMAGES)
         );
 
-        $sectorsInput = $request->input('sectors', $request->input('sector'));
-        $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
-
-        $updatedProduct = [
-            'catalog' => $request->input('catalog') ?: '',
-            'title' => $newTitle,
-            'description' => $request->input('description') ?: '',
-            'datasheet_url' => $datasheetUrl,
-            'msds_url' => $msdsUrl,
-            'category' => $request->input('category'),
-            'sub_category' => $request->input('sub_category') ?: null,
-            'packaging' => $request->input('packaging') ?: null,
-            'function' => $request->input('function') ?: null,
-            'reference_method' => $request->input('reference_method') ?: null,
-            'sector' => $sectorCsv,
-            'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
-            'image' => $image,
-            'gallery_images' => $galleryImages,
-            'price' => (float) $request->input('price', 0),
-            'stock' => (int) $request->input('stock', 0),
-            'is_featured' => (bool) $request->input('is_featured', false),
-        ];
+        $updatedProduct = $this->buildProductPayload($request, $newTitle, $image, $datasheetUrl, $msdsUrl, $galleryImages);
 
         $this->products->updateProductById($id, $updatedProduct);
 
@@ -518,5 +476,43 @@ class AdminProductController extends Controller
 
             return redirect()->back()->with('error', 'Gagal memproses file Excel: '.$e->getMessage());
         }
+    }
+
+    /**
+     * Normalize request inputs into a consistent product persistence payload.
+     *
+     * @param  array<int, string>  $galleryImages
+     * @return array<string, mixed>
+     */
+    private function buildProductPayload(
+        Request $request,
+        string $title,
+        ?string $image,
+        ?string $datasheetUrl,
+        ?string $msdsUrl,
+        array $galleryImages
+    ): array {
+        $sectorsInput = $request->input('sectors', $request->input('sector'));
+        $sectorCsv = is_array($sectorsInput) ? implode(',', array_filter($sectorsInput)) : ($sectorsInput ?: '');
+
+        return [
+            'catalog' => $request->input('catalog') ?: '',
+            'title' => $title,
+            'description' => $request->input('description') ?: '',
+            'datasheet_url' => $datasheetUrl,
+            'msds_url' => $msdsUrl,
+            'category' => $request->input('category'),
+            'sub_category' => $request->input('sub_category') ?: null,
+            'packaging' => $request->input('packaging') ?: null,
+            'function' => $request->input('function') ?: null,
+            'reference_method' => $request->input('reference_method') ?: null,
+            'sector' => $sectorCsv,
+            'principal_id' => $request->input('principal_id') ? (int) $request->input('principal_id') : null,
+            'image' => $image,
+            'gallery_images' => $galleryImages,
+            'price' => (float) $request->input('price', 0),
+            'stock' => (int) $request->input('stock', 0),
+            'is_featured' => (bool) $request->input('is_featured', false),
+        ];
     }
 }

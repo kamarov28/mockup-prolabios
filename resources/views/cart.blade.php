@@ -61,7 +61,7 @@
           <button type="button" class="btn btn-sm btn-primary rounded-0 py-1 px-3 d-inline-flex align-items-center gap-1" id="btn-restore-cart">
             <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i> Pulihkan Item
           </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary rounded-0 py-1 px-2" id="btn-dismiss-cart">
+          <button type="button" class="btn btn-sm btn-outline-secondary rounded-0 py-1 px-2" id="btn-dismiss-cart" aria-label="Tutup pemberitahuan pemulihan keranjang">
             Abaikan
           </button>
         </div>

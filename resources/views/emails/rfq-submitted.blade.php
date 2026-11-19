@@ -71,7 +71,7 @@
           <tr>
             <td class="label">WhatsApp:</td>
             <td class="val">
-              <a href="https://wa.me/{{ $rfq->normalized_whatsapp_number }}" target="_blank" style="color: #16a34a; font-weight: 700; text-decoration: none;">
+              <a href="https://wa.me/{{ $rfq->normalized_whatsapp_number }}" target="_blank" rel="noopener noreferrer" style="color: #16a34a; font-weight: 700; text-decoration: none;">
                 {{ $rfq->phone_wa }} <span style="font-size: 11px; font-weight: normal; color: #16a34a;">(Chat WA &rarr;)</span>
               </a>
             </td>
