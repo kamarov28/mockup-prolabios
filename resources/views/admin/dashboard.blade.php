@@ -1039,9 +1039,9 @@
       new Chart(ctx, {
         type: 'doughnut',
         data: {
-          labels: {!! json_encode(array_keys($categoryDist)) !!},
+          labels: @js(array_keys($categoryDist)),
           datasets: [{
-            data: {!! json_encode(array_values($categoryDist)) !!},
+            data: @js(array_values($categoryDist)),
             backgroundColor: ['#A6171C', '#1E1E1E', '#F1C045', '#7A1015', '#8C8275', '#B8AF9F', '#D6D0C5', '#3D3835'],
             hoverOffset: 4,
             borderWidth: 2,

@@ -116,13 +116,13 @@
         });
 
         @if(session('success'))
-          Toast.fire({ icon: 'success', title: {!! json_encode(session('success')) !!} });
+          Toast.fire({ icon: 'success', title: @js(session('success')) });
         @endif
         @if(session('error'))
-          Toast.fire({ icon: 'error', title: {!! json_encode(session('error')) !!} });
+          Toast.fire({ icon: 'error', title: @js(session('error')) });
         @endif
         @if(session('info'))
-          Toast.fire({ icon: 'info', title: {!! json_encode(session('info')) !!} });
+          Toast.fire({ icon: 'info', title: @js(session('info')) });
         @endif
       });
     </script>

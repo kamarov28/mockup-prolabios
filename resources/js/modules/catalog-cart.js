@@ -75,7 +75,7 @@ export function initContactForm() {
         if (tokenInput) tokenInput.value = recaptchaToken;
       } catch (err) {
         console.error('reCAPTCHA error:', err);
-        alert('Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.');
+        showToast('Verifikasi keamanan gagal. Silakan muat ulang halaman dan coba lagi.', 'warning');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
         return;
@@ -93,8 +93,10 @@ export function initContactForm() {
     })
       .then(res => {
         if (res.status === 419) {
-          alert('Sesi formulir telah kedaluwarsa. Halaman akan dimuat ulang...');
-          window.location.reload();
+          showToast('Sesi formulir telah kedaluwarsa. Halaman akan dimuat ulang...', 'info');
+          setTimeout(function () {
+            window.location.reload();
+          }, 1500);
           return null;
         }
         return res.json();
@@ -111,14 +113,14 @@ export function initContactForm() {
             success.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         } else {
-          alert(data.message || 'Gagal mengirim pesan.');
+          showToast(data.message || 'Gagal mengirim pesan.', 'warning');
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnText;
         }
       })
       .catch(error => {
         console.error('Error submitting form:', error);
-        alert('Terjadi gangguan koneksi atau server. Silakan hubungi admin.');
+        showToast('Terjadi gangguan koneksi atau server. Silakan hubungi admin.', 'warning');
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
       });
